@@ -69,7 +69,7 @@
     <Build Include="Tables\Provider.sql" />
     <Build Include="Tables\EmailTemplate.sql" />
     <Build Include="Tables\TemplatePlaceholder.sql" />
-    <Build Include="Tables\Notification.sql" />
+    <Build Include="Tables\NotificationHistory.sql" />
     <Build Include="Tables\Course.sql" />
     <Build Include="Tables\RoutePath.sql" />
     <Build Include="Tables\ProviderCourses.sql" />
