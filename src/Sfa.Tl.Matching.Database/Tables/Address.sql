@@ -1,0 +1,22 @@
+﻿CREATE TABLE [dbo].[Address]
+(
+	[Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+	[EntityRefId] UNIQUEIDENTIFIER NOT NULL, 
+	[LocalAuthorityMappingId] UNIQUEIDENTIFIER NULL, 
+	[AddressLine1] VARCHAR(50) NULL, 
+	[AddressLine2] VARCHAR(50) NULL, 
+	[AddressLine3] VARCHAR(50) NULL,
+	[City] VARCHAR(50) NULL, 
+	[County] NVARCHAR(50) NULL, 
+	[Region] NVARCHAR(200) NULL,
+	[Country] NVARCHAR(50) NULL, 
+	[Postcode] VARCHAR(10) NOT NULL,
+	[Latitude] [DECIMAL](9, 6) NULL,
+	[Longitude] [DECIMAL](9, 6) NULL,
+	[Location] [geography] NULL, 
+	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
+	[ModifiedOn] DATETIME2 NULL, 
+	CONSTRAINT [FK_Address_Employer] FOREIGN KEY ([EntityRefId]) REFERENCES [Employer]([Id]),
+	CONSTRAINT [FK_Address_Provider] FOREIGN KEY ([EntityRefId]) REFERENCES [Provider]([Id]),
+	CONSTRAINT [FK_Address_LocalAuthorityMapping] FOREIGN KEY ([LocalAuthorityMappingId]) REFERENCES [LocalAuthorityMapping]([Id]),
+)
