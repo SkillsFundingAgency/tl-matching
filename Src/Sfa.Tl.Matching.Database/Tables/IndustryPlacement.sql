@@ -11,7 +11,7 @@
 	[Resolution] NVARCHAR(100) NULL, 
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[ModifiedOn] DATETIME2 NULL, 
-    CONSTRAINT [FK_IndustryPlacement_Employer] FOREIGN KEY ([EmployerId]) REFERENCES [Employer]([Id]),
-    CONSTRAINT [FK_IndustryPlacement_RoutePath] FOREIGN KEY ([RoutePathId]) REFERENCES [RoutePath]([Id]),
-    CONSTRAINT [FK_IndustryPlacement_Address] FOREIGN KEY ([AddressId]) REFERENCES [Address]([Id]),
+	CONSTRAINT [FK_IndustryPlacement_Employer] FOREIGN KEY ([EmployerId]) REFERENCES [Employer]([Id]),
+	CONSTRAINT [FK_IndustryPlacement_RoutePath] FOREIGN KEY ([RoutePathId]) REFERENCES [RoutePath]([Id]),
+	CONSTRAINT [FK_IndustryPlacement_Address] FOREIGN KEY ([AddressId]) REFERENCES [Address]([Id]),
 )

@@ -8,5 +8,5 @@
 	[Keywords] NVARCHAR(50) NULL, 
 	[CreatedOn] DATETIME2 NULL DEFAULT GetDate(), 
 	[ModifiedOn] DATETIME2 NULL, 
-    CONSTRAINT [FK_RoutePath_Course] FOREIGN KEY ([CourseId]) REFERENCES [Course]([Id]), 
+	CONSTRAINT [FK_RoutePath_Course] FOREIGN KEY ([CourseId]) REFERENCES [Course]([Id]), 
 )
