@@ -5,19 +5,21 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Web", "Sfa.Tl.Matching.Web\Sfa.Tl.Matching.Web.csproj", "{9D1CBE77-09C6-41A7-AB98-0CA58A3DB6EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Functions", "Sfa.Tl.Matching.Functions\Sfa.Tl.Matching.Functions.csproj", "{CFE3C23E-F125-4FC7-A9A9-129CD8D2B3B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Functions", "Sfa.Tl.Matching.Functions\Sfa.Tl.Matching.Functions.csproj", "{CFE3C23E-F125-4FC7-A9A9-129CD8D2B3B5}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Sfa.Tl.Matching.Database", "Sfa.Tl.Matching.Database\Sfa.Tl.Matching.Database.sqlproj", "{7C0E2398-1B73-450B-BB20-9103AA4CA262}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Core", "Sfa.Tl.Matching.Core\Sfa.Tl.Matching.Core.csproj", "{188218C3-170B-46B0-A9AF-4146A972F986}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Core", "Sfa.Tl.Matching.Core\Sfa.Tl.Matching.Core.csproj", "{188218C3-170B-46B0-A9AF-4146A972F986}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Infrastucture", "Sfa.Tl.Matching.Infrastucture\Sfa.Tl.Matching.Infrastucture.csproj", "{88478BF9-1FE0-4F76-939C-628D37F71572}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Infrastucture", "Sfa.Tl.Matching.Infrastucture\Sfa.Tl.Matching.Infrastucture.csproj", "{88478BF9-1FE0-4F76-939C-628D37F71572}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Application", "Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj", "{F1516E45-B1AA-4C80-ADB8-442EA84DC3C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Application", "Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj", "{F1516E45-B1AA-4C80-ADB8-442EA84DC3C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Application.UnitTests", "Sfa.Tl.Matching.Application.UnitTests\Sfa.Tl.Matching.Application.UnitTests.csproj", "{0A26E19A-BD4D-4E06-A5D4-3EAF8FC05579}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Application.UnitTests", "Sfa.Tl.Matching.Application.UnitTests\Sfa.Tl.Matching.Application.UnitTests.csproj", "{0A26E19A-BD4D-4E06-A5D4-3EAF8FC05579}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Application.IntegrationTests", "Sfa.Tl.Matching.Application.IntegrationTests\Sfa.Tl.Matching.Application.IntegrationTests.csproj", "{47265647-AC78-4796-860E-C8CE9E318268}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Application.IntegrationTests", "Sfa.Tl.Matching.Application.IntegrationTests\Sfa.Tl.Matching.Application.IntegrationTests.csproj", "{47265647-AC78-4796-860E-C8CE9E318268}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Data", "Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj", "{515AE7C8-BB11-4290-ADED-234977FB1975}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{47265647-AC78-4796-860E-C8CE9E318268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47265647-AC78-4796-860E-C8CE9E318268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47265647-AC78-4796-860E-C8CE9E318268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{515AE7C8-BB11-4290-ADED-234977FB1975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{515AE7C8-BB11-4290-ADED-234977FB1975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{515AE7C8-BB11-4290-ADED-234977FB1975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{515AE7C8-BB11-4290-ADED-234977FB1975}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

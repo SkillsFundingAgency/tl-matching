@@ -25,6 +25,11 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj" />
+  </ItemGroup>
+
+
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES2015</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
