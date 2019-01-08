@@ -1,0 +1,74 @@
+trigger:
+- master
+
+workspace:
+    clean: all
+
+queue:
+  name: Continuous Integration 02 - SSD - 160ACU
+  demands: 
+  - msbuild
+  - visualstudio
+
+steps:
+- task: gittools.gitversion.gitversion-task.GitVersion@3
+  displayName: GitVersion
+  inputs:
+    updateAssemblyInfo: true
+
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: 'src/**/*.csproj'
+    noCache: true
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    projects: 'src/**/*.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: test
+    projects: '**/*Tests/*.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish Website'
+  inputs:
+    command: publish
+    publishWebProjects: true
+    projects: 'src\Sfa.Tl.Matching.Web.csproj'
+    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish Function App'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: 'src\Sfa.Tl.Matching.Functions.csproj'
+    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+
+- task: VSBuild@1
+  displayName: 'Build DACPAC'
+  inputs:
+    solution: 'src\Sfa.Tl.Matching.Database.sqlproj'
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    Contents: |
+     azure\**
+     src\**\*.dacpac
+    TargetFolder: '$(build.artifactstagingdirectory)'
+    OverWrite: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
