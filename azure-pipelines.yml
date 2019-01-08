@@ -58,6 +58,7 @@ steps:
     solution: 'src\Sfa.Tl.Matching.Database\Sfa.Tl.Matching.Database.sqlproj'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
+    msbuildArgs: '/p:PackageLocation="$(build.artifactstagingdirectory)\"'
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
