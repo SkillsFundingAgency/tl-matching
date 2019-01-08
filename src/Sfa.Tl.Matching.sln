@@ -22,6 +22,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AC50D8E9-002B-4A81-B436-8D4284E023B5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Functions.Extensions", "Sfa.Tl.Matching.Functions.Extensions\Sfa.Tl.Matching.Functions.Extensions.csproj", "{66668B61-2D04-45A0-AEEE-CAE0334F56E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Data", "Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj", "{515AE7C8-BB11-4290-ADED-234977FB1975}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +68,10 @@ Global
 		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{515AE7C8-BB11-4290-ADED-234977FB1975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{515AE7C8-BB11-4290-ADED-234977FB1975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{515AE7C8-BB11-4290-ADED-234977FB1975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{515AE7C8-BB11-4290-ADED-234977FB1975}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
