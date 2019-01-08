@@ -19,6 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Application.IntegrationTests", "Sfa.Tl.Matching.Application.IntegrationTests\Sfa.Tl.Matching.Application.IntegrationTests.csproj", "{47265647-AC78-4796-860E-C8CE9E318268}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AC50D8E9-002B-4A81-B436-8D4284E023B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Functions.Extensions", "Sfa.Tl.Matching.Functions.Extensions\Sfa.Tl.Matching.Functions.Extensions.csproj", "{66668B61-2D04-45A0-AEEE-CAE0334F56E5}"
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Data", "Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj", "{515AE7C8-BB11-4290-ADED-234977FB1975}"
 EndProject
 Global
@@ -61,6 +64,10 @@ Global
 		{47265647-AC78-4796-860E-C8CE9E318268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47265647-AC78-4796-860E-C8CE9E318268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47265647-AC78-4796-860E-C8CE9E318268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66668B61-2D04-45A0-AEEE-CAE0334F56E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{515AE7C8-BB11-4290-ADED-234977FB1975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{515AE7C8-BB11-4290-ADED-234977FB1975}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{515AE7C8-BB11-4290-ADED-234977FB1975}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -68,6 +75,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0A26E19A-BD4D-4E06-A5D4-3EAF8FC05579} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
+		{47265647-AC78-4796-860E-C8CE9E318268} = {AC50D8E9-002B-4A81-B436-8D4284E023B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59BF75E1-537C-4287-92BE-6BAB5E8C8277}
