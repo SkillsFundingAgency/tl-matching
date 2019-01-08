@@ -4,6 +4,10 @@ trigger:
 workspace:
     clean: all
 
+variables:
+  buildConfiguration: 'Release'
+  buildPlatform: 'any cpu'
+
 pool:
   name: 'Continuous Integration 02 - SSD - 160ACU'
   demands: 
@@ -27,14 +31,14 @@ steps:
   displayName: Build
   inputs:
     projects: 'src/**/*.csproj'
-    arguments: '--configuration $(BuildConfiguration)'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: Test
   inputs:
     command: test
     projects: '**/*Tests/*.csproj'
-    arguments: '--configuration $(BuildConfiguration)'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish Website'
@@ -42,7 +46,7 @@ steps:
     command: publish
     publishWebProjects: true
     projects: 'src\Sfa.Tl.Matching.Web\Sfa.Tl.Matching.Web.csproj'
-    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish Function App'
@@ -50,14 +54,14 @@ steps:
     command: publish
     publishWebProjects: false
     projects: 'src\Sfa.Tl.Matching.Functions\Sfa.Tl.Matching.Functions.csproj'
-    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
 
 - task: VSBuild@1
   displayName: 'Build DACPAC'
   inputs:
     solution: 'src\Sfa.Tl.Matching.Database\Sfa.Tl.Matching.Database.sqlproj'
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
     msbuildArgs: '/p:PackageLocation="$(build.artifactstagingdirectory)\"'
 
 - task: CopyFiles@2
