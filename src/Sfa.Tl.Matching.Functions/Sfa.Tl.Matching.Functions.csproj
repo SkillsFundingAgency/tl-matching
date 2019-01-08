@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
@@ -8,6 +8,13 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Sfa.Tl.Matching.Core\Sfa.Tl.Matching.Core.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.Functions.Extensions\Sfa.Tl.Matching.Functions.Extensions.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="extensions.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
