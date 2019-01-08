@@ -24,23 +24,5 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             return builder;
         }
-
-        ///// <summary>
-        ///// Adds the Injection extension to the provided <see cref="IWebJobsBuilder"/>.
-        ///// </summary>
-        ///// <param name="builder">The <see cref="IWebJobsBuilder"/> to configure.</param>
-        ///// <param name="configure">An <see cref="Action{InjectOptions}"/> to configure the provided <see cref="InjectOptions"/>.</param>
-        //public static IWebJobsBuilder AddInject(
-        //    this IWebJobsBuilder builder,
-        //    Action<InjectOptions> configure)
-        //{
-        //    builder = builder ?? throw new ArgumentNullException(nameof(builder));
-        //    configure = configure ?? throw new ArgumentNullException(nameof(configure));
-
-        //    builder.AddInject();
-        //    builder.Services.Configure(configure);
-
-        //    return builder;
-        //}
     }
 }
