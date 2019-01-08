@@ -10,6 +10,7 @@
 	[ContactedOn] DATETIME2 NULL, 
 	[NextContactOn] DATETIME2 NULL, 
 	[Resolution] NVARCHAR(100) NULL, 
+	[SpecialRequirements] NVARCHAR(500) NULL, 
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[ModifiedOn] DATETIME2 NULL, 
 	CONSTRAINT [FK_IndustryPlacement_RoutePath] FOREIGN KEY ([RoutePathId]) REFERENCES [RoutePath]([Id]),

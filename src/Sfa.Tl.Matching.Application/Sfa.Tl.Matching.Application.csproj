@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sfa.Tl.Matching.Core\Sfa.Tl.Matching.Core.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.Infrastucture\Sfa.Tl.Matching.Infrastucture.csproj" />
+  </ItemGroup>
+
 </Project>
