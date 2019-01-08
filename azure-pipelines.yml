@@ -41,7 +41,7 @@ steps:
   inputs:
     command: publish
     publishWebProjects: true
-    projects: 'src\Sfa.Tl.Matching.Web.csproj'
+    projects: 'src\Sfa.Tl.Matching.Web\Sfa.Tl.Matching.Web.csproj'
     arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
 
 - task: DotNetCoreCLI@2
@@ -49,13 +49,13 @@ steps:
   inputs:
     command: publish
     publishWebProjects: false
-    projects: 'src\Sfa.Tl.Matching.Functions.csproj'
+    projects: 'src\Sfa.Tl.Matching.Functions\Sfa.Tl.Matching.Functions.csproj'
     arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
 
 - task: VSBuild@1
   displayName: 'Build DACPAC'
   inputs:
-    solution: 'src\Sfa.Tl.Matching.Database.sqlproj'
+    solution: 'src\Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Database.sqlproj'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
