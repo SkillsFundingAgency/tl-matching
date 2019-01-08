@@ -5,8 +5,8 @@ workspace:
     clean: all
 
 variables:
-  buildConfiguration: 'Release'
-  buildPlatform: 'any cpu'
+  buildConfiguration: 'release'
+  buildPlatform: 'anycpu'
 
 pool:
   name: 'Continuous Integration 02 - SSD - 160ACU'
