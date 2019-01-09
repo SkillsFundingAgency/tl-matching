@@ -33,6 +33,13 @@ steps:
     projects: 'src/**/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
+- task: alanwales.resharper-code-analysis.custom-build-task.ResharperCli@1
+  displayName: 'Automated code quality checks'
+  inputs:
+    SolutionOrProjectPath: 'src/*.sln'
+    FailBuildLevelSelector: Warning
+    FailBuildOnCodeIssues: true
+    
 - task: DotNetCoreCLI@2
   displayName: Test
   inputs:
