@@ -38,7 +38,7 @@ steps:
   inputs:
     SolutionOrProjectPath: 'src/Sfa.Tl.Matching.sln'
     FailBuildLevelSelector: Warning
-    FailBuildOnCodeIssues: true
+    FailBuildOnCodeIssues: false
     
 - task: DotNetCoreCLI@2
   displayName: Test
@@ -53,7 +53,7 @@ steps:
     command: publish
     publishWebProjects: true
     projects: 'src\Sfa.Tl.Matching.Web\Sfa.Tl.Matching.Web.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish'
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish Function App'
@@ -61,7 +61,7 @@ steps:
     command: publish
     publishWebProjects: false
     projects: 'src\Sfa.Tl.Matching.Functions\Sfa.Tl.Matching.Functions.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish'
 
 - task: VSBuild@1
   displayName: 'Build DACPAC'
@@ -69,7 +69,7 @@ steps:
     solution: 'src\Sfa.Tl.Matching.Database\Sfa.Tl.Matching.Database.sqlproj'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArgs: '/p:PackageLocation="$(build.artifactstagingdirectory)\"'
+    msbuildArgs: '/p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
@@ -77,10 +77,10 @@ steps:
     Contents: |
      azure\**
      src\**\*.dacpac
-    TargetFolder: '$(build.artifactstagingdirectory)'
+    TargetFolder: '$(build.artifactstagingdirectory)/publish'
     OverWrite: true
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
+    PathtoPublish: '$(build.artifactstagingdirectory)/publish'

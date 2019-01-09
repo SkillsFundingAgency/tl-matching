@@ -224,5 +224,18 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "sqlDatabaseName": {
+            "type": "string",
+            "value": "[variables('sqlDatabaseName')]"
+        },
+        "uiAppName": {
+            "type": "string",
+            "value": "[variables('uiAppName')]"
+        },
+        "workerFunctionAppName": {
+            "type": "string",
+            "value": "[variables('workerFunctionAppName')]"
+        }
+    }
 }
