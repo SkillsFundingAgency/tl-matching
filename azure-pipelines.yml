@@ -36,7 +36,7 @@ steps:
 - task: alanwales.resharper-code-analysis.custom-build-task.ResharperCli@1
   displayName: 'Automated code quality checks'
   inputs:
-    SolutionOrProjectPath: 'src/*.sln'
+    SolutionOrProjectPath: 'src/Sfa.Tl.Matching.sln'
     FailBuildLevelSelector: Warning
     FailBuildOnCodeIssues: true
     
