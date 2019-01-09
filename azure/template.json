@@ -32,6 +32,9 @@
         },
         "sqlDatabaseTier": {
             "type": "string"
+        },
+        "configurationStorageConnectionString": {
+            "type": "securestring"
         }
     },
     "variables": {
@@ -108,7 +111,16 @@
                         "value": "[parameters('sharedEnvResourceGroup')]"
                     },
                     "appServiceAppSettings": {
-                        "value": []
+                        "value": [
+                            {
+                                "name": "ConfigurationStorageConnectionString",
+                                "value": "[parameters('configurationStorageConnectionString')]"
+                            },
+                            {
+                                "name": "EnvironmentName",
+                                "value": "[parameters('environmentNameAbbreviation')]"
+                            }
+                        ]
                     }
                 }
             }
