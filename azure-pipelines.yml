@@ -38,7 +38,7 @@ steps:
   inputs:
     SolutionOrProjectPath: 'src/Sfa.Tl.Matching.sln'
     FailBuildLevelSelector: Warning
-    FailBuildOnCodeIssues: true
+    FailBuildOnCodeIssues: false
     
 - task: DotNetCoreCLI@2
   displayName: Test
