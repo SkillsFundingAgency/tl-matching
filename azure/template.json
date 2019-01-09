@@ -1,0 +1,228 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environmentNameAbbreviation": {
+            "type": "string",
+            "maxLength": 4
+        },
+        "workerASPSize": {
+            "type": "string",
+            "allowedValues": [
+                "1",
+                "2",
+                "3"
+            ]
+        },
+        "workerASPInstances": {
+            "type": "int",
+            "minValue": 1
+        },
+        "sharedASPName": {
+            "type": "string"
+        },
+        "sharedEnvResourceGroup": {
+            "type": "string"
+        },
+        "sharedSQLServerName": {
+            "type": "string"
+        },
+        "sqlDatabaseSkuName": {
+            "type": "string"
+        },
+        "sqlDatabaseTier": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "resourceNamePrefix": "[concat('tl-', toLower(parameters('environmentNameAbbreviation')))]",
+        "workerASPName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-asp')]",
+        "uiAppName": "[concat(variables('resourceNamePrefix'), '-mtchui-as')]",
+        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-fa')]",
+        "azureSearchName": "[concat(variables('resourceNamePrefix'), '-mtch-azs')]",
+        "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-mtch-db')]",
+        "serviceBusName": "[concat(variables('resourceNamePrefix'), '-mtch-ns')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-05-10",
+            "name": "workerAppServicePlan",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/app-service-plan.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServicePlanName": {
+                        "value": "[variables('workerASPName')]"
+                    },
+                    "aspSize": {
+                        "value": "[parameters('workerASPSize')]"
+                    },
+                    "aspInstances": {
+                        "value": "[parameters('workerASPInstances')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "uiAppInsights",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/application-insights.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[variables('uiAppName')]"
+                    },
+                    "attachedService": {
+                        "value": "[variables('uiAppName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "uiAppService",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/app-service.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServiceName": {
+                        "value": "[variables('uiAppName')]"
+                    },
+                    "appServicePlanName": {
+                        "value": "[parameters('sharedASPName')]"
+                    },
+                    "appServicePlanResourceGroup": {
+                        "value": "[parameters('sharedEnvResourceGroup')]"
+                    },
+                    "appServiceAppSettings": {
+                        "value": []
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "functionAppInsights",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/application-insights.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[variables('workerFunctionAppName')]"
+                    },
+                    "attachedService": {
+                        "value": "[variables('workerFunctionAppName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "functionApp",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/function-app.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "functionAppName": {
+                        "value": "[variables('workerFunctionAppName')]"
+                    },
+                    "appServicePlanName": {
+                        "value": "[variables('workerASPName')]"
+                    },
+                    "appServicePlanResourceGroup": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "functionAppAppSettings": {
+                        "value": []
+                    }
+                }
+            },
+            "dependsOn": [
+                "workerAppServicePlan"
+            ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "azureSearch",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/azure-search.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "azureSearchName": {
+                        "value": "[variables('azureSearchName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "sqlDatabase",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/sql-database.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "databaseName": {
+                        "value": "[variables('sqlDatabaseName')]"
+                    },
+                    "sqlServerName": {
+                        "value": "[parameters('sharedSQLServerName')]"
+                    },
+                    "databaseSkuName": {
+                        "value": "[parameters('sqlDatabaseSkuName')]"
+                    },
+                    "databaseTier": {
+                        "value": "[parameters('sqlDatabaseTier')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "serviceBus",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/service-bus.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "serviceBusNamespaceName": {
+                        "value": "[variables('serviceBusName')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
