@@ -31,7 +31,7 @@ steps:
   displayName: Build
   inputs:
     projects: 'src/**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration)  --no-restore'
 
 - task: alanwales.resharper-code-analysis.custom-build-task.ResharperCli@1
   displayName: 'Automated code quality checks'
