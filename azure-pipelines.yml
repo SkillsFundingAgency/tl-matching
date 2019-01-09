@@ -53,7 +53,7 @@ steps:
     command: publish
     publishWebProjects: true
     projects: 'src\Sfa.Tl.Matching.Web\Sfa.Tl.Matching.Web.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish'
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore'
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish Function App'
@@ -61,7 +61,7 @@ steps:
     command: publish
     publishWebProjects: false
     projects: 'src\Sfa.Tl.Matching.Functions\Sfa.Tl.Matching.Functions.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish'
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore'
 
 - task: VSBuild@1
   displayName: 'Build DACPAC'
