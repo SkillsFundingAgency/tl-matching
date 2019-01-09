@@ -20,7 +20,9 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             builder.AddExtension<InjectConfiguration>();
 
             //Register the cleanup a filter
+#pragma warning disable 618
             builder.Services.AddSingleton<IFunctionFilter, ScopeCleanupFilter>();
+#pragma warning restore 618
 
             return builder;
         }

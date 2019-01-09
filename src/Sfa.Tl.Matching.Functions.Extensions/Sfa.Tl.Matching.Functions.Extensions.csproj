@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj" />
-    <ProjectReference Include="..\Sfa.Tl.Matching.Infrastucture\Sfa.Tl.Matching.Infrastucture.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
-using Sfa.Tl.Matching.Infrastucture.Configuration;
+using Sfa.Tl.Matching.Infrastructure.Configuration;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 var result = await table.ExecuteAsync(operation);
 
                 var dynResult = result.Result as DynamicTableEntity;
-                var data = dynResult.Properties["Data"].StringValue;
+                var data = dynResult?.Properties["Data"].StringValue;
 
                 return JsonConvert.DeserializeObject<MatchingConfiguration>(data);
             }

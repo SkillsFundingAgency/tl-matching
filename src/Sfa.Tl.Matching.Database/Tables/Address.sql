@@ -16,7 +16,5 @@
 	[Location] [geography] NULL, 
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[ModifiedOn] DATETIME2 NULL, 
-	CONSTRAINT [FK_Address_Employer] FOREIGN KEY ([EntityRefId]) REFERENCES [Employer]([Id]),
-	CONSTRAINT [FK_Address_Provider] FOREIGN KEY ([EntityRefId]) REFERENCES [Provider]([Id]),
 	CONSTRAINT [FK_Address_LocalAuthorityMapping] FOREIGN KEY ([LocalAuthorityMappingId]) REFERENCES [LocalAuthorityMapping]([Id]),
 )

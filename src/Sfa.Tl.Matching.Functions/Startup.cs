@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Hosting;
+using Sfa.Tl.Matching.Functions;
 using Sfa.Tl.Matching.Functions.Extensions;
 
 //There is a bug in VS where it won't automatically create the extensions.json which tells it where the Startup is
@@ -8,7 +9,7 @@ using Sfa.Tl.Matching.Functions.Extensions;
 // To work around this manually creating and copying extensions.json
 //https://stackoverflow.com/questions/52123538/iextensionconfigprovider-not-initializing-or-binding-with-microsoft-azure-webjob
 
-[assembly: WebJobsStartup(typeof(Sfa.Tl.Matching.Functions.Startup))]
+[assembly: WebJobsStartup(typeof(Startup))]
 namespace Sfa.Tl.Matching.Functions
 {
     public class Startup : IWebJobsStartup
