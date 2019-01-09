@@ -113,12 +113,20 @@
                     "appServiceAppSettings": {
                         "value": [
                             {
+                                "name": "EnvironmentName",
+                                "value": "[parameters('environmentNameAbbreviation')]"
+                            },
+                            {
                                 "name": "ConfigurationStorageConnectionString",
                                 "value": "[parameters('configurationStorageConnectionString')]"
                             },
                             {
-                                "name": "EnvironmentName",
-                                "value": "[parameters('environmentNameAbbreviation')]"
+                                "name": "Version",
+                                "value": "1.0"
+                            },
+                            {
+                                "name": "ServiceName",
+                                "value": "Sfa.Tl.Matching"
                             }
                         ]
                     }
@@ -166,7 +174,24 @@
                         "value": "[resourceGroup().name]"
                     },
                     "functionAppAppSettings": {
-                        "value": []
+                        "value": [
+                            {
+                                "name": "EnvironmentName",
+                                "value": "[parameters('environmentNameAbbreviation')]"
+                            },
+                            {
+                                "name": "ConfigurationStorageConnectionString",
+                                "value": "[parameters('configurationStorageConnectionString')]"
+                            },
+                            {
+                                "name": "Version",
+                                "value": "1.0"
+                            },
+                            {
+                                "name": "ServiceName",
+                                "value": "Sfa.Tl.Matching"
+                            }
+                        ]
                     }
                 }
             },
@@ -248,6 +273,18 @@
         "workerFunctionAppName": {
             "type": "string",
             "value": "[variables('workerFunctionAppName')]"
+        },
+        "azureSearchName": {
+            "type": "string",
+            "value": "[variables('azureSearchName')]"
+        },
+        "azureSearchAdminApiKey": {
+            "type": "string",
+            "value": "[reference('azureSearch').outputs.azureSearchPrimaryAdminKey.value]"
+        },
+        "serviceBusConnectionString": {
+            "type": "string",
+            "value": "[reference('serviceBus').outputs.ServiceBusEndpoint.value]"
         }
     }
 }
