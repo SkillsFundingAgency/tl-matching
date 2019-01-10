@@ -127,6 +127,10 @@
                             {
                                 "name": "ServiceName",
                                 "value": "Sfa.Tl.Matching"
+                            },
+                            {
+                                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                                "value": "[reference('uiAppInsights').outputs.InstrumentationKey.value]"
                             }
                         ]
                     }
@@ -190,6 +194,10 @@
                             {
                                 "name": "ServiceName",
                                 "value": "Sfa.Tl.Matching"
+                            },
+                            {
+                                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                                "value": "[reference('functionAppInsights').outputs.InstrumentationKey.value]"
                             }
                         ]
                     }
