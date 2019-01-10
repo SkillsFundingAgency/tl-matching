@@ -384,7 +384,9 @@
 		/* ReSharper disable UnknownCssVendorExtension */
 		-ms-flex-preferred-size: 320px;
 		/* ReSharper restore UnknownCssVendorExtension */
+		/* ReSharper disable CssBrowserCompatibility */
 		flex-basis: 320px;
+		/* ReSharper restore CssBrowserCompatibility */
 	}
 }
 
