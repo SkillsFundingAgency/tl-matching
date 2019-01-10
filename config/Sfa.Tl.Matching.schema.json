@@ -81,7 +81,7 @@
   "additionalProperties": false,
   "required": [
     "Authentication",
-    "NotificationsApiClientConfiguration",
+    "GovNotifyAPIKey",
     "SessionRedisConnectionString",
     "SqlConnectionString"
   ],
