@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Infrastructure.Configuration
 
         public string ServiceBusConnectionString { get; set; }
 
-        public string GovNotifyAPIKey { get; set; }
+        public string GovNotifyApiKey { get; set; }
 
         public string PostcodeRetrieverBaseUrl { get; set; }
 

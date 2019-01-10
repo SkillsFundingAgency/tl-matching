@@ -54,7 +54,7 @@
       "type": "string",
       "environmentVariable": "PostCodeRetrieverBaseUrl"
     },
-    "GovNotifyAPIKey": {
+    "GovNotifyApiKey": {
       "minLength": 1,
       "type": "string",
       "environmentVariable": "GovNotifyAPIKey"
@@ -81,7 +81,7 @@
   "additionalProperties": false,
   "required": [
     "Authentication",
-    "GovNotifyAPIKey",
+    "GovNotifyApiKey",
     "SessionRedisConnectionString",
     "SqlConnectionString"
   ],
