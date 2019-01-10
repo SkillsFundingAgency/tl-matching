@@ -14,8 +14,4 @@
     <Folder Include="Interfaces\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.1.19" />
-  </ItemGroup>
-
 </Project>
