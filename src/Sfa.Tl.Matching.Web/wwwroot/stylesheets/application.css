@@ -330,6 +330,7 @@
 }
 
 .das-user-panel__content {
+	/* ReSharper disable CssBrowserCompatibility */
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -338,6 +339,7 @@
 	-webkit-box-align: end;
 	-ms-flex-align: end;
 	align-items: flex-end;
+	/* ReSharper restore CssBrowserCompatibility */
 }
 
 @media print {
@@ -370,14 +372,18 @@
 }
 
 .das-user-panel__item--grow {
+	/* ReSharper disable CssBrowserCompatibility */
 	-webkit-box-flex: 1;
 	-ms-flex: 1;
 	flex: 1;
+	/* ReSharper restore CssBrowserCompatibility */
 }
 
 @media (max-width: 40.0525em) {
 	.das-user-panel__item--grow {
+		/* ReSharper disable UnknownCssVendorExtension */
 		-ms-flex-preferred-size: 320px;
+		/* ReSharper restore UnknownCssVendorExtension */
 		flex-basis: 320px;
 	}
 }
