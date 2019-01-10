@@ -2,7 +2,6 @@
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Extensions.DependencyInjection;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Infrastucture.Configuration;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
@@ -28,7 +27,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     Environment.GetEnvironmentVariable("ServiceName"))
                 .Result;
 
-            services.AddSingleton<MatchingConfiguration>(configuration);
+            services.AddSingleton(configuration);
 
             //var connectionString = config.GetConnectionString("SqlConnectionString");
 

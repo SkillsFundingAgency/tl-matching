@@ -1,20 +1,18 @@
 ﻿using System.Diagnostics;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Infrastucture.Configuration;
 using Sfa.Tl.Matching.Web.Models;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly MatchingConfiguration _configuration;
+        //private readonly MatchingConfiguration _configuration;
 
-        public HomeController(MatchingConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        //public HomeController(MatchingConfiguration configuration)
+        //{
+        //    _configuration = configuration;
+        //}
 
         [AllowAnonymous]
         public IActionResult Index()
@@ -53,10 +51,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task Signout()
+        public IActionResult Signout()
         {
-            //TODO: Signout using proper idams methods
-            RedirectToAction("Index");
+            //TODO: Sign-out using proper idams methods
+           return RedirectToAction("Index");
 
             //Should just do this:
             /*
@@ -69,10 +67,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
              */
         }
 
-        public async Task SignoutCleanup()
-        {
-            //TODO: Confirm whether this method is needed
-        }
+        //public Task SignOutCleanup()
+        //{
+        //    //TODO: Confirm whether this method is needed
+        //}
 
         [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

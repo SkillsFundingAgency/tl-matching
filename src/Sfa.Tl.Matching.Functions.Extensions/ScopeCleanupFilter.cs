@@ -5,6 +5,8 @@ using Microsoft.Azure.WebJobs.Host;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
+#pragma warning disable 618
+#pragma warning disable 618
     public class ScopeCleanupFilter : IFunctionInvocationFilter, IFunctionExceptionFilter
     {
         public Task OnExceptionAsync(FunctionExceptionContext exceptionContext, CancellationToken cancellationToken)
@@ -31,3 +33,5 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         }
     }
 }
+#pragma warning restore 618
+#pragma warning restore 618

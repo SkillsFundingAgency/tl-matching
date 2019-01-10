@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         {
             await Task.Yield();
 
-            var scope = InjectBindingProvider.Scopes.GetOrAdd(context.FunctionInstanceId, (_) => _serviceProvider.CreateScope());
+            var scope = InjectBindingProvider.Scopes.GetOrAdd(context.FunctionInstanceId, _ => _serviceProvider.CreateScope());
             var value = scope.ServiceProvider.GetRequiredService(_type);
 
             return await BindAsync(value, context.ValueContext);

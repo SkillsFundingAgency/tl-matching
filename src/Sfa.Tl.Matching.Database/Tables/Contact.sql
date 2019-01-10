@@ -15,6 +15,4 @@
 	[Email] NVARCHAR(100) NULL, 
 	[CreatedOn] DATETIME2 NULL DEFAULT GetDate(), 
 	[ModifiedOn] DATETIME2 NULL, 
-	CONSTRAINT [FK_Contact_Employer_EntityRefId] FOREIGN KEY (EntityRefId) REFERENCES [Employer]([Id]), 
-	CONSTRAINT [FK_Contact_Provider_EntityRefId] FOREIGN KEY (EntityRefId) REFERENCES [Provider]([Id]), 
 )
