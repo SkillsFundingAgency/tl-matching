@@ -277,14 +277,6 @@
         "azureSearchName": {
             "type": "string",
             "value": "[variables('azureSearchName')]"
-        },
-        "azureSearchAdminApiKey": {
-            "type": "string",
-            "value": "[reference('azureSearch').outputs.azureSearchPrimaryAdminKey.value]"
-        },
-        "serviceBusConnectionString": {
-            "type": "string",
-            "value": "[reference('serviceBus').outputs.ServiceBusEndpoint.value]"
         }
     }
 }
