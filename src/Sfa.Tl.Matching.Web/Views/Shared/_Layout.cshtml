@@ -64,34 +64,33 @@
         </div>
     </header>
 
-    <div class="govuk-width-container">
-        <span class="govuk-body-s das-user-panel__item das-user-panel__item--grow">
-            @*
-                If we have access to the applying org. include it here
-                <span class="govuk-!-font-weight-bold">Applying organisation</span>
-                <span class="govuk-visually-hidden">Signed in as </span>
-            *@
-            @*<span>Signed in as </span>
-                <span>@SessionService.Get("LoggedInUser")</span>*@
-        </span>
-        <span class="govuk-body-s">
-            <a class="govuk-link govuk-link--white" asp-controller="Home" asp-action="ContactUs">Contact us</a>
-        </span>
-        <span class="govuk-body-s">
-            @if (Context.User.Identity.IsAuthenticated)
-            {
-                @*<li>*@
-                <a class="govuk-link govuk-link--white" asp-area="" asp-controller="Home" asp-action="Signout">Sign out</a>
-                @*</li>*@
-            }
-            else
-            {
-                @*<li>*@
-                <a class="govuk-link govuk-link--white" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
-                @*</li>*@
-            }
-
-        </span>
+    @*TODO: Replace das- styles in application.css with our own *@
+    <div class="das-user-panel">
+        <div class="govuk-width-container">
+            <div class="das-user-panel__content">
+                <span class="govuk-body-s das-user-panel__item das-user-panel__item--grow">
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    //TODO: Get logged in user from claims
+                    @*<span>Signed in as </span>
+                    <span>@SessionService.Get("LoggedInUser")</span>*@
+                }
+                </span>
+                <span class="govuk-body-s das-user-panel__item">
+                    <a class="govuk-link govuk-link--white" asp-controller="Home" asp-action="ContactUs">Contact us</a>
+                </span>
+                <span class="govuk-body-s das-user-panel__item">
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        <a class="govuk-link govuk-link--white" asp-area="" asp-controller="Home" asp-action="Signout">Sign out</a>
+                    }
+                    else
+                    {
+                        <a class="govuk-link govuk-link--white" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
+                    }
+                </span>
+            </div>
+        </div>
     </div>
 
     <div class="govuk-width-container">
