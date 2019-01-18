@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Sfa.Tl.Matching.Web.ViewModels.FileUploadViewModel
+@{
     ViewData["Title"] = "T Levels Industry Placement Matching Service";
 }
 
@@ -11,7 +12,16 @@
 
                 <h2 class="govuk-heading-s">1. Select the file</h2>
                 <input type="file" name="file" />
-                <h2 class="govuk-heading-s">2. Upload the file</h2>
+                <h2 class="govuk-heading-s">2. Select the file type</h2>
+
+                <fieldset>
+                    @foreach (var fileType in Model.FileTypeViewModels)
+                    {
+                        <input asp-for="SelectedFileType" type="radio" value="@fileType.Id" /> @fileType.Name
+                    }
+                </fieldset>
+
+                <h2 class="govuk-heading-s">3. Upload the file</h2>
 
                 <div class="govuk-form-group">
                     <input class="govuk-button" type="submit" value="Upload">
