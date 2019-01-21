@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
+using Sfa.Tl.Matching.Web.Mappers;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -43,6 +44,7 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddSingleton(provider => Configuration);
             services.AddTransient<ILogger>(provider => Logger);
+            services.AddScoped<IFileUploadViewModelMapper, FileUploadViewModelMapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,7 +64,7 @@ namespace Sfa.Tl.Matching.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

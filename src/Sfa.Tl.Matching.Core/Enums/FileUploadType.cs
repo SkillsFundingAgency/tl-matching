@@ -1,8 +1,16 @@
-﻿namespace Sfa.Tl.Matching.Core.Enums
+﻿using System.ComponentModel;
+
+namespace Sfa.Tl.Matching.Core.Enums
 {
     public enum FileUploadType
     {
         Employer = 1,
-        Contact
+        EmployerContacts,
+        Provider,
+        ProviderContacts,
+        Venue,
+        Qualification,
+        [Description("Route & Pathway")]
+        RouteAndPathway
     }
 }
