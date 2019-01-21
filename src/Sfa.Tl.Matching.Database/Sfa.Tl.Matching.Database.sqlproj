@@ -59,9 +59,11 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables\" />
+    <Folder Include="PostDeployment" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
+    <None Include="PostDeployment\Seed Routes and Pathways.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
@@ -76,5 +78,9 @@
     <Build Include="Tables\ProviderCourses.sql" />
     <Build Include="Tables\IndustryPlacement.sql" />
     <Build Include="Tables\LocalAuthorityMapping.sql" />
+    <Build Include="Tables\RoutePathLookup.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostDeployment\PostDeploy.sql" />
   </ItemGroup>
 </Project>
