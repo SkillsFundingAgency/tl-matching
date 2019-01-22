@@ -15,6 +15,6 @@ namespace Sfa.Tl.Matching.Data.Models
 
         public virtual Course Course { get; set; }
         public virtual ICollection<IndustryPlacement> IndustryPlacement { get; set; }
-        public virtual ICollection<RoutePathLookup> RoutePathLookup { get; set; }
+        public virtual RoutePathLookup RoutePathLookup { get; set; }
     }
 }

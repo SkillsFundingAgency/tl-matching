@@ -2,6 +2,8 @@
 Insert initial data for Routes and Pathways
 */
 
+SET IDENTITY_INSERT [dbo].[RoutePathLookup] ON
+
 MERGE INTO [dbo].[RoutePathLookup] AS Target 
 USING (VALUES 
   (1, N'Agriculture, Environmental and Animal Care', N'Agriculture, Land Management and Production'),
@@ -47,3 +49,6 @@ WHEN NOT MATCHED BY TARGET THEN
 	VALUES ([Id], [Route], [Path], 'System') 
 WHEN NOT MATCHED BY SOURCE THEN 
 DELETE;
+
+SET IDENTITY_INSERT [dbo].[RoutePathLookup] OFF
+
