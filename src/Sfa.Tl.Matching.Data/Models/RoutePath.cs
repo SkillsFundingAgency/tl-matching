@@ -7,8 +7,7 @@ namespace Sfa.Tl.Matching.Data.Models
     {
         public Guid Id { get; set; }
         public Guid CourseId { get; set; }
-        public string Route { get; set; }
-        public string Path { get; set; }
+        public int RoutePathLookupId { get; set; }
         public string Summary { get; set; }
         public string Keywords { get; set; }
         public DateTime? CreatedOn { get; set; }
@@ -16,5 +15,6 @@ namespace Sfa.Tl.Matching.Data.Models
 
         public virtual Course Course { get; set; }
         public virtual ICollection<IndustryPlacement> IndustryPlacement { get; set; }
+        public virtual RoutePathLookup RoutePathLookup { get; set; }
     }
 }
