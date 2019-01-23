@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using NLog.Web;
+using Microsoft.Extensions.Logging;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -9,25 +8,21 @@ namespace Sfa.Tl.Matching.Web
     {
         public static void Main(string[] args)
         {
-            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-            try
-            {
-                logger.Info("Starting up host");
-                CreateWebHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
-            {
-                //NLog: catch setup errors
-                logger.Error(ex, "Stopped program because of exception");
-                throw;
-            }
+            CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseApplicationInsights()
                 .UseStartup<Startup>()
-                //.UseUrls("https://localhost:6016", "http://localhost:6015")
-                .UseNLog();
+                .ConfigureLogging(logging =>
+                {
+                    logging.AddConsole();
+                    logging.AddDebug();
+                    logging.AddAzureWebAppDiagnostics();
+                    logging.AddFilter((category, level) =>
+                        level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
+
+                });
     }
 }
