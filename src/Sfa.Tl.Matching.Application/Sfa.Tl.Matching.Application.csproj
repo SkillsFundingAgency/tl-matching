@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Core\Sfa.Tl.Matching.Core.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Infrastructure\Sfa.Tl.Matching.Infrastructure.csproj" />
   </ItemGroup>
 

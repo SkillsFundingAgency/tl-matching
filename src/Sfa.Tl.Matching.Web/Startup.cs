@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Core.Interfaces;
+using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 
 namespace Sfa.Tl.Matching.Web
@@ -39,6 +44,14 @@ namespace Sfa.Tl.Matching.Web
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddDbContext<MatchingDbContext>(options =>
+                options.UseSqlServer(Configuration.SqlConnectionString));
+
+            services.AddAutoMapper();
+
+            services.AddTransient<IRoutePathService, RoutePathService>();
+            services.AddTransient<IRoutePathRepository, RoutePathRepository>();
 
             //Inject services
             services.AddSingleton(provider => Configuration);
