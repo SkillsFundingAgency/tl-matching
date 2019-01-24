@@ -8,7 +8,7 @@ using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class FileUploadController : Controller
     {
         private readonly IFileUploadViewModelMapper _viewModelMapper;
