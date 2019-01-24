@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
         public EmployerLoadResult Load(Stream stream)
         {
             var fileLoadResult = new EmployerLoadResult();
-            var employers = new List<Employer>();
+            var employers = new List<Employer>(); // TODO AU Return a FileEmployer
 
             using (var document = SpreadsheetDocument.Open(stream, false))
             {

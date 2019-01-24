@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Core\Sfa.Tl.Matching.Core.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.FileReader.Csv\Sfa.Tl.Matching.FileReader.Csv.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.FileReader.Excel\Sfa.Tl.Matching.FileReader.Excel.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Infrastructure\Sfa.Tl.Matching.Infrastructure.csproj" />
   </ItemGroup>
 
