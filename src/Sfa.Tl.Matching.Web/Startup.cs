@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using System.Globalization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +15,9 @@ using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
+using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Infrastructure.Configuration;
+using Sfa.Tl.Matching.Web.Extensions;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -38,6 +44,8 @@ namespace Sfa.Tl.Matching.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            AddAuthentication(services);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<MatchingDbContext>(options =>
@@ -53,6 +61,11 @@ namespace Sfa.Tl.Matching.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var cultureInfo = new CultureInfo("en-GB");
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -74,6 +87,22 @@ namespace Sfa.Tl.Matching.Web
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void AddAuthentication(IServiceCollection services)
+        {
+            services.AddAuthentication(sharedOptions =>
+            {
+                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = WsFederationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultSignOutScheme = WsFederationDefaults.AuthenticationScheme;
+            }).AddWsFederation(options =>
+            {
+                options.Wtrealm = Configuration.Authentication.WtRealm;
+                options.MetadataAddress = Configuration.Authentication.MetaDataEndpoint;
+                options.TokenValidationParameters.RoleClaimType = Roles.RoleClaimType;
+            }).AddCookie();
         }
     }
 }
