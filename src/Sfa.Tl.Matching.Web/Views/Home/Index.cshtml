@@ -1,10 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "T Levels Industry Placement Matching Service";
+    ViewData["Title"] = "Industry Placement Matching Service";
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">Find an industry placement</h1>
+        <h1 class="govuk-heading-l">Industry Placement Matching Service</h1>
         <p class="govuk-body">Use this service to help employers:</p>
         <ul class="govuk-list govuk-list--bullet">
             <li>find local providers with suitable students</li>
@@ -14,9 +14,9 @@
         <div class="govuk-inset-text">
             You will only be able to find one type of placement for one location at a time.
         </div>
-        <form asp-controller="Home" asp-action="Start">
-            <input class="govuk-button govuk-button--start" type="submit" value="Start now">
-        </form>
+        <<div class="form-group">
+            <a asp-action="SignIn" asp-controller="Account" class="govuk-button govuk-button--start">Start now</a>
+        </div>
     </div>
 </div>
 
