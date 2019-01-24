@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return RedirectToAction("InvalidRole", "Home");
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Start", "Search");
         }
 
         [HttpGet]

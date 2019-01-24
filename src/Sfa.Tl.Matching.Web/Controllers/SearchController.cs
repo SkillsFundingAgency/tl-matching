@@ -22,5 +22,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
             // ReSharper disable once Mvc.ViewNotResolved
             return View(model);
         }
+        
+        [HttpPost]
+        public IActionResult Results(SearchQueryViewModel viewModel)
+        {
+            return View();
+        }
+    }
+
+    public class SearchQueryViewModel
+    {
     }
 }
