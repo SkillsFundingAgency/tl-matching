@@ -49,38 +49,27 @@
                 <a href="/" class="govuk-header__link govuk-header__link--service-name">
                     T Levels Industry Placement Matching Service
                 </a>
+                <button type="button" role="button" class="govuk-header__menu-button js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
+                <nav>
+                    <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
+                        <li class="govuk-header__navigation-item">
+                            <a class="govuk-header__link" asp-controller="Home" asp-action="ContactUs">Contact us</a>
+                        </li>
+                        <li class="govuk-header__navigation-item">
+                            @if (Context.User.Identity.IsAuthenticated)
+                            {
+                                <a class="govuk-header__link" asp-area="" asp-controller="Home" asp-action="Signout">Sign out</a>
+                            }
+                            else
+                            {
+                                <a class="govuk-header__link" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
+                            }
+                        </li>                     
+                    </ul>
+                </nav>
             </div>
         </div>
     </header>
-
-    @*TODO: Replace das- styles in application.css with our own *@
-    <div class="das-user-panel">
-        <div class="govuk-width-container">
-            <div class="das-user-panel__content">
-                <span class="govuk-body-s das-user-panel__item das-user-panel__item--grow">
-                    @if (Context.User.Identity.IsAuthenticated)
-                    {
-                        //TODO: Get logged in user from claims
-                        @*<span>Signed in as </span>
-                            <span>@SessionService.Get("LoggedInUser")</span>*@
-                    }
-                </span>
-                <span class="govuk-body-s das-user-panel__item">
-                    <a class="govuk-link govuk-link--white" asp-controller="Home" asp-action="ContactUs">Contact us</a>
-                </span>
-                <span class="govuk-body-s das-user-panel__item">
-                    @if (Context.User.Identity.IsAuthenticated)
-                    {
-                        <a class="govuk-link govuk-link--white" asp-area="" asp-controller="Home" asp-action="Signout">Sign out</a>
-                    }
-                    else
-                    {
-                        <a class="govuk-link govuk-link--white" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
-                    }
-                </span>
-            </div>
-        </div>
-    </div>
 
     <div class="govuk-width-container">
         <div class="govuk-phase-banner">
@@ -97,8 +86,8 @@
     </div>
 
     <div class="govuk-width-container">
-        <main class="govuk-main-wrapper " id="main-content" role="main">
-            @RenderBody()
+        <main class="govuk-main-wrapper" id="main-content" role="main">
+            @RenderBody();
         </main>
     </div>
 
