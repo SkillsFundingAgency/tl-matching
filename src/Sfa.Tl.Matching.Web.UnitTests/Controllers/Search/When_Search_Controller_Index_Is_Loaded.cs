@@ -10,14 +10,13 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
 {
-    public class IndexLoaded
+    public class When_Search_Controller_Index_Is_Loaded
     {
         private IRoutePathService _routePathLookupService;
         private SearchController _controller;
         private IActionResult _result;
 
         [SetUp]
-        //public async Task Setup()
         public void Setup()
         {
             _routePathLookupService =
@@ -40,13 +39,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
             _routePathLookupService.GetRoutesAsync().Returns(routes);
 
             _controller = new SearchController(_routePathLookupService);
-            //var _result = await _controller.Index();
-            //_result = Task.FromResult(_controller.Index()).Result.Result;
             _result = _controller.Index().Result;
         }
 
         [Test]
-        public async Task GetRoutesAsyncIsCalledExactlyOnce()
+        public async Task Then_GetRoutesAsync_Is_Called_Exactly_Once()
         {
             await _routePathLookupService
                 .Received(1)
