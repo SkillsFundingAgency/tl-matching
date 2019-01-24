@@ -5,10 +5,10 @@ using Sfa.Tl.Matching.Web.Controllers;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload.Security
 {
-    public class ActionUploadAllowAnonymousAttribute
+    public class Index_Action_Allow_Anonymous_Attribute
     {
         private AllowAnonymousAttribute _allowAnonymousAttribute;
-        private const string MethodName = "Upload";
+        private const string MethodName = "Index";
 
         [SetUp]
         public void Setup()
@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload.Security
         }
 
         [Test]
-        public void IsNotOnMethod() =>
+        public void Is_Not_On_Method() =>
             Assert.Null(_allowAnonymousAttribute);
     }
 }

@@ -27,12 +27,18 @@ namespace Sfa.Tl.Matching.Web.Mappers
             var fileTypeViewModels = fileUploadTypeNames.Select(uploadType =>
                 new FileTypeViewModel
                 {
-                    Id = (int)Enum.Parse(typeof(FileUploadType), uploadType),
-                    Name = ((FileUploadType)Enum.Parse(typeof(FileUploadType), uploadType)).Humanize(),
+                    Id = GetId(uploadType),
+                    Name = GetDescription(uploadType),
                 }).ToList();
 
             return fileTypeViewModels;
         }
+
+        private static int GetId(string uploadType) =>
+            (int)Enum.Parse(typeof(FileUploadType), uploadType);
+
+        private static string GetDescription(string uploadType) =>
+            ((FileUploadType)Enum.Parse(typeof(FileUploadType), uploadType)).Humanize();
         #endregion
     }
 }

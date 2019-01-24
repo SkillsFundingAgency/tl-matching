@@ -4,7 +4,7 @@ using Sfa.Tl.Matching.Web.Controllers;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload.Security
 {
-    public class ControllerAuthoriseAttribute
+    public class Controller_Authorise_Attribute
     {
         private AuthorizeAttribute[] _authoriseAttributes;
 
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload.Security
         }
 
         [Test]
-        public void IsOnController() =>
+        public void Is_On_Controller() =>
             Assert.Greater(_authoriseAttributes.Length, 0);
     }
 }

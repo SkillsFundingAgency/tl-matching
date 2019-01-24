@@ -5,7 +5,7 @@ using Sfa.Tl.Matching.Web.Mappers;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.FileUploadViewModel
 {
-    public class DescriptionPopulateSuccess
+    public class Description_Is_Populated_Successfully
     {
         private ViewModels.FileUploadViewModel _viewModel;
 
@@ -17,15 +17,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.FileUploadViewModel
         }
 
         [Test]
-        public void IsNotNull() =>
+        public void Is_Not_Null() =>
             Assert.NotNull(_viewModel);
 
         [Test]
-        public void FileTypeViewModelsIsNotNull() =>
+        public void File_Type_View_Models_Is_Not_Null() =>
             Assert.NotNull(_viewModel.FileTypeViewModels);
 
-        [Test(Description = "FileUploadType name is mapped correctly to the View Model")]
-        public void FileTypeViewModelsEnumName() =>
+        [Test]
+        public void FileUploadType_Name_Is_Mapped_Correctly() =>
             Assert.AreEqual(FileUploadType.RouteAndPathway.Humanize(), _viewModel.FileTypeViewModels[6].Name);
     }
 }

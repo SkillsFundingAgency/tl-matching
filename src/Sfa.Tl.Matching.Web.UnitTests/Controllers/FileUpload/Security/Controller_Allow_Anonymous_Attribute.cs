@@ -4,7 +4,7 @@ using Sfa.Tl.Matching.Web.Controllers;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload.Security
 {
-    public class ControllerAllowAnonymousAttribute
+    public class Controller_Allow_Anonymous_Attribute
     {
         private AllowAnonymousAttribute[] _allowAnonymousAttributes;
 
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload.Security
         }
 
         [Test]
-        public void IsNotOnController() =>
+        public void Is_Not_On_Controller() =>
             Assert.Zero(_allowAnonymousAttributes.Length);
     }
 }

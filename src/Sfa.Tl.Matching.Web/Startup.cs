@@ -5,9 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Application.Commands.UploadBlob;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Infrastructure.Blob;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 using Sfa.Tl.Matching.Web.Mappers;
+using Sfa.Tl.Matching.Web.Services;
+using Constants = Sfa.Tl.Matching.Infrastructure.Configuration.Constants;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -44,6 +48,11 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddSingleton(provider => Configuration);
             services.AddTransient<ILogger>(provider => Logger);
+
+            services.AddScoped<IBlobService, BlobService>();
+            services.AddScoped<IUploadService, UploadService>();
+
+            services.AddScoped<IUploadBlobCommand, UploadBlobCommand>();
             services.AddScoped<IFileUploadViewModelMapper, FileUploadViewModelMapper>();
         }
 
