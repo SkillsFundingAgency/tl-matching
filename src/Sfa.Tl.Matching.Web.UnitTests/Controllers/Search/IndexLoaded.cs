@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using NSubstitute;
-using Sfa.Tl.Matching.Core.DomainModels;
-using Sfa.Tl.Matching.Core.Interfaces;
 using Sfa.Tl.Matching.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
 {
@@ -45,14 +45,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
             _result = _controller.Index().Result;
         }
 
-        //[Test]
-        //public async Task GetPathsAsyncIsCalledExactlyOnce()
-        //{
-        //    await _routePathLookupService
-        //        .Received(1)
-        //        .GetPathsAsync();
-        //}
-
         [Test]
         public async Task GetRoutesAsyncIsCalledExactlyOnce()
         {
@@ -65,16 +57,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
         public void ResultContainsRoutes()
         {
             var view = _result as ViewResult;
-            var model = view.Model as IEnumerable<Route>;
-            Assert.AreEqual("Route 1", model.First().Name);
+            var model = view?.Model as IEnumerable<Route>;
+            Assert.AreEqual("Route 1", model?.First().Name);
         }
-
-        //[Test]
-        //public void ResultContainsPaths()
-        //{
-        //    var view = _result as ViewResult;
-        //    var model = view.Model as IEnumerable<Path>;
-        //    Assert.AreEqual("Path 1", model.First().Name);
-        //}
     }
 }

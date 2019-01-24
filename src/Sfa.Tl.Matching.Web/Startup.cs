@@ -7,9 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Core.Interfaces;
 using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 
@@ -17,14 +18,13 @@ namespace Sfa.Tl.Matching.Web
 {
     public class Startup
     {
-        public MatchingConfiguration Configuration { get; set; }
+        private readonly MatchingConfiguration _configuration;
 
         public ILogger<Startup> Logger { get; }
 
         public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
-            var configurationService = new ConfigurationService();
-            Configuration = configurationService.GetConfig(
+            _configuration = ConfigurationLoader.Load(
                 configuration[Constants.EnvironmentNameConfigKey],
                 configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
                 configuration[Constants.VersionConfigKey],
@@ -46,15 +46,14 @@ namespace Sfa.Tl.Matching.Web
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<MatchingDbContext>(options =>
-                options.UseSqlServer(Configuration.SqlConnectionString));
+                options.UseSqlServer(_configuration.SqlConnectionString));
 
             services.AddAutoMapper();
 
+            //Inject services
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IRoutePathRepository, RoutePathRepository>();
 
-            //Inject services
-            services.AddSingleton(provider => Configuration);
             services.AddTransient<ILogger>(provider => Logger);
         }
 

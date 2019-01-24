@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Core.Interfaces;
+using Sfa.Tl.Matching.Application.Interfaces;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -15,9 +15,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //TODO: Add view model and view model mapper
+            //TODO: Add view model and mapper
             var model = await _routePathLookupService.GetRoutesAsync();
 
+            //TODO: Create actual view and remove R# comment
+            // ReSharper disable once Mvc.ViewNotResolved
             return View(model);
         }
     }

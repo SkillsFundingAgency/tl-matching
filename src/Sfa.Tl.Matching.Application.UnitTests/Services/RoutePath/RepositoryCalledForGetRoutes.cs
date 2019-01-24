@@ -1,37 +1,31 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using NSubstitute;
 using NUnit.Framework;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Application.Interfaces;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 {
-    public class ReturnsRoutes
+    public class RepositoryCalledForGetRoutes
     {
         private IRoutePathRepository _repository;
         private IRoutePathService _service;
-        private Task<IEnumerable<Route>> _result;
         private readonly IEnumerable<Route> _routeData
             = new List<Route>
             {
                 new Route { Id = 1, Name = "Route 1" },
                 new Route { Id = 2, Name = "Route 2" }
             };
-        private readonly IEnumerable<Route> _expected
-            = new List<Route>
-            {
-                new Route { Name = "Route 1"},
-                new Route { Name = "Route 2"}
-            };
 
         [SetUp]
         public void Setup()
         {
-            _repository =
+            _repository = 
                 Substitute
                     .For<IRoutePathRepository>();
 
@@ -40,13 +34,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 
             _service = new RoutePathService(_repository);
 
-            _result = _service.GetRoutesAsync();
+            _service.GetRoutesAsync().ConfigureAwait(false);
         }
 
         [Test]
-        public void ResultIsAsExpected()
+        public async Task GetRoutesAsyncIsCalledExactlyOnce()
         {
-            Assert.AreEqual(_expected.First().Name, _result.Result.First().Name);
+            await _repository
+                .Received(1)
+                .GetRoutesAsync();
         }
     }
 }

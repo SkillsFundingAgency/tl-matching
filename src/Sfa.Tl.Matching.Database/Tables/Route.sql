@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[Route]
+(
+	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY, 
+	[Name] NVARCHAR(50) NOT NULL, 
+	[Keywords] NVARCHAR(500) NULL, 
+	[Summary] NVARCHAR(500) NULL, 
+	[CreatedOn] DATETIME2 NULL DEFAULT GetDate(), 
+	[CreatedBy] NVARCHAR(50) NOT NULL, 
+	[ModifiedOn] DATETIME2 NULL, 
+	[ModifiedBy] NVARCHAR(50) NULL)

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Extensions.DependencyInjection;
-using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Infrastructure.Configuration;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
@@ -19,15 +19,12 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private void RegisterServices(IServiceCollection services)
         {
-            var configurationService = new ConfigurationService();
-            var configuration = configurationService.GetConfig(
+            var configuration = ConfigurationLoader.Load(
                     Environment.GetEnvironmentVariable("EnvironmentName"),
                     Environment.GetEnvironmentVariable("ConfigurationStorageConnectionString"),
                     Environment.GetEnvironmentVariable("Version"),
                     Environment.GetEnvironmentVariable("ServiceName"))
                 .Result;
-
-            services.AddSingleton(configuration);
 
             //var connectionString = config.GetConnectionString("SqlConnectionString");
 
