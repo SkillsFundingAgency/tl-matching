@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[RoutePathLookup]
+(
+	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY, 
+	[Route] NVARCHAR(50) NOT NULL, 
+	[Path] NVARCHAR(50) NOT NULL, 
+	[CreatedOn] DATETIME2 NULL DEFAULT GetDate(), 
+	[CreatedBy] NVARCHAR(50) NOT NULL, 
+	[ModifiedOn] DATETIME2 NULL, 
+	[ModifiedBy] NVARCHAR(50) NULL
+)
