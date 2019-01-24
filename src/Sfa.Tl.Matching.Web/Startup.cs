@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
@@ -20,17 +19,13 @@ namespace Sfa.Tl.Matching.Web
     {
         private readonly MatchingConfiguration _configuration;
 
-        public ILogger<Startup> Logger { get; }
-
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             _configuration = ConfigurationLoader.Load(
                 configuration[Constants.EnvironmentNameConfigKey],
                 configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
                 configuration[Constants.VersionConfigKey],
                 configuration[Constants.ServiceNameConfigKey]).Result;
-
-            Logger = logger;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -53,8 +48,6 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IRoutePathRepository, RoutePathRepository>();
-
-            services.AddTransient<ILogger>(provider => Logger);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,7 +67,7 @@ namespace Sfa.Tl.Matching.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

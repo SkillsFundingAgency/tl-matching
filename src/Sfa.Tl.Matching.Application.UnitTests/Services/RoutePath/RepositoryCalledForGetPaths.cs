@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Application.Interfaces;
 
