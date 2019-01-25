@@ -9,10 +9,10 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
 {
     public class When_RoutePathRepository_GetPathsAsync_Is_Called
     {
-        private Task<IEnumerable<Path>> _result;
+        private IEnumerable<Path> _result;
 
-        [SetUp]
-        public void Setup()
+        [OneTimeSetUp]
+        public async Task OneTimeSetup()
         {
             using (var dbContext = InMemoryDbContext.Create())
             {
@@ -39,78 +39,50 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
                 dbContext.SaveChanges();
 
                 var repository = new RoutePathRepository(dbContext);
-                _result = repository.GetPathsAsync();
+                _result = await repository.GetPathsAsync();
             }
         }
 
         [Test]
-        public async Task Then_Path_Id_Is_Returned()
+        public void Then_Path_Id_Is_Returned()
         {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.AreEqual(1, t.Result.First().Id);
-                });
+            Assert.AreEqual(1, _result.First().Id);
         }
 
         [Test]
-        public async Task Then_Path_RouteId_Is_Returned()
+        public void Then_Path_RouteId_Is_Returned()
         {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.AreEqual(1, t.Result.First().RouteId);
-                });
+            Assert.AreEqual(1, _result.First().RouteId);
         }
 
         [Test]
-        public async Task Then_Path_Name_Is_Returned()
+        public void Then_Path_Name_Is_Returned()
         {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.AreEqual("Path 1", t.Result.First().Name);
-                });
+            Assert.AreEqual("Path 1", _result.First().Name);
         }
 
         [Test]
-        public async Task Then_Path_Keywords_Is_Returned()
+        public void Then_Path_Keywords_Is_Returned()
         {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.AreEqual("Keyword", t.Result.First().Keywords);
-                });
+            Assert.AreEqual("Keyword", _result.First().Keywords);
         }
 
         [Test]
-        public async Task Then_Path_Summary_Is_Returned()
+        public void Then_Path_Summary_Is_Returned()
         {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.AreEqual("Path summary", t.Result.First().Summary);
-                });
+            Assert.AreEqual("Path summary", _result.First().Summary);
         }
 
         [Test]
-        public async Task Then_Related_Route_Is_Returned()
+        public void Then_Related_Route_Is_Returned()
         {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.IsNotNull(t.Result.First().Route.Id);
-                });
+            Assert.IsNotNull(_result.First().Route.Id);
         }
 
         [Test]
-        public async Task Then_Related_Route_Id_Is_Returned()
+        public void Then_Related_Route_Id_Is_Returned()
         {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.AreEqual(1, t.Result.First().Route.Id);
-                });
+            Assert.AreEqual(1, _result.First().Route.Id);
         }
     }
 }

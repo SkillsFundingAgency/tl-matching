@@ -9,10 +9,10 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
 {
     public class When_RoutePathRepository_GetRoutesAsync_Is_Called
     {
-        private Task<IEnumerable<Route>> _result;
+        private IEnumerable<Route> _result;
 
-        [SetUp]
-        public void Setup()
+        [OneTimeSetUp]
+        public async Task OneTimeSetup()
         {
             using (var dbContext = InMemoryDbContext.Create())
             {
@@ -27,49 +27,32 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
                 dbContext.SaveChanges();
 
                 var repository = new RoutePathRepository(dbContext);
-                _result = repository.GetRoutesAsync();
+                _result = await repository.GetRoutesAsync();
             }
         }
 
         [Test]
-        public async Task Then_Route_Id_Is_Returned()
+        public void Then_Route_Id_Is_Returned()
         {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.AreEqual(1, t.Result.First().Id);
-                });
+            Assert.AreEqual(_result.First().Id, _result.First().Id);
         }
 
         [Test]
-        public async Task Then_Route_Name_Is_Returned()
+        public void Then_Route_Name_Is_Returned()
         {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.AreEqual("Route 1", t.Result.First().Name);
-                });
-        }
-
-
-        [Test]
-        public async Task Then_Route_Keywords_Is_Returned()
-        {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.AreEqual("Keyword", t.Result.First().Keywords);
-                });
+            Assert.AreEqual("Route 1", _result.First().Name);
         }
         
         [Test]
-        public async Task Then_Route_Summary_Id_Is_Returned()
+        public void Then_Route_Keywords_Is_Returned()
         {
-            await _result.ContinueWith(
-                t =>
-                {
-                    Assert.AreEqual("Route summary", t.Result.First().Summary);
-                });
+            Assert.AreEqual("Keyword", _result.First().Keywords);
+        }
+
+        [Test]
+        public void Then_Route_Summary_Id_Is_Returned()
+        {
+            Assert.AreEqual("Route summary", _result.First().Summary);
         }
     }
 }

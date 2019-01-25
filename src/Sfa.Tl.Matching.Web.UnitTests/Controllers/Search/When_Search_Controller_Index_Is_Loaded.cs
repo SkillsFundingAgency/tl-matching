@@ -16,8 +16,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
         private SearchController _controller;
         private IActionResult _result;
 
-        [SetUp]
-        public void Setup()
+        [OneTimeSetUp]
+        public async Task OneTimeSetup()
         {
             _routePathLookupService =
                 Substitute
@@ -29,6 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
                     new Path { Name = "Path 1" }
                 }
                 .AsEnumerable());
+
             var routes = Task.FromResult(
                 new List<Route>
                     {
@@ -39,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
             _routePathLookupService.GetRoutesAsync().Returns(routes);
 
             _controller = new SearchController(_routePathLookupService);
-            _result = _controller.Index().Result;
+            _result = await _controller.Index();
         }
 
         [Test]
@@ -51,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
         }
 
         [Test]
-        public void ResultContainsRoutes()
+        public void Then_Result_Contains_Routes()
         {
             var view = _result as ViewResult;
             var model = view?.Model as IEnumerable<Route>;

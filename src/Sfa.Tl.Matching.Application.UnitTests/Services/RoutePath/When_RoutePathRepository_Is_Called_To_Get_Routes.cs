@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
     {
         private IRoutePathRepository _repository;
         private IRoutePathService _service;
-        private Task<IEnumerable<Route>> _result;
+        private IEnumerable<Route> _result;
 
         private readonly IEnumerable<Route> _routeData
             = new List<Route>
@@ -53,8 +53,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
                     }
             };
 
-        [SetUp]
-        public void Setup()
+        [OneTimeSetUp]
+        public async Task OneTimeSetup()
         {
             _repository =
                 Substitute
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 
             _service = new RoutePathService(_repository);
 
-            _result = Task.FromResult(_service.GetRoutesAsync().Result);
+            _result = await _service.GetRoutesAsync();
         }
 
         [Test]
@@ -79,31 +79,31 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         [Test]
         public void Then_The_Expected_Number_Of_Items_Is_Returned()
         {
-            Assert.AreEqual(_routeData.Count(), _result.Result.Count());
+            Assert.AreEqual(_routeData.Count(), _result.Count());
         }
 
         [Test]
         public void Then_Route_Id_Is_Returned()
         {
-            Assert.AreEqual(_expected.First().Id, _result.Result.First().Id);
+            Assert.AreEqual(_expected.First().Id, _result.First().Id);
         }
 
         [Test]
         public void Then_Route_Name_Is_Returned()
         {
-            Assert.AreEqual(_expected.First().Name, _result.Result.First().Name);
+            Assert.AreEqual(_expected.First().Name, _result.First().Name);
         }
 
         [Test]
         public void Then_Route_Keywords_Is_Returned()
         {
-            Assert.AreEqual(_expected.First().Keywords, _result.Result.First().Keywords);
+            Assert.AreEqual(_expected.First().Keywords, _result.First().Keywords);
         }
 
         [Test]
         public void Then_Route_Summary_Is_Returned()
         {
-            Assert.AreEqual(_expected.First().Summary, _result.Result.First().Summary);
+            Assert.AreEqual(_expected.First().Summary, _result.First().Summary);
         }
     }
 }
