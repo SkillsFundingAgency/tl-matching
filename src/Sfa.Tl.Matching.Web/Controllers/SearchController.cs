@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -18,8 +19,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             //TODO: Add view model and mapper
             var model = await _routePathLookupService.GetRoutesAsync();
 
-            //TODO: Create actual view and remove R# comment
-            // ReSharper disable once Mvc.ViewNotResolved
             return View(model);
         }
         
@@ -28,9 +27,5 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View();
         }
-    }
-
-    public class SearchQueryViewModel
-    {
     }
 }

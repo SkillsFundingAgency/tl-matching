@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Web.Models;
+using Sfa.Tl.Matching.Models;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
