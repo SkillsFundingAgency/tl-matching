@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         }
 
         [SuppressMessage("ReSharper", "UnusedVariable")]
+        [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         private void RegisterServices(IServiceCollection services)
         {
             var configuration = ConfigurationLoader.Load(
@@ -28,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     Environment.GetEnvironmentVariable("ServiceName"))
                 .Result;
 
-            //TODO: Remove SuppressMessage on method
+            //TODO: Remove SuppressMessage(s) on method
             //var connectionString = config.GetConnectionString("SqlConnectionString");
 
             //Add services here
