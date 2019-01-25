@@ -1,7 +1,5 @@
 ﻿using Sfa.Tl.Matching.Domain.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Sfa.Tl.Matching.Data.Interfaces;
 
 namespace Sfa.Tl.Matching.Data.Repositories
@@ -15,14 +13,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Path>> GetPathsAsync()
+        public IQueryable<Path> GetPaths()
         {
-            return await _dbContext.Path.ToListAsync();
+            return _dbContext.Path;
         }
 
-        public async Task<IEnumerable<Route>> GetRoutesAsync()
+        public IQueryable<Route> GetRoutes()
         {
-            return await _dbContext.Route.ToListAsync();
+            return _dbContext.Route;
         }
     }
 }

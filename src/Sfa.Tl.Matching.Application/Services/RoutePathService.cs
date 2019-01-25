@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -15,14 +14,14 @@ namespace Sfa.Tl.Matching.Application.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Path>> GetPathsAsync()
+        public IQueryable<Path> GetPaths()
         {
-            return await _repository.GetPathsAsync();
+            return _repository.GetPaths();
         }
 
-        public async Task<IEnumerable<Route>> GetRoutesAsync()
+        public IQueryable<Route> GetRoutes()
         {
-            return await _repository.GetRoutesAsync();
+            return _repository.GetRoutes();
         }
     }
 }
