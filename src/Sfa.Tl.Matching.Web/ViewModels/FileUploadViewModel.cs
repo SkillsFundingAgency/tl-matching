@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Sfa.Tl.Matching.Core.Enums;
+using Sfa.Tl.Matching.Domain.Enums;
 
 namespace Sfa.Tl.Matching.Web.ViewModels
 {

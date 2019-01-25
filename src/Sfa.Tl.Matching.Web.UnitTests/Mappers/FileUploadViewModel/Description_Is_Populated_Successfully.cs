@@ -1,6 +1,6 @@
 using Humanizer;
 using NUnit.Framework;
-using Sfa.Tl.Matching.Core.Enums;
+using Sfa.Tl.Matching.Domain.Enums;
 using Sfa.Tl.Matching.Web.Mappers;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.FileUploadViewModel

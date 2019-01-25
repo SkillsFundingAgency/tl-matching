@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Humanizer;
-using Sfa.Tl.Matching.Core.Enums;
+using Sfa.Tl.Matching.Domain.Enums;
 using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.Mappers

@@ -60,10 +60,10 @@
     <Folder Include="Properties" />
     <Folder Include="Tables\" />
     <Folder Include="PostDeployment" />
+    <Folder Include="PreDeployment" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
-    <None Include="PostDeployment\Seed Routes and Pathways.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
@@ -78,9 +78,15 @@
     <Build Include="Tables\ProviderCourses.sql" />
     <Build Include="Tables\IndustryPlacement.sql" />
     <Build Include="Tables\LocalAuthorityMapping.sql" />
-    <Build Include="Tables\RoutePathLookup.sql" />
+    <Build Include="Tables\Route.sql" />
+    <Build Include="Tables\Path.sql" />
+    <None Include="PostDeployment\Seed Routes.sql" />
+    <None Include="PostDeployment\Seed Paths.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="PreDeployment\PreDeploy.sql" />
   </ItemGroup>
 </Project>

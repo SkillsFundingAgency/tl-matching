@@ -23,19 +23,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
     <PackageReference Include="Humanizer.Core.uk" Version="2.5.16" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.1" />
     <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers" Version="1.0.16" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj" />
-    <ProjectReference Include="..\Sfa.Tl.Matching.Core\Sfa.Tl.Matching.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

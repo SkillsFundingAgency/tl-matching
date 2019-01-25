@@ -2,5 +2,5 @@
 Post-Deployment Script
 */
 
-:r ".\Seed Routes and Pathways.sql"
-
+:r ".\Seed Routes.sql"
+:r ".\Seed Paths.sql"

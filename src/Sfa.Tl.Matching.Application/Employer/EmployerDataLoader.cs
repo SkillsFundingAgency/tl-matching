@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Sfa.Tl.Matching.Core.Enums;
+using Sfa.Tl.Matching.Domain.Enums;
 using Sfa.Tl.Matching.FileReader.Excel.Employer;
 
 namespace Sfa.Tl.Matching.Application.Employer

@@ -7,15 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sfa.Tl.Matching.Core\Sfa.Tl.Matching.Core.csproj" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 </Project>

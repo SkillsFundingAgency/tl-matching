@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using NUnit.Framework;
-using Sfa.Tl.Matching.Core.Enums;
+using Sfa.Tl.Matching.Domain.Enums;
 using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
