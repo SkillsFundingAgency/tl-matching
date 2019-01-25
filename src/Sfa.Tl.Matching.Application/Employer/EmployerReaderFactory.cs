@@ -10,9 +10,6 @@ namespace Sfa.Tl.Matching.Application.Employer
         {
             switch (fileType)
             {
-                // TODO AU ADD BACK IN
-                //case FileType.Csv:
-                //    return new CsvEmployerFileReader();
                 case FileType.Excel:
                     return new ExcelEmployerFileReader();
             }

@@ -5,12 +5,12 @@ using Sfa.Tl.Matching.FileReader.Excel.Employer;
 
 namespace Sfa.Tl.Matching.FileReader.Excel.IntegrationTests.Employer
 {
-    public class Excel_Loaded_Successfully
+    public class When_ExcelEmployerFileReader_Load_Is_Called
     {
         private EmployerLoadResult _loadResult;
 
         private const string DataFilePath = "./Employer/Employer-Simple.xlsx";
-        private Excel.Employer.FileEmployer _firstRecord;
+        private FileEmployer _firstRecord;
 
         [SetUp]
         public void Setup()
@@ -24,16 +24,16 @@ namespace Sfa.Tl.Matching.FileReader.Excel.IntegrationTests.Employer
         }
 
         [Test]
-        public void Correct_Number_Of_Records_Loaded() =>
+        public void Then_Count_Of_Records_Is_1() =>
             Assert.AreEqual(1, _loadResult.Data.Count);
 
         #region 1st Record Tests
         [Test]
-        public void First_Record_Account_Is_Correct() =>
+        public void Then_Account_Is_Returned() =>
             Assert.AreEqual(new Guid("9082609f-9cf8-e811-80e0-000d3a214f60"), _firstRecord.Account);
 
         [Test]
-        public void First_Record_Company_Name_Is_Correct() =>
+        public void Then_Company_Name_Is_Returned() =>
             Assert.AreEqual("Company Name", _firstRecord.CompanyName);
 
         // TODO AU ADD BACK IN
@@ -46,51 +46,51 @@ namespace Sfa.Tl.Matching.FileReader.Excel.IntegrationTests.Employer
         //    Assert.Equals("Aware", _firstRecord.Aupa);
 
         //[Test]
-        //public void First_Record_Company_Type_Is_Correct() =>
+        //public void Then_Company_Type_Is_Returned() =>
         //    Assert.AreEqual("Employer", _firstRecord.CompanyType);
 
         [Test]
-        public void First_Record_Phone_Is_Correct() =>
+        public void Then_Phone_Is_Returned() =>
             Assert.AreEqual("7777744465", _firstRecord.Phone);
 
         [Test]
-        public void First_Record_Email_Is_Correct() =>
+        public void Then_Email_Is_Returned() =>
             Assert.AreEqual("email@address.com", _firstRecord.Email);
 
         [Test]
-        public void First_Record_Website_Is_Correct() =>
+        public void Then_Website_Is_Returned() =>
             Assert.AreEqual("www.website.com", _firstRecord.Website);
 
         [Test]
-        public void First_Record_Address1_Is_Correct() =>
+        public void Then_Address1_Is_Returned() =>
             Assert.AreEqual("Address1", _firstRecord.Address1);
 
         [Test]
-        public void First_Record_City_Is_Correct() =>
+        public void Then_City_Is_Returned() =>
             Assert.AreEqual("City", _firstRecord.City);
 
         [Test]
-        public void First_Record_PostCode_Is_Correct() =>
+        public void Then_PostCode_Is_Returned() =>
             Assert.AreEqual("S1 1AA", _firstRecord.PostCode);
 
         [Test]
-        public void First_Record_Created_By_Is_Correct() =>
+        public void Then_Created_By_Is_Returned() =>
             Assert.AreEqual("Created By", _firstRecord.CreatedBy);
 
         [Test]
-        public void First_Record_Created_On_Is_Correct() =>
+        public void Then_Created_On_Is_Returned() =>
             Assert.AreEqual(new DateTime(2018, 12, 5, 14, 47, 1), _firstRecord.CreatedOn);
 
         [Test]
-        public void First_Record_Modified_By_Is_Correct() =>
+        public void Then_Modified_By_Is_Returned() =>
             Assert.AreEqual("Modified By", _firstRecord.ModifiedBy);
 
         [Test]
-        public void First_Record_Modified_On_Is_Correct() =>
+        public void Then_Modified_On_Is_Returned() =>
             Assert.AreEqual(new DateTime(2018, 12, 5, 14, 53, 48), _firstRecord.ModifiedOn);
 
         [Test]
-        public void First_Record_Owner_Is_Correct() =>
+        public void Then_Owner_Is_Returned() =>
             Assert.AreEqual("Owner", _firstRecord.Owner);
         #endregion
     }

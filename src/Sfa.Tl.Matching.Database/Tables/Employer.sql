@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Employer]
 (
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Account] uniqueidentifier NOT NULL,
+	[CrmId] uniqueidentifier NOT NULL,
 	[CompanyName] NVARCHAR(160) NOT NULL, 
 	[AlsoKnownAs] NVARCHAR(100) NULL, 
 	[AupaStatus] INT NOT NULL,
