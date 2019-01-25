@@ -1,8 +1,9 @@
-﻿using System;
+﻿
+using System;
 
 namespace Sfa.Tl.Matching.FileReader.Excel.Employer
 {
-    public class Employer // TODO AU MOVE
+    public class FileEmployer
     {
         public int Id { get; set; }
         public Guid Account { get; set; }

@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
         public EmployerLoadResult Load(Stream stream)
         {
             var fileLoadResult = new EmployerLoadResult();
-            var employers = new List<Employer>(); // TODO AU Return a FileEmployer
+            var fileEmployers = new List<FileEmployer>();
 
             using (var document = SpreadsheetDocument.Open(stream, false))
             {
@@ -28,18 +28,18 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
 
                 foreach (var row in rows)
                 {
-                    var fileUploadEmployer = CreateEmployer(document, row);
-                    employers.Add(fileUploadEmployer);
+                    var fileEmployer = CreateEmployer(document, row);
+                    fileEmployers.Add(fileEmployer);
                 }
 
-                fileLoadResult.Data = employers;
+                fileLoadResult.Data = fileEmployers;
 
                 return fileLoadResult;
             }
         }
 
         #region Private Methods
-        private static Employer CreateEmployer(SpreadsheetDocument document, OpenXmlElement row)
+        private static FileEmployer CreateEmployer(SpreadsheetDocument document, OpenXmlElement row)
         {
             var account = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Account));
             var companyName = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CompanyName));
@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
             //var primaryContact = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.PrimaryContact));
             //var countryRegion = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CountryRegion));
 
-            var employer = new Employer
+            var fileEmployer = new FileEmployer
             {
                 Account = new Guid(account),
                 CompanyName = companyName,
@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
                 Owner = owner
             };
 
-            return employer;
+            return fileEmployer;
         }
         #endregion
     }

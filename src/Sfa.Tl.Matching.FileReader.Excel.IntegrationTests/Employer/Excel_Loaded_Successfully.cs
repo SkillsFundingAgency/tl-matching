@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.FileReader.Excel.IntegrationTests.Employer
         private EmployerLoadResult _loadResult;
 
         private const string DataFilePath = "./Employer/Employer-Simple.xlsx";
-        private Excel.Employer.Employer _firstRecord;
+        private Excel.Employer.FileEmployer _firstRecord;
 
         [SetUp]
         public void Setup()
