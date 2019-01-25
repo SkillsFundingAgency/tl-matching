@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.FileReader.Excel.Employer
 {
-    public class EmployerLoadResult // TODO AU MOVE
+    public class EmployerLoadResult
     {
         public List<FileEmployer> Data { get; set; }
         public string Error { get; set; }

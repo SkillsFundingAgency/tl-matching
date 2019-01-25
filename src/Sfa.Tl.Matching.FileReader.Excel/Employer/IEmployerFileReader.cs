@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.FileReader.Excel.Employer
 {
-    public interface IEmployerFileReader // TODO AU MOVE
+    public interface IEmployerFileReader
     {
         EmployerLoadResult Load(Stream stream);
     }
