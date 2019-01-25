@@ -14,6 +14,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _routePathLookupService = routePathLookupService;
         }
 
+        public IActionResult Start()
+        {
+            return View();
+        }
         public async Task<IActionResult> Index()
         {
             //TODO: Add view model and mapper

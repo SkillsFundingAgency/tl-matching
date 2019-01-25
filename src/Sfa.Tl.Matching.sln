@@ -23,13 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Data", "Sfa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Infrastructure", "Sfa.Tl.Matching.Infrastructure\Sfa.Tl.Matching.Infrastructure.csproj", "{63750008-F64A-4C75-A5EB-E8A3BC05D57F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Web.UnitTests", "Sfa.Tl.Matching.Web.UnitTests\Sfa.Tl.Matching.Web.UnitTests.csproj", "{47B2E287-B812-427C-800B-60E18F07DBB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Web.UnitTests", "Sfa.Tl.Matching.Web.UnitTests\Sfa.Tl.Matching.Web.UnitTests.csproj", "{47B2E287-B812-427C-800B-60E18F07DBB2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Data.UnitTests", "Sfa.Tl.Matching.Data.UnitTests\Sfa.Tl.Matching.Data.UnitTests.csproj", "{361DF8E1-4ED4-4D85-89EF-48388D11E97E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Domain", "Sfa.Tl.Matching.Domain\Sfa.Tl.Matching.Domain.csproj", "{9160AF31-755A-4DEC-AC08-C3C8C937E68F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sfa.Tl.Matching.Models", "Sfa.Tl.Matching.Models\Sfa.Tl.Matching.Models.csproj", "{BE914355-47E4-429D-8E2A-232580E563BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sfa.Tl.Matching.Models", "Sfa.Tl.Matching.Models\Sfa.Tl.Matching.Models.csproj", "{BE914355-47E4-429D-8E2A-232580E563BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,7 +47,6 @@ Global
 		{CFE3C23E-F125-4FC7-A9A9-129CD8D2B3B5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7C0E2398-1B73-450B-BB20-9103AA4CA262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7C0E2398-1B73-450B-BB20-9103AA4CA262}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C0E2398-1B73-450B-BB20-9103AA4CA262}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{7C0E2398-1B73-450B-BB20-9103AA4CA262}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C0E2398-1B73-450B-BB20-9103AA4CA262}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7C0E2398-1B73-450B-BB20-9103AA4CA262}.Release|Any CPU.Deploy.0 = Release|Any CPU

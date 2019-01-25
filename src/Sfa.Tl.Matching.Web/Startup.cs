@@ -15,8 +15,6 @@ using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
-using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Infrastructure.Configuration;
 using Sfa.Tl.Matching.Web.Extensions;
 
 namespace Sfa.Tl.Matching.Web
@@ -99,8 +97,8 @@ namespace Sfa.Tl.Matching.Web
                 sharedOptions.DefaultSignOutScheme = WsFederationDefaults.AuthenticationScheme;
             }).AddWsFederation(options =>
             {
-                options.Wtrealm = Configuration.Authentication.WtRealm;
-                options.MetadataAddress = Configuration.Authentication.MetaDataEndpoint;
+                options.Wtrealm = _configuration.Authentication.WtRealm;
+                options.MetadataAddress = _configuration.Authentication.MetaDataEndpoint;
                 options.TokenValidationParameters.RoleClaimType = Roles.RoleClaimType;
             }).AddCookie();
         }
