@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Extensions.DependencyInjection;
-using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Infrastructure.Configuration;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
@@ -17,18 +18,18 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                    .Bind(new InjectBindingProvider(serviceProvider));
         }
 
+        [SuppressMessage("ReSharper", "UnusedVariable")]
+        [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         private void RegisterServices(IServiceCollection services)
         {
-            var configurationService = new ConfigurationService();
-            var configuration = configurationService.GetConfig(
+            var configuration = ConfigurationLoader.Load(
                     Environment.GetEnvironmentVariable("EnvironmentName"),
                     Environment.GetEnvironmentVariable("ConfigurationStorageConnectionString"),
                     Environment.GetEnvironmentVariable("Version"),
                     Environment.GetEnvironmentVariable("ServiceName"))
                 .Result;
 
-            services.AddSingleton(configuration);
-
+            //TODO: Remove SuppressMessage(s) on method
             //var connectionString = config.GetConnectionString("SqlConnectionString");
 
             //Add services here
