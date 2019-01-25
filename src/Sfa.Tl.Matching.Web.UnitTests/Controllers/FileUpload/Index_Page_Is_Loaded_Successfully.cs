@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
         public void Model_Is_Not_Null()
         {
             var viewResult = _result as ViewResult;
-            Assert.NotNull(viewResult.Model);
+            Assert.NotNull(viewResult?.Model);
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
         private FileUploadViewModel GetViewModel()
         {
             var viewResult = _result as ViewResult;
-            var viewModel = viewResult.Model as FileUploadViewModel;
+            var viewModel = viewResult?.Model as FileUploadViewModel;
 
             return viewModel;
         }

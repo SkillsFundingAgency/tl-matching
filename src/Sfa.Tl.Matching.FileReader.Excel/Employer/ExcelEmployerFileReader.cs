@@ -44,8 +44,8 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
             var account = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Account));
             var companyName = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CompanyName));
             var companyAka = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CompanyAka));
-            var aupa = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Aupa));
-            var companyType = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CompanyType));
+            //var aupa = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Aupa));
+            //var companyType = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CompanyType));
             var phone = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Phone));
             var email = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Email));
             var website = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Website));

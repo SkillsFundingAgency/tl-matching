@@ -17,6 +17,7 @@ namespace Sfa.Tl.Matching.Application.Commands.UploadBlob
 
         public async Task Upload(BlobData blobData)
         {
+            _logger.LogInformation("Uploading blob");
             await _blobService.Upload(blobData);
         }
     }

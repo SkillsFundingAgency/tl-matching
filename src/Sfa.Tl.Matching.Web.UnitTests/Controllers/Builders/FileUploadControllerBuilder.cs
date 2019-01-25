@@ -1,21 +1,21 @@
-﻿using Sfa.Tl.Matching.Web.Controllers;
+﻿//using Sfa.Tl.Matching.Web.Controllers;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
-{
-    internal class FileUploadControllerBuilder
-    {
-        private readonly FileUploadController _fileUploadController;
+//namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
+//{
+//    internal class FileUploadControllerBuilder
+//    {
+//        private readonly FileUploadController _fileUploadController;
 
-        public FileUploadControllerBuilder()
-        {
-        }
+//        public FileUploadControllerBuilder()
+//        {
+//        }
 
-        internal FileUploadControllerBuilder Add(int id)
-        {
-            return this;
-        }
+//        internal FileUploadControllerBuilder Add(int id)
+//        {
+//            return this;
+//        }
 
-        public FileUploadController Build() =>
-            _fileUploadController;
-    }
-}
+//        public FileUploadController Build() =>
+//            _fileUploadController;
+//    }
+//}
