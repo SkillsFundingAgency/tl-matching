@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.Extensions.DependencyInjection;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
@@ -17,6 +18,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                    .Bind(new InjectBindingProvider(serviceProvider));
         }
 
+        [SuppressMessage("ReSharper", "UnusedVariable")]
         private void RegisterServices(IServiceCollection services)
         {
             var configuration = ConfigurationLoader.Load(
@@ -26,6 +28,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     Environment.GetEnvironmentVariable("ServiceName"))
                 .Result;
 
+            //TODO: Remove SuppressMessage on method
             //var connectionString = config.GetConnectionString("SqlConnectionString");
 
             //Add services here
