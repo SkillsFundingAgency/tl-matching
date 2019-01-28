@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.FileReader.Excel.IntegrationTests.Employer
         #region 1st Record Tests
         [Test]
         public void Then_Account_Is_Returned() =>
-            Assert.AreEqual(new Guid("9082609f-9cf8-e811-80e0-000d3a214f60"), _firstRecord.Account);
+            Assert.AreEqual(new Guid("9082609f-9cf8-e811-80e0-000d3a214f60"), _firstRecord.CrmId);
 
         [Test]
         public void Then_Company_Name_Is_Returned() =>

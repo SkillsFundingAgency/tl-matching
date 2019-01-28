@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
     public class FileEmployer
     {
         public int Id { get; set; }
-        public Guid Account { get; set; }
+        public Guid CrmId { get; set; }
         public string CompanyName { get; set; }
         public string AlsoKnownAs { get; set; }
         public string PrimaryContact { get; set; }

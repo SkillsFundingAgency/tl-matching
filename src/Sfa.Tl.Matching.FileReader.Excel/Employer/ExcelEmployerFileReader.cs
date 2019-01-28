@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
         #region Private Methods
         private static FileEmployer CreateEmployer(SpreadsheetDocument document, OpenXmlElement row)
         {
-            var account = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Account));
+            var crmId = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Account));
             var companyName = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CompanyName));
             var companyAka = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CompanyAka));
             var primaryContact = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.PrimaryContact));
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
 
             var fileEmployer = new FileEmployer
             {
-                Account = new Guid(account),
+                CrmId = new Guid(crmId),
                 CompanyName = companyName,
                 AlsoKnownAs = companyAka,
                 PrimaryContact = primaryContact,
