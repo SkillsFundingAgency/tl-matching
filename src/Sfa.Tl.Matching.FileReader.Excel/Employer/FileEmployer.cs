@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 namespace Sfa.Tl.Matching.FileReader.Excel.Employer
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class FileEmployer
     {
         public int Id { get; set; }

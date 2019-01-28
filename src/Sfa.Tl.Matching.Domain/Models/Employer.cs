@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 namespace Sfa.Tl.Matching.Domain.Models
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class Employer
     {
         public int Id { get; set; }
