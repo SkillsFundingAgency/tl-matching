@@ -44,46 +44,21 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
             var account = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Account));
             var companyName = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CompanyName));
             var companyAka = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CompanyAka));
-            //var aupa = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Aupa));
-            //var companyType = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CompanyType));
+            var primaryContact = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.PrimaryContact));
             var phone = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Phone));
             var email = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Email));
-            var website = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Website));
-            // TODO AU Where is this? var addressName
-            var address1 = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Address1));
-            // TODO AU Where is this? var address1
-            // TODO AU Where is this? var address2
-            // TODO AU Where is this? var address3
-            var city = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.City));
-            // TODO AU Where is this? var county
             var postCode = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.PostCode));
-            var createdBy = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CreatedBy));
-            var created = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Created));
-            var modifiedBy = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.ModifiedBy));
-            var modified = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Modified));
             var owner = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.Owner));
-            
-            //var modifiedOn = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.ModifiedOn));
-            //var primaryContact = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.PrimaryContact));
-            //var countryRegion = CellValueRetriever.Get(document, row.Descendants<Cell>().ElementAt(EmployerColumnIndex.CountryRegion));
 
             var fileEmployer = new FileEmployer
             {
                 Account = new Guid(account),
                 CompanyName = companyName,
                 AlsoKnownAs = companyAka,
-                // TODO AU ADD BACK IN AupaStatus = aupa,
-                // TODO AU ADD BACK IN CompanyType = companyType,
+                PrimaryContact = primaryContact,
                 Phone = phone,
                 Email = email,
-                Website = website,
-                Address1 = address1,
-                City = city,
                 PostCode = postCode,
-                CreatedBy = createdBy,
-                CreatedOn = created.ToDate(),
-                ModifiedBy = modifiedBy,
-                ModifiedOn = modified.ToDate(),
                 Owner = owner
             };
 

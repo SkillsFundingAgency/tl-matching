@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.FileReader.Excel.Employer
         public string CompanyName { get; set; }
         public string AlsoKnownAs { get; set; }
         public int AupaStatus { get; set; }
+        public string PrimaryContact { get; set; }
         public int CompanyType { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
