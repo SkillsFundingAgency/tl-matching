@@ -1,5 +1,6 @@
 ﻿using Sfa.Tl.Matching.Domain.Models;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data.Interfaces;
 
 namespace Sfa.Tl.Matching.Data.Repositories
@@ -15,12 +16,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public IQueryable<Path> GetPaths()
         {
-            return _dbContext.Path;
+            return _dbContext.Path
+                .Include("Route")
+                .AsNoTracking();
         }
 
         public IQueryable<Route> GetRoutes()
         {
-            return _dbContext.Route;
+            return _dbContext.Route.AsNoTracking();
         }
     }
 }
