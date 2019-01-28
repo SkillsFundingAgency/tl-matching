@@ -6,8 +6,8 @@ namespace Sfa.Tl.Matching.Web.Extensions
     {
         public const string RoleClaimType = "http://service/service";
 
-        public const string AdminUser = "EPC";
-        public const string StandardUser = "EPO";
+        public const string AdminUser = "TMA";
+        public const string StandardUser = "TMS";
 
         public static bool HasValidRole(this ClaimsPrincipal user)
         {
