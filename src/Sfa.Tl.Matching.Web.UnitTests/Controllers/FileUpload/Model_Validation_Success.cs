@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
 {
     public class Model_Validation_Success
     {
-        private List<ValidationResult> _results = new List<ValidationResult>();
+        private readonly List<ValidationResult> _results = new List<ValidationResult>();
 
         [SetUp]
         public void Setup()

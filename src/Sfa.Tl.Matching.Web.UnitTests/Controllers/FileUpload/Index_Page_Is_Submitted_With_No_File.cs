@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
     {
         private IActionResult _result;
         private IUploadService _uploadService;
-        private IFormFile _formFile = null;
+        private readonly IFormFile _formFile = null;
         private FileUploadController _fileUploadController;
         private FileUploadViewModel _viewModel;
 
