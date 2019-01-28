@@ -8,7 +8,7 @@ using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
 {
-    public class Index_Page_Is_Loaded
+    public class When_File_Upload_COntroller_Index_Is_Loaded
     {
         private FileUploadController _fileUploadController;
         private IFileUploadViewModelMapper _viewModelMapper;
@@ -34,33 +34,33 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
         }
 
         [Test]
-        public void Result_Is_Not_Null() =>
+        public void Then_Result_Is_Not_Null() =>
             Assert.NotNull(_result);
 
         [Test]
-        public void View_Result_Is_Returned() =>
+        public void Then_View_Result_Is_Returned() =>
             Assert.IsAssignableFrom<ViewResult>(_result);
 
         [Test]
-        public void Model_Is_Not_Null()
+        public void Then_Model_Is_Not_Null()
         {
             var viewResult = _result as ViewResult;
             Assert.NotNull(viewResult?.Model);
         }
 
         [Test]
-        public void File_Upload_Type_Is_Not_Null()
+        public void Then_File_Upload_Type_Is_Not_Null()
         {
             var viewModel = GetViewModel();
             Assert.NotNull(viewModel.FileTypeViewModels);
         }
 
         [Test]
-        public void View_Model_Mapper_Populate_Is_Called_Exactly_Once() =>
+        public void Then_Mapper_Populate_Is_Called_Exactly_Once() =>
             _viewModelMapper.Received(1).Populate();
 
         [Test]
-        public void File_Upload_Type_Contains_Data()
+        public void Then_File_Upload_Type_Contains_Data()
         {
             var viewModel = GetViewModel();
             Assert.Greater(viewModel.FileTypeViewModels.Count, 0);

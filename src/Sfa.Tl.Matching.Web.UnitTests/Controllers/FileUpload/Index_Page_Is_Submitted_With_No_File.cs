@@ -9,7 +9,7 @@ using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
 {
-    public class Index_Page_Is_Submitted_With_No_File
+    public class When_File_Upload_Controller_Index_Is_Submitted_With_No_File
     {
         private IActionResult _result;
         private IUploadService _uploadService;
@@ -31,26 +31,26 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
         }
 
         [Test]
-        public void View_Result_Is_Returned() =>
+        public void Then_View_Result_Is_Returned() =>
              Assert.IsAssignableFrom<ViewResult>(_result);
 
         [Test]
-        public void Model_State_Has_1_Error() =>
+        public void Then_Model_State_Has_1_Error() =>
             Assert.AreEqual(1, _fileUploadController.ViewData.ModelState.Count);
 
         [Test]
-        public void Model_State_Has_File_Key() =>
+        public void Then_Model_State_Has_File_Key() =>
             Assert.True(_fileUploadController.ViewData.ModelState.ContainsKey("file"));
 
         [Test]
-        public void Model_State_Has_File_Error()
+        public void Then_Model_State_Has_File_Error()
         {
             var modelStateEntry = _fileUploadController.ViewData.ModelState["file"];
             Assert.AreEqual("A file must be selected", modelStateEntry.Errors[0].ErrorMessage);
         }
 
         [Test]
-        public void Upload_Service_Upload_Is_Not_Called() =>
+        public void Then_Service_Upload_Is_Not_Called() =>
             _uploadService.Received(0).Upload(_formFile, _viewModel);
     }
 }

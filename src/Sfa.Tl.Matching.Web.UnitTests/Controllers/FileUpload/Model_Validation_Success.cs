@@ -6,7 +6,7 @@ using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
 {
-    public class Model_Validation_Success
+    public class When_Model_Validation_Success
     {
         private readonly List<ValidationResult> _results = new List<ValidationResult>();
 
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
         }
 
         [Test]
-        public void Model_Has_0_Errors() =>
+        public void Then_Model_Has_0_Errors() =>
             Assert.Zero(0);
     }
 }

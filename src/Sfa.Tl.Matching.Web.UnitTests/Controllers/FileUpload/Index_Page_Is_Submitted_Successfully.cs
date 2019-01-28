@@ -9,7 +9,7 @@ using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
 {
-    public class Index_Page_Is_Submitted_Successfully
+    public class When_File_Upload_Controller_Index_Is_Submitted_Successfully
     {
         private IActionResult _result;
         private IUploadService _uploadService;
@@ -32,18 +32,18 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
         }
 
         [Test]
-        public void View_Result_Is_Returned() =>
+        public void Then_View_Result_Is_Returned() =>
              Assert.IsAssignableFrom<ViewResult>(_result);
 
         [Test]
-        public void Model_State_Has_No_Errors()
+        public void Then_Model_State_Has_No_Errors()
         {
             var viewResult = (ViewResult)_result;
             Assert.Zero(viewResult.ViewData.ModelState.Count);
         }
 
         [Test]
-        public void Upload_Service_Upload_Is_Called_Exactly_Once() =>
+        public void Then_Service_Upload_Is_Called_Exactly_Once() =>
             _uploadService.Received(1).Upload(_formFile, _viewModel);
     }
 }
