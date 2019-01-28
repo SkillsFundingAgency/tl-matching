@@ -38,8 +38,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
         [Test]
         public void Model_State_Has_No_Errors()
         {
-            var viewResult = _result as ViewResult;
-            //TODO: AU Rewrito to not have R# null ref warning
+            var viewResult = (ViewResult)_result;
             Assert.Zero(viewResult.ViewData.ModelState.Count);
         }
 

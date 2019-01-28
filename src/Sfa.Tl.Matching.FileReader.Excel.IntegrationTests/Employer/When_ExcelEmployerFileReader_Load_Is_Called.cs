@@ -36,19 +36,6 @@ namespace Sfa.Tl.Matching.FileReader.Excel.IntegrationTests.Employer
         public void Then_Company_Name_Is_Returned() =>
             Assert.AreEqual("Company Name", _firstRecord.CompanyName);
 
-        // TODO AU ADD BACK IN
-        //[Fact(DisplayName = "1st record - Company Aka is correct")]
-        //public void CompanyAkaIsCorrectForRecord1() =>
-        //    Assert.Equals("Also Known As", _firstRecord.CompanyAka);
-
-        //[Fact(DisplayName = "1st record - Aupa is correct")]
-        //public void AupaIsCorrectForRecord1() =>
-        //    Assert.Equals("Aware", _firstRecord.Aupa);
-
-        //[Test]
-        //public void Then_Company_Type_Is_Returned() =>
-        //    Assert.AreEqual("Employer", _firstRecord.CompanyType);
-
         [Test]
         public void Then_Phone_Is_Returned() =>
             Assert.AreEqual("7777744465", _firstRecord.Phone);
@@ -58,36 +45,8 @@ namespace Sfa.Tl.Matching.FileReader.Excel.IntegrationTests.Employer
             Assert.AreEqual("email@address.com", _firstRecord.Email);
 
         [Test]
-        public void Then_Website_Is_Returned() =>
-            Assert.AreEqual("www.website.com", _firstRecord.Website);
-
-        [Test]
-        public void Then_Address1_Is_Returned() =>
-            Assert.AreEqual("Address1", _firstRecord.Address1);
-
-        [Test]
-        public void Then_City_Is_Returned() =>
-            Assert.AreEqual("City", _firstRecord.City);
-
-        [Test]
         public void Then_PostCode_Is_Returned() =>
             Assert.AreEqual("S1 1AA", _firstRecord.PostCode);
-
-        [Test]
-        public void Then_Created_By_Is_Returned() =>
-            Assert.AreEqual("Created By", _firstRecord.CreatedBy);
-
-        [Test]
-        public void Then_Created_On_Is_Returned() =>
-            Assert.AreEqual(new DateTime(2018, 12, 5, 14, 47, 1), _firstRecord.CreatedOn);
-
-        [Test]
-        public void Then_Modified_By_Is_Returned() =>
-            Assert.AreEqual("Modified By", _firstRecord.ModifiedBy);
-
-        [Test]
-        public void Then_Modified_On_Is_Returned() =>
-            Assert.AreEqual(new DateTime(2018, 12, 5, 14, 53, 48), _firstRecord.ModifiedOn);
 
         [Test]
         public void Then_Owner_Is_Returned() =>
