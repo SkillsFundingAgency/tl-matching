@@ -15,7 +15,9 @@
     <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png" />
 
     <!--[if !IE 8]><!-->
+    @* ReSharper disable Html.PathError *@
     <link href="/css/main.css" rel="stylesheet" />
+    @* ReSharper restore Html.PathError *@
     <!--<![endif]-->
 
     <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
@@ -49,7 +51,9 @@
                 <a href="/" class="govuk-header__link govuk-header__link--service-name">
                     T Levels Industry Placement Matching Service
                 </a>
+                @* ReSharper disable UnknownCssClass *@
                 <button type="button" role="button" class="govuk-header__menu-button js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
+                @* ReSharper restore UnknownCssClass *@
                 <nav>
                     <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
                         <li class="govuk-header__navigation-item">

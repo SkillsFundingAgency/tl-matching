@@ -1,22 +1,27 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 
 namespace Sfa.Tl.Matching.Web
 {
     public class Startup
     {
-        public MatchingConfiguration Configuration { get; set; }
+        private readonly MatchingConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
-            var configurationService = new ConfigurationService();
-            Configuration = configurationService.GetConfig(
+            _configuration = ConfigurationLoader.Load(
                 configuration[Constants.EnvironmentNameConfigKey],
                 configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
                 configuration[Constants.VersionConfigKey],
@@ -35,8 +40,14 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddDbContext<MatchingDbContext>(options =>
+                options.UseSqlServer(_configuration.SqlConnectionString));
+
+            services.AddAutoMapper();
+
             //Inject services
-            services.AddSingleton(provider => Configuration);
+            services.AddTransient<IRoutePathService, RoutePathService>();
+            services.AddTransient<IRoutePathRepository, RoutePathRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +67,7 @@ namespace Sfa.Tl.Matching.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
