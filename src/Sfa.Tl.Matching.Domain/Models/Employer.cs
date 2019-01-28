@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class Employer
     {
         public int Id { get; set; }

@@ -52,18 +52,18 @@ namespace Sfa.Tl.Matching.Application.Services
         }
 
         #region Private Methods
-        private static List<Domain.Models.Employer> Map(List<CreateEmployerDto> createEmployerDtos)
+        private static List<Domain.Models.Employer> Map(IEnumerable<CreateEmployerDto> createEmployerDtos)
         {
-            var employers = createEmployerDtos.Select(edto => new Domain.Models.Employer()
+            var employers = createEmployerDtos.Select(dto => new Domain.Models.Employer()
             {
-                CrmId = edto.CrmId,
-                AlsoKnownAs = edto.AlsoKnownAs,
-                CompanyName = edto.CompanyName,
-                Email = edto.Email,
-                Owner = edto.Owner,
-                Phone = edto.Phone,
-                PostCode = edto.PostCode,
-                PrimaryContact = edto.PrimaryContact
+                CrmId = dto.CrmId,
+                AlsoKnownAs = dto.AlsoKnownAs,
+                CompanyName = dto.CompanyName,
+                Email = dto.Email,
+                Owner = dto.Owner,
+                Phone = dto.Phone,
+                PostCode = dto.PostCode,
+                PrimaryContact = dto.PrimaryContact
             }).ToList();
 
             return employers;
