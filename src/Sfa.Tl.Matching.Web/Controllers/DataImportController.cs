@@ -8,15 +8,15 @@ using Sfa.Tl.Matching.Web.ViewModels;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     //[Authorize]
-    public class FileUploadController : Controller
+    public class DataImportController : Controller
     {
-        private readonly IFileUploadViewModelMapper _viewModelMapper;
+        private readonly IDataImportViewModelMapper _viewModelMapper;
         private readonly IUploadService _uploadService;
 
         private const string FileMissingKey = "file";
         private const string FileMissingError = "A file must be selected";
 
-        public FileUploadController(IFileUploadViewModelMapper viewModelMapper,
+        public DataImportController(IDataImportViewModelMapper viewModelMapper,
             IUploadService uploadService)
         {
             _viewModelMapper = viewModelMapper;
@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file, FileUploadViewModel viewModel)
+        public async Task<IActionResult> Upload(IFormFile file, DataImportViewModel viewModel)
         {
             if (file == null)
                 ModelState.AddModelError(FileMissingKey, FileMissingError);

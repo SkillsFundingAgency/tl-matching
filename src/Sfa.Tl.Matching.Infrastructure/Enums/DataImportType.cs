@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace Sfa.Tl.Matching.Domain.Enums
+namespace Sfa.Tl.Matching.Infrastructure.Enums
 {
-    public enum FileUploadType
+    public enum DataImportType
     {
         Employer = 1,
         EmployerContacts,

@@ -14,13 +14,15 @@ namespace Sfa.Tl.Matching.Infrastructure.Blob
             _configuration = configuration;
         }
 
-        public async Task Upload(BlobData blobData)
+        public async Task<CloudBlockBlob> Upload(BlobData blobData)
         {
             var blobContainer = await GetContainer(ContainerConstants.Files);
             var blockBlob = blobContainer.GetBlockBlobReference(blobData.FileName);
             blockBlob.Properties.ContentType = blobData.ContentType;
 
             await blockBlob.UploadFromByteArrayAsync(blobData.Data, 0, blobData.Data.Length);
+
+            return blockBlob;
         }
 
         #region Private Methods

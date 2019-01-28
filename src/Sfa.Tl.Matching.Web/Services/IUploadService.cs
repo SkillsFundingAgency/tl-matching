@@ -6,6 +6,6 @@ namespace Sfa.Tl.Matching.Web.Services
 {
     public interface IUploadService
     {
-        Task Upload(IFormFile file, FileUploadViewModel viewModel);
+        Task Upload(IFormFile file, DataImportViewModel viewModel);
     }
 }

@@ -7,28 +7,28 @@ using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.Services;
 using Sfa.Tl.Matching.Web.ViewModels;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 {
-    public class When_File_Upload_Controller_Index_Is_Submitted_Successfully
+    public class When_Data_Import_Controller_Index_Is_Submitted_Successfully
     {
         private IActionResult _result;
         private IUploadService _uploadService;
         private IFormFile _formFile;
-        private FileUploadController _fileUploadController;
-        private FileUploadViewModel _viewModel;
+        private DataImportController _dataImportController;
+        private DataImportViewModel _viewModel;
 
         [SetUp]
         public void Setup()
         {
-            _viewModel = new FileUploadViewModel();
+            _viewModel = new DataImportViewModel();
 
-            var viewModelMapper = Substitute.For<IFileUploadViewModelMapper>();
+            var viewModelMapper = Substitute.For<IDataImportViewModelMapper>();
             _uploadService = Substitute.For<IUploadService>();
             _formFile = Substitute.For<IFormFile>();
             
-            _fileUploadController = new FileUploadController(viewModelMapper, _uploadService);
+            _dataImportController = new DataImportController(viewModelMapper, _uploadService);
            
-            _result = _fileUploadController.Upload(_formFile, _viewModel).Result;
+            _result = _dataImportController.Upload(_formFile, _viewModel).Result;
         }
 
         [Test]

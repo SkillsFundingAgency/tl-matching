@@ -6,31 +6,31 @@ using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.Services;
 using Sfa.Tl.Matching.Web.ViewModels;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 {
-    public class When_File_Upload_COntroller_Index_Is_Loaded
+    public class When_Data_Import_Controller_Index_Is_Loaded
     {
-        private FileUploadController _fileUploadController;
-        private IFileUploadViewModelMapper _viewModelMapper;
+        private DataImportController _dataImportController;
+        private IDataImportViewModelMapper _viewModelMapper;
         private IActionResult _result;
 
         [SetUp]
         public void Setup()
         {
-            var viewModel = new FileUploadViewModel();
-            viewModel.FileTypeViewModels.Add(new FileTypeViewModel
+            var viewModel = new DataImportViewModel();
+            viewModel.DataImportTypeViewModels.Add(new DataImportTypeViewModel
             {
                 Id = 1,
-                Name = "FileTypeName"
+                Name = "DataImportTypeName"
             });
 
-            _viewModelMapper = Substitute.For<IFileUploadViewModelMapper>();
+            _viewModelMapper = Substitute.For<IDataImportViewModelMapper>();
             _viewModelMapper.Populate().Returns(viewModel);
 
             var uploadService = Substitute.For<IUploadService>();
 
-            _fileUploadController = new FileUploadController(_viewModelMapper, uploadService);
-            _result = _fileUploadController.Index();
+            _dataImportController = new DataImportController(_viewModelMapper, uploadService);
+            _result = _dataImportController.Index();
         }
 
         [Test]
@@ -49,10 +49,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
         }
 
         [Test]
-        public void Then_File_Upload_Type_Is_Not_Null()
+        public void Then_Data_Import_Type_Is_Not_Null()
         {
             var viewModel = GetViewModel();
-            Assert.NotNull(viewModel.FileTypeViewModels);
+            Assert.NotNull(viewModel.DataImportTypeViewModels);
         }
 
         [Test]
@@ -60,16 +60,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload
             _viewModelMapper.Received(1).Populate();
 
         [Test]
-        public void Then_File_Upload_Type_Contains_Data()
+        public void Then_Data_Import_Type_Contains_Data()
         {
             var viewModel = GetViewModel();
-            Assert.Greater(viewModel.FileTypeViewModels.Count, 0);
+            Assert.Greater(viewModel.DataImportTypeViewModels.Count, 0);
         }
 
-        private FileUploadViewModel GetViewModel()
+        private DataImportViewModel GetViewModel()
         {
             var viewResult = _result as ViewResult;
-            var viewModel = viewResult?.Model as FileUploadViewModel;
+            var viewModel = viewResult?.Model as DataImportViewModel;
 
             return viewModel;
         }

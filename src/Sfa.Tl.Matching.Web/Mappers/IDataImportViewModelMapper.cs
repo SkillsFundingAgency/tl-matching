@@ -2,8 +2,8 @@
 
 namespace Sfa.Tl.Matching.Web.Mappers
 {
-    public interface IFileUploadViewModelMapper
+    public interface IDataImportViewModelMapper
     {
-        FileUploadViewModel Populate();
+        DataImportViewModel Populate();
     }
 }

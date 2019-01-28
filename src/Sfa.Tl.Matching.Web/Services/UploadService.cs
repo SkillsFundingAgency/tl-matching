@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Sfa.Tl.Matching.Application.Commands.UploadBlob;
 using Sfa.Tl.Matching.Infrastructure.Blob;
+using Sfa.Tl.Matching.Infrastructure.Enums;
 using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.Services
@@ -16,14 +17,14 @@ namespace Sfa.Tl.Matching.Web.Services
             _uploadBlobCommand = uploadBlobCommand;
         }
 
-        public async Task Upload(IFormFile file, FileUploadViewModel viewModel)
+        public async Task Upload(IFormFile file, DataImportViewModel viewModel)
         {
             using (var ms = new MemoryStream())
             {
                 file.CopyTo(ms);
                 var fileBytes = ms.ToArray();
                 var blobData = new BlobData(file.FileName, 
-                    viewModel.SelectedFileType,
+                    (DataImportType)viewModel.SelectedDataImportType,
                     file.ContentType,
                     fileBytes);
 

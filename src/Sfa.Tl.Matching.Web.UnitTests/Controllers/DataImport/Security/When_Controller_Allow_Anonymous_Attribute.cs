@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Sfa.Tl.Matching.Web.Controllers;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload.Security
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
 {
     public class When_Controller_Allow_Anonymous_Attribute
     {
@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.FileUpload.Security
         [SetUp]
         public void Setup()
         {
-            var controllerType = typeof(FileUploadController);
+            var controllerType = typeof(DataImportController);
 
             _allowAnonymousAttributes = controllerType.GetCustomAttributes(typeof(AllowAnonymousAttribute), false)
                 as AllowAnonymousAttribute[];
