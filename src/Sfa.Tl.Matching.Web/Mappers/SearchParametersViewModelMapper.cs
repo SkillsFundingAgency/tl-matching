@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
             _routePathLookupService = routePathLookupService;
         }
 
-        public SearchParametersViewModel Populate(string selectedRouteId = null, string postcode = null)
+        public SearchParametersViewModel Populate(string selectedRouteId, string postcode)
         {
             var routes = _routePathLookupService
                 .GetRoutes()

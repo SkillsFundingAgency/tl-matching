@@ -5,6 +5,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.ViewModels;
@@ -17,6 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
         private ISearchParametersViewModelMapper _viewModelMapper;
         private SearchParametersViewModel _viewModel;
         private IActionResult _result;
+        private ILogger<SearchController> _logger;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -41,8 +43,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
             _viewModelMapper.Populate(Arg.Any<string>(), Arg.Any<string>())
                 .Returns(_viewModel);
 
-            _controller = new SearchController(_viewModelMapper);
-            _result = _controller.Index();
+            _logger = Substitute.For<ILogger<SearchController>>();
+
+            _controller = new SearchController(_viewModelMapper, _logger);
+            _result = _controller.Index(null, null);
         }
         
         [Test]

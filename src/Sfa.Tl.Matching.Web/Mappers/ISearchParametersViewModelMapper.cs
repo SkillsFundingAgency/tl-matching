@@ -4,6 +4,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
 {
     public interface ISearchParametersViewModelMapper
     {
-        SearchParametersViewModel Populate(string selectedRouteId = null, string postcode = null);
+        SearchParametersViewModel Populate(string selectedRouteId, string postcode);
     }
 }
