@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models;
 
@@ -18,10 +17,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            //TODO: Add view model and mapper
-            var model = await _routePathLookupService.GetRoutesAsync();
+            //TODO: Add view model and mapper. ToListAsync() is probably inside mapper.
+            var model = _routePathLookupService.GetRoutes();
 
             return View(model);
         }

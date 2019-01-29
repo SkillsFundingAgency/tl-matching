@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.Interfaces
 {
     public interface IRoutePathRepository
     {
-        Task<IEnumerable<Path>> GetPathsAsync();
-        Task<IEnumerable<Route>> GetRoutesAsync();
+        IQueryable<Path> GetPaths();
+        IQueryable<Route> GetRoutes();
     }
 }

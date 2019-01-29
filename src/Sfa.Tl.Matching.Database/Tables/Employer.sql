@@ -1,11 +1,12 @@
 ﻿CREATE TABLE [dbo].[Employer]
 (
-	[Id] uniqueidentifier NOT NULL PRIMARY KEY, 
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CrmId] uniqueidentifier NOT NULL,
 	[CompanyName] NVARCHAR(160) NOT NULL, 
 	[AlsoKnownAs] NVARCHAR(100) NULL, 
-	[CompanyType] INT NOT NULL, 
-	[AupaStatus] INT NOT NULL, 
-	[Website] NVARCHAR(200) NULL,
-	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
-	[ModifiedOn] DATETIME2 NULL,
+	[PrimaryContact] NVARCHAR(100) NULL, 
+	[Phone] VARCHAR(150) NULL,
+	[Email] VARCHAR(320) NULL,
+	[PostCode] VARCHAR(10) NOT NULL,
+	[Owner] NVARCHAR(150) NOT NULL,
 )
