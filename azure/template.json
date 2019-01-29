@@ -149,10 +149,6 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('uiAppInsights').outputs.InstrumentationKey.value]"
-                            },
-                            {
-                                "name": "BlobStorageConnectionString",
-                                "value": "[reference('storageAccount').outputs.storageConnectionString.value]"
                             }
                         ]
                     }
