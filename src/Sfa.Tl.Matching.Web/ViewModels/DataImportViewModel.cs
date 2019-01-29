@@ -10,5 +10,6 @@ namespace Sfa.Tl.Matching.Web.ViewModels
         public int SelectedDataImportType { get; set; }
         public List<DataImportTypeViewModel> DataImportTypeViewModels { get; set; } = new List<DataImportTypeViewModel>();
         public List<DataImportType> UploadDataImportTypes { get; set; } = new List<DataImportType>();
+        public bool Success { get; set; }
     }
 }
