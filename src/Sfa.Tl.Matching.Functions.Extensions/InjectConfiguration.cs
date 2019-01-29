@@ -4,7 +4,12 @@ using AutoMapper;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.FileReader.Excel.Employer;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
@@ -39,6 +44,10 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddAutoMapper();
             //TODO: Remove SuppressMessage(s) on method
+
+            services.AddTransient<IEmployerCommandRepository, EmployerCommandRepository>();
+            services.AddTransient<IEmployerFileReader, ExcelEmployerFileReader>();
+            services.AddTransient<ICreateEmployerService, CreateEmployerService>();
         }
     }
 }

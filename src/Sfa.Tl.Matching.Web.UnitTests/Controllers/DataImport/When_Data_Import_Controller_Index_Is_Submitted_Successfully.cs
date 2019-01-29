@@ -25,9 +25,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
             var viewModelMapper = Substitute.For<IDataImportViewModelMapper>();
             _uploadService = Substitute.For<IUploadService>();
             _formFile = Substitute.For<IFormFile>();
-            
+
+            viewModelMapper.Populate().Returns(_viewModel);
+
             _dataImportController = new DataImportController(viewModelMapper, _uploadService);
-           
+
             _result = _dataImportController.Upload(_formFile, _viewModel).Result;
         }
 
@@ -45,5 +47,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
         [Test]
         public void Then_Service_Upload_Is_Called_Exactly_Once() =>
             _uploadService.Received(1).Upload(_formFile, _viewModel);
+
+        [Test]
+        public void Then_Success_Is_Set_To_True() =>
+            Assert.True(_viewModel.Success);
     }
 }
