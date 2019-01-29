@@ -10,6 +10,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         public IActionResult Index()
         {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+               return RedirectToAction("PostSignIn", "Account");
+            }
+
             return View();
         }
 

@@ -1,4 +1,5 @@
-﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+﻿@using Sfa.Tl.Matching.Infrastructure.Extensions
+@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
 <!DOCTYPE html>
 <html class="govuk-template ">
 <head>
@@ -57,18 +58,24 @@
                 <nav>
                     <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
                         <li class="govuk-header__navigation-item">
+                            @if (Context.User.Identity.IsAuthenticated)
+                            {
+                                @Context.User.GetUserEmail()
+                            }
+                        </li>
+                        <li class="govuk-header__navigation-item">
                             <a class="govuk-header__link" asp-controller="Home" asp-action="ContactUs">Contact us</a>
                         </li>
                         <li class="govuk-header__navigation-item">
                             @if (Context.User.Identity.IsAuthenticated)
                             {
-                                <a class="govuk-header__link" asp-area="" asp-controller="Home" asp-action="Signout">Sign out</a>
+                                <a class="govuk-header__link" asp-area="" asp-controller="Account" asp-action="SignOut">Sign out</a>
                             }
                             else
                             {
-                                <a class="govuk-header__link" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
+                                <a class="govuk-header__link" asp-area="" asp-controller="Account" asp-action="SignIn">Login</a>
                             }
-                        </li>                     
+                        </li>
                     </ul>
                 </nav>
             </div>

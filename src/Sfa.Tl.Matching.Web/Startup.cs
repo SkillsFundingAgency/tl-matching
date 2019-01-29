@@ -18,10 +18,11 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Infrastructure.Blob;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Web.Mappers;
+using Sfa.Tl.Matching.Web.Services;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -106,6 +107,9 @@ namespace Sfa.Tl.Matching.Web
                 routes.MapRoute(
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                    "SearchStart",
+                    "{controller=Search}/{action=Start}");
             });
         }
 
@@ -121,7 +125,7 @@ namespace Sfa.Tl.Matching.Web
             {
                 options.Wtrealm = _configuration.Authentication.WtRealm;
                 options.MetadataAddress = _configuration.Authentication.MetaDataEndpoint;
-                options.TokenValidationParameters.RoleClaimType = Roles.RoleClaimType;
+                options.TokenValidationParameters.RoleClaimType = RolesExtensions.IdamsUserRole;
             }).AddCookie(options =>
             {
                 options.Cookie.Name = "qa-auth-cookie";

@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Models;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
+    [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
     public class SearchController : Controller
     {
         private readonly IRoutePathService _routePathLookupService;
@@ -17,9 +20,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View();
         }
+
         public IActionResult Index()
         {
-            //TODO: Add view model and mapper. ToListAsync() is probably inside mapper.
             var model = _routePathLookupService.GetRoutes();
 
             return View(model);

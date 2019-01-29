@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Web.Extensions;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -44,14 +45,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult SignOut()
+        public async Task<SignOutResult> SignOut()
         {
-            var callbackUrl = Url.Action(nameof(SignedOut), "Account", values: null, protocol: Request.Scheme);
+            var callbackUrl = Url.Action(nameof(SignedOut), "Account", null, Request.Scheme);
 
             foreach (var cookie in Request.Cookies.Keys)
             {
                 Response.Cookies.Delete(cookie);
             }
+
+            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return SignOut(
                 new AuthenticationProperties { RedirectUri = callbackUrl },
