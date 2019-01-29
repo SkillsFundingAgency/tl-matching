@@ -23,49 +23,51 @@
     </div>
 }
 
-<form class="form" method="post">
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <div class="govuk-form-group">
-                <h1 class="govuk-heading-l">Find local providers</h1>
-                <h2 class="govuk-heading-m">What skill is the employer looking for?</h2>
+@* ReSharper disable UnknownCssClass *@
+    <form class="form" method="post">
+        @* ReSharper restore UnknownCssClass *@
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
                 <div class="govuk-form-group">
-                    <label class="govuk-label" for="route">
-                        Choose a skill area
-                    </label>
-                    <select class="govuk-select" id="route" name="route">
-                        <option value="agriculture, environmental and animal care">Agriculture, environmental and animal care</option>
-                        <option value="business and administration">Business and administration</option>
-                        <option value="care services">Care services</option>
-                        <option value="catering and hospitality">Catering and hospitality</option>
-                        <option value="construction">Construction</option>
-                        <option value="creative and design">Creative and design</option>
-                        <option value="digital">Digital</option>
-                        <option value="education and childcare">Education and childcare</option>
-                        <option value="engineering and manufacturing">Engineering and manufacturing</option>
-                        <option value="hair and beauty">Hair and beauty</option>
-                        <option value="health and science">Health and science</option>
-                        <option value="legal, financial and accounting">Legal, financial and accounting</option>
-                        <option value="protective services">Protective services</option>
-                        <option value="sales, marketing and procurement">Sales, marketing and procurement</option>
-                        <option value="transport and logistics">Transport and logistics</option>
-                    </select>
+                    <h1 class="govuk-heading-l">Find local providers</h1>
+                    <h2 class="govuk-heading-m">What skill is the employer looking for?</h2>
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="route">
+                            Choose a skill area
+                        </label>
+                        <select class="govuk-select" id="route" name="route">
+                            <option value="agriculture, environmental and animal care">Agriculture, environmental and animal care</option>
+                            <option value="business and administration">Business and administration</option>
+                            <option value="care services">Care services</option>
+                            <option value="catering and hospitality">Catering and hospitality</option>
+                            <option value="construction">Construction</option>
+                            <option value="creative and design">Creative and design</option>
+                            <option value="digital">Digital</option>
+                            <option value="education and childcare">Education and childcare</option>
+                            <option value="engineering and manufacturing">Engineering and manufacturing</option>
+                            <option value="hair and beauty">Hair and beauty</option>
+                            <option value="health and science">Health and science</option>
+                            <option value="legal, financial and accounting">Legal, financial and accounting</option>
+                            <option value="protective services">Protective services</option>
+                            <option value="sales, marketing and procurement">Sales, marketing and procurement</option>
+                            <option value="transport and logistics">Transport and logistics</option>
+                        </select>
+                    </div>
+                    <h2 class="govuk-heading-m">Where is the placement?</h2>
+                    <div class="govuk-form-group @((bool) formError ? "govuk-form-group--error" : "")">
+                        <label class="govuk-label" for="postcode">
+                            Postcode of workplace
+                        </label>
+                        @if ((bool)formError)
+                        {
+                            <span id="postcode-error" class="govuk-error-message">
+                                You must enter a postcode
+                            </span>
+                        }
+                        <input class="govuk-input govuk-input--width-5" id="postcode" name="postcode" type="text">
+                    </div>
                 </div>
-                <h2 class="govuk-heading-m">Where is the placement?</h2>
-                <div class="govuk-form-group @((bool)formError ? "govuk-form-group--error" : "")">
-                    <label class="govuk-label" for="postcode">
-                        Postcode of workplace
-                    </label>
-                    @if ((bool)formError)
-                    {
-                        <span id="postcode-error" class="govuk-error-message">
-                            You must enter a postcode
-                        </span>
-                    }
-                    <input class="govuk-input govuk-input--width-5" id="postcode" name="postcode" type="text">
-                </div>
+                <button class="govuk-button">Search</button>
             </div>
-            <button class="govuk-button">Search</button>
         </div>
-    </div>
-</form>
+    </form>
