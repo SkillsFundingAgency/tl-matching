@@ -4,36 +4,59 @@
 }
 
 <main class="govuk-main-wrapper " id="main-content" role="main">
-
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            
+            @if (Model.Success)
+            {
+                <div class="das-notification das-notification--success">
+                    <p class="das-notification__body">File uploaded successfully</p>
+                </div> 
+            }
+            
+            <div class="govuk-form-group">
+                <div asp-validation-summary="All"></div>
+            </div>
+
+            <h1 class="govuk-heading-xl">Data Import</h1>
+
             <form asp-controller="DataImport" asp-action="Upload" enctype="multipart/form-data">
-                <h1 class="govuk-heading-xl">Data Import</h1>
-
-                <h2 class="govuk-heading-s">1. Select the file</h2>
-                <input type="file" name="file" />
-                <h2 class="govuk-heading-s">2. Select the file type</h2>
-
-                <fieldset>
-                    @foreach (var dataImportType in Model.DataImportTypeViewModels)
-                    {
-                        <input asp-for="SelectedDataImportType" type="radio" value="@dataImportType.Id" /> @dataImportType.Name
-                    }
-                </fieldset>
-
-                <h2 class="govuk-heading-s">3. Upload the file</h2>
 
                 <div class="govuk-form-group">
-                    <input class="govuk-button" type="submit" value="Upload">
+                    <label class="govuk-label govuk-!-font-weight-bold" for="file-upload-1">
+                        1. Select the file
+                    </label>
+                    <input class="govuk-file-upload" id="file" name="file" type="file">
+                </div>
+
+
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                            <h2 class="govuk-fieldset__heading">
+                                2. Select the file type
+                            </h2>
+                        </legend>
+                        <div class="govuk-radios">
+                            @foreach (var dataImportType in Model.DataImportTypeViewModels)
+                            {
+                                <div class="govuk-radios__item">
+                                    <input asp-for="SelectedDataImportType" class="govuk-radios__input" id="data-import-type-@dataImportType.Id" type="radio" value="@dataImportType.Id"/>
+                                    <label class="govuk-label govuk-radios__label" for="data-import-type-@dataImportType.Id">
+                                        @dataImportType.Name
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </fieldset>
                 </div>
 
                 <div class="govuk-form-group">
-                    <div asp-validation-summary="All"></div>
+                    <input class="govuk-button" type="submit" value="Upload"/>
                 </div>
-                @if (Model.Success)
-                {
-                    <p>File uploaded successfully</p>
-                }
+
+
+
             </form>
         </div>
     </div>
