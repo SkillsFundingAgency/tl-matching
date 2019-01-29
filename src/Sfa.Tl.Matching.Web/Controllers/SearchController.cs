@@ -1,25 +1,61 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Application.Interfaces;
+﻿using System;
+using System.ComponentModel;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Web.Mappers;
+using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly IRoutePathService _routePathLookupService;
+        private readonly ILogger<SearchController> _logger;
+        private readonly ISearchParametersViewModelMapper _viewModelMapper;
 
-        public SearchController(IRoutePathService routePathLookupService)
+        public SearchController(ISearchParametersViewModelMapper viewModelMapper, ILogger<SearchController> logger)
         {
-            _routePathLookupService = routePathLookupService;
+            _viewModelMapper = viewModelMapper;
+            _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string selectedRouteId, string postcode)//SearchParametersViewModel viewModel)
         {
-            //TODO: Add view model and mapper. ToListAsync() is probably inside mapper.
-            var model = _routePathLookupService.GetRoutes();
+            //if (!ModelState.IsValid)
+            //{
+            //    //return RedirectToAction(nameof(Index), "Search", new { viewModel.SelectedRouteId, viewModel.Postcode });
+            //}
 
-            //TODO: Create actual view and remove R# comment
-            // ReSharper disable once Mvc.ViewNotResolved
-            return View(model);
+            //TODO: Search and redirect to the results page
+            //await _searchService.Search(model.);
+            //return RedirectToAction(nameof(SearchResults), "Search");
+
+            try
+            {
+
+                var viewModel = _viewModelMapper.Populate(selectedRouteId, postcode);
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Loading of routes failed.");
+                throw;
+            }
+        }
+
+        public IActionResult Search(SearchParametersViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                //return RedirectToAction(nameof(Index), "Search", new { viewModel.SelectedRouteId, viewModel.Postcode });
+                viewModel = _viewModelMapper.Populate(viewModel.SelectedRouteId, viewModel.Postcode);
+                return View(nameof(Index), viewModel);
+            }
+
+            _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
+            //await _searchService.Search(model.);
+
+            return RedirectToAction(nameof(Index), "Search");
         }
     }
 }

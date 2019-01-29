@@ -4,57 +4,58 @@ using NUnit.Framework;
 using NSubstitute;
 using Sfa.Tl.Matching.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Web.Mappers;
+using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
 {
     public class When_Search_Controller_Index_Is_Loaded
     {
-        private IRoutePathService _routePathLookupService;
         private SearchController _controller;
+        private ISearchParametersViewModelMapper _viewModelMapper;
+        private SearchParametersViewModel _viewModel;
         private IActionResult _result;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            _routePathLookupService =
-                Substitute
-                    .For<IRoutePathService>();
-
-            var paths = new List<Path>
-                {
-                    new Path { Name = "Path 1" }
-                }
-                .AsQueryable();
-
             var routes = new List<Route>
                 {
-                    new Route { Name = "Route 1" }
+                    new Route { Id = 1, Name = "Route 1" }
                 }
                 .AsQueryable();
 
-            _routePathLookupService.GetPaths().Returns(paths);
-            _routePathLookupService.GetRoutes().Returns(routes);
+            _viewModel = new SearchParametersViewModel
+            {
+                RoutesSelectList = new List<SelectListItem>
+                (
+                    routes.Select(
+                        r => new SelectListItem {Value = r.Name, Text = r.Name})
+                ),
+                SelectedRouteId = "1"
+            };
 
-            _controller = new SearchController(_routePathLookupService);
+            _viewModelMapper = Substitute.For<ISearchParametersViewModelMapper>();
+            _viewModelMapper.Populate(Arg.Any<string>(), Arg.Any<string>())
+                .Returns(_viewModel);
+
+            _controller = new SearchController(_viewModelMapper);
             _result = _controller.Index();
         }
+        
+        [Test]
+        public void Then_View_Model_Mapper_Populate_Is_Called_Exactly_Once() =>
+            _viewModelMapper.Received(1)
+                .Populate(Arg.Any<string>(), Arg.Any<string>());
 
         [Test]
-        public void Then_GetRoutes_Is_Called_Exactly_Once()
-        {
-            _routePathLookupService
-                .Received(1)
-                .GetRoutes();
-        }
-
-        [Test]
-        public void Then_Result_Contains_Routes()
+        public void Then_Result_Contains_ViewModel()
         {
             var view = _result as ViewResult;
-            var model = view?.Model as IEnumerable<Route>;
-            Assert.AreEqual("Route 1", model?.First().Name);
+            var viewModel = view?.Model as SearchParametersViewModel;
+            Assert.AreEqual(_viewModel, viewModel);
         }
     }
 }
