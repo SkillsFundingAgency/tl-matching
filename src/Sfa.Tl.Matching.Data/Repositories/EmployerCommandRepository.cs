@@ -10,10 +10,10 @@ namespace Sfa.Tl.Matching.Data.Repositories
 {
     public class EmployerCommandRepository : IEmployerCommandRepository
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<EmployerCommandRepository> _logger;
         private readonly MatchingDbContext _dbContext;
 
-        public EmployerCommandRepository(ILogger logger,
+        public EmployerCommandRepository(ILogger<EmployerCommandRepository> logger,
             MatchingDbContext dbContext)
         {
             _logger = logger;
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 _logger.LogError(due.Message, due.InnerException);
                 throw;
             }
-
+            
             return createdRecordsCount;
         }
 
