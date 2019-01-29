@@ -44,9 +44,27 @@
         "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-fa')]",
         "azureSearchName": "[concat(variables('resourceNamePrefix'), '-mtch-azs')]",
         "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-mtch-db')]",
-        "serviceBusName": "[concat(variables('resourceNamePrefix'), '-mtch-ns')]"
+        "serviceBusName": "[concat(variables('resourceNamePrefix'), '-mtch-ns')]",
+        "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'mtchstr'), '-', '')]"
     },
     "resources": [
+        {
+            "apiVersion": "2017-05-10",
+            "name": "storageAccount",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/storage-account-arm.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    }
+                }
+            }
+        },
         {
             "apiVersion": "2017-05-10",
             "name": "workerAppServicePlan",
@@ -131,6 +149,10 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('uiAppInsights').outputs.InstrumentationKey.value]"
+                            },
+                            {
+                                "name": "BlobStorageConnectionString",
+                                "value": "[reference('storageAccount').outputs.storageConnectionString.value]"
                             }
                         ]
                     }
