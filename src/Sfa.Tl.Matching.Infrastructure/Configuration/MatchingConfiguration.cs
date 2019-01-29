@@ -10,6 +10,8 @@ namespace Sfa.Tl.Matching.Infrastructure.Configuration
 
         public string BlobStorageConnectionString { get; set; }
 
+        public string QueueStorageConnectionString { get; set; }
+
         public string ServiceBusConnectionString { get; set; }
 
         public string GovNotifyApiKey { get; set; }

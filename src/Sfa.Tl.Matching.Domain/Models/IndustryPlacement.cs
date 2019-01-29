@@ -17,7 +17,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public DateTime CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
 
-        public virtual Address Address { get; set; }
         public virtual RoutePath RoutePath { get; set; }
     }
 }

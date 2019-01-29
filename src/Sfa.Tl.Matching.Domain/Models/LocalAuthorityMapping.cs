@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
@@ -12,7 +11,5 @@ namespace Sfa.Tl.Matching.Domain.Models
         public bool InMultipleLeps { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
-
-        public virtual ICollection<Address> Address { get; set; }
     }
 }

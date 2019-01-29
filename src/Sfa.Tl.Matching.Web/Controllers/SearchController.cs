@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -13,10 +12,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _routePathLookupService = routePathLookupService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            //TODO: Add view model and mapper
-            var model = await _routePathLookupService.GetRoutesAsync();
+            //TODO: Add view model and mapper. ToListAsync() is probably inside mapper.
+            var model = _routePathLookupService.GetRoutes();
 
             //TODO: Create actual view and remove R# comment
             // ReSharper disable once Mvc.ViewNotResolved

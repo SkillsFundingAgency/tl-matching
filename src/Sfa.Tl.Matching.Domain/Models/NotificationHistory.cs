@@ -15,7 +15,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public DateTime CreatedOn { get; set; }
 
         public virtual EmailTemplate EmailTemplate { get; set; }
-        public virtual Employer EntityRef { get; set; }
         public virtual Provider EntityRefNavigation { get; set; }
     }
 }

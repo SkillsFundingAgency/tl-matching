@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.Services;
@@ -14,11 +13,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
     {
         private IRoutePathRepository _repository;
         private IRoutePathService _service;
-        private IEnumerable<Path> _result;
+        private IQueryable<Path> _result;
 
-        private readonly IEnumerable<Path> _pathData
+        private readonly IQueryable<Path> _pathData
             = new List<Path>
-            {
+            { 
                 new Path
                 {
                     Id = 1,
@@ -35,7 +34,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
                     Keywords = "Keyword3, Keyword4",
                     Summary = "Path 2 summary",
                 }
-            };
+            }
+            .AsQueryable();
 
         private readonly IEnumerable<Path> _expected
             = new List<Path>
@@ -59,26 +59,27 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
             };
 
         [OneTimeSetUp]
-        public async Task OneTimeSetup()
+        public void OneTimeSetup()
         {
             _repository =
                 Substitute
                     .For<IRoutePathRepository>();
 
-            _repository.GetPathsAsync()
+            _repository
+                .GetPaths()
                 .Returns(_pathData);
 
             _service = new RoutePathService(_repository);
 
-            _result = await _service.GetPathsAsync();
+            _result = _service.GetPaths();
         }
 
         [Test]
-        public async Task Then_GetPathsAsync_Is_Called_Exactly_Once()
+        public void Then_GetPaths_Is_Called_Exactly_Once()
         {
-            await _repository
+            _repository
                 .Received(1)
-                .GetPathsAsync();
+                .GetPaths();
         }
 
         [Test]

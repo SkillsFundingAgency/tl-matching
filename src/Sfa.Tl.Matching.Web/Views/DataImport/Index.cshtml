@@ -1,0 +1,37 @@
+﻿@model Sfa.Tl.Matching.Web.ViewModels.DataImportViewModel
+@{
+    ViewData["Title"] = "T Levels Industry Placement Matching Service";
+}
+
+<main class="govuk-main-wrapper " id="main-content" role="main">
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form asp-controller="DataImport" asp-action="Upload" enctype="multipart/form-data">
+                <h1 class="govuk-heading-xl">Data Import</h1>
+
+                <h2 class="govuk-heading-s">1. Select the file</h2>
+                <input type="file" name="file" />
+                <h2 class="govuk-heading-s">2. Select the file type</h2>
+
+                <fieldset>
+                    @foreach (var dataImportType in Model.DataImportTypeViewModels)
+                    {
+                        <input asp-for="SelectedDataImportType" type="radio" value="@dataImportType.Id" /> @dataImportType.Name
+                    }
+                </fieldset>
+
+                <h2 class="govuk-heading-s">3. Upload the file</h2>
+
+                <div class="govuk-form-group">
+                    <input class="govuk-button" type="submit" value="Upload">
+                </div>
+
+                <div class="govuk-form-group">
+                    <div asp-validation-summary="All"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</main>
