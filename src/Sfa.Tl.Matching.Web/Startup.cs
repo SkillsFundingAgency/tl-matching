@@ -12,17 +12,13 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sfa.Tl.Matching.Application.Commands.UploadBlob;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Infrastructure.Blob;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.Services;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -69,13 +65,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IRoutePathRepository, RoutePathRepository>();
 
-            services.AddTransient<IDataImportViewModelMapper, DataImportViewModelMapper>();
-            services.AddTransient<ISearchParametersViewModelMapper, SearchParametersViewModelMapper>();
-
-            services.AddTransient<IUploadBlobCommand, UploadBlobCommand>();
-
-            services.AddTransient<IUploadService, UploadService>();
-            services.AddTransient<IBlobService>(bs => new BlobService(_configuration));
+            services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,7 +91,7 @@ namespace Sfa.Tl.Matching.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseAuthentication(); // TODO: WP - Add the authentication middleware into the pipeline
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

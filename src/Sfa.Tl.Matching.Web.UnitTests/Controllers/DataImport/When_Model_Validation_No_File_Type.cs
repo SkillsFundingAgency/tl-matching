@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using NUnit.Framework;
-using Sfa.Tl.Matching.Web.ViewModels;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 {
@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
         [SetUp]
         public void Setup()
         {
-            var viewModel = new DataImportViewModel();
+            var viewModel = new SelectedImportDataViewModel();
             var validationContext = new ValidationContext(viewModel, null, null);
             Validator.TryValidateObject(viewModel, validationContext, _results, true);
         }

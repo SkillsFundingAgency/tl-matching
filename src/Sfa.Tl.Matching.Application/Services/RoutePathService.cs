@@ -23,5 +23,15 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             return _repository.GetRoutes();
         }
+
+        public void ImportQualificationPathMapping()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void IndexQualificationPathMapping()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

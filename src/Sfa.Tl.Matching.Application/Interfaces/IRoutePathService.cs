@@ -8,5 +8,8 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         IQueryable<Path> GetPaths();
 
         IQueryable<Route> GetRoutes();
+
+        void ImportQualificationPathMapping();
+        void IndexQualificationPathMapping();
     }
 }

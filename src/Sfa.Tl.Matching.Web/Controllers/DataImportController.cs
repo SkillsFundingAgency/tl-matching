@@ -1,55 +1,79 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.Services;
-using Sfa.Tl.Matching.Web.ViewModels;
+using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
     public class DataImportController : Controller
     {
-        private readonly IDataImportViewModelMapper _viewModelMapper;
-        private readonly IUploadService _uploadService;
+        private readonly IMapper _mapper;
+        private readonly IDataBlobUploadService _dataBlobUploadService;
 
         private const string FileMissingKey = "file";
         private const string FileMissingError = "A file must be selected";
 
-        public DataImportController(IDataImportViewModelMapper viewModelMapper,
-            IUploadService uploadService)
+        public DataImportController(IMapper mapper, IDataBlobUploadService dataBlobUploadService)
         {
-            _viewModelMapper = viewModelMapper;
-            _uploadService = uploadService;
+            _mapper = mapper;
+            _dataBlobUploadService = dataBlobUploadService;
         }
 
         public IActionResult Index()
         {
-            var viewModel = _viewModelMapper.Populate();
+            var viewModel = Populate();
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file, DataImportViewModel viewModel)
+        public async Task<IActionResult> Import(IFormFile file, int selectedItem)
         {
             if (file == null)
                 ModelState.AddModelError(FileMissingKey, FileMissingError);
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                viewModel = _viewModelMapper.Populate();
-                return View("Index", viewModel);
+                var viewModel = new SelectedImportDataViewModel { Id = selectedItem };
+                _mapper.Map(file, viewModel);
+                await _dataBlobUploadService.Upload(viewModel);
             }
 
-            await _uploadService.Upload(file, viewModel);
-
-            viewModel = _viewModelMapper.Populate();
-            viewModel.Success = true;
-
-            return View("Index", viewModel);
+            return RedirectToAction(nameof(Index), "DataImport");
         }
+
+        public DataImportParametersViewModel Populate()
+        {
+            var dataImportTypeNames = Enum.GetNames(typeof(DataImportType));
+
+            var dataImportTypeViewModels = new DataImportParametersViewModel
+            {
+                ImportType = dataImportTypeNames.Select(uploadType => new SelectListItem
+                {
+
+                    Value = uploadType.ToString(),
+                    Text = GetDescription(uploadType),
+                }).ToArray(),
+            };
+
+            return dataImportTypeViewModels;
+        }
+
+        //private static int GetId(string uploadType) =>
+        //    (int)Enum.Parse(typeof(DataImportType), uploadType);
+
+        private static string GetDescription(string uploadType) =>
+            ((DataImportType)Enum.Parse(typeof(DataImportType), uploadType)).Humanize();
+
     }
 }

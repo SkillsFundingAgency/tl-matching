@@ -1,47 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Web.ViewModels;
+using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Web.Mappers
 {
-    public class SearchParametersViewModelMapper : ISearchParametersViewModelMapper
+    public class SearchParametersViewModelMapper : MapperConfigurationExpression
     {
-        private readonly IRoutePathService _routePathLookupService;
-
-        public SearchParametersViewModelMapper(IRoutePathService routePathLookupService)
+        public SearchParametersViewModelMapper()
         {
-            _routePathLookupService = routePathLookupService;
-        }
+            CreateMap<Route, SelectListItem>()
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(source => source.Name))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom((source) => source.Id))
+                ;
 
-        public SearchParametersViewModel Populate(string selectedRouteId, string postcode)
-        {
-            var routes = _routePathLookupService
-                .GetRoutes()
-                .OrderBy(r => r.Name);
-
-            var viewModel = new SearchParametersViewModel
-            {
-                RoutesSelectList = new List<SelectListItem>
-                (
-                    routes.Select(
-                        r => new SelectListItem
-                        {
-                            Value = r.Id.ToString(),
-                            Text = r.Name
-                        })
-                ),
-                SelectedRouteId = selectedRouteId,
-                Postcode = postcode
-            };
-
-            if (viewModel.SelectedRouteId == null && viewModel.RoutesSelectList.Count > 0)
-            {
-                viewModel.SelectedRouteId = viewModel.RoutesSelectList.First().Value;
-            }
-
-            return viewModel;
         }
     }
 }

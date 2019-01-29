@@ -1,6 +1,5 @@
 ﻿using AutoMapper.Configuration;
-using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
@@ -8,9 +7,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
     {
         public EmployerMapper()
         {
-            CreateMap<CreateEmployerDto, Employer>()
-                .ForMember(dest => dest.Id,
-                    opt => opt.Ignore());
+            CreateMap<EmployerDto, Domain.Models.Employer>();
         }
     }
 }
