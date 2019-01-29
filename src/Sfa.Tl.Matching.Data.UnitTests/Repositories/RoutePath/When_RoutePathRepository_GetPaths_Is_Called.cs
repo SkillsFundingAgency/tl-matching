@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Data.Repositories;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
 {
-    public class When_RoutePathRepository_GetPathsAsync_Is_Called
+    public class When_RoutePathRepository_GetPaths_Is_Called
     {
         private IEnumerable<Path> _result;
 
@@ -39,7 +40,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
                 dbContext.SaveChanges();
 
                 var repository = new RoutePathRepository(dbContext);
-                _result = await repository.GetPathsAsync();
+                _result = await repository.GetPaths().ToListAsync();
             }
         }
 

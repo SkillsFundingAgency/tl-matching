@@ -7,9 +7,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public Guid Id { get; set; }
         public Guid ProviderId { get; set; }
         public Guid CourseId { get; set; }
-        public Guid AddressId { get; set; }
-
-        public virtual Address Address { get; set; }
         public virtual Course Course { get; set; }
         public virtual Provider Provider { get; set; }
     }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using NSubstitute;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -17,38 +16,37 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
         private IActionResult _result;
 
         [OneTimeSetUp]
-        public async Task OneTimeSetup()
+        public void OneTimeSetup()
         {
             _routePathLookupService =
                 Substitute
                     .For<IRoutePathService>();
 
-            var paths = Task.FromResult(
-                new List<Path>
+            var paths = new List<Path>
                 {
                     new Path { Name = "Path 1" }
                 }
-                .AsEnumerable());
+                .AsQueryable();
 
-            var routes = Task.FromResult(
-                new List<Route>
-                    {
+            var routes = new List<Route>
+                {
                     new Route { Name = "Route 1" }
                 }
-                .AsEnumerable());
-            _routePathLookupService.GetPathsAsync().Returns(paths);
-            _routePathLookupService.GetRoutesAsync().Returns(routes);
+                .AsQueryable();
+
+            _routePathLookupService.GetPaths().Returns(paths);
+            _routePathLookupService.GetRoutes().Returns(routes);
 
             _controller = new SearchController(_routePathLookupService);
-            _result = await _controller.Index();
+            _result = _controller.Index();
         }
 
         [Test]
-        public async Task Then_GetRoutesAsync_Is_Called_Exactly_Once()
+        public void Then_GetRoutes_Is_Called_Exactly_Once()
         {
-            await _routePathLookupService
+            _routePathLookupService
                 .Received(1)
-                .GetRoutesAsync();
+                .GetRoutes();
         }
 
         [Test]
