@@ -1,5 +1,6 @@
 ﻿
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 namespace Sfa.Tl.Matching.Infrastructure.Configuration
 {
     public class MatchingConfiguration

@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using System;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Sfa.Tl.Matching.FileReader.Excel
@@ -20,6 +21,18 @@ namespace Sfa.Tl.Matching.FileReader.Excel
                     case CellValues.InlineString:
                         cellValue = cell.InnerText;
                         break;
+                    case CellValues.Boolean:
+                        break;
+                    case CellValues.Number:
+                        break;
+                    case CellValues.Error:
+                        break;
+                    case CellValues.String:
+                        break;
+                    case CellValues.Date:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
             else if (cell.CellValue != null)

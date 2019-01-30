@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Sfa.Tl.Matching.Domain.Models
 {
     public class RoutePath

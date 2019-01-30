@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.FileReader.Excel.Employer;
 using Sfa.Tl.Matching.Models;
 
@@ -36,8 +36,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 _logger.LogError(result.Error);
 
             var createEmployerDtos = _mapper.Map<List<CreateEmployerDto>>(result.Data);
-            //var employers = _mapper.Map<List<Domain.Models.Employer>>(createEmployerDtos);
-            var employers = Map(createEmployerDtos);
+            var employers = _mapper.Map<List<Employer>>(createEmployerDtos);
 
             if (employers.Count == 0)
             {
@@ -50,24 +49,5 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return createdRecords;
         }
-
-        #region Private Methods
-        private static List<Domain.Models.Employer> Map(IEnumerable<CreateEmployerDto> createEmployerDtos)
-        {
-            var employers = createEmployerDtos.Select(dto => new Domain.Models.Employer()
-            {
-                CrmId = dto.CrmId,
-                AlsoKnownAs = dto.AlsoKnownAs,
-                CompanyName = dto.CompanyName,
-                Email = dto.Email,
-                Owner = dto.Owner,
-                Phone = dto.Phone,
-                PostCode = dto.PostCode,
-                PrimaryContact = dto.PrimaryContact
-            }).ToList();
-
-            return employers;
-        }
-        #endregion
     }
 }

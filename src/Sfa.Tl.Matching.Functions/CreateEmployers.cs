@@ -8,6 +8,7 @@ using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.FileReader.Excel.Employer;
 using Sfa.Tl.Matching.Functions.Extensions;
+// ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Functions
 {

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sfa.Tl.Matching.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
 {

@@ -1,5 +1,5 @@
-﻿@using Sfa.Tl.Matching.Infrastructure.Extensions
-@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+﻿@using Microsoft.ApplicationInsights.AspNetCore
+@inject JavaScriptSnippet JavaScriptSnippet
 <!DOCTYPE html>
 <html class="govuk-template ">
 <head>
@@ -57,12 +57,6 @@
                 @* ReSharper restore UnknownCssClass *@
                 <nav>
                     <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
-                        <li class="govuk-header__navigation-item">
-                            @if (Context.User.Identity.IsAuthenticated)
-                            {
-                                @Context.User.GetUserEmail()
-                            }
-                        </li>
                         <li class="govuk-header__navigation-item">
                             <a class="govuk-header__link" asp-controller="Home" asp-action="ContactUs">Contact us</a>
                         </li>

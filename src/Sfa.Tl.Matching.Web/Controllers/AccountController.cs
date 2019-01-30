@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 Response.Cookies.Delete(cookie);
             }
 
-            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return SignOut(
                 new AuthenticationProperties { RedirectUri = callbackUrl },
