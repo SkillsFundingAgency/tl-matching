@@ -300,3 +300,5 @@ __pycache__/
 # Ignore [Aa]pplication.[Mm]in auto generated files
 [Aa]pplication.[Mm]in.js
 [Aa]pplication.[Mm]in.css
+
+!launchSettings.json
