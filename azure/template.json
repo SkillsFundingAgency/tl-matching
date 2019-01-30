@@ -216,6 +216,10 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('functionAppInsights').outputs.InstrumentationKey.value]"
+                            },
+                            {
+                                "name": "BlobStorageConnectionString",
+                                "value": "[reference('storageAccount').outputs.storageConnectionString.value]"
                             }
                         ]
                     }
