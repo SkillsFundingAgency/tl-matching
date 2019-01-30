@@ -43,7 +43,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
             try
             {
                 await _dbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.Employer");
-                await _dbContext.Database.ExecuteSqlCommandAsync("DBCC CHECKIDENT ('Employer', RESEED, 0)");
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception e)
