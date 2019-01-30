@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("CreateEmployers")]
         public static async Task Run(
-            [BlobTrigger("files/Employer/{name}", Connection = "ConfigurationStorageConnectionString")]Stream stream, 
+            [BlobTrigger("files/Employer/{name}", Connection = "BlobStorageConnectionString")]Stream stream, 
             string name, 
             ILogger logger,
             [Inject] ICreateEmployerService createEmployerService)
