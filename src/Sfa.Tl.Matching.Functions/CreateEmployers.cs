@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("CreateEmployers")]
         public static async Task Run(
-            [BlobTrigger("files/Employer/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
+            [BlobTrigger("files/Employer/{name}", Connection = "ConfigurationStorageConnectionString")]Stream stream, 
             string name, 
             ILogger logger,
             [Inject] ICreateEmployerService createEmployerService)
