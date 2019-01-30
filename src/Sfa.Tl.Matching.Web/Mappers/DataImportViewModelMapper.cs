@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 new DataImportTypeViewModel
                 {
                     Id = GetId(uploadType),
-                    Name = GetDescription(uploadType),
+                    Name = GetDescription(uploadType)
                 }).ToList();
 
             return dataImportTypeViewModels;

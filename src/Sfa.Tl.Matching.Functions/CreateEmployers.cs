@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Functions.Extensions;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Sfa.Tl.Matching.Functions
 {
     public static class CreateEmployers

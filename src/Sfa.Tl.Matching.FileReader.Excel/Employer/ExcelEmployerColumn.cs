@@ -1,4 +1,5 @@
-﻿namespace Sfa.Tl.Matching.FileReader.Excel.Employer
+﻿// ReSharper disable UnusedMember.Global
+namespace Sfa.Tl.Matching.FileReader.Excel.Employer
 {
     public enum ExcelEmployerColumn
     {

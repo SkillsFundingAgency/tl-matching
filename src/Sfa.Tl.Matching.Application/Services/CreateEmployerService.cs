@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.FileReader.Excel.Employer;
 using Sfa.Tl.Matching.Models;
 
@@ -36,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 _logger.LogError(result.Error);
 
             var createEmployerDtos = _mapper.Map<List<CreateEmployerDto>>(result.Data);
-            var employers = _mapper.Map<List<Domain.Models.Employer>>(createEmployerDtos);
+            var employers = _mapper.Map<List<Employer>>(createEmployerDtos);
 
             if (employers.Count == 0)
             {

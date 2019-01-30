@@ -1,11 +1,15 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
+using Sfa.Tl.Matching.Models;
 using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
+    [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
     public class SearchController : Controller
     {
         private readonly ILogger<SearchController> _logger;
@@ -17,6 +21,18 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _logger = logger;
         }
 
+        public IActionResult Start()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult Results(SearchQueryViewModel viewModel)
+        {
+            return View();
+        }
+		
         public IActionResult Index(string selectedRouteId, string postcode)//SearchParametersViewModel viewModel)
         {
             //if (!ModelState.IsValid)

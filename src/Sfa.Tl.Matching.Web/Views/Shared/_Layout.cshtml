@@ -1,4 +1,5 @@
-﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+﻿@using Microsoft.ApplicationInsights.AspNetCore
+@inject JavaScriptSnippet JavaScriptSnippet
 <!DOCTYPE html>
 <html class="govuk-template ">
 <head>
@@ -49,28 +50,16 @@
             </div>
             <div class="govuk-header__content">
                 <a href="/" class="govuk-header__link govuk-header__link--service-name">
-                    T Levels Industry Placement Matching Service
+                    Find an industry placement
                 </a>
-                @* ReSharper disable UnknownCssClass *@
-                <button type="button" role="button" class="govuk-header__menu-button js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
-                @* ReSharper restore UnknownCssClass *@
-                <nav>
-                    <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
-                        <li class="govuk-header__navigation-item">
-                            <a class="govuk-header__link" asp-controller="Home" asp-action="ContactUs">Contact us</a>
-                        </li>
-                        <li class="govuk-header__navigation-item">
-                            @if (Context.User.Identity.IsAuthenticated)
-                            {
-                                <a class="govuk-header__link" asp-area="" asp-controller="Home" asp-action="Signout">Sign out</a>
-                            }
-                            else
-                            {
-                                <a class="govuk-header__link" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
-                            }
-                        </li>                     
-                    </ul>
-                </nav>
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <a class="govuk-header__link" style="padding-left: 80px" asp-area="" asp-controller="Account" asp-action="SignOut">Sign out</a>
+                }
+                else
+                {
+                    <a class="govuk-header__link" style="padding-left: 80px" asp-area="" asp-controller="Account" asp-action="SignIn">Login</a>
+                }
             </div>
         </div>
     </header>

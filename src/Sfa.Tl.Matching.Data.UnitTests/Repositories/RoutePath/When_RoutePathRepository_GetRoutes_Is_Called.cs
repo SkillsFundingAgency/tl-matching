@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
 {

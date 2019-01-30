@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Sfa.Tl.Matching.Infrastructure.Enums
 {
     public enum DataImportType
