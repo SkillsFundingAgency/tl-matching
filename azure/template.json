@@ -220,6 +220,18 @@
                             {
                                 "name": "BlobStorageConnectionString",
                                 "value": "[reference('storageAccount').outputs.storageConnectionString.value]"
+                            },
+                            {
+                                "name": "AzureWebJobsStorage",
+                                "value": "[reference('storageAccount').outputs.storageConnectionString.value]"
+                            },
+                            {
+                                "name": "AzureWebJobsDashboard",
+                                "value": "[reference('storageAccount').outputs.storageConnectionString.value]"
+                            },
+                            {
+                                "name": "FUNCTIONS_EXTENSION_VERSION",
+                                "value": "~2"
                             }
                         ]
                     }
