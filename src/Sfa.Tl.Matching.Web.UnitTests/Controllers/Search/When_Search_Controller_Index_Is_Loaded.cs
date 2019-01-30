@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
-using NSubstitute;
-using Sfa.Tl.Matching.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using NSubstitute;
+using NUnit.Framework;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.ViewModels;
 

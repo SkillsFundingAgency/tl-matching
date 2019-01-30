@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Sfa.Tl.Matching.Infrastructure.Enums;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Web.ViewModels

@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Sfa.Tl.Matching.Web\Sfa.Tl.Matching.Web.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\Account\" />
-  </ItemGroup>
-
 </Project>

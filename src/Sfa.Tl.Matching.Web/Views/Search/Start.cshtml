@@ -15,10 +15,10 @@
         <div class="govuk-inset-text">
             You will only be able to find one type of placement for one location at a time.
         </div>
-        <div class="form-group">
+        <div class="govuk-form-group">
             <a asp-action="Index" asp-controller="Search" class="govuk-button govuk-button--start">Start now</a>
         </div>
-        <div class="form-group">
+        <div class="govuk-form-group">
             @if (Context.User.HasAdminRole())
             {
                 <a asp-action="Index" asp-controller="DataImport">Upload Employer and Provider Data</a>

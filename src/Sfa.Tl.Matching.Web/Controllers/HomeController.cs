@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Models;
+using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {

@@ -1,6 +1,6 @@
 ﻿using System;
-using AutoMapper;
 using System.Globalization;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;

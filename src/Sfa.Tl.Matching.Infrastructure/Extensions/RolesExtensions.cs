@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Claims;
+// ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Infrastructure.Extensions
 {

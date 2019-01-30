@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 _logger.LogError(result.Error);
 
             var createEmployerDtos = _mapper.Map<List<CreateEmployerDto>>(result.Data);
-            //var employers = _mapper.Map<List<Domain.Models.Employer>>(createEmployerDtos);
+            var employers = _mapper.Map<List<Employer>>(createEmployerDtos);
 
             if (employers.Count == 0)
             {

@@ -9,7 +9,7 @@ using Sfa.Tl.Matching.Web.Controllers;
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
 {
     [TestFixture]
-    public class Given_I_request_Sign_In
+    public class Given_I_Request_Sign_In
     {
         private AccountController _accountController;
 

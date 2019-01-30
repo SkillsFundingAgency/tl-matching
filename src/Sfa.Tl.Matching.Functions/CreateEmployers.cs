@@ -4,6 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Functions.Extensions;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Functions

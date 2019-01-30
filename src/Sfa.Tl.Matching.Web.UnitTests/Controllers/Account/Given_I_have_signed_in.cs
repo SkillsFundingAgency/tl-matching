@@ -9,7 +9,7 @@ using Sfa.Tl.Matching.Web.Controllers;
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
 {
     [TestFixture]
-    public class Given_I_have_signed_in
+    public class Given_I_Have_Signed_In
     {
         private IHttpContextAccessor _contextAccessor;
         private AccountController _accountController;
