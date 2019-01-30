@@ -47,6 +47,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _uploadService.Upload(file, viewModel);
 
             viewModel = _viewModelMapper.Populate();
+            viewModel.Success = true;
 
             return View("Index", viewModel);
         }

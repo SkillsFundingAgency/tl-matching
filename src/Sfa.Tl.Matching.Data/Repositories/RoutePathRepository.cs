@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public IQueryable<Route> GetRoutes()
         {
-            return _dbContext.Route;
+            return _dbContext.Route.AsNoTracking();
         }
     }
 }

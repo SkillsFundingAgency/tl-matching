@@ -70,6 +70,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRoutePathRepository, RoutePathRepository>();
 
             services.AddTransient<IDataImportViewModelMapper, DataImportViewModelMapper>();
+            services.AddTransient<ISearchParametersViewModelMapper, SearchParametersViewModelMapper>();
 
             services.AddTransient<IUploadBlobCommand, UploadBlobCommand>();
 

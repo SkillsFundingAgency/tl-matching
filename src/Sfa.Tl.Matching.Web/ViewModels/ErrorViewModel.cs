@@ -1,4 +1,4 @@
-﻿namespace Sfa.Tl.Matching.Models
+﻿namespace Sfa.Tl.Matching.Web.ViewModels
 {
     public class ErrorViewModel
     {
