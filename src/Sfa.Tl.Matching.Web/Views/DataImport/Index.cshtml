@@ -19,7 +19,7 @@
             <form asp-controller="DataImport" asp-action="Upload" enctype="multipart/form-data">
 
                 <div class="govuk-form-group">
-                    <label class="govuk-label govuk-!-font-weight-bold" for="file-upload-1">
+                    <label class="govuk-label govuk-!-font-weight-bold" for="file">
                        Select the file
                     </label>
                     <input class="govuk-file-upload" id="file" name="file" type="file">
@@ -36,8 +36,8 @@
                             @foreach (var dataImportType in Model.DataImportTypeViewModels)
                             {
                                 <div class="govuk-radios__item">
-                                    <input asp-for="SelectedDataImportType" class="govuk-radios__input" id="data-import-type-@dataImportType.Id" type="radio" value="@dataImportType.Id"/>
-                                    <label class="govuk-label govuk-radios__label" for="data-import-type-@dataImportType.Id">
+                                    <input asp-for="SelectedDataImportType" class="govuk-radios__input" id="data-import-type@dataImportType.Id" type="radio" value="@dataImportType.Id"/>
+                                    <label class="govuk-label govuk-radios__label" for="data-import-type@dataImportType.Id">
                                         @dataImportType.Name
                                     </label>
                                 </div>
