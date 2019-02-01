@@ -1,13 +1,9 @@
-﻿
+﻿@model SearchParametersViewModel
 @{
     ViewData["Title"] = "Find local providers";
 }
 
-@{
-    var formError = false; // Temp variable for marking up validation
-}
-
-@if ((bool)formError)
+@if (!ViewData.ModelState.IsValid)
 {
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
         <h2 class="govuk-error-summary__title" id="error-summary-title">
@@ -15,59 +11,43 @@
         </h2>
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
-                <li>
-                    <a href="#postcode-error">You must enter a postcode</a>
-                </li>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    //TODO Need to get tags for h-refs into the individual fields:
+                    <li>
+                        <a href="#postcode-error">@error.ErrorMessage</a>
+                    </li>
+                }
             </ul>
         </div>
     </div>
 }
 
 @* ReSharper disable UnknownCssClass *@
-    <form class="form" method="post">
-        @* ReSharper restore UnknownCssClass *@
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
+<form class="form" asp-controller="Search" asp-action="Search">
+    @* ReSharper restore UnknownCssClass *@
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group">
+                <h1 class="govuk-heading-l">Find local providers</h1>
+                <h2 class="govuk-heading-m">What skill is the employer looking for?</h2>
                 <div class="govuk-form-group">
-                    <h1 class="govuk-heading-l">Find local providers</h1>
-                    <h2 class="govuk-heading-m">What skill is the employer looking for?</h2>
-                    <div class="govuk-form-group">
-                        <label class="govuk-label" for="route">
-                            Choose a skill area
-                        </label>
-                        <select class="govuk-select" id="route" name="route">
-                            <option value="agriculture, environmental and animal care">Agriculture, environmental and animal care</option>
-                            <option value="business and administration">Business and administration</option>
-                            <option value="care services">Care services</option>
-                            <option value="catering and hospitality">Catering and hospitality</option>
-                            <option value="construction">Construction</option>
-                            <option value="creative and design">Creative and design</option>
-                            <option value="digital">Digital</option>
-                            <option value="education and childcare">Education and childcare</option>
-                            <option value="engineering and manufacturing">Engineering and manufacturing</option>
-                            <option value="hair and beauty">Hair and beauty</option>
-                            <option value="health and science">Health and science</option>
-                            <option value="legal, financial and accounting">Legal, financial and accounting</option>
-                            <option value="protective services">Protective services</option>
-                            <option value="sales, marketing and procurement">Sales, marketing and procurement</option>
-                            <option value="transport and logistics">Transport and logistics</option>
-                        </select>
-                    </div>
-                    <h2 class="govuk-heading-m">Where is the placement?</h2>
-                    <div class="govuk-form-group @((bool) formError ? "govuk-form-group--error" : "")">
-                        <label class="govuk-label" for="postcode">
-                            Postcode of workplace
-                        </label>
-                        @if ((bool)formError)
-                        {
-                            <span id="postcode-error" class="govuk-error-message">
-                                You must enter a postcode
-                            </span>
-                        }
-                        <input class="govuk-input govuk-input--width-5" id="postcode" name="postcode" type="text">
-                    </div>
+                    <label class="govuk-label" asp-for="SelectedRouteId">
+                        Choose a skill area
+                    </label>
+                    <select class="govuk-select" asp-for="SelectedRouteId" asp-items="Model.RoutesSelectList"></select>
                 </div>
-                <button class="govuk-button">Search</button>
+                <h2 class="govuk-heading-m">Where is the placement?</h2>
+
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="postcode">
+                        Postcode of workplace
+                    </label>
+                    <input class="govuk-input govuk-input--width-5" asp-for="Postcode" id="postcode" name="postcode" type="text">
+                    <span asp-validation-for="Postcode" class="govuk-form-group--error" id="postcode-error"></span>
+                </div>
             </div>
+            <button class="govuk-button">Search</button>
         </div>
-    </form>
+    </div>
+</form>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Domain.Models;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 namespace Sfa.Tl.Matching.Data
 {
@@ -10,7 +11,7 @@ namespace Sfa.Tl.Matching.Data
         {
         }
 
-        public MatchingDbContext(DbContextOptions<MatchingDbContext> options)
+        public MatchingDbContext(DbContextOptions options)
             : base(options)
         {
         }

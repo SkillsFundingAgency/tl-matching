@@ -1,13 +1,15 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.Services;
 using Sfa.Tl.Matching.Web.ViewModels;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = RolesExtensions.AdminUser)]
     public class DataImportController : Controller
     {
         private readonly IDataImportViewModelMapper _viewModelMapper;

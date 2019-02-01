@@ -20,21 +20,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task Create(Employer employer)
-        {
-            _dbContext.Employer.Add(employer);
-
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateException due)
-            {
-                _logger.LogError(due.Message, due.InnerException);
-                throw;
-            }
-        }
-
         public async Task<int> CreateMany(List<Employer> employers)
         {
             _dbContext.Employer.AddRange(employers);
@@ -58,7 +43,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
             try
             {
                 await _dbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.Employer");
-                await _dbContext.Database.ExecuteSqlCommandAsync("DBCC CHECKIDENT ('Employer', RESEED, 0)");
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception e)

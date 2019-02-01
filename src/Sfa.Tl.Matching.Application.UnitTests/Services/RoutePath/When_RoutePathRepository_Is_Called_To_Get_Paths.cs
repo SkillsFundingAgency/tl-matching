@@ -2,10 +2,10 @@
 using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
-using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 {
@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
                     RouteId = 1,
                     Name = "Path 1",
                     Keywords = "Keyword1, Keyword2",
-                    Summary = "Path 1 summary",
+                    Summary = "Path 1 summary"
                 },
                 new Path
                 {
@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
                     RouteId = 1,
                     Name = "Path 2",
                     Keywords = "Keyword3, Keyword4",
-                    Summary = "Path 2 summary",
+                    Summary = "Path 2 summary"
                 }
             }
             .AsQueryable();

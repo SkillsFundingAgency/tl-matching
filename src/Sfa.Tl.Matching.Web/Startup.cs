@@ -1,8 +1,14 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Globalization;
+using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.WsFederation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +20,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Infrastructure.Blob;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.Services;
 
@@ -42,7 +49,16 @@ namespace Sfa.Tl.Matching.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(config =>
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    config.Filters.Add(new AuthorizeFilter(policy));
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            AddAuthentication(services);
 
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(_configuration.SqlConnectionString));
@@ -54,6 +70,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRoutePathRepository, RoutePathRepository>();
 
             services.AddTransient<IDataImportViewModelMapper, DataImportViewModelMapper>();
+            services.AddTransient<ISearchParametersViewModelMapper, SearchParametersViewModelMapper>();
 
             services.AddTransient<IUploadBlobCommand, UploadBlobCommand>();
 
@@ -64,6 +81,11 @@ namespace Sfa.Tl.Matching.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var cultureInfo = new CultureInfo("en-GB");
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -79,11 +101,39 @@ namespace Sfa.Tl.Matching.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseAuthentication(); // TODO: WP - Add the authentication middleware into the pipeline
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                    "SearchStart",
+                    "{controller=Search}/{action=Start}");
+            });
+        }
+
+        private void AddAuthentication(IServiceCollection services)
+        {
+            services.AddAuthentication(sharedOptions =>
+            {
+                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = WsFederationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultSignOutScheme = WsFederationDefaults.AuthenticationScheme;
+            }).AddWsFederation(options =>
+            {
+                options.Wtrealm = _configuration.Authentication.WtRealm;
+                options.MetadataAddress = _configuration.Authentication.MetaDataEndpoint;
+                options.TokenValidationParameters.RoleClaimType = RolesExtensions.IdamsUserRole;
+            }).AddCookie(options =>
+            {
+                options.Cookie.Name = "qa-auth-cookie";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.AccessDeniedPath = "/Error/403";
+                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             });
         }
     }

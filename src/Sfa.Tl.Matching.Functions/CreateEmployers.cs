@@ -5,13 +5,15 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Functions.Extensions;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Sfa.Tl.Matching.Functions
 {
     public static class CreateEmployers
     {
         [FunctionName("CreateEmployers")]
         public static async Task Run(
-            [BlobTrigger("files/Employer/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
+            [BlobTrigger("files/Employer/{name}", Connection = "BlobStorageConnectionString")]Stream stream, 
             string name, 
             ILogger logger,
             [Inject] ICreateEmployerService createEmployerService)
