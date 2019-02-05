@@ -6,17 +6,21 @@ SET IDENTITY_INSERT [dbo].[Route] ON
 
 MERGE INTO [dbo].[Route] AS Target 
 USING (VALUES 
-  (1, N'Agriculture, Environmental and Animal Care'),
-  (2, N'Business and Administration'),
-  (3, N'Catering and Hospitality'),
+  (1, N'Agriculture, environmental and animal care'),
+  (2, N'Business AND administration'),
+  (3, N'Catering and hospitality'),
   (4, N'Construction'),
-  (5, N'Creative and Design'),
+  (5, N'Creative and design'),
   (6, N'Digital'),
-  (7, N'Education & Childcare'),
-  (8, N'Engineering and Manufacturing'),
-  (9, N'Hair and Beauty'),
-  (10, N'Health and Science'),
-  (11, N'Legal, Financial and Accounting')
+  (7, N'Education and childcare'),
+  (8, N'Engineering and manufacturing'),
+  (9, N'Hair and beauty'),
+  (10, N'Health and science'),
+  (11, N'Legal, financial and accounting'),
+  (12, N'Care services'),
+  (13, N'Protective services'),
+  (14, N'Sales, marketing and procurement'),
+  (15, N'Transport and logistics')
   )
   AS Source ([Id], [Name]) 
 ON Target.[Id] = Source.[Id] 
@@ -27,7 +31,7 @@ THEN
 UPDATE SET 
 	[Name] = Source.[Name],
 	[ModifiedOn] = GETDATE(),
-	[ModifiedBy] = 'System'
+	[ModifiedBy] = 'SYSTEM'
 WHEN NOT MATCHED BY TARGET THEN 
 	INSERT ([Id], [Name], [CreatedBy]) 
 	VALUES ([Id], [Name], 'System') 
