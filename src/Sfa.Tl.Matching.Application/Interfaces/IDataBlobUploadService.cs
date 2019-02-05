@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IDataBlobUploadService
     {
-        Task<CloudBlockBlob> Upload(SelectedImportDataViewModel viewModel);
+        Task Upload(DataImportDto dto);
     }
 }

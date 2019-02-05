@@ -129,6 +129,8 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddSingleton(_configuration);
 
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IRoutePathRepository, RoutePathRepository>();
 

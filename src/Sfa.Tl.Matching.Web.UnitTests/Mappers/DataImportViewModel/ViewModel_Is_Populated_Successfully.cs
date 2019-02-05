@@ -3,17 +3,17 @@
 //using Sfa.Tl.Matching.Models.Enums;
 //using Sfa.Tl.Matching.Models.ViewModel;
 
-//namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.DataImportViewModel
+//namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.DataImportDto
 //{
 //    public class When_ViewModel_Is_Populated_Successfully
 //    {
-//        private SelectedImportDataViewModel _viewModel;
+//        private DataImportDto _viewModel;
 
 //        [SetUp]
 //        public void Setup()
 //        {
 //            var mapper = new DataImportViewModelMapper();
-//            _viewModel = mapper.Populate();
+//            _viewModel = mapper.GetImportTypeSelectList();
 //        }
 
 //        [Test]
