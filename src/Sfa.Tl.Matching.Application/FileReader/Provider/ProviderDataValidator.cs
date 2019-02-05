@@ -49,10 +49,13 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
             RuleFor(x => x[(int) ProviderColumnIndex.PrimaryContact])
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
+                    .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
+
+            RuleFor(x => x[(int) ProviderColumnIndex.PrimaryContactPhone])
                 .Matches(ValidationConstants.PhoneNumberRegex)
+                    .When(x => !string.IsNullOrEmpty(x[(int)ProviderColumnIndex.PrimaryContactPhone]))
                     .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                    .WithMessage($"'{nameof(ProviderColumnIndex.PrimaryContact)}' {ValidationErrorCode.InvalidFormat.Humanize()}");
+                    .WithMessage($"'{nameof(ProviderColumnIndex.PrimaryContactPhone)}' {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(x => x[(int)ProviderColumnIndex.PrimaryContactEmail])
                 .NotEmpty()
@@ -60,13 +63,16 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                     .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
                 .EmailAddress();
 
-            RuleFor(x => x[(int)ProviderColumnIndex.SecondaryContact])
+            RuleFor(x => x[(int) ProviderColumnIndex.SecondaryContact])
                 .NotEmpty()
-                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
+                .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
+
+            RuleFor(x => x[(int)ProviderColumnIndex.SecondaryContactPhone])
                 .Matches(ValidationConstants.PhoneNumberRegex)
+                    .When(x => !string.IsNullOrEmpty(x[(int)ProviderColumnIndex.SecondaryContactPhone]))
                     .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                    .WithMessage($"'{nameof(ProviderColumnIndex.PrimaryContact)}' {ValidationErrorCode.InvalidFormat.Humanize()}");
+                    .WithMessage($"'{nameof(ProviderColumnIndex.SecondaryContactPhone)}' {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(x => x[(int)ProviderColumnIndex.SecondaryContactEmail])
                 .NotEmpty()
@@ -78,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                     .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
-                .Must(x => x.IsOfsteadRating())
+                .Must(x => x.IsSource())
                     .WithErrorCode(ValidationErrorCode.WrongDataType.ToString())
                     .WithMessage($"'{nameof(ProviderColumnIndex.Source)}' {ValidationErrorCode.WrongDataType.Humanize()}");
         }
