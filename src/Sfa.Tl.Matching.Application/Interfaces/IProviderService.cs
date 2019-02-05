@@ -1,10 +1,11 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProviderService
     {
-        int ImportProvider(Stream stream);
+        Task<int> ImportProvider(Stream stream);
         void UpdateProvider();
         void SearchProviderByPostCodeProximity();
     }
