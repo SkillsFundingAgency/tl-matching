@@ -82,6 +82,7 @@
     <Build Include="Tables\Path.sql" />
     <None Include="PostDeployment\Seed Routes.sql" />
     <None Include="PostDeployment\Seed Paths.sql" />
+    <Build Include="Tables\RoutePathMapping.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
