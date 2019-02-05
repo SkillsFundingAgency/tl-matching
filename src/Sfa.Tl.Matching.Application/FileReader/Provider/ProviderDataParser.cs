@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
             {
                 UkPrn = cells[(int)ProviderColumnIndex.UkPrn].ToLong(),
                 Name = cells[(int)ProviderColumnIndex.Name],
-                OfstedRating = cells[(int)ProviderColumnIndex.Name].ToOfsteadRating(),
+                OfstedRating = cells[(int)ProviderColumnIndex.OfstedRating].ToOfstedRating(),
                 Active = cells[(int)ProviderColumnIndex.Active].ToBool(),
                 ActiveReason = cells[(int)ProviderColumnIndex.ActiveReason],
                 PrimaryContact = cells[(int)ProviderColumnIndex.PrimaryContact],

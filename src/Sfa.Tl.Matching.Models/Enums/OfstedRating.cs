@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.Enums
 {
-    public enum OfsteadRating
+    public enum OfstedRating
     {
         Outstanding = 1,
         Good,

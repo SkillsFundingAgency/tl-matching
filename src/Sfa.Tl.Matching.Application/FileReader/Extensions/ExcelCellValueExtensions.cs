@@ -53,11 +53,11 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
             throw new InvalidOperationException($"{nameof(cellValue)} cannot be parsed ({nameof(ToBool)})");
         }
 
-        public static OfsteadRating ToOfsteadRating(this string cellValue)
+        public static OfstedRating ToOfstedRating(this string cellValue)
         {
-            var ofsteadRating = cellValue.DehumanizeTo<OfsteadRating>();
+            var ofstedRating = cellValue.DehumanizeTo<OfstedRating>();
 
-            return ofsteadRating;
+            return ofstedRating;
         }
 
         public static Source ToSource(this string cellValue)
@@ -111,11 +111,11 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
             }
         }
 
-        public static bool IsOfsteadRating(this string cellValue)
+        public static bool IsOfstedRating(this string cellValue)
         {
             try
             {
-                cellValue.DehumanizeTo<OfsteadRating>();
+                cellValue.DehumanizeTo<OfstedRating>();
                 return true;
             }
             catch (NoMatchFoundException)

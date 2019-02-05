@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public int Id { get; set; }
         public long UkPrn { get; set; }
         public string Name { get; set; }
-        public OfsteadRating OfstedRating { get; set; }
+        public OfstedRating OfstedRating { get; set; }
         public bool Active { get; set; }
         public string ActiveReason { get; set; }
         public string PrimaryContact { get; set; }
