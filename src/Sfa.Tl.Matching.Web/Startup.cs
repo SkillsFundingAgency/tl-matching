@@ -46,26 +46,17 @@ namespace Sfa.Tl.Matching.Web
             });
 
             services.AddMvc(config =>
-                {
-                    var policy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .Build();
-                    config.Filters.Add(new AuthorizeFilter(policy));
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             AddAuthentication(services);
 
-            services.AddDbContext<MatchingDbContext>(options =>
-                options.UseSqlServer(_configuration.SqlConnectionString));
-
-            services.AddAutoMapper();
-
-            //Inject services
-            services.AddTransient<IRoutePathService, RoutePathService>();
-            services.AddTransient<IRoutePathRepository, RoutePathRepository>();
-
-            services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
+            RegisterDependencies(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -125,6 +116,23 @@ namespace Sfa.Tl.Matching.Web
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             });
+        }
+
+        private void RegisterDependencies(IServiceCollection services)
+        {
+            //Inject AutoMapper
+            services.AddAutoMapper();
+
+            //Inject DbContext
+            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString));
+
+            //Inject services
+            services.AddSingleton(_configuration);
+
+            services.AddTransient<IRoutePathService, RoutePathService>();
+            services.AddTransient<IRoutePathRepository, RoutePathRepository>();
+
+            services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
         }
     }
 }

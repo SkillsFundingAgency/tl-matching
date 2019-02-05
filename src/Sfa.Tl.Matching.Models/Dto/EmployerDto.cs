@@ -1,7 +1,5 @@
 ﻿using System;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
 namespace Sfa.Tl.Matching.Models.Dto
 {
     public class EmployerDto

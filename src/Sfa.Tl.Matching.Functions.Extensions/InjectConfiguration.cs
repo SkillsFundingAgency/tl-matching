@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using AutoMapper;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +28,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                    .Bind(new InjectBindingProvider(serviceProvider));
         }
 
-        [SuppressMessage("ReSharper", "UnusedVariable")]
-        [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         private void RegisterServices(IServiceCollection services)
         {
             _configuration = ConfigurationLoader.Load(
@@ -41,27 +37,14 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     Environment.GetEnvironmentVariable("ServiceName"))
                 .Result;
 
+            services.AddAutoMapper();
+
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(_configuration.SqlConnectionString));
 
-            services.AddAutoMapper();
-            //TODO: Remove SuppressMessage(s) on method
 
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
             services.AddTransient<IFileReader<EmployerDto>, ExcelFileReader<EmployerDto>>();
-        }
-
-        private void RegisterFileReaders(IServiceCollection services)
-        {
-            // Just return if we've already added AutoMapper to avoid double-registration
-            //if (services.Any(sd => sd.ServiceType == typeof(IMapper)))
-            //    return services;
-
-            var allTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => a.GetName().Name != nameof(AutoMapper))
-                .SelectMany(a => a.DefinedTypes)
-                .ToArray();
-
         }
     }
 }

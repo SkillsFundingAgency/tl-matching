@@ -60,6 +60,5 @@ namespace Sfa.Tl.Matching.Application.FileReader
             var sheetData = workSheet.GetFirstChild<SheetData>();
             return sheetData.Descendants<Row>();
         }
-
     }
 }

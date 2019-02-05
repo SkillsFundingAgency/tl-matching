@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("ProviderQualification")]
         public static void ImportProviderQualification(
-            [BlobTrigger("files/ProviderQualification/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
+            [BlobTrigger("providerQualification/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
             string name, 
             ILogger logger,
             [Inject] IMapper mapper

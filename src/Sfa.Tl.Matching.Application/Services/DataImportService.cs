@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Enums;
@@ -15,7 +14,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public DataImportService(
             ILogger logger,
-            IMapper mapper,
             IFileReader<TDto> fileReader)
         {
             _logger = logger;

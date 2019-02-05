@@ -62,18 +62,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 {
 
                     Value = uploadType.ToString(),
-                    Text = GetDescription(uploadType),
+                    Text = ((DataImportType)Enum.Parse(typeof(DataImportType), uploadType)).Humanize(),
                 }).ToArray(),
             };
 
             return dataImportTypeViewModels;
         }
-
-        //private static int GetId(string uploadType) =>
-        //    (int)Enum.Parse(typeof(DataImportType), uploadType);
-
-        private static string GetDescription(string uploadType) =>
-            ((DataImportType)Enum.Parse(typeof(DataImportType), uploadType)).Humanize();
-
     }
 }

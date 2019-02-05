@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("QualificationRoutePathMapping")]
         public static void ImportQualificationRoutePathMapping(
-            [BlobTrigger("files/QualificationRoutePathMapping/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
+            [BlobTrigger("qualificationRoutePathMapping/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
             string name, 
             ILogger logger,
             [Inject] IMapper mapper
