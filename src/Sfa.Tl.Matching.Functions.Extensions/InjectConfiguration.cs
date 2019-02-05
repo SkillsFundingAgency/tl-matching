@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AutoMapper;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Sfa.Tl.Matching.Application.FileReader;
+using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
@@ -30,8 +31,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                    .Bind(new InjectBindingProvider(serviceProvider));
         }
 
-        [SuppressMessage("ReSharper", "UnusedVariable")]
-        [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         private void RegisterServices(IServiceCollection services)
         {
             _configuration = ConfigurationLoader.Load(
@@ -45,10 +44,19 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 options.UseSqlServer(_configuration.SqlConnectionString));
 
             services.AddAutoMapper();
-            //TODO: Remove SuppressMessage(s) on method
+
+            //services.AddLogging();
 
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
             services.AddTransient<IFileReader<EmployerDto>, ExcelFileReader<EmployerDto>>();
+
+            services.AddTransient<IRoutePathService, RoutePathService>();
+            services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
+            services.AddTransient<IRoutePathRepository, RoutePathRepository>();
+            services.AddTransient<IFileReader<RoutePathMappingDto>, ExcelFileReader<RoutePathMappingDto>>();
+            services.AddTransient<IDataImportService<RoutePathMappingDto>, DataImportService<RoutePathMappingDto>>();
+            services.AddTransient<IDataParser<RoutePathMappingDto>, RoutePathMappingDataParser>();
+            services.AddTransient<FluentValidation.IValidator<string[]>, RoutePathMappingDataValidator>();
         }
 
         private void RegisterFileReaders(IServiceCollection services)
