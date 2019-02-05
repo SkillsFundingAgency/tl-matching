@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                     .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
-                .Must(x => x.IsOfsteadRating())
+                .Must(x => x.IsOfstedRating())
                     .WithErrorCode(ValidationErrorCode.WrongDataType.ToString())
                     .WithMessage($"'{nameof(ProviderColumnIndex.OfstedRating)}' {ValidationErrorCode.WrongDataType.Humanize()}");
 

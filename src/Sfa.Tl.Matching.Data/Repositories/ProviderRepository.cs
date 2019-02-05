@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public async Task<int> CreateMany(IEnumerable<Provider> providers)
         {
             _dbContext.Provider.AddRange(providers);
-
+            
             int createdRecordsCount;
             try
             {
