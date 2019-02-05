@@ -53,6 +53,21 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
             throw new InvalidOperationException($"{nameof(cellValue)} cannot be parsed ({nameof(ToBool)})");
         }
 
+        public static OfsteadRating ToOfsteadRating(this string cellValue)
+        {
+            var ofsteadRating = cellValue.DehumanizeTo<OfsteadRating>();
+
+            return ofsteadRating;
+        }
+
+        public static Source ToSource(this string cellValue)
+        {
+            var source = cellValue.DehumanizeTo<Source>();
+
+            return source;
+        }
+
+
         public static bool IsInt(this string cellValue)
         {
             return int.TryParse(cellValue, out _);
