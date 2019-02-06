@@ -22,9 +22,9 @@ namespace Sfa.Tl.Matching.Application.FileReader
             IDataParser<TDto> dataParser, 
             IValidator<string[]> validator)
         {
+            _logger = logger;
             _dataParser = dataParser;
             _validator = validator;
-            _logger = logger;
         }
 
         public IEnumerable<TDto> ValidateAndParseFile(Stream stream)
@@ -52,6 +52,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     {
                         var errorMessage = GetErrorMessage(rowCount, validationResult);
                         _logger.LogError(errorMessage);
+                        continue;
                     };
 
                     var dto = _dataParser.Parse(cellValues);
@@ -76,7 +77,8 @@ namespace Sfa.Tl.Matching.Application.FileReader
         private static string GetErrorMessage(int rowCount, ValidationResult validationResult)
         {
             var errorMessage =
-                $"Row Number={rowCount} failed with the following errors: \n{string.Join(", ", validationResult.Errors)}";
+                $"Row Number={rowCount} failed with the following errors: \n" +
+                $"{string.Join(", ", validationResult.Errors)}";
 
             return errorMessage;
         }
