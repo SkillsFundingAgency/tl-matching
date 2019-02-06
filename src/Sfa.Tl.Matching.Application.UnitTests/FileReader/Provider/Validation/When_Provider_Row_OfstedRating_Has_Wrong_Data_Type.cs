@@ -8,7 +8,7 @@ using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 {
-    public class When_Provider_Row_Has_Wrong_Number_Of_Columns
+    public class When_Provider_Row_OfstedRating_Has_Wrong_Data_Type
     {
         private ValidationResult _validationResult;
 
@@ -19,7 +19,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
             var validator = new ProviderDataValidator(repository);
             _validationResult = validator.Validate(new[]
             {
-                "123"
+                "10000546",
+                "",
+                "NotAValidOfstedRating",
+                "Yes",
+                "Active Reason",
+                "PrimaryContact",
+                "primary@contact.co.uk",
+                "01777757777",
+                "SecondaryContact",
+                "secondary@contact.co.uk",
+                "01777757777",
+                "PMF_1018"
             });
         }
 
@@ -33,10 +44,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         [Test]
         public void Then_Error_Code_Is_WrongNumberOfColumns() =>
-            Assert.AreEqual(ValidationErrorCode.WrongNumberOfColumns.ToString(), _validationResult.Errors[0].ErrorCode);
+            Assert.AreEqual(ValidationErrorCode.WrongDataType.ToString(), _validationResult.Errors[0].ErrorCode);
 
         [Test]
         public void Then_Error_Message_Is_WrongNumberOfColumns() =>
-            Assert.AreEqual(ValidationErrorCode.WrongNumberOfColumns.Humanize(), _validationResult.Errors[0].ErrorMessage);
+            Assert.AreEqual(ValidationErrorCode.WrongDataType.Humanize(), _validationResult.Errors[0].ErrorMessage);
     }
 }
