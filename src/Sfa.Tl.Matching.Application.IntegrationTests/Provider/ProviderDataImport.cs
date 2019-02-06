@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var options = new DbContextOptionsBuilder<MatchingDbContext>().UseSqlServer(connectionString).Options;
             var matchingDbContext = new MatchingDbContext(options);
             var repository = new ProviderRepository(loggerRepository, matchingDbContext);
-            var dataValidator = new ProviderDataValidator();
+            var dataValidator = new ProviderDataValidator(repository);
             var dataParser = new ProviderDataParser();
 
             var excelFileReader = new ExcelFileReader<ProviderDto>(loggerExcelFileReader, dataParser, dataValidator);

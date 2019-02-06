@@ -1,6 +1,8 @@
-﻿using FluentValidation;
+﻿using System.Threading.Tasks;
+using FluentValidation;
 using Humanizer;
 using Sfa.Tl.Matching.Application.FileReader.Extensions;
+using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.FileReader.Provider
@@ -9,7 +11,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
     {
         private const int NumberOfColumns = 12;
 
-        public ProviderDataValidator()
+        public ProviderDataValidator(IRepository<Domain.Models.Provider> repository)
         {
             RuleFor(x => x)
                 .Must(x => x.Length == NumberOfColumns)
@@ -25,7 +27,10 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                     .Matches(ValidationConstants.UkprnRegex)
                         .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                         .WithMessage(
-                            $"'{nameof(ProviderColumnIndex.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                            $"'{nameof(ProviderColumnIndex.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
+                    .MustAsync((x, cancellation) => CanUkprnBeAdded(repository, x))
+                        .WithErrorCode(ValidationErrorCode.RecordExists.ToString())
+                        .WithMessage($"'{nameof(ProviderColumnIndex.UkPrn)}' - {ValidationErrorCode.RecordExists.Humanize()}"); ;
 
                 RuleFor(x => x[(int) ProviderColumnIndex.Name])
                     .NotEmpty()
@@ -95,6 +100,13 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                         .WithMessage(
                             $"'{nameof(ProviderColumnIndex.Source)}' - {ValidationErrorCode.WrongDataType.Humanize()}");
             });
+        }
+
+        private async Task<bool> CanUkprnBeAdded(IRepository<Domain.Models.Provider> repository, string ukPrn)
+        {
+            var provider = await repository.GetSingleOrDefault(p => p.UkPrn == int.Parse(ukPrn));
+
+            return provider == null;
         }
     }
 }
