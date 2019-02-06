@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Functions
 {
     public static class Provider
     {
-        [FunctionName("ImportEmployer")]
+        [FunctionName("ImportProvider")]
         public static async Task ImportProvider(
             [BlobTrigger("provider/{name}", Connection = "ConfigurationStorageConnectionString")]Stream stream, 
             string name, 
