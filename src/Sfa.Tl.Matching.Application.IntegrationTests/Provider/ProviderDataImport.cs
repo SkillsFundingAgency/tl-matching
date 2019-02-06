@@ -24,6 +24,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
         {
             var loggerRepository = new Logger<ProviderRepository>(
                 new NullLoggerFactory());
+
+            var loggerImportService = new Logger<DataImportService<ProviderDto>>(
+                new NullLoggerFactory());
+
             var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderDto>>(
                 new NullLoggerFactory());
 
@@ -43,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var providerService = new ProviderService(
                 mapper,
                 new DataImportService<ProviderDto>(
-                    loggerRepository,
+                    loggerImportService,
                     mapper, 
                     excelFileReader),
                 repository);
