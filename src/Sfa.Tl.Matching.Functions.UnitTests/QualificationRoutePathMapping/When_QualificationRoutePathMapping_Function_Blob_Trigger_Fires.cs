@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using AutoMapper;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using NSubstitute;
@@ -11,17 +11,15 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
     {
         private Stream _blobStream;
         private ILogger _logger;
-        private IMapper _mapper;
         private IRoutePathService _routePathService;
 
         [OneTimeSetUp]
-        public void OneTimeSetup()
+        public async Task OneTimeSetup()
         {
             _blobStream = new MemoryStream();
             _routePathService = Substitute.For<IRoutePathService>();
             _logger = Substitute.For<ILogger>();
-            _mapper = Substitute.For<IMapper>();
-            Functions.QualificationRoutePathMapping.ImportQualificationRoutePathMapping(_blobStream, "test", _logger, _mapper, _routePathService);
+            await Functions.QualificationRoutePathMapping.ImportQualificationRoutePathMapping(_blobStream, "test", _logger, _routePathService);
         }
 
         [Test]

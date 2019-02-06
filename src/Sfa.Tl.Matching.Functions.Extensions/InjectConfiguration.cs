@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.FileReader;
+using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -43,33 +47,60 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(_configuration.SqlConnectionString));
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(expression => expression.AddProfiles(typeof(EmployerMapper).Assembly));
 
-            //services.AddLogging();
+            RegisterFileReaders(services);
 
-            services.AddTransient<IRepository<Employer>, EmployerRepository>();
-            services.AddTransient<IFileReader<EmployerDto>, ExcelFileReader<EmployerDto>>();
+            RegisterRepositories(services);
 
-            services.AddTransient<IRoutePathService, RoutePathService>();
-            services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
-            services.AddTransient<IRoutePathRepository, RoutePathRepository>();
-            services.AddTransient<IFileReader<RoutePathMappingDto>, ExcelFileReader<RoutePathMappingDto>>();
-            services.AddTransient<IDataImportService<RoutePathMappingDto>, DataImportService<RoutePathMappingDto>>();
-            services.AddTransient<IDataParser<RoutePathMappingDto>, RoutePathMappingDataParser>();
-            services.AddTransient<FluentValidation.IValidator<string[]>, RoutePathMappingDataValidator>();
+            RegisterApplicationServices(services);
         }
 
-        private void RegisterFileReaders(IServiceCollection services)
+        private static void RegisterFileReaders(IServiceCollection services)
         {
-            // Just return if we've already added AutoMapper to avoid double-registration
-            //if (services.Any(sd => sd.ServiceType == typeof(IMapper)))
-            //    return services;
+            RegisterEmployerFileReader(services);
+            RegisterRoutePathMappingFileReader(services);
+        }
 
-            var allTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => a.GetName().Name != nameof(AutoMapper))
-                .SelectMany(a => a.DefinedTypes)
-                .ToArray();
+        private static void RegisterEmployerFileReader(IServiceCollection services)
+        {
+            services.AddTransient<IDataParser<EmployerDto>, EmployerDataParser>();
+            services.AddTransient<IValidator<string[]>, EmployerDataValidator>();
 
+            services.AddTransient<IFileReader<EmployerDto>, ExcelFileReader<EmployerDto>>(provider =>
+                new ExcelFileReader<EmployerDto>(
+                    provider.GetService<ILogger<ExcelFileReader<EmployerDto>>>(),
+                    provider.GetService<IDataParser<EmployerDto>>(),
+                    (IValidator<string[]>)provider.GetServices(typeof(IValidator<string[]>)).Single(t => t.GetType() == typeof(EmployerDataValidator))));
+
+            services.AddTransient<IDataImportService<EmployerDto>, DataImportService<EmployerDto>>();
+        }
+
+        private static void RegisterRoutePathMappingFileReader(IServiceCollection services)
+        {
+            services.AddTransient<IDataParser<RoutePathMappingDto>, RoutePathMappingDataParser>();
+            services.AddTransient<IValidator<string[]>, RoutePathMappingDataValidator>();
+
+            services.AddTransient<IFileReader<RoutePathMappingDto>, ExcelFileReader<RoutePathMappingDto>>(provider =>
+                new ExcelFileReader<RoutePathMappingDto>(
+                    provider.GetService<ILogger<ExcelFileReader<RoutePathMappingDto>>>(),
+                    provider.GetService<IDataParser<RoutePathMappingDto>>(),
+                    (IValidator<string[]>)provider.GetServices(typeof(IValidator<string[]>)).Single(t => t.GetType() == typeof(RoutePathMappingDataValidator))));
+
+            services.AddTransient<IDataImportService<RoutePathMappingDto>, DataImportService<RoutePathMappingDto>>();
+        }
+
+        private static void RegisterRepositories(IServiceCollection services)
+        {
+            services.AddTransient<IRepository<Employer>, EmployerRepository>();
+            services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
+            services.AddTransient<IRoutePathRepository, RoutePathRepository>();
+        }
+
+        private static void RegisterApplicationServices(IServiceCollection services)
+        {
+            services.AddTransient<IEmployerService, EmployerService>();
+            services.AddTransient<IRoutePathService, RoutePathService>();
         }
     }
 }

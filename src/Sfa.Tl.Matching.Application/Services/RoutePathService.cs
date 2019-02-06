@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -53,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var createdRecords = 0;
             if (import != null)
             {
-                var routePathMappings = _mapper.Map<IEnumerable<RoutePathMapping>>(import);
+                var routePathMappings = _mapper.Map<IList<RoutePathMapping>>(import);
                 createdRecords = await _routePathMappingRepository.CreateMany(routePathMappings);
             }
 

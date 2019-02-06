@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Application.FileReader.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -33,6 +33,12 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
             }
 
             return fileRoutePathMapping;
+        }
+
+        public IEnumerable<RoutePathMappingDto> ParseToMany(string[] cells)
+        {
+            //TODO: Get a list based on paths
+            throw new System.NotImplementedException();
         }
     }
 }

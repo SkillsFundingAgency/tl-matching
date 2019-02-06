@@ -1,4 +1,5 @@
-﻿using Sfa.Tl.Matching.Application.FileReader.Extensions;
+﻿using System.Collections.Generic;
+using Sfa.Tl.Matching.Application.FileReader.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
@@ -22,6 +23,11 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
             };
 
             return fileEmployer;
+        }
+
+        public IEnumerable<EmployerDto> ParseToMany(string[] cells)
+        {
+            return new List<EmployerDto> { Parse(cells) };
         }
     }
 }
