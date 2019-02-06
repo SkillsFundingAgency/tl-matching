@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Functions
         {
             logger.LogInformation($"Processing Employer blob\n Name:{name} \n Size: {stream.Length} Bytes");
 
-            employerService.ImportEmployer();
+            employerService.ImportEmployer(stream);
         }
     }
 }

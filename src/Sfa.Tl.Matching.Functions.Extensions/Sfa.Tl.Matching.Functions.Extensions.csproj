@@ -8,11 +8,13 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.3" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.4" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.3" />
 
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.Infrastructure\Sfa.Tl.Matching.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -9,19 +9,19 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
     {
         public EmployerDto Parse(string[] cells)
         {
-            var fileEmployer = new EmployerDto
+            return new EmployerDto
             {
                 CrmId = cells[EmployerColumnIndex.CrmId].ToGuid(),
                 CompanyName = cells[EmployerColumnIndex.CompanyName],
                 AlsoKnownAs = cells[EmployerColumnIndex.CompanyAka],
+                Aupa = cells[EmployerColumnIndex.Aupa],
+                CompanyType = cells[EmployerColumnIndex.CompanyType],
                 PrimaryContact = cells[EmployerColumnIndex.PrimaryContact],
                 Phone = cells[EmployerColumnIndex.Phone],
                 Email = cells[EmployerColumnIndex.Email],
                 PostCode = cells[EmployerColumnIndex.PostCode],
                 Owner = cells[EmployerColumnIndex.Owner]
             };
-
-            return fileEmployer;
         }
     }
 }

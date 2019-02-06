@@ -9,11 +9,11 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class DataImportService<TDto>: IDataImportService<TDto> where TDto : class, new()
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<DataImportService<TDto>> _logger;
         private readonly IFileReader<TDto> _fileReader;
 
         public DataImportService(
-            ILogger logger,
+            ILogger<DataImportService<TDto>> logger,
             IFileReader<TDto> fileReader)
         {
             _logger = logger;

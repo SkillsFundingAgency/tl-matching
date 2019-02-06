@@ -24,15 +24,12 @@ namespace Sfa.Tl.Matching.Application.FileReader
 
         public IEnumerable<TDto> ValidateAndParseFile(Stream stream)
         {
-            var employers = new List<TDto>();
+            var dtos = new List<TDto>();
 
             using (var document = SpreadsheetDocument.Open(stream, false))
             {
                 var rows = OpenSpreadSheetAndReadAllGetRows(document);
                 
-                //NOTE:We May have some logic to do some kind or header validation
-                //rows.RemoveAt(0);
-
                 foreach (var row in rows)
                 {
                     var cellValues = row.Descendants<Cell>().ToStringArray(document.WorkbookPart.SharedStringTablePart);
@@ -41,12 +38,12 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     
                     if(validationResult.IsValid)
                     {
-                        var fileEmployer = _dataParser.Parse(cellValues);
-                        employers.Add(fileEmployer);
+                        var dto = _dataParser.Parse(cellValues);
+                        dtos.Add(dto);
                     }
                 }
 
-                return employers;
+                return dtos.AsEnumerable();
             }
         }
 
@@ -58,7 +55,9 @@ namespace Sfa.Tl.Matching.Application.FileReader
             var worksheetPart = (WorksheetPart) document.WorkbookPart.GetPartById(relationshipId);
             var workSheet = worksheetPart.Worksheet;
             var sheetData = workSheet.GetFirstChild<SheetData>();
-            return sheetData.Descendants<Row>();
+
+            //NOTE:We May have some logic to do some kind or header validation
+            return sheetData.Descendants<Row>().Skip(1);
         }
     }
 }
