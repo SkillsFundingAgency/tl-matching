@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 
         IQueryable<Route> GetRoutes();
 
-        void ImportQualificationPathMapping(System.IO.Stream stream);
+        Task<int> ImportQualificationPathMapping(System.IO.Stream stream);
 
         void IndexQualificationPathMapping();
     }

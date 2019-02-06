@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -42,17 +44,20 @@ namespace Sfa.Tl.Matching.Application.Services
             return _repository.GetRoutes();
         }
 
-        public void ImportQualificationPathMapping(System.IO.Stream stream)
+        public async Task<int> ImportQualificationPathMapping(System.IO.Stream stream)
         {
             _logger.LogInformation("Processing Qualification Path Mapping.");
 
             var import = _dataImportService.Import(stream, DataImportType.RouteAndPathway);
 
+            var createdRecords = 0;
             if (import != null)
             {
                 var routePathMappings = _mapper.Map<IEnumerable<RoutePathMapping>>(import);
-                _routePathMappingRepository.CreateMany(routePathMappings);
+                createdRecords = await _routePathMappingRepository.CreateMany(routePathMappings);
             }
+
+            return createdRecords;
         }
 
         public void IndexQualificationPathMapping()
