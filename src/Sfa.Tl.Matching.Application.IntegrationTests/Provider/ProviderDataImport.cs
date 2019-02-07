@@ -12,7 +12,7 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
 {
-    public class ProviderDataImport
+    public class When_Provider_Imports_File
     {
         private const string DataFilePath = @"Provider\Provider-Simple.xlsx";
         private int _createdRecordCount;
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
         }
 
         [Test]
-        public void RecordsSaved()
+        public void Then_Record_Is_Saved()
         {
             Assert.AreEqual(1, _createdRecordCount);
         }

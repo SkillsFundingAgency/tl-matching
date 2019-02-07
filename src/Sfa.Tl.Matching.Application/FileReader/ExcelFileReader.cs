@@ -49,6 +49,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     {
                         var errorMessage = GetErrorMessage(rowCount, validationResult);
                         _logger.LogError(errorMessage);
+                        continue;
                     }
 
                     var dto = _dataParser.Parse(cellValues);

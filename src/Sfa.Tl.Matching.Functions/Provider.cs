@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("ImportProvider")]
         public static async Task ImportProvider(
-            [BlobTrigger("provider/{name}", Connection = "ConfigurationStorageConnectionString")]Stream stream, 
+            [BlobTrigger("provider/{name}", Connection = "BlobStorageConnectionString")]Stream stream, 
             string name, 
             ILogger logger,
             [Inject] IProviderService providerService)

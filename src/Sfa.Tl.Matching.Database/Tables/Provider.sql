@@ -12,5 +12,5 @@
 	[SecondaryContact] NVARCHAR(100) NOT NULL,
 	[SecondaryContactEmail] VARCHAR(320) NOT NULL,
 	[SecondaryContactPhone] VARCHAR(150) NULL,
-	[Source] INT NOT NULL
+	[Source] VARCHAR(50) NOT NULL
 )
