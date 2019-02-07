@@ -3,6 +3,8 @@ using Humanizer;
 using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
+using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders;
+using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -15,23 +17,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
         [SetUp]
         public void Setup()
         {
+            var provider = new ValidProviderBuilder().Build();
+            var providerStringArray = provider.ToStringArray();
+            providerStringArray[(int)ProviderColumnIndex.Name] = "";
+
             var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
+
             var validator = new ProviderDataValidator(repository);
-            _validationResult = validator.Validate(new[]
-            {
-                "10000546",
-                "",
-                "Good",
-                "Yes",
-                "Active Reason",
-                "PrimaryContact",
-                "primary@contact.co.uk",
-                "01777757777",
-                "SecondaryContact",
-                "secondary@contact.co.uk",
-                "01777757777",
-                "PMF_1018"
-            });
+            _validationResult = validator.Validate(providerStringArray);
         }
 
         [Test]
