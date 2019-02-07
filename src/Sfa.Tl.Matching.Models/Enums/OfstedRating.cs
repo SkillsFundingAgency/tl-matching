@@ -8,6 +8,7 @@ namespace Sfa.Tl.Matching.Models.Enums
         Good,
         [Description("Requires improvement")]
         RequiresImprovement,
-        Inadequate
+        Inadequate,
+        NotApplicable
     }
 }

@@ -61,11 +61,9 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                         .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
 
                 RuleFor(x => x[(int) ProviderColumnIndex.PrimaryContactPhone])
-                    .Matches(ValidationConstants.PhoneNumberRegex)
-                    .When(x => !string.IsNullOrEmpty(x[(int) ProviderColumnIndex.PrimaryContactPhone]))
-                        .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                        .WithMessage(
-                            $"'{nameof(ProviderColumnIndex.PrimaryContactPhone)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                    .NotEmpty()
+                        .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
 
                 RuleFor(x => x[(int) ProviderColumnIndex.PrimaryContactEmail])
                     .NotEmpty()
@@ -78,12 +76,10 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                         .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
 
-                RuleFor(x => x[(int) ProviderColumnIndex.SecondaryContactPhone])
-                    .Matches(ValidationConstants.PhoneNumberRegex)
-                    .When(x => !string.IsNullOrEmpty(x[(int) ProviderColumnIndex.SecondaryContactPhone]))
-                        .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                        .WithMessage(
-                            $"'{nameof(ProviderColumnIndex.SecondaryContactPhone)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                RuleFor(x => x[(int)ProviderColumnIndex.SecondaryContactPhone])
+                    .NotEmpty()
+                        .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
 
                 RuleFor(x => x[(int) ProviderColumnIndex.SecondaryContactEmail])
                     .NotEmpty()
