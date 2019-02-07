@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
         private static string GetErrorMessage(int rowCount, ValidationResult validationResult)
         {
             var errorMessage =
-                $"Row Number={rowCount} failed with the following errors: \n{string.Join(", ", validationResult.Errors)}";
+                $"Row Number={rowCount} failed with the following errors: \n\t{string.Join("\n\t", validationResult.Errors)}";
 
             return errorMessage;
         }

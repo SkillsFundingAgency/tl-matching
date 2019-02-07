@@ -41,6 +41,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         [Test]
         public void Then_Error_Message_Is_MissingMandatoryData() =>
-            Assert.AreEqual(ValidationErrorCode.MissingMandatoryData.Humanize(), _validationResult.Errors[0].ErrorMessage);
+            Assert.AreEqual($"'{nameof(ProviderColumnIndex.Name)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}", _validationResult.Errors[0].ErrorMessage);
     }
 }

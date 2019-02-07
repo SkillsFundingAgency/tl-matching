@@ -23,24 +23,24 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 RuleFor(x => x[(int) ProviderColumnIndex.UkPrn])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
+                        .WithMessage($"'{nameof(ProviderColumnIndex.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                     .Matches(ValidationConstants.UkprnRegex)
                         .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                        .WithMessage(
-                            $"'{nameof(ProviderColumnIndex.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
+                        .WithMessage($"'{nameof(ProviderColumnIndex.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
                     .MustAsync((x, cancellation) => CanUkprnBeAdded(repository, x))
                         .WithErrorCode(ValidationErrorCode.RecordExists.ToString())
-                        .WithMessage($"'{nameof(ProviderColumnIndex.UkPrn)}' - {ValidationErrorCode.RecordExists.Humanize()}"); ;
+                        .WithMessage($"'{nameof(ProviderColumnIndex.UkPrn)}' - {ValidationErrorCode.RecordExists.Humanize()}");
 
                 RuleFor(x => x[(int) ProviderColumnIndex.Name])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
+                        .WithMessage(
+                            $"'{nameof(ProviderColumnIndex.Name)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
                 RuleFor(x => x[(int) ProviderColumnIndex.OfstedRating])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
+                        .WithMessage($"'{nameof(ProviderColumnIndex.OfstedRating)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                     .Must(x => x.IsOfstedRating())
                         .WithErrorCode(ValidationErrorCode.WrongDataType.ToString())
                         .WithMessage(
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 RuleFor(x => x[(int) ProviderColumnIndex.Active])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
+                        .WithMessage($"'{nameof(ProviderColumnIndex.Active)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                     .Must(x => x.IsYesNo())
                         .WithErrorCode(ValidationErrorCode.WrongDataType.ToString())
                         .WithMessage(
@@ -58,42 +58,42 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 RuleFor(x => x[(int) ProviderColumnIndex.PrimaryContact])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
+                        .WithMessage($"'{nameof(ProviderColumnIndex.PrimaryContact)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
                 RuleFor(x => x[(int) ProviderColumnIndex.PrimaryContactPhone])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
+                        .WithMessage($"'{nameof(ProviderColumnIndex.PrimaryContactPhone)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
                 RuleFor(x => x[(int) ProviderColumnIndex.PrimaryContactEmail])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
+                        .WithMessage($"'{nameof(ProviderColumnIndex.PrimaryContactEmail)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                     .EmailAddress();
 
                 RuleFor(x => x[(int) ProviderColumnIndex.SecondaryContact])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
+                        .WithMessage($"'{nameof(ProviderColumnIndex.SecondaryContact)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
                 RuleFor(x => x[(int)ProviderColumnIndex.SecondaryContactPhone])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
+                        .WithMessage($"'{nameof(ProviderColumnIndex.SecondaryContactPhone)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
                 RuleFor(x => x[(int) ProviderColumnIndex.SecondaryContactEmail])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
+                        .WithMessage($"'{nameof(ProviderColumnIndex.SecondaryContactEmail)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                     .EmailAddress();
 
                 RuleFor(x => x[(int) ProviderColumnIndex.Source])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
+                        .WithMessage($"'{nameof(ProviderColumnIndex.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
             });
         }
-
+        
         private async Task<bool> CanUkprnBeAdded(IRepository<Domain.Models.Provider> repository, string ukPrn)
         {
             var provider = await repository.GetSingleOrDefault(p => p.UkPrn == int.Parse(ukPrn));
