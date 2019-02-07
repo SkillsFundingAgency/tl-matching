@@ -5,6 +5,6 @@
         public const int LarsId = 0;
         public const int Title = 1;
         public const int ShortTitle = 2;
-        public const int FirstPathId = 3;
+        public const int PathStartIndex = 3;
     }
 }

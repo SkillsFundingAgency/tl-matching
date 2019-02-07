@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
 {
     public class ProviderDataParser : IDataParser<ProviderDto>
     {
-        public ProviderDto Parse(string[] cells)
+        public IEnumerable<ProviderDto>  Parse(string[] cells)
         {
             var provider = new ProviderDto
             {
@@ -26,12 +26,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 Source = cells[(int)ProviderColumnIndex.Source]
             };
 
-            return provider;
-        }
-
-        public IEnumerable<ProviderDto> ParseToMany(string[] cells)
-        {
-            return new List<ProviderDto> { Parse(cells) };
+            return new List<ProviderDto> { provider };
         }
     }
 }

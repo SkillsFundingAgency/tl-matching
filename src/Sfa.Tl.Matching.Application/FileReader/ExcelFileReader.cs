@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     }
 
                     var dto = _dataParser.Parse(cellValues);
-                    dtos.Add(dto);
+                    dtos.AddRange(dto);
                 }
             }
 

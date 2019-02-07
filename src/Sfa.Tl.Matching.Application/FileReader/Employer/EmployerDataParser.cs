@@ -8,9 +8,9 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
 {
     public class EmployerDataParser : IDataParser<EmployerDto>
     {
-        public EmployerDto Parse(string[] cells)
+        public IEnumerable<EmployerDto> Parse(string[] cells)
         {
-            return new EmployerDto
+            var employerDto = new EmployerDto
             {
                 CrmId = cells[EmployerColumnIndex.CrmId].ToGuid(),
                 CompanyName = cells[EmployerColumnIndex.CompanyName],
@@ -23,11 +23,9 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
                 PostCode = cells[EmployerColumnIndex.PostCode],
                 Owner = cells[EmployerColumnIndex.Owner]
             };
-        }
 
-        public IEnumerable<EmployerDto> ParseToMany(string[] cells)
-        {
-            return new List<EmployerDto> { Parse(cells) };
+            return new List<EmployerDto> { employerDto };
+
         }
     }
 }

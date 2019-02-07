@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
         [Test]
         public void Then_Record_Is_Saved()
         {
-            Assert.AreEqual(1, _createdRecordCount);
+            Assert.AreEqual(3, _createdRecordCount);
         }
     }
 }
