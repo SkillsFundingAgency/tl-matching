@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("QualificationRoutePathMapping")]
         public static async Task ImportQualificationRoutePathMapping(
-            [BlobTrigger("routeandpathway/{name}", Connection = "BlobStorageConnectionString")]Stream stream,
+            [BlobTrigger("qualificationroutepathmapping/{name}", Connection = "BlobStorageConnectionString")]Stream stream,
             string name,
             ILogger logger,
             [Inject] IRoutePathService routePathService

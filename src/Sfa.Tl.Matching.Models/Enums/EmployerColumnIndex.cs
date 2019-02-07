@@ -10,7 +10,7 @@
         public const int PrimaryContact = 7;
         public const int Phone = 8;
         public const int Email = 9;
-        public const int PostCode = 14;
-        public const int Owner = 19;
+        public const int PostCode = 10;
+        public const int Owner = 11;
     }
 }

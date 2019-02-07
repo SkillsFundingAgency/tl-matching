@@ -14,7 +14,7 @@
 //        [SetUp]
 //        public void Setup()
 //        {
-//            var viewModel = new SelectedImportDataViewModel
+//            var viewModel = new DataImportDto
 //            {
 //                SelectedDataImportType = (int)DataImportType.Employer
 //            };

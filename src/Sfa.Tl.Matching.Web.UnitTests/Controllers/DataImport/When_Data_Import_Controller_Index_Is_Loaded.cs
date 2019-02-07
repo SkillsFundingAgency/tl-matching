@@ -15,15 +15,15 @@
 //        [SetUp]
 //        public void Setup()
 //        {
-//            var viewModel = new SelectedImportDataViewModel();
+//            var viewModel = new DataImportDto();
 //            viewModel.DataImportTypeViewModels.Add(new DataImportParametersViewModel
 //            {
 //                Id = 1,
-//                IsImportsuccessful = "DataImportTypeName"
+//                IsImportSuccessful = "DataImportTypeName"
 //            });
 
 //            _viewModelMapper = Substitute.For<IDataImportViewModelMapper>();
-//            _viewModelMapper.Populate().Returns(viewModel);
+//            _viewModelMapper.GetImportTypeSelectList().Returns(viewModel);
 
 //            var uploadService = Substitute.For<IDataImportService>();
 
@@ -55,7 +55,7 @@
 
 //        [Test]
 //        public void Then_Mapper_Populate_Is_Called_Exactly_Once() =>
-//            _viewModelMapper.Received(1).Populate();
+//            _viewModelMapper.Received(1).GetImportTypeSelectList();
 
 //        [Test]
 //        public void Then_Data_Import_Type_Contains_Data()
@@ -64,10 +64,10 @@
 //            Assert.Greater(viewModel.DataImportTypeViewModels.Count, 0);
 //        }
 
-//        private SelectedImportDataViewModel GetViewModel()
+//        private DataImportDto GetViewModel()
 //        {
 //            var viewResult = _result as ViewResult;
-//            var viewModel = viewResult?.Model as SelectedImportDataViewModel;
+//            var viewModel = viewResult?.Model as DataImportDto;
 
 //            return viewModel;
 //        }

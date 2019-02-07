@@ -2,45 +2,66 @@
 @{
     ViewData["Title"] = "T Levels Industry Placement Matching Service";
 }
-@* ReSharper disable UnknownCssClass *@
 <main class="govuk-main-wrapper " id="main-content" role="main">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @if (Model.IsImportsuccessful)
+            @if (Model.IsImportSuccessful)
             {
                 <div class="das-notification das-notification--success">
                     <p class="das-notification__body">File uploaded successfully</p>
                 </div>
             }
-            <div asp-validation-summary="All"></div>
-            <form asp-controller="DataImport" asp-action="Import" enctype="multipart/form-data">
-                <h1 class="govuk-heading-xl">Data Upload</h1>
+            <h1 class="govuk-heading-xl">Data Import</h1>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+                    <h2 class="govuk-error-summary__title" id="error-summary-title">
+                        This page has errors
+                    </h2>
+                    <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__list">
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                //TODO Need to get tags for h-refs into the individual fields:
+                                <li>
+                                    <a href="#file-error">@error.ErrorMessage</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <form asp-controller="DataImport" asp-action="Index" enctype="multipart/form-data">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
                 <div class="govuk-form-group">
                     <label class="govuk-label govuk-!-font-weight-bold" for="file">
                         Select the file
                     </label>
-                    <input class="govuk-file-upload" id="file" name="file" type="file">
+                    <input asp-for="File" class="govuk-file-upload" id="file" name="file" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                    <span asp-validation-for="File" class="govuk-form-group--error" id="file-error"></span>
                 </div>
-
+            </div>
+            <div class="govuk-grid-column-two-thirds">
                 <div class="govuk-form-group">
-                    <fieldset class="govuk-fieldset">
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                            <h2 class="govuk-fieldset__heading">
-                                Select the file type
-                            </h2>
-                        </legend>
-                        <div class="govuk-radios">
-                            <select class="govuk-radios__item" asp-for="SelectedImportTypeId" asp-items="Model.ImportType"></select>
-                        </div>
-                    </fieldset>
+                    <label class="govuk-label govuk-!-font-weight-bold" asp-for="SelectedImportType">
+                        Choose file Type
+                    </label>
+                    <select class="govuk-select" asp-for="SelectedImportType" asp-items="Model.ImportType"></select>
                 </div>
-
+            </div>
+            <div class="govuk-grid-column-two-thirds">
                 <div class="govuk-form-group">
                     <input class="govuk-button" type="submit" value="Upload" />
                 </div>
-
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 </main>
-@* ReSharper restore UnknownCssClass *@

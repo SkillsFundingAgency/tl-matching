@@ -30,7 +30,7 @@
 //            _routePathLookupService.GetRoutes().Returns(_routes);
             
 //            var mapper = new SearchParametersViewModelMapper(_routePathLookupService);
-//            _viewModel = mapper.Populate(null, null);
+//            _viewModel = mapper.GetImportTypeSelectList(null, null);
 //        }
 
 //        [Test]

@@ -1,8 +1,10 @@
-﻿namespace Sfa.Tl.Matching.Application.Interfaces
+﻿using System.IO;
+
+namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IEmployerService
     {
-        void ImportEmployer();
+        void ImportEmployer(Stream dataStream);
         void GetEmployerByName();
         void CreateEmployer();
         void UpdateEmployer();

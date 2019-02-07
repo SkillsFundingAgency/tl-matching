@@ -1,10 +1,10 @@
-﻿using AutoMapper.Configuration;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Web.Mappers
 {
-    public class SearchParametersViewModelMapper : MapperConfigurationExpression
+    public class SearchParametersViewModelMapper : Profile
     {
         public SearchParametersViewModelMapper()
         {

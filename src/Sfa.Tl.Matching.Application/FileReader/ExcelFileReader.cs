@@ -22,9 +22,9 @@ namespace Sfa.Tl.Matching.Application.FileReader
             IDataParser<TDto> dataParser,
             IValidator<string[]> validator)
         {
+            _logger = logger;
             _dataParser = dataParser;
             _validator = validator;
-            _logger = logger;
         }
 
         public IEnumerable<TDto> ValidateAndParseFile(Stream stream)
@@ -35,30 +35,27 @@ namespace Sfa.Tl.Matching.Application.FileReader
             {
                 var rows = OpenSpreadSheetAndReadAllGetRows(document);
 
-                //NOTE:We May have some logic to do some kind or header validation
-                //rows.RemoveAt(0);
-
                 var rowCount = 0;
+
                 foreach (var row in rows)
                 {
                     rowCount++;
-                    if (rowCount == 1)
-                        continue;
 
-                    var cellValues = row.Descendants<Cell>().ToStringArray(document.WorkbookPart.SharedStringTablePart).ToArray();
+                    var cellValues = row.Descendants<Cell>().ToStringArray(document.WorkbookPart.SharedStringTablePart);
 
                     var validationResult = _validator.Validate(cellValues);
+
                     if (!validationResult.IsValid)
                     {
                         var errorMessage = GetErrorMessage(rowCount, validationResult);
                         _logger.LogError(errorMessage);
-                    };
+                    }
 
                     var dto = _dataParser.Parse(cellValues);
                     dtos.Add(dto);
                 }
 
-                return dtos;
+                return dtos.AsEnumerable();
             }
         }
 
@@ -70,7 +67,9 @@ namespace Sfa.Tl.Matching.Application.FileReader
             var worksheetPart = (WorksheetPart)document.WorkbookPart.GetPartById(relationshipId);
             var workSheet = worksheetPart.Worksheet;
             var sheetData = workSheet.GetFirstChild<SheetData>();
-            return sheetData.Descendants<Row>();
+
+            //NOTE:We May have some logic to do some kind or header validation
+            return sheetData.Descendants<Row>().Skip(1);
         }
 
         private static string GetErrorMessage(int rowCount, ValidationResult validationResult)

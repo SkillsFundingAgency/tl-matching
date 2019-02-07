@@ -41,7 +41,7 @@
 //            };
 
 //            _viewModelMapper = Substitute.For<ISearchParametersViewModelMapper>();
-//            _viewModelMapper.Populate(Arg.Any<string>(), Arg.Any<string>())
+//            _viewModelMapper.GetImportTypeSelectList(Arg.Any<string>(), Arg.Any<string>())
 //                .Returns(_viewModel);
 
 //            _logger = Substitute.For<ILogger<SearchController>>();
@@ -53,7 +53,7 @@
 //        [Test]
 //        public void Then_View_Model_Mapper_Populate_Is_Called_Exactly_Once() =>
 //            _viewModelMapper.Received(1)
-//                .Populate(Arg.Any<string>(), Arg.Any<string>());
+//                .GetImportTypeSelectList(Arg.Any<string>(), Arg.Any<string>());
 
 //        [Test]
 //        public void Then_Result_Contains_ViewModel()

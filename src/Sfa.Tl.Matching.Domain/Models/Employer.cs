@@ -1,7 +1,5 @@
 ﻿using System;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
 namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Employer
@@ -10,6 +8,8 @@ namespace Sfa.Tl.Matching.Domain.Models
         public Guid CrmId { get; set; }
         public string CompanyName { get; set; }
         public string AlsoKnownAs { get; set; }
+        public string Aupa { get; set; }
+        public string CompanyType { get; set; }
         public string PrimaryContact { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }

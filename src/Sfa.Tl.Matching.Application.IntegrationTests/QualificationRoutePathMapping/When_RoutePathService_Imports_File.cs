@@ -42,7 +42,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
 
             var dataImportService = new DataImportService<RoutePathMappingDto>(
                 loggerDataImportService,
-                mapper,
                 excelFileReader);
 
             var routeMappingService = new RoutePathService(

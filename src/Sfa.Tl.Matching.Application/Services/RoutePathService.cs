@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _logger.LogInformation("Processing Qualification Path Mapping.");
 
-            var import = _dataImportService.Import(stream, DataImportType.RouteAndPathway);
+            var import = _dataImportService.Import(stream, DataImportType.QualificationRoutePathMapping);
 
             var createdRecords = 0;
             if (import != null)

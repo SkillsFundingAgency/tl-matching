@@ -44,10 +44,12 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     Environment.GetEnvironmentVariable("ServiceName"))
                 .Result;
 
-            services.AddDbContext<MatchingDbContext>(options =>
-                options.UseSqlServer(_configuration.SqlConnectionString));
+            services.AddLogging();
 
             services.AddAutoMapper(expression => expression.AddProfiles(typeof(EmployerMapper).Assembly));
+
+            services.AddDbContext<MatchingDbContext>(options =>
+                options.UseSqlServer(_configuration.SqlConnectionString));
 
             RegisterFileReaders(services);
 

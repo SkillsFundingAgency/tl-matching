@@ -14,12 +14,12 @@
 //        private IDataImportService _dataImportService;
 //        private IFormFile _formFile;
 //        private DataImportController _dataImportController;
-//        private SelectedImportDataViewModel _viewModel;
+//        private DataImportDto _viewModel;
 
 //        [SetUp]
 //        public void Setup()
 //        {
-//            _viewModel = new SelectedImportDataViewModel();
+//            _viewModel = new DataImportDto();
 
 //            var viewModelMapper = Substitute.For<IDataImportViewModelMapper>();
 //            _dataImportService = Substitute.For<IDataImportService>();
