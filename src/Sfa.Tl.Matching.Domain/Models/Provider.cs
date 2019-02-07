@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+ using System.ComponentModel.DataAnnotations;
 
-namespace Sfa.Tl.Matching.Domain.Models
+ namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Provider
     {
-        public Guid Id { get; set; }
+        [Key]
+        public int Id { get; set; }
+        public long UkPrn { get; set; }
         public string Name { get; set; }
-        public string Ukprn { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime? ModifiedOn { get; set; }
-        public virtual ICollection<NotificationHistory> NotificationHistory { get; set; }
-        public virtual ICollection<ProviderCourses> ProviderCourses { get; set; }
+        public int OfstedRating { get; set; }
+        public bool Active { get; set; }
+        public string ActiveReason { get; set; }
+        public string PrimaryContact { get; set; }
+        public string PrimaryContactEmail { get; set; }
+        public string PrimaryContactPhone { get; set; }
+        public string SecondaryContact { get; set; }
+        public string SecondaryContactEmail { get; set; }
+        public string SecondaryContactPhone { get; set; }
+        public int Source { get; set; }
     }
 }

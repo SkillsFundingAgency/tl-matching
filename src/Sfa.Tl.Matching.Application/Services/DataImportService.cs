@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (!result.Any())
             {
-                _logger.LogWarning("No employers to add to the database, so quitting");
+                _logger.LogWarning("No data to add to the database, so quitting");
                 return null;
             }
 

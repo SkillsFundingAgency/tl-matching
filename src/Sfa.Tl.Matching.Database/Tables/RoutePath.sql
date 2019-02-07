@@ -5,7 +5,7 @@
 	[PathId] INT NOT NULL, 
 	[Summary] NVARCHAR(50) NULL, 
 	[Keywords] NVARCHAR(50) NULL, 
-	[CreatedOn] DATETIME2 NULL DEFAULT GetDate(), 
+	[CreatedOn] DATETIME2 NOT NULL DEFAULT GETDATE(), 
 	[ModifiedOn] DATETIME2 NULL, 
 	CONSTRAINT [FK_RoutePath_Course] FOREIGN KEY ([CourseId]) REFERENCES [Course]([Id]), 
 	CONSTRAINT [FK_RoutePath_Path] FOREIGN KEY ([PathId]) REFERENCES [Path]([Id])

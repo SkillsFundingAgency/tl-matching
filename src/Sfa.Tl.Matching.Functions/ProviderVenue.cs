@@ -8,9 +8,9 @@
 //{
 //    public static class ProviderVenue
 //    {
-//        [FunctionName("ProviderVenue")]
+//        [FunctionName("ImportProviderVenue")]
 //        public static void ImportProviderVenue(
-//            [BlobTrigger("providerVenue/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
+//            [BlobTrigger("providervenue/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
 //            string name, 
 //            ILogger logger,
 //            [Inject] IMapper mapper

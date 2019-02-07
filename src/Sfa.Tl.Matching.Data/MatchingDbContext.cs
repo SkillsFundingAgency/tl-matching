@@ -23,8 +23,9 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Path> Path { get; set; }
         public virtual DbSet<Provider> Provider { get; set; }
         public virtual DbSet<ProviderCourses> ProviderCourses { get; set; }
-        public virtual DbSet<RoutePath> RoutePath { get; set; }
         public virtual DbSet<Route> Route { get; set; }
+        public virtual DbSet<RoutePath> RoutePath { get; set; }
+        public virtual DbSet<RoutePathMapping> RoutePathMapping { get; set; }
         public virtual DbSet<TemplatePlaceholder> TemplatePlaceholder { get; set; }
     }
 }

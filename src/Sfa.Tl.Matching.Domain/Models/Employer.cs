@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Employer
     {
+        [Key]
         public int Id { get; set; }
         public Guid CrmId { get; set; }
         public string CompanyName { get; set; }

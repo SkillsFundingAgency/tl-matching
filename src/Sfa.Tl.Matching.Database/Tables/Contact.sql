@@ -13,6 +13,6 @@
 	[MobilePhone] NVARCHAR(100) NULL, 
 	[HomePhone] NVARCHAR(100) NULL, 
 	[Email] NVARCHAR(100) NULL, 
-	[CreatedOn] DATETIME2 NULL DEFAULT GetDate(), 
+	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[ModifiedOn] DATETIME2 NULL, 
 )

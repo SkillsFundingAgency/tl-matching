@@ -5,6 +5,6 @@
 	[QualificationTitle] NVARCHAR(100) NOT NULL, 
 	[Summary] NVARCHAR(50) NULL, 
 	[Keywords] NVARCHAR(50) NULL, 
-	[CreatedOn] DATETIME2 NULL DEFAULT GetDate(), 
+	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[ModifiedOn] DATETIME2 NULL
 )

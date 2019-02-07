@@ -1,20 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 {
     public class When_RoutePathRepository_Is_Called_To_Get_Paths
     {
+        private ILogger<RoutePathService> _logger;
+        private IMapper _mapper;
+        private IDataImportService<RoutePathMappingDto> _dataImportService;
         private IRoutePathRepository _repository;
+        private IRepository<RoutePathMapping> _routePathMappingRepository;
         private IRoutePathService _service;
         private IQueryable<Path> _result;
-
+        
         private readonly IQueryable<Path> _pathData
             = new List<Path>
             { 
@@ -61,15 +68,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            _repository =
-                Substitute
-                    .For<IRoutePathRepository>();
+            _logger = Substitute.For<ILogger<RoutePathService>>();
+            _mapper = Substitute.For<IMapper>();
+            _dataImportService = Substitute.For<IDataImportService<RoutePathMappingDto>>();
+            _repository = Substitute.For<IRoutePathRepository>();
+            _routePathMappingRepository = Substitute.For<IRepository<RoutePathMapping>>();
 
             _repository
                 .GetPaths()
                 .Returns(_pathData);
 
-            _service = new RoutePathService(_repository);
+            _service = new RoutePathService(_logger, _mapper, _dataImportService, _repository, _routePathMappingRepository);
 
             _result = _service.GetPaths();
         }
