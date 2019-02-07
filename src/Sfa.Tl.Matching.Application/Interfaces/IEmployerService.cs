@@ -1,10 +1,11 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IEmployerService
     {
-        void ImportEmployer(Stream dataStream);
+        Task ImportEmployer(Stream dataStream);
         void GetEmployerByName();
         void CreateEmployer();
         void UpdateEmployer();

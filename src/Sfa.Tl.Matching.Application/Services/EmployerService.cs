@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -26,14 +27,14 @@ namespace Sfa.Tl.Matching.Application.Services
             _repository = repository;
         }
 
-        public void ImportEmployer(Stream dataStream)
+        public async Task ImportEmployer(Stream dataStream)
         {
             var import = _dataImportService.Import(dataStream, DataImportType.Employer);
 
             if (import != null)
             {
-                var employers = _mapper.Map<List<Employer>>(import);
-                _repository.CreateMany(employers);
+                var employers = _mapper.Map<IEnumerable<Employer>>(import);
+               await _repository.CreateMany(employers);
             }
         }
 

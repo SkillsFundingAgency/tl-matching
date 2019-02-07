@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     }
                 }
 
-                return dtos.AsEnumerable();
+                return dtos;
             }
         }
 
