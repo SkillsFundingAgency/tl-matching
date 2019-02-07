@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task ImportEmployer(Stream dataStream)
         {
-            var import = _dataImportService.Import(dataStream, DataImportType.Employer);
+            var import = _dataImportService.Import(dataStream, DataImportType.Employer, 1);
 
             if (import != null)
             {

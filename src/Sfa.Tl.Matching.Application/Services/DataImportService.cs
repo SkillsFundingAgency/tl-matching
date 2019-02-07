@@ -20,9 +20,9 @@ namespace Sfa.Tl.Matching.Application.Services
             _fileReader = fileReader;
         }
 
-        public IEnumerable<TDto> Import(Stream stream, DataImportType dataImportType)
+        public IEnumerable<TDto> Import(Stream stream, DataImportType dataImportType, int headerRows)
         {
-            var result = _fileReader.ValidateAndParseFile(stream);
+            var result = _fileReader.ValidateAndParseFile(stream, headerRows);
 
             if (!result.Any())
             {

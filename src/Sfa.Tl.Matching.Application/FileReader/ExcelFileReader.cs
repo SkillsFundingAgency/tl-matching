@@ -27,13 +27,13 @@ namespace Sfa.Tl.Matching.Application.FileReader
             _validator = validator;
         }
 
-        public IEnumerable<TDto> ValidateAndParseFile(Stream stream)
+        public IEnumerable<TDto> ValidateAndParseFile(Stream stream, int headerRows)
         {
             var dtos = new List<TDto>();
 
             using (var document = SpreadsheetDocument.Open(stream, false))
             {
-                var rows = OpenSpreadSheetAndReadAllGetRows(document);
+                var rows = OpenSpreadSheetAndReadAllGetRows(document, headerRows);
 
                 var rowCount = 0;
 
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
             return dtos;
         }
 
-        private static IEnumerable<Row> OpenSpreadSheetAndReadAllGetRows(SpreadsheetDocument document)
+        private static IEnumerable<Row> OpenSpreadSheetAndReadAllGetRows(SpreadsheetDocument document, int headerRows)
         {
             var workbookPart = document.WorkbookPart;
             var sheets = workbookPart.Workbook.GetFirstChild<Sheets>().Elements<Sheet>();
@@ -68,8 +68,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
             var workSheet = worksheetPart.Worksheet;
             var sheetData = workSheet.GetFirstChild<SheetData>();
 
-            //NOTE:We May have some logic to do some kind or header validation
-            return sheetData.Descendants<Row>().Skip(1);
+            return sheetData.Descendants<Row>().Skip(headerRows);
         }
 
         private static string GetErrorMessage(int rowCount, ValidationResult validationResult)
