@@ -8,7 +8,7 @@
 //{
 //    public static class ProviderQualification
 //    {
-//        [FunctionName("ProviderQualification")]
+//        [FunctionName("ImportProviderQualification")]
 //        public static void ImportProviderQualification(
 //            [BlobTrigger("providerqualification/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
 //            string name, 

@@ -1,22 +1,24 @@
-//using System.IO;
-//using AutoMapper;
-//using Microsoft.Azure.WebJobs;
-//using Microsoft.Extensions.Logging;
-//using Sfa.Tl.Matching.Functions.Extensions;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Functions.Extensions;
 
-//namespace Sfa.Tl.Matching.Functions
-//{
-//    public static class Provider
-//    {
-//        [FunctionName("Provider")]
-//        public static void ImportProvider(
-//            [BlobTrigger("provider/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
-//            string name, 
-//            ILogger logger,
-//            [Inject] IMapper mapper
-//            )
-//        {
-//            logger.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {stream.Length} Bytes");
-//        }
-//    }
-//}
+namespace Sfa.Tl.Matching.Functions
+{
+    public static class Provider
+    {
+        [FunctionName("ImportProvider")]
+        public static async Task ImportProvider(
+            [BlobTrigger("provider/{name}", Connection = "ConfigurationStorageConnectionString")]Stream stream, 
+            string name, 
+            ILogger logger,
+            [Inject] IProviderService providerService)
+        {
+            logger.LogInformation($"Processing {nameof(Provider)} blob\n Name:{name} \n Size: {stream.Length} Bytes");
+            var createdRecords = await providerService.ImportProvider(stream);
+            logger.LogInformation($"Processed {createdRecords} {nameof(Provider)} records from blob\n Name:{name} \n Size: {stream.Length} Bytes");
+        }
+    }
+}

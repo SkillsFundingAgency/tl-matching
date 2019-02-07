@@ -10,7 +10,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests
     [SetUpFixture]
     public class TestConfiguration
     {
-        public static IConfigurationRoot Configuration { get; private set; }
         public static MatchingConfiguration MatchingConfiguration { get; private set; }
 
         [OneTimeSetUp]

@@ -3,23 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Humanizer;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.FileReader.Extensions
 {
     public static class ExcelCellValueExtensions
     {
+        private const string Yes = "yes";
+        private const string No = "no";
+
         public static string[] ToStringArray(this IEnumerable<Cell> cells, SharedStringTablePart sharedStringTablePart)
         {
             return cells.Select(cell => GetCellValue(sharedStringTablePart, cell)).ToArray();
         }
-
-
-
+        
         public static int ToInt(this string cellValue)
         {
             return int.Parse(cellValue);
         }
-        
+
+        public static long ToLong(this string cellValue)
+        {
+            return long.Parse(cellValue);
+        }
+
         public static Guid ToGuid(this string cellValue)
         {
             return Guid.Parse(cellValue);
@@ -30,21 +38,88 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
             return DateTime.Parse(cellValue);
         }
 
+        public static bool ToBool(this string cellValue)
+        {
+            switch (cellValue.ToLower())
+            {
+                case Yes:
+                    return true;
+                case No:
+                    return false;
+            }
+
+            throw new InvalidOperationException($"{nameof(cellValue)} cannot be parsed ({nameof(ToBool)})");
+        }
+
+        public static OfstedRating ToOfstedRating(this string cellValue)
+        {
+            var ofstedRating = cellValue.DehumanizeTo<OfstedRating>();
+
+            return ofstedRating;
+        }
+
+        public static Source ToSource(this string cellValue)
+        {
+            var source = cellValue.DehumanizeTo<Source>();
+
+            return source;
+        }
 
 
         public static bool IsInt(this string cellValue)
         {
             return int.TryParse(cellValue, out _);
         }
-        
+
+        public static bool IsLong(this string cellValue)
+        {
+            return long.TryParse(cellValue, out _);
+        }
+
         public static bool IsGuid(this string cellValue)
         {
             return Guid.TryParse(cellValue, out _);
         }
 
+        public static bool IsBool(this string cellValue)
+        {
+            return bool.TryParse(cellValue, out _);
+        }
+
         public static bool IsDateTime(this string cellValue)
         {
             return DateTime.TryParse(cellValue, out _);
+        }
+
+        public static bool IsYesNo(this string cellValue)
+        {
+            return cellValue.ToLower() == Yes || cellValue.ToLower() == No;
+        }
+
+        public static bool IsSource(this string cellValue)
+        {
+            try
+            {
+                cellValue.DehumanizeTo<Source>();
+                return true;
+            }
+            catch (NoMatchFoundException)
+            {
+                return false;
+            }
+        }
+
+        public static bool IsOfstedRating(this string cellValue)
+        {
+            try
+            {
+                cellValue.DehumanizeTo<OfstedRating>();
+                return true;
+            }
+            catch (NoMatchFoundException)
+            {
+                return false;
+            }
         }
 
 

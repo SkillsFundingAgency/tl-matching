@@ -3,11 +3,11 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
-    public class EmployerMapper : Profile
+    public class ProviderMapper : Profile
     {
-        public EmployerMapper()
+        public ProviderMapper()
         {
-            CreateMap<EmployerDto, Domain.Models.Employer>();
+            CreateMap<ProviderDto, Domain.Models.Provider>();
         }
     }
 }

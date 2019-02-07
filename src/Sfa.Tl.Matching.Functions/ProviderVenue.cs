@@ -8,7 +8,7 @@
 //{
 //    public static class ProviderVenue
 //    {
-//        [FunctionName("ProviderVenue")]
+//        [FunctionName("ImportProviderVenue")]
 //        public static void ImportProviderVenue(
 //            [BlobTrigger("providervenue/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
 //            string name, 

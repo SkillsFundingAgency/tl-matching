@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
     public class IndustryPlacement
     {
+        [Key]
         public Guid Id { get; set; }
         public Guid? RoutePathId { get; set; }
         public Guid? AddressId { get; set; }
@@ -14,6 +17,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public DateTime? ContactedOn { get; set; }
         public DateTime? NextContactOn { get; set; }
         public string Resolution { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedOn { get; set; }
         public DateTime? ModifiedOn { get; set; }
 

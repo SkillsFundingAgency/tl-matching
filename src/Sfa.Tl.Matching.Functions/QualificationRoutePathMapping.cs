@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Functions
 {
     public static class QualificationRoutePathMapping
     {
-        [FunctionName("QualificationRoutePathMapping")]
+        [FunctionName("ImportQualificationRoutePathMapping")]
         public static async Task ImportQualificationRoutePathMapping(
             [BlobTrigger("qualificationroutepathmapping/{name}", Connection = "BlobStorageConnectionString")]Stream stream,
             string name,

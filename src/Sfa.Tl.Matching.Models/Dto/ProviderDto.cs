@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
- using System.ComponentModel.DataAnnotations;
+﻿using System.Diagnostics.CodeAnalysis;
+using Sfa.Tl.Matching.Models.Enums;
 
- namespace Sfa.Tl.Matching.Domain.Models
+namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class Provider
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
+    public class ProviderDto
     {
-        [Key]
         public int Id { get; set; }
         public long UkPrn { get; set; }
         public string Name { get; set; }
-        public int OfstedRating { get; set; }
+        public OfstedRating OfstedRating { get; set; }
         public bool Active { get; set; }
         public string ActiveReason { get; set; }
         public string PrimaryContact { get; set; }
@@ -19,6 +18,6 @@ using System.Collections.Generic;
         public string SecondaryContact { get; set; }
         public string SecondaryContactEmail { get; set; }
         public string SecondaryContactPhone { get; set; }
-        public int Source { get; set; }
+        public Source Source { get; set; }
     }
 }

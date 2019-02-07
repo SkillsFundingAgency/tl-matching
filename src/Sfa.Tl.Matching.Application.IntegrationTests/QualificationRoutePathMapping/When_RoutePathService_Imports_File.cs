@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
     public class When_RoutePathService_Imports_File
     {
         private const string DataFilePath = @"QualificationRoutePathMapping\RoutePathMapping-Simple.xlsx";
-        private int _recordsCreated;
+        private int _createdRecordCount;
 
         [SetUp]
         public async Task Setup()
@@ -54,14 +54,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                _recordsCreated = await routeMappingService.ImportQualificationPathMapping(stream);
+                _createdRecordCount = await routeMappingService.ImportQualificationPathMapping(stream);
             }
         }
 
         [Test]
         public void Then_Record_Is_Saved()
         {
-            Assert.AreEqual(1, _recordsCreated);
+            Assert.AreEqual(1, _createdRecordCount);
         }
     }
 }

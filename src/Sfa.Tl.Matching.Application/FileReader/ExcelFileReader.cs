@@ -41,10 +41,10 @@ namespace Sfa.Tl.Matching.Application.FileReader
                 {
                     rowCount++;
 
-                    var cellValues = row.Descendants<Cell>().ToStringArray(document.WorkbookPart.SharedStringTablePart);
+                    var cellValues = row.Descendants<Cell>()
+                        .ToStringArray(document.WorkbookPart.SharedStringTablePart);
 
                     var validationResult = _validator.Validate(cellValues);
-
                     if (!validationResult.IsValid)
                     {
                         var errorMessage = GetErrorMessage(rowCount, validationResult);
@@ -54,9 +54,9 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     var dto = _dataParser.Parse(cellValues);
                     dtos.Add(dto);
                 }
-
-                return dtos.AsEnumerable();
             }
+
+            return dtos;
         }
 
         private static IEnumerable<Row> OpenSpreadSheetAndReadAllGetRows(SpreadsheetDocument document)
