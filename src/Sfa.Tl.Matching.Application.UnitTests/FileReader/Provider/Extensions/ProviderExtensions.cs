@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Extensions
                 provider.SecondaryContact,
                 provider.SecondaryContactEmail,
                 provider.SecondaryContactPhone,
-                ((Source)provider.Source).Humanize()
+                provider.Source
             };
 
             return providerArray;

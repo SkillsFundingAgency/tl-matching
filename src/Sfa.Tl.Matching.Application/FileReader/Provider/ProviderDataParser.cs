@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 SecondaryContact = cells[(int)ProviderColumnIndex.SecondaryContact],
                 SecondaryContactEmail = cells[(int)ProviderColumnIndex.SecondaryContactEmail],
                 SecondaryContactPhone = cells[(int)ProviderColumnIndex.SecondaryContactPhone],
-                Source = cells[(int)ProviderColumnIndex.Source].ToSource()
+                Source = cells[(int)ProviderColumnIndex.Source]
             };
 
             return provider;

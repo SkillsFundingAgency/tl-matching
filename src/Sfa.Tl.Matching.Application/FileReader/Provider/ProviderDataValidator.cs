@@ -94,11 +94,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 RuleFor(x => x[(int) ProviderColumnIndex.Source])
                     .NotEmpty()
                         .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize())
-                    .Must(x => x.IsSource())
-                        .WithErrorCode(ValidationErrorCode.WrongDataType.ToString())
-                        .WithMessage(
-                            $"'{nameof(ProviderColumnIndex.Source)}' - {ValidationErrorCode.WrongDataType.Humanize()}");
+                        .WithMessage(ValidationErrorCode.MissingMandatoryData.Humanize());
             });
         }
 

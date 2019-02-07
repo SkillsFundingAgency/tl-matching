@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
- using System.ComponentModel.DataAnnotations;
+﻿ using System.ComponentModel.DataAnnotations;
 
  namespace Sfa.Tl.Matching.Domain.Models
 {
@@ -19,6 +17,6 @@ using System.Collections.Generic;
         public string SecondaryContact { get; set; }
         public string SecondaryContactEmail { get; set; }
         public string SecondaryContactPhone { get; set; }
-        public int Source { get; set; }
+        public string Source { get; set; }
     }
 }

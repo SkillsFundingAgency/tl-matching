@@ -58,14 +58,6 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
             return ofstedRating;
         }
 
-        public static Source ToSource(this string cellValue)
-        {
-            var source = cellValue.DehumanizeTo<Source>();
-
-            return source;
-        }
-
-
         public static bool IsInt(this string cellValue)
         {
             return int.TryParse(cellValue, out _);
@@ -94,19 +86,6 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
         public static bool IsYesNo(this string cellValue)
         {
             return cellValue.ToLower() == Yes || cellValue.ToLower() == No;
-        }
-
-        public static bool IsSource(this string cellValue)
-        {
-            try
-            {
-                cellValue.DehumanizeTo<Source>();
-                return true;
-            }
-            catch (NoMatchFoundException)
-            {
-                return false;
-            }
         }
 
         public static bool IsOfstedRating(this string cellValue)

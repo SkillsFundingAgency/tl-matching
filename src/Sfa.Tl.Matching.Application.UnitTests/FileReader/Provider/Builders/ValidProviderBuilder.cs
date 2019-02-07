@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders
                 SecondaryContact = ProviderConstants.SecondaryContact,
                 SecondaryContactEmail = ProviderConstants.SecondaryContactEmail,
                 SecondaryContactPhone = ProviderConstants.SecondaryContactPhone,
-                Source = (int)ProviderConstants.Source
+                Source = ProviderConstants.Source
             };
         }
 

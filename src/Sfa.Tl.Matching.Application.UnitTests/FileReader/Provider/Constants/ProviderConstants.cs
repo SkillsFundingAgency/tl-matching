@@ -15,6 +15,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Constants
         public const string SecondaryContact = "SecondaryContact";
         public const string SecondaryContactEmail = "secondary@contact.co.uk";
         public const string SecondaryContactPhone = "01777757777";
-        public const Source Source = Models.Enums.Source.Pmf1018;
+        public const string Source = "PMF_1018";
     }
 }
