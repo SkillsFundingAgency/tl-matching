@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -14,14 +15,22 @@ namespace Sfa.Tl.Matching.Functions
             [BlobTrigger("qualificationroutepathmapping/{name}", Connection = "BlobStorageConnectionString")]Stream stream,
             string name,
             ILogger logger,
-            [Inject] IRoutePathService routePathService
+            [Inject] IRoutePathService routePathService,
+            ExecutionContext context
         )
         {
-            logger.LogInformation($"C# Blob trigger function processing blob\n Name:{name} \n Size: {stream.Length} Bytes");
+            logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
+                                  $"\tName:{name}\n" +
+                                  $"\tSize: {stream.Length} Bytes");
 
+            var stopwatch = Stopwatch.StartNew();
             var createdRows = await routePathService.ImportQualificationPathMapping(stream);
+            stopwatch.Stop();
 
-            logger.LogInformation($"C# Blob trigger function processed blob\n Name:{name} \n Rows saved: {createdRows}");
+            logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
+                                  $"\tName:{name}\n" +
+                                  $"\tRows saved: {createdRows}\n" +
+                                  $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
         }
     }
 }
