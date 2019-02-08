@@ -13,11 +13,6 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
         private const string Yes = "yes";
         private const string No = "no";
 
-        public static string[] ToStringArray(this IEnumerable<Cell> cells, SharedStringTablePart sharedStringTablePart)
-        {
-            return cells.Select(cell => GetCellValue(sharedStringTablePart, cell)).ToArray();
-        }
-        
         public static int ToInt(this string cellValue)
         {
             return int.Parse(cellValue);

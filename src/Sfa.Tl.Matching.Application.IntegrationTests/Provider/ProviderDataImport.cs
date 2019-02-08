@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
         [Test]
         public void Then_Record_Is_Saved()
         {
-            Assert.AreEqual(1, _createdRecordCount);
+            Assert.AreEqual(2, _createdRecordCount);
         }
     }
 }

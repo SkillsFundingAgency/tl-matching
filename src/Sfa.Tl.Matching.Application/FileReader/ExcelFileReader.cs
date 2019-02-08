@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Application.FileReader.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 
 namespace Sfa.Tl.Matching.Application.FileReader
@@ -33,16 +36,14 @@ namespace Sfa.Tl.Matching.Application.FileReader
 
             using (var document = SpreadsheetDocument.Open(stream, false))
             {
-                var rows = OpenSpreadSheetAndReadAllGetRows(document, headerRows);
+                var dataTable = OpenSpreadSheetAndReadAllRows(document, headerRows);
 
                 var rowCount = 0;
-
-                foreach (var row in rows)
+                foreach (DataRow row in dataTable.Rows)
                 {
                     rowCount++;
 
-                    var cellValues = row.Descendants<Cell>()
-                        .ToStringArray(document.WorkbookPart.SharedStringTablePart);
+                    var cellValues = Array.ConvertAll(row.ItemArray, x => x.ToString());
 
                     var validationResult = _validator.Validate(cellValues);
                     if (!validationResult.IsValid)
@@ -60,7 +61,15 @@ namespace Sfa.Tl.Matching.Application.FileReader
             return dtos;
         }
 
-        private static IEnumerable<Row> OpenSpreadSheetAndReadAllGetRows(SpreadsheetDocument document, int headerRows)
+        private static DataTable OpenSpreadSheetAndReadAllRows(SpreadsheetDocument document, int headerRows)
+        {
+            var allRows = GetAllRows(document).ToList();
+            var dt = CreateDataTable(document, headerRows, allRows);
+
+            return dt;
+        }
+
+        private static IEnumerable<Row> GetAllRows(SpreadsheetDocument document)
         {
             var workbookPart = document.WorkbookPart;
             var sheets = workbookPart.Workbook.GetFirstChild<Sheets>().Elements<Sheet>();
@@ -68,8 +77,92 @@ namespace Sfa.Tl.Matching.Application.FileReader
             var worksheetPart = (WorksheetPart)document.WorkbookPart.GetPartById(relationshipId);
             var workSheet = worksheetPart.Worksheet;
             var sheetData = workSheet.GetFirstChild<SheetData>();
+            var rows = sheetData.Descendants<Row>();
 
-            return sheetData.Descendants<Row>().Skip(headerRows);
+            return rows;
+        }
+
+        private static DataTable CreateDataTable(SpreadsheetDocument document, int headerRows, List<Row> allRows)
+        {
+            var dt = new DataTable();
+            CreateColumns(document, allRows, dt);
+
+            var rowsWithoutHeader = allRows.Skip(headerRows);
+            foreach (var row in rowsWithoutHeader)
+            {
+                var rowToAdd = CreateDataRow(document, dt, row);
+                dt.Rows.Add(rowToAdd);
+            }
+
+            return dt;
+        }
+
+        private static void CreateColumns(SpreadsheetDocument document, IEnumerable<Row> allRows, DataTable dt)
+        {
+            foreach (var openXmlElement in allRows.ElementAt(0))
+            {
+                var cell = (Cell) openXmlElement;
+                dt.Columns.Add(GetCellValue(document, cell));
+            }
+        }
+
+        private static DataRow CreateDataRow(SpreadsheetDocument document, DataTable dt, OpenXmlElement row)
+        {
+            var tempRow = dt.NewRow();
+            var columnIndex = 0;
+            foreach (var cell in row.Descendants<Cell>())
+            {
+                var columnName = GetColumnName(cell.CellReference);
+                var cellColumnIndex = GetColumnIndexFromName(columnName);
+                cellColumnIndex--;
+                while (columnIndex < cellColumnIndex)
+                {
+                    tempRow[columnIndex] = "";
+                    columnIndex++;
+                }
+
+                tempRow[columnIndex] = GetCellValue(document, cell);
+                columnIndex++;
+            }
+
+            return tempRow;
+        }
+
+        private static string GetCellValue(SpreadsheetDocument document, CellType cell)
+        {
+            var stringTablePart = document.WorkbookPart.SharedStringTablePart;
+            if (cell.CellValue == null)
+                return "";
+
+            var value = cell.CellValue.InnerXml;
+            if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
+            {
+                return stringTablePart.SharedStringTable.ChildElements[int.Parse(value)].InnerText;
+            }
+
+            return value;
+        }
+
+        private static string GetColumnName(string cellReference)
+        {
+            var regex = new Regex("[A-Za-z]+");
+            var match = regex.Match(cellReference);
+
+            return match.Value;
+        }
+
+        private static int? GetColumnIndexFromName(string columnName)
+        {
+            var name = columnName;
+            var number = 0;
+            var pow = 1;
+            for (var i = name.Length - 1; i >= 0; i--)
+            {
+                number += (name[i] - 'A' + 1) * pow;
+                pow *= 26;
+            }
+
+            return number;
         }
 
         private static string GetErrorMessage(int rowCount, ValidationResult validationResult)

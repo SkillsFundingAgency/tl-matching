@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var import = _dataImportService.Import(stream, DataImportType.Provider, 1);
 
-            int createdRecords = 0;
+            var createdRecords = 0;
             if (import != null)
             {
                 var providers = _mapper.Map<IEnumerable<Provider>>(import);
