@@ -157,17 +157,17 @@ namespace Sfa.Tl.Matching.Web
         
         private static void RegisterRepositories(IServiceCollection services)
         {
-            services.AddTransient<IRepository<Employer>, EmployerRepository>();
+            //services.AddTransient<IRepository<Employer>, EmployerRepository>();
             services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
             services.AddTransient<IRoutePathRepository, RoutePathRepository>();
-            services.AddTransient<IRepository<Provider>, ProviderRepository>();
+            //services.AddTransient<IRepository<Provider>, ProviderRepository>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
         {
-            services.AddTransient<IEmployerService, EmployerService>();
+            //services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
-            services.AddTransient<IProviderService, ProviderService>();
+            //services.AddTransient<IProviderService, ProviderService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
