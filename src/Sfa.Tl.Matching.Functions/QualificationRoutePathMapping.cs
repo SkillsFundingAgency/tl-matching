@@ -14,9 +14,9 @@ namespace Sfa.Tl.Matching.Functions
         public static async Task ImportQualificationRoutePathMapping(
             [BlobTrigger("qualificationroutepathmapping/{name}", Connection = "BlobStorageConnectionString")]Stream stream,
             string name,
+            ExecutionContext context,
             ILogger logger,
-            [Inject] IRoutePathService routePathService,
-            ExecutionContext context
+            [Inject] IRoutePathService routePathService
         )
         {
             logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
@@ -24,12 +24,12 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRows = await routePathService.ImportQualificationPathMapping(stream);
+            var createdRecords = await routePathService.ImportQualificationPathMapping(stream);
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
                                   $"\tName:{name}\n" +
-                                  $"\tRows saved: {createdRows}\n" +
+                                  $"\tRows saved: {createdRecords}\n" +
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
         }
     }

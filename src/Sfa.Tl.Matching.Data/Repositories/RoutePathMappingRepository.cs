@@ -21,8 +21,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<int> CreateMany(IEnumerable<RoutePathMapping> routePathMappings)
         {
-            await ResetData();
-
             _dbContext.RoutePathMapping.AddRange(routePathMappings);
 
             int createdRecordsCount;
@@ -42,20 +40,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public Task<RoutePathMapping> GetSingleOrDefault(Func<RoutePathMapping, bool> predicate)
         {
             return _dbContext.RoutePathMapping.SingleOrDefaultAsync(routePathMapping => predicate(routePathMapping));
-        }
-
-        public async Task ResetData()
-        {
-            try
-            {
-                await _dbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.RoutePathMapping");
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message, e.InnerException);
-                throw;
-            }
         }
     }
 }

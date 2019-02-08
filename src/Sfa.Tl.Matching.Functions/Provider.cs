@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -13,12 +14,23 @@ namespace Sfa.Tl.Matching.Functions
         public static async Task ImportProvider(
             [BlobTrigger("provider/{name}", Connection = "BlobStorageConnectionString")]Stream stream, 
             string name, 
+            ExecutionContext context,
             ILogger logger,
             [Inject] IProviderService providerService)
         {
-            logger.LogInformation($"Processing {nameof(Provider)} blob\n Name:{name} \n Size: {stream.Length} Bytes");
+            logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
+                                  $"\tName:{name}\n" +
+                                  $"\tSize: {stream.Length} Bytes");
+
+            var stopwatch = Stopwatch.StartNew();
+
             var createdRecords = await providerService.ImportProvider(stream);
-            logger.LogInformation($"Processed {createdRecords} {nameof(Provider)} records from blob\n Name:{name} \n Size: {stream.Length} Bytes");
+            stopwatch.Stop();
+
+            logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
+                                  $"\tName:{name}\n" +
+                                  $"\tRows saved: {createdRecords}\n" +
+                                  $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
         }
     }
 }

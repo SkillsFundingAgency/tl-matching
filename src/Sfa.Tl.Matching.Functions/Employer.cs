@@ -1,6 +1,6 @@
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -14,14 +14,25 @@ namespace Sfa.Tl.Matching.Functions
         public static async Task ImportEmployer(
             [BlobTrigger("employer/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
             string name, 
+            ExecutionContext context,
             ILogger logger,
-            [Inject] IMapper mapper,
             [Inject] IEmployerService employerService
             )
         {
-            logger.LogInformation($"Processing Employer blob\n Name:{name} \n Size: {stream.Length} Bytes");
+            logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
+                                  $"\tName:{name}\n" +
+                                  $"\tSize: {stream.Length} Bytes");
 
+            var stopwatch = Stopwatch.StartNew();
+            //var createdRecords = 
             await employerService.ImportEmployer(stream);
+            stopwatch.Stop();
+
+            logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
+                                  $"\tName:{name}\n" +
+                                  //$"\tRows saved: {createdRecords}\n" +
+                                  $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
+            logger.LogInformation($"Processing Employer blob\n Name:{name} \n Size: {stream.Length} Bytes");
         }
     }
 }

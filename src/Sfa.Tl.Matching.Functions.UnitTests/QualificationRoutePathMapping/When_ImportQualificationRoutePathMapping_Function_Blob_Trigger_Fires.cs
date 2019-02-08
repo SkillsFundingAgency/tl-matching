@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using NSubstitute;
@@ -7,9 +8,10 @@ using Sfa.Tl.Matching.Application.Interfaces;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
 {
-    public class When_QualificationRoutePathMapping_Function_Blob_Trigger_Fires
+    public class When_ImportQualificationRoutePathMapping_Function_Blob_Trigger_Fires
     {
         private Stream _blobStream;
+        private ExecutionContext _context;
         private ILogger _logger;
         private IRoutePathService _routePathService;
 
@@ -17,9 +19,10 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
         public async Task OneTimeSetup()
         {
             _blobStream = new MemoryStream();
-            _routePathService = Substitute.For<IRoutePathService>();
+            _context = new ExecutionContext();
             _logger = Substitute.For<ILogger>();
-            await Functions.QualificationRoutePathMapping.ImportQualificationRoutePathMapping(_blobStream, "test", _logger, _routePathService);
+            _routePathService = Substitute.For<IRoutePathService>();
+            await Functions.QualificationRoutePathMapping.ImportQualificationRoutePathMapping(_blobStream, "test", _context, _logger, _routePathService);
         }
 
         [Test]
