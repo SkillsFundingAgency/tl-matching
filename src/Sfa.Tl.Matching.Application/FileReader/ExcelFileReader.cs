@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
         private static DataTable CreateDataTable(SpreadsheetDocument document, int headerRows, List<Row> allRows)
         {
             var dt = new DataTable();
-            CreateColumns(document, allRows, dt);
+            CreateColumns(document, allRows, headerRows, dt);
 
             var rowsWithoutHeader = allRows.Skip(headerRows);
             foreach (var row in rowsWithoutHeader)
@@ -97,9 +97,9 @@ namespace Sfa.Tl.Matching.Application.FileReader
             return dt;
         }
 
-        private static void CreateColumns(SpreadsheetDocument document, IEnumerable<Row> allRows, DataTable dt)
+        private static void CreateColumns(SpreadsheetDocument document, IEnumerable<Row> allRows, int headerRows, DataTable dt)
         {
-            foreach (var openXmlElement in allRows.ElementAt(0))
+            foreach (var openXmlElement in allRows.ElementAt(headerRows - 1))
             {
                 var cell = (Cell) openXmlElement;
                 dt.Columns.Add(GetCellValue(document, cell));
