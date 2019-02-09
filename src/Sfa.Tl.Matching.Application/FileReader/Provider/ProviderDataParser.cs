@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
             var provider = new ProviderDto
             {
                 UkPrn = cells[(int)ProviderColumnIndex.UkPrn].ToLong(),
-                Name = cells[(int)ProviderColumnIndex.Name],
+                Name = cells[(int)ProviderColumnIndex.Name].Trim(),
                 OfstedRating = cells[(int)ProviderColumnIndex.OfstedRating].ToOfstedRating(),
                 Active = cells[(int)ProviderColumnIndex.Active].ToBool(),
                 ActiveReason = cells[(int)ProviderColumnIndex.ActiveReason],
