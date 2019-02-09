@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
@@ -7,6 +9,7 @@ using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Models.Dto;
 
@@ -15,10 +18,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
     public class When_Provider_Imports_File
     {
         private const string DataFilePath = @"Provider\Provider-Simple.xlsx";
+        private MatchingDbContext _matchingDbContext;
         private int _createdRecordCount;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             var loggerRepository = new Logger<ProviderRepository>(
                 new NullLoggerFactory());
@@ -29,9 +33,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderDto>>(
                 new NullLoggerFactory());
 
-            var matchingDbContext = TestConfiguration.GetDbContext();
+            _matchingDbContext = TestConfiguration.GetDbContext();
 
-            var repository = new ProviderRepository(loggerRepository, matchingDbContext);
+            await ResetData();
+
+            var repository = new ProviderRepository(loggerRepository, _matchingDbContext);
             var dataValidator = new ProviderDataValidator(repository);
             var dataParser = new ProviderDataParser();
 
@@ -58,7 +64,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
         [Test]
         public void Then_Record_Is_Saved()
         {
-            Assert.AreEqual(2, _createdRecordCount);
+            Assert.AreEqual(1, _createdRecordCount);
+        }
+
+        private async Task ResetData()
+        {
+            await _matchingDbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.Provider");
+            await _matchingDbContext.SaveChangesAsync();
         }
     }
 }

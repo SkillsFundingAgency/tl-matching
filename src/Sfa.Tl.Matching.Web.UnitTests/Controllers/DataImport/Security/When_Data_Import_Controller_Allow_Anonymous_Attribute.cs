@@ -4,7 +4,7 @@ using Sfa.Tl.Matching.Web.Controllers;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
 {
-    public class When_Controller_Allow_Anonymous_Attribute
+    public class When_Data_Import_Controller_Allow_Anonymous_Attribute
     {
         private AllowAnonymousAttribute[] _allowAnonymousAttributes;
 
