@@ -3,6 +3,7 @@ using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
+using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 
@@ -17,7 +18,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         {
             var routePathMapping = new ValidRoutePathMappingBuilder().Build();
             var dto = routePathMapping.ToDto();
-
+            dto.AgricultureLandManagementandProduction = RoutePathMappingConstants.AgricultureLandManagementandProduction;
+            dto.AnimalCareandManagement = RoutePathMappingConstants.AnimalCareandManagement;
+            dto.Hospitality = RoutePathMappingConstants.Hospitality;
 
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
 
