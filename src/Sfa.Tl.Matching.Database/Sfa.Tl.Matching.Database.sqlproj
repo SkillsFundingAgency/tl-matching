@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
+    <Build Include="Tables\ProviderVenue.sql" />
     <Build Include="Tables\Provider.sql" />
     <Build Include="Tables\Route.sql" />
     <Build Include="Tables\Path.sql" />
