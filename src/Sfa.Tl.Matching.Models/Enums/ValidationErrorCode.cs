@@ -7,6 +7,6 @@
         MissingMandatoryData,
         InvalidFormat,
         InvalidLength,
-        RecordExists
+        RecordAlreadyExists
     }
 }

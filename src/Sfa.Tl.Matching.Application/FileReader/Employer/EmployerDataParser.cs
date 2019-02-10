@@ -2,30 +2,30 @@
 using Sfa.Tl.Matching.Application.FileReader.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.FileReader.Employer
 {
     public class EmployerDataParser : IDataParser<EmployerDto>
     {
-        public IEnumerable<EmployerDto> Parse(string[] cells)
+        public IEnumerable<EmployerDto> Parse(FileImportDto dto)
         {
+            if (!(dto is EmployerFileImportDto data)) return null;
+
             var employerDto = new EmployerDto
             {
-                CrmId = cells[EmployerColumnIndex.CrmId].ToGuid(),
-                CompanyName = cells[EmployerColumnIndex.CompanyName],
-                AlsoKnownAs = cells[EmployerColumnIndex.CompanyAka],
-                Aupa = cells[EmployerColumnIndex.Aupa],
-                CompanyType = cells[EmployerColumnIndex.CompanyType],
-                PrimaryContact = cells[EmployerColumnIndex.PrimaryContact],
-                Phone = cells[EmployerColumnIndex.Phone],
-                Email = cells[EmployerColumnIndex.Email],
-                PostCode = cells[EmployerColumnIndex.PostCode],
-                Owner = cells[EmployerColumnIndex.Owner]
+                CrmId = data.CrmId.ToGuid(),
+                CompanyName = data.CompanyName,
+                AlsoKnownAs = data.AlsoKnownAs,
+                Aupa = data.Aupa,
+                CompanyType = data.CompanyType,
+                PrimaryContact = data.PrimaryContact,
+                Email = data.Email,
+                Phone = data.Phone,
+                PostCode = data.PostCode,
+                Owner = data.Owner
             };
 
             return new List<EmployerDto> { employerDto };
-
         }
     }
 }

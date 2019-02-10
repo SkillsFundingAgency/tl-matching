@@ -2,11 +2,10 @@
 using FluentValidation;
 using Humanizer;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
 {
-    public class RoutePathMappingDataValidator : AbstractValidator<string[]>
+    public class QualificationRoutePathMappingDataValidator : AbstractValidator<QualificationRoutePathMappingFileImportDto>
     {
         private const int MinimumNumberOfColumns = 4;
         private const int MaximumTitleLength = 250;
