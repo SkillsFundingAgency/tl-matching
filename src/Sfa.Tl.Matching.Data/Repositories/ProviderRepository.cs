@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -21,12 +22,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return await BaseCreateMany(providers);
         }
 
-        public Task<IQueryable<Provider>> GetMany(Func<Provider, bool> predicate)
+        public override Task<IQueryable<Provider>> GetMany(Func<Provider, bool> predicate)
         {
             return Task.FromResult(_dbContext.Provider.Where(provider => predicate(provider)));
         }
 
-        public async Task<Provider> GetSingleOrDefault(Func<Provider, bool> predicate)
+        public override async Task<Provider> GetSingleOrDefault(Func<Provider, bool> predicate)
         {
             return await _dbContext.Provider.SingleOrDefaultAsync(p => predicate(p));
         }

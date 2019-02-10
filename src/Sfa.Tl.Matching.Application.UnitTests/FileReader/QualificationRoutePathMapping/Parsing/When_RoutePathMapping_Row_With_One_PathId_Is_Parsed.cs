@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Parsing
@@ -16,16 +15,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         [SetUp]
         public void Setup()
         {
-            var routePathMapping = new ValidRoutePathMappingBuilder().Build();
-            var routePathMappingStringArray = routePathMapping.ToStringArray();
+            var routePathMappingDto = new ValidQualificationRoutePathMappingFileImportDtoBuilder().Build();
 
-            var parser = new RoutePathMappingDataParser();
-            _parseResult = parser.Parse(routePathMappingStringArray);
+            var parser = new QualificationRoutePathMappingDataParser();
+            _parseResult = parser.Parse(routePathMappingDto);
         }
 
         [Test]
         public void Then_ParseResult_Count_Is_One() =>
-            Assert.AreEqual(1, _parseResult.Count());
+            Assert.AreEqual(int.Parse(RoutePathMappingConstants.AgricultureLandManagementandProduction), _parseResult.Count());
         
         [Test]
         public void Then_ParseResult_LarsId_Matches_Input() =>

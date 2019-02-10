@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -39,6 +40,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public abstract Task<int> CreateMany(IEnumerable<T> entities);
 
+        public abstract Task<IQueryable<T>> GetMany(Func<T, bool> predicate);
+        
         public abstract Task<T> GetSingleOrDefault(Func<T, bool> predicate);
     }
 }

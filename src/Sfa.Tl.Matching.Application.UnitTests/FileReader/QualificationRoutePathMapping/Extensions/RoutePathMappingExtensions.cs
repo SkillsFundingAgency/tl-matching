@@ -4,20 +4,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 {
     public static class RoutePathMappingExtensions
     {
-        public static QualificationRoutePathMappingFileImportDto ToDto(this Domain.Models.RoutePathMapping provider)
+        public static QualificationRoutePathMappingFileImportDto ToDto(this Domain.Models.RoutePathMapping routePathMapping)
         {
             var routePathMappingArray = new QualificationRoutePathMappingFileImportDto
             {
-                LarsId = provider.LarsId,
-                Title = provider.Title,
-                ShortTitle = provider.ShortTitle,
-                Accounting = provider.PathId.ToString()
+                LarsId = routePathMapping.LarsId,
+                Title = routePathMapping.Title,
+                ShortTitle = routePathMapping.ShortTitle,
+                Accounting = routePathMapping.PathId.ToString()
             };
 
             return routePathMappingArray;
         }
 
-        public static QualificationRoutePathMappingFileImportDto[] ToDto(this Domain.Models.RoutePathMapping provider, int numberOfElements)
+        public static QualificationRoutePathMappingFileImportDto[] ToDto(this Domain.Models.RoutePathMapping routePathMapping, int numberOfElements)
         {
             var routePathMappingArray = new QualificationRoutePathMappingFileImportDto[numberOfElements];
 
@@ -25,10 +25,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
                 {
                     new QualificationRoutePathMappingFileImportDto
                         {
-                            LarsId = provider.LarsId,
-                            Title = provider.Title,
-                            ShortTitle = provider.ShortTitle,
-                            Accounting = provider.PathId.ToString()
+                            LarsId = routePathMapping.LarsId,
+                            Title = routePathMapping.Title,
+                            ShortTitle = routePathMapping.ShortTitle,
+                            Accounting = routePathMapping.PathId.ToString()
                         }
                 }
                 .CopyTo(routePathMappingArray, 0);

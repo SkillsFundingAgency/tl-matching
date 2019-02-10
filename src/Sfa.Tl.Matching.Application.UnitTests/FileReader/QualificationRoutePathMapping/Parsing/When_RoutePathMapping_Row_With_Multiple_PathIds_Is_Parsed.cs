@@ -4,9 +4,7 @@ using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Parsing
 {
@@ -17,14 +15,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         [SetUp]
         public void Setup()
         {
-            var routePathMapping = new ValidRoutePathMappingBuilder().Build();
-            var routePathMappingStringArray = routePathMapping.ToStringArray(15);
-            routePathMappingStringArray[RoutePathMappingColumnIndex.PathStartIndex] = "";
-            routePathMappingStringArray[RoutePathMappingColumnIndex.PathStartIndex + 1] = "2";
-            routePathMappingStringArray[RoutePathMappingColumnIndex.PathStartIndex + 4] = "5";
+            var routePathMappingDto = new ValidQualificationRoutePathMappingFileImportDtoBuilder().Build();
+            routePathMappingDto.AgricultureLandManagementandProduction = null;
+            routePathMappingDto.AnimalCareandManagement = RoutePathMappingConstants.AnimalCareandManagement;
+            routePathMappingDto.Hospitality = RoutePathMappingConstants.Hospitality;
 
-            var parser = new RoutePathMappingDataParser();
-            _parseResult = parser.Parse(routePathMappingStringArray);
+            var parser = new QualificationRoutePathMappingDataParser();
+            _parseResult = parser.Parse(routePathMappingDto);
         }
 
         [Test]
@@ -45,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 
         [Test]
         public void Then_First_ParseResult_PathId_Matches_Input() =>
-            Assert.AreEqual(2, _parseResult.First().PathId);
+            Assert.AreEqual(int.Parse(RoutePathMappingConstants.AnimalCareandManagement), _parseResult.First().PathId);
 
         [Test]
         public void Then_Second_ParseResult_LarsId_Matches_Input() =>
@@ -61,6 +58,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 
         [Test]
         public void Then_Second_First_ParseResult_PathId_Matches_Input() =>
-            Assert.AreEqual(5, _parseResult.Skip(1).First().PathId);
+            Assert.AreEqual(int.Parse(RoutePathMappingConstants.Hospitality), _parseResult.Skip(1).First().PathId);
     }
 }

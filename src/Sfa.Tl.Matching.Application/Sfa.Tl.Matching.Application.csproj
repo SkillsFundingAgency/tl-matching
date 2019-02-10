@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="FileReader\RoutePathMapping\RoutePathMappingDataValidator.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.9.0" />
     <PackageReference Include="FluentValidation" Version="8.1.3" />

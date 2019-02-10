@@ -3,9 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Parsing
 {
@@ -16,12 +14,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         [SetUp]
         public void Setup()
         {
-            var routePathMapping = new ValidRoutePathMappingBuilder().Build();
-            var routePathMappingStringArray = routePathMapping.ToStringArray();
-            routePathMappingStringArray[RoutePathMappingColumnIndex.PathStartIndex] = "";
-
-            var parser = new RoutePathMappingDataParser();
-            _parseResult = parser.Parse(routePathMappingStringArray);
+            var routePathMappingDto = new ValidQualificationRoutePathMappingFileImportDtoBuilder().Build();
+            routePathMappingDto.AgricultureLandManagementandProduction = null;
+            
+            var parser = new QualificationRoutePathMappingDataParser();
+            _parseResult = parser.Parse(routePathMappingDto);
         }
 
         [Test]
