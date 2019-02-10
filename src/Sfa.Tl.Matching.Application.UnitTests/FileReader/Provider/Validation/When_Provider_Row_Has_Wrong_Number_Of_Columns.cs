@@ -4,6 +4,7 @@ using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
@@ -17,10 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
         {
             var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
             var validator = new ProviderDataValidator(repository);
-            _validationResult = validator.Validate(new[]
-            {
-                "123"
-            });
+            _validationResult = validator.Validate(new ProviderFileImportDto { PrimaryContactName = "Test" });
         }
 
         [Test]
@@ -28,17 +26,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
             Assert.False(_validationResult.IsValid);
 
         [Test]
-        public void Then_Error_Count_Is_One() =>
-            Assert.AreEqual(1, _validationResult.Errors.Count);
+        public void Then_Error_Count_Is_21() =>
+            Assert.AreEqual(21, _validationResult.Errors.Count);
 
         [Test]
-        public void Then_Error_Code_Is_WrongNumberOfColumns() =>
-            Assert.AreEqual(ValidationErrorCode.WrongNumberOfColumns.ToString(), 
-                _validationResult.Errors[0].ErrorCode);
-
-        [Test]
-        public void Then_Error_Message_Is_WrongNumberOfColumns() =>
-            Assert.AreEqual(ValidationErrorCode.WrongNumberOfColumns.Humanize(), 
+        public void Then_Error_Message_Is_MissingMandatoryData() =>
+            Assert.AreEqual($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}",
                 _validationResult.Errors[0].ErrorMessage);
     }
 }

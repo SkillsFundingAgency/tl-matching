@@ -3,9 +3,8 @@ using Humanizer;
 using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
@@ -17,9 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
         [SetUp]
         public void Setup()
         {
-            var provider = new ValidProviderBuilder().Build();
-            var providerStringArray = provider.ToStringArray();
-            providerStringArray[(int)ProviderColumnIndex.UkPrn] = "159856587455885";
+            var providerStringArray = new ProviderFileImportDto { UkPrn = "159856587455885" };
 
             var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
 
@@ -32,17 +29,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
             Assert.False(_validationResult.IsValid);
 
         [Test]
-        public void Then_Error_Count_Is_One() =>
-            Assert.AreEqual(1, _validationResult.Errors.Count);
+        public void Then_Error_Count_Is_22() =>
+            Assert.AreEqual(22, _validationResult.Errors.Count);
 
         [Test]
         public void Then_Error_Code_Is_InvalidFormat() =>
-            Assert.AreEqual(ValidationErrorCode.InvalidFormat.ToString(), 
+            Assert.AreEqual(ValidationErrorCode.InvalidFormat.ToString(),
                 _validationResult.Errors[0].ErrorCode);
 
         [Test]
         public void Then_Error_Message_Is_InvalidFormat() =>
-            Assert.AreEqual($"'{nameof(Domain.Models.Provider.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}", 
+            Assert.AreEqual($"'{nameof(Domain.Models.Provider.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}",
                 _validationResult.Errors[0].ErrorMessage);
     }
 }

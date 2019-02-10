@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var dataValidator = new ProviderDataValidator(repository);
             var dataParser = new ProviderDataParser();
 
-            var excelFileReader = new ExcelFileReader<ProviderDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var excelFileReader = new ExcelFileReader<ProviderFileImportDto, ProviderDto>(loggerExcelFileReader, dataParser, dataValidator);
 
             var config = new MapperConfiguration(c => c.AddProfile<ProviderMapper>());
 

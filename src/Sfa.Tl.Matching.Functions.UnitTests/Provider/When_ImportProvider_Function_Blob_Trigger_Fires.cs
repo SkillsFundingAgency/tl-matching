@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
 {
@@ -31,7 +32,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
             _providerService
                 .Received(1)
                 .ImportProvider(
-                    Arg.Is(_blobStream));
+                    Arg.Is<ProviderFileImportDto>(dto => dto.FileDataStream == _blobStream));
         }
     }
 }

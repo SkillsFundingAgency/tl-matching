@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
     {
         private ILogger<RoutePathService> _logger;
         private IMapper _mapper;
-        private IDataImportService<RoutePathMappingDto> _dataImportService;
+        private IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto> _fileReader;
         private IRoutePathRepository _repository;
         private IRepository<RoutePathMapping> _routePathMappingRepository;
         private IRoutePathService _service;
@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         {
             _logger = Substitute.For<ILogger<RoutePathService>>();
             _mapper = Substitute.For<IMapper>();
-            _dataImportService = Substitute.For<IDataImportService<RoutePathMappingDto>>();
+            _fileReader = Substitute.For<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>();
             _repository = Substitute.For<IRoutePathRepository>();
             _routePathMappingRepository = Substitute.For<IRepository<RoutePathMapping>>();
 
@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
                 .GetPaths()
                 .Returns(_pathData);
 
-            _service = new RoutePathService(_logger, _mapper, _dataImportService, _repository, _routePathMappingRepository);
+            _service = new RoutePathService(_logger, _mapper, _fileReader, _repository, _routePathMappingRepository);
 
             _result = _service.GetPaths();
         }

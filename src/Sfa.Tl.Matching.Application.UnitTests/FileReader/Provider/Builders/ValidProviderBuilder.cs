@@ -1,31 +1,30 @@
-﻿using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Constants;
+﻿using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders
 {
     internal class ValidProviderBuilder
     {
-        private readonly Domain.Models.Provider _provider;
+        private readonly ProviderFileImportDto _provider;
 
         public ValidProviderBuilder()
         {
-            _provider = new Domain.Models.Provider
+            _provider = new ProviderFileImportDto
             {
-                UkPrn = ProviderConstants.UkPrn,
-                Name = ProviderConstants.Name,
-                OfstedRating = (int)ProviderConstants.OfstedRating,
-                Active = ProviderConstants.Active,
-                ActiveReason = ProviderConstants.ActiveReason,
-                PrimaryContact = ProviderConstants.PrimaryContact,
-                PrimaryContactEmail = ProviderConstants.PrimaryContactEmail,
-                PrimaryContactPhone = ProviderConstants.PrimaryContactPhone,
-                SecondaryContact = ProviderConstants.SecondaryContact,
-                SecondaryContactEmail = ProviderConstants.SecondaryContactEmail,
-                SecondaryContactPhone = ProviderConstants.SecondaryContactPhone,
-                Source = ProviderConstants.Source
+                UkPrn = "10000546",
+                ProviderName = "ProviderName",
+                OfstedRating = Models.Enums.OfstedRating.Good.ToString(),
+                Status = "Yes",
+                StatusReason = "StatusReason",
+                PrimaryContactName = "PrimaryContact",
+                PrimaryContactEmail = "primary@contact.co.uk",
+                PrimaryContactTelephone = "01777757777",
+                SecondaryContactName = "SecondaryContact",
+                SecondaryContactEmail = "secondary@contact.co.uk",
+                SecondaryContactTelephone = "01777757777",
+                Source = "PMF_1018"
             };
         }
 
-        public Domain.Models.Provider Build() =>
-            _provider;
+        public ProviderFileImportDto Build() => _provider;
     }
 }

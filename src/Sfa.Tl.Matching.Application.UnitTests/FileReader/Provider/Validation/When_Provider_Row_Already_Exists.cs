@@ -5,7 +5,6 @@ using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -18,13 +17,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
         [SetUp]
         public void Setup()
         {
-            var provider = new ValidProviderBuilder().Build();
+            var provider = new Domain.Models.Provider();
+
+            var providerFileImportDto = new ValidProviderBuilder().Build();
 
             var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
-            repository.GetSingleOrDefault(Arg.Is<Func<Domain.Models.Provider, bool>>(p => p(provider))).Returns(provider);
+            repository.GetSingleOrDefault(Arg.Any<Func<Domain.Models.Provider, bool>>()).Returns(provider);
 
             var validator = new ProviderDataValidator(repository);
-            _validationResult = validator.Validate(provider.ToStringArray());
+            _validationResult = validator.Validate(providerFileImportDto);
         }
 
         [Test]
@@ -37,11 +38,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         [Test]
         public void Then_Error_Code_Is_RecordExists() =>
-            Assert.AreEqual(ValidationErrorCode.RecordExists.ToString(), 
+            Assert.AreEqual(ValidationErrorCode.RecordAlreadyExists.ToString(), 
                 _validationResult.Errors[0].ErrorCode);
 
         [Test]
         public void Then_Error_Message_Is_RecordExists() =>
-            Assert.AreEqual($"'{nameof(Domain.Models.Provider.UkPrn)}' - {ValidationErrorCode.RecordExists.Humanize()}", _validationResult.Errors[0].ErrorMessage);
+            Assert.AreEqual($"'{nameof(Domain.Models.Provider.UkPrn)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}", _validationResult.Errors[0].ErrorMessage);
     }
 }

@@ -3,9 +3,8 @@ using Humanizer;
 using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
@@ -17,9 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
         [SetUp]
         public void Setup()
         {
-            var provider = new ValidProviderBuilder().Build();
-            var providerStringArray = provider.ToStringArray();
-            providerStringArray[(int)ProviderColumnIndex.Name] = "";
+            var providerStringArray = new ProviderFileImportDto { ProviderName = "" };
 
             var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
 
@@ -33,14 +30,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         [Test]
         public void Then_Error_Count_Is_One() =>
-            Assert.AreEqual(1, _validationResult.Errors.Count);
+            Assert.AreEqual(22, _validationResult.Errors.Count);
 
         [Test]
         public void Then_Error_Code_Is_MissingMandatoryData() =>
-            Assert.AreEqual(ValidationErrorCode.MissingMandatoryData.ToString(), _validationResult.Errors[0].ErrorCode);
+            Assert.AreEqual(ValidationErrorCode.MissingMandatoryData.ToString(), 
+                            _validationResult.Errors[0].ErrorCode);
 
         [Test]
         public void Then_Error_Message_Is_MissingMandatoryData() =>
-            Assert.AreEqual($"'{nameof(ProviderColumnIndex.Name)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}", _validationResult.Errors[0].ErrorMessage);
+            Assert.AreEqual($"'{nameof(ProviderFileImportDto.ProviderName)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}", 
+                _validationResult.Errors[2].ErrorMessage);
     }
 }

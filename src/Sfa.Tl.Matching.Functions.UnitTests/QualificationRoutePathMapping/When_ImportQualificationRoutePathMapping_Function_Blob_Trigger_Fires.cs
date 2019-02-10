@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
 {
@@ -31,7 +32,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
             _routePathService
                 .Received(1)
                 .ImportQualificationPathMapping(
-                    Arg.Is(_blobStream));
+                    Arg.Any<QualificationRoutePathMappingFileImportDto>());
         }
     }
 }

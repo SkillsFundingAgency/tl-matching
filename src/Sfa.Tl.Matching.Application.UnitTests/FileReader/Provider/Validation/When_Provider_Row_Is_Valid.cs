@@ -3,7 +3,6 @@ using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
@@ -15,12 +14,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
         [SetUp]
         public void Setup()
         {
-            var provider = new ValidProviderBuilder().Build();
-            var providerStringArray = provider.ToStringArray();
-
+            ValidProviderBuilder builder = new ValidProviderBuilder();
+            var providerFileImportDto = builder.Build();
             var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
             var validator = new ProviderDataValidator(repository);
-            _validationResult = validator.Validate(providerStringArray);
+            _validationResult = validator.Validate(providerFileImportDto);
         }
 
         [Test]
