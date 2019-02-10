@@ -6,6 +6,7 @@
         WrongNumberOfColumns,
         MissingMandatoryData,
         InvalidFormat,
+        InvalidLength,
         RecordExists
     }
 }

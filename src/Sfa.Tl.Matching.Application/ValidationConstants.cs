@@ -4,6 +4,9 @@ namespace Sfa.Tl.Matching.Application
 {
     public static class ValidationConstants
     {
+        public static Regex LarsIdRegex =>
+            new Regex(@"^[\da-zA-Z]{8}$");
+
         public static Regex UkprnRegex => 
             new Regex(@"^((?!(0))[0-9]{8})$");
 
