@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using FluentValidation.Results;
 using Humanizer;
 using NSubstitute;
@@ -21,7 +22,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
             var routePathMapping = new ValidRoutePathMappingBuilder().Build();
 
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
-            repository.GetSingleOrDefault(Arg.Is<Func<Domain.Models.RoutePathMapping, bool>>(p => p(routePathMapping))).Returns(routePathMapping);
+            repository.GetMany(Arg.Is<Func<Domain.Models.RoutePathMapping, bool>>(p => p(routePathMapping)))
+                .Returns(
+                    new System.Collections.Generic.List<Domain.Models.RoutePathMapping>
+                        {
+                            routePathMapping
+                        }
+                        .AsQueryable());
 
             var validator = new QualificationRoutePathMappingDataValidator(repository);
             _validationResult = validator.Validate(routePathMapping.ToDto());

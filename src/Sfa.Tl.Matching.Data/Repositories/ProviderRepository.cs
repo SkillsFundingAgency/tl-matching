@@ -21,7 +21,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return await BaseCreateMany(providers);
         }
 
-        public override async Task<Provider> GetSingleOrDefault(Func<Provider, bool> predicate)
+        public Task<IQueryable<Provider>> GetMany(Func<Provider, bool> predicate)
+        {
+            return Task.FromResult(_dbContext.Provider.Where(provider => predicate(provider)));
+        }
+
+        public async Task<Provider> GetSingleOrDefault(Func<Provider, bool> predicate)
         {
             return await _dbContext.Provider.SingleOrDefaultAsync(p => predicate(p));
         }

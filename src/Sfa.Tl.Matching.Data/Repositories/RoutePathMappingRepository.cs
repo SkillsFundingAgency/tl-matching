@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -21,7 +22,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return await BaseCreateMany(routePathMappings);
         }
 
-        public override Task<RoutePathMapping> GetSingleOrDefault(Func<RoutePathMapping, bool> predicate)
+        public Task<IQueryable<RoutePathMapping>> GetMany(Func<RoutePathMapping, bool> predicate)
+        {
+            return Task.FromResult(_dbContext.RoutePathMapping.Where(routePathMapping => predicate(routePathMapping)));
+        }
+
+        public Task<RoutePathMapping> GetSingleOrDefault(Func<RoutePathMapping, bool> predicate)
         {
             return _dbContext.RoutePathMapping.SingleOrDefaultAsync(routePathMapping => predicate(routePathMapping));
         }
