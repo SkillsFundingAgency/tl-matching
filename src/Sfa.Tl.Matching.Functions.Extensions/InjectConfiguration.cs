@@ -12,6 +12,7 @@ using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
+using Sfa.Tl.Matching.Application.FileReader.ProviderVenue;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -63,49 +64,56 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         {
             RegisterEmployerFileReader(services);
             RegisterProviderFileReader(services);
+            RegisterProviderVenueFileReader(services);
             RegisterRoutePathMappingFileReader(services);
         }
 
         private static void RegisterEmployerFileReader(IServiceCollection services)
         {
             services.AddTransient<IDataParser<EmployerDto>, EmployerDataParser>();
-            services.AddTransient<IValidator<string[]>, EmployerDataValidator>();
+            services.AddTransient<IValidator<EmployerFileImportDto>, EmployerDataValidator>();
 
-            services.AddTransient<IFileReader<EmployerDto>, ExcelFileReader<EmployerDto>>(provider =>
-                new ExcelFileReader<EmployerDto>(
-                    provider.GetService<ILogger<ExcelFileReader<EmployerDto>>>(),
+            services.AddTransient<IFileReader<EmployerFileImportDto, EmployerDto>, ExcelFileReader<EmployerFileImportDto, EmployerDto>>(provider =>
+                new ExcelFileReader<EmployerFileImportDto, EmployerDto>(
+                    provider.GetService<ILogger<ExcelFileReader<EmployerFileImportDto, EmployerDto>>>(),
                     provider.GetService<IDataParser<EmployerDto>>(),
-                    (IValidator<string[]>)provider.GetServices(typeof(IValidator<string[]>)).Single(t => t.GetType() == typeof(EmployerDataValidator))));
-
-            services.AddTransient<IDataImportService<EmployerDto>, DataImportService<EmployerDto>>();
+                    (IValidator<FileImportDto>)provider.GetServices(typeof(IValidator<EmployerFileImportDto>)).Single(t => t.GetType() == typeof(EmployerDataValidator))));
         }
 
         private static void RegisterProviderFileReader(IServiceCollection services)
         {
             services.AddTransient<IDataParser<ProviderDto>, ProviderDataParser>();
-            services.AddTransient<IValidator<string[]>, ProviderDataValidator>();
+            services.AddTransient<IValidator<ProviderFileImportDto>, ProviderDataValidator>();
 
-            services.AddTransient<IFileReader<ProviderDto>, ExcelFileReader<ProviderDto>>(provider =>
-                new ExcelFileReader<ProviderDto>(
-                    provider.GetService<ILogger<ExcelFileReader<ProviderDto>>>(),
+            services.AddTransient<IFileReader<ProviderFileImportDto, ProviderDto>, ExcelFileReader<ProviderFileImportDto, ProviderDto>>(provider =>
+                new ExcelFileReader<ProviderFileImportDto, ProviderDto>(
+                    provider.GetService<ILogger<ExcelFileReader<ProviderFileImportDto, ProviderDto>>>(),
                     provider.GetService<IDataParser<ProviderDto>>(),
-                    (IValidator<string[]>)provider.GetServices(typeof(IValidator<string[]>)).Single(t => t.GetType() == typeof(ProviderDataValidator))));
+                    (IValidator<FileImportDto>)provider.GetServices(typeof(IValidator<ProviderFileImportDto>)).Single(t => t.GetType() == typeof(ProviderDataValidator))));
+        }
 
-            services.AddTransient<IDataImportService<ProviderDto>, DataImportService<ProviderDto>>();
+        private static void RegisterProviderVenueFileReader(IServiceCollection services)
+        {
+            services.AddTransient<IDataParser<ProviderVenueDto>, ProviderVenueDataParser>();
+            services.AddTransient<IValidator<ProviderVenueFileImportDto>, ProviderVenueDataValidator>();
+
+            services.AddTransient<IFileReader<ProviderVenueFileImportDto, ProviderVenueDto>, ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>>(provider =>
+                new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(
+                    provider.GetService<ILogger<ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>>>(),
+                    provider.GetService<IDataParser<ProviderVenueDto>>(),
+                    (IValidator<FileImportDto>)provider.GetServices(typeof(IValidator<ProviderVenueFileImportDto>)).Single(t => t.GetType() == typeof(ProviderVenueDataValidator))));
         }
 
         private static void RegisterRoutePathMappingFileReader(IServiceCollection services)
         {
-            services.AddTransient<IDataParser<RoutePathMappingDto>, RoutePathMappingDataParser>();
-            services.AddTransient<IValidator<string[]>, RoutePathMappingDataValidator>();
+            services.AddTransient<IDataParser<RoutePathMappingDto>, QualificationRoutePathMappingDataParser>();
+            services.AddTransient<IValidator<QualificationRoutePathMappingFileImportDto>, QualificationRoutePathMappingDataValidator>();
 
-            services.AddTransient<IFileReader<RoutePathMappingDto>, ExcelFileReader<RoutePathMappingDto>>(provider =>
-                new ExcelFileReader<RoutePathMappingDto>(
-                    provider.GetService<ILogger<ExcelFileReader<RoutePathMappingDto>>>(),
+            services.AddTransient<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>, ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>(provider =>
+                new ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>(
+                    provider.GetService<ILogger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>>(),
                     provider.GetService<IDataParser<RoutePathMappingDto>>(),
-                    (IValidator<string[]>)provider.GetServices(typeof(IValidator<string[]>)).Single(t => t.GetType() == typeof(RoutePathMappingDataValidator))));
-
-            services.AddTransient<IDataImportService<RoutePathMappingDto>, DataImportService<RoutePathMappingDto>>();
+                    (IValidator<FileImportDto>)provider.GetServices(typeof(IValidator<QualificationRoutePathMappingFileImportDto>)).Single(t => t.GetType() == typeof(QualificationRoutePathMappingDataValidator))));
         }
         
         private static void RegisterRepositories(IServiceCollection services)
@@ -114,6 +122,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
             services.AddTransient<IRoutePathRepository, RoutePathRepository>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
+            services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -121,6 +130,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IProviderService, ProviderService>();
+            services.AddTransient<IProviderVenueService, ProviderVenueService>();
         }
     }
 }
