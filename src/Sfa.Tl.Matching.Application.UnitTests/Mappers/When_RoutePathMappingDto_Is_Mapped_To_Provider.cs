@@ -4,14 +4,14 @@ using Sfa.Tl.Matching.Application.Mappers;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Mappers
 {
-    public class When_CreateEmployerDto_Is_Mapped_To_Employer
+    public class When_RoutePathMappingDto_Is_Mapped_To_RoutePathMapping
     {
         private MapperConfiguration _config;
 
         [SetUp]
         public void Setup()
         {
-            _config = new MapperConfiguration(c => c.AddProfile<EmployerMapper>());
+            _config = new MapperConfiguration(c => c.AddProfile<RoutePathMappingMapper>());
         }
 
         [Test]
