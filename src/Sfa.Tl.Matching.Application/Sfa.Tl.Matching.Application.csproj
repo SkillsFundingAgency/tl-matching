@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Sfa.Tl.Matching.Models\Sfa.Tl.Matching.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="FileReader\ProviderVenue\" />
-  </ItemGroup>
-
 </Project>
