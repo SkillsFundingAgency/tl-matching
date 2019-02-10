@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
 {
@@ -10,7 +11,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 
         IQueryable<Route> GetRoutes();
 
-        Task<int> ImportQualificationPathMapping(System.IO.Stream stream);
+        Task<int> ImportQualificationPathMapping(QualificationRoutePathMappingFileImportDto fileImportDto);
 
         void IndexQualificationPathMapping();
     }

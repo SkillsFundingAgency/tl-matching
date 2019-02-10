@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Functions.Extensions;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
 {
@@ -12,8 +13,8 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("ImportProvider")]
         public static async Task ImportProvider(
-            [BlobTrigger("provider/{name}", Connection = "BlobStorageConnectionString")]Stream stream, 
-            string name, 
+            [BlobTrigger("provider/{name}", Connection = "BlobStorageConnectionString")]Stream stream,
+            string name,
             ExecutionContext context,
             ILogger logger,
             [Inject] IProviderService providerService)
@@ -24,7 +25,7 @@ namespace Sfa.Tl.Matching.Functions
 
             var stopwatch = Stopwatch.StartNew();
 
-            var createdRecords = await providerService.ImportProvider(stream);
+            var createdRecords = await providerService.ImportProvider(new ProviderFileImportDto { FileDataStream = stream });
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} processed blob\n" +

@@ -1,35 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class ProviderService : IProviderService
     {
         private readonly IMapper _mapper;
-        private readonly IDataImportService<ProviderDto> _dataImportService;
+        private readonly IFileReader<ProviderFileImportDto, ProviderDto> _fileReader;
         private readonly IRepository<Provider> _repository;
 
         public ProviderService(
             IMapper mapper,
-            IDataImportService<ProviderDto> dataImportService,
+            IFileReader<ProviderFileImportDto, ProviderDto> fileReader,
             IRepository<Provider> repository)
         {
             _mapper = mapper;
-            _dataImportService = dataImportService;
+            _fileReader = fileReader;
             _repository = repository;
         }
 
-        public async Task<int> ImportProvider(Stream stream)
+        public async Task<int> ImportProvider(ProviderFileImportDto fileImportDto)
         {
-            var import = _dataImportService.Import(stream, DataImportType.Provider, 1);
+            var import = _fileReader.ValidateAndParseFile(fileImportDto);
 
             var createdRecords = 0;
             if (import != null)

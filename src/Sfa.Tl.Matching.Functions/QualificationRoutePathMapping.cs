@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Functions.Extensions;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
 {
@@ -24,7 +25,7 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRecords = await routePathService.ImportQualificationPathMapping(stream);
+            var createdRecords = await routePathService.ImportQualificationPathMapping(new QualificationRoutePathMappingFileImportDto());
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
