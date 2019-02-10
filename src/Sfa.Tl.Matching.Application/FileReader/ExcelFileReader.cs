@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Reflection;
+using System.Text;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -11,49 +11,59 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileReader
 {
-    public class ExcelFileReader<TDto> : IFileReader<TDto> where TDto : class, new()
+    public class ExcelFileReader<TImportDto, TDto> : IFileReader<TImportDto, TDto> where TDto : class, new() where TImportDto : FileImportDto
     {
-        private readonly ILogger<ExcelFileReader<TDto>> _logger;
+        private readonly ILogger<ExcelFileReader<TImportDto, TDto>> _logger;
         private readonly IDataParser<TDto> _dataParser;
-        private readonly IValidator<string[]> _validator;
+        private readonly IValidator<TImportDto> _validator;
 
         public ExcelFileReader(
-            ILogger<ExcelFileReader<TDto>> logger,
+            ILogger<ExcelFileReader<TImportDto, TDto>> logger,
             IDataParser<TDto> dataParser,
-            IValidator<string[]> validator)
+            IValidator<TImportDto> validator)
         {
             _logger = logger;
             _dataParser = dataParser;
             _validator = validator;
         }
 
-        public IEnumerable<TDto> ValidateAndParseFile(Stream stream, int headerRows)
+        public IEnumerable<TDto> ValidateAndParseFile(TImportDto fileImportDto)
         {
             var dtos = new List<TDto>();
 
-            using (var document = SpreadsheetDocument.Open(stream, false))
+            using (var document = SpreadsheetDocument.Open(fileImportDto.FileDataStream, false))
             {
-                var dataTable = OpenSpreadSheetAndReadAllRows(document, headerRows);
-
-                var rowCount = 0;
-                foreach (DataRow row in dataTable.Rows)
+                var rows = GetAllRows(document, fileImportDto.NumberOfHeaderRows).ToList();
+                
+                var stringTablePart = document.WorkbookPart.SharedStringTablePart;
+                
+                var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
+                
+                foreach (var row in rows)
                 {
-                    rowCount++;
+                    foreach (var prop in fileImportDto.GetType().GetProperties().Where(pr => pr.GetCustomAttribute<ColumnAttribute>() != null)) 
+                    {
+                        var cell = GetCellByIndex(prop.GetCustomAttribute<ColumnAttribute>().Order, startIndex, row);
 
-                    var cellValues = Array.ConvertAll(row.ItemArray, x => x.ToString());
+                        var cellValue = GetCellValue(stringTablePart, cell);
+                        
+                        prop.SetValue(fileImportDto, cellValue);
+                    }
 
-                    var validationResult = _validator.Validate(cellValues);
+                    startIndex++;
+
+                    var validationResult = _validator.Validate(fileImportDto);
                     if (!validationResult.IsValid)
                     {
-                        var errorMessage = GetErrorMessage(rowCount, validationResult);
-                        _logger.LogError(errorMessage);
+                        LogErrorsAndWarnings(startIndex, validationResult);
                         continue;
                     }
 
-                    var dto = _dataParser.Parse(cellValues);
+                    var dto = _dataParser.Parse(fileImportDto);
                     dtos.AddRange(dto);
                 }
             }
@@ -61,15 +71,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
             return dtos;
         }
 
-        private static DataTable OpenSpreadSheetAndReadAllRows(SpreadsheetDocument document, int headerRows)
-        {
-            var allRows = GetAllRows(document).ToList();
-            var dt = CreateDataTable(document, headerRows, allRows);
-
-            return dt;
-        }
-
-        private static IEnumerable<Row> GetAllRows(SpreadsheetDocument document)
+        private static IEnumerable<Row> GetAllRows(SpreadsheetDocument document, int? headerRowIndex)
         {
             var workbookPart = document.WorkbookPart;
             var sheets = workbookPart.Workbook.GetFirstChild<Sheets>().Elements<Sheet>();
@@ -79,98 +81,108 @@ namespace Sfa.Tl.Matching.Application.FileReader
             var sheetData = workSheet.GetFirstChild<SheetData>();
             var rows = sheetData.Descendants<Row>();
 
+            if (headerRowIndex.HasValue)
+                rows = rows.Skip(headerRowIndex.Value);
+
             return rows;
         }
 
-        private static DataTable CreateDataTable(SpreadsheetDocument document, int headerRows, List<Row> allRows)
+        private static Cell GetCellByIndex(int cellIndex, int rowIndex, OpenXmlElement row)
         {
-            var dt = new DataTable();
-            CreateColumns(document, allRows, headerRows, dt);
-
-            var rowsWithoutHeader = allRows.Skip(headerRows);
-            foreach (var row in rowsWithoutHeader)
-            {
-                var rowToAdd = CreateDataRow(document, dt, row);
-                dt.Rows.Add(rowToAdd);
-            }
-
-            return dt;
+            var cellReference = GetCellReferenceByIndex(cellIndex, rowIndex);
+            return row.Descendants<Cell>().FirstOrDefault(cell => cell.CellReference == cellReference);
         }
 
-        private static void CreateColumns(SpreadsheetDocument document, IEnumerable<Row> allRows, int headerRows, DataTable dt)
+        private static string GetCellValue(SharedStringTablePart stringTablePart, CellType cell)
         {
-            foreach (var openXmlElement in allRows.ElementAt(headerRows - 1))
-            {
-                var cell = (Cell) openXmlElement;
-                dt.Columns.Add(GetCellValue(document, cell));
-            }
-        }
+            var cellValue = string.Empty;
 
-        private static DataRow CreateDataRow(SpreadsheetDocument document, DataTable dt, OpenXmlElement row)
-        {
-            var tempRow = dt.NewRow();
-            var columnIndex = 0;
-            foreach (var cell in row.Descendants<Cell>())
+            if (cell == null) return cellValue;
+
+            if (cell.DataType != null)
             {
-                var columnName = GetColumnName(cell.CellReference);
-                var cellColumnIndex = GetColumnIndexFromName(columnName);
-                cellColumnIndex--;
-                while (columnIndex < cellColumnIndex)
+                switch (cell.DataType.Value)
                 {
-                    tempRow[columnIndex] = "";
-                    columnIndex++;
+                    case CellValues.SharedString:
+                        cellValue = stringTablePart.SharedStringTable.ChildElements[int.Parse(cell.CellValue.InnerXml)].InnerText;
+                        break;
+                    case CellValues.InlineString:
+                        cellValue = cell.InnerText;
+                        break;
+                    case CellValues.Boolean:
+                    case CellValues.Number:
+                    case CellValues.Error:
+                    case CellValues.String:
+                    case CellValues.Date:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-
-                tempRow[columnIndex] = GetCellValue(document, cell);
-                columnIndex++;
             }
-
-            return tempRow;
-        }
-
-        private static string GetCellValue(SpreadsheetDocument document, CellType cell)
-        {
-            var stringTablePart = document.WorkbookPart.SharedStringTablePart;
-            if (cell.CellValue == null)
-                return "";
-
-            var value = cell.CellValue.InnerXml;
-            if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
+            else if (cell.CellValue != null)
             {
-                return stringTablePart.SharedStringTable.ChildElements[int.Parse(value)].InnerText;
+                cellValue = cell.CellValue.InnerXml;
             }
 
-            return value;
+            return cellValue;
         }
 
-        private static string GetColumnName(string cellReference)
+        public static string GetCellReferenceByIndex(int col, int row)
         {
-            var regex = new Regex("[A-Za-z]+");
-            var match = regex.Match(cellReference);
-
-            return match.Value;
-        }
-
-        private static int? GetColumnIndexFromName(string columnName)
-        {
-            var name = columnName;
-            var number = 0;
-            var pow = 1;
-            for (var i = name.Length - 1; i >= 0; i--)
+            col++;
+            var sb = new StringBuilder();
+            do
             {
-                number += (name[i] - 'A' + 1) * pow;
-                pow *= 26;
-            }
+                col--;
+                sb.Insert(0, (char)('A' + (col % 26)));
+                col /= 26;
 
-            return number;
+            } while (col > 0);
+            sb.Append(row + 1);
+            return sb.ToString();
         }
 
-        private static string GetErrorMessage(int rowCount, ValidationResult validationResult)
+        private void LogErrorsAndWarnings(int rowIndex, ValidationResult validationResult)
         {
-            var errorMessage =
-                $"Row Number={rowCount} failed with the following errors: \n\t{string.Join("\n\t", validationResult.Errors)}";
+            var errorMessage = $"Row Number={rowIndex} failed with the following errors: \n\t{string.Join("\n\t", validationResult.Errors)}";
 
-            return errorMessage;
+            //TODO Logic to check if its a warning or error
+            _logger.LogError(errorMessage);
         }
+
+        //public static string GetCellReferenceByIndex(int cellIndex)
+        //{
+        //    if (cellIndex <= 26)
+        //    {
+        //        return Convert.ToChar(cellIndex + 64).ToString();
+        //    }
+
+        //    var div = cellIndex / 26;
+
+        //    var mod = cellIndex % 26;
+
+        //    if (mod == 0)
+        //    {
+        //        mod = 26; div--;
+        //    }
+
+        //    return GetCellReferenceByIndex(div) + GetCellReferenceByIndex(mod);
+        //}
+
+        //public static int GetCellIndexByCellReference(string cellReference)
+        //{
+        //    var digits = new int[cellReference.Length];
+        //    for (var i = 0; i < cellReference.Length; ++i)
+        //    {
+        //        digits[i] = Convert.ToInt32(cellReference[i]) - 64;
+        //    }
+        //    var mul = 1; var res = 0;
+        //    for (var pos = digits.Length - 1; pos >= 0; --pos)
+        //    {
+        //        res += digits[pos] * mul;
+        //        mul *= 26;
+        //    }
+        //    return res;
+        //}
     }
 }

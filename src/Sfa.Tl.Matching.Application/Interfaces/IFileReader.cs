@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.IO;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
 {
-    public interface IFileReader<out TDto> where TDto : class, new()
+    public interface IFileReader<in TImportDto, out TDto> where TDto : class, new()  where TImportDto : FileImportDto
     {
-        IEnumerable<TDto> ValidateAndParseFile(Stream stream, int headerRows);
+        IEnumerable<TDto> ValidateAndParseFile(TImportDto fileImportDto);
     }
 }
