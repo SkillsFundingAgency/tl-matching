@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Provider]
 (
-	[Id] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[UkPrn] BIGINT NOT NULL,
 	[Name] NVARCHAR(400) NOT NULL,
 	[OfstedRating] INT NOT NULL,
@@ -12,5 +12,10 @@
 	[SecondaryContact] NVARCHAR(100) NOT NULL,
 	[SecondaryContactEmail] VARCHAR(320) NOT NULL,
 	[SecondaryContactPhone] VARCHAR(150) NULL,
-	[Source] VARCHAR(50) NOT NULL
+	[Source] VARCHAR(50) NOT NULL,
+	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
+	[CreatedBy] NVARCHAR(50) NULL, 
+	[ModifiedOn] DATETIME2 NULL, 
+	[ModifiedBy] NVARCHAR(50) NULL
+	CONSTRAINT [PK_Provider] PRIMARY KEY ([Id]),
 )

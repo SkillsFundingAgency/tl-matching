@@ -1,12 +1,9 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
-    public class Employer
+    public class Employer : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
         public Guid CrmId { get; set; }
         public string CompanyName { get; set; }
         public string AlsoKnownAs { get; set; }
@@ -17,5 +14,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string Email { get; set; }
         public string PostCode { get; set; }
         public string Owner { get; set; }
+        
     }
 }

@@ -11,4 +11,9 @@
 	[Email] VARCHAR(320) NULL,
 	[PostCode] VARCHAR(10) NOT NULL,
 	[Owner] NVARCHAR(150) NOT NULL,
+	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
+	[CreatedBy] NVARCHAR(50) NULL, 
+	[ModifiedOn] DATETIME2 NULL, 
+	[ModifiedBy] NVARCHAR(50) NULL, 
+    CONSTRAINT [PK_Employer] PRIMARY KEY ([Id])
 )
