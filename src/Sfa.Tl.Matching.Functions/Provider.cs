@@ -24,7 +24,6 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-
             var createdRecords = await providerService.ImportProvider(new ProviderFileImportDto { FileDataStream = stream });
             stopwatch.Stop();
 

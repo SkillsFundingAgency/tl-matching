@@ -27,8 +27,7 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRecords = 0;
-            createdRecords = await providerVenueService.ImportProviderVenue(new ProviderVenueFileImportDto { FileDataStream = stream });
+            var createdRecords = await providerVenueService.ImportProviderVenue(new ProviderVenueFileImportDto { FileDataStream = stream });
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} processed blob\n" +

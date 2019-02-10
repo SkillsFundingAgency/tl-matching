@@ -25,13 +25,12 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-            //var createdRecords = 
-            await employerService.ImportEmployer(new EmployerFileImportDto { FileDataStream = stream });
+            var createdRecords = await employerService.ImportEmployer(new EmployerFileImportDto { FileDataStream = stream });
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
                                   $"\tName:{name}\n" +
-                                  //$"\tRows saved: {createdRecords}\n" +
+                                  $"\tRows saved: {createdRecords}\n" +
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
             logger.LogInformation($"Processing Employer blob\n Name:{name} \n Size: {stream.Length} Bytes");
         }
