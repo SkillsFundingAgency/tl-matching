@@ -12,7 +12,7 @@
 //        [SetUp]
 //        public void Setup()
 //        {
-//            var viewModel = new DataImportDto();
+//            var viewModel = new DataUploadDto();
 //            var validationContext = new ValidationContext(viewModel, null, null);
 //            Validator.TryValidateObject(viewModel, validationContext, _results, true);
 //        }

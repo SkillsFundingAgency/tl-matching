@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _configuration = configuration;
         }
 
-        public async Task Upload(DataImportDto dto)
+        public async Task Upload(DataUploadDto dto)
         {
             var blobContainer = await GetContainer(dto.ImportType.ToString().ToLowerInvariant());
 

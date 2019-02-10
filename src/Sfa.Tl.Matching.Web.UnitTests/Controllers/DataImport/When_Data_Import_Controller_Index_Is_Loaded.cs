@@ -15,7 +15,7 @@
 //        [SetUp]
 //        public void Setup()
 //        {
-//            var viewModel = new DataImportDto();
+//            var viewModel = new DataUploadDto();
 //            viewModel.DataImportTypeViewModels.Add(new DataImportParametersViewModel
 //            {
 //                Id = 1,
@@ -64,10 +64,10 @@
 //            Assert.Greater(viewModel.DataImportTypeViewModels.Count, 0);
 //        }
 
-//        private DataImportDto GetViewModel()
+//        private DataUploadDto GetViewModel()
 //        {
 //            var viewResult = _result as ViewResult;
-//            var viewModel = viewResult?.Model as DataImportDto;
+//            var viewModel = viewResult?.Model as DataUploadDto;
 
 //            return viewModel;
 //        }

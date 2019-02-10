@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
     {
         public ViewModelMapperProfile()
         {
-            CreateMap<DataImportParametersViewModel, DataImportDto>()
+            CreateMap<DataImportParametersViewModel, DataUploadDto>()
                 .ForMember(dest => dest.FileName, opt => opt.MapFrom<FileNameResolver>())
                 .ForMember(dest => dest.ImportType, opt => opt.MapFrom(source => source.SelectedImportType))
                 .ForMember(dest => dest.ContentType, opt => opt.MapFrom(source => source.File.ContentType))

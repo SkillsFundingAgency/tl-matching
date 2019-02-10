@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var dto = _mapper.Map<DataImportDto>(viewModel);
+                var dto = _mapper.Map<DataUploadDto>(viewModel);
 
                 await _dataBlobUploadService.Upload(dto);
 

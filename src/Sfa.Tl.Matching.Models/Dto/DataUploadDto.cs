@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class DataImportDto
+    public class DataUploadDto
     {
         public DataImportType ImportType { get; set; }
         public string ContentType { get; set; }
