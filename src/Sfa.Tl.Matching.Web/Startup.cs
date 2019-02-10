@@ -150,7 +150,7 @@ namespace Sfa.Tl.Matching.Web
                 new ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>(
                     provider.GetService<ILogger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>>(),
                     provider.GetService<IDataParser<RoutePathMappingDto>>(),
-                    (IValidator<FileImportDto>)provider.GetServices(typeof(IValidator<QualificationRoutePathMappingFileImportDto>)).Single(t => t.GetType() == typeof(QualificationRoutePathMappingDataValidator))));
+                    (IValidator<QualificationRoutePathMappingFileImportDto>)provider.GetServices(typeof(IValidator<QualificationRoutePathMappingFileImportDto>)).Single(t => t.GetType() == typeof(QualificationRoutePathMappingDataValidator))));
         }
         
         private static void RegisterRepositories(IServiceCollection services)

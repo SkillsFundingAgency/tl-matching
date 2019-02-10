@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.Azure.WebJobs.Host.Config;
@@ -77,7 +79,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 new ExcelFileReader<EmployerFileImportDto, EmployerDto>(
                     provider.GetService<ILogger<ExcelFileReader<EmployerFileImportDto, EmployerDto>>>(),
                     provider.GetService<IDataParser<EmployerDto>>(),
-                    (IValidator<FileImportDto>)provider.GetServices(typeof(IValidator<EmployerFileImportDto>)).Single(t => t.GetType() == typeof(EmployerDataValidator))));
+                    (IValidator<EmployerFileImportDto>)provider.GetServices(typeof(IValidator<EmployerFileImportDto>)).Single(t => t.GetType() == typeof(EmployerDataValidator))));
         }
 
         private static void RegisterProviderFileReader(IServiceCollection services)
@@ -89,7 +91,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 new ExcelFileReader<ProviderFileImportDto, ProviderDto>(
                     provider.GetService<ILogger<ExcelFileReader<ProviderFileImportDto, ProviderDto>>>(),
                     provider.GetService<IDataParser<ProviderDto>>(),
-                    (IValidator<FileImportDto>)provider.GetServices(typeof(IValidator<ProviderFileImportDto>)).Single(t => t.GetType() == typeof(ProviderDataValidator))));
+                    (IValidator<ProviderFileImportDto>)provider.GetServices(typeof(IValidator<ProviderFileImportDto>)).Single(t => t.GetType() == typeof(ProviderDataValidator))));
         }
 
         private static void RegisterProviderVenueFileReader(IServiceCollection services)
@@ -101,7 +103,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(
                     provider.GetService<ILogger<ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>>>(),
                     provider.GetService<IDataParser<ProviderVenueDto>>(),
-                    (IValidator<FileImportDto>)provider.GetServices(typeof(IValidator<ProviderVenueFileImportDto>)).Single(t => t.GetType() == typeof(ProviderVenueDataValidator))));
+                    (IValidator<ProviderVenueFileImportDto>)provider.GetServices(typeof(IValidator<ProviderVenueFileImportDto>)).Single(t => t.GetType() == typeof(ProviderVenueDataValidator))));
         }
 
         private static void RegisterRoutePathMappingFileReader(IServiceCollection services)
@@ -113,9 +115,9 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 new ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>(
                     provider.GetService<ILogger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>>(),
                     provider.GetService<IDataParser<RoutePathMappingDto>>(),
-                    (IValidator<FileImportDto>)provider.GetServices(typeof(IValidator<QualificationRoutePathMappingFileImportDto>)).Single(t => t.GetType() == typeof(QualificationRoutePathMappingDataValidator))));
+                    (IValidator<QualificationRoutePathMappingFileImportDto>)provider.GetServices(typeof(IValidator<QualificationRoutePathMappingFileImportDto>)).Single(t => t.GetType() == typeof(QualificationRoutePathMappingDataValidator))));
         }
-        
+
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
