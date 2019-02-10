@@ -14,18 +14,10 @@ namespace Sfa.Tl.Matching.Data
         {
         }
 
-        public virtual DbSet<Course> Course { get; set; }
-        public virtual DbSet<EmailTemplate> EmailTemplate { get; set; }
         public virtual DbSet<Employer> Employer { get; set; }
-        public virtual DbSet<IndustryPlacement> IndustryPlacement { get; set; }
-        public virtual DbSet<LocalAuthorityMapping> LocalAuthorityMapping { get; set; }
-        public virtual DbSet<NotificationHistory> NotificationHistory { get; set; }
         public virtual DbSet<Path> Path { get; set; }
         public virtual DbSet<Provider> Provider { get; set; }
-        public virtual DbSet<ProviderCourses> ProviderCourses { get; set; }
         public virtual DbSet<Route> Route { get; set; }
-        public virtual DbSet<RoutePath> RoutePath { get; set; }
         public virtual DbSet<RoutePathMapping> RoutePathMapping { get; set; }
-        public virtual DbSet<TemplatePlaceholder> TemplatePlaceholder { get; set; }
     }
 }

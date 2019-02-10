@@ -67,17 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
-    <Build Include="Tables\Contact.sql" />
-    <Build Include="Tables\Address.sql" />
     <Build Include="Tables\Provider.sql" />
-    <Build Include="Tables\EmailTemplate.sql" />
-    <Build Include="Tables\TemplatePlaceholder.sql" />
-    <Build Include="Tables\NotificationHistory.sql" />
-    <Build Include="Tables\Course.sql" />
-    <Build Include="Tables\RoutePath.sql" />
-    <Build Include="Tables\ProviderCourses.sql" />
-    <Build Include="Tables\IndustryPlacement.sql" />
-    <Build Include="Tables\LocalAuthorityMapping.sql" />
     <Build Include="Tables\Route.sql" />
     <Build Include="Tables\Path.sql" />
     <None Include="PostDeployment\Seed Routes.sql" />
