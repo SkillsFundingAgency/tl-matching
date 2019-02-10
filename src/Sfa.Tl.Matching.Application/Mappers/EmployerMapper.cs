@@ -8,7 +8,12 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public EmployerMapper()
         {
             CreateMap<EmployerDto, Domain.Models.Employer>()
-                .ForMember(dest => dest.Id, mapping => mapping.Ignore());
+                .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                ;
         }
     }
 }

@@ -3,11 +3,11 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
-    public class RoutePathMappingMapper : Profile
+    public class ProviderVenueMapper : Profile
     {
-        public RoutePathMappingMapper()
+        public ProviderVenueMapper()
         {
-            CreateMap<RoutePathMappingDto, Domain.Models.RoutePathMapping>()
+            CreateMap<ProviderVenueDto, Domain.Models.ProviderVenue>()
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.Ignore())
