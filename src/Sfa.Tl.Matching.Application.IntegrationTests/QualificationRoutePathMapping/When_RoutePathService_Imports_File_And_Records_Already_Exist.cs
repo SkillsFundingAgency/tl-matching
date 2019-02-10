@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMapping
 {
@@ -24,11 +25,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
                 PathId = 1
             });
             await MatchingDbContext.SaveChangesAsync();
-            
+
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                _createdRecordCount = await RouteMappingService.ImportQualificationPathMapping(stream);
+                _createdRecordCount = await RouteMappingService.ImportQualificationPathMapping(new QualificationRoutePathMappingFileImportDto { FileDataStream = stream });
             }
         }
 

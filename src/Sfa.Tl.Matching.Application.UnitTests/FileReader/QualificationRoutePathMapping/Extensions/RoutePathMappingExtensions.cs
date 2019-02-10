@@ -1,32 +1,35 @@
-﻿using Sfa.Tl.Matching.Models.Enums;
+﻿using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Extensions
 {
     public static class RoutePathMappingExtensions
     {
-        public static string[] ToStringArray(this Domain.Models.RoutePathMapping provider)
+        public static QualificationRoutePathMappingFileImportDto ToDto(this Domain.Models.RoutePathMapping provider)
         {
-            var routePathMappingArray = new[]
+            var routePathMappingArray = new QualificationRoutePathMappingFileImportDto
             {
-                provider.LarsId,
-                provider.Title,
-                provider.ShortTitle,
-                provider.PathId.ToString()
+                LarsId = provider.LarsId,
+                Title = provider.Title,
+                ShortTitle = provider.ShortTitle,
+                Accounting = provider.PathId.ToString()
             };
 
             return routePathMappingArray;
         }
 
-        public static string[] ToStringArray(this Domain.Models.RoutePathMapping provider, int numberOfElements)
+        public static QualificationRoutePathMappingFileImportDto[] ToDto(this Domain.Models.RoutePathMapping provider, int numberOfElements)
         {
-            var routePathMappingArray = new string[numberOfElements];
+            var routePathMappingArray = new QualificationRoutePathMappingFileImportDto[numberOfElements];
 
-            new[] 
+            new[]
                 {
-                    provider.LarsId,
-                    provider.Title,
-                    provider.ShortTitle,
-                    provider.PathId.ToString()
+                    new QualificationRoutePathMappingFileImportDto
+                        {
+                            LarsId = provider.LarsId,
+                            Title = provider.Title,
+                            ShortTitle = provider.ShortTitle,
+                            Accounting = provider.PathId.ToString()
+                        }
                 }
                 .CopyTo(routePathMappingArray, 0);
 

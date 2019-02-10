@@ -1,6 +1,4 @@
-﻿using Sfa.Tl.Matching.Models.Enums;
-
-namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants
+﻿namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants
 {
     internal static class RoutePathMappingConstants
     {

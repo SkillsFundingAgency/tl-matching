@@ -16,23 +16,20 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
 {
     public class ProviderTestBase
     {
-        internal readonly IProviderService _providerService;
-        internal MatchingDbContext _matchingDbContext;
+        internal readonly IProviderService ProviderService;
+        internal MatchingDbContext MatchingDbContext;
 
         public ProviderTestBase()
         {
             var loggerRepository = new Logger<ProviderRepository>(
                 new NullLoggerFactory());
 
-            var loggerImportService = new Logger<DataImportService<ProviderDto>>(
+            var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderFileImportDto, ProviderDto>>(
                 new NullLoggerFactory());
 
-            var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderDto>>(
-                new NullLoggerFactory());
+            MatchingDbContext = TestConfiguration.GetDbContext();
 
-            _matchingDbContext = TestConfiguration.GetDbContext();
-
-            var repository = new ProviderRepository(loggerRepository, _matchingDbContext);
+            var repository = new ProviderRepository(loggerRepository, MatchingDbContext);
             var dataValidator = new ProviderDataValidator(repository);
             var dataParser = new ProviderDataParser();
 
@@ -42,18 +39,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
 
             var mapper = new Mapper(config);
 
-            _providerService = new ProviderService(
-                mapper,
-                new DataImportService<ProviderDto>(
-                    loggerImportService,
-                    excelFileReader),
-                repository);
+            ProviderService = new ProviderService(mapper, excelFileReader, repository);
         }
 
         internal async Task ResetData()
         {
-            await _matchingDbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.Provider");
-            await _matchingDbContext.SaveChangesAsync();
+            await MatchingDbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.Provider");
+            await MatchingDbContext.SaveChangesAsync();
         }
     }
 }

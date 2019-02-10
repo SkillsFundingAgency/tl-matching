@@ -1,13 +1,10 @@
 ﻿using FluentValidation.Results;
-using Humanizer;
 using NSubstitute;
 using NUnit.Framework;
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Validation
 {
@@ -19,13 +16,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         public void Setup()
         {
             var routePathMapping = new ValidRoutePathMappingBuilder().Build();
-            var routePathMappingStringArray 
-                = routePathMapping.ToStringArray(10);
+            var dto = routePathMapping.ToDto();
 
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
 
-            var validator = new RoutePathMappingDataValidator(repository);
-            _validationResult = validator.Validate(routePathMappingStringArray);
+            var validator = new QualificationRoutePathMappingDataValidator(repository);
+            _validationResult = validator.Validate(dto);
         }
 
         [Test]

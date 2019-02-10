@@ -18,13 +18,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         public void Setup()
         {
             var routePathMapping = new ValidRoutePathMappingBuilder().Build();
-            var routePathMappingStringArray = routePathMapping.ToStringArray();
-            routePathMappingStringArray[RoutePathMappingColumnIndex.Title] = "";
+            var dto = routePathMapping.ToDto();
+            dto.Title = "";
 
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
 
-            var validator = new RoutePathMappingDataValidator(repository);
-            _validationResult = validator.Validate(routePathMappingStringArray);
+            var validator = new QualificationRoutePathMappingDataValidator(repository);
+            _validationResult = validator.Validate(dto);
         }
 
         [Test]
@@ -41,6 +41,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 
         [Test]
         public void Then_Error_Message_Is_MissingMandatoryData() =>
-            Assert.AreEqual($"'{nameof(RoutePathMappingColumnIndex.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}", _validationResult.Errors[0].ErrorMessage);
+            Assert.AreEqual($"'Title' - {ValidationErrorCode.MissingMandatoryData.Humanize()}", _validationResult.Errors[0].ErrorMessage);
     }
 }

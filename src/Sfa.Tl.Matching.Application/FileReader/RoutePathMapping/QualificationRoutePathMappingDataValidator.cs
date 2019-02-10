@@ -1,58 +1,57 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using FluentValidation;
 using Humanizer;
+using Sfa.Tl.Matching.Application.FileReader.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
 {
     public class QualificationRoutePathMappingDataValidator : AbstractValidator<QualificationRoutePathMappingFileImportDto>
     {
-        private const int MinimumNumberOfColumns = 4;
         private const int MaximumTitleLength = 250;
         private const int MaximumShortTitleLength = 50;
 
-        public RoutePathMappingDataValidator(IRepository<Domain.Models.RoutePathMapping> repository)
+        public QualificationRoutePathMappingDataValidator(IRepository<Domain.Models.RoutePathMapping> repository)
         {
-            RuleFor(x => x)
-                .Must(x => x.Length >= MinimumNumberOfColumns)
+            RuleFor(dto => dto)
+                .Must(MustHaveAtlEastOnePathId)
                 .WithErrorCode(ValidationErrorCode.WrongNumberOfColumns.ToString())
                 .WithMessage(ValidationErrorCode.WrongNumberOfColumns.Humanize());
 
-            When(x => x.Length >= MinimumNumberOfColumns, () =>
-            {
-                RuleFor(x => x[(int) RoutePathMappingColumnIndex.LarsId])
-                    .NotEmpty()
+            RuleFor(dto => dto.LarsId)
+                .NotNull()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage(
-                        $"'{nameof(RoutePathMappingColumnIndex.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
-                    
-                    .Matches(ValidationConstants.LarsIdRegex)
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .NotEmpty()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .Matches(ValidationConstants.LarsIdRegex)
                     .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                    .WithMessage(
-                        $"'{nameof(RoutePathMappingColumnIndex.LarsId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
-                    
-                    .MustAsync((x, cancellation) => CanLarsIdBeAdded(repository, x))
-                    .WithErrorCode(ValidationErrorCode.RecordExists.ToString())
-                    .WithMessage(
-                        $"'{nameof(RoutePathMappingColumnIndex.LarsId)}' - {ValidationErrorCode.RecordExists.Humanize()}");
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
+                .MustAsync((x, cancellation) => CanLarsIdBeAdded(repository, x))
+                    .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
 
-                RuleFor(x => x[RoutePathMappingColumnIndex.Title])
-                    .NotEmpty()
+            RuleFor(dto => dto.Title)
+                .NotNull()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage(
-                        $"'{nameof(RoutePathMappingColumnIndex.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .NotEmpty()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
-                RuleFor(x => x[RoutePathMappingColumnIndex.Title]).Length(0, MaximumTitleLength)
-                    .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
-                    .WithMessage(
-                        $"'{nameof(RoutePathMappingColumnIndex.Title)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
+            RuleFor(dto => dto.Title).Length(0, MaximumTitleLength)
+                .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
+                .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
 
-                RuleFor(x => x[RoutePathMappingColumnIndex.ShortTitle]).Length(0, MaximumShortTitleLength)
-                    .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
-                    .WithMessage(
-                        $"'{nameof(RoutePathMappingColumnIndex.ShortTitle)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
-
-            });
+            RuleFor(dto => dto.ShortTitle).Length(0, MaximumShortTitleLength)
+                .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
+                .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.ShortTitle)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
         }
 
         private async Task<bool> CanLarsIdBeAdded(IRepository<Domain.Models.RoutePathMapping> repository, string larsId)
@@ -60,6 +59,18 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
             var routePathMapping = await repository.GetSingleOrDefault(p => p.LarsId == larsId);
 
             return routePathMapping == null;
+        }
+
+        private bool MustHaveAtlEastOnePathId(QualificationRoutePathMappingFileImportDto data)
+        {
+            var pathIds = data.GetType().GetProperties()
+                .Where(pr => pr.GetCustomAttribute<ColumnAttribute>() != null)
+                .SkipWhile(info => info.Name == nameof(QualificationRoutePathMappingFileImportDto.LarsId) ||
+                                   info.Name == nameof(QualificationRoutePathMappingFileImportDto.Title) ||
+                                   info.Name == nameof(QualificationRoutePathMappingFileImportDto.ShortTitle))
+                .Where(pr => pr.GetValue(data) != null && !string.IsNullOrWhiteSpace(pr.GetValue(data).ToString())).ToList();
+
+            return pathIds.Any();
         }
     }
 }

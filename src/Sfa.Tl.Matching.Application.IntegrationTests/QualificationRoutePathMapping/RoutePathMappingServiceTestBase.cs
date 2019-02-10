@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,9 +21,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
         public virtual async Task Setup()
         {
             var loggerRepository = new Logger<RoutePathMappingRepository>(new NullLoggerFactory());
-            var loggerExcelFileReader = new Logger<ExcelFileReader<RoutePathMappingDto>>(new NullLoggerFactory());
+            var loggerExcelFileReader = new Logger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>(new NullLoggerFactory());
             var loggerRoutePathService = new Logger<RoutePathService>(new NullLoggerFactory());
-            var loggerDataImportService = new Logger<DataImportService<RoutePathMappingDto>>(new NullLoggerFactory());
 
             MatchingDbContext = TestConfiguration.GetDbContext();
 
@@ -33,22 +30,18 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
 
             var repository = new RoutePathMappingRepository(loggerRepository, MatchingDbContext);
             var routePathRepository = new RoutePathRepository(MatchingDbContext);
-            var dataValidator = new RoutePathMappingDataValidator(repository);
-            var dataParser = new RoutePathMappingDataParser();
+            var dataValidator = new QualificationRoutePathMappingDataValidator(repository);
+            var dataParser = new QualificationRoutePathMappingDataParser();
 
-            var excelFileReader = new ExcelFileReader<RoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator);
 
             var config = new MapperConfiguration(c => c.AddProfile<RoutePathMappingMapper>());
             var mapper = new Mapper(config);
 
-            var dataImportService = new DataImportService<RoutePathMappingDto>(
-                loggerDataImportService,
-                excelFileReader);
-
             RouteMappingService = new RoutePathService(
                 loggerRoutePathService,
                 mapper,
-                dataImportService,
+                excelFileReader,
                 routePathRepository,
                 repository);
         }

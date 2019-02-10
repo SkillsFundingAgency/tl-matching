@@ -18,13 +18,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         public void Setup()
         {
             var routePathMapping = new ValidRoutePathMappingBuilder().Build();
-            var routePathMappingStringArray = routePathMapping.ToStringArray();
-            routePathMappingStringArray[(int)RoutePathMappingColumnIndex.LarsId] = "12345";
+            var dto = routePathMapping.ToDto();
+            dto.LarsId = "12345";
 
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
 
-            var validator = new RoutePathMappingDataValidator(repository);
-            _validationResult = validator.Validate(routePathMappingStringArray);
+            var validator = new QualificationRoutePathMappingDataValidator(repository);
+            _validationResult = validator.Validate(dto);
         }
 
         [Test]

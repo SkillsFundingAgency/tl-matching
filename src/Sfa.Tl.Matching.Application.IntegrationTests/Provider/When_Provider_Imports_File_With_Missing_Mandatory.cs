@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
 {
@@ -17,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                _createdRecordCount = _providerService.ImportProvider(stream).Result;
+                _createdRecordCount = ProviderService.ImportProvider(new ProviderFileImportDto { FileDataStream = stream }).Result;
             }
         }
 

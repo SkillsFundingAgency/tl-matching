@@ -23,8 +23,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
             repository.GetSingleOrDefault(Arg.Is<Func<Domain.Models.RoutePathMapping, bool>>(p => p(routePathMapping))).Returns(routePathMapping);
 
-            var validator = new RoutePathMappingDataValidator(repository);
-            _validationResult = validator.Validate(routePathMapping.ToStringArray());
+            var validator = new QualificationRoutePathMappingDataValidator(repository);
+            _validationResult = validator.Validate(routePathMapping.ToDto());
         }
 
         [Test]
@@ -37,11 +37,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 
         [Test]
         public void Then_Error_Code_Is_RecordExists() =>
-            Assert.AreEqual(ValidationErrorCode.RecordExists.ToString(), 
+            Assert.AreEqual(ValidationErrorCode.RecordAlreadyExists.ToString(), 
                 _validationResult.Errors[0].ErrorCode);
 
         [Test]
         public void Then_Error_Message_Is_RecordExists() =>
-            Assert.AreEqual($"'{nameof(Domain.Models.RoutePathMapping.LarsId)}' - {ValidationErrorCode.RecordExists.Humanize()}", _validationResult.Errors[0].ErrorMessage);
+            Assert.AreEqual($"'{nameof(Domain.Models.RoutePathMapping.LarsId)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}", _validationResult.Errors[0].ErrorMessage);
     }
 }

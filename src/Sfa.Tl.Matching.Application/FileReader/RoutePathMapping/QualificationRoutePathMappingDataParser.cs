@@ -14,15 +14,14 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
         {
             if (!(dto is QualificationRoutePathMappingFileImportDto data)) return null;
 
-            var props = data.GetType().GetProperties();
-
-            var props1 = props.Where(pr => pr.GetCustomAttribute<ColumnAttribute>() != null).ToList();
-            var props2 = props1.SkipWhile(info => info.Name == nameof(QualificationRoutePathMappingFileImportDto.LarsId) ||
+            var pathIds = data.GetType().GetProperties()
+                .Where(pr => pr.GetCustomAttribute<ColumnAttribute>() != null)
+                .SkipWhile(info => info.Name == nameof(QualificationRoutePathMappingFileImportDto.LarsId) ||
                                                   info.Name == nameof(QualificationRoutePathMappingFileImportDto.Title) ||
-                                                  info.Name == nameof(QualificationRoutePathMappingFileImportDto.ShortTitle)).ToList();
-            var props3 = props2.Where(pr => pr.GetValue(data) != null && !string.IsNullOrWhiteSpace(pr.GetValue(data).ToString())).ToList();
+                                                  info.Name == nameof(QualificationRoutePathMappingFileImportDto.ShortTitle))
+                .Where(pr => pr.GetValue(data) != null && !string.IsNullOrWhiteSpace(pr.GetValue(data).ToString())).ToList();
 
-            var pathvalues = props3.Select(prop =>
+            var pathvalues = pathIds.Select(prop =>
                     new RoutePathMappingDto
                     {
                         LarsId = data.LarsId,

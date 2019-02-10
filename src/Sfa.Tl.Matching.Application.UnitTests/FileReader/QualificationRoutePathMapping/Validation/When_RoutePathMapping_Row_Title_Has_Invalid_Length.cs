@@ -18,14 +18,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         public void Setup()
         {
             var routePathMapping = new ValidRoutePathMappingBuilder().Build();
-            var routePathMappingStringArray = routePathMapping.ToStringArray();
-            routePathMappingStringArray[RoutePathMappingColumnIndex.Title] 
-                = new string('X', 251);
+            var dto = routePathMapping.ToDto();
+            dto.Title  = new string('X', 251);
 
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
 
-            var validator = new RoutePathMappingDataValidator(repository);
-            _validationResult = validator.Validate(routePathMappingStringArray);
+            var validator = new QualificationRoutePathMappingDataValidator(repository);
+            _validationResult = validator.Validate(dto);
         }
 
         [Test]
@@ -42,6 +41,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 
         [Test]
         public void Then_Error_Message_Is_InvalidLength() =>
-            Assert.AreEqual($"'{nameof(RoutePathMappingColumnIndex.Title)}' - {ValidationErrorCode.InvalidLength.Humanize()}", _validationResult.Errors[0].ErrorMessage);
+            Assert.AreEqual($"'Title' - {ValidationErrorCode.InvalidLength.Humanize()}", _validationResult.Errors[0].ErrorMessage);
     }
 }
