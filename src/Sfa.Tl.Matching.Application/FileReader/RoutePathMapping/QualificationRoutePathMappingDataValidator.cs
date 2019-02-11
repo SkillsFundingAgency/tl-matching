@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
         public QualificationRoutePathMappingDataValidator(IRepository<Domain.Models.RoutePathMapping> repository)
         {
             RuleFor(dto => dto)
-                .Must(MustHaveAtlEastOnePathId)
+                .Must(MustHaveAtLeastOnePathId)
                 .WithErrorCode(ValidationErrorCode.WrongNumberOfColumns.ToString())
                 .WithMessage(ValidationErrorCode.WrongNumberOfColumns.Humanize());
 
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
             return routePathMapping == null || !routePathMapping.Any();
         }
 
-        private bool MustHaveAtlEastOnePathId(QualificationRoutePathMappingFileImportDto data)
+        private bool MustHaveAtLeastOnePathId(QualificationRoutePathMappingFileImportDto data)
         {
             var pathIds = data.GetType().GetProperties()
                 .Where(pr => pr.GetCustomAttribute<ColumnAttribute>() != null)
