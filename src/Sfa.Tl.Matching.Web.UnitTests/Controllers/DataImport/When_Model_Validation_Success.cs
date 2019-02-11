@@ -1,12 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-using Sfa.Tl.Matching.Models;
-using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.Enums;
-using Sfa.Tl.Matching.Models.ViewModel;
-using Xunit;
-
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 {
     public class When_Model_Validation_Success

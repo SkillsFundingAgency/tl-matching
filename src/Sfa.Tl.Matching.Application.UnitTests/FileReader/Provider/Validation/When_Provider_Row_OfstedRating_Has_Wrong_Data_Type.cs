@@ -2,28 +2,19 @@
 using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
-using NSubstitute;
-
-using Sfa.Tl.Matching.Application.FileReader.Provider;
-using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 {
-    public class When_Provider_Row_OfstedRating_Has_Wrong_Data_Type
+    public class When_Provider_Row_OfstedRating_Has_Wrong_Data_Type : IClassFixture<ProviderFileImportFixture>
     {
-        private ValidationResult _validationResult;
-
-        public void Setup()
+        private readonly ValidationResult _validationResult;
+        public When_Provider_Row_OfstedRating_Has_Wrong_Data_Type(ProviderFileImportFixture fixture)
         {
-            var providerStringArray = new ProviderFileImportDto { OfstedRating = "A" };
+            fixture.ProviderFileImportDto.OfstedRating = "A";
 
-            var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
-
-            var validator = new ProviderDataValidator(repository);
-            _validationResult = validator.Validate(providerStringArray);
+            _validationResult = fixture.ProviderDataValidator.Validate(fixture.ProviderFileImportDto);
         }
 
         [Fact]
@@ -31,8 +22,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
             _validationResult.IsValid.Should().BeFalse();
 
         [Fact]
-        public void Then_Error_Count_Is_21() =>
-            _validationResult.Errors.Count.Should().Be(21);
+        public void Then_Error_Count_Is_One() =>
+            _validationResult.Errors.Count.Should().Be(1);
 
         [Fact]
         public void Then_Error_Code_Is_WrongDataType() =>

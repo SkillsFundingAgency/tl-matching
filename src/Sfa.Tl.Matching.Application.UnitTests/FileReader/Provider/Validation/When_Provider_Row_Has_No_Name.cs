@@ -1,28 +1,21 @@
 ﻿using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
-using NSubstitute;
-
-using Sfa.Tl.Matching.Application.FileReader.Provider;
-using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 {
-    public class When_Provider_Row_Has_No_Name
+    public class When_Provider_Row_Has_No_Name : IClassFixture<ProviderFileImportFixture>
     {
-        private ValidationResult _validationResult;
+        private readonly ValidationResult _validationResult;
 
-        public void Setup()
+        public When_Provider_Row_Has_No_Name(ProviderFileImportFixture fixture)
         {
-            var providerStringArray = new ProviderFileImportDto { ProviderName = "" };
+            fixture.ProviderFileImportDto.ProviderName = null;
 
-            var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
-
-            var validator = new ProviderDataValidator(repository);
-            _validationResult = validator.Validate(providerStringArray);
+            _validationResult = fixture.ProviderDataValidator.Validate(fixture.ProviderFileImportDto);
         }
 
         [Fact]
@@ -30,8 +23,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
             Assert.False(_validationResult.IsValid);
 
         [Fact]
-        public void Then_Error_Count_Is_One() =>
-            _validationResult.Errors.Count.Should().Be(22);
+        public void Then_Error_Count_Is_Two() =>
+            _validationResult.Errors.Count.Should().Be(2);
 
         [Fact]
         public void Then_Error_Code_Is_MissingMandatoryData() =>
@@ -40,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         [Fact]
         public void Then_Error_Message_Is_MissingMandatoryData() =>
-            _validationResult.Errors[2].ErrorMessage.Should()
+            _validationResult.Errors[0].ErrorMessage.Should()
                 .Be($"'{nameof(ProviderFileImportDto.ProviderName)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
     }
 }

@@ -1,28 +1,19 @@
 ﻿using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
-using NSubstitute;
-
-using Sfa.Tl.Matching.Application.FileReader.Provider;
-using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 {
-    public class When_Provider_Row_UkPrn_Has_Invalid_Format
+    public class When_Provider_Row_UkPrn_Has_Invalid_Format : IClassFixture<ProviderFileImportFixture>
     {
-        private ValidationResult _validationResult;
+        private readonly ValidationResult _validationResult;
 
-        public void Setup()
+        public When_Provider_Row_UkPrn_Has_Invalid_Format(ProviderFileImportFixture fixture)
         {
-            var dto = new ProviderFileImportDto { UkPrn = "159856587455885" };
-
-            var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
-
-            var validator = new ProviderDataValidator(repository);
-            _validationResult = validator.Validate(dto);
+            fixture.ProviderFileImportDto.UkPrn = "159856587455885";
+            _validationResult = fixture.ProviderDataValidator.Validate(fixture.ProviderFileImportDto);
         }
 
         [Fact]
@@ -30,8 +21,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
             _validationResult.IsValid.Should().BeFalse();
 
         [Fact]
-        public void Then_Error_Count_Is_22() =>
-            _validationResult.Errors.Count.Should().Be(22);
+        public void Then_Error_Count_Is_One() =>
+            _validationResult.Errors.Count.Should().Be(1);
 
         [Fact]
         public void Then_Error_Code_Is_InvalidFormat() =>

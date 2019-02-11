@@ -1,9 +1,3 @@
-
-using Sfa.Tl.Matching.Models;
-using Sfa.Tl.Matching.Models.Enums;
-using Sfa.Tl.Matching.Models.ViewModel;
-using Xunit;
-
 namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.DataUploadDto
 {
     public class When_ViewModel_Is_Populated_Successfully

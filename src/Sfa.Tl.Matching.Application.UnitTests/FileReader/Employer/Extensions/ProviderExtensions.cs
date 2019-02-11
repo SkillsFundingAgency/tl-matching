@@ -1,7 +1,4 @@
-﻿using Humanizer;
-using Sfa.Tl.Matching.Models.Enums;
-
-namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Extensions
+﻿namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Extensions
 {
     public static class EmployerExtensions
     {

@@ -1,25 +1,19 @@
 ﻿using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
-using NSubstitute;
-
-using Sfa.Tl.Matching.Application.FileReader.Provider;
-using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 {
-    public class When_Provider_Row_Has_Wrong_Number_Of_Columns
+    public class When_Provider_Row_Has_Wrong_Number_Of_Columns : IClassFixture<ProviderFileImportFixture>
     {
-        private ValidationResult _validationResult;
+        private readonly ValidationResult _validationResult;
 
-        public void Setup()
+        public When_Provider_Row_Has_Wrong_Number_Of_Columns(ProviderFileImportFixture fixture)
         {
-            var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
-            var validator = new ProviderDataValidator(repository);
-            _validationResult = validator.Validate(new ProviderFileImportDto { PrimaryContactName = "Fact" });
+            _validationResult = fixture.ProviderDataValidator.Validate(new ProviderFileImportDto { PrimaryContactName = "Fact" });
         }
 
         [Fact]

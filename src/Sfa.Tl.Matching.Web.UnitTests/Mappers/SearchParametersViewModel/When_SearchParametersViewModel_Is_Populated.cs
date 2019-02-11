@@ -4,7 +4,6 @@ using NSubstitute;
 
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.SearchParametersViewModel
