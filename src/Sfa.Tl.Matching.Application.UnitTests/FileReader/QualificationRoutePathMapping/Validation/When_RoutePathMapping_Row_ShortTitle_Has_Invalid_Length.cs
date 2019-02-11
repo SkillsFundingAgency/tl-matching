@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         {
             var routePathMapping = new ValidRoutePathMappingBuilder().Build();
             var dto = routePathMapping.ToDto();
-            dto.ShortTitle = new string('X', 51);
+            dto.ShortTitle = new string('X', QualificationRoutePathMappingDataValidator.MaximumShortTitleLength + 1);
 
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
 

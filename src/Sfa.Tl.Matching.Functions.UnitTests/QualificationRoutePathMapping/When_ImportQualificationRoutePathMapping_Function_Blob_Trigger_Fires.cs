@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
             _routePathService
                 .Received(1)
                 .ImportQualificationPathMapping(
-                    Arg.Any<QualificationRoutePathMappingFileImportDto>());
+                    Arg.Is<QualificationRoutePathMappingFileImportDto>(dto => dto.FileDataStream == _blobStream));
         }
     }
 }

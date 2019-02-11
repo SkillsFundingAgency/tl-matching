@@ -10,7 +10,7 @@ using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Validation
 {
-    public class When_RoutePathMapping_Row_Title_Has_Invalid_Length
+    public class When_RoutePathMapping_Row_Has_No_ShortTitle
     {
         private ValidationResult _validationResult;
 
@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         {
             var routePathMapping = new ValidRoutePathMappingBuilder().Build();
             var dto = routePathMapping.ToDto();
-            dto.Title = new string('X', QualificationRoutePathMappingDataValidator.MaximumTitleLength + 1);
+            dto.ShortTitle = "";
 
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
 
@@ -36,11 +36,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
             Assert.AreEqual(1, _validationResult.Errors.Count);
 
         [Test]
-        public void Then_Error_Code_Is_InvalidLength() =>
-            Assert.AreEqual(ValidationErrorCode.InvalidLength.ToString(), _validationResult.Errors[0].ErrorCode);
+        public void Then_Error_Code_Is_MissingMandatoryData() =>
+            Assert.AreEqual(ValidationErrorCode.MissingMandatoryData.ToString(), _validationResult.Errors[0].ErrorCode);
 
         [Test]
-        public void Then_Error_Message_Is_InvalidLength() =>
-            Assert.AreEqual($"'Title' - {ValidationErrorCode.InvalidLength.Humanize()}", _validationResult.Errors[0].ErrorMessage);
+        public void Then_Error_Message_Is_MissingMandatoryData() =>
+            Assert.AreEqual($"'ShortTitle' - {ValidationErrorCode.MissingMandatoryData.Humanize()}", _validationResult.Errors[0].ErrorMessage);
     }
 }
