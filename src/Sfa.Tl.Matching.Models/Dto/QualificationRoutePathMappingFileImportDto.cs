@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         [Column(Order = 8)] public string Hospitality { get; set; }
         [Column(Order = 9)] public string Catering { get; set; }
         [Column(Order = 10)] public string DesignSurveyingandPlanning { get; set; }
-        [Column(Order = 11)] public string Onsiteconstruction { get; set; }
+        [Column(Order = 11)] public string OnSiteConstruction { get; set; }
         [Column(Order = 12)] public string BuildingServicesEngineering { get; set; }
         [Column(Order = 13)] public string CraftandDesign { get; set; }
         [Column(Order = 14)] public string MediaBroadcastandProduction { get; set; }
