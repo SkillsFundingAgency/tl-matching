@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -13,12 +14,12 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMapping
 {
-    public abstract class RoutePathMappingServiceTestBase
+    public class QualificationRoutePathMappingTestFixture : IDisposable
     {
         protected MatchingDbContext MatchingDbContext;
         protected RoutePathService RouteMappingService;
 
-        public virtual async Task Setup()
+        public RoutePathMappingServiceTestFixture()
         {
             var loggerRepository = new Logger<RoutePathMappingRepository>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>(new NullLoggerFactory());
@@ -26,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
 
             MatchingDbContext = TestConfiguration.GetDbContext();
 
-            await ResetData();
+            //await ResetData();
 
             var repository = new RoutePathMappingRepository(loggerRepository, MatchingDbContext);
             var routePathRepository = new RoutePathRepository(MatchingDbContext);
@@ -46,10 +47,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
                 repository);
         }
         
-        public async Task ResetData()
+        //public async Task ResetData()
+        //{
+        //    await MatchingDbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.RoutePathMapping");
+        //    await MatchingDbContext.SaveChangesAsync();
+        //}
+        public void Dispose()
         {
-            await MatchingDbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.RoutePathMapping");
-            await MatchingDbContext.SaveChangesAsync();
+            MatchingDbContext?.Dispose();
         }
     }
 }

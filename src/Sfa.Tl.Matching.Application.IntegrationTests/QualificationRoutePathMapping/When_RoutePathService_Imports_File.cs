@@ -1,12 +1,12 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using NUnit.Framework;
+
 using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMapping
 {
-    public class When_RoutePathService_Imports_File
-        : RoutePathMappingServiceTestBase
+    public class When_RoutePathService_Imports_File : IClassFixture<QualificationRoutePathMappingTestFixture>
     {
         private const string DataFilePath = @"QualificationRoutePathMapping\RoutePathMapping-Simple.xlsx";
         private int _createdRecordCount;

@@ -1,11 +1,12 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using NUnit.Framework;
+
 using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
 {
-    public class When_Employer_Import_File_Has_Wrong_Data_Type : EmployerTestBase
+    public class When_Employer_Import_File_Has_Wrong_Data_Type : IClassFixture<EmployerTestFixture>
     {
         private const string DataFilePath = @"Employer\Employer-WrongDataType.xlsx";
         private int _createdRecordCount;
@@ -23,9 +24,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
         }
 
         [Test]
-        public void Then_No_Record_Is_Saved()
+        public void Then_No_Record_Is_Saved(IEmployerService EmployerService,  MatchingDbContext MatchingDbContext)
         {
-            Assert.AreEqual(0, _createdRecordCount);
+            _createdRecordCount.Should().Be(0);
         }
     }
 }

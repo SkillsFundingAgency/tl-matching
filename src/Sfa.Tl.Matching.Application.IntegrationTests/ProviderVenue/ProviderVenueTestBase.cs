@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,12 +15,12 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
 {
-    public class ProviderVenueTestBase
+    public class ProviderVenueTestFixture : IDisposable
     {
         internal readonly IProviderVenueService ProviderVenueService;
         internal MatchingDbContext MatchingDbContext;
 
-        public ProviderVenueTestBase()
+        public ProviderVenueTestFixture()
         {
             var loggerRepository = new Logger<ProviderRepository>(
                 new NullLoggerFactory());
@@ -45,10 +46,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             ProviderVenueService = new ProviderVenueService(mapper, excelFileReader, providerVenuerepository);
         }
 
-        internal async Task ResetData()
+        //internal async Task ResetData()
+        //{
+        //    await MatchingDbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.ProviderVenue");
+        //    await MatchingDbContext.SaveChangesAsync();
+        //}
+        public void Dispose()
         {
-            await MatchingDbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.ProviderVenue");
-            await MatchingDbContext.SaveChangesAsync();
+            MatchingDbContext?.Dispose();
         }
     }
 }

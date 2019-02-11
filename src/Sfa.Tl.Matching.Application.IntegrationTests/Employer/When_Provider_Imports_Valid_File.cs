@@ -1,11 +1,12 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using NUnit.Framework;
+
 using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
 {
-    public class When_Employer_Import_File_Is_Valid : EmployerTestBase
+    public class When_Employer_Import_File_Is_Valid : IClassFixture<EmployerTestFixture>
     {
         private const string DataFilePath = @"Employer\Employer-Simple.xlsx";
         private int _createdRecordCount;
@@ -25,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
         [Test]
         public void Then_Record_Is_Saved()
         {
-            Assert.AreEqual(1, _createdRecordCount);
+            _createdRecordCount.Should().Be(1);
         }
     }
 }
