@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sfa.Tl.Matching.Application.FileReader;
@@ -16,16 +14,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
 {
     public class QualificationRoutePathMappingTestFixture : IDisposable
     {
-        protected MatchingDbContext MatchingDbContext;
-        protected RoutePathService RouteMappingService;
+        public MatchingDbContext MatchingDbContext;
+        public RoutePathService RouteMappingService;
 
-        public RoutePathMappingServiceTestFixture()
+        public QualificationRoutePathMappingTestFixture()
         {
             var loggerRepository = new Logger<RoutePathMappingRepository>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>(new NullLoggerFactory());
             var loggerRoutePathService = new Logger<RoutePathService>(new NullLoggerFactory());
 
-            MatchingDbContext = TestConfiguration.GetDbContext();
+            MatchingDbContext = new TestConfiguration().GetDbContext();
 
             //await ResetData();
 

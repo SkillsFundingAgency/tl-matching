@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using NUnit.Framework;
+
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
 {
@@ -16,7 +17,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
         private ILogger _logger;
         private IRoutePathService _routePathService;
 
-        [OneTimeSetUp]
+        
         public async Task OneTimeSetup()
         {
             _blobStream = new MemoryStream();
@@ -26,7 +27,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
             await Functions.QualificationRoutePathMapping.ImportQualificationRoutePathMapping(_blobStream, "test", _context, _logger, _routePathService);
         }
 
-        [Test]
+        [Fact]
         public void ImportQualificationPathMapping_Is_Called_Exactly_Once()
         {
             _routePathService

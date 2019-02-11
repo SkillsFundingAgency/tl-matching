@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
 using NSubstitute;
@@ -7,6 +8,7 @@ using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 {
@@ -14,7 +16,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
     {
         private ValidationResult _validationResult;
 
-        [SetUp]
         public void Setup()
         {
             var providerStringArray = new ProviderFileImportDto { OfstedRating = "A" };
@@ -25,22 +26,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
             _validationResult = validator.Validate(providerStringArray);
         }
 
-        [Test]
+        [Fact]
         public void Then_Validation_Result_Is_Not_Valid() =>
-            Assert.False(_validationResult.IsValid);
+            _validationResult.IsValid.Should().BeFalse();
 
-        [Test]
+        [Fact]
         public void Then_Error_Count_Is_21() =>
-            Assert.AreEqual(21, _validationResult.Errors.Count);
+            _validationResult.Errors.Count.Should().Be(21);
 
-        [Test]
+        [Fact]
         public void Then_Error_Code_Is_WrongDataType() =>
-            Assert.AreEqual(ValidationErrorCode.WrongDataType.ToString(),
-                _validationResult.Errors.First(e => e.ErrorCode == ValidationErrorCode.WrongDataType.ToString()).ErrorCode);
+            _validationResult.Errors.First(e => e.ErrorCode == ValidationErrorCode.WrongDataType.ToString()).ErrorCode.Should()
+                .Be(ValidationErrorCode.WrongDataType.ToString());
 
-        [Test]
+        [Fact]
         public void Then_Error_Message_Is_WrongDataType() =>
-            Assert.AreEqual($"'{nameof(Domain.Models.Provider.OfstedRating)}' - {ValidationErrorCode.WrongDataType.Humanize()}",
-                _validationResult.Errors.First(e => e.ErrorCode == ValidationErrorCode.WrongDataType.ToString()).ErrorMessage);
+            _validationResult.Errors.First(e => e.ErrorCode == ValidationErrorCode.WrongDataType.ToString()).ErrorMessage.Should()
+                .Be($"'{nameof(Domain.Models.Provider.OfstedRating)}' - {ValidationErrorCode.WrongDataType.Humanize()}");
     }
 }

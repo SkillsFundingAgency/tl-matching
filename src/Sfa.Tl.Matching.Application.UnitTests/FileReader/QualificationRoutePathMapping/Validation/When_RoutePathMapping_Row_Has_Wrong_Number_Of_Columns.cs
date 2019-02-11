@@ -1,12 +1,13 @@
 ﻿using FluentValidation.Results;
 using Humanizer;
 using NSubstitute;
-using NUnit.Framework;
+
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Validation
 {
@@ -14,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
     {
         private ValidationResult _validationResult;
 
-        [SetUp]
+        
         public void Setup()
         {
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
@@ -27,22 +28,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
             });
         }
 
-        [Test]
+        [Fact]
         public void Then_Validation_Result_Is_Not_Valid() =>
             Assert.False(_validationResult.IsValid);
 
-        [Test]
+        [Fact]
         public void Then_Error_Count_Is_One() =>
-            Assert.AreEqual(1, _validationResult.Errors.Count);
+            Assert.Equal(1, _validationResult.Errors.Count);
 
-        [Test]
+        [Fact]
         public void Then_Error_Code_Is_WrongNumberOfColumns() =>
-            Assert.AreEqual(ValidationErrorCode.WrongNumberOfColumns.ToString(),
+            Assert.Equal(ValidationErrorCode.WrongNumberOfColumns.ToString(),
                 _validationResult.Errors[0].ErrorCode);
 
-        [Test]
+        [Fact]
         public void Then_Error_Message_Is_WrongNumberOfColumns() =>
-            Assert.AreEqual(ValidationErrorCode.WrongNumberOfColumns.Humanize(),
+            Assert.Equal(ValidationErrorCode.WrongNumberOfColumns.Humanize(),
                 _validationResult.Errors[0].ErrorMessage);
     }
 }

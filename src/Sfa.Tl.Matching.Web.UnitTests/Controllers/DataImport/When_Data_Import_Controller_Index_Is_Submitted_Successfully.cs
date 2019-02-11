@@ -1,48 +1,47 @@
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using NSubstitute;
-//using NUnit.Framework;
-//using Sfa.Tl.Matching.Models;
-//using Sfa.Tl.Matching.Models.ViewModel;
-//using Sfa.Tl.Matching.Web.Controllers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using NSubstitute;
 
-//namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
-//{
-//    public class When_Data_Import_Controller_Index_Is_Submitted_Successfully
-//    {
-//        private IActionResult _result;
-//        private IDataImportService _dataImportService;
-//        private IFormFile _formFile;
-//        private DataImportController _dataImportController;
-//        private DataUploadDto _viewModel;
+using Sfa.Tl.Matching.Models;
+using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Web.Controllers;
+using Xunit;
 
-//        [SetUp]
-//        public void Setup()
-//        {
-//            _viewModel = new DataUploadDto();
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
+{
+    public class When_Data_Import_Controller_Index_Is_Submitted_Successfully
+    {
+        private IActionResult _result;
+        private IFormFile _formFile;
+        private DataImportController _dataImportController;
+        private DataUploadDto _viewModel;
 
-//            var viewModelMapper = Substitute.For<IDataImportViewModelMapper>();
-//            _dataImportService = Substitute.For<IDataImportService>();
-//            _formFile = Substitute.For<IFormFile>();
-            
-//            _dataImportController = new DataImportController(viewModelMapper, _dataImportService);
-           
-//            _result = _dataImportController.Import(_formFile, _viewModel).Result;
-//        }
 
-//        [Test]
-//        public void Then_View_Result_Is_Returned() =>
-//             Assert.IsAssignableFrom<ViewResult>(_result);
+        public void Setup()
+        {
+            _viewModel = new DataUploadDto();
 
-//        [Test]
-//        public void Then_Model_State_Has_No_Errors()
-//        {
-//            var viewResult = (ViewResult)_result;
-//            Assert.Zero(viewResult.ViewData.ModelState.Count);
-//        }
+            _formFile = Substitute.For<IFormFile>();
 
-//        [Test]
-//        public void Then_Service_Upload_Is_Called_Exactly_Once() =>
-//            _dataImportService.Received(1).Import(_formFile, _viewModel);
-//    }
-//}
+            //_dataImportController = new DataImportController(viewModelMapper, _dataImportService);
+
+            //_result = _dataImportController.Import(_formFile, _viewModel).Result;
+        }
+
+        [Fact]
+        public void Then_View_Result_Is_Returned() =>
+             Assert.IsAssignableFrom<ViewResult>(_result);
+
+        //[Fact]
+        //public void Then_Model_State_Has_No_Errors()
+        //{
+        //    var viewResult = (ViewResult)_result;
+        //    Assert.Zero(viewResult.ViewData.ModelState.Count);
+        //}
+
+        //[Fact]
+        //public void Then_Service_Upload_Is_Called_Exactly_Once() =>
+        //    _dataImportService.Received(1).Import(_formFile, _viewModel);
+    }
+}

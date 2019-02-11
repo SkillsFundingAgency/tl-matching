@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sfa.Tl.Matching.Application.FileReader;
@@ -30,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>>(
                 new NullLoggerFactory());
 
-            MatchingDbContext = TestConfiguration.GetDbContext();
+            MatchingDbContext = new TestConfiguration().GetDbContext();
 
             var repository = new ProviderRepository(loggerRepository, MatchingDbContext);
             var providerVenuerepository = new ProviderVenueRepository(providerVenueloggerRepository, MatchingDbContext);

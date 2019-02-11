@@ -1,12 +1,13 @@
 ﻿using FluentValidation.Results;
 using Humanizer;
 using NSubstitute;
-using NUnit.Framework;
+
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Enums;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Validation
 {
@@ -14,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
     {
         private ValidationResult _validationResult;
 
-        [SetUp]
+        
         public void Setup()
         {
             var routePathMapping = new ValidRoutePathMappingBuilder().Build();
@@ -27,20 +28,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
             _validationResult = validator.Validate(dto);
         }
 
-        [Test]
+        [Fact]
         public void Then_Validation_Result_Is_Not_Valid() =>
             Assert.False(_validationResult.IsValid);
 
-        [Test]
+        [Fact]
         public void Then_Error_Count_Is_One() =>
-            Assert.AreEqual(1, _validationResult.Errors.Count);
+            Assert.Equal(1, _validationResult.Errors.Count);
 
-        [Test]
+        [Fact]
         public void Then_Error_Code_Is_InvalidLength() =>
-            Assert.AreEqual(ValidationErrorCode.InvalidLength.ToString(), _validationResult.Errors[0].ErrorCode);
+            Assert.Equal(ValidationErrorCode.InvalidLength.ToString(), _validationResult.Errors[0].ErrorCode);
 
-        [Test]
+        [Fact]
         public void Then_Error_Message_Is_InvalidLength() =>
-            Assert.AreEqual($"'ShortTitle' - {ValidationErrorCode.InvalidLength.Humanize()}", _validationResult.Errors[0].ErrorMessage);
+            Assert.Equal($"'ShortTitle' - {ValidationErrorCode.InvalidLength.Humanize()}", _validationResult.Errors[0].ErrorMessage);
     }
 }

@@ -4,11 +4,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders
 {
     internal class ValidProviderBuilder
     {
-        private readonly ProviderFileImportDto _provider;
+        private static readonly ProviderFileImportDto Provider;
 
-        public ValidProviderBuilder()
+        static ValidProviderBuilder()
         {
-            _provider = new ProviderFileImportDto
+            Provider = new ProviderFileImportDto
             {
                 UkPrn = "10000546",
                 ProviderName = "ProviderName",
@@ -25,6 +25,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders
             };
         }
 
-        public ProviderFileImportDto Build() => _provider;
+        public static ProviderFileImportDto Build() => Provider;
     }
 }

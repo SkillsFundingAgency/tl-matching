@@ -1,4 +1,5 @@
-﻿using FluentValidation.Results;
+﻿using FluentAssertions;
+using FluentValidation.Results;
 using Humanizer;
 using NSubstitute;
 
@@ -6,6 +7,7 @@ using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 {
@@ -13,25 +15,24 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
     {
         private ValidationResult _validationResult;
 
-        [SetUp]
         public void Setup()
         {
             var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
             var validator = new ProviderDataValidator(repository);
-            _validationResult = validator.Validate(new ProviderFileImportDto { PrimaryContactName = "Test" });
+            _validationResult = validator.Validate(new ProviderFileImportDto { PrimaryContactName = "Fact" });
         }
 
-        [Test]
+        [Fact]
         public void Then_Validation_Result_Is_Not_Valid() =>
-            Assert.False(_validationResult.IsValid);
+            _validationResult.IsValid.Should().BeFalse();
 
-        [Test]
+        [Fact]
         public void Then_Error_Count_Is_21() =>
-            Assert.AreEqual(21, _validationResult.Errors.Count);
+            _validationResult.Errors.Count.Should().Be(21);
 
-        [Test]
+        [Fact]
         public void Then_Error_Message_Is_MissingMandatoryData() =>
-            Assert.AreEqual($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}",
-                _validationResult.Errors[0].ErrorMessage);
+            _validationResult.Errors[0].ErrorMessage.Should()
+                .Be($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
     }
 }

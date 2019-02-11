@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using NUnit.Framework;
+
 using Sfa.Tl.Matching.Application.Mappers;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Mappers
 {
@@ -8,13 +9,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Mappers
     {
         private MapperConfiguration _config;
 
-        [SetUp]
+        
         public void Setup()
         {
             _config = new MapperConfiguration(c => c.AddProfile<EmployerMapper>());
         }
 
-        [Test]
+        [Fact]
         public void Then_All_Properties_Are_Implemented() =>
             _config.AssertConfigurationIsValid();
     }

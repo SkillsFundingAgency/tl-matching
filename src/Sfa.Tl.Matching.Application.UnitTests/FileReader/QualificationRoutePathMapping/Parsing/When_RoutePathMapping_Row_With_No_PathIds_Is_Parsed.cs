@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
 using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Parsing
 {
@@ -11,7 +12,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
     {
         private IEnumerable<RoutePathMappingDto> _parseResult;
 
-        [SetUp]
+        
         public void Setup()
         {
             var routePathMappingDto = new ValidQualificationRoutePathMappingFileImportDtoBuilder().Build();
@@ -21,8 +22,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
             _parseResult = parser.Parse(routePathMappingDto);
         }
 
-        [Test]
+        [Fact]
         public void Then_ParseResult_Count_Is_Zero() =>
-            Assert.Zero(_parseResult.Count());
+            Assert.Empty(_parseResult);
     }
 }

@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using NUnit.Framework;
+
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.Employer
 
@@ -17,7 +18,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Employer
         private ILogger _logger;
         private IEmployerService _employerService;
 
-        [OneTimeSetUp]
+        
         public async Task OneTimeSetup()
         {
             _blobStream = new MemoryStream();
@@ -27,13 +28,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Employer
             await Functions.Employer.ImportEmployer(_blobStream, "test", _context, _logger, _employerService);
         }
 
-        [Test]
+        [Fact]
         public void ImportEmployer_Is_Called_Exactly_Once()
         {
             _employerService
                 .Received(1)
-                .ImportEmployer(
-                    Arg.Is<EmployerFileImportDto>(dto => dto.FileDataStream == _blobStream));
+                .ImportEmployer(Arg.Is<EmployerFileImportDto>(dto => dto.FileDataStream == _blobStream));
         }
     }
 }

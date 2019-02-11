@@ -64,6 +64,14 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                     .WithMessage($"'{nameof(ProviderFileImportDto.PrimaryContactName)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
+            RuleFor(dto => dto.PrimaryContactTelephone)
+                .NotNull()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(ProviderFileImportDto.PrimaryContactTelephone)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .NotEmpty()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(ProviderFileImportDto.PrimaryContactTelephone)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+
             RuleFor(dto => dto.PrimaryContactEmail)
                 .NotNull()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
@@ -80,6 +88,14 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                     .WithMessage($"'{nameof(ProviderFileImportDto.SecondaryContactName)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+
+            RuleFor(dto => dto.SecondaryContactTelephone)
+                .NotNull()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(ProviderFileImportDto.SecondaryContactTelephone)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .NotEmpty()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(ProviderFileImportDto.SecondaryContactTelephone)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
             RuleFor(dto => dto.SecondaryContactEmail)
                 .NotNull()

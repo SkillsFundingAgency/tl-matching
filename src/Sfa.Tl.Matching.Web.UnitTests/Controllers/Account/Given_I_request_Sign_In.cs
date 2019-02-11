@@ -3,17 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using NUnit.Framework;
+
 using Sfa.Tl.Matching.Web.Controllers;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
 {
-    [TestFixture]
+
     public class Given_I_Request_Sign_In
     {
         private AccountController _accountController;
 
-        [SetUp]
+        
         public void Arrange()
         {
             var mockUrlHelper = Substitute.For<IUrlHelper>();
@@ -28,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
 
         }
 
-        [Test]
+        [Fact]
         public void Then_I_receive_a_ChallengeResult()
         {
             var result = _accountController.SignIn();
