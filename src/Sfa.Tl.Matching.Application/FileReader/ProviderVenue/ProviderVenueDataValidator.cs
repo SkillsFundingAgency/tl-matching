@@ -12,18 +12,38 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
     {
         public ProviderVenueDataValidator(IRepository<Domain.Models.Provider> repository)
         {
-            RuleFor(dto => dto)
+            RuleFor(dto => dto.UkPrn)
+                .NotNull()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .NotEmpty()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .Matches(ValidationConstants.UkprnRegex)
+                    .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
+                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+
+           RuleFor(dto => dto)
                 .MustAsync((dto, cancellation) => ProviderMustExistsForVenue(repository, dto))
                     .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
             RuleFor(dto => dto.PostCode)
+                .NotNull()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .NotEmpty()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .Matches(dto => ValidationConstants.UkPostCodeRegex)
                     .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(dto => dto.Source)
-                .NotNull().NotEmpty()
+                .NotNull()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
