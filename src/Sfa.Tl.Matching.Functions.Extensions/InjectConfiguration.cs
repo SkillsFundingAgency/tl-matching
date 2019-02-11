@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.Azure.WebJobs.Host.Config;
