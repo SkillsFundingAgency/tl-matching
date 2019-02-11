@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Sfa.Tl.Matching.Application.IntegrationTests.Employer;
+using FluentAssertions;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -10,23 +10,25 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
     {
         private const string DataFilePath = @"Provider\Provider-MissingMandatory.xlsx";
         private int _createdRecordCount;
+        private readonly string _testExecutionDirectory;
 
-        [SetUp]
-        public async Task Setup()
+        private readonly ProviderTestFixture _testFixture;
+        public When_Provider_Imports_File_With_Missing_Mandatory(ProviderTestFixture testFixture)
         {
-            await ResetData();
-
-            var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, DataFilePath);
-            using (var stream = File.Open(filePath, FileMode.Open))
-            {
-                _createdRecordCount = ProviderService.ImportProvider(new ProviderFileImportDto { FileDataStream = stream }).Result;
-            }
+            _testFixture = testFixture;
+            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
         }
 
-        [Test]
-        public void Then_No_Record_Is_Saved()
+        [Fact]
+        public async Task Then_No_Record_Is_Saved()
         {
-            Assert.AreEqual(0, _createdRecordCount);
+            var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
+            using (var stream = File.Open(filePath, FileMode.Open))
+            {
+                _createdRecordCount = await _testFixture.ProviderService.ImportProvider(new ProviderFileImportDto { FileDataStream = stream });
+            }
+
+            _createdRecordCount.Should().Be(0);
         }
     }
 }

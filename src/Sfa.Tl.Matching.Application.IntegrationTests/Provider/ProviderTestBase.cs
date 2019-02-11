@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Linq;
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -28,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderFileImportDto, ProviderDto>>(
                 new NullLoggerFactory());
 
-            MatchingDbContext = TestConfiguration.GetDbContext();
+            MatchingDbContext = new TestConfiguration().GetDbContext();
 
             var repository = new ProviderRepository(loggerRepository, MatchingDbContext);
             var dataValidator = new ProviderDataValidator(repository);
@@ -43,11 +44,17 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             ProviderService = new ProviderService(mapper, excelFileReader, repository);
         }
 
-        //internal async Task ResetData()
-        //{
-        //    await MatchingDbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.Provider");
-        //    await MatchingDbContext.SaveChangesAsync();
-        //}
+        internal void ResetData(string name)
+        {
+            var provider = MatchingDbContext.Provider.FirstOrDefault(e => e.Name == name);
+            if (provider != null)
+            {
+                MatchingDbContext.Provider.Remove(provider);
+                var count = MatchingDbContext.SaveChanges();
+                count.Should().Be(1);
+            }
+        }
+
         public void Dispose()
         {
             MatchingDbContext?.Dispose();
