@@ -7,6 +7,7 @@
         MissingMandatoryData,
         InvalidFormat,
         InvalidLength,
+        ColumnValueDoesNotMatchType,
         RecordAlreadyExists
     }
 }
