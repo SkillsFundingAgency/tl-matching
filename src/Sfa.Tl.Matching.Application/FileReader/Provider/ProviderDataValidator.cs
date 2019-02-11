@@ -23,6 +23,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                     .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                     .WithMessage($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
                 .MustAsync((x, cancellation) => CanUkprnBeAdded(repository, x))
+                    .When(x => !string.IsNullOrEmpty(x.UkPrn))
                     .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
                     .WithMessage($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
 
