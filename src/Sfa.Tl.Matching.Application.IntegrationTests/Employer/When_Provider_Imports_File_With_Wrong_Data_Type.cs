@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-
+using FluentAssertions;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -10,22 +10,23 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
     {
         private const string DataFilePath = @"Employer\Employer-WrongDataType.xlsx";
         private int _createdRecordCount;
+        private readonly EmployerTestFixture _testFixture;
+        private readonly string _testExecutionDirectory;
 
-        [SetUp]
-        public async Task Setup()
+        public When_Employer_Import_File_Has_Wrong_Data_Type(EmployerTestFixture testFixture)
         {
-            await ResetData();
-
-            var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, DataFilePath);
+            _testFixture = testFixture;
+            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+        }
+        [Fact]
+        public async Task Then_No_Record_Is_Saved()
+        {
+            var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                _createdRecordCount = EmployerService.ImportEmployer(new EmployerFileImportDto { FileDataStream = stream }).Result;
+                _createdRecordCount = await _testFixture.EmployerService.ImportEmployer(new EmployerFileImportDto { FileDataStream = stream });
             }
-        }
 
-        [Test]
-        public void Then_No_Record_Is_Saved(IEmployerService EmployerService,  MatchingDbContext MatchingDbContext)
-        {
             _createdRecordCount.Should().Be(0);
         }
     }
