@@ -38,19 +38,23 @@ namespace Sfa.Tl.Matching.Application.FileReader
             using (var document = SpreadsheetDocument.Open(fileImportDto.FileDataStream, false))
             {
                 var rows = GetAllRows(document, fileImportDto.NumberOfHeaderRows).ToList();
-                
+
                 var stringTablePart = document.WorkbookPart.SharedStringTablePart;
-                
+
                 var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
-                
+
+                var columnProperties = fileImportDto.GetType().GetProperties()
+                    .Where(pr => pr.GetCustomAttribute<ColumnAttribute>(false) != null)
+                    .ToList();
+
                 foreach (var row in rows)
                 {
-                    foreach (var prop in fileImportDto.GetType().GetProperties().Where(pr => pr.GetCustomAttribute<ColumnAttribute>() != null)) 
+                    foreach (var prop in columnProperties)
                     {
-                        var cell = GetCellByIndex(prop.GetCustomAttribute<ColumnAttribute>().Order, startIndex, row);
+                        var cell = GetCellByIndex(prop.GetCustomAttribute<ColumnAttribute>(false).Order, startIndex, row);
 
                         var cellValue = GetCellValue(stringTablePart, cell);
-                        
+
                         prop.SetValue(fileImportDto, cellValue);
                     }
 
