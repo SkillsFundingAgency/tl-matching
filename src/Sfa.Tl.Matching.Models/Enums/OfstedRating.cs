@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Models.Enums
         [Description("Requires improvement")]
         RequiresImprovement,
         Inadequate,
-        [Description("#N/A")]
+        [Description("Not applicable")]
         NotApplicable
     }
 }
