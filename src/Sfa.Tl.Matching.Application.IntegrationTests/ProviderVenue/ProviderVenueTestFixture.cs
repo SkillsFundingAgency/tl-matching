@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sfa.Tl.Matching.Application.FileReader;
@@ -44,14 +46,59 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             ProviderVenueService = new ProviderVenueService(mapper, excelFileReader, providerVenuerepository);
         }
 
-        //internal async Task ResetData()
-        //{
-        //    await MatchingDbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.ProviderVenue");
-        //    await MatchingDbContext.SaveChangesAsync();
-        //}
+        internal void ResetData(int ukprn)
+        {
+            ResetProviderVenue(ukprn);
+            ResetProvider(ukprn);
+        }
+
+        internal Domain.Models.Provider CreateProvider(int ukprn)
+        {
+            var provider = new Domain.Models.Provider
+            {
+                UkPrn = ukprn,
+                Name = nameof(ProviderVenueTestFixture),
+                OfstedRating = 3,
+                Status = true,
+                PrimaryContact = "PrimaryContact",
+                PrimaryContactEmail = "primary@contact.com",
+                SecondaryContact = "SecondaryContact",
+                SecondaryContactEmail = "secondary@contact.com",
+                Source = nameof(ProviderVenueTestFixture),
+                CreatedOn = DateTime.Now
+            };
+
+            MatchingDbContext.Add(provider);
+            MatchingDbContext.SaveChanges();
+
+            return provider;
+        }
+
         public void Dispose()
         {
             MatchingDbContext?.Dispose();
+        }
+
+        private void ResetProviderVenue(int ukprn)
+        {
+            var providerVenue = MatchingDbContext.ProviderVenue.FirstOrDefault(pv => pv.Provider.UkPrn == ukprn);
+            if (providerVenue != null)
+            {
+                MatchingDbContext.ProviderVenue.Remove(providerVenue);
+                var count = MatchingDbContext.SaveChanges();
+                count.Should().Be(1);
+            }
+        }
+
+        private void ResetProvider(int ukprn)
+        {
+            var provider = MatchingDbContext.Provider.FirstOrDefault(p => p.UkPrn == ukprn);
+            if (provider != null)
+            {
+                MatchingDbContext.Provider.Remove(provider);
+                var count = MatchingDbContext.SaveChanges();
+                count.Should().Be(1);
+            }
         }
     }
 }

@@ -10,14 +10,17 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
     {
         private const string DataFilePath = @"ProviderVenue\ProviderVenue-Simple.xlsx";
         private int _createdRecordCount;
-
         private readonly string _testExecutionDirectory;
-
         private readonly ProviderVenueTestFixture _testFixture;
+        private readonly Domain.Models.Provider _createdProvider;
+        private const int UkPrn = 10000546;
+
         public When_ProviderVenue_Imports_Valid_File(ProviderVenueTestFixture testFixture)
         {
             _testFixture = testFixture;
             _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            _testFixture.ResetData(UkPrn);
+            _createdProvider = _testFixture.CreateProvider(UkPrn);
         }
 
         [Fact]
@@ -26,7 +29,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                _createdRecordCount = await _testFixture.ProviderVenueService.ImportProviderVenue(new ProviderVenueFileImportDto { FileDataStream = stream });
+                _createdRecordCount = await _testFixture.ProviderVenueService.ImportProviderVenue(
+                    new ProviderVenueFileImportDto
+                    {
+                        FileDataStream = stream,
+                        ProviderId = _createdProvider.Id,
+                        Source = _createdProvider.Source
+                    });
             }
 
             _createdRecordCount.Should().Be(1);

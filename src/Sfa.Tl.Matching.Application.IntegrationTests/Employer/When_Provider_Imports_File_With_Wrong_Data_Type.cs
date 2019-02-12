@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
             _testFixture = testFixture;
             _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
         }
+
         [Fact]
         public async Task Then_No_Record_Is_Saved()
         {

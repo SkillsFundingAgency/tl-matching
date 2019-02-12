@@ -1,36 +1,31 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMapping
 {
-    public class When_RoutePathService_Imports_File_And_Records_Already_Exist : IClassFixture<QualificationRoutePathMappingTestFixture>
+    public class When_RoutePathService_Imports_File_And_Records_Already_Exist : IClassFixture<RoutePathMappingServiceTestFixture>
     {
         private const string DataFilePath = @"QualificationRoutePathMapping\RoutePathMapping-Simple.xlsx";
         private int _createdRecordCount;
-
         private readonly string _testExecutionDirectory;
+        private readonly RoutePathMappingServiceTestFixture _testFixture;
+        private const string LarsId = "60144567";
 
-        private readonly QualificationRoutePathMappingTestFixture _testFixture;
-        public When_RoutePathService_Imports_File_And_Records_Already_Exist(QualificationRoutePathMappingTestFixture testFixture)
+        public When_RoutePathService_Imports_File_And_Records_Already_Exist(RoutePathMappingServiceTestFixture testFixture)
         {
             _testFixture = testFixture;
             _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            _testFixture.ResetData(LarsId);
+            _testFixture.CreateRoutePathMapping(LarsId);
         }
 
         [Fact]
-        public async Task Then_Record_Is_Not_Saved()
+        public async Task Then_Record_Is_Saved()
         {
-            _testFixture.MatchingDbContext.Add(new Domain.Models.RoutePathMapping
-            {
-                LarsId = "60144567", //Must match id in RoutePathMapping-Simple.xlsx
-                Title = "Test",
-                PathId = 1
-            });
-            await _testFixture.MatchingDbContext.SaveChangesAsync();
-
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {

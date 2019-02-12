@@ -11,8 +11,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
         private const string DataFilePath = @"Provider\Provider-Simple.xlsx";
         private int _createdRecordCount;
         private readonly string _testExecutionDirectory;
-
         private readonly ProviderTestFixture _testFixture;
+
         public When_Provider_Imports_Valid_File(ProviderTestFixture testFixture)
         {
             _testFixture = testFixture;

@@ -13,6 +13,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
         private readonly string _testExecutionDirectory;
 
         private readonly ProviderTestFixture _testFixture;
+
         public When_Provider_Imports_File_With_Wrong_Data_Type(ProviderTestFixture testFixture)
         {
             _testFixture = testFixture;

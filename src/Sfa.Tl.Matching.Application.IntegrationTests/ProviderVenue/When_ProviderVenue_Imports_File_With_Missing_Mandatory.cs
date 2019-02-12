@@ -10,16 +10,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
     {
         private const string DataFilePath = @"ProviderVenue\ProviderVenue-MissingMandatory.xlsx";
         private int _createdRecordCount;
-
         private readonly string _testExecutionDirectory;
-
         private readonly ProviderVenueTestFixture _testFixture;
+
         public When_ProviderVenue_Imports_File_With_Missing_Mandatory(ProviderVenueTestFixture testFixture)
         {
             _testFixture = testFixture;
             _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
         }
-
 
         [Fact]
         public async Task Then_No_Record_Is_Saved()

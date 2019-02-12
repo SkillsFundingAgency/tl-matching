@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sfa.Tl.Matching.Application.FileReader;
@@ -12,20 +14,18 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMapping
 {
-    public class QualificationRoutePathMappingTestFixture : IDisposable
+    public class RoutePathMappingServiceTestFixture : IDisposable
     {
-        public MatchingDbContext MatchingDbContext;
-        public RoutePathService RouteMappingService;
+        internal MatchingDbContext MatchingDbContext;
+        internal RoutePathService RouteMappingService;
 
-        public QualificationRoutePathMappingTestFixture()
+        public RoutePathMappingServiceTestFixture()
         {
             var loggerRepository = new Logger<RoutePathMappingRepository>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>(new NullLoggerFactory());
             var loggerRoutePathService = new Logger<RoutePathService>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
-
-            //await ResetData();
 
             var repository = new RoutePathMappingRepository(loggerRepository, MatchingDbContext);
             var routePathRepository = new RoutePathRepository(MatchingDbContext);
@@ -44,12 +44,31 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
                 routePathRepository,
                 repository);
         }
-        
-        //public async Task ResetData()
-        //{
-        //    await MatchingDbContext.Database.ExecuteSqlCommandAsync("DELETE FROM dbo.RoutePathMapping");
-        //    await MatchingDbContext.SaveChangesAsync();
-        //}
+
+        internal void ResetData(string larsId)
+        {
+            var routePathMapping = MatchingDbContext.RoutePathMapping.FirstOrDefault(rpm => rpm.LarsId == larsId);
+            if (routePathMapping != null)
+            {
+                MatchingDbContext.RoutePathMapping.Remove(routePathMapping);
+                var count = MatchingDbContext.SaveChanges();
+                count.Should().Be(1);
+            }
+        }
+
+        internal void CreateRoutePathMapping(string larsId)
+        {
+            var routePathMapping = new Domain.Models.RoutePathMapping
+            {
+                LarsId = larsId, //Must match id in RoutePathMapping-Simple.xlsx
+                Title = "Test",
+                PathId = 1
+            };
+
+            MatchingDbContext.Add(routePathMapping);
+            MatchingDbContext.SaveChanges();
+        }
+
         public void Dispose()
         {
             MatchingDbContext?.Dispose();
