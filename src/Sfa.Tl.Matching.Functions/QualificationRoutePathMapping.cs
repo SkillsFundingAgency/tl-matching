@@ -1,10 +1,11 @@
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Functions.Extensions;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
@@ -13,19 +14,24 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("ImportQualificationRoutePathMapping")]
         public static async Task ImportQualificationRoutePathMapping(
-            [BlobTrigger("qualificationroutepathmapping/{name}", Connection = "BlobStorageConnectionString")]Stream stream,
+            [BlobTrigger("qualificationroutepathmapping/{name}", Connection = "BlobStorageConnectionString")]CloudBlockBlob blockBlob,
             string name,
             ExecutionContext context,
             ILogger logger,
             [Inject] IRoutePathService routePathService
         )
         {
+            var stream = await blockBlob.OpenReadAsync();
             logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
                                   $"\tName:{name}\n" +
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRecords = await routePathService.ImportQualificationPathMapping(new QualificationRoutePathMappingFileImportDto { FileDataStream = stream });
+            var createdRecords = await routePathService.ImportQualificationPathMapping(new QualificationRoutePathMappingFileImportDto
+            {
+                FileDataStream = stream,
+                CreatedBy = blockBlob.GetCreatedByMetadata()
+            });
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} processed blob\n" +

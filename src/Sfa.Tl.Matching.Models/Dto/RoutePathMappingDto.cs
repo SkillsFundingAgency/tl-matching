@@ -7,5 +7,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string Title { get; set; }
         public string ShortTitle { get; set; }
         public int PathId { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

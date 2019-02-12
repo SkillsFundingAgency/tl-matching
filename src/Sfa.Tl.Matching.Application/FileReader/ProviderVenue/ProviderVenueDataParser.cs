@@ -14,7 +14,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
             {
                 ProviderId = data.ProviderId,
                 Postcode = data.PostCode,
-                Source = data.Source
+                Source = data.Source,
+                CreatedBy = data.CreatedBy
             };
 
             return new List<ProviderVenueDto> { provider };

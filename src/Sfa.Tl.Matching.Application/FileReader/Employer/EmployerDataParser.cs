@@ -22,7 +22,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
                 Email = data.Email,
                 Phone = data.Phone,
                 PostCode = data.PostCode,
-                Owner = data.Owner
+                Owner = data.Owner,
+                CreatedBy = data.CreatedBy
             };
 
             return new List<EmployerDto> { employerDto };

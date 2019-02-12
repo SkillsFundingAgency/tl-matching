@@ -14,5 +14,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string Email { get; set; }
         public string PostCode { get; set; }
         public string Owner { get; set; }
+        public string CreatedBy { get; set; }
     }
 }
