@@ -20,6 +20,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 
             Repository = Substitute.For<IRepository<RoutePathMapping>>();
             RoutePathRepository = Substitute.For<IRoutePathRepository>();
+            RoutePathRepository
+                .GetPaths()
+                .Returns(new PathListBuilder().Build());
 
             Validator = new QualificationRoutePathMappingDataValidator(Repository, RoutePathRepository);
         }

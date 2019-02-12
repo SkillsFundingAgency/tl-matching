@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 
         public When_RoutePathMapping_Row_ShortTitle_Has_Invalid_Length(QualificationRoutePathMappingFileImportValidationTestFixture fixture)
         {
-            fixture.Dto.ShortTitle = new string('X', 51);
+            fixture.Dto.ShortTitle = new string('X', 101);
             _validationResult = fixture.Validator.Validate(fixture.Dto);
         }
 

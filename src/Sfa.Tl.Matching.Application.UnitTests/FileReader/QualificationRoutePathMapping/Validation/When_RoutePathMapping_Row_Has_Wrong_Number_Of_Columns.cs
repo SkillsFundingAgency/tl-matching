@@ -13,6 +13,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         public When_RoutePathMapping_Row_Has_Wrong_Number_Of_Columns(QualificationRoutePathMappingFileImportValidationTestFixture fixture)
         {
             fixture.Dto.Accountancy = null;
+            fixture.Dto.AgricultureLandManagementandProduction = null;
             _validationResult = fixture.Validator.Validate(fixture.Dto);
         }
 
