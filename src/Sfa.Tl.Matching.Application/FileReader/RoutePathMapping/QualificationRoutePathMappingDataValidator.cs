@@ -15,15 +15,16 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
         public const int MaximumTitleLength = 250;
         public const int MaximumShortTitleLength = 100;
 
-        private readonly IDictionary<int, string> _pathMapping;
+        public IDictionary<int, string> PathMapping { get; set; }
+
 
         public QualificationRoutePathMappingDataValidator(IRepository<Domain.Models.RoutePathMapping> repository, IRoutePathRepository routePathRepository)
         {
             var paths = routePathRepository.GetPaths().ToList();
-           
+
             PathMapping = paths
-                .Select(p => 
-                    new KeyValuePair<int, string>(p.Id, 
+                .Select(p =>
+                    new KeyValuePair<int, string>(p.Id,
                         p.Name
                             .Replace(" ", "")
                             .Replace(",", "")
@@ -84,8 +85,6 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                     .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
-
-        public IDictionary<int, string> PathMapping { get => _pathMapping; set => _pathMapping = value; }
 
         private async Task<bool> CanLarsIdBeAdded(IRepository<Domain.Models.RoutePathMapping> repository, string larsId)
         {
