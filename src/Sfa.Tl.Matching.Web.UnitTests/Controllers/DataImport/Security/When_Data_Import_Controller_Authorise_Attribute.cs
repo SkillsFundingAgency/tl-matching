@@ -11,8 +11,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
     {
         private AuthorizeAttribute[] _authoriseAttributes;
 
-        
-        public void Setup()
+
+        public When_Data_Import_Controller_Authorise_Attribute()
         {
             var controllerType = typeof(DataImportController);
 

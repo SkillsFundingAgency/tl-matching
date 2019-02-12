@@ -9,9 +9,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
     public class When_Data_Import_Controller_Allow_Anonymous_Attribute
     {
         private AllowAnonymousAttribute[] _allowAnonymousAttributes;
-
         
-        public void Setup()
+        public When_Data_Import_Controller_Allow_Anonymous_Attribute()
         {
             var controllerType = typeof(DataImportController);
 
