@@ -1,8 +1,6 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -12,20 +10,22 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenue
 {
     public class When_ImportProviderVenue_Function_Blob_Trigger_Fires
     {
-        private Stream _blobStream;
-        private ExecutionContext _context;
-        private ILogger _logger;
-        private IProviderVenueService _providerVenueService;
-
-
-        public async Task OneTimeSetup()
+        public When_ImportProviderVenue_Function_Blob_Trigger_Fires()
         {
             _blobStream = new MemoryStream();
-            _context = new ExecutionContext();
-            _logger = Substitute.For<ILogger>();
+            var context = new ExecutionContext();
+            var logger = Substitute.For<ILogger>();
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            await Functions.ProviderVenue.ImportProviderVenue(_blobStream, "test", _context, _logger, _providerVenueService);
+            Functions.ProviderVenue.ImportProviderVenue(
+                _blobStream,
+                "test",
+                context,
+                logger,
+                _providerVenueService).GetAwaiter().GetResult();
         }
+
+        private readonly Stream _blobStream;
+        private readonly IProviderVenueService _providerVenueService;
 
         [Fact]
         public void ImportProviderVenue_Is_Called_Exactly_Once()

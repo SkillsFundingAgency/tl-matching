@@ -11,19 +11,21 @@
 //{
 //    public class When_ImportProviderQualification_Function_Blob_Trigger_Fires
 //    {
-//        private Stream _blobStream;
-//        private ExecutionContext _context;
-//        private ILogger _logger;
-//        private IProviderQualificationService _providerQualificationService;
+//        private readonly Stream _blobStream;
+//        private readonly IProviderQualificationService _providerQualificationService;
 
-
-//        public async Task OneTimeSetup()
+//        public When_ImportProviderQualification_Function_Blob_Trigger_Fires()
 //        {
 //            _blobStream = new MemoryStream();
-//            _context = new ExecutionContext();
-//            _logger = Substitute.For<ILogger>();
+//            var context = new ExecutionContext();
+//            var logger = Substitute.For<ILogger>();
 //            _providerQualificationService = Substitute.For<IProviderQualificationService>();
-//            await Functions.ProviderQualification.ImportProviderQualification(_blobStream, "test", _context, _logger, _providerQualificationService);
+//            Functions.ProviderQualification.ImportProviderQualification(
+//                    _blobStream, 
+//                    "test", 
+//                    context, 
+//                    logger, 
+//                    _providerQualificationService).GetAwaiter().GetResult();
 //        }
 
 //        [Fact]
@@ -32,7 +34,8 @@
 //            _providerQualificationService
 //                .Received(1)
 //                .ImportProviderQualification(
-//                    Arg.Is(_blobStream));
+//                    Arg.Is(Arg.Is<ProviderQualificationFileImportDto>(dto => dto.FileDataStream == _blobStream)));
 //        }
 //    }
 //}
+

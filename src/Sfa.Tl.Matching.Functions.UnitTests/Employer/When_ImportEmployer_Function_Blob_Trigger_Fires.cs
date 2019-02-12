@@ -1,32 +1,31 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.Employer
-
 {
     public class When_ImportEmployer_Function_Blob_Trigger_Fires
     {
-        private Stream _blobStream;
-        private ExecutionContext _context;
-        private ILogger _logger;
-        private IEmployerService _employerService;
-
-        
-        public async Task OneTimeSetup()
+        public When_ImportEmployer_Function_Blob_Trigger_Fires()
         {
             _blobStream = new MemoryStream();
-            _context = new ExecutionContext();
-            _logger = Substitute.For<ILogger>();
+            var context = new ExecutionContext();
+            var logger = Substitute.For<ILogger>();
             _employerService = Substitute.For<IEmployerService>();
-            await Functions.Employer.ImportEmployer(_blobStream, "test", _context, _logger, _employerService);
+            Functions.Employer.ImportEmployer(
+                _blobStream,
+                "test",
+                context,
+                logger,
+                _employerService).GetAwaiter().GetResult();
         }
+
+        private readonly Stream _blobStream;
+        private readonly IEmployerService _employerService;
 
         [Fact]
         public void ImportEmployer_Is_Called_Exactly_Once()

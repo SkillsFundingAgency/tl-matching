@@ -1,8 +1,6 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -12,20 +10,22 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
 {
     public class When_ImportQualificationRoutePathMapping_Function_Blob_Trigger_Fires
     {
-        private Stream _blobStream;
-        private ExecutionContext _context;
-        private ILogger _logger;
-        private IRoutePathService _routePathService;
-
-        
-        public async Task OneTimeSetup()
+        public When_ImportQualificationRoutePathMapping_Function_Blob_Trigger_Fires()
         {
             _blobStream = new MemoryStream();
-            _context = new ExecutionContext();
-            _logger = Substitute.For<ILogger>();
+            var context = new ExecutionContext();
+            var logger = Substitute.For<ILogger>();
             _routePathService = Substitute.For<IRoutePathService>();
-            await Functions.QualificationRoutePathMapping.ImportQualificationRoutePathMapping(_blobStream, "test", _context, _logger, _routePathService);
+            Functions.QualificationRoutePathMapping.ImportQualificationRoutePathMapping(
+                _blobStream,
+                "test",
+                context,
+                logger,
+                _routePathService).GetAwaiter().GetResult();
         }
+
+        private readonly IRoutePathService _routePathService;
+        private readonly Stream _blobStream;
 
         [Fact]
         public void ImportQualificationPathMapping_Is_Called_Exactly_Once()
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
             _routePathService
                 .Received(1)
                 .ImportQualificationPathMapping(
-                    Arg.Any<QualificationRoutePathMappingFileImportDto>());
+                    Arg.Is<QualificationRoutePathMappingFileImportDto>(dto => dto.FileDataStream == _blobStream));
         }
     }
 }
