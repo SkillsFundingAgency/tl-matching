@@ -1,31 +1,34 @@
-﻿//using System.IO;
-//using System.Threading.Tasks;
-//using NUnit.Framework;
-//using Sfa.Tl.Matching.Models.Dto;
+﻿using System.IO;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
-//namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
-//{
-//    public class When_Provider_Imports_File_With_Invalid_Format : ProviderVenueTestBase
-//    {
-//        private const string DataFilePath = @"ProviderVenue\ProviderVenue-InvalidFormat.xlsx";
-//        private int _createdRecordCount;
+namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
+{
+    public class When_ProviderVenue_Imports_File_With_Invalid_Format : IClassFixture<ProviderVenueTestFixture>
+    {
+        private const string DataFilePath = @"ProviderVenue\ProviderVenue-InvalidFormat.xlsx";
+        private int _createdRecordCount;
+        private readonly string _testExecutionDirectory;
+        private readonly ProviderVenueTestFixture _testFixture;
 
-//        [SetUp]
-//        public async Task Setup()
-//        {
-//            await ResetData();
+        public When_ProviderVenue_Imports_File_With_Invalid_Format(ProviderVenueTestFixture testFixture)
+        {
+            _testFixture = testFixture;
+            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+        }
 
-//            var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, DataFilePath);
-//            using (var stream = File.Open(filePath, FileMode.Open))
-//            {
-//                _createdRecordCount = ProviderVenueService.ImportProviderVenue(new ProviderVenueFileImportDto { FileDataStream = stream }).Result;
-//            }
-//        }
+        [Fact]
+        public async Task Then_No_Record_Is_Saved()
+        {
+            var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
+            using (var stream = File.Open(filePath, FileMode.Open))
+            {
+                _createdRecordCount = await _testFixture.ProviderVenueService.ImportProviderVenue(new ProviderVenueFileImportDto { FileDataStream = stream });
+            }
 
-//        [Test]
-//        public void Then_No_Record_Is_Saved()
-//        {
-//            Assert.AreEqual(0, _createdRecordCount);
-//        }
-//    }
-//}
+            _createdRecordCount.Should().Be(0);
+        }
+    }
+}

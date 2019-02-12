@@ -12,7 +12,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(source => source.Name))
                 .ForMember(dest => dest.Value, opt => opt.MapFrom((source) => source.Id))
                 ;
-
         }
     }
 }

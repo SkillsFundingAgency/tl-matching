@@ -1,38 +1,40 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System;
+using System.IO;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using NUnit.Framework;
+using Microsoft.WindowsAzure.Storage.Blob;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
 {
     public class When_ImportQualificationRoutePathMapping_Function_Blob_Trigger_Fires
     {
-        private Stream _blobStream;
-        private ExecutionContext _context;
-        private ILogger _logger;
-        private IRoutePathService _routePathService;
+        private readonly IRoutePathService _routePathService;
 
-        [OneTimeSetUp]
-        public async Task OneTimeSetup()
+        public When_ImportQualificationRoutePathMapping_Function_Blob_Trigger_Fires()
         {
-            _blobStream = new MemoryStream();
-            _context = new ExecutionContext();
-            _logger = Substitute.For<ILogger>();
+            var blobStream = new CloudBlockBlob(new Uri(""));
+            var context = new ExecutionContext();
+            var logger = Substitute.For<ILogger>();
             _routePathService = Substitute.For<IRoutePathService>();
-            await Functions.QualificationRoutePathMapping.ImportQualificationRoutePathMapping(_blobStream, "test", _context, _logger, _routePathService);
+            Functions.QualificationRoutePathMapping.ImportQualificationRoutePathMapping(
+                blobStream,
+                "test",
+                context,
+                logger,
+                _routePathService).GetAwaiter().GetResult();
         }
 
-        [Test]
+        [Fact]
         public void ImportQualificationPathMapping_Is_Called_Exactly_Once()
         {
             _routePathService
                 .Received(1)
                 .ImportQualificationPathMapping(
-                    Arg.Is<QualificationRoutePathMappingFileImportDto>(dto => dto.FileDataStream == _blobStream));
+                    Arg.Any<QualificationRoutePathMappingFileImportDto>());
         }
     }
 }

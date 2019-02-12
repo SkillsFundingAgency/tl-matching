@@ -1,37 +1,39 @@
-﻿//using System.IO;
-//using System.Threading.Tasks;
-//using Microsoft.Azure.WebJobs;
-//using Microsoft.Extensions.Logging;
-//using NUnit.Framework;
-//using NSubstitute;
-//using Sfa.Tl.Matching.Application.Interfaces;
-//
-//namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenue
-//{
-//    public class When_ImportProviderVenue_Function_Blob_Trigger_Fires
-//    {
-//        private Stream _blobStream;
-//        private ExecutionContext _context;
-//        private ILogger _logger;
-//        private IProviderVenueService _providerVenueService;
-//
-//        [OneTimeSetUp]
-//        public async Task OneTimeSetup()
-//        {
-//            _blobStream = new MemoryStream();
-//            _context = new ExecutionContext();
-//            _logger = Substitute.For<ILogger>();
-//            _providerVenueService = Substitute.For<IProviderVenueService>();
-//            await Functions.ProviderVenue.ImportProviderVenue(_blobStream, "test", _context, _logger, _providerVenueService);
-//        }
-//
-//        [Test]
-//        public void ImportProviderVenue_Is_Called_Exactly_Once()
-//        {
-//            _providerVenueService
-//                .Received(1)
-//                .ImportProviderVenue(
-//                    Arg.Is(_blobStream));
-//        }
-//    }
-//}
+﻿using System;
+using System.IO;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage.Blob;
+using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
+
+namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenue
+{
+    public class When_ImportProviderVenue_Function_Blob_Trigger_Fires
+    {
+        private readonly IProviderVenueService _providerVenueService;
+
+        public When_ImportProviderVenue_Function_Blob_Trigger_Fires()
+        {
+            var blobStream = new CloudBlockBlob(new Uri(""));
+            var context = new ExecutionContext();
+            var logger = Substitute.For<ILogger>();
+            _providerVenueService = Substitute.For<IProviderVenueService>();
+            Functions.ProviderVenue.ImportProviderVenue(
+                blobStream,
+                "test",
+                context,
+                logger,
+                _providerVenueService).GetAwaiter().GetResult();
+        }
+
+        [Fact]
+        public void ImportProviderVenue_Is_Called_Exactly_Once()
+        {
+            _providerVenueService
+                .Received(1)
+                .ImportProviderVenue(Arg.Any<ProviderVenueFileImportDto>());
+        }
+    }
+}

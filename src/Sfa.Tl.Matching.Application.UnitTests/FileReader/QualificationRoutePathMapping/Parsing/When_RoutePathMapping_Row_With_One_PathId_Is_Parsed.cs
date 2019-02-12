@@ -1,44 +1,41 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
+using FluentAssertions;
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants;
 using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Parsing
 {
-    public class When_RoutePathMapping_Row_With_One_PathId_Is_Parsed
+    public class When_RoutePathMapping_Row_With_One_PathId_Is_Parsed : IClassFixture<QualificationRoutePathMappingParsingFixture>
     {
-        private IEnumerable<RoutePathMappingDto> _parseResult;
+        private readonly IEnumerable<RoutePathMappingDto> _parseResult;
 
-        [SetUp]
-        public void Setup()
+        public When_RoutePathMapping_Row_With_One_PathId_Is_Parsed(QualificationRoutePathMappingParsingFixture fixture)
         {
-            var routePathMappingDto = new ValidQualificationRoutePathMappingFileImportDtoBuilder().Build();
-
-            var parser = new QualificationRoutePathMappingDataParser();
-            _parseResult = parser.Parse(routePathMappingDto);
+            _parseResult = fixture.Parser.Parse(fixture.Dto);
         }
 
-        [Test]
+        [Fact]
         public void Then_ParseResult_Count_Is_One() =>
-            Assert.AreEqual(int.Parse(RoutePathMappingConstants.AgricultureLandManagementandProduction), _parseResult.Count());
-        
-        [Test]
+            _parseResult.Count().Should().Be(int.Parse(RoutePathMappingConstants.AgricultureLandManagementandProduction));
+
+        [Fact]
         public void Then_ParseResult_LarsId_Matches_Input() =>
-            Assert.AreEqual(RoutePathMappingConstants.LarsId, _parseResult.First().LarsId);
-        
-        [Test]
+            _parseResult.First().LarsId.Should().BeEquivalentTo(RoutePathMappingConstants.LarsId);
+
+        [Fact]
         public void Then_ParseResult_Title_Matches_Input() =>
-            Assert.AreEqual(RoutePathMappingConstants.Title, _parseResult.First().Title);
+            _parseResult.First().Title.Should().BeEquivalentTo(RoutePathMappingConstants.Title);
 
-        [Test]
+        [Fact]
         public void Then_ParseResult_ShortTitle_Matches_Input() =>
-            Assert.AreEqual(RoutePathMappingConstants.ShortTitle, _parseResult.First().ShortTitle);
+            _parseResult.First().ShortTitle.Should().BeEquivalentTo(RoutePathMappingConstants.ShortTitle);
 
-        [Test]
+        [Fact]
         public void Then_ParseResult_PathId_Matches_Input() =>
-            Assert.AreEqual(RoutePathMappingConstants.PathId, _parseResult.First().PathId);
+            _parseResult.First().PathId.Should().Be(RoutePathMappingConstants.PathId);
     }
 }

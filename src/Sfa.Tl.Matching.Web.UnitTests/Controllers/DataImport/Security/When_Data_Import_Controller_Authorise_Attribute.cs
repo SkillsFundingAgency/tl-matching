@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using NUnit.Framework;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Authorization;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Web.Controllers;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
 {
     public class When_Data_Import_Controller_Authorise_Attribute
     {
-        private AuthorizeAttribute[] _authoriseAttributes;
+        private readonly AuthorizeAttribute[] _authoriseAttributes;
 
-        [SetUp]
-        public void Setup()
+        public When_Data_Import_Controller_Authorise_Attribute()
         {
             var controllerType = typeof(DataImportController);
 
@@ -18,12 +18,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
                 as AuthorizeAttribute[];
         }
 
-        [Test]
+        [Fact]
         public void Then_Is_On_Controller() =>
-            Assert.Greater(_authoriseAttributes.Length, 0);
+            _authoriseAttributes.Length.Should().BeGreaterThan(0);
 
-        [Test]
+        [Fact]
         public void Then_Role_Has_AdminUser() =>
-            Assert.AreEqual(RolesExtensions.AdminUser, _authoriseAttributes[0].Roles);
+            _authoriseAttributes[0].Roles.Should().Be(RolesExtensions.AdminUser);
     }
 }

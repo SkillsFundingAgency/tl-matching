@@ -1,32 +1,23 @@
-﻿//using FluentValidation.Results;
-//using NSubstitute;
-//using NUnit.Framework;
-//using Sfa.Tl.Matching.Application.FileReader.Provider;
-//using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders;
-//using Sfa.Tl.Matching.Data.Interfaces;
+﻿using FluentAssertions;
+using FluentValidation.Results;
+using Xunit;
 
-//namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
-//{
-//    public class When_Provider_Row_Is_Valid
-//    {
-//        private ValidationResult _validationResult;
+namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
+{
+    public class When_Provider_Row_Is_Valid : IClassFixture<ProviderFileImportFixture>
+    {
+        private readonly ValidationResult _validationResult;
+        public When_Provider_Row_Is_Valid(ProviderFileImportFixture fixture)
+        {
+            _validationResult = fixture.ProviderDataValidator.Validate(fixture.ProviderFileImportDto);
+        }
 
-//        [SetUp]
-//        public void Setup()
-//        {
-//            ValidProviderBuilder builder = new ValidProviderBuilder();
-//            var providerFileImportDto = builder.Build();
-//            var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
-//            var validator = new ProviderDataValidator(repository);
-//            _validationResult = validator.Validate(providerFileImportDto);
-//        }
+        [Fact]
+        public void Then_Validation_Result_Is_Valid() =>
+            _validationResult.IsValid.Should().BeTrue();
 
-//        [Test]
-//        public void Then_Validation_Result_Is_Valid() =>
-//            Assert.True(_validationResult.IsValid);
-
-//        [Test]
-//        public void Then_Error_Count_Is_Zero() =>
-//            Assert.Zero(_validationResult.Errors.Count);
-//    }
-//}
+        [Fact]
+        public void Then_Error_Count_Is_Zero() =>
+            _validationResult.Errors.Count.Should().Be(0);
+    }
+}

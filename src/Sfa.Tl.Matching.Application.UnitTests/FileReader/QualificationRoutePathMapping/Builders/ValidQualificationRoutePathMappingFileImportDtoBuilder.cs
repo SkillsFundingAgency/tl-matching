@@ -14,7 +14,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
                 LarsId = RoutePathMappingConstants.LarsId,
                 Title = RoutePathMappingConstants.Title,
                 ShortTitle = RoutePathMappingConstants.ShortTitle,
-                AgricultureLandManagementandProduction = RoutePathMappingConstants.PathId.ToString()
+                Accountancy = RoutePathMappingConstants.PathId.ToString(),
+                Source = "Manual"
             };
         }
 

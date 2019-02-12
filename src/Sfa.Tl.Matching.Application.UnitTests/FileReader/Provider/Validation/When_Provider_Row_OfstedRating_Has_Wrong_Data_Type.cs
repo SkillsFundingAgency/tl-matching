@@ -1,46 +1,38 @@
-﻿//using System.Linq;
-//using FluentValidation.Results;
-//using Humanizer;
-//using NSubstitute;
-//using NUnit.Framework;
-//using Sfa.Tl.Matching.Application.FileReader.Provider;
-//using Sfa.Tl.Matching.Data.Interfaces;
-//using Sfa.Tl.Matching.Models.Dto;
-//using Sfa.Tl.Matching.Models.Enums;
+﻿using System.Linq;
+using FluentAssertions;
+using FluentValidation.Results;
+using Humanizer;
+using Sfa.Tl.Matching.Models.Enums;
+using Xunit;
 
-//namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
-//{
-//    public class When_Provider_Row_OfstedRating_Has_Wrong_Data_Type
-//    {
-//        private ValidationResult _validationResult;
+namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
+{
+    public class When_Provider_Row_OfstedRating_Has_Wrong_Data_Type : IClassFixture<ProviderFileImportFixture>
+    {
+        private readonly ValidationResult _validationResult;
+        public When_Provider_Row_OfstedRating_Has_Wrong_Data_Type(ProviderFileImportFixture fixture)
+        {
+            fixture.ProviderFileImportDto.OfstedRating = "A";
 
-//        [SetUp]
-//        public void Setup()
-//        {
-//            var providerStringArray = new ProviderFileImportDto { OfstedRating = "A" };
+            _validationResult = fixture.ProviderDataValidator.Validate(fixture.ProviderFileImportDto);
+        }
 
-//            var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
+        [Fact]
+        public void Then_Validation_Result_Is_Not_Valid() =>
+            _validationResult.IsValid.Should().BeFalse();
 
-//            var validator = new ProviderDataValidator(repository);
-//            _validationResult = validator.Validate(providerStringArray);
-//        }
+        [Fact]
+        public void Then_Error_Count_Is_One() =>
+            _validationResult.Errors.Count.Should().Be(1);
 
-//        [Test]
-//        public void Then_Validation_Result_Is_Not_Valid() =>
-//            Assert.False(_validationResult.IsValid);
+        [Fact]
+        public void Then_Error_Code_Is_WrongDataType() =>
+            _validationResult.Errors.First(e => e.ErrorCode == ValidationErrorCode.WrongDataType.ToString()).ErrorCode.Should()
+                .Be(ValidationErrorCode.WrongDataType.ToString());
 
-//        [Test]
-//        public void Then_Error_Count_Is_21() =>
-//            Assert.AreEqual(21, _validationResult.Errors.Count);
-
-//        [Test]
-//        public void Then_Error_Code_Is_WrongDataType() =>
-//            Assert.AreEqual(ValidationErrorCode.WrongDataType.ToString(),
-//                _validationResult.Errors.First(e => e.ErrorCode == ValidationErrorCode.WrongDataType.ToString()).ErrorCode);
-
-//        [Test]
-//        public void Then_Error_Message_Is_WrongDataType() =>
-//            Assert.AreEqual($"'{nameof(Domain.Models.Provider.OfstedRating)}' - {ValidationErrorCode.WrongDataType.Humanize()}",
-//                _validationResult.Errors.First(e => e.ErrorCode == ValidationErrorCode.WrongDataType.ToString()).ErrorMessage);
-//    }
-//}
+        [Fact]
+        public void Then_Error_Message_Is_WrongDataType() =>
+            _validationResult.Errors.First(e => e.ErrorCode == ValidationErrorCode.WrongDataType.ToString()).ErrorMessage.Should()
+                .Be($"'{nameof(Domain.Models.Provider.OfstedRating)}' - {ValidationErrorCode.WrongDataType.Humanize()}");
+    }
+}

@@ -1,48 +1,54 @@
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using NSubstitute;
-//using NUnit.Framework;
-//using Sfa.Tl.Matching.Models;
-//using Sfa.Tl.Matching.Models.ViewModel;
-//using Sfa.Tl.Matching.Web.Controllers;
+using AutoMapper;
+using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Web.Controllers;
+using Xunit;
 
-//namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
-//{
-//    public class When_Data_Import_Controller_Index_Is_Submitted_Successfully
-//    {
-//        private IActionResult _result;
-//        private IDataImportService _dataImportService;
-//        private IFormFile _formFile;
-//        private DataImportController _dataImportController;
-//        private DataUploadDto _viewModel;
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
+{
+    public class When_Data_Import_Controller_Index_Is_Submitted_Successfully
+    {
+        private readonly IActionResult _result;
+        private readonly DataUploadDto _dataUploadDto;
+        private readonly IDataBlobUploadService _dataBlobUploadService;
 
-//        [SetUp]
-//        public void Setup()
-//        {
-//            _viewModel = new DataUploadDto();
+        public When_Data_Import_Controller_Index_Is_Submitted_Successfully()
+        {
+            _dataUploadDto = new DataUploadDto();
 
-//            var viewModelMapper = Substitute.For<IDataImportViewModelMapper>();
-//            _dataImportService = Substitute.For<IDataImportService>();
-//            _formFile = Substitute.For<IFormFile>();
-            
-//            _dataImportController = new DataImportController(viewModelMapper, _dataImportService);
-           
-//            _result = _dataImportController.Import(_formFile, _viewModel).Result;
-//        }
+            var mapper = Substitute.For<IMapper>();
+            _dataBlobUploadService = Substitute.For<IDataBlobUploadService>();
+            var formFile = Substitute.For<IFormFile>();
+            formFile.ContentType.Returns("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
-//        [Test]
-//        public void Then_View_Result_Is_Returned() =>
-//             Assert.IsAssignableFrom<ViewResult>(_result);
+            var dataImportController = new DataImportController(mapper, _dataBlobUploadService);
 
-//        [Test]
-//        public void Then_Model_State_Has_No_Errors()
-//        {
-//            var viewResult = (ViewResult)_result;
-//            Assert.Zero(viewResult.ViewData.ModelState.Count);
-//        }
+            var viewModel = new DataImportParametersViewModel
+            {
+                File = formFile
+            };
 
-//        [Test]
-//        public void Then_Service_Upload_Is_Called_Exactly_Once() =>
-//            _dataImportService.Received(1).Import(_formFile, _viewModel);
-//    }
-//}
+            _result = dataImportController.Index(viewModel).Result;
+        }
+
+        [Fact]
+        public void Then_View_Result_Is_Returned() =>
+            _result.Should().BeAssignableTo<ViewResult>();
+
+        [Fact]
+        public void Then_Model_State_Has_No_Errors()
+        {
+            var viewResult = (ViewResult)_result;
+            viewResult.ViewData.ModelState.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Then_Service_Upload_Is_Called_Exactly_Once() =>
+            _dataBlobUploadService.ReceivedWithAnyArgs(1).Upload(_dataUploadDto);
+    }
+}

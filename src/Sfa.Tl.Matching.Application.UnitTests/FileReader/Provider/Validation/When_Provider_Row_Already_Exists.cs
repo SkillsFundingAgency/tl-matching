@@ -1,48 +1,42 @@
-﻿//using System;
-//using FluentValidation.Results;
-//using Humanizer;
-//using NSubstitute;
-//using NUnit.Framework;
-//using Sfa.Tl.Matching.Application.FileReader.Provider;
-//using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders;
-//using Sfa.Tl.Matching.Data.Interfaces;
-//using Sfa.Tl.Matching.Models.Enums;
+﻿using System;
+using FluentAssertions;
+using FluentValidation.Results;
+using Humanizer;
+using NSubstitute;
 
-//namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
-//{
-//    public class When_Provider_Row_Already_Exists
-//    {
-//        private ValidationResult _validationResult;
-        
-//        [SetUp]
-//        public void Setup()
-//        {
-//            var provider = new Domain.Models.Provider();
+using Sfa.Tl.Matching.Application.FileReader.Provider;
+using Sfa.Tl.Matching.Models.Enums;
+using Xunit;
 
-//            var providerFileImportDto = new ValidProviderBuilder().Build();
+namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
+{
+    public class When_Provider_Row_Already_Exists : IClassFixture<ProviderFileImportFixture>
+    {
+        private readonly ValidationResult _validationResult;
 
-//            var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
-//            repository.GetSingleOrDefault(Arg.Any<Func<Domain.Models.Provider, bool>>()).Returns(provider);
+        public When_Provider_Row_Already_Exists(ProviderFileImportFixture fixture)
+        {
+            fixture.Repository.GetSingleOrDefault(Arg.Any<Func<Domain.Models.Provider, bool>>())
+                .Returns(new Domain.Models.Provider());
 
-//            var validator = new ProviderDataValidator(repository);
-//            _validationResult = validator.Validate(providerFileImportDto);
-//        }
+            var validator = new ProviderDataValidator(fixture.Repository);
+            _validationResult = validator.Validate(fixture.ProviderFileImportDto);
+        }
 
-//        [Test]
-//        public void Then_Validation_Result_Is_Not_Valid() =>
-//            Assert.False(_validationResult.IsValid);
+        [Fact]
+        public void Then_Validation_Result_Is_Not_Valid() =>
+            _validationResult.IsValid.Should().BeFalse();
 
-//        [Test]
-//        public void Then_Error_Count_Is_One() =>
-//            Assert.AreEqual(1, _validationResult.Errors.Count);
+        [Fact]
+        public void Then_Error_Count_Is_One() =>
+            _validationResult.Errors.Count.Should().Be(1);
 
-//        [Test]
-//        public void Then_Error_Code_Is_RecordExists() =>
-//            Assert.AreEqual(ValidationErrorCode.RecordAlreadyExists.ToString(), 
-//                _validationResult.Errors[0].ErrorCode);
+        [Fact]
+        public void Then_Error_Code_Is_RecordExists() =>
+            _validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.RecordAlreadyExists.ToString());
 
-//        [Test]
-//        public void Then_Error_Message_Is_RecordExists() =>
-//            Assert.AreEqual($"'{nameof(Domain.Models.Provider.UkPrn)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}", _validationResult.Errors[0].ErrorMessage);
-//    }
-//}
+        [Fact]
+        public void Then_Error_Message_Is_RecordExists() =>
+            _validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(Domain.Models.Provider.UkPrn)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
+    }
+}

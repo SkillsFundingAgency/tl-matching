@@ -1,42 +1,37 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using FluentAssertions;
 using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMapping
 {
-    public class When_RoutePathService_Imports_File_And_Records_Already_Exist
-        : RoutePathMappingServiceTestBase
+    public class When_RoutePathService_Imports_File_And_Records_Already_Exist : IClassFixture<RoutePathMappingServiceTestFixture>
     {
-        private const string DataFilePath = @"QualificationRoutePathMapping\RoutePathMapping-Simple.xlsx";
+        private const string DataFilePath = @"QualificationRoutePathMapping\RoutePathMapping-RecordsAlreadyExist.xlsx";
         private int _createdRecordCount;
+        private readonly string _testExecutionDirectory;
+        private readonly RoutePathMappingServiceTestFixture _testFixture;
+        private const string LarsId = "10000002";
 
-        [SetUp]
-        public override async Task Setup()
+        public When_RoutePathService_Imports_File_And_Records_Already_Exist(RoutePathMappingServiceTestFixture testFixture)
         {
-            await base.Setup();
-
-            await ResetData();
-
-            MatchingDbContext.Add(new Domain.Models.RoutePathMapping
-            {
-                LarsId = "60144567", //Must match id in RoutePathMapping-Simple.xlsx
-                Title = "Test",
-                PathId = 1
-            });
-            await MatchingDbContext.SaveChangesAsync();
-
-            var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, DataFilePath);
-            using (var stream = File.Open(filePath, FileMode.Open))
-            {
-                _createdRecordCount = await RouteMappingService.ImportQualificationPathMapping(new QualificationRoutePathMappingFileImportDto { FileDataStream = stream });
-            }
+            _testFixture = testFixture;
+            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            _testFixture.ResetData(LarsId);
+            _testFixture.CreateRoutePathMapping(LarsId);
         }
 
-        [Test]
-        public void Then_Record_Is_Not_Saved()
+        [Fact]
+        public async Task Then_Record_Is_Saved()
         {
-            Assert.AreEqual(0, _createdRecordCount);
+            var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
+            using (var stream = File.Open(filePath, FileMode.Open))
+            {
+                _createdRecordCount = await _testFixture.RouteMappingService.ImportQualificationPathMapping(new QualificationRoutePathMappingFileImportDto { FileDataStream = stream });
+            }
+
+            _createdRecordCount.Should().Be(0);
         }
     }
 }

@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using NUnit.Framework;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Authorization;
 using Sfa.Tl.Matching.Web.Controllers;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
 {
     public class When_Data_Import_Controller_Allow_Anonymous_Attribute
     {
-        private AllowAnonymousAttribute[] _allowAnonymousAttributes;
-
-        [SetUp]
-        public void Setup()
+        private readonly AllowAnonymousAttribute[] _allowAnonymousAttributes;
+        
+        public When_Data_Import_Controller_Allow_Anonymous_Attribute()
         {
             var controllerType = typeof(DataImportController);
 
@@ -17,8 +17,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
                 as AllowAnonymousAttribute[];
         }
 
-        [Test]
+        [Fact]
         public void Then_Is_Not_On_Controller() =>
-            Assert.Zero(_allowAnonymousAttributes.Length);
+            _allowAnonymousAttributes.Length.Should().Be(0);
     }
 }

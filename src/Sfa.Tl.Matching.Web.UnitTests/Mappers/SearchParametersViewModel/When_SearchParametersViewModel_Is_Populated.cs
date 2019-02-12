@@ -1,70 +1,69 @@
-//using System.Collections.Generic;
-//using System.Linq;
-//using NSubstitute;
-//using NUnit.Framework;
-//using Sfa.Tl.Matching.Application.Interfaces;
-//using Sfa.Tl.Matching.Domain.Models;
-//using Sfa.Tl.Matching.Web.Mappers;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
+using Xunit;
 
-//namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.SearchParametersViewModel
-//{
-//    public class When_SearchParametersViewModel_Is_Populated
-//    {
-//        private IQueryable<Route> _routes;
-//        private IRoutePathService _routePathLookupService;
-//        private Models.ViewModel.SearchParametersViewModel _viewModel;
+namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.SearchParametersViewModel
+{
+    public class When_SearchParametersViewModel_Is_Populated
+    {
+        private readonly IQueryable<Route> _routes;
+        private readonly IRoutePathService _routePathLookupService;
+        private Models.ViewModel.SearchParametersViewModel _viewModel;
 
-//        [SetUp]
-//        public void Setup()
-//        {
-//            _routes = new List<Route>
-//                {
-//                    new Route { Id = 1, Name = "Good Route" },
-//                    new Route { Id = 2, Name = "Another Route" }
-//                }
-//                .AsQueryable();
+        public When_SearchParametersViewModel_Is_Populated()
+        {
+            _routes = new List<Route>
+                {
+                    new Route { Id = 1, Name = "Good Route" },
+                    new Route { Id = 2, Name = "Another Route" }
+                }
+                .AsQueryable();
 
-//            _routePathLookupService =
-//                Substitute
-//                    .For<IRoutePathService>();
-//            _routePathLookupService.GetRoutes().Returns(_routes);
-            
-//            var mapper = new SearchParametersViewModelMapper(_routePathLookupService);
-//            _viewModel = mapper.GetImportTypeSelectList(null, null);
-//        }
+            _routePathLookupService =
+                Substitute
+                    .For<IRoutePathService>();
+            _routePathLookupService.GetRoutes().Returns(_routes);
 
-//        [Test]
-//        public void Then_ViewModel_IsNotNull() =>
-//            Assert.NotNull(_viewModel);
+            //var mapper = new SearchParametersViewModelMapper(_routePathLookupService);
+            //_viewModel = mapper.GetImportTypeSelectList(null, null);
+        }
 
-//        [Test]
-//        public void Then_RoutesSelectList_Is_NotNull() =>
-//            Assert.NotNull(_viewModel.RoutesSelectList);
+        [Fact]
+        public void Then_ViewModel_IsNotNull() =>
+            _viewModel.Should().NotBeNull();
 
-//        [Test]
-//        public void Then_RoutesSelectList_Count_Is_Correct() =>
-//            Assert.AreEqual(2, _viewModel.RoutesSelectList.Count);
-        
-//        [Test]
-//        public void Then_RoutesSelectList_Id_Is_Mapped_To_Value_Correctly()
-//        {
-//            foreach (var route in _routes)
-//            {
-//                Assert.IsTrue(_viewModel.RoutesSelectList.Any(r => r.Value == route.Id.ToString()));
-//            }
-//        }
+        [Fact]
+        public void Then_RoutesSelectList_Is_NotNull() =>
+            _viewModel.RoutesSelectList.Should().NotBeNull();
 
-//        [Test]
-//        public void Then_RoutesSelectList_Name_Is_Mapped_To_Text_Correctly()
-//        {
-//            foreach (var route in _routes)
-//            {
-//                Assert.IsTrue(_viewModel.RoutesSelectList.Any(r => r.Text == route.Name));
-//            }
-//        }
+        [Fact]
+        public void Then_RoutesSelectList_Count_Is_Correct() =>
+            _viewModel.RoutesSelectList.Count.Should().Be(2);
 
-//        [Test]
-//        public void Then_SelectedRouteId_Is_Mapped_To_The_Correctly_Ordered_Route_Id() =>
-//            Assert.AreEqual("2", _viewModel.SelectedRouteId);
-//    }
-//}
+        //[Fact]
+        //public void Then_RoutesSelectList_Id_Is_Mapped_To_Value_Correctly()
+        //{
+        //    foreach (var route in _routes)
+        //    {
+        //        Assert.IsTrue(_viewModel.RoutesSelectList.Any(r => r.Value == route.Id.ToString()));
+        //    }
+        //}
+
+        //[Fact]
+        //public void Then_RoutesSelectList_Name_Is_Mapped_To_Text_Correctly()
+        //{
+        //    foreach (var route in _routes)
+        //    {
+        //        Assert.IsTrue(_viewModel.RoutesSelectList.Any(r => r.Text == route.Name));
+        //    }
+        //}
+
+        [Fact]
+        public void Then_SelectedRouteId_Is_Mapped_To_The_Correctly_Ordered_Route_Id() =>
+            _viewModel.SelectedRouteId.Should().Be("2");
+    }
+}

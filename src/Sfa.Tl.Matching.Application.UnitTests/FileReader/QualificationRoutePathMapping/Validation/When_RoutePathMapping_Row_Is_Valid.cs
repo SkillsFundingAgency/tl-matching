@@ -1,36 +1,24 @@
-﻿using FluentValidation.Results;
-using NSubstitute;
-using NUnit.Framework;
-using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Extensions;
-using Sfa.Tl.Matching.Data.Interfaces;
+﻿using FluentAssertions;
+using FluentValidation.Results;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Validation
 {
-    public class When_RoutePathMapping_Row_Is_Valid
+    public class When_RoutePathMapping_Row_Is_Valid : IClassFixture<QualificationRoutePathMappingFileImportValidationTestFixture>
     {
-        private ValidationResult _validationResult;
-
-        [SetUp]
-        public void Setup()
+        private readonly ValidationResult _validationResult;
+        
+        public When_RoutePathMapping_Row_Is_Valid(QualificationRoutePathMappingFileImportValidationTestFixture fixture)
         {
-            var routePathMapping = new ValidRoutePathMappingBuilder().Build();
-            var dto = routePathMapping.ToDto();
-
-            var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
-            var routePathRepository = Substitute.For<IRoutePathRepository>();
-
-            var validator = new QualificationRoutePathMappingDataValidator(repository, routePathRepository);
-            _validationResult = validator.Validate(dto);
+            _validationResult = fixture.Validator.Validate(fixture.Dto);
         }
 
-        [Test]
+        [Fact]
         public void Then_Validation_Result_Is_Valid() =>
-            Assert.True(_validationResult.IsValid);
+            _validationResult.IsValid.Should().BeTrue();
 
-        [Test]
+        [Fact]
         public void Then_Error_Count_Is_Zero() =>
-            Assert.Zero(_validationResult.Errors.Count);
+            _validationResult.Errors.Should().BeEmpty();
     }
 }

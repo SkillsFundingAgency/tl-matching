@@ -17,15 +17,14 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
         public const int MaximumTitleLength = 250;
         public const int MaximumShortTitleLength = 100;
 
-        private IDictionary<int, string> _pathMapping;
+        private readonly IDictionary<int, string> _pathMapping;
 
         public QualificationRoutePathMappingDataValidator(IRepository<Domain.Models.RoutePathMapping> repository, IRoutePathRepository routePathRepository)
         {
             var paths = routePathRepository.GetPaths().ToList();
            
             _pathMapping = paths
-                .Select(p => 
-                    new KeyValuePair<int, string>(p.Id, 
+                .Select(p => new KeyValuePair<int, string>(p.Id, 
                         p.Name
                             .Replace(" ", "")
                             .Replace(",", "")
@@ -34,27 +33,27 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
 
             RuleFor(dto => dto)
                 .Must(MustHaveAtLeastOnePathId)
-                .WithErrorCode(ValidationErrorCode.WrongNumberOfColumns.ToString())
-                .WithMessage(ValidationErrorCode.WrongNumberOfColumns.Humanize());
+                    .WithErrorCode(ValidationErrorCode.WrongNumberOfColumns.ToString())
+                    .WithMessage(ValidationErrorCode.WrongNumberOfColumns.Humanize());
 
             RuleFor(dto => dto)
                 .Must(PathIdValuesMustMatchColumnType)
-                .WithErrorCode(ValidationErrorCode.ColumnValueDoesNotMatchType.ToString())
-                .WithMessage(ValidationErrorCode.ColumnValueDoesNotMatchType.Humanize());
+                    .WithErrorCode(ValidationErrorCode.ColumnValueDoesNotMatchType.ToString())
+                    .WithMessage(ValidationErrorCode.ColumnValueDoesNotMatchType.Humanize());
 
             RuleFor(dto => dto.LarsId)
-                    .NotNull()
-                        .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
-                    .NotEmpty()
-                        .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                        .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
-                    .Matches(ValidationConstants.LarsIdRegex)
-                        .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                        .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
-                    .MustAsync((x, cancellation) => CanLarsIdBeAdded(repository, x))
-                        .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
-                        .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
+                .NotNull()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .NotEmpty()
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .Matches(ValidationConstants.LarsIdRegex)
+                    .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
+                .MustAsync((x, cancellation) => CanLarsIdBeAdded(repository, x))
+                    .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
 
             RuleFor(dto => dto.Title)
                 .NotNull()
@@ -62,7 +61,10 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
                     .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .Length(0, MaximumTitleLength)
+                    .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
 
             RuleFor(dto => dto.ShortTitle)
                 .NotNull()
@@ -70,15 +72,10 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
                     .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.ShortTitle)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.ShortTitle)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
-
-            RuleFor(dto => dto.Title).Length(0, MaximumTitleLength)
-                .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
-                .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
-
-            RuleFor(dto => dto.ShortTitle).Length(0, MaximumShortTitleLength)
-                .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
-                .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.ShortTitle)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.ShortTitle)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .Length(0, MaximumShortTitleLength)
+                    .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.ShortTitle)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
 
             RuleFor(dto => dto.Source)
                 .NotNull()

@@ -1,31 +1,35 @@
-﻿//using System.IO;
-//using System.Threading.Tasks;
-//using NUnit.Framework;
-//using Sfa.Tl.Matching.Models.Dto;
+﻿using System.IO;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Sfa.Tl.Matching.Models.Dto;
+using Xunit;
 
-//namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
-//{
-//    public class When_Provider_Imports_File_With_Missing_Mandatory : ProviderTestBase
-//    {
-//        private const string DataFilePath = @"Provider\Provider-MissingMandatory.xlsx";
-//        private int _createdRecordCount;
+namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
+{
+    public class When_Provider_Imports_File_With_Missing_Mandatory : IClassFixture<ProviderTestFixture>
+    {
+        private const string DataFilePath = @"Provider\Provider-MissingMandatory.xlsx";
+        private int _createdRecordCount;
+        private readonly string _testExecutionDirectory;
 
-//        [SetUp]
-//        public async Task Setup()
-//        {
-//            await ResetData();
+        private readonly ProviderTestFixture _testFixture;
 
-//            var filePath = Path.Combine(TestContext.CurrentContext.TestDirectory, DataFilePath);
-//            using (var stream = File.Open(filePath, FileMode.Open))
-//            {
-//                _createdRecordCount = ProviderService.ImportProvider(new ProviderFileImportDto { FileDataStream = stream }).Result;
-//            }
-//        }
+        public When_Provider_Imports_File_With_Missing_Mandatory(ProviderTestFixture testFixture)
+        {
+            _testFixture = testFixture;
+            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+        }
 
-//        [Test]
-//        public void Then_No_Record_Is_Saved()
-//        {
-//            Assert.AreEqual(0, _createdRecordCount);
-//        }
-//    }
-//}
+        [Fact]
+        public async Task Then_No_Record_Is_Saved()
+        {
+            var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
+            using (var stream = File.Open(filePath, FileMode.Open))
+            {
+                _createdRecordCount = await _testFixture.ProviderService.ImportProvider(new ProviderFileImportDto { FileDataStream = stream });
+            }
+
+            _createdRecordCount.Should().Be(0);
+        }
+    }
+}
