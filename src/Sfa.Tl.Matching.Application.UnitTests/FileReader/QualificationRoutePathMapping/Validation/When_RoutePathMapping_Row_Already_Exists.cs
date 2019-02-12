@@ -30,7 +30,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
                         }
                         .AsQueryable());
 
-            var validator = new QualificationRoutePathMappingDataValidator(repository);
+            var routePathRepository = Substitute.For<IRoutePathRepository>();
+
+            var validator = new QualificationRoutePathMappingDataValidator(repository, routePathRepository);
             _validationResult = validator.Validate(routePathMapping.ToDto());
         }
 

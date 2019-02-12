@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
 
             var repository = new RoutePathMappingRepository(loggerRepository, MatchingDbContext);
             var routePathRepository = new RoutePathRepository(MatchingDbContext);
-            var dataValidator = new QualificationRoutePathMappingDataValidator(repository);
+            var dataValidator = new QualificationRoutePathMappingDataValidator(repository, routePathRepository);
             var dataParser = new QualificationRoutePathMappingDataParser();
 
             var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator);

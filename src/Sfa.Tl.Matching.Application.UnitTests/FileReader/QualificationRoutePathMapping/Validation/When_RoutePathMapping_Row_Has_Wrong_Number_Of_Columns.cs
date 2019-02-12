@@ -18,12 +18,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         public void Setup()
         {
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
-            var validator = new QualificationRoutePathMappingDataValidator(repository);
+            var routePathRepository = Substitute.For<IRoutePathRepository>();
+
+            var validator = new QualificationRoutePathMappingDataValidator(repository, routePathRepository);
             _validationResult = validator.Validate(new QualificationRoutePathMappingFileImportDto
             {
                 LarsId = RoutePathMappingConstants.LarsId,
                 Title = "Column 2",
                 ShortTitle = "Column 3",
+                Source = "Test"
             });
         }
 

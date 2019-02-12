@@ -17,11 +17,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         {
             var routePathMapping = new ValidRoutePathMappingBuilder().Build();
             var dto = routePathMapping.ToDto();
-            dto.Accounting = "";
+            dto.Accountancy = "";
 
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
+            var routePathRepository = Substitute.For<IRoutePathRepository>();
 
-            var validator = new QualificationRoutePathMappingDataValidator(repository);
+            var validator = new QualificationRoutePathMappingDataValidator(repository, routePathRepository);
             _validationResult = validator.Validate(dto);
         }
 

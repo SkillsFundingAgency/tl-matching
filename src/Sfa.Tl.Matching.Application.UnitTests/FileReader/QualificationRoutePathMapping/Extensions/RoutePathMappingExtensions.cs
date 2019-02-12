@@ -11,7 +11,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
                 LarsId = routePathMapping.LarsId,
                 Title = routePathMapping.Title,
                 ShortTitle = routePathMapping.ShortTitle,
-                Accounting = routePathMapping.PathId.ToString()
+                Accountancy = routePathMapping.PathId.ToString(),
+                Source = "Test"
             };
 
             return routePathMappingArray;
@@ -28,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
                             LarsId = routePathMapping.LarsId,
                             Title = routePathMapping.Title,
                             ShortTitle = routePathMapping.ShortTitle,
-                            Accounting = routePathMapping.PathId.ToString()
+                            Accountancy = routePathMapping.PathId.ToString()
                         }
                 }
                 .CopyTo(routePathMappingArray, 0);

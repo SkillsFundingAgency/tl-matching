@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
                 .SkipWhile(info => info.Name == nameof(QualificationRoutePathMappingFileImportDto.LarsId) ||
                                                   info.Name == nameof(QualificationRoutePathMappingFileImportDto.Title) ||
                                                   info.Name == nameof(QualificationRoutePathMappingFileImportDto.ShortTitle))
+                .TakeWhile(info => info.Name != nameof(QualificationRoutePathMappingFileImportDto.Source))
                 .Where(pr => pr.GetValue(data) != null && !string.IsNullOrWhiteSpace(pr.GetValue(data).ToString())).ToList();
 
             var pathvalues = pathIds.Select(prop =>

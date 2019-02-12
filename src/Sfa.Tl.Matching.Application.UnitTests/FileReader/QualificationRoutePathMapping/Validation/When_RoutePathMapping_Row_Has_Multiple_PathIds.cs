@@ -23,8 +23,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
             dto.Hospitality = RoutePathMappingConstants.Hospitality;
 
             var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
+            var routePathRepository = Substitute.For<IRoutePathRepository>();
 
-            var validator = new QualificationRoutePathMappingDataValidator(repository);
+            var validator = new QualificationRoutePathMappingDataValidator(repository, routePathRepository);
             _validationResult = validator.Validate(dto);
         }
 

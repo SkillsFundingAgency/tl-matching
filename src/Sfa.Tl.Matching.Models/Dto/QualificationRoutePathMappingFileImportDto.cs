@@ -25,10 +25,10 @@ namespace Sfa.Tl.Matching.Models.Dto
         [Column(Order = 14)] public string MediaBroadcastandProduction { get; set; }
         [Column(Order = 15)] public string CulturalHeritageandVisitorAttractions { get; set; }
         [Column(Order = 16)] public string DigitalSupportandServices { get; set; }
-        [Column(Order = 17)] public string DigitalProductionDevelopmentandDesign { get; set; }
-        [Column(Order = 18)] public string DevelopmentandDigitalBusinessServices { get; set; }
+        [Column(Order = 17)] public string DigitalProductionDesignandDevelopment { get; set; }
+        [Column(Order = 18)] public string DigitalBusinessServices { get; set; }
         [Column(Order = 19)] public string Education { get; set; }
-        [Column(Order = 20)] public string EngineeringDesignDevelopmentandControl { get; set; }
+        [Column(Order = 20)] public string DesignDevelopmentandControl { get; set; }
         [Column(Order = 21)] public string ManufacturingandProcess { get; set; }
         [Column(Order = 22)] public string MaintenanceInstallationandRepair { get; set; }
         [Column(Order = 23)] public string HairBeautyandAesthetics { get; set; }
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         [Column(Order = 27)] public string CommunityExerciseFitnessandHealth { get; set; }
         [Column(Order = 28)] public string Legal { get; set; }
         [Column(Order = 29)] public string Financial { get; set; }
-        [Column(Order = 30)] public string Accounting { get; set; }
+        [Column(Order = 30)] public string Accountancy { get; set; }
         [Column(Order = 31)] public string ProtectiveServices { get; set; }
         [Column(Order = 32)] public string CustomerService { get; set; }
         [Column(Order = 33)] public string Marketing { get; set; }
