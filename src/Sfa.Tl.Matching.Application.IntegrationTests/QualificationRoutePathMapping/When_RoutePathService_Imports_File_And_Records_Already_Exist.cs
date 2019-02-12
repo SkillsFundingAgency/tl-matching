@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
         }
 
         [Fact]
-        public async Task Then_Record_Is_Not_Saved()
+        public async Task Then_No_Record_Is_Saved()
         {
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))

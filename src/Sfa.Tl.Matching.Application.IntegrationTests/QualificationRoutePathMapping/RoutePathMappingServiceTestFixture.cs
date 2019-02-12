@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sfa.Tl.Matching.Application.FileReader;
@@ -47,12 +46,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
 
         internal void ResetData(string larsId)
         {
-            var routePathMapping = MatchingDbContext.RoutePathMapping.FirstOrDefault(rpm => rpm.LarsId == larsId);
-            if (routePathMapping != null)
+            var routePathMappings = MatchingDbContext.RoutePathMapping.Where(rpm => rpm.LarsId == larsId);
+            if (routePathMappings.Any())
             {
-                MatchingDbContext.RoutePathMapping.Remove(routePathMapping);
-                var count = MatchingDbContext.SaveChanges();
-                count.Should().Be(1);
+                MatchingDbContext.RoutePathMapping.RemoveRange(routePathMappings);
+                MatchingDbContext.SaveChanges();
             }
         }
 
@@ -62,7 +60,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
             {
                 LarsId = larsId, //Must match id in RoutePathMapping-Simple.xlsx
                 Title = "Test",
-                PathId = 1
+                PathId = 1,
+                Source = "Test"
             };
 
             MatchingDbContext.Add(routePathMapping);
