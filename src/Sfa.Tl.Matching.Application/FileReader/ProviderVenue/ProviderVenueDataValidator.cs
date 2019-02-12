@@ -10,8 +10,10 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
 {
     public class ProviderVenueDataValidator : AbstractValidator<ProviderVenueFileImportDto>
     {
-        public ProviderVenueDataValidator(IRepository<Domain.Models.Provider> repository)
+        public ProviderVenueDataValidator(IRepository<Domain.Models.Provider> repository, IRepository<Domain.Models.ProviderVenue> venueRepository)
         {
+            CascadeMode = CascadeMode.StopOnFirstFailure;
+
             RuleFor(dto => dto.UkPrn)
                 .NotNull()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
@@ -23,10 +25,10 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
                     .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
-           RuleFor(dto => dto)
-                .MustAsync((dto, cancellation) => ProviderMustExistsForVenue(repository, dto))
-                    .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
-                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+            RuleFor(dto => dto)
+                 .MustAsync((dto, cancellation) => ProviderMustExistsForVenue(repository, dto))
+                     .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
+                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
             RuleFor(dto => dto.PostCode)
                 .NotNull()
@@ -38,6 +40,11 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
                 .Matches(dto => ValidationConstants.UkPostCodeRegex)
                     .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+
+            RuleFor(dto => dto)
+                 .MustAsync((dto, cancellation) => ProviderVenueMustBeUniqueue(venueRepository, dto))
+                     .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
+                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
             RuleFor(dto => dto.Source)
                 .NotNull()
@@ -62,6 +69,16 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
             dto.ProviderId = provider.Id;
 
             return true;
+        }
+        private async Task<bool> ProviderVenueMustBeUniqueue(IRepository<Domain.Models.ProviderVenue> venueRepository, ProviderVenueFileImportDto dto)
+        {
+            if (dto.ProviderId == 0) return false;
+
+            var venue = await venueRepository.GetSingleOrDefault(v =>
+                v.ProviderId == dto.ProviderId
+             && v.Postcode == dto.PostCode);
+
+            return venue == null;
         }
     }
 }
