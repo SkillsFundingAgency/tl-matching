@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using FluentValidation;
 using Humanizer;
@@ -23,8 +21,9 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
         {
             var paths = routePathRepository.GetPaths().ToList();
            
-            _pathMapping = paths
-                .Select(p => new KeyValuePair<int, string>(p.Id, 
+            PathMapping = paths
+                .Select(p => 
+                    new KeyValuePair<int, string>(p.Id, 
                         p.Name
                             .Replace(" ", "")
                             .Replace(",", "")
@@ -86,6 +85,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
                     .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
 
+        public IDictionary<int, string> PathMapping { get => _pathMapping; set => _pathMapping = value; }
+
         private async Task<bool> CanLarsIdBeAdded(IRepository<Domain.Models.RoutePathMapping> repository, string larsId)
         {
             var routePathMapping = await repository.GetMany(p => p.LarsId == larsId);
@@ -95,27 +96,13 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
 
         private bool MustHaveAtLeastOnePathId(QualificationRoutePathMappingFileImportDto data)
         {
-            var pathIds = data.GetType().GetProperties()
-                .Where(pr => pr.GetCustomAttribute<ColumnAttribute>() != null)
-                .SkipWhile(info => info.Name == nameof(QualificationRoutePathMappingFileImportDto.LarsId) ||
-                                   info.Name == nameof(QualificationRoutePathMappingFileImportDto.Title) ||
-                                   info.Name == nameof(QualificationRoutePathMappingFileImportDto.ShortTitle))
-                .TakeWhile(info => info.Name != nameof(QualificationRoutePathMappingFileImportDto.Source))
-                .Where(pr => pr.GetValue(data) != null && !string.IsNullOrWhiteSpace(pr.GetValue(data).ToString())).ToList();
-
+            var pathIds = data.GetQualificationRoutePathMappingPathIdColumns();
             return pathIds.Any();
         }
 
         private bool PathIdValuesMustMatchColumnType(QualificationRoutePathMappingFileImportDto data)
         {
-            var pathIds = data.GetType().GetProperties()
-                .Where(pr => pr.GetCustomAttribute<ColumnAttribute>() != null
-                             && pr.Name != nameof(QualificationRoutePathMappingFileImportDto.Source))
-                .SkipWhile(info => info.Name == nameof(QualificationRoutePathMappingFileImportDto.LarsId) ||
-                                   info.Name == nameof(QualificationRoutePathMappingFileImportDto.Title) ||
-                                   info.Name == nameof(QualificationRoutePathMappingFileImportDto.ShortTitle))
-                .TakeWhile(info => info.Name != nameof(QualificationRoutePathMappingFileImportDto.Source))
-                .Where(pr => pr.GetValue(data) != null && !string.IsNullOrWhiteSpace(pr.GetValue(data).ToString())).ToList();
+            var pathIds = data.GetQualificationRoutePathMappingPathIdColumns();
 
             var isValid = true;
 
@@ -125,12 +112,16 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
                 {
                     isValid = false;
                 }
-                else if (_pathMapping.TryGetValue(pathIdValue, out var path))
+                else if (PathMapping.TryGetValue(pathIdValue, out var path))
                 {
                     if (path != p.Name.ToLower())
                     {
                         isValid = false;
                     }
+                }
+                else
+                {
+                    isValid = false;
                 }
             }
 
