@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -23,31 +24,31 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
         [Fact]
         public void Then_Result_Is_Not_Null() =>
-            Assert.NotNull(_result);
+            _result.Should().NotBeNull();
 
         [Fact]
         public void Then_View_Result_Is_Returned() =>
-            Assert.IsAssignableFrom<ViewResult>(_result);
+            _result.Should().BeAssignableTo<ViewResult>();
 
         [Fact]
         public void Then_Model_Is_Not_Null()
         {
             var viewResult = _result as ViewResult;
-            Assert.NotNull(viewResult?.Model);
+            viewResult?.Model.Should().NotBeNull();
         }
 
         [Fact]
         public void Then_Data_Import_Type_Is_Not_Null()
         {
             var viewModel = GetViewModel();
-            Assert.NotEmpty(viewModel.ImportType);
+            viewModel.ImportType.Should().NotBeEmpty();
         }
 
         [Fact]
         public void Then_Data_Import_Type_Contains_Data()
         {
             var viewModel = GetViewModel();
-            Assert.True(viewModel.ImportType.Length > 0);
+            viewModel.ImportType.Length.Should().BeGreaterThan(0);
         }
 
         private DataImportParametersViewModel GetViewModel()

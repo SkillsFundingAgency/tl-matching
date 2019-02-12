@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Authorization;
-
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
@@ -8,7 +7,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
 {
     public class When_Data_Import_Controller_Allow_Anonymous_Attribute
     {
-        private AllowAnonymousAttribute[] _allowAnonymousAttributes;
+        private readonly AllowAnonymousAttribute[] _allowAnonymousAttributes;
         
         public When_Data_Import_Controller_Allow_Anonymous_Attribute()
         {

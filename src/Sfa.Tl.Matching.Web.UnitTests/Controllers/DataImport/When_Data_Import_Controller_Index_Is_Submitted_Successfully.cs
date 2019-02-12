@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -37,13 +38,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
         [Fact]
         public void Then_View_Result_Is_Returned() =>
-             Assert.IsAssignableFrom<ViewResult>(_result);
+            _result.Should().BeAssignableTo<ViewResult>();
 
         [Fact]
         public void Then_Model_State_Has_No_Errors()
         {
             var viewResult = (ViewResult)_result;
-            Assert.Empty(viewResult.ViewData.ModelState);
+            viewResult.ViewData.ModelState.Should().BeEmpty();
         }
 
         [Fact]

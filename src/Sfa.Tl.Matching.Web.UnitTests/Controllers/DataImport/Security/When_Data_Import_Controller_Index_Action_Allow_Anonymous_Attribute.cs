@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
+using FluentAssertions;
 using Microsoft.AspNetCore.Authorization;
-
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
@@ -9,11 +9,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
 {
     public class When_Data_Import_Controller_Index_Action_Allow_Anonymous_Attribute
     {
-        private AllowAnonymousAttribute _allowAnonymousAttributeGet;
-        private AllowAnonymousAttribute _allowAnonymousAttributePost;
+        private readonly AllowAnonymousAttribute _allowAnonymousAttributeGet;
+        private readonly AllowAnonymousAttribute _allowAnonymousAttributePost;
 
-        
-        public void Setup()
+        public When_Data_Import_Controller_Index_Action_Allow_Anonymous_Attribute()
         {
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public;
 
@@ -30,10 +29,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
 
         [Fact]
         public void Then_Is_Not_On_Get_Method() =>
-            Assert.Null(_allowAnonymousAttributeGet);
+            _allowAnonymousAttributeGet.Should().BeNull();
 
         [Fact]
         public void Then_Is_Not_On_Post_Method() =>
-            Assert.Null(_allowAnonymousAttributePost);
+            _allowAnonymousAttributePost.Should().BeNull();
     }
 }

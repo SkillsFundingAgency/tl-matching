@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -30,21 +31,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
         [Fact]
         public void Then_View_Result_Is_Returned() =>
-             Assert.IsAssignableFrom<ViewResult>(_result);
+            _result.Should().BeAssignableTo<ViewResult>();
 
         [Fact]
         public void Then_Model_State_Has_1_Error() =>
-            Assert.Single(_dataImportController.ViewData.ModelState);
+            _dataImportController.ViewData.ModelState.Should().ContainSingle();
 
         [Fact]
         public void Then_Model_State_Has_File_Key() =>
-            Assert.True(_dataImportController.ViewData.ModelState.ContainsKey("file"));
+            _dataImportController.ViewData.ModelState.ContainsKey("file").Should().BeTrue();
 
         [Fact]
         public void Then_Model_State_Has_File_Error()
         {
             var modelStateEntry = _dataImportController.ViewData.ModelState["file"];
-            Assert.Equal("A file must be selected", modelStateEntry.Errors[0].ErrorMessage);
+            modelStateEntry.Errors[0].ErrorMessage.Should().Be("A file must be selected");
         }
 
         [Fact]
