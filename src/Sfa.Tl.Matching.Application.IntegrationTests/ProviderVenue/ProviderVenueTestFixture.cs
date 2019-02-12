@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
 
             var repository = new ProviderRepository(loggerRepository, MatchingDbContext);
             var providerVenuerepository = new ProviderVenueRepository(providerVenueloggerRepository, MatchingDbContext);
-            var dataValidator = new ProviderVenueDataValidator(repository);
+            var dataValidator = new ProviderVenueDataValidator(repository, providerVenuerepository);
             var dataParser = new ProviderVenueDataParser();
 
             var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(loggerExcelFileReader, dataParser, dataValidator);
