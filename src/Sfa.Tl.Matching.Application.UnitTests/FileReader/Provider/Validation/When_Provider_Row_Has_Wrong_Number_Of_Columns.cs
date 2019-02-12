@@ -1,6 +1,8 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
+using NSubstitute;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
@@ -13,7 +15,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         public When_Provider_Row_Has_Wrong_Number_Of_Columns(ProviderFileImportFixture fixture)
         {
-            _validationResult = fixture.ProviderDataValidator.Validate(new ProviderFileImportDto { PrimaryContactName = "Fact" });
+            fixture.ProviderFileImportDto.UkPrn = null;
+            fixture.Repository.GetSingleOrDefault(Arg.Any<Func<Domain.Models.Provider, bool>>()).Returns((Domain.Models.Provider)null);
+            _validationResult = fixture.ProviderDataValidator.Validate(fixture.ProviderFileImportDto);
         }
 
         [Fact]
@@ -21,8 +25,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
             _validationResult.IsValid.Should().BeFalse();
 
         [Fact]
-        public void Then_Error_Count_Is_21() =>
-            _validationResult.Errors.Count.Should().Be(21);
+        public void Then_Error_Count_Is_One() =>
+            _validationResult.Errors.Count.Should().Be(1);
 
         [Fact]
         public void Then_Error_Message_Is_MissingMandatoryData() =>

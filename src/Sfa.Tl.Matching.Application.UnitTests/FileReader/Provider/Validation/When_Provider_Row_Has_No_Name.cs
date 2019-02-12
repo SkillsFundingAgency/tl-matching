@@ -23,8 +23,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
             Assert.False(_validationResult.IsValid);
 
         [Fact]
-        public void Then_Error_Count_Is_Two() =>
-            _validationResult.Errors.Count.Should().Be(2);
+        public void Then_Error_Count_Is_One() =>
+            _validationResult.Errors.Count.Should().Be(1);
 
         [Fact]
         public void Then_Error_Code_Is_MissingMandatoryData() =>
