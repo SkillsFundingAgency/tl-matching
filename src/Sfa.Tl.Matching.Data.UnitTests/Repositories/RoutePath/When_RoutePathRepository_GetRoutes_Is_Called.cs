@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-
+using FluentAssertions;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
@@ -11,10 +9,9 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
 {
     public class When_RoutePathRepository_GetRoutes_Is_Called
     {
-        private IEnumerable<Route> _result;
+        private readonly IEnumerable<Route> _result;
 
-        
-        public async Task OneTimeSetup()
+        public When_RoutePathRepository_GetRoutes_Is_Called()
         {
             using (var dbContext = InMemoryDbContext.Create())
             {
@@ -29,32 +26,24 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
                 dbContext.SaveChanges();
 
                 var repository = new RoutePathRepository(dbContext);
-                _result = await repository.GetRoutes().ToListAsync();
+                _result = repository.GetRoutes().ToList();
             }
         }
 
         [Fact]
-        public void Then_Route_Id_Is_Returned()
-        {
-            Assert.Equal(_result.First().Id, _result.First().Id);
-        }
+        public void Then_Route_Id_Is_Returned() => 
+            _result.First().Id.Should().Be(1);
 
         [Fact]
-        public void Then_Route_Name_Is_Returned()
-        {
-            Assert.Equal("Route 1", _result.First().Name);
-        }
-        
-        [Fact]
-        public void Then_Route_Keywords_Is_Returned()
-        {
-            Assert.Equal("Keyword", _result.First().Keywords);
-        }
+        public void Then_Route_Name_Is_Returned() => 
+            _result.First().Name.Should().BeEquivalentTo("Route 1");
 
         [Fact]
-        public void Then_Route_Summary_Id_Is_Returned()
-        {
-            Assert.Equal("Route summary", _result.First().Summary);
-        }
+        public void Then_Route_Keywords_Is_Returned() => 
+            _result.First().Keywords.Should().BeEquivalentTo("Keyword");
+
+        [Fact]
+        public void Then_Route_Summary_Id_Is_Returned() 
+            => _result.First().Summary.Should().BeEquivalentTo("Route summary");
     }
 }
