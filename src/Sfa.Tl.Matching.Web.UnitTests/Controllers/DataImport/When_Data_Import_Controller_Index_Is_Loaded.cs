@@ -1,8 +1,10 @@
 using AutoMapper;
 using FluentAssertions;
+using Humanizer;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -49,6 +51,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
         {
             var viewModel = GetViewModel();
             viewModel.ImportType.Length.Should().BeGreaterThan(0);
+        }
+
+        [Fact]
+        public void Then_DataImportType_Text_Is_Populated_With_Description()
+        {
+            var viewModel = GetViewModel();
+            viewModel.ImportType[4].Text.Should().Be(DataImportType.QualificationRoutePathMapping.Humanize());
         }
 
         private DataImportParametersViewModel GetViewModel()
