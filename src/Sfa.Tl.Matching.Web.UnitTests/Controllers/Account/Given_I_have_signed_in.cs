@@ -4,20 +4,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
 {
-
     public class Given_I_Have_Signed_In
     {
         private IHttpContextAccessor _contextAccessor;
-        private AccountController _accountController;
+        private readonly AccountController _accountController;
 
-
-        public void Arrange()
+        public Given_I_Have_Signed_In()
         {
             _accountController = new AccountController(Substitute.For<ILogger<AccountController>>());
         }

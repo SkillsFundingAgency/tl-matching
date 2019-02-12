@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NSubstitute;
-
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
@@ -10,12 +9,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.SearchParametersViewModel
 {
     public class When_SearchParametersViewModel_Is_Populated
     {
-        private IQueryable<Route> _routes;
-        private IRoutePathService _routePathLookupService;
+        private readonly IQueryable<Route> _routes;
+        private readonly IRoutePathService _routePathLookupService;
         private Models.ViewModel.SearchParametersViewModel _viewModel;
 
-
-        public void Setup()
+        public When_SearchParametersViewModel_Is_Populated()
         {
             _routes = new List<Route>
                 {

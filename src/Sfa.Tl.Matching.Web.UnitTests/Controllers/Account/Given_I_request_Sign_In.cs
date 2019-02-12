@@ -12,10 +12,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
 
     public class Given_I_Request_Sign_In
     {
-        private AccountController _accountController;
-
+        private readonly AccountController _accountController;
         
-        public void Arrange()
+        public Given_I_Request_Sign_In()
         {
             var mockUrlHelper = Substitute.For<IUrlHelper>();
 
@@ -26,7 +25,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
             {
                 Url = mockUrlHelper
             };
-
         }
 
         [Fact]

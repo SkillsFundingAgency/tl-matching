@@ -1,6 +1,9 @@
-using Microsoft.AspNetCore.Http;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
@@ -8,21 +11,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 {
     public class When_Data_Import_Controller_Index_Is_Submitted_With_No_File
     {
-        private IActionResult _result;
-        private readonly IFormFile _formFile = null;
-        private DataImportController _dataImportController;
-        private DataUploadDto _viewModel;
+        private readonly IActionResult _result;
+        private readonly DataImportController _dataImportController;
+        private readonly DataUploadDto _dataUploadDto;
+        private readonly IDataBlobUploadService _dataBlobUploadService;
 
-
-        public void Setup()
+        public When_Data_Import_Controller_Index_Is_Submitted_With_No_File()
         {
-            _viewModel = new DataUploadDto();
+            _dataUploadDto = new DataUploadDto();
 
-            //var viewModelMapper = Substitute.For<IDataImportViewModelMapper>();
-            
-            //_dataImportController = new DataImportController(viewModelMapper, _dataImportService);
+            var mapper = Substitute.For<IMapper>();
+            _dataBlobUploadService = Substitute.For<IDataBlobUploadService>();
+            _dataImportController = new DataImportController(mapper, _dataBlobUploadService);
 
-            //_result = _dataImportController.Import(_formFile, _viewModel).Result;
+            var viewModel = new DataImportParametersViewModel();
+            _result = _dataImportController.Index(viewModel).Result;
         }
 
         [Fact]
@@ -31,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
         [Fact]
         public void Then_Model_State_Has_1_Error() =>
-            Assert.Equal(1, _dataImportController.ViewData.ModelState.Count);
+            Assert.Single(_dataImportController.ViewData.ModelState);
 
         [Fact]
         public void Then_Model_State_Has_File_Key() =>
@@ -44,8 +47,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
             Assert.Equal("A file must be selected", modelStateEntry.Errors[0].ErrorMessage);
         }
 
-        //[Fact]
-        //public void Then_Service_Upload_Is_Not_Called() =>
-        //    _dataImportService.Received(0).Import(_formFile, _viewModel);
+        [Fact]
+        public void Then_Service_Upload_Is_Not_Called() =>
+            _dataBlobUploadService.Received(0).Upload(_dataUploadDto);
     }
 }

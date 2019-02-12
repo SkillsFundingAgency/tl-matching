@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.DataUploadDto
         private Models.Dto.DataUploadDto _viewModel;
 
 
-        public void Setup()
+        public When_Description_Is_Populated_Successfully()
         {
             //var mapper = new DataImportViewModelMapper();
             //_viewModel = mapper.GetImportTypeSelectList();

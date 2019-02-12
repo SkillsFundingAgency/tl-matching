@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Models.Dto;
+using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -8,26 +10,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 {
     public class When_Data_Import_Controller_Index_Is_Loaded
     {
-        private DataImportController _dataImportController;
-        private IActionResult _result;
+        private readonly IActionResult _result;
 
-
-        public void Setup()
+        public When_Data_Import_Controller_Index_Is_Loaded()
         {
-            var viewModel = new DataImportParametersViewModel();
-            //viewModel.Add(new DataImportParametersViewModel
-            //{
-            //    Id = 1,
-            //    IsImportSuccessful = "DataImportTypeName"
-            //});
+            var mapper = Substitute.For<IMapper>();
+            var dataBlobUploadService = Substitute.For<IDataBlobUploadService>();
+            var dataImportController = new DataImportController(mapper, dataBlobUploadService);
 
-            //_viewModelMapper = Substitute.For<IDataImportViewModelMapper>();
-            //_viewModelMapper.GetImportTypeSelectList().Returns(viewModel);
-
-            //var uploadService = Substitute.For<IDataImportService>();
-
-            //_dataImportController = new DataImportController(_viewModelMapper, uploadService);
-            _result = _dataImportController.Index();
+            _result = dataImportController.Index();
         }
 
         [Fact]
@@ -45,28 +36,24 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
             Assert.NotNull(viewResult?.Model);
         }
 
-        //[Fact]
-        //public void Then_Data_Import_Type_Is_Not_Null()
-        //{
-        //    var viewModel = GetViewModel();
-        //    Assert.NotEmpty(viewModel.ImportType);
-        //}
+        [Fact]
+        public void Then_Data_Import_Type_Is_Not_Null()
+        {
+            var viewModel = GetViewModel();
+            Assert.NotEmpty(viewModel.ImportType);
+        }
 
-        //[Fact]
-        //public void Then_Mapper_Populate_Is_Called_Exactly_Once() =>
-        //    _viewModelMapper.Received(1).GetImportTypeSelectList();
+        [Fact]
+        public void Then_Data_Import_Type_Contains_Data()
+        {
+            var viewModel = GetViewModel();
+            Assert.True(viewModel.ImportType.Length > 0);
+        }
 
-        //[Fact]
-        //public void Then_Data_Import_Type_Contains_Data()
-        //{
-        //    var viewModel = GetViewModel();
-        //    Assert.Greater(viewModel.DataImportTypeViewModels.Count, 0);
-        //}
-
-        private DataUploadDto GetViewModel()
+        private DataImportParametersViewModel GetViewModel()
         {
             var viewResult = _result as ViewResult;
-            var viewModel = viewResult?.Model as DataUploadDto;
+            var viewModel = viewResult?.Model as DataImportParametersViewModel;
 
             return viewModel;
         }
