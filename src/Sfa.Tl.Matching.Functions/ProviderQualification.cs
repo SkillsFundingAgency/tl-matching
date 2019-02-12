@@ -11,19 +11,24 @@
 //    {
 //        [FunctionName("ImportProviderQualification")]
 //        public static void ImportProviderQualification(
-//            [BlobTrigger("providerqualification/{name}", Connection = "AzureWebJobsStorage")]Stream stream, 
+//            [BlobTrigger("providerqualification/{name}", Connection = "AzureWebJobsStorage")]ICloudBlob blockBlob, 
 //            string name, 
 //            ExecutionContext context,
 //            ILogger logger,
-//            [Inject] IMapper mapper
+//            IProviderQualificationService providerQualificationService
 //        )
 //        {
+//            var stream = await blockBlob.OpenReadAsync(null, null, null);
 //            logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
 //                                  $"\tName:{name}\n" +
 //                                  $"\tSize: {stream.Length} Bytes");
 //
 //            var stopwatch = Stopwatch.StartNew();
-//            var createdRecords = await providerQualificationService.ImportProviderQualification(stream);
+//            var createdRecords = await providerQualificationService.ImportProviderQualification(new ProviderQualificationFileImportDto
+//{
+//                FileDataStream = stream,
+//                CreatedBy = blockBlob.GetCreatedByMetadata()
+//            });
 //            stopwatch.Stop();
 //
 //            logger.LogInformation($"Function {context.FunctionName} processed blob\n" +

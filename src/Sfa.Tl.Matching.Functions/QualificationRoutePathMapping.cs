@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -14,14 +15,14 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("ImportQualificationRoutePathMapping")]
         public static async Task ImportQualificationRoutePathMapping(
-            [BlobTrigger("qualificationroutepathmapping/{name}", Connection = "BlobStorageConnectionString")]CloudBlockBlob blockBlob,
+            [BlobTrigger("qualificationroutepathmapping/{name}", Connection = "BlobStorageConnectionString")]ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
             ILogger logger,
             [Inject] IRoutePathService routePathService
         )
-        {
-            var stream = await blockBlob.OpenReadAsync();
+        {          
+            var stream = await blockBlob.OpenReadAsync(null, null, null);
             logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
                                   $"\tName:{name}\n" +
                                   $"\tSize: {stream.Length} Bytes");

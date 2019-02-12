@@ -15,7 +15,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
          private readonly IProviderService _providerService;
        public When_ImportProvider_Function_Blob_Trigger_Fires()
         {
-            var blobStream = new CloudBlockBlob(new Uri(""));
+            var blobStream = Substitute.For<ICloudBlob>();
+            blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
             _providerService = Substitute.For<IProviderService>();

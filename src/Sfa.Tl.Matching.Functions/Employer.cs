@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -15,14 +14,15 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("ImportEmployer")]
         public static async Task ImportEmployer(
-            [BlobTrigger("employer/{name}", Connection = "BlobStorageConnectionString")]CloudBlockBlob blockBlob,
+            [BlobTrigger("employer/{name}", Connection = "BlobStorageConnectionString")]ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
             ILogger logger,
             [Inject] IEmployerService employerService
             )
         {
-            var stream = await blockBlob.OpenReadAsync();
+            var stream = await blockBlob.OpenReadAsync(null, null, null);
+
             logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
                                   $"\tName:{name}\n" +
                                   $"\tSize: {stream.Length} Bytes");

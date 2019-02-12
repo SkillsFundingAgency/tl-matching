@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -12,17 +13,15 @@ namespace Sfa.Tl.Matching.Functions
 {
     public static class Provider
     {
-        private const string MetadataKeyCreatedBy = "createdBy";
-
         [FunctionName("ImportProvider")]
         public static async Task ImportProvider(
-            [BlobTrigger("provider/{name}", Connection = "BlobStorageConnectionString")]CloudBlockBlob blockBlob,
+            [BlobTrigger("provider/{name}", Connection = "BlobStorageConnectionString")]ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
             ILogger logger,
             [Inject] IProviderService providerService)
         {
-            var stream = await blockBlob.OpenReadAsync();
+            var stream = await blockBlob.OpenReadAsync(null, null, null);
             logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
                                   $"\tName:{name}\n" +
                                   $"\tSize: {stream.Length} Bytes");

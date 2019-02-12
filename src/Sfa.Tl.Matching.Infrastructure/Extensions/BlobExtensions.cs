@@ -6,12 +6,12 @@ namespace Sfa.Tl.Matching.Infrastructure.Extensions
     {
         private const string MetadataKeyCreatedBy = "createdBy";
 
-        public static void AddCreatedByMetadata(this CloudBlob cloudBlob, string createdBy)
+        public static void AddCreatedByMetadata(this ICloudBlob cloudBlob, string createdBy)
         {
             cloudBlob.Metadata[MetadataKeyCreatedBy] = createdBy;
         }
 
-        public static string GetCreatedByMetadata(this CloudBlob cloudBlob)
+        public static string GetCreatedByMetadata(this ICloudBlob cloudBlob)
         {
             var createdBy = cloudBlob.Metadata.ContainsKey(MetadataKeyCreatedBy)
                 ? cloudBlob.Metadata[MetadataKeyCreatedBy]
