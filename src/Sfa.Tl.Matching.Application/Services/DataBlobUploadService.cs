@@ -4,6 +4,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -12,6 +13,7 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly ILogger<DataBlobUploadService> _logger;
         private readonly MatchingConfiguration _configuration;
+
 
         public DataBlobUploadService(ILogger<DataBlobUploadService> logger, MatchingConfiguration configuration)
         {
@@ -24,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var blobContainer = await GetContainer(dto.ImportType.ToString().ToLowerInvariant());
 
             var blockBlob = blobContainer.GetBlockBlobReference(dto.FileName);
-
+            blockBlob.AddCreatedByMetadata(dto.UserName);
             blockBlob.Properties.ContentType = dto.ContentType;
 
             await blockBlob.UploadFromByteArrayAsync(dto.Data, 0, dto.Data.Length);

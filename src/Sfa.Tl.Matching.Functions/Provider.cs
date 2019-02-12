@@ -1,30 +1,38 @@
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Functions.Extensions;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
 {
     public static class Provider
     {
+        private const string MetadataKeyCreatedBy = "createdBy";
+
         [FunctionName("ImportProvider")]
         public static async Task ImportProvider(
-            [BlobTrigger("provider/{name}", Connection = "BlobStorageConnectionString")]Stream stream,
+            [BlobTrigger("provider/{name}", Connection = "BlobStorageConnectionString")]CloudBlockBlob blockBlob,
             string name,
             ExecutionContext context,
             ILogger logger,
             [Inject] IProviderService providerService)
         {
+            var stream = await blockBlob.OpenReadAsync();
             logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
                                   $"\tName:{name}\n" +
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRecords = await providerService.ImportProvider(new ProviderFileImportDto { FileDataStream = stream });
+            var createdRecords = await providerService.ImportProvider(new ProviderFileImportDto
+            {
+                FileDataStream = stream,
+                CreatedBy = blockBlob.GetCreatedByMetadata()
+            });
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} processed blob\n" +

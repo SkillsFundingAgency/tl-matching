@@ -24,7 +24,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 SecondaryContact = data.SecondaryContactName,
                 SecondaryContactEmail = data.SecondaryContactEmail,
                 SecondaryContactPhone = data.SecondaryContactTelephone,
-                Source = data.Source
+                Source = data.Source,
+                CreatedBy = data.CreatedBy
             };
 
             return new List<ProviderDto> {provider};

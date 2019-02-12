@@ -39,6 +39,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (ModelState.IsValid)
             {
                 var dto = _mapper.Map<DataUploadDto>(viewModel);
+                dto.UserName = HttpContext.User.GetUserName();
 
                 await _dataBlobUploadService.Upload(dto);
 

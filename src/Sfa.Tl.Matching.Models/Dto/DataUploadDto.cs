@@ -8,5 +8,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ContentType { get; set; }
         public byte[] Data { get; set; }
         public string FileName { get; set; }
+        public string UserName { get; set; }
     }
 }
