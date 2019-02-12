@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -38,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
-                 new Claim(RolesExtensions.IdamsUserGivenName, "username"),
+                 new Claim(ClaimTypes.GivenName, "username"),
             }));
 
             dataImportController.ControllerContext = new ControllerContext()

@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
-                 new Claim(RolesExtensions.IdamsUserGivenName, "username"),
+                 new Claim(ClaimTypes.GivenName, "username"),
             }));
 
             _accountController.ControllerContext = new ControllerContext()
