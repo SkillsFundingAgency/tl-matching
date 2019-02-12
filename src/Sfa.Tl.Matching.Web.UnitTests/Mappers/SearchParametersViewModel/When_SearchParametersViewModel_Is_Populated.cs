@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -33,15 +34,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.SearchParametersViewModel
 
         [Fact]
         public void Then_ViewModel_IsNotNull() =>
-            Assert.NotNull(_viewModel);
+            _viewModel.Should().NotBeNull();
 
         [Fact]
         public void Then_RoutesSelectList_Is_NotNull() =>
-            Assert.NotNull(_viewModel.RoutesSelectList);
+            _viewModel.RoutesSelectList.Should().NotBeNull();
 
         [Fact]
         public void Then_RoutesSelectList_Count_Is_Correct() =>
-            Assert.Equal(2, _viewModel.RoutesSelectList.Count);
+            _viewModel.RoutesSelectList.Count.Should().Be(2);
 
         //[Fact]
         //public void Then_RoutesSelectList_Id_Is_Mapped_To_Value_Correctly()
@@ -63,6 +64,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers.SearchParametersViewModel
 
         [Fact]
         public void Then_SelectedRouteId_Is_Mapped_To_The_Correctly_Ordered_Route_Id() =>
-            Assert.Equal("2", _viewModel.SelectedRouteId);
+            _viewModel.SelectedRouteId.Should().Be("2");
     }
 }
