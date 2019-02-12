@@ -32,8 +32,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             MatchingDbContext = TestConfiguration.GetDbContext();
 
             var repository = new ProviderRepository(loggerRepository, MatchingDbContext);
-            var providerVenuerepository = new ProviderVenueRepository(providerVenueloggerRepository, MatchingDbContext);
-            var dataValidator = new ProviderVenueDataValidator(repository);
+            var providerVenueRepository = new ProviderVenueRepository(providerVenueloggerRepository, MatchingDbContext);
+            var dataValidator = new ProviderVenueDataValidator(repository, providerVenueRepository);
             var dataParser = new ProviderVenueDataParser();
 
             var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(loggerExcelFileReader, dataParser, dataValidator);
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
 
             var mapper = new Mapper(config);
 
-            ProviderVenueService = new ProviderVenueService(mapper, excelFileReader, providerVenuerepository);
+            ProviderVenueService = new ProviderVenueService(mapper, excelFileReader, providerVenueRepository);
         }
 
         internal async Task ResetData()

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Office.CustomUI;
 using FluentValidation;
 using Humanizer;
 using Sfa.Tl.Matching.Application.FileReader.Extensions;
@@ -85,11 +82,11 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
 
             RuleFor(dto => dto.Source)
                 .NotNull()
-                .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .NotEmpty()
-                .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
 
         private async Task<bool> CanLarsIdBeAdded(IRepository<Domain.Models.RoutePathMapping> repository, string larsId)
