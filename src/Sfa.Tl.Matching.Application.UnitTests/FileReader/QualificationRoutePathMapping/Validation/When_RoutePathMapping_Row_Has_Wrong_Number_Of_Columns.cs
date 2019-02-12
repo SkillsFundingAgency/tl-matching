@@ -1,49 +1,38 @@
-﻿using FluentValidation.Results;
+﻿using FluentAssertions;
+using FluentValidation.Results;
 using Humanizer;
-using NSubstitute;
-
-using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants;
-using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Validation
 {
-    public class When_RoutePathMapping_Row_Has_Wrong_Number_Of_Columns
+    public class When_RoutePathMapping_Row_Has_Wrong_Number_Of_Columns : IClassFixture<QualificationRoutePathMappingFileImportValidationTestFixture>
     {
-        private ValidationResult _validationResult;
+        private readonly ValidationResult _validationResult;
 
-        
-        public void Setup()
+        public When_RoutePathMapping_Row_Has_Wrong_Number_Of_Columns(QualificationRoutePathMappingFileImportValidationTestFixture fixture)
         {
-            var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
-            var validator = new QualificationRoutePathMappingDataValidator(repository);
-            _validationResult = validator.Validate(new QualificationRoutePathMappingFileImportDto
-            {
-                LarsId = RoutePathMappingConstants.LarsId,
-                Title = "Column 2",
-                ShortTitle = "Column 3",
-            });
+            fixture.Dto.Accounting = null;
+
+            _validationResult = fixture.Validator.Validate(fixture.Dto);
         }
 
         [Fact]
         public void Then_Validation_Result_Is_Not_Valid() =>
-            Assert.False(_validationResult.IsValid);
+            _validationResult.IsValid.Should().BeFalse();
 
         [Fact]
-        public void Then_Error_Count_Is_One() =>
-            Assert.Equal(1, _validationResult.Errors.Count);
+        public void Then_Error_Count_Is_Two() =>
+            _validationResult.Errors.Count.Should().Be(1);
 
         [Fact]
         public void Then_Error_Code_Is_WrongNumberOfColumns() =>
-            Assert.Equal(ValidationErrorCode.WrongNumberOfColumns.ToString(),
-                _validationResult.Errors[0].ErrorCode);
+            _validationResult.Errors[0].ErrorCode.Should()
+                .Be(ValidationErrorCode.WrongNumberOfColumns.ToString());
 
         [Fact]
         public void Then_Error_Message_Is_WrongNumberOfColumns() =>
-            Assert.Equal(ValidationErrorCode.WrongNumberOfColumns.Humanize(),
-                _validationResult.Errors[0].ErrorMessage);
+            _validationResult.Errors[0].ErrorMessage.Should()
+                .Be(ValidationErrorCode.WrongNumberOfColumns.Humanize());
     }
 }

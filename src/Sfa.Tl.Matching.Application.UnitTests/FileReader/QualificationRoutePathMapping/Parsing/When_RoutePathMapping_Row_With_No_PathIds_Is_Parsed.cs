@@ -1,27 +1,25 @@
 ﻿using System.Collections.Generic;
+using FluentAssertions;
 using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Parsing
 {
-    public class When_RoutePathMapping_Row_With_No_PathIds_Is_Parsed
+    public class When_RoutePathMapping_Row_With_No_PathIds_Is_Parsed : IClassFixture<QualificationRoutePathMappingParsingFixture>
     {
-        private IEnumerable<RoutePathMappingDto> _parseResult;
+        private readonly IEnumerable<RoutePathMappingDto> _parseResult;
 
-        
-        public void Setup()
+        public When_RoutePathMapping_Row_With_No_PathIds_Is_Parsed(QualificationRoutePathMappingParsingFixture fixture)
         {
-            var routePathMappingDto = new ValidQualificationRoutePathMappingFileImportDtoBuilder().Build();
-            routePathMappingDto.AgricultureLandManagementandProduction = null;
+            fixture.Dto.Accounting = null;
             
             var parser = new QualificationRoutePathMappingDataParser();
-            _parseResult = parser.Parse(routePathMappingDto);
+            _parseResult = parser.Parse(fixture.Dto);
         }
 
         [Fact]
         public void Then_ParseResult_Count_Is_Zero() =>
-            Assert.Empty(_parseResult);
+            _parseResult.Should().BeEmpty();
     }
 }

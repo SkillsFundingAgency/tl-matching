@@ -5,14 +5,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Mappers
 {
-    public class When_ProviderDto_Is_Mapped_To_Provider
+    public class When_AutoMapper_Profiles_Are_Configurationed
     {
-        private MapperConfiguration _config;
-
+        private readonly MapperConfiguration _config;
         
-        public void Setup()
+        public When_AutoMapper_Profiles_Are_Configurationed()
         {
-            _config = new MapperConfiguration(c => c.AddProfile<ProviderMapper>());
+            _config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
         }
 
         [Fact]

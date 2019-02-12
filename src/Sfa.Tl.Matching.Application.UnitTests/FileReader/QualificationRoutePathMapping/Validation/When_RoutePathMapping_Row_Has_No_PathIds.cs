@@ -1,33 +1,22 @@
-﻿using FluentValidation.Results;
-using NSubstitute;
-
-using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Extensions;
-using Sfa.Tl.Matching.Data.Interfaces;
+﻿using FluentAssertions;
+using FluentValidation.Results;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Validation
 {
-    public class When_RoutePathMapping_Row_Has_No_PathId
+    public class When_RoutePathMapping_Row_Has_No_PathId : IClassFixture<QualificationRoutePathMappingFileImportValidationTestFixture>
     {
-        private ValidationResult _validationResult;
-
+        private readonly ValidationResult _validationResult;
         
-        public void Setup()
+        public When_RoutePathMapping_Row_Has_No_PathId(QualificationRoutePathMappingFileImportValidationTestFixture fixture)
         {
-            var routePathMapping = new ValidRoutePathMappingBuilder().Build();
-            var dto = routePathMapping.ToDto();
-            dto.Accounting = "";
+            fixture.Dto.Accounting = null;
 
-            var repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
-
-            var validator = new QualificationRoutePathMappingDataValidator(repository);
-            _validationResult = validator.Validate(dto);
+            _validationResult = fixture.Validator.Validate(fixture.Dto);
         }
 
         [Fact]
         public void Then_Validation_Result_Is_InValid() =>
-            Assert.False(_validationResult.IsValid);
+            _validationResult.IsValid.Should().BeFalse();
     }
 }

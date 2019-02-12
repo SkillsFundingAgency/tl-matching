@@ -3,7 +3,6 @@ using System.Linq;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -15,13 +14,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 {
     public class When_RoutePathRepository_Is_Called_To_Get_Paths
     {
-        private ILogger<RoutePathService> _logger;
-        private IMapper _mapper;
-        private IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto> _fileReader;
-        private IRoutePathRepository _repository;
-        private IRepository<RoutePathMapping> _routePathMappingRepository;
-        private IRoutePathService _service;
-        private IQueryable<Path> _result;
+        private readonly IRoutePathRepository _repository;
+        private readonly IQueryable<Path> _result;
         
         private readonly IQueryable<Path> _pathData
             = new List<Path>
@@ -66,22 +60,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
                 }
             };
 
-        //
-        public void OneTimeSetup()
+        public When_RoutePathRepository_Is_Called_To_Get_Paths()
         {
-            _logger = Substitute.For<ILogger<RoutePathService>>();
-            _mapper = Substitute.For<IMapper>();
-            _fileReader = Substitute.For<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>();
+            var logger = Substitute.For<ILogger<RoutePathService>>();
+            var mapper = Substitute.For<IMapper>();
+            var fileReader = Substitute.For<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>();
             _repository = Substitute.For<IRoutePathRepository>();
-            _routePathMappingRepository = Substitute.For<IRepository<RoutePathMapping>>();
+            var routePathMappingRepository = Substitute.For<IRepository<RoutePathMapping>>();
 
             _repository
                 .GetPaths()
                 .Returns(_pathData);
 
-            _service = new RoutePathService(_logger, _mapper, _fileReader, _repository, _routePathMappingRepository);
+            var service = new RoutePathService(logger, mapper, fileReader, _repository, routePathMappingRepository);
 
-            _result = _service.GetPaths();
+            _result = service.GetPaths();
         }
 
         [Fact]
