@@ -5,6 +5,7 @@
 	[Title] NVARCHAR(250) NOT NULL, 
 	[ShortTitle] NVARCHAR(100) NULL, 
 	[PathId] INT NOT NULL, 
+	[Source] VARCHAR(50) NOT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 

@@ -10,6 +10,8 @@
         
         public int PathId { get; set; }
 
+        public string Source { get; set; }
+
         public virtual Path Path { get; set; }
     }
 }

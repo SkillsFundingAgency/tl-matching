@@ -18,8 +18,9 @@ namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
                     {
                         LarsId = data.LarsId,
                         Title = data.Title,
-                        ShortTitle =data.ShortTitle,
+                        ShortTitle = data.ShortTitle,
                         PathId = prop.GetValue(data).ToString().ToInt(),
+                        Source = data.Source,
                         CreatedBy = data.CreatedBy
                     }
                 );
