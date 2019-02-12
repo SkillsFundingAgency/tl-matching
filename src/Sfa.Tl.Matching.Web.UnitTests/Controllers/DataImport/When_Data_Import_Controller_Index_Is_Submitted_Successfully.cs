@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using System.Security.Claims;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
@@ -20,19 +22,30 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
         public When_Data_Import_Controller_Index_Is_Submitted_Successfully()
         {
             _dataUploadDto = new DataUploadDto();
-
-            var mapper = Substitute.For<IMapper>();
-            _dataBlobUploadService = Substitute.For<IDataBlobUploadService>();
             var formFile = Substitute.For<IFormFile>();
-            formFile.ContentType.Returns("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-
-            var dataImportController = new DataImportController(mapper, _dataBlobUploadService);
 
             var viewModel = new DataImportParametersViewModel
             {
                 File = formFile
             };
+            var mapper = Substitute.For<IMapper>();
+            mapper.Map<DataUploadDto>(viewModel).Returns(_dataUploadDto);
 
+            _dataBlobUploadService = Substitute.For<IDataBlobUploadService>();
+            formFile.ContentType.Returns("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            var dataImportController = new DataImportController(mapper, _dataBlobUploadService);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                 new Claim(RolesExtensions.IdamsUserGivenName, "username"),
+            }));
+
+            dataImportController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+            
             _result = dataImportController.Index(viewModel).Result;
         }
 

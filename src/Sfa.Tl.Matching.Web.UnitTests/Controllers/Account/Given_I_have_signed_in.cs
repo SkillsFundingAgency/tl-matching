@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
@@ -11,22 +12,26 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
 {
     public class Given_I_Have_Signed_In
     {
-        private IHttpContextAccessor _contextAccessor;
         private readonly AccountController _accountController;
 
         public Given_I_Have_Signed_In()
         {
             _accountController = new AccountController(Substitute.For<ILogger<AccountController>>());
+
         }
 
         [Fact]
         public void And_I_do_not_have_correct_role_Then_redirect_to_InvalidRole_page()
         {
-            _contextAccessor = Substitute.For<IHttpContextAccessor>();
-            _contextAccessor.HttpContext.Returns(new DefaultHttpContext());
-            _contextAccessor.HttpContext.User.Returns(new ClaimsPrincipal());
-            _contextAccessor.HttpContext.User.IsInRole(Arg.Any<string>())
-                .Returns(false);
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                 new Claim(RolesExtensions.IdamsUserGivenName, "username"),
+            }));
+
+            _accountController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
 
             var result = _accountController.PostSignIn();
 
@@ -40,11 +45,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
         [Fact]
         public void And_I_do_not_have_correct_role_Then_redirect_to_search_start_page()
         {
-            _contextAccessor = Substitute.For<IHttpContextAccessor>();
-            _contextAccessor.HttpContext.Returns(new DefaultHttpContext());
-            _contextAccessor.HttpContext.User.Returns(new ClaimsPrincipal());
-            _contextAccessor.HttpContext.User.IsInRole(Arg.Any<string>())
-                .Returns(true);
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                 new Claim(ClaimTypes.Role, RolesExtensions.StandardUser),
+            }));
+
+            _accountController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
 
             var result = _accountController.PostSignIn();
 
