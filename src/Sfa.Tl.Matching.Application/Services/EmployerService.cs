@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -29,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var import = _fileReader.ValidateAndParseFile(fileImportDto);
 
-            if (import != null)
+            if (import != null && import.Any())
             {
                 var employers = _mapper.Map<IEnumerable<Employer>>(import);
                 return await _repository.CreateMany(employers);

@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var import = _fileReader.ValidateAndParseFile(fileImportDto);
 
             var createdRecords = 0;
-            if (import != null)
+            if (import != null && import.Any())
             {
                 var routePathMappings = _mapper.Map<IList<RoutePathMapping>>(import);
                 createdRecords = await _routePathMappingRepository.CreateMany(routePathMappings);
