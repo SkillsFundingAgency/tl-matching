@@ -1,5 +1,5 @@
 ﻿using NSubstitute;
-using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
+using Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;

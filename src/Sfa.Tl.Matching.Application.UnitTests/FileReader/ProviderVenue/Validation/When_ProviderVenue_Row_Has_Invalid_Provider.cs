@@ -1,45 +1,16 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
-using NSubstitute;
-using NSubstitute.ReturnsExtensions;
-using Sfa.Tl.Matching.Application.FileReader.ProviderVenue;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Builders;
-using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validation
 {
-    public class ProviderVenueNoProviderFixture
-    {
-        public ProviderVenueDataValidator Validator;
-        public ProviderVenueFileImportDto Dto;
-        public IRepository<Domain.Models.Provider> ProviderRepository;
-        public IRepository<Domain.Models.ProviderVenue> ProviderVenueRepository;
-
-        public ProviderVenueNoProviderFixture()
-        {
-            Dto = new ProviderVenueFileImportDtoBuilder().Build();
-            ProviderRepository = Substitute.For<IRepository<Domain.Models.Provider>>();
-
-            ProviderRepository.GetSingleOrDefault(
-                    Arg.Any<Func<Domain.Models.Provider, bool>>())
-                .ReturnsNull();
-
-            ProviderVenueRepository = Substitute.For<IRepository<Domain.Models.ProviderVenue>>();
-            Validator = new ProviderVenueDataValidator(ProviderRepository,
-                ProviderVenueRepository);
-        }
-    }
-
-    public class When_ProviderVenue_Row_Has_Invalid_Provider : IClassFixture<ProviderVenueNoProviderFixture>
+    public class When_ProviderVenue_Row_Has_Invalid_Provider : IClassFixture<ProviderVenueFileImportValidationTestFixture>
     {
         private readonly ValidationResult _validationResult;
 
-        public When_ProviderVenue_Row_Has_Invalid_Provider(ProviderVenueNoProviderFixture fixture)
+        public When_ProviderVenue_Row_Has_Invalid_Provider(ProviderVenueFileImportValidationTestFixture fixture)
         {
             _validationResult = fixture.Validator.Validate(fixture.Dto);
         }
@@ -53,12 +24,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validat
             _validationResult.Errors.Count.Should().Be(1);
 
         [Fact]
-        public void Then_Error_Code_Is_RecordExists() =>
+        public void Then_Error_Code_Is_ProviderDoesntExist() =>
             _validationResult.Errors[0].ErrorCode.Should()
                 .Be(ValidationErrorCode.ProviderDoesntExist.ToString());
 
         [Fact]
-        public void Then_Error_Message_Is_RecordExists() =>
+        public void Then_Error_Message_Is_ProviderDoesntExist() =>
             _validationResult.Errors[0].ErrorMessage.Should()
                 .Be($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.ProviderDoesntExist.Humanize()}");
     }

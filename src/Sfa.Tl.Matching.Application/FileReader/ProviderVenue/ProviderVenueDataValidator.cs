@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
             RuleFor(dto => dto)
                  .MustAsync((dto, cancellation) => ProviderVenueMustBeUnique(venueRepository, dto))
                      .WithErrorCode(ValidationErrorCode.VenueAlreadyExists.ToString())
-                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.VenueAlreadyExists.Humanize()}");
+                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.VenueAlreadyExists.Humanize()}");
 
             RuleFor(dto => dto.Source)
                 .NotEmpty()
@@ -47,13 +47,13 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
 
-        private async Task<bool> ProviderMustExistsForVenue(IRepository<Domain.Models.Provider> repository, ProviderVenueFileImportDto dto)
+        private async Task<bool> ProviderMustExistsForVenue(IRepository<Domain.Models.Provider> providerRepository, ProviderVenueFileImportDto dto)
         {
             var result = long.TryParse(dto.UkPrn, out var ukPrn);
 
             if (!result) return false;
 
-            var provider = await repository.GetSingleOrDefault(p => p.UkPrn == ukPrn);
+            var provider = await providerRepository.GetSingleOrDefault(p => p.UkPrn == ukPrn);
 
             if (provider == null) return false;
 
@@ -63,11 +63,11 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
             return true;
         }
 
-        private async Task<bool> ProviderVenueMustBeUnique(IRepository<Domain.Models.ProviderVenue> venueRepository, ProviderVenueFileImportDto dto)
+        private async Task<bool> ProviderVenueMustBeUnique(IRepository<Domain.Models.ProviderVenue> providerVenueRepository, ProviderVenueFileImportDto dto)
         {
             if (dto.ProviderId == 0) return false;
 
-            var venue = await venueRepository.GetSingleOrDefault(v =>
+            var venue = await providerVenueRepository.GetSingleOrDefault(v =>
                 v.ProviderId == dto.ProviderId
              && v.Postcode == dto.PostCode);
 

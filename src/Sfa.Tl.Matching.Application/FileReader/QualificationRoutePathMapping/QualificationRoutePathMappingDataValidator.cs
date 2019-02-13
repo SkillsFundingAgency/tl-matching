@@ -8,7 +8,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
-namespace Sfa.Tl.Matching.Application.FileReader.RoutePathMapping
+namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
 {
     public class QualificationRoutePathMappingDataValidator : AbstractValidator<QualificationRoutePathMappingFileImportDto>
     {

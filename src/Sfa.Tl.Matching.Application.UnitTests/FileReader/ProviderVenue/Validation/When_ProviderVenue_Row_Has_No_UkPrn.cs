@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validation
 {
-    public class When_ProviderVenue_Row_Has_No_UkPrn : IClassFixture<ProviderVenueFileImportFixture>
+    public class When_ProviderVenue_Row_Has_No_UkPrn : IClassFixture<ProviderVenueFileImportValidationTestFixture>
     {
-        private readonly ProviderVenueFileImportFixture _fixture;
+        private readonly ProviderVenueFileImportValidationTestFixture _fixture;
 
-        public When_ProviderVenue_Row_Has_No_UkPrn(ProviderVenueFileImportFixture fixture)
+        public When_ProviderVenue_Row_Has_No_UkPrn(ProviderVenueFileImportValidationTestFixture fixture)
         {
             _fixture = fixture;
         }

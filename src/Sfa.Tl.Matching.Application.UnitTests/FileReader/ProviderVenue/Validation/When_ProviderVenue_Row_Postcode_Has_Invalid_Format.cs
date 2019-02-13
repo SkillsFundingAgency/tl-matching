@@ -1,18 +1,28 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Humanizer;
+using NSubstitute;
+using Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Builders;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validation
 {
-    public class When_ProviderVenue_Row_Postcode_Has_Invalid_Format : IClassFixture<ProviderVenueFileImportFixture>
+    public class When_ProviderVenue_Row_Postcode_Has_Invalid_Format : IClassFixture<ProviderVenueFileImportValidationTestFixture>
     {
-        private readonly ProviderVenueFileImportFixture _fixture;
+        private readonly ProviderVenueFileImportValidationTestFixture _fixture;
 
-        public When_ProviderVenue_Row_Postcode_Has_Invalid_Format(ProviderVenueFileImportFixture fixture)
+        public When_ProviderVenue_Row_Postcode_Has_Invalid_Format(ProviderVenueFileImportValidationTestFixture fixture)
         {
             _fixture = fixture;
+            fixture.ProviderRepository.GetSingleOrDefault(Arg.Any<Func<Domain.Models.Provider, bool>>())
+                .Returns(new Domain.Models.Provider
+                {
+                    Id = 1,
+                    UkPrn = long.Parse(ValidProviderVenueFileImportDtoBuilder.UkPrn),
+                    Source = "Test"
+                });
         }
 
         [Theory]
