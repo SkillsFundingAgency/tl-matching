@@ -43,8 +43,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     Environment.GetEnvironmentVariable("EnvironmentName"),
                     Environment.GetEnvironmentVariable("ConfigurationStorageConnectionString"),
                     Environment.GetEnvironmentVariable("Version"),
-                    Environment.GetEnvironmentVariable("ServiceName"))
-                .Result;
+                    Environment.GetEnvironmentVariable("ServiceName"));
 
             services.AddLogging();
 

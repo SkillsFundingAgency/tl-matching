@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Infrastructure.Configuration
 {
     public static class ConfigurationLoader
     {
-        public static async Task<MatchingConfiguration> Load(string environment, string storageConnectionString,
+        public static MatchingConfiguration Load(string environment, string storageConnectionString,
             string version, string serviceName)
         {
             try
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Infrastructure.Configuration
                 var table = tableClient.GetTableReference("Configuration");
 
                 var operation = TableOperation.Retrieve(environment, $"{serviceName}_{version}");
-                var result = await table.ExecuteAsync(operation);
+                var result = table.ExecuteAsync(operation).GetAwaiter().GetResult();
 
                 var dynResult = result.Result as DynamicTableEntity;
                 var data = dynResult?.Properties["Data"].StringValue;

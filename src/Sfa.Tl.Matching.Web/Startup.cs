@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web
                 configuration[Constants.EnvironmentNameConfigKey],
                 configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
                 configuration[Constants.VersionConfigKey],
-                configuration[Constants.ServiceNameConfigKey]).Result;
+                configuration[Constants.ServiceNameConfigKey]);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

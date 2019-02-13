@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests
     {
         public static MatchingConfiguration MatchingConfiguration { get; private set; }
 
-        public TestConfiguration()
+        static TestConfiguration()
         {
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.test.json")
@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests
                 configuration["EnvironmentName"],
                 configuration["ConfigurationStorageConnectionString"],
                 configuration["Version"],
-                configuration["ServiceName"]).GetAwaiter().GetResult();
+                configuration["ServiceName"]);
         }
 
         public MatchingDbContext GetDbContext()
