@@ -35,7 +35,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (viewModel.File != null && viewModel.File.ContentType != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 ModelState.AddModelError("file", "A file must be Excel Document");
 
-
             if (ModelState.IsValid)
             {
                 var dto = _mapper.Map<DataUploadDto>(viewModel);

@@ -15,7 +15,6 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
 {
-
     public class EmployerTestFixture : IDisposable
     {
         public IEmployerService EmployerService;

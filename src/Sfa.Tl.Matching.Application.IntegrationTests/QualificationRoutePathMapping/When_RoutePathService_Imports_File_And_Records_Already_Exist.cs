@@ -28,7 +28,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                _createdRecordCount = await _testFixture.RouteMappingService.ImportQualificationPathMapping(new QualificationRoutePathMappingFileImportDto { FileDataStream = stream });
+                _createdRecordCount = await _testFixture.RouteMappingService.ImportQualificationPathMapping(new QualificationRoutePathMappingFileImportDto
+                {
+                    FileDataStream = stream,
+                    CreatedBy = nameof(RoutePathMappingServiceTestFixture)
+                });
             }
 
             _createdRecordCount.Should().Be(0);

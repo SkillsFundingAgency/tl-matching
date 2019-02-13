@@ -34,7 +34,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
                     {
                         FileDataStream = stream,
                         ProviderId = _createdProvider.Id,
-                        Source = _createdProvider.Source
+                        Source = _createdProvider.Source,
+                        CreatedBy = nameof(ProviderVenueTestFixture)
                     });
             }
 

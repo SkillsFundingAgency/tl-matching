@@ -61,7 +61,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
                 LarsId = larsId, //Must match id in RoutePathMapping-Simple.xlsx
                 Title = "Test",
                 PathId = 1,
-                Source = "Test"
+                Source = "Test",
+                CreatedBy = nameof(RoutePathMappingServiceTestFixture)
             };
 
             MatchingDbContext.Add(routePathMapping);

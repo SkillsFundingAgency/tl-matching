@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             var provider = new Domain.Models.Provider
             {
                 UkPrn = ukprn,
-                Name = nameof(ProviderVenueTestFixture),
+                Name = "Name",
                 OfstedRating = 3,
                 Status = true,
                 PrimaryContact = "PrimaryContact",
