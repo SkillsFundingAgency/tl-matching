@@ -7,6 +7,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using System.Security.Claims;
 using Xunit;
 
@@ -34,16 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
             formFile.ContentType.Returns("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
             var dataImportController = new DataImportController(mapper, _dataBlobUploadService);
-
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            {
-                 new Claim(ClaimTypes.GivenName, "username"),
-            }));
-
-            dataImportController.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = user }
-            };
+            dataImportController.AddUsernameToContext("username");
             
             _result = dataImportController.Index(viewModel).Result;
         }

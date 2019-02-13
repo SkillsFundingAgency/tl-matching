@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
 {
-
     public class Given_I_Request_Sign_In
     {
         private readonly AccountController _accountController;
