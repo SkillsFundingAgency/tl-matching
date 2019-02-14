@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 {
-    public class When_RoutePathRepository_Is_Called_To_Get_Routes
+    public class When_RoutePathService_Is_Called_To_Get_Routes
     {
         private readonly IRoutePathRepository _repository;
         private readonly IQueryable<Route> _result;
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
                 }
             };
 
-        public When_RoutePathRepository_Is_Called_To_Get_Routes()
+        public When_RoutePathService_Is_Called_To_Get_Routes()
         {
             var logger = Substitute.For<ILogger<RoutePathService>>();
             var mapper = Substitute.For<IMapper>();
