@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
@@ -12,28 +11,31 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
         private int _createdRecordCount;
         private readonly string _testExecutionDirectory;
         private readonly ProviderTestFixture _testFixture;
+        private const string ProviderName = "Provider-Simple";
 
         public When_Provider_Imports_Valid_File(ProviderTestFixture testFixture)
         {
             _testFixture = testFixture;
             _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
-            _testFixture.ResetData("Provider-Simple");
-        }
+            _testFixture.ResetData(ProviderName);
 
-        [Fact]
-        public async Task Then_Record_Is_Saved()
-        {
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                _createdRecordCount = await _testFixture.ProviderService.ImportProvider(new ProviderFileImportDto
+                _createdRecordCount = _testFixture.ProviderService.ImportProvider(new ProviderFileImportDto
                 {
                     FileDataStream = stream,
                     CreatedBy = nameof(ProviderTestFixture)
-                });
+                }).GetAwaiter().GetResult();
             }
-
-            _createdRecordCount.Should().Be(1);
         }
+
+        [Fact]
+        public void Then_Record_Is_Saved() =>
+            _createdRecordCount.Should().Be(1);
+
+        [Fact]
+        public void Then_Record_Does_Exist() =>
+            _testFixture.GetCountBy(ProviderName).Should().Be(1);
     }
 }

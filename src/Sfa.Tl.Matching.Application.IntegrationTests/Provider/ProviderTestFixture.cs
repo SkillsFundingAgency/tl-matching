@@ -45,13 +45,27 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
 
         internal void ResetData(string name)
         {
-            var provider = MatchingDbContext.Provider.FirstOrDefault(e => e.Name == name);
+            var provider = MatchingDbContext.Provider.FirstOrDefault(p => p.Name == name);
             if (provider != null)
             {
                 MatchingDbContext.Provider.Remove(provider);
                 var count = MatchingDbContext.SaveChanges();
                 count.Should().Be(1);
             }
+        }
+
+        internal int GetCountBy(string name)
+        {
+            var providerCount = MatchingDbContext.Provider.Count(p => p.Name == name);
+
+            return providerCount;
+        }
+
+        internal int GetCountBy(int ukPrn)
+        {
+            var providerCount = MatchingDbContext.Provider.Count(p => p.UkPrn == ukPrn);
+
+            return providerCount;
         }
 
         public void Dispose()
