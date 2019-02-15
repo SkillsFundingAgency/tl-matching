@@ -2,6 +2,10 @@ $buildId = Get-Date
 $failBuildLevelSelector = "Warning"
 
 $tempExePath = "C:\Temp"
+if(!(Test-Path $inspectCodeExePath)) {
+    mkdir $tempExePath
+}
+
 $solutionOrProjectPath = "$PSScriptRoot\Sfa.Tl.Matching.sln"
 
 $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"

@@ -1,1 +1,0 @@
-.\InspectCode.exe  "C:\Source\DFE\tl-matching\src\Sfa.Tl.Matching.sln" /o:"c:\temp\inspect.xml" /disable-settings-layers:SolutionPersonal
