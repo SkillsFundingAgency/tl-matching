@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.UnitTests.Data.RoutePathMapping.Builders;
 using Sfa.Tl.Matching.Data.Repositories;
 using Xunit;
 
@@ -18,15 +19,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
 
             using (var dbContext = InMemoryDbContext.Create())
             {
-                dbContext.Add(
-                    new Domain.Models.RoutePathMapping
-                    {
-                        Id = 1,
-                        LarsId = "1234567X",
-                        Title = "Test title",
-                        ShortTitle = "Test short title",
-                        PathId = 2,
-                    });
+                dbContext.Add(new ValidRoutePathMappingBuilder().Build());
                 dbContext.SaveChanges();
 
                 var repository = new RoutePathMappingRepository(logger, dbContext);
@@ -44,7 +37,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
             _result.First().LarsId.Should().BeEquivalentTo("1234567X");
 
         [Fact]
-        public void Then_RouteThen_RoutePathMapping_Title_Is_Returned() => 
+        public void Then_RoutePathMapping_Title_Is_Returned() => 
             _result.First().Title.Should().BeEquivalentTo("Test title");
 
         [Fact]
@@ -55,5 +48,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
         public void Then_RoutePathMapping_PathId_Is_Returned()
             => _result.First().PathId.Should().Be(2);
 
+        [Fact]
+        public void Then_RoutePathMapping_Source_Is_Returned() =>
+            _result.First().Source.Should().BeEquivalentTo("Test");
     }
 }
