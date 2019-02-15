@@ -1,4 +1,5 @@
 ﻿using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Constants;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders
 {
@@ -11,11 +12,11 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders
             _routePathMapping = new Domain.Models.RoutePathMapping
             {
                 Id = 1,
-                LarsId = "1234567X",
-                Title = "Test title",
-                ShortTitle = "Test short title",
-                PathId = 2,
-                Source = "Test",
+                LarsId = RoutePathMappingConstants.LarsId,
+                Title = RoutePathMappingConstants.Title,
+                ShortTitle = RoutePathMappingConstants.ShortTitle,
+                PathId = RoutePathMappingConstants.PathId,
+                Source = RoutePathMappingConstants.Source,
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Constants;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
@@ -34,22 +35,22 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
 
         [Fact]
         public void Then_RoutePathMapping_LarsId_Is_Returned() => 
-            _result.First().LarsId.Should().BeEquivalentTo("1234567X");
+            _result.First().LarsId.Should().BeEquivalentTo(RoutePathMappingConstants.LarsId);
 
         [Fact]
         public void Then_RoutePathMapping_Title_Is_Returned() => 
-            _result.First().Title.Should().BeEquivalentTo("Test title");
+            _result.First().Title.Should().BeEquivalentTo(RoutePathMappingConstants.Title);
 
         [Fact]
         public void Then_RoutePathMapping_ShortTitle_Is_Returned() 
-            => _result.First().ShortTitle.Should().BeEquivalentTo("Test short title");
+            => _result.First().ShortTitle.Should().BeEquivalentTo(RoutePathMappingConstants.ShortTitle);
 
         [Fact]
         public void Then_RoutePathMapping_PathId_Is_Returned()
-            => _result.First().PathId.Should().Be(2);
+            => _result.First().PathId.Should().Be(RoutePathMappingConstants.PathId);
 
         [Fact]
         public void Then_RoutePathMapping_Source_Is_Returned() =>
-            _result.First().Source.Should().BeEquivalentTo("Test");
+            _result.First().Source.Should().BeEquivalentTo(RoutePathMappingConstants.Source);
     }
 }

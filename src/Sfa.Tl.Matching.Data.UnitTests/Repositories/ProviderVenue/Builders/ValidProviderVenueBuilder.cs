@@ -1,4 +1,5 @@
 ﻿using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue.Constants;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue.Builders
 {
@@ -11,15 +12,15 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue.Builders
             _providerVenue = new Domain.Models.ProviderVenue
             {
                 Id = 1,
-                ProviderId = 10000546,
-                Postcode = "AA1 1AA",
-                Town = "Town",
-                County = "County",
-                Status = true,
-                StatusReason = "Reason",
-                Latitude = 52.648869M,
-                Longitude = -2.095574M,
-                Source = "Test",
+                ProviderId = ProviderVenueConstants.ProviderId,
+                Postcode = ProviderVenueConstants.Postcode,
+                Town = ProviderVenueConstants.Town,
+                County = ProviderVenueConstants.County,
+                Status = ProviderVenueConstants.Status,
+                StatusReason = ProviderVenueConstants.StatusReason,
+                Latitude = ProviderVenueConstants.Latitude,
+                Longitude = ProviderVenueConstants.Longitude,
+                Source = ProviderVenueConstants.Source,
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,

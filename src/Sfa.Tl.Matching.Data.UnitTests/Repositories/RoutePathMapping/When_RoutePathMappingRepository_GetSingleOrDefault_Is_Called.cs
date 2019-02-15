@@ -4,6 +4,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Constants;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
@@ -49,7 +50,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
 
         [Fact]
         public void Then_RoutePathMapping_Source_Is_Returned() =>
-            _result.Source.Should().BeEquivalentTo("Test");
+            _result.Source.Should().BeEquivalentTo(RoutePathMappingConstants.Source);
         
         [Fact]
         public void Then_RoutePathMapping_CreatedBy_Is_Returned() =>
