@@ -6,8 +6,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Parsing
 {
     public class ProviderParsingFixture
     {
-        public ProviderDataParser Parser;
         public ProviderFileImportDto Dto;
+        public ProviderDataParser Parser;
 
         public ProviderParsingFixture()
         {

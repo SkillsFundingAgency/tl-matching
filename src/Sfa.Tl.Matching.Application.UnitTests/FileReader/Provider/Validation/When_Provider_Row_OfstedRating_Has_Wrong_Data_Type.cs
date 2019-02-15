@@ -2,6 +2,7 @@
 using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
@@ -33,6 +34,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
         [Fact]
         public void Then_Error_Message_Is_WrongDataType() =>
             _validationResult.Errors.First(e => e.ErrorCode == ValidationErrorCode.WrongDataType.ToString()).ErrorMessage.Should()
-                .Be($"'{nameof(Domain.Models.Provider.OfstedRating)}' - {ValidationErrorCode.WrongDataType.Humanize()}");
+                .Be($"'{nameof(ProviderFileImportDto.OfstedRating)}' - {ValidationErrorCode.WrongDataType.Humanize()}");
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
@@ -31,6 +32,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
         [Fact]
         public void Then_Error_Message_Is_InvalidFormat() =>
             _validationResult.Errors[0].ErrorMessage.Should()
-                .Be($"'{nameof(Domain.Models.Provider.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                .Be($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
     }
 }

@@ -4,6 +4,7 @@ using FluentValidation.Results;
 using Humanizer;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
@@ -36,6 +37,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         [Fact]
         public void Then_Error_Message_Is_RecordExists() =>
-            _validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(Domain.Models.Provider.UkPrn)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
+            _validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
     }
 }

@@ -1,4 +1,5 @@
-﻿using Sfa.Tl.Matching.Models.Dto;
+﻿using Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Constants;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Builders
 {
@@ -10,10 +11,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Builder
         {
             _providerVenueFileImportDto = new ProviderVenueFileImportDto
             {
-                PostCode = "AB1 1AA",
-                ProviderId = 1,
-                UkPrn = "10000546",
-                Source = "PMF_1018"
+                UkPrn = ProviderVenueConstants.UkPrn,
+                PostCode = ProviderVenueConstants.PostCode,
+                ProviderId = ProviderVenueConstants.ProviderId,
+                Source = ProviderVenueConstants.Source,
+                CreatedBy = ProviderVenueConstants.CreatedBy
             };
         }
 
