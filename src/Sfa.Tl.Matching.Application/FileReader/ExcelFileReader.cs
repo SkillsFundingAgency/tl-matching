@@ -138,7 +138,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
             do
             {
                 col--;
-                sb.Insert(0, (char)('A' + (col % 26)));
+                sb.Insert(0, (char)('A' + col % 26));
                 col /= 26;
 
             } while (col > 0);

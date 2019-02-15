@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
             return routePathMapping == null || !routePathMapping.Any();
         }
 
-        private bool MustHaveAtLeastOnePathId(QualificationRoutePathMappingFileImportDto data)
+        private static bool MustHaveAtLeastOnePathId(QualificationRoutePathMappingFileImportDto data)
         {
             var pathIds = data.GetQualificationRoutePathMappingPathIdColumnProperties();
             return pathIds.Any();
