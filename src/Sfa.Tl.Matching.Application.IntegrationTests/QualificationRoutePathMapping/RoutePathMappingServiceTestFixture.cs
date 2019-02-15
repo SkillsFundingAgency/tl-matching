@@ -9,6 +9,7 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMapping
@@ -56,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
 
         internal void CreateRoutePathMapping(string larsId)
         {
-            var routePathMapping = new Domain.Models.RoutePathMapping
+            var routePathMapping = new RoutePathMapping
             {
                 LarsId = larsId, //Must match id in RoutePathMapping-Simple.xlsx
                 Title = "Test",

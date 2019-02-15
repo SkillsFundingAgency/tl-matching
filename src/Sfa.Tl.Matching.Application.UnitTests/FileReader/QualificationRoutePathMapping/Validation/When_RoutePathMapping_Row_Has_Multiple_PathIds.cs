@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FluentValidation.Results;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants;
+using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Validation
@@ -11,9 +11,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         
         public When_RoutePathMapping_Row_Has_Multiple_PathIds(QualificationRoutePathMappingFileImportValidationTestFixture fixture)
         {
-            fixture.Dto.AgricultureLandManagementandProduction = RoutePathMappingConstants.AgricultureLandManagementandProduction;
-            fixture.Dto.AnimalCareandManagement = RoutePathMappingConstants.AnimalCareandManagement;
-            fixture.Dto.Hospitality = RoutePathMappingConstants.Hospitality;
+            fixture.Dto.AgricultureLandManagementandProduction = ValidQualificationRoutePathMappingFileImportDtoBuilder.AgricultureLandManagementandProduction;
+            fixture.Dto.AnimalCareandManagement = ValidQualificationRoutePathMappingFileImportDtoBuilder.AnimalCareandManagement;
+            fixture.Dto.Hospitality = ValidQualificationRoutePathMappingFileImportDtoBuilder.Hospitality;
 
             _validationResult = fixture.Validator.Validate(fixture.Dto);
         }

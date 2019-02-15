@@ -61,13 +61,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             return providerCount;
         }
 
-        internal int GetCountBy(int ukPrn)
-        {
-            var providerCount = MatchingDbContext.Provider.Count(p => p.UkPrn == ukPrn);
-
-            return providerCount;
-        }
-
         public void Dispose()
         {
             MatchingDbContext?.Dispose();

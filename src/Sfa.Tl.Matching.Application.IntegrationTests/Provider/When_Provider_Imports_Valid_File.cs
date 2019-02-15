@@ -8,18 +8,17 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
     public class When_Provider_Imports_Valid_File : IClassFixture<ProviderTestFixture>
     {
         private const string DataFilePath = @"Provider\Provider-Simple.xlsx";
-        private int _createdRecordCount;
-        private readonly string _testExecutionDirectory;
+        private readonly int _createdRecordCount;
         private readonly ProviderTestFixture _testFixture;
         private const string ProviderName = "Provider-Simple";
 
         public When_Provider_Imports_Valid_File(ProviderTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            var testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
             _testFixture.ResetData(ProviderName);
 
-            var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
+            var filePath = Path.Combine(testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
                 _createdRecordCount = _testFixture.ProviderService.ImportProvider(new ProviderFileImportDto

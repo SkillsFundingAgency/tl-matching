@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
             {
 
                 Value = uploadType.ToString(),
-                Text = ((DataImportType) Enum.Parse(typeof(DataImportType), uploadType)).Humanize(),
+                Text = ((DataImportType) Enum.Parse(typeof(DataImportType), uploadType)).Humanize()
             }).ToArray();
     }
 }

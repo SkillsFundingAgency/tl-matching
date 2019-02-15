@@ -1,25 +1,26 @@
-﻿using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Constants;
-using Sfa.Tl.Matching.Models.Dto;
+﻿using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders
 {
-    internal class ValidQualificationRoutePathMappingFileImportDtoBuilder
+    public class ValidQualificationRoutePathMappingFileImportDtoBuilder
     {
-        private readonly QualificationRoutePathMappingFileImportDto _routePathMappingDto;
+        public const string LarsId = "1234567X";
+        public const string Title = "Full Qualification Title";
+        public const string ShortTitle = "Short Title";
+        public const int PathId = 25;
 
-        public ValidQualificationRoutePathMappingFileImportDtoBuilder()
+        public const string Accountancy = "25";
+        public const string AgricultureLandManagementandProduction = "1";
+        public const string AnimalCareandManagement = "2";
+        public const string Hospitality = "5";
+
+        public QualificationRoutePathMappingFileImportDto Build() => new QualificationRoutePathMappingFileImportDto
         {
-            _routePathMappingDto = new QualificationRoutePathMappingFileImportDto
-            {
-                LarsId = RoutePathMappingConstants.LarsId,
-                Title = RoutePathMappingConstants.Title,
-                ShortTitle = RoutePathMappingConstants.ShortTitle,
-                Accountancy = RoutePathMappingConstants.Accountancy,
-                Source = "Manual"
-            };
-        }
-
-        public QualificationRoutePathMappingFileImportDto Build() =>
-            _routePathMappingDto;
+            LarsId = LarsId,
+            Title = Title,
+            ShortTitle = ShortTitle,
+            Accountancy = Accountancy,
+            Source = "Manual"
+        };
     }
 }

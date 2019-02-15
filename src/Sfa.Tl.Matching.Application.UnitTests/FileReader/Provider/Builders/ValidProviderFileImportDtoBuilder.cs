@@ -1,33 +1,38 @@
-﻿using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Constants;
-using Sfa.Tl.Matching.Models.Dto;
+﻿using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders
 {
-    internal class ValidProviderFileImportDtoBuilder
+    public class ValidProviderFileImportDtoBuilder
     {
-        private readonly ProviderFileImportDto _providerFileImportDto;
+        public const string UkPrn = "10000546";
+        public const string Name = "ProviderName";
+        public const string OfstedRating = "Good";
+        public const string Status = "Yes";
+        public const string StatusReason = "StatusReason";
+        public const string PrimaryContactName = "PrimaryContact";
+        public const string PrimaryContactEmail = "primary@contact.co.uk";
+        public const string PrimaryContactTelephone = "01777757777";
+        public const string SecondaryContactName = "SecondaryContact";
+        public const string SecondaryContactEmail = "secondary@contact.co.uk";
+        public const string SecondaryContactTelephone = "01777757777";
+        public const string Source = "PMF_1018";
+        public const string CreatedBy = "CreatedBy";
 
-        public ValidProviderFileImportDtoBuilder()
+        public ProviderFileImportDto Build() => new ProviderFileImportDto
         {
-            _providerFileImportDto = new ProviderFileImportDto
-            {
-                UkPrn = ProviderConstants.UkPrn.ToString(),
-                ProviderName = ProviderConstants.Name,
-                OfstedRating = ProviderConstants.OfstedRating,
-                Status = ProviderConstants.Status,
-                StatusReason = ProviderConstants.StatusReason,
-                PrimaryContactName = ProviderConstants.PrimaryContactName,
-                PrimaryContactEmail = ProviderConstants.PrimaryContactEmail,
-                PrimaryContactTelephone = ProviderConstants.PrimaryContactTelephone,
-                SecondaryContactName = ProviderConstants.SecondaryContactName,
-                SecondaryContactEmail = ProviderConstants.SecondaryContactEmail,
-                SecondaryContactTelephone = ProviderConstants.SecondaryContactTelephone,
-                Source = ProviderConstants.Source,
-                CreatedBy = ProviderConstants.CreatedBy
-            };
-        }
-
-        public ProviderFileImportDto Build() => 
-            _providerFileImportDto;
+            UkPrn = UkPrn,
+            ProviderName = Name,
+            OfstedRating = OfstedRating,
+            Status = Status,
+            StatusReason = StatusReason,
+            PrimaryContactName = PrimaryContactName,
+            PrimaryContactEmail = PrimaryContactEmail,
+            PrimaryContactTelephone = PrimaryContactTelephone,
+            SecondaryContactName = SecondaryContactName,
+            SecondaryContactEmail = SecondaryContactEmail,
+            SecondaryContactTelephone = SecondaryContactTelephone,
+            Source = Source,
+            CreatedBy = CreatedBy
+        };
     }
 }

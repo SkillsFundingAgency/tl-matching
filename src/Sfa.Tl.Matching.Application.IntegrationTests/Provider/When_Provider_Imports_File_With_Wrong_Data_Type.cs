@@ -8,17 +8,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
     public class When_Provider_Imports_File_With_Wrong_Data_Type : IClassFixture<ProviderTestFixture>
     {
         private const string DataFilePath = @"Provider\Provider-WrongDataType.xlsx";
-        private int _createdRecordCount;
-        private readonly string _testExecutionDirectory;
+        private readonly int _createdRecordCount;
         private readonly ProviderTestFixture _testFixture;
         private const string ProviderName = "Provider-WrongDataType";
 
         public When_Provider_Imports_File_With_Wrong_Data_Type(ProviderTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            var testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
 
-            var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
+            var filePath = Path.Combine(testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
                 _createdRecordCount = _testFixture.ProviderService.ImportProvider(new ProviderFileImportDto

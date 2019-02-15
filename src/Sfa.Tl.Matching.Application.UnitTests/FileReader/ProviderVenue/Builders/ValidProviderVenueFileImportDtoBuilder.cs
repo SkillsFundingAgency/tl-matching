@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Builder
             UkPrn = UkPrn,
             PostCode = PostCode,
             Source = Source,
-            CreatedBy = CreatedBy,
+            CreatedBy = CreatedBy
         };
 
     }

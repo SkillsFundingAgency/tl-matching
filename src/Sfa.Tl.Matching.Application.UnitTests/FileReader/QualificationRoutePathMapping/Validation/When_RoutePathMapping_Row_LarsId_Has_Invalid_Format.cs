@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
@@ -33,6 +34,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         [Fact]
         public void Then_Error_Message_Is_InvalidFormat() =>
             _validationResult.Errors[0].ErrorMessage.Should()
-                .Be($"'{nameof(Domain.Models.RoutePathMapping.LarsId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                .Be($"'{nameof(RoutePathMapping.LarsId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
     }
 }

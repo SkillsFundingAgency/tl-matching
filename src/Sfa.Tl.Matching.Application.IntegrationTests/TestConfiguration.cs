@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests
 {
     public class TestConfiguration
     {
-        public static MatchingConfiguration MatchingConfiguration { get; private set; }
+        public static MatchingConfiguration MatchingConfiguration { get; }
 
         static TestConfiguration()
         {

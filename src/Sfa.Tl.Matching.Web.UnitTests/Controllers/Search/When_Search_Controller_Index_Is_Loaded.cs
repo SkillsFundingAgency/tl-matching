@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -5,10 +7,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
@@ -48,16 +47,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
         {
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
-        }
-
-        // TODO Check ViewModel has everything set up
-
-        private SearchParametersViewModel GetViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            var viewModel = viewResult?.Model as SearchParametersViewModel;
-
-            return viewModel;
         }
     }
 }

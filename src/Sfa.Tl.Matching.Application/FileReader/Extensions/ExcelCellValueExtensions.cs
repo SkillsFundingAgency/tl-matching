@@ -24,11 +24,6 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
             return Guid.Parse(cellValue);
         }
 
-        public static DateTime ToDateTime(this string cellValue)
-        {
-            return DateTime.Parse(cellValue);
-        }
-
         public static bool ToBool(this string cellValue)
         {
             switch (cellValue.ToLower())
@@ -49,29 +44,9 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
             return ofstedRating;
         }
 
-        public static bool IsInt(this string cellValue)
-        {
-            return int.TryParse(cellValue, out _);
-        }
-
-        public static bool IsLong(this string cellValue)
-        {
-            return long.TryParse(cellValue, out _);
-        }
-
         public static bool IsGuid(this string cellValue)
         {
             return Guid.TryParse(cellValue, out _);
-        }
-
-        public static bool IsBool(this string cellValue)
-        {
-            return bool.TryParse(cellValue, out _);
-        }
-
-        public static bool IsDateTime(this string cellValue)
-        {
-            return DateTime.TryParse(cellValue, out _);
         }
 
         public static bool IsYesNo(this string cellValue)

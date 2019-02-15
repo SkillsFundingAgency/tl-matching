@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
-using System.Security.Claims;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions
 {
@@ -19,14 +19,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions
 
         private static void AddClaim(Controller controller, string type, string value)
         {
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new[]
             {
-                 new Claim(type, value),
+                 new Claim(type, value)
             }));
 
-            controller.ControllerContext = new ControllerContext()
+            controller.ControllerContext = new ControllerContext
             {
-                HttpContext = new DefaultHttpContext() { User = user }
+                HttpContext = new DefaultHttpContext { User = user }
             };
         }
     }

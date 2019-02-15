@@ -5,10 +5,6 @@ namespace Sfa.Tl.Matching.Data
 {
     public class MatchingDbContext : DbContext
     {
-        public MatchingDbContext()
-        {
-        }
-
         public MatchingDbContext(DbContextOptions options)
             : base(options)
         {

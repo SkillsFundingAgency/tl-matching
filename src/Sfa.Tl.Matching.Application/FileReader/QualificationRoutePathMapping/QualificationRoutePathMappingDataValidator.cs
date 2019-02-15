@@ -5,6 +5,7 @@ using FluentValidation;
 using Humanizer;
 using Sfa.Tl.Matching.Application.FileReader.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -18,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
         public IDictionary<int, string> PathMapping { get; set; }
 
 
-        public QualificationRoutePathMappingDataValidator(IRepository<Domain.Models.RoutePathMapping> repository, IRoutePathRepository routePathRepository)
+        public QualificationRoutePathMappingDataValidator(IRepository<RoutePathMapping> repository, IRoutePathRepository routePathRepository)
         {
             var paths = routePathRepository.GetPaths().ToList();
 
@@ -86,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
                     .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
 
-        private async Task<bool> CanLarsIdBeAdded(IRepository<Domain.Models.RoutePathMapping> repository, string larsId)
+        private async Task<bool> CanLarsIdBeAdded(IRepository<RoutePathMapping> repository, string larsId)
         {
             var routePathMapping = await repository.GetMany(p => p.LarsId == larsId);
 
