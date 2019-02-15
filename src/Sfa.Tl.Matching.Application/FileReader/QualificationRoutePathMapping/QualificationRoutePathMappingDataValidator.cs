@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
 
         public QualificationRoutePathMappingDataValidator(IRepository<RoutePathMapping> repository, IRoutePathRepository routePathRepository)
         {
+            CascadeMode = CascadeMode.StopOnFirstFailure;
             var paths = routePathRepository.GetPaths().ToList();
 
             PathMapping = paths
