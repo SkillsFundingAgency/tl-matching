@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
+using Sfa.Tl.Matching.Application.FileReader.RoutePathMapping;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
@@ -13,7 +14,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 
         public When_RoutePathMapping_Row_Title_Has_Invalid_Length(QualificationRoutePathMappingFileImportValidationTestFixture fixture)
         {
-            fixture.Dto.Title  = new string('X', 251);
+            fixture.Dto.Title  = new string(
+                'X',
+                QualificationRoutePathMappingDataValidator.MaximumTitleLength + 1);                );
             _validationResult = fixture.Validator.Validate(fixture.Dto);
         }
 
