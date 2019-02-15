@@ -8,6 +8,8 @@
         InvalidFormat,
         InvalidLength,
         ColumnValueDoesNotMatchType,
-        RecordAlreadyExists
+        RecordAlreadyExists,
+        ProviderDoesntExist,
+        VenueAlreadyExists
     }
 }

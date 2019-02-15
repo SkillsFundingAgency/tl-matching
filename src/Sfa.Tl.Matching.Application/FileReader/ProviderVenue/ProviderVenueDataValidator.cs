@@ -26,9 +26,10 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(dto => dto)
-                 .MustAsync((dto, cancellation) => ProviderMustExistsForVenue(repository, dto))
-                     .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
-                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+                .MustAsync((dto, cancellation) => ProviderMustExistsForVenue(repository, dto))
+                     .When(pv => !string.IsNullOrEmpty(pv.UkPrn))
+                     .WithErrorCode(ValidationErrorCode.ProviderDoesntExist.ToString())
+                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.ProviderDoesntExist.Humanize()}");
 
             RuleFor(dto => dto.PostCode)
                 .NotNull()
@@ -42,9 +43,9 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(dto => dto)
-                 .MustAsync((dto, cancellation) => ProviderVenueMustBeUniqueue(venueRepository, dto))
-                     .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
-                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+                 .MustAsync((dto, cancellation) => ProviderVenueMustBeUnique(venueRepository, dto))
+                     .WithErrorCode(ValidationErrorCode.VenueAlreadyExists.ToString())
+                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.VenueAlreadyExists.Humanize()}");
 
             RuleFor(dto => dto.Source)
                 .NotNull()
@@ -57,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
 
         private async Task<bool> ProviderMustExistsForVenue(IRepository<Domain.Models.Provider> repository, ProviderVenueFileImportDto dto)
         {
-            var result = int.TryParse(dto.UkPrn, out var ukPrn);
+            var result = long.TryParse(dto.UkPrn, out var ukPrn);
 
             if (!result) return false;
 
@@ -70,7 +71,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
 
             return true;
         }
-        private async Task<bool> ProviderVenueMustBeUniqueue(IRepository<Domain.Models.ProviderVenue> venueRepository, ProviderVenueFileImportDto dto)
+
+        private async Task<bool> ProviderVenueMustBeUnique(IRepository<Domain.Models.ProviderVenue> venueRepository, ProviderVenueFileImportDto dto)
         {
             if (dto.ProviderId == 0) return false;
 

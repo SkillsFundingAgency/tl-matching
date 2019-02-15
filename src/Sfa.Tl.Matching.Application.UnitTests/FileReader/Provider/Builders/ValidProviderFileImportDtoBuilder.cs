@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders
 {
-    internal class ValidProviderBuilder
+    internal class ValidProviderFileImportDtoBuilder
     {
         public static ProviderFileImportDto Build() => new ProviderFileImportDto
         {
