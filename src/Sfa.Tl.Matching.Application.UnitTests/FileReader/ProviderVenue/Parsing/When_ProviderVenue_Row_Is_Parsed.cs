@@ -14,7 +14,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Parsing
 
         public When_ProviderVenue_Row_Is_Parsed(ProviderVenueParsingFixture fixture)
         {
-            var dto = new ValidProviderVenueFileImportDtoBuilder().Build();
             _parseResult = fixture.Parser.Parse(fixture.Dto);
             _firstProviderVenueDto = _parseResult.First();
         }
@@ -36,6 +35,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Parsing
             _parseResult.First().Source.Should().BeEquivalentTo(ValidProviderVenueFileImportDtoBuilder.Source);
         [Fact]
         public void Then_First_ParseResult_CreatedBy_Matches_Input() =>
-            _firstProviderVenueDto.CreatedBy.Should().Be("CreatedBy");
+            _firstProviderVenueDto.CreatedBy.Should().Be(ValidProviderVenueFileImportDtoBuilder.CreatedBy);
     }
 }

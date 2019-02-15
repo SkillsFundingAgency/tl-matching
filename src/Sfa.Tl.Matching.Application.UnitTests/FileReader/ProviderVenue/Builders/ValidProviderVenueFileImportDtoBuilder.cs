@@ -8,13 +8,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Builder
         public static string UkPrn = "10000546";
         public static string PostCode = "CV1 2WT";
         public static string Source = "PMF_1018";
+        public static string CreatedBy = "CreatedBy";
 
         public ProviderVenueFileImportDto Build() => new ProviderVenueFileImportDto
         {
             ProviderId = ProviderId,
             UkPrn = UkPrn,
             PostCode = PostCode,
-            Source = Source
+            Source = Source,
+            CreatedBy = CreatedBy,
         };
 
     }

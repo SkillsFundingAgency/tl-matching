@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Parsing
 
         public ProviderVenueParsingFixture()
         {
-            Dto = new ProviderVenueFileImportDtoBuilder().Build();
+            Dto = new ValidProviderVenueFileImportDtoBuilder().Build();
             Parser = new ProviderVenueDataParser();
         }
     }
