@@ -1,55 +1,51 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.Services;
-using Sfa.Tl.Matching.Web.ViewModels;
+using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
     public class DataImportController : Controller
     {
-        private readonly IDataImportViewModelMapper _viewModelMapper;
-        private readonly IUploadService _uploadService;
+        private readonly IMapper _mapper;
+        private readonly IDataBlobUploadService _dataBlobUploadService;
 
-        private const string FileMissingKey = "file";
-        private const string FileMissingError = "A file must be selected";
-
-        public DataImportController(IDataImportViewModelMapper viewModelMapper,
-            IUploadService uploadService)
+        public DataImportController(IMapper mapper, IDataBlobUploadService dataBlobUploadService)
         {
-            _viewModelMapper = viewModelMapper;
-            _uploadService = uploadService;
+            _mapper = mapper;
+            _dataBlobUploadService = dataBlobUploadService;
         }
 
         public IActionResult Index()
         {
-            var viewModel = _viewModelMapper.Populate();
-
-            return View(viewModel);
+            return View(new DataImportParametersViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file, DataImportViewModel viewModel)
+        public async Task<IActionResult> Index(DataImportParametersViewModel viewModel)
         {
-            if (file == null)
-                ModelState.AddModelError(FileMissingKey, FileMissingError);
+            if (viewModel.File == null)
+                ModelState.AddModelError("file", "A file must be selected");
 
-            if (!ModelState.IsValid)
+            if (viewModel.File != null && viewModel.File.ContentType != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                ModelState.AddModelError("file", "A file must be Excel Document");
+
+            if (ModelState.IsValid)
             {
-                viewModel = _viewModelMapper.Populate();
-                return View("Index", viewModel);
+                var dto = _mapper.Map<DataUploadDto>(viewModel);
+                dto.UserName = HttpContext.User.GetUserName();
+
+                await _dataBlobUploadService.Upload(dto);
+
+                viewModel.IsImportSuccessful = true;
             }
 
-            await _uploadService.Upload(file, viewModel);
-
-            viewModel = _viewModelMapper.Populate();
-            viewModel.Success = true;
-
-            return View("Index", viewModel);
+            return View(viewModel);
         }
     }
 }

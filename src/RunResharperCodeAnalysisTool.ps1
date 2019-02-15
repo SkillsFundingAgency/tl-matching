@@ -1,47 +1,32 @@
-$solutionOrProjectPath		
-$failBuildLevelSelector		
-$failBuildOnCodeIssues		
-$additionalArguments		
-$buildId					
-$inspectCodeResultsPathOverride
+$buildId = Get-Date
+$failBuildLevelSelector = "Warning"
 
-
-function Set-Results {
-    param(
-        [string]
-        $summaryMessage,
-        [ValidateSet("Succeeded", "Failed")]
-        [string]
-        $buildResult
-    )
-    Write-Output ("##vso[task.complete result={0};]{1}" -f $buildResult, $summaryMessage)
-    Add-Content $summaryFilePath ($summaryMessage)
+$tempExePath = "C:\Temp"
+if(!(Test-Path $inspectCodeExePath)) {
+    mkdir $tempExePath
 }
 
-# Gather inputs
-$tempDownloadFolder = "C:\Temp\"
+$solutionOrProjectPath = "$PSScriptRoot\Sfa.Tl.Matching.sln"
 
 $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-$targetNugetExe = "$tempDownloadFolder\nuget.exe"
-Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
-Set-Alias nuget $targetNugetExe -Scope Global -Verbose
+$nugetExeLocation = "$tempExePath\nuget.exe"
 
-$nugetExeLocation = $targetNugetExe
-
-$nugetArguments = "install JetBrains.ReSharper.CommandLineTools -source https://api.nuget.org/v3/index.json"
-if($useSpecificNuGetVersion){
-	$nugetArguments += " -Version $resharperNugetVersion"
+if(!(Test-Path $nugetExeLocation)) {
+    Write-Output "Downloading Latest Nuget.exe"
+    Invoke-WebRequest $sourceNugetExe -OutFile $nugetExeLocation
+    Set-Alias nuget $nugetExeLocation -Scope Global -Verbose
+    Write-Output "Nuget.exe downloaded"
 }
 
-Start-Process -FilePath "$nugetExeLocation" -ArgumentList $nugetArguments -WorkingDirectory $tempDownloadFolder -Wait
+$nugetArguments = "install JetBrains.ReSharper.CommandLineTools -source https://api.nuget.org/v3/index.json -OutputDirectory $tempExePath"
 
-$resharperPreInstalledDirectoryPath = [System.IO.Directory]::EnumerateDirectories($tempDownloadFolder, "*JetBrains*")[0]
-if(!(Test-Path $resharperPreInstalledDirectoryPath)) {
-	Throw [System.IO.FileNotFoundException] "InspectCode.exe was not found at $inspectCodeExePath or $resharperPreInstalledDirectoryPath"
-}
+Write-Output "downloading Resharper CLT $nugetExeLocation $nugetArguments"
+
+Start-Process -FilePath "$nugetExeLocation" $nugetArguments -Wait
 
 Write-Output "Resharper CLT downloaded"
 
+$resharperPreInstalledDirectoryPath = [System.IO.Directory]::EnumerateDirectories($tempExePath, "*JetBrains*")[0]
 $commandLineInterfacePath = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($resharperPreInstalledDirectoryPath, "tools"));
 $inspectCodeExePath =  [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($commandLineInterfacePath, "InspectCode.exe"));
 
@@ -55,13 +40,7 @@ if(!(Test-Path $solutionOrProjectFullPath)) {
     Throw [System.IO.FileNotFoundException] "No solution or project found at $solutionOrProjectFullPath"
 }
 
-[string] $inspectCodeResultsPath = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($commandLineInterfacePath, "Reports\CodeInspection_$buildId.xml"));
-if($inspectCodeResultsPathOverride){
-    if(!$inspectCodeResultsPathOverride.EndsWith(".xml")) {
-        $inspectCodeResultsPathOverride += ".xml"
-    }
-    $inspectCodeResultsPath = $inspectCodeResultsPathOverride
-}
+[string] $inspectCodeResultsPath = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($tempExePath, "Reports\CodeInspection_$buildId.xml"));
 
 $severityLevels = @{"Hint" = 0; "Suggestion" = 1; "Warning" = 2; "Error" = 3}
 
@@ -71,7 +50,7 @@ Write-Output "Inspecting code for $solutionOrProjectPath"
 
 # Run code analysis
 
-$arguments = """$solutionOrProjectFullPath"" /o:""$inspectCodeResultsPath"" $additionalArguments"
+$arguments = """$solutionOrProjectFullPath"" -o=""$inspectCodeResultsPath"" -s=WARNING --verbosity=WARN --swea --no-buildin-settings"
 
 Write-Output "Invoking InspectCode.exe using arguments $arguments" 
 
@@ -81,10 +60,10 @@ Start-Process -FilePath $inspectCodeExePath -ArgumentList $arguments -Wait
 
 $xmlContent = [xml] (Get-Content "$inspectCodeResultsPath")
 $issuesTypesXpath = "/Report/IssueTypes//IssueType"
-$issuesTypesElements = $xmlContent | Select-Xml $issuesTypesXpath | Select -Expand Node
+$issuesTypesElements = $xmlContent | Select-Xml $issuesTypesXpath | Select-Object -Expand Node
 
 $issuesXpath = "/Report/Issues//Issue"
-$issuesElements = $xmlContent | Select-Xml $issuesXpath | Select -Expand Node
+$issuesElements = $xmlContent | Select-Xml $issuesXpath | Select-Object -Expand Node
 
 $filteredElements = New-Object System.Collections.Generic.List[System.Object]
 
@@ -106,48 +85,39 @@ foreach($issue in $issuesElements) {
 }
 
 # Report results output
-
 foreach ($issue in $filteredElements | Sort-Object Severity -Descending) {
     $errorType = "warning"
     if($issue.Severity -eq "Error"){
         $errorType = "error"
+        Write-Warning ("issue type={0};sourcepath={1};linenumber={2};columnnumber=1] {3} to Supress \\Resharper Disable {4}" -f $errorType, $issue.File, $issue.Line, $issue.Message, $issue.TypeId)
     }
-    Write-Output ("##vso[task.logissue type={0};sourcepath={1};linenumber={2};columnnumber=1]R# {3}" -f $errorType, $issue.File, $issue.Line, $issue.Message)
+    Write-Error ("issue type={0};sourcepath={1};linenumber={2};columnnumber=1] {3} to Supress \\Resharper Disable {4}" -f $errorType, $issue.File, $issue.Line, $issue.Message, $issue.TypeId)
 }
 
-$taskCommonTools = "Microsoft.TeamFoundation.DistributedTask.Task.Common"
-if (Get-Module -ListAvailable -Name $taskCommonTools) {
-    Write-Output "Preparing to add summary to build results"
-} else {
-    Throw [System.IO.FileNotFoundException] "Module $taskCommonTools is not installed. If using a custom build controller ensure that this library is correctly installed and available for use in PowerShell."
+function Set-Results {
+    param(
+        [string]
+        $summaryMessage,
+        [ValidateSet("Succeeded", "Failed")]
+        [string]
+        $buildResult
+    )
+    if($buildResult -eq "Failed") {
+        Write-Error ("result={0};]{1}" -f $buildResult, $summaryMessage)
+    } else {
+        Write-Information ("result={0};]{1}" -f $buildResult, $summaryMessage) -ForegroundColor Green
+    }
 }
-
-import-module $taskCommonTools
-$summaryFilePath = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($tempDownloadFolder, "Summary.md"));
-New-Item $summaryFilePath -type file -force
 
 $summaryMessage = ""
 
-[bool] $failBuildOnCodeIssuesBool = [System.Convert]::ToBoolean($failBuildOnCodeIssues)
-
-if ($failBuildOnCodeIssuesBool) {
-    if($filteredElements.Count -eq 0) {
-        Set-Results -summaryMessage "No code quality issues found" -buildResult "Succeeded"
-    } elseif($filteredElements.Count -eq 1) {
-        Set-Results -summaryMessage "One code quality issue found" -buildResult "Failed"
-    } else {
-        $summaryMessage = "{0} code quality issues found" -f $filteredElements.Count
-        Set-Results -summaryMessage $summaryMessage -buildResult "Failed"
-    }
+if($filteredElements.Count -eq 0) {
+    Set-Results -summaryMessage "No code quality issues found" -buildResult "Succeeded"
+} elseif($filteredElements.Count -eq 1) {
+    Set-Results -summaryMessage "One code quality issue found" -buildResult "Failed"
 } else {
     $summaryMessage = "{0} code quality issues found" -f $filteredElements.Count
-    Set-Results -summaryMessage $summaryMessage -buildResult "Succeeded"
+    Set-Results -summaryMessage $summaryMessage -buildResult "Failed"
 }
 
-Write-Output "##vso[task.addattachment type=Distributedtask.Core.Summary;name=Code Quality Analysis;]$summaryFilePath"
-
-If (Test-Path $inspectCodeResultsPath) {
- If (!$inspectCodeResultsPathOverride) {
-    Remove-Item $inspectCodeResultsPath
- }
-}
+Remove-Item $tempExePath

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
@@ -12,17 +14,18 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sfa.Tl.Matching.Application.Commands.UploadBlob;
+using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Application.FileReader;
+using Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Infrastructure.Blob;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.Services;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -36,7 +39,7 @@ namespace Sfa.Tl.Matching.Web
                 configuration[Constants.EnvironmentNameConfigKey],
                 configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
                 configuration[Constants.VersionConfigKey],
-                configuration[Constants.ServiceNameConfigKey]).Result;
+                configuration[Constants.ServiceNameConfigKey]);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -50,32 +53,17 @@ namespace Sfa.Tl.Matching.Web
             });
 
             services.AddMvc(config =>
-                {
-                    var policy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .Build();
-                    config.Filters.Add(new AuthorizeFilter(policy));
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             AddAuthentication(services);
 
-            services.AddDbContext<MatchingDbContext>(options =>
-                options.UseSqlServer(_configuration.SqlConnectionString));
-
-            services.AddAutoMapper();
-
-            //Inject services
-            services.AddTransient<IRoutePathService, RoutePathService>();
-            services.AddTransient<IRoutePathRepository, RoutePathRepository>();
-
-            services.AddTransient<IDataImportViewModelMapper, DataImportViewModelMapper>();
-            services.AddTransient<ISearchParametersViewModelMapper, SearchParametersViewModelMapper>();
-
-            services.AddTransient<IUploadBlobCommand, UploadBlobCommand>();
-
-            services.AddTransient<IUploadService, UploadService>();
-            services.AddTransient<IBlobService>(bs => new BlobService(_configuration));
+            RegisterDependencies(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,7 +89,7 @@ namespace Sfa.Tl.Matching.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseAuthentication(); // TODO: WP - Add the authentication middleware into the pipeline
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -135,6 +123,53 @@ namespace Sfa.Tl.Matching.Web
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             });
+        }
+
+        private void RegisterDependencies(IServiceCollection services)
+        {
+            //Inject AutoMapper
+            services.AddAutoMapper();
+
+            //Inject DbContext
+            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString));
+
+            //Inject services
+            services.AddSingleton(_configuration);
+
+            RegisterRoutePathMappingFileReader(services);
+            RegisterRepositories(services);
+            RegisterApplicationServices(services);
+        }
+
+        private static void RegisterRoutePathMappingFileReader(IServiceCollection services)
+        {
+            services.AddTransient<IDataParser<RoutePathMappingDto>, QualificationRoutePathMappingDataParser>();
+            services.AddTransient<IValidator<QualificationRoutePathMappingFileImportDto>, QualificationRoutePathMappingDataValidator>();
+
+            services.AddTransient<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>, ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>(provider =>
+                new ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>(
+                    provider.GetService<ILogger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>>(),
+                    provider.GetService<IDataParser<RoutePathMappingDto>>(),
+                    (IValidator<QualificationRoutePathMappingFileImportDto>)provider.GetServices(typeof(IValidator<QualificationRoutePathMappingFileImportDto>)).Single(t => t.GetType() == typeof(QualificationRoutePathMappingDataValidator))));
+        }
+        
+        private static void RegisterRepositories(IServiceCollection services)
+        {
+            //services.AddTransient<IRepository<Employer>, EmployerRepository>();
+            services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
+            services.AddTransient<IRoutePathRepository, RoutePathRepository>();
+            //services.AddTransient<IRepository<Provider>, ProviderRepository>();
+        }
+
+        private static void RegisterApplicationServices(IServiceCollection services)
+        {
+            //services.AddTransient<IEmployerService, EmployerService>();
+            services.AddTransient<IRoutePathService, RoutePathService>();
+            //services.AddTransient<IProviderService, ProviderService>();
+
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+            services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
         }
     }
 }

@@ -1,44 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Humanizer;
-using Sfa.Tl.Matching.Infrastructure.Enums;
-using Sfa.Tl.Matching.Web.ViewModels;
+﻿using System.IO;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Mappers
 {
-    public class DataImportViewModelMapper : IDataImportViewModelMapper
+    public class ViewModelMapperProfile : Profile
     {
-        public DataImportViewModel Populate()
+        public ViewModelMapperProfile()
         {
-            var viewModel = new DataImportViewModel
+            CreateMap<DataImportParametersViewModel, DataUploadDto>()
+                .ForMember(dest => dest.FileName, opt => opt.MapFrom<FileNameResolver>())
+                .ForMember(dest => dest.ImportType, opt => opt.MapFrom(source => source.SelectedImportType))
+                .ForMember(dest => dest.ContentType, opt => opt.MapFrom(source => source.File.ContentType))
+                .ForMember(dest => dest.Data, opt => opt.MapFrom(source => GetByteArray(source.File)))
+                ;
+        }
+
+        private static byte[] GetByteArray(IFormFile source)
+        {
+            using (var ms = new MemoryStream())
             {
-                DataImportTypeViewModels = CreateDataImportTypeViewModels()
-            };
-
-            return viewModel;
+                source.CopyTo(ms);
+                return ms.ToArray();
+            }
         }
-
-        #region Private Methods
-        private static List<DataImportTypeViewModel> CreateDataImportTypeViewModels()
-        {
-            var dataImportTypeNames = Enum.GetNames(typeof(DataImportType));
-
-            var dataImportTypeViewModels = dataImportTypeNames.Select(uploadType =>
-                new DataImportTypeViewModel
-                {
-                    Id = GetId(uploadType),
-                    Name = GetDescription(uploadType)
-                }).ToList();
-
-            return dataImportTypeViewModels;
-        }
-
-        private static int GetId(string uploadType) =>
-            (int)Enum.Parse(typeof(DataImportType), uploadType);
-
-        private static string GetDescription(string uploadType) =>
-            ((DataImportType)Enum.Parse(typeof(DataImportType), uploadType)).Humanize();
-        #endregion
     }
 }

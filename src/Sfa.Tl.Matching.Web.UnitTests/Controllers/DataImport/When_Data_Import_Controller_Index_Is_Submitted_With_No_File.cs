@@ -1,56 +1,55 @@
-using Microsoft.AspNetCore.Http;
+using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using NUnit.Framework;
+using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.Services;
-using Sfa.Tl.Matching.Web.ViewModels;
+using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 {
     public class When_Data_Import_Controller_Index_Is_Submitted_With_No_File
     {
-        private IActionResult _result;
-        private IUploadService _uploadService;
-        private readonly IFormFile _formFile = null;
-        private DataImportController _dataImportController;
-        private DataImportViewModel _viewModel;
+        private readonly IActionResult _result;
+        private readonly DataImportController _dataImportController;
+        private readonly DataUploadDto _dataUploadDto;
+        private readonly IDataBlobUploadService _dataBlobUploadService;
 
-        [SetUp]
-        public void Setup()
+        public When_Data_Import_Controller_Index_Is_Submitted_With_No_File()
         {
-            _viewModel = new DataImportViewModel();
+            _dataUploadDto = new DataUploadDto();
 
-            var viewModelMapper = Substitute.For<IDataImportViewModelMapper>();
-            _uploadService = Substitute.For<IUploadService>();
-            
-            _dataImportController = new DataImportController(viewModelMapper, _uploadService);
-           
-            _result = _dataImportController.Upload(_formFile, _viewModel).Result;
+            var mapper = Substitute.For<IMapper>();
+            _dataBlobUploadService = Substitute.For<IDataBlobUploadService>();
+            _dataImportController = new DataImportController(mapper, _dataBlobUploadService);
+
+            var viewModel = new DataImportParametersViewModel();
+            _result = _dataImportController.Index(viewModel).Result;
         }
 
-        [Test]
+        [Fact]
         public void Then_View_Result_Is_Returned() =>
-             Assert.IsAssignableFrom<ViewResult>(_result);
+            _result.Should().BeAssignableTo<ViewResult>();
 
-        [Test]
+        [Fact]
         public void Then_Model_State_Has_1_Error() =>
-            Assert.AreEqual(1, _dataImportController.ViewData.ModelState.Count);
+            _dataImportController.ViewData.ModelState.Should().ContainSingle();
 
-        [Test]
+        [Fact]
         public void Then_Model_State_Has_File_Key() =>
-            Assert.True(_dataImportController.ViewData.ModelState.ContainsKey("file"));
+            _dataImportController.ViewData.ModelState.ContainsKey("file").Should().BeTrue();
 
-        [Test]
+        [Fact]
         public void Then_Model_State_Has_File_Error()
         {
             var modelStateEntry = _dataImportController.ViewData.ModelState["file"];
-            Assert.AreEqual("A file must be selected", modelStateEntry.Errors[0].ErrorMessage);
+            modelStateEntry.Errors[0].ErrorMessage.Should().Be("A file must be selected");
         }
 
-        [Test]
+        [Fact]
         public void Then_Service_Upload_Is_Not_Called() =>
-            _uploadService.Received(0).Upload(_formFile, _viewModel);
+            _dataBlobUploadService.Received(0).Upload(_dataUploadDto);
     }
 }

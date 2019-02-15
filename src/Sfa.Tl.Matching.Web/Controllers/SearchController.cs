@@ -1,55 +1,40 @@
 ﻿using System;
+using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
-using Sfa.Tl.Matching.Models;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.ViewModels;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
     public class SearchController : Controller
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<SearchController> _logger;
-        private readonly ISearchParametersViewModelMapper _viewModelMapper;
+        private readonly IRoutePathService _routePathService;
 
-        public SearchController(ISearchParametersViewModelMapper viewModelMapper, ILogger<SearchController> logger)
+        public SearchController(ILogger<SearchController> logger, IMapper mapper, IRoutePathService routePathService)
         {
-            _viewModelMapper = viewModelMapper;
             _logger = logger;
+            _mapper = mapper;
+            _routePathService = routePathService;
         }
 
         public IActionResult Start()
         {
             return View();
         }
-
-
-        [HttpPost]
-        public IActionResult Results(SearchQueryViewModel viewModel)
-        {
-            return View();
-        }
 		
-        public IActionResult Index(string selectedRouteId, string postcode)//SearchParametersViewModel viewModel)
+        public IActionResult Index()
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    //return RedirectToAction(nameof(Index), "Search", new { viewModel.SelectedRouteId, viewModel.Postcode });
-            //}
-
-            //TODO: Search and redirect to the results page
-            //await _searchService.Search(model.);
-            //return RedirectToAction(nameof(SearchResults), "Search");
-
             try
             {
-
-                var viewModel = _viewModelMapper.Populate(selectedRouteId, postcode);
-
-                return View(viewModel);
+                return GetIndexView();
             }
             catch (Exception ex)
             {
@@ -58,19 +43,29 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
         }
 
-        public IActionResult Search(SearchParametersViewModel viewModel)
+        [HttpPost]
+        public IActionResult Results(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                //return RedirectToAction(nameof(Index), "Search", new { viewModel.SelectedRouteId, viewModel.Postcode });
-                viewModel = _viewModelMapper.Populate(viewModel.SelectedRouteId, viewModel.Postcode);
-                return View(nameof(Index), viewModel);
+                return GetIndexView(viewModel.SelectedRouteId, viewModel.Postcode);
             }
 
             _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
-            //await _searchService.Search(model.);
 
             return RedirectToAction(nameof(Index), "Search");
+        }
+
+        private IActionResult GetIndexView(string selectedRouteId = null, string postCode = null)
+        {
+            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name);
+
+            return View(nameof(Index), new SearchParametersViewModel
+            {
+                RoutesSelectList = _mapper.Map<SelectListItem[]>(routes),
+                SelectedRouteId = selectedRouteId,
+                Postcode = postCode
+            });
         }
     }
 }
