@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue.Builders
                 StatusReason = "Reason",
                 Latitude = 52.648869M,
                 Longitude = -2.095574M,
-                Source = "PMF_1018",
+                Source = "Test",
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
