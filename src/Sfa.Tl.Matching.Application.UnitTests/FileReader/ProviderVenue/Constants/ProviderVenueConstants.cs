@@ -3,7 +3,7 @@
     internal static class ProviderVenueConstants
     {
         public const string UkPrn = "10000546";
-        public const string PostCode = "AB1 1AA";
+        public const string PostCode = "CV1 2WT";
         public const int ProviderId = 1;
         public const string Source = "PMF_1018";
         public const string CreatedBy = "CreatedBy";
