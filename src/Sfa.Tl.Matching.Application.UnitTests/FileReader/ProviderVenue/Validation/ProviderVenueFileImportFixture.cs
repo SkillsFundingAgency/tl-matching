@@ -1,10 +1,10 @@
 ﻿using NSubstitute;
 using Sfa.Tl.Matching.Application.FileReader.ProviderVenue;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using System;
+using Sfa.Tl.Matching.Application.UnitTests.Provider.Builders;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validation
 {

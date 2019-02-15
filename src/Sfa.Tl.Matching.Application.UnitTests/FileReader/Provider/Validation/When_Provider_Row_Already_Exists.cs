@@ -3,7 +3,6 @@ using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
 using NSubstitute;
-
 using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;

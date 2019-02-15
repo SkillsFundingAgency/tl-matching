@@ -15,9 +15,6 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
             CascadeMode = CascadeMode.StopOnFirstFailure;
 
             RuleFor(dto => dto.UkPrn)
-                .NotNull()
-                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
@@ -32,9 +29,6 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
                      .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.ProviderDoesntExist.Humanize()}");
 
             RuleFor(dto => dto.PostCode)
-                .NotNull()
-                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
@@ -48,9 +42,6 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
                      .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.VenueAlreadyExists.Humanize()}");
 
             RuleFor(dto => dto.Source)
-                .NotNull()
-                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");

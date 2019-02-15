@@ -1,4 +1,4 @@
-﻿namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders
+﻿namespace Sfa.Tl.Matching.Application.UnitTests.Provider.Builders
 {
     internal class ValidProviderBuilder
     {

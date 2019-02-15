@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-
 using Sfa.Tl.Matching.Application.Mappers;
 using Xunit;
 

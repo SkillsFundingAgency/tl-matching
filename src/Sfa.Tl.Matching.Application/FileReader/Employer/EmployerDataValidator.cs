@@ -10,6 +10,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
     {
         public EmployerDataValidator()
         {
+            CascadeMode = CascadeMode.StopOnFirstFailure;
+
             RuleFor(dto => dto.CrmId)
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
