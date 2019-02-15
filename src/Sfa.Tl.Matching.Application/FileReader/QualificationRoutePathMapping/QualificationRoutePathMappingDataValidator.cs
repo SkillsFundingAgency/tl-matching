@@ -22,6 +22,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
         public QualificationRoutePathMappingDataValidator(IRepository<RoutePathMapping> repository, IRoutePathRepository routePathRepository)
         {
             CascadeMode = CascadeMode.StopOnFirstFailure;
+
             var paths = routePathRepository.GetPaths().ToList();
 
             PathMapping = paths
@@ -97,13 +98,13 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
 
         private bool MustHaveAtLeastOnePathId(QualificationRoutePathMappingFileImportDto data)
         {
-            var pathIds = data.GetQualificationRoutePathMappingPathIdColumns();
+            var pathIds = data.GetQualificationRoutePathMappingPathIdColumnProperties();
             return pathIds.Any();
         }
 
         private bool PathIdValuesMustMatchColumnType(QualificationRoutePathMappingFileImportDto data)
         {
-            var pathIds = data.GetQualificationRoutePathMappingPathIdColumns();
+            var pathIds = data.GetQualificationRoutePathMappingPathIdColumnProperties();
 
             var isValid = true;
 

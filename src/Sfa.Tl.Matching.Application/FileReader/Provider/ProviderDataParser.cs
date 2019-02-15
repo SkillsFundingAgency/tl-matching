@@ -7,11 +7,11 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
 {
     public class ProviderDataParser : IDataParser<ProviderDto>
     {
-        public IEnumerable<ProviderDto> Parse(FileImportDto dto)
+        public IEnumerable<ProviderDto> Parse(FileImportDto fileImportDto)
         {
-            if (!(dto is ProviderFileImportDto data)) return null;
-            
-            var provider = new ProviderDto
+            if (!(fileImportDto is ProviderFileImportDto data)) return null;
+
+            var providerDto = new ProviderDto
             {
                 UkPrn = data.UkPrn.ToLong(),
                 Name = data.ProviderName.Trim(),
@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 CreatedBy = data.CreatedBy
             };
 
-            return new List<ProviderDto> {provider};
+            return new List<ProviderDto> { providerDto };
         }
     }
 }

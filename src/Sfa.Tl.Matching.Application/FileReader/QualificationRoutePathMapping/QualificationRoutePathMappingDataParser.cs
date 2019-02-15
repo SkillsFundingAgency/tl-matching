@@ -8,12 +8,12 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
 {
     public class QualificationRoutePathMappingDataParser : IDataParser<RoutePathMappingDto>
     {
-        public IEnumerable<RoutePathMappingDto> Parse(FileImportDto dto)
+        public IEnumerable<RoutePathMappingDto> Parse(FileImportDto fileImportDto)
         {
-            if (!(dto is QualificationRoutePathMappingFileImportDto data)) return null;
+            if (!(fileImportDto is QualificationRoutePathMappingFileImportDto data)) return null;
 
-            var pathIds = data.GetQualificationRoutePathMappingPathIdColumns();
-            var pathvalues = pathIds.Select(prop =>
+            var pathIdProperties = data.GetQualificationRoutePathMappingPathIdColumnProperties();
+            var routePathMappingDto = pathIdProperties.Select(prop =>
                     new RoutePathMappingDto
                     {
                         LarsId = data.LarsId,
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
                     }
                 );
 
-            return pathvalues;
+            return routePathMappingDto;
         }
     }
 }

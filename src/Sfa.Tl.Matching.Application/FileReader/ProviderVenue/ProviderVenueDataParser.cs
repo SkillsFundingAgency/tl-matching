@@ -6,11 +6,11 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
 {
     public class ProviderVenueDataParser : IDataParser<ProviderVenueDto>
     {
-        public IEnumerable<ProviderVenueDto> Parse(FileImportDto dto)
+        public IEnumerable<ProviderVenueDto> Parse(FileImportDto fileImportDto)
         {
-            if (!(dto is ProviderVenueFileImportDto data)) return null;
+            if (!(fileImportDto is ProviderVenueFileImportDto data)) return null;
 
-            var provider = new ProviderVenueDto
+            var providerVenueDto = new ProviderVenueDto
             {
                 ProviderId = data.ProviderId,
                 Postcode = data.PostCode,
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
                 CreatedBy = data.CreatedBy
             };
 
-            return new List<ProviderVenueDto> { provider };
+            return new List<ProviderVenueDto> { providerVenueDto };
         }
     }
 }

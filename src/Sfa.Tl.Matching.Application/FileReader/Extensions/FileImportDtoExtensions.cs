@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
 {
     public static class FileImportDtoExtensions
     {
-        public static IEnumerable<PropertyInfo> GetQualificationRoutePathMappingPathIdColumns(this QualificationRoutePathMappingFileImportDto data)
+        public static IEnumerable<PropertyInfo> GetQualificationRoutePathMappingPathIdColumnProperties(this QualificationRoutePathMappingFileImportDto data)
         {
             var pathIds = data.GetType().GetProperties()
                 .Where(pr => pr.GetCustomAttribute<ColumnAttribute>() != null)

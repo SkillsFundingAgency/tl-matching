@@ -7,9 +7,9 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
 {
     public class EmployerDataParser : IDataParser<EmployerDto>
     {
-        public IEnumerable<EmployerDto> Parse(FileImportDto dto)
+        public IEnumerable<EmployerDto> Parse(FileImportDto fileImportDto)
         {
-            if (!(dto is EmployerFileImportDto data)) return null;
+            if (!(fileImportDto is EmployerFileImportDto data)) return null;
 
             var employerDto = new EmployerDto
             {
