@@ -15,25 +15,25 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 {
-    public class When_RoutePathService_Is_Called_To_Import_RoutePathMapping
+    public class When_RoutePathService_Is_Called_To_Import_RoutePathMappings
     {
         private readonly QualificationRoutePathMappingFileImportDto _fileImportDto;
         private readonly IEnumerable<RoutePathMappingDto> _fileReaderResults;
         private readonly IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto> _fileReader;
-        private readonly IRepository<RoutePathMapping> _routePathMappingRepository;
+        private readonly IRepository<RoutePathMapping> _repository;
         private readonly int _result;
 
-        public When_RoutePathService_Is_Called_To_Import_RoutePathMapping()
+        public When_RoutePathService_Is_Called_To_Import_RoutePathMappings()
         {
             var logger = Substitute.For<ILogger<RoutePathService>>();
             var config = new MapperConfiguration(c => c.AddProfile<RoutePathMappingMapper>());
             var mapper = new Mapper(config);
             _fileReader =
                 Substitute.For<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>();
-            var repository = Substitute.For<IRoutePathRepository>();
-            _routePathMappingRepository = Substitute.For<IRepository<RoutePathMapping>>();
+            var routePathRepository = Substitute.For<IRoutePathRepository>();
+            _repository = Substitute.For<IRepository<RoutePathMapping>>();
 
-            _routePathMappingRepository
+            _repository
                 .CreateMany(Arg.Any<IEnumerable<RoutePathMapping>>())
                 .Returns(callinfo =>
                 {
@@ -51,8 +51,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(_fileReaderResults);
 
-            IRoutePathService service =
-                new RoutePathService(logger, mapper, _fileReader, repository, _routePathMappingRepository);
+            var service =
+                new RoutePathService(logger, mapper, _fileReader, routePathRepository, _repository);
 
             _result = service.ImportQualificationPathMapping(_fileImportDto).GetAwaiter().GetResult();
         }
@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         [Fact]
         public void Then_CreateMany_Is_Called_Exactly_Once()
         {
-            _routePathMappingRepository
+            _repository
                 .Received(1)
                 .CreateMany(Arg.Any<IEnumerable<RoutePathMapping>>());
         }

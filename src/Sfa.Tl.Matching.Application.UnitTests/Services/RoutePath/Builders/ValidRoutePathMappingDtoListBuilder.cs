@@ -19,7 +19,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath.Builders
                     Title = $"Test Title {i + 1}",
                     ShortTitle = $"Test Short Title {i + 1}",
                     PathId = i + 1,
-                    Source = "Manual"
+                    Source = "Test",
+                    CreatedBy = "Test"
                 });
             }
         }
