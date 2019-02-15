@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         public ProviderFileImportFixture()
         {
-            ProviderFileImportDto = ValidProviderFileImportDtoBuilder.Build();
+            ProviderFileImportDto = new ValidProviderFileImportDtoBuilder().Build();
             Repository = Substitute.For<IRepository<Domain.Models.Provider>>();
             ProviderDataValidator = new ProviderDataValidator(Repository);
         }

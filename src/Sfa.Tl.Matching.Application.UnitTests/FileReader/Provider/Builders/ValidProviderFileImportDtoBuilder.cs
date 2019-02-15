@@ -1,23 +1,33 @@
-﻿using Sfa.Tl.Matching.Models.Dto;
+﻿using Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Constants;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Builders
 {
     internal class ValidProviderFileImportDtoBuilder
     {
-        public static ProviderFileImportDto Build() => new ProviderFileImportDto
+        private readonly ProviderFileImportDto _providerFileImportDto;
+
+        public ValidProviderFileImportDtoBuilder()
         {
-            UkPrn = "10000546",
-            ProviderName = "ProviderName",
-            OfstedRating = Models.Enums.OfstedRating.Good.ToString(),
-            Status = "Yes",
-            StatusReason = "StatusReason",
-            PrimaryContactName = "PrimaryContact",
-            PrimaryContactEmail = "primary@contact.co.uk",
-            PrimaryContactTelephone = "01777757777",
-            SecondaryContactName = "SecondaryContact",
-            SecondaryContactEmail = "secondary@contact.co.uk",
-            SecondaryContactTelephone = "01777757777",
-            Source = "PMF_1018"
-        };
+            _providerFileImportDto = new ProviderFileImportDto
+            {
+                UkPrn = ProviderConstants.UkPrn.ToString(),
+                ProviderName = ProviderConstants.Name,
+                OfstedRating = ProviderConstants.OfstedRating,
+                Status = ProviderConstants.Status,
+                StatusReason = ProviderConstants.StatusReason,
+                PrimaryContactName = ProviderConstants.PrimaryContactName,
+                PrimaryContactEmail = ProviderConstants.PrimaryContactEmail,
+                PrimaryContactTelephone = ProviderConstants.PrimaryContactTelephone,
+                SecondaryContactName = ProviderConstants.SecondaryContactName,
+                SecondaryContactEmail = ProviderConstants.SecondaryContactEmail,
+                SecondaryContactTelephone = ProviderConstants.SecondaryContactTelephone,
+                Source = ProviderConstants.Source,
+                CreatedBy = ProviderConstants.CreatedBy
+            };
+        }
+
+        public ProviderFileImportDto Build() => 
+            _providerFileImportDto;
     }
 }

@@ -2,17 +2,17 @@
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Builders;
 using Sfa.Tl.Matching.Models.Dto;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
+namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Parsing
 {
-    public class EmployerFileImportFixture
+    public class EmployerParsingFixture
     {
-        public EmployerDataValidator Validator;
+        public EmployerDataParser Parser;
         public EmployerFileImportDto Dto;
 
-        public EmployerFileImportFixture()
+        public EmployerParsingFixture()
         {
             Dto = new ValidEmployerFileImportDtoBuilder().Build();
-            Validator = new EmployerDataValidator();
+            Parser = new EmployerDataParser();
         }
     }
 }

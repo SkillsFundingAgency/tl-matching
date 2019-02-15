@@ -1,21 +1,31 @@
-﻿using Sfa.Tl.Matching.Models.Dto;
+﻿using Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Constants;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Builders
 {
     internal class ValidEmployerFileImportDtoBuilder
     {
-        public static EmployerFileImportDto Build() => new EmployerFileImportDto
+        private readonly EmployerFileImportDto _employerFileImportDto;
+
+        public ValidEmployerFileImportDtoBuilder()
         {
-            CrmId = "7FBD4621-CEAF-4DFA-B8D6-E98C0567CD27",
-            CompanyName = "CompanyName",
-            AlsoKnownAs = "AlsoKnownAs",
-            Aupa = "Active",
-            CompanyType = "Employer",
-            PrimaryContact = "PrimaryContact",
-            Phone = "01474777777",
-            Email = "email@address.com",
-            PostCode = "AB1 1AA",
-            Owner = "Owner"
-        };
+            _employerFileImportDto = new EmployerFileImportDto
+            {
+                CrmId = EmployerConstants.CrmId,
+                CompanyName = EmployerConstants.CompanyName,
+                AlsoKnownAs = EmployerConstants.AlsoKnownAs,
+                Aupa = EmployerConstants.Aupa,
+                CompanyType = EmployerConstants.CompanyType,
+                PrimaryContact = EmployerConstants.PrimaryContact,
+                Phone = EmployerConstants.Phone,
+                Email = EmployerConstants.Email,
+                PostCode = EmployerConstants.PostCode,
+                Owner = EmployerConstants.Owner,
+                CreatedBy = EmployerConstants.CreatedBy
+            };
+        }
+
+        public EmployerFileImportDto Build() =>
+            _employerFileImportDto;
     }
 }
