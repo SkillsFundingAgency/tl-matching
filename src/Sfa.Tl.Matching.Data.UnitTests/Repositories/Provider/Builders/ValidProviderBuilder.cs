@@ -1,6 +1,6 @@
 ﻿using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Data.Provider.Builders
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
 {
     internal class ValidProviderBuilder
     {

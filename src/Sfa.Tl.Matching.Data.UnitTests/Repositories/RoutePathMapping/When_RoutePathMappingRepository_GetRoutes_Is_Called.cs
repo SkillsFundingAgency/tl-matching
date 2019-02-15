@@ -3,8 +3,8 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.UnitTests.Data.RoutePathMapping.Builders;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping

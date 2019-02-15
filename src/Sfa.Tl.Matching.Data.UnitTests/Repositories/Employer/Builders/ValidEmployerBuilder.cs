@@ -1,7 +1,7 @@
 ﻿using System;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Data.Employer.Builders
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Employer.Builders
 {
     internal class ValidEmployerBuilder
     {

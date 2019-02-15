@@ -14,9 +14,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 
         public When_RoutePathMapping_Row_Title_Has_Invalid_Length(QualificationRoutePathMappingFileImportValidationTestFixture fixture)
         {
-            fixture.Dto.Title  = new string(
+            fixture.Dto.Title = new string(
                 'X',
-                QualificationRoutePathMappingDataValidator.MaximumTitleLength + 1);                );
+                QualificationRoutePathMappingDataValidator.MaximumTitleLength + 1);
             _validationResult = fixture.Validator.Validate(fixture.Dto);
         }
 

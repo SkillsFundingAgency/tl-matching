@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Data.ProviderVenue.Builders
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue.Builders
 {
     internal class ValidProviderVenueListBuilder
     {

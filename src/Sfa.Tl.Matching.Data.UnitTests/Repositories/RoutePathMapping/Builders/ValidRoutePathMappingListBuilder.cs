@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Data.RoutePathMapping.Builders
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders
 {
     internal class ValidRoutePathMappingListBuilder
     {
