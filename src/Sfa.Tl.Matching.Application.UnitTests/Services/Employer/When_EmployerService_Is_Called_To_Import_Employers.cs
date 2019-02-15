@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using AutoMapper;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
