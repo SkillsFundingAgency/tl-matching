@@ -1,8 +1,10 @@
+using System;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.UnitTests.Data.RoutePathMapping.Builders;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
@@ -49,5 +51,21 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
         [Fact]
         public void Then_RoutePathMapping_Source_Is_Returned() =>
             _result.Source.Should().BeEquivalentTo("Test");
+        
+        [Fact]
+        public void Then_RoutePathMapping_CreatedBy_Is_Returned() =>
+            _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
+
+        [Fact]
+        public void Then_RoutePathMapping_CreatedOn_Is_Returned() =>
+            _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
+
+        [Fact]
+        public void Then_RoutePathMapping_ModifiedBy_Is_Returned() =>
+            _result.ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);
+        
+        [Fact]
+        public void Then_RoutePathMapping_ModifiedOn_Is_Returned() =>
+            _result.ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
     }
 }

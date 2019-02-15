@@ -1,4 +1,5 @@
-﻿
+﻿using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
+
 namespace Sfa.Tl.Matching.Application.UnitTests.Data.RoutePathMapping.Builders
 {
     internal class ValidRoutePathMappingBuilder
@@ -14,7 +15,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Data.RoutePathMapping.Builders
                 Title = "Test title",
                 ShortTitle = "Test short title",
                 PathId = 2,
-                Source = "Test"
+                Source = "Test",
+                CreatedBy = EntityCreationConstants.CreatedByUser,
+                CreatedOn = EntityCreationConstants.CreatedOn,
+                ModifiedBy = EntityCreationConstants.ModifiedByUser,
+                ModifiedOn = EntityCreationConstants.ModifiedOn
             };
         }
 

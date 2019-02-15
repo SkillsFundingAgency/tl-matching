@@ -7,11 +7,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
 {
-    public class When_RoutePathMappingRepository_GetSingelOrDefault_Is_Called_With_Missing_Id
+    public class When_RoutePathMappingRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id
     {
         private readonly Domain.Models.RoutePathMapping _result;
 
-        public When_RoutePathMappingRepository_GetSingelOrDefault_Is_Called_With_Missing_Id()
+        public When_RoutePathMappingRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id()
         {
             var logger = Substitute.For<ILogger<RoutePathMappingRepository>>();
 

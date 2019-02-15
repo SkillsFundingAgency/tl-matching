@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Data.RoutePathMapping.Builders
 {
@@ -18,7 +19,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Data.RoutePathMapping.Builders
                         Title = "Test title 1",
                         ShortTitle = "Test short title 1",
                         PathId = 1,
-                        Source = "Test"
+                        Source = "Test",
+                        CreatedBy = EntityCreationConstants.CreatedByUser,
+                        CreatedOn = EntityCreationConstants.CreatedOn,
+                        ModifiedBy = EntityCreationConstants.ModifiedByUser,
+                        ModifiedOn = EntityCreationConstants.ModifiedOn
                     },
                     new Domain.Models.RoutePathMapping
                     {
@@ -27,7 +32,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Data.RoutePathMapping.Builders
                         Title = "Test title 2",
                         ShortTitle = "Test short title 2",
                         PathId = 2,
-                        Source = "Test"
+                        Source = "Test",
+                        CreatedBy = EntityCreationConstants.CreatedByUser,
+                        CreatedOn = EntityCreationConstants.CreatedOn,
+                        ModifiedBy = EntityCreationConstants.ModifiedByUser,
+                        ModifiedOn = EntityCreationConstants.ModifiedOn
                     }
                 };
         }
