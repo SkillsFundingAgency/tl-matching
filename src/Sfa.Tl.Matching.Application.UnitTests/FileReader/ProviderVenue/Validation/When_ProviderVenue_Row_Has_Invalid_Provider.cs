@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validat
 
         public ProviderVenueNoProviderFixture()
         {
-            Dto = ProviderVenueFileImportDtoBuilder.Build();
+            Dto = new ProviderVenueFileImportDtoBuilder().Build();
             ProviderRepository = Substitute.For<IRepository<Domain.Models.Provider>>();
 
             ProviderRepository.GetSingleOrDefault(

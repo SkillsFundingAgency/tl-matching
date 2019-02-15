@@ -4,12 +4,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Builder
 {
     internal class ProviderVenueFileImportDtoBuilder
     {
-        public static ProviderVenueFileImportDto Build() => new ProviderVenueFileImportDto
+        private readonly ProviderVenueFileImportDto _providerVenueFileImportDto;
+
+        public ProviderVenueFileImportDtoBuilder()
         {
-            PostCode = "AB1 1AA",
-            ProviderId = 1,
-            UkPrn = "10000546",
-            Source = "PMF_1018"
-        };
+            _providerVenueFileImportDto = new ProviderVenueFileImportDto
+            {
+                PostCode = "AB1 1AA",
+                ProviderId = 1,
+                UkPrn = "10000546",
+                Source = "PMF_1018"
+            };
+        }
+
+        public ProviderVenueFileImportDto Build() =>
+            _providerVenueFileImportDto;
     }
 }
