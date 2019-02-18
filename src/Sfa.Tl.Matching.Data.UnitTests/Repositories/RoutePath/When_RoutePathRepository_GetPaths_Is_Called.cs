@@ -2,20 +2,19 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
 {
     public class When_RoutePathRepository_GetPaths_Is_Called
     {
-        private readonly IEnumerable<Path> _result;
-        
+        private readonly IEnumerable<Domain.Models.Path> _result;
+
         public When_RoutePathRepository_GetPaths_Is_Called()
         {
             using (var dbContext = InMemoryDbContext.Create())
             {
-                var route = new Route
+                var route = new Domain.Models.Route
                 {
                     Id = 1,
                     Name = "Route 1",
@@ -25,7 +24,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePath
                 dbContext.Add(route);
 
                 dbContext.Add(
-                    new Path
+                    new Domain.Models.Path
                     {
                         Id = 1,
                         RouteId = 1,
