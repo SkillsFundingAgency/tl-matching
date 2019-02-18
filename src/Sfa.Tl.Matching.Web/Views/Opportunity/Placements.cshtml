@@ -52,7 +52,7 @@
 
             <div class="govuk-form-group govuk-form-group--error">
                 <fieldset class="govuk-fieldset">
-                    <label class="govuk-label govuk-label--m" for="placement-location">
+                    <label class="govuk-label govuk-label--m" asp-for="PlacementsKnown">
                         Does know how many placements they want at this location?
                     </label>
                     <span id="placement-location-hint" class="govuk-hint">
@@ -64,7 +64,7 @@
 
                     <div class="govuk-radios govuk-radios--conditional" data-module="radios">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="placement-location-yes" name="known-placement-location-quantity" type="radio" value="yes" data-aria-controls="conditional-placement-location" aria-expanded="false">
+                            <input asp-for="PlacementsKnown" class="govuk-radios__input" id="placement-location-yes" type="radio" value="true" data-aria-controls="conditional-placement-location" aria-expanded="false">
                             <label class="govuk-label govuk-radios__label" for="placement-location-yes">
                                 Yes
                             </label>
@@ -72,19 +72,19 @@
 
                         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-placement-location">
                             <div class="govuk-form-group">
-                                <label class="govuk-label" for="placement-number">
+                                <label class="govuk-label" asp-for="Placements">
                                     Number of placements
                                 </label>
                                 <span id="placement-number-error" class="govuk-error-message">
                                     You must estimate how many placements the employer wants at this location
                                 </span>
                                 
-                                <input id="placement-number" asp-for="Placements" class="govuk-input govuk-input govuk-input--width-3" />
+                                <input asp-for="Placements" class="govuk-input govuk-input govuk-input--width-3" />
                             </div>
                         </div>
 
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="placement-location-no" name="known-placement-location-quantity" type="radio" value="no">
+                            <input asp-for="PlacementsKnown" class="govuk-radios__input" id="placement-location-no" type="radio" value="false">
                             <label class="govuk-label govuk-radios__label" for="placement-location-no">
                                 No
                             </label>
