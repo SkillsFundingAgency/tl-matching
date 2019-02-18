@@ -12,25 +12,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
         }
 
-        public IActionResult Index()
+        [HttpGet("who-is-employer", Name = RouteNames.EmployerNameGet)]
+        public IActionResult Name()
         {
-            return View("Name");
+            return View();
         }
         
-        [HttpPost]
-        public IActionResult Index(EmployerNameViewModel viewModel)
+        [HttpPost("who-is-employer", Name = RouteNames.EmployerNamePost)]
+        public IActionResult Name(EmployerNameViewModel viewModel)
         {
             return RedirectToAction(nameof(Details));
         }
 
+        [HttpGet("employer-details", Name = RouteNames.EmployerDetailsGet)]
         public IActionResult Details()
         {
-            return View(nameof(Details));
-        }
-
-        public IActionResult Placements()
-        {
-            return View(nameof(Placements));
+            return View();
         }
     }
 }
