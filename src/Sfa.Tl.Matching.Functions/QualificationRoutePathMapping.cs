@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Functions
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IRoutePathService routePathService
+            [Inject] IRoutePathMappingService routeMappingPathService
         )
         {          
             var stream = await blockBlob.OpenReadAsync(null, null, null);
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRecords = await routePathService.ImportQualificationPathMapping(new QualificationRoutePathMappingFileImportDto
+            var createdRecords = await routeMappingPathService.ImportQualificationPathMapping(new QualificationRoutePathMappingFileImportDto
             {
                 FileDataStream = stream,
                 CreatedBy = blockBlob.GetCreatedByMetadata()

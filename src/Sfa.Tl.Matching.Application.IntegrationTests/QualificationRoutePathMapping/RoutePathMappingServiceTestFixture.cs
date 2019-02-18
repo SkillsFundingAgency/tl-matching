@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
     public class RoutePathMappingServiceTestFixture : IDisposable
     {
         internal MatchingDbContext MatchingDbContext;
-        internal RoutePathService RouteMappingService;
+        internal RoutePathMappingService RouteMappingService;
 
         public RoutePathMappingServiceTestFixture()
         {
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
             var loggerRouteRepository = new Logger<RouteRepository>(new NullLoggerFactory());
             var loggerPathRepository = new Logger<PathRepository>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>(new NullLoggerFactory());
-            var loggerRoutePathService = new Logger<RoutePathService>(new NullLoggerFactory());
+            var loggerRoutePathMappingService = new Logger<RoutePathMappingService>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
@@ -40,12 +40,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
             var config = new MapperConfiguration(c => c.AddProfile<RoutePathMappingMapper>());
             var mapper = new Mapper(config);
 
-            RouteMappingService = new RoutePathService(
-                loggerRoutePathService,
+            RouteMappingService = new RoutePathMappingService(
+                loggerRoutePathMappingService,
                 mapper,
                 excelFileReader,
-                routeRepository,
-                pathRepository,
                 repository);
         }
 

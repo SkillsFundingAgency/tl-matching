@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
@@ -59,17 +57,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         public When_RoutePathService_Is_Called_To_Get_Routes()
         {
             var logger = Substitute.For<ILogger<RoutePathService>>();
-            var mapper = Substitute.For<IMapper>();
-            var fileReader = Substitute.For<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>();
             _routeRepository = Substitute.For<IRepository<Route>>();
             var pathRepository = Substitute.For<IRepository<Path>>();
-            var routePathMappingRepository = Substitute.For<IRepository<RoutePathMapping>>();
 
             _routeRepository
                 .GetMany(Arg.Any<Func<Route, bool>>())
                 .Returns(_routeData);
 
-            IRoutePathService service = new RoutePathService(logger, mapper, fileReader, _routeRepository, pathRepository, routePathMappingRepository);
+            IRoutePathService service = new RoutePathService(logger,  _routeRepository, pathRepository);
 
             _result = service.GetRoutes();
         }

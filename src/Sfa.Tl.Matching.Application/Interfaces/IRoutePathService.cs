@@ -10,9 +10,5 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         IQueryable<Path> GetPaths();
 
         IQueryable<Route> GetRoutes();
-
-        Task<int> ImportQualificationPathMapping(QualificationRoutePathMappingFileImportDto fileImportDto);
-
-        void IndexQualificationPathMapping();
     }
 }

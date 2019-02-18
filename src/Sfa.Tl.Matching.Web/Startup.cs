@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using AutoMapper;
-using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
@@ -14,9 +12,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Application.FileReader;
-using Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
@@ -25,7 +20,6 @@ using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
-using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -136,23 +130,10 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddSingleton(_configuration);
 
-            RegisterRoutePathMappingFileReader(services);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }
 
-        private static void RegisterRoutePathMappingFileReader(IServiceCollection services)
-        {
-            services.AddTransient<IDataParser<RoutePathMappingDto>, QualificationRoutePathMappingDataParser>();
-            services.AddTransient<IValidator<QualificationRoutePathMappingFileImportDto>, QualificationRoutePathMappingDataValidator>();
-
-            services.AddTransient<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>, ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>(provider =>
-                new ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>(
-                    provider.GetService<ILogger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>>(),
-                    provider.GetService<IDataParser<RoutePathMappingDto>>(),
-                    (IValidator<QualificationRoutePathMappingFileImportDto>)provider.GetServices(typeof(IValidator<QualificationRoutePathMappingFileImportDto>)).Single(t => t.GetType() == typeof(QualificationRoutePathMappingDataValidator))));
-        }
-        
         private static void RegisterRepositories(IServiceCollection services)
         {
             //services.AddTransient<IRepository<Employer>, EmployerRepository>();
