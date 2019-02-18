@@ -129,6 +129,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         {
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
+            services.AddTransient<IRoutePathMappingService, RoutePathMappingService>();
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
         }
