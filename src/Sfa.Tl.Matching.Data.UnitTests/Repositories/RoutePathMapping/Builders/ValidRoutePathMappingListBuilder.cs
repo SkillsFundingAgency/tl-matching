@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Constants;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders
 {
@@ -14,12 +15,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders
                 {
                     new Domain.Models.RoutePathMapping
                     {
-                        Id = 1,
-                        LarsId = "0000001X",
-                        Title = "Test title 1",
-                        ShortTitle = "Test short title 1",
-                        PathId = 1,
-                        Source = "Test",
+                        Id = RoutePathMappingConstants.Id,
+                        LarsId = RoutePathMappingConstants.LarsId,
+                        Title = RoutePathMappingConstants.Title,
+                        ShortTitle = RoutePathMappingConstants.ShortTitle,
+                        PathId = RoutePathMappingConstants.PathId,
+                        Source = RoutePathMappingConstants.Source,
                         CreatedBy = EntityCreationConstants.CreatedByUser,
                         CreatedOn = EntityCreationConstants.CreatedOn,
                         ModifiedBy = EntityCreationConstants.ModifiedByUser,
@@ -27,12 +28,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders
                     },
                     new Domain.Models.RoutePathMapping
                     {
-                        Id = 2,
-                        LarsId = "0000002X",
-                        Title = "Test title 2",
-                        ShortTitle = "Test short title 2",
-                        PathId = 2,
-                        Source = "Test",
+                        Id = RoutePathMappingConstants.Id2,
+                        LarsId = RoutePathMappingConstants.LarsId2,
+                        Title = RoutePathMappingConstants.Title2,
+                        ShortTitle = RoutePathMappingConstants.ShortTitle2,
+                        PathId = RoutePathMappingConstants.PathId2,
+                        Source = RoutePathMappingConstants.Source,
                         CreatedBy = EntityCreationConstants.CreatedByUser,
                         CreatedOn = EntityCreationConstants.CreatedOn,
                         ModifiedBy = EntityCreationConstants.ModifiedByUser,

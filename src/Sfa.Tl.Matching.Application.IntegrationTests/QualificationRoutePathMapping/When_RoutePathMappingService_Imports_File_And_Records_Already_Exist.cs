@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMapping
 {
-    public class When_RoutePathService_Imports_File_And_Records_Already_Exist : IClassFixture<RoutePathMappingServiceTestFixture>
+    public class When_RoutePathMappingService_Imports_File_And_Records_Already_Exist : IClassFixture<RoutePathMappingServiceTestFixture>
     {
         private const string DataFilePath = @"QualificationRoutePathMapping\RoutePathMapping-RecordsAlreadyExist.xlsx";
         private int _createdRecordCount;
@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
         private readonly RoutePathMappingServiceTestFixture _testFixture;
         private const string LarsId = "10000002";
 
-        public When_RoutePathService_Imports_File_And_Records_Already_Exist(RoutePathMappingServiceTestFixture testFixture)
+        public When_RoutePathMappingService_Imports_File_And_Records_Already_Exist(RoutePathMappingServiceTestFixture testFixture)
         {
             _testFixture = testFixture;
             _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();

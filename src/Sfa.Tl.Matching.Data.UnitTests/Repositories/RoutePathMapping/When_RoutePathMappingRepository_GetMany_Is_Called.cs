@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Constants;
 using Xunit;
@@ -31,7 +32,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
 
         [Fact]
         public void Then_RoutePathMapping_Id_Is_Returned() => 
-            _result.First().Id.Should().Be(1);
+            _result.First().Id.Should().Be(RoutePathMappingConstants.Id);
 
         [Fact]
         public void Then_RoutePathMapping_LarsId_Is_Returned() => 
@@ -52,5 +53,21 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
         [Fact]
         public void Then_RoutePathMapping_Source_Is_Returned() =>
             _result.First().Source.Should().BeEquivalentTo(RoutePathMappingConstants.Source);
+
+        [Fact]
+        public void Then_Route_CreatedBy_Is_Returned() =>
+            _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
+
+        [Fact]
+        public void Then_Route_CreatedOn_Is_Returned() =>
+            _result.First().CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
+
+        [Fact]
+        public void Then_Route_ModifiedBy_Is_Returned() =>
+            _result.First().ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);
+
+        [Fact]
+        public void Then_Route_ModifiedOn_Is_Returned() =>
+            _result.First().ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
     }
 }

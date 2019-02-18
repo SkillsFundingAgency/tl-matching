@@ -10,13 +10,13 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Search_Controller_Index_Is_Loaded
+    public class When_Provider_Controller_Index_Is_Loaded
     {
         private readonly IActionResult _result;
 
-        public When_Search_Controller_Index_Is_Loaded()
+        public When_Provider_Controller_Index_Is_Loaded()
         {
             var routes = new List<Route>
                 {
@@ -24,14 +24,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Search
                 }
                 .AsQueryable();
 
-            var logger = Substitute.For<ILogger<SearchController>>();
+            var logger = Substitute.For<ILogger<ProviderController>>();
             var mapper = Substitute.For<IMapper>();
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
-            var searchController = new SearchController(logger, mapper, routePathService);
+            var providerController = new ProviderController(logger, mapper, routePathService);
 
-            _result = searchController.Index();
+            _result = providerController.Index();
         }
 
         [Fact]

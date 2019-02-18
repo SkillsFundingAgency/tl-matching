@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -16,52 +13,27 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly ILogger<RoutePathService> _logger;
         private readonly IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto> _fileReader;
         private readonly IMapper _mapper;
-        private readonly IRoutePathRepository _repository;
-        private readonly IRepository<RoutePathMapping> _routePathMappingRepository;
+        private readonly IRepository<Route> _routeRepository;
+        private readonly IRepository<Path> _pathRepository;
 
         public RoutePathService(
             ILogger<RoutePathService> logger,
-            IMapper mapper,
-            IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto> fileReader,
-            IRoutePathRepository repository,
-            IRepository<RoutePathMapping> routePathMappingRepository)
+            IRepository<Route> routeRepository,
+            IRepository<Path> pathRepository)
         {
             _logger = logger;
-            _mapper = mapper;
-            _fileReader = fileReader;
-            _repository = repository;
-            _routePathMappingRepository = routePathMappingRepository;
+            _pathRepository = pathRepository;
+            _routeRepository = routeRepository;
         }
 
         public IQueryable<Path> GetPaths()
         {
-            return _repository.GetPaths();
+            return _pathRepository.GetMany(x => true).GetAwaiter().GetResult();
         }
 
         public IQueryable<Route> GetRoutes()
         {
-            return _repository.GetRoutes();
-        }
-
-        public async Task<int> ImportQualificationPathMapping(QualificationRoutePathMappingFileImportDto fileImportDto)
-        {
-            _logger.LogInformation("Processing Qualification Path Mapping.");
-
-            var import = _fileReader.ValidateAndParseFile(fileImportDto);
-
-            var createdRecords = 0;
-            if (import != null && import.Any())
-            {
-                var routePathMappings = _mapper.Map<IList<RoutePathMapping>>(import);
-                createdRecords = await _routePathMappingRepository.CreateMany(routePathMappings);
-            }
-
-            return createdRecords;
-        }
-
-        public void IndexQualificationPathMapping()
-        {
-            throw new NotImplementedException();
+            return _routeRepository.GetMany(x => true).GetAwaiter().GetResult();
         }
     }
 }
