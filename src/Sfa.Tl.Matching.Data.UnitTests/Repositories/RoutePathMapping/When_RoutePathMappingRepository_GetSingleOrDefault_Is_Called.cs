@@ -30,23 +30,23 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping
 
         [Fact]
         public void Then_RoutePathMapping_Id_Is_Returned() =>
-            _result.Id.Should().Be(1);
+            _result.Id.Should().Be(RoutePathMappingConstants.Id);
 
         [Fact]
         public void Then_RoutePathMapping_LarsId_Is_Returned() =>
-            _result.LarsId.Should().BeEquivalentTo("0000001X");
+            _result.LarsId.Should().BeEquivalentTo(RoutePathMappingConstants.LarsId);
 
         [Fact]
         public void Then_RoutePathMapping_Title_Is_Returned() =>
-            _result.Title.Should().BeEquivalentTo("Test title 1");
+            _result.Title.Should().BeEquivalentTo(RoutePathMappingConstants.Title);
 
         [Fact]
         public void Then_RoutePathMapping_ShortTitle_Is_Returned()
-            => _result.ShortTitle.Should().BeEquivalentTo("Test short title 1");
+            => _result.ShortTitle.Should().BeEquivalentTo(RoutePathMappingConstants.ShortTitle);
 
         [Fact]
         public void Then_RoutePathMapping_PathId_Is_Returned()
-            => _result.PathId.Should().Be(1);
+            => _result.PathId.Should().Be(RoutePathMappingConstants.PathId);
 
         [Fact]
         public void Then_RoutePathMapping_Source_Is_Returned() =>
