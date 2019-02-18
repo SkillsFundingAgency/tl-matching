@@ -1,0 +1,33 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerDetailsViewModel
+
+<form>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group">
+                <h2 class="govuk-heading-m">Check employer's details?</h2>
+                
+                <a asp-action="Index">Find a different employer</a>
+
+                <div class="govuk-form-group">
+                    <label class="govuk-label">
+                        Contact name for placements
+                    </label>
+                    <input asp-for="ContactName" class="govuk-input govuk-input" />
+                </div>
+                <div class="govuk-form-group">
+                    <label class="govuk-label">
+                        Email
+                    </label>
+                    <input asp-for="Email" class="govuk-input govuk-input" />
+                </div>
+                <div class="govuk-form-group">
+                    <label class="govuk-label">
+                        Phone number
+                    </label>
+                    <input asp-for="PhoneNumber" class="govuk-input govuk-input" />
+                </div>
+            </div>
+            <button class="govuk-button">Confirm and continue</button>
+        </div>
+    </div>
+</form>

@@ -74,6 +74,7 @@
     <None Include="PostDeployment\Seed Routes.sql" />
     <None Include="PostDeployment\Seed Paths.sql" />
     <Build Include="Tables\RoutePathMapping.sql" />
+    <Build Include="Tables\Opportunity.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
