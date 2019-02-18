@@ -97,8 +97,8 @@ namespace Sfa.Tl.Matching.Web
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
                 routes.MapRoute(
-                    "SearchStart",
-                    "{controller=Search}/{action=Start}");
+                    "ProviderStart",
+                    "{controller=Provider}/{action=Start}");
             });
         }
 
