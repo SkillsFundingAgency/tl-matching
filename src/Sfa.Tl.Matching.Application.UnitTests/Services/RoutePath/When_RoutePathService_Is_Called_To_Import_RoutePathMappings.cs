@@ -30,7 +30,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
             var mapper = new Mapper(config);
             _fileReader =
                 Substitute.For<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>();
-            var routePathRepository = Substitute.For<IRoutePathRepository>();
+            var pathRepository = Substitute.For<IRepository<Domain.Models.Path>>();
+            var routeRepository = Substitute.For<IRepository<Route>>();
             _repository = Substitute.For<IRepository<RoutePathMapping>>();
 
             _repository
@@ -52,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
                 .Returns(_fileReaderResults);
 
             var service =
-                new RoutePathService(logger, mapper, _fileReader, routePathRepository, _repository);
+                new RoutePathService(logger, mapper, _fileReader, routeRepository, pathRepository, _repository);
 
             _result = service.ImportQualificationPathMapping(_fileImportDto).GetAwaiter().GetResult();
         }

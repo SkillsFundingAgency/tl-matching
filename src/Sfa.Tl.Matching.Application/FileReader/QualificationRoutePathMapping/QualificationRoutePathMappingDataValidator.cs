@@ -19,11 +19,14 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
         public IDictionary<int, string> PathMapping { get; set; }
 
 
-        public QualificationRoutePathMappingDataValidator(IRepository<RoutePathMapping> repository, IRoutePathRepository routePathRepository)
+        public QualificationRoutePathMappingDataValidator(IRepository<RoutePathMapping> repository, IRepository<Path> pathRepository)
         {
             CascadeMode = CascadeMode.StopOnFirstFailure;
 
-            var paths = routePathRepository.GetPaths().ToList();
+            var paths = pathRepository
+                    .GetMany(x => true)
+                    .GetAwaiter()
+                    .GetResult();
 
             PathMapping = paths
                 .Select(p =>

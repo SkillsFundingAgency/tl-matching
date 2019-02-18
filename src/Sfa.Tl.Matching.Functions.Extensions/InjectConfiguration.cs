@@ -118,8 +118,9 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
+            services.AddTransient<IRepository<Route>, RouteRepository>();
+            services.AddTransient<IRepository<Path>, PathRepository>();
             services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
-            services.AddTransient<IRoutePathRepository, RoutePathRepository>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
             services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
         }

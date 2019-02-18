@@ -22,14 +22,17 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
         public RoutePathMappingServiceTestFixture()
         {
             var loggerRepository = new Logger<RoutePathMappingRepository>(new NullLoggerFactory());
+            var loggerRouteRepository = new Logger<RouteRepository>(new NullLoggerFactory());
+            var loggerPathRepository = new Logger<PathRepository>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>(new NullLoggerFactory());
             var loggerRoutePathService = new Logger<RoutePathService>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
             var repository = new RoutePathMappingRepository(loggerRepository, MatchingDbContext);
-            var routePathRepository = new RoutePathRepository(MatchingDbContext);
-            var dataValidator = new QualificationRoutePathMappingDataValidator(repository, routePathRepository);
+            var routeRepository = new RouteRepository(loggerRouteRepository, MatchingDbContext);
+            var pathRepository = new PathRepository(loggerPathRepository, MatchingDbContext);
+            var dataValidator = new QualificationRoutePathMappingDataValidator(repository, pathRepository);
             var dataParser = new QualificationRoutePathMappingDataParser();
 
             var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator);
@@ -41,7 +44,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
                 loggerRoutePathService,
                 mapper,
                 excelFileReader,
-                routePathRepository,
+                routeRepository,
+                pathRepository,
                 repository);
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -14,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 {
     public class When_RoutePathService_Is_Called_To_Get_Routes
     {
-        private readonly IRoutePathRepository _repository;
+        private readonly IRepository<Route> _routeRepository;
         private readonly IQueryable<Route> _result;
 
         private readonly IQueryable<Route> _routeData
@@ -60,24 +61,25 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
             var logger = Substitute.For<ILogger<RoutePathService>>();
             var mapper = Substitute.For<IMapper>();
             var fileReader = Substitute.For<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>();
-            _repository = Substitute.For<IRoutePathRepository>();
+            _routeRepository = Substitute.For<IRepository<Route>>();
+            var pathRepository = Substitute.For<IRepository<Path>>();
             var routePathMappingRepository = Substitute.For<IRepository<RoutePathMapping>>();
 
-            _repository
-                .GetRoutes()
+            _routeRepository
+                .GetMany(Arg.Any<Func<Route, bool>>())
                 .Returns(_routeData);
 
-            IRoutePathService service = new RoutePathService(logger, mapper, fileReader, _repository, routePathMappingRepository);
+            IRoutePathService service = new RoutePathService(logger, mapper, fileReader, _routeRepository, pathRepository, routePathMappingRepository);
 
             _result = service.GetRoutes();
         }
 
         [Fact]
-        public void Then_GetRoutes_Is_Called_Exactly_Once()
+        public void Then_Route_Repository_GetMany_Is_Called_Exactly_Once()
         {
-            _repository
+            _routeRepository
                 .Received(1)
-                .GetRoutes();
+                .GetMany(Arg.Any<Func<Route, bool>>());
         }
 
         [Fact]

@@ -16,31 +16,35 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly ILogger<RoutePathService> _logger;
         private readonly IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto> _fileReader;
         private readonly IMapper _mapper;
-        private readonly IRoutePathRepository _repository;
+        private readonly IRepository<Route> _routeRepository;
+        private readonly IRepository<Path> _pathRepository;
         private readonly IRepository<RoutePathMapping> _routePathMappingRepository;
 
         public RoutePathService(
             ILogger<RoutePathService> logger,
             IMapper mapper,
             IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto> fileReader,
-            IRoutePathRepository repository,
+            IRepository<Route> routeRepository,
+            IRepository<Path> pathRepository,
             IRepository<RoutePathMapping> routePathMappingRepository)
         {
             _logger = logger;
             _mapper = mapper;
             _fileReader = fileReader;
-            _repository = repository;
+            _pathRepository = pathRepository;
+            _routeRepository = routeRepository;
             _routePathMappingRepository = routePathMappingRepository;
         }
 
         public IQueryable<Path> GetPaths()
         {
-            return _repository.GetPaths();
+            return _pathRepository.GetMany(x => true).GetAwaiter().GetResult();
         }
 
         public IQueryable<Route> GetRoutes()
         {
-            return _repository.GetRoutes();
+            return _routeRepository.GetMany(x => true).GetAwaiter().GetResult();
+
         }
 
         public async Task<int> ImportQualificationPathMapping(QualificationRoutePathMappingFileImportDto fileImportDto)
