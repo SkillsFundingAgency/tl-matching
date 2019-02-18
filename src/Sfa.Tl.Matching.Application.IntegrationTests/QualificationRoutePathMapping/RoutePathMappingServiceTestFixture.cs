@@ -17,19 +17,22 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
     public class RoutePathMappingServiceTestFixture : IDisposable
     {
         internal MatchingDbContext MatchingDbContext;
-        internal RoutePathService RouteMappingService;
+        internal RoutePathMappingService RouteMappingService;
 
         public RoutePathMappingServiceTestFixture()
         {
             var loggerRepository = new Logger<RoutePathMappingRepository>(new NullLoggerFactory());
+            var loggerRouteRepository = new Logger<RouteRepository>(new NullLoggerFactory());
+            var loggerPathRepository = new Logger<PathRepository>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>(new NullLoggerFactory());
-            var loggerRoutePathService = new Logger<RoutePathService>(new NullLoggerFactory());
+            var loggerRoutePathMappingService = new Logger<RoutePathMappingService>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
             var repository = new RoutePathMappingRepository(loggerRepository, MatchingDbContext);
-            var routePathRepository = new RoutePathRepository(MatchingDbContext);
-            var dataValidator = new QualificationRoutePathMappingDataValidator(repository, routePathRepository);
+            var routeRepository = new RouteRepository(loggerRouteRepository, MatchingDbContext);
+            var pathRepository = new PathRepository(loggerPathRepository, MatchingDbContext);
+            var dataValidator = new QualificationRoutePathMappingDataValidator(repository, pathRepository);
             var dataParser = new QualificationRoutePathMappingDataParser();
 
             var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator);
@@ -37,11 +40,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
             var config = new MapperConfiguration(c => c.AddProfile<RoutePathMappingMapper>());
             var mapper = new Mapper(config);
 
-            RouteMappingService = new RoutePathService(
-                loggerRoutePathService,
+            RouteMappingService = new RoutePathMappingService(
+                loggerRoutePathMappingService,
                 mapper,
                 excelFileReader,
-                routePathRepository,
                 repository);
         }
 

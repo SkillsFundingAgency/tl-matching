@@ -13,31 +13,30 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePathMapping
 {
-    public class When_RoutePathService_Is_Called_To_Import_RoutePathMappings
+    public class When_RoutePathMappingService_Is_Called_To_Import_RoutePathMappings
     {
         private readonly QualificationRoutePathMappingFileImportDto _fileImportDto;
         private readonly IEnumerable<RoutePathMappingDto> _fileReaderResults;
         private readonly IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto> _fileReader;
-        private readonly IRepository<RoutePathMapping> _repository;
+        private readonly IRepository<Domain.Models.RoutePathMapping> _repository;
         private readonly int _result;
 
-        public When_RoutePathService_Is_Called_To_Import_RoutePathMappings()
+        public When_RoutePathMappingService_Is_Called_To_Import_RoutePathMappings()
         {
-            var logger = Substitute.For<ILogger<RoutePathService>>();
+            var logger = Substitute.For<ILogger<RoutePathMappingService>>();
             var config = new MapperConfiguration(c => c.AddProfile<RoutePathMappingMapper>());
             var mapper = new Mapper(config);
             _fileReader =
                 Substitute.For<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>();
-            var routePathRepository = Substitute.For<IRoutePathRepository>();
-            _repository = Substitute.For<IRepository<RoutePathMapping>>();
+            _repository = Substitute.For<IRepository<Domain.Models.RoutePathMapping>>();
 
             _repository
-                .CreateMany(Arg.Any<IEnumerable<RoutePathMapping>>())
+                .CreateMany(Arg.Any<IEnumerable<Domain.Models.RoutePathMapping>>())
                 .Returns(callinfo =>
                 {
-                    var passedEntities = callinfo.ArgAt<IEnumerable<RoutePathMapping>>(0);
+                    var passedEntities = callinfo.ArgAt<IEnumerable<Domain.Models.RoutePathMapping>>(0);
                     return passedEntities.Count();
                 });
 
@@ -52,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
                 .Returns(_fileReaderResults);
 
             var service =
-                new RoutePathService(logger, mapper, _fileReader, routePathRepository, _repository);
+                new RoutePathMappingService(logger, mapper, _fileReader,  _repository);
 
             _result = service.ImportQualificationPathMapping(_fileImportDto).GetAwaiter().GetResult();
         }
@@ -70,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         {
             _repository
                 .Received(1)
-                .CreateMany(Arg.Any<IEnumerable<RoutePathMapping>>());
+                .CreateMany(Arg.Any<IEnumerable<Domain.Models.RoutePathMapping>>());
         }
 
         [Fact]

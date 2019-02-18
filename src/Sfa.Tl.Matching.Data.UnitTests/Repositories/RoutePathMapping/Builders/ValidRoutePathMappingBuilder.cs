@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.RoutePathMapping.Builders
         {
             _routePathMapping = new Domain.Models.RoutePathMapping
             {
-                Id = 1,
+                Id = RoutePathMappingConstants.Id,
                 LarsId = RoutePathMappingConstants.LarsId,
                 Title = RoutePathMappingConstants.Title,
                 ShortTitle = RoutePathMappingConstants.ShortTitle,

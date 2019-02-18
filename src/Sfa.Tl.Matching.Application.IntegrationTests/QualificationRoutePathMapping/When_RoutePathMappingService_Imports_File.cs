@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMapping
 {
-    public class When_RoutePathService_Imports_File : IClassFixture<RoutePathMappingServiceTestFixture>
+    public class When_RoutePathMappingService_Imports_File : IClassFixture<RoutePathMappingServiceTestFixture>
     {
         private const string DataFilePath = @"QualificationRoutePathMapping\RoutePathMapping-Simple.xlsx";
         private int _createdRecordCount;
@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
         private readonly RoutePathMappingServiceTestFixture _testFixture;
         private const string LarsId = "10000001";
 
-        public When_RoutePathService_Imports_File(RoutePathMappingServiceTestFixture testFixture)
+        public When_RoutePathMappingService_Imports_File(RoutePathMappingServiceTestFixture testFixture)
         {
             _testFixture = testFixture;
             _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();

@@ -1,4 +1,7 @@
-﻿using NSubstitute;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NSubstitute;
 using Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -12,19 +15,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
         public QualificationRoutePathMappingFileImportDto Dto;
         public IRepository<RoutePathMapping> Repository;
         public QualificationRoutePathMappingDataValidator Validator;
-        public IRoutePathRepository RoutePathRepository;
+        public IRepository<Path> PathRepository;
 
         public QualificationRoutePathMappingFileImportValidationTestFixture()
         {
             Dto = new ValidQualificationRoutePathMappingFileImportDtoBuilder().Build();
 
             Repository = Substitute.For<IRepository<RoutePathMapping>>();
-            RoutePathRepository = Substitute.For<IRoutePathRepository>();
-            RoutePathRepository
-                .GetPaths()
+            PathRepository = Substitute.For<IRepository<Path>>();
+            PathRepository
+                .GetMany(Arg.Any<Func<Path, bool>>())
                 .Returns(new PathListBuilder().Build());
 
-            Validator = new QualificationRoutePathMappingDataValidator(Repository, RoutePathRepository);
+            Validator = new QualificationRoutePathMappingDataValidator(Repository, PathRepository);
         }
     }
 }

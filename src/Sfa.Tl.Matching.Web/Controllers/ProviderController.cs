@@ -12,13 +12,13 @@ using Sfa.Tl.Matching.Models.ViewModel;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
-    public class SearchController : Controller
+    public class ProviderController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<SearchController> _logger;
+        private readonly ILogger<ProviderController> _logger;
         private readonly IRoutePathService _routePathService;
 
-        public SearchController(ILogger<SearchController> logger, IMapper mapper, IRoutePathService routePathService)
+        public ProviderController(ILogger<ProviderController> logger, IMapper mapper, IRoutePathService routePathService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -43,6 +43,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult Results()
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpPost]
         public IActionResult Results(SearchParametersViewModel viewModel)
         {
@@ -53,7 +59,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
 
-            return RedirectToAction(nameof(Index), "Search");
+            //TODO: Search and return SearchResultsViewModel
+            //return RedirectToAction(nameof(Index), "Results");
+            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name);
+            var resultsViewModel = new SearchParametersViewModel
+            {
+                RoutesSelectList = _mapper.Map<SelectListItem[]>(routes),
+                SearchRadius = viewModel.SearchRadius,
+                SelectedRouteId = viewModel.SelectedRouteId,
+                Postcode = viewModel.Postcode
+            };
+            return View(resultsViewModel);
         }
 
         private IActionResult GetIndexView(string selectedRouteId = null, string postCode = null)

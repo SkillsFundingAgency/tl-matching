@@ -1,0 +1,22 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel
+
+@{
+    ViewData["Title"] = "Results";
+}
+
+<h1>Results</h1>
+
+<div>
+    <p>
+        <label>Postcode of workplace: </label>
+        <label>@Model.Postcode</label>
+    </p>
+    <p>
+        <label>Selected Route: </label>
+        <label>@Model.SelectedRouteId</label>
+    </p>
+    <p>
+        <label>Search Radius: </label>
+        <label>@Model.SearchRadius</label>
+    </p>
+</div>
