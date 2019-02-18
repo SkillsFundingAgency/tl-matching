@@ -27,5 +27,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View(nameof(Details));
         }
+
+        public IActionResult Placements()
+        {
+            return View(nameof(Placements));
+        }
     }
 }
