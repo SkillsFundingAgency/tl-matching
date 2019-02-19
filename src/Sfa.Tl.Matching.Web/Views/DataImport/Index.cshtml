@@ -24,13 +24,7 @@
                     </h2>
                     <div class="govuk-error-summary__body">
                         <ul class="govuk-list govuk-error-summary__list">
-                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                            {
-                                //TODO Need to get tags for h-refs into the individual fields:
-                                <li>
-                                    <a href="#file-error">@error.ErrorMessage</a>
-                                </li>
-                            }
+                            <li><a sfa-validation-for="File"></a></li>
                         </ul>
                     </div>
                 </div>
@@ -41,12 +35,12 @@
     <form asp-controller="DataImport" asp-action="Index" enctype="multipart/form-data">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <div class="govuk-form-group">
+                <div class="govuk-form-group" sfa-validation-for="File" sfa-validationerror-class="govuk-form-group--error">
                     <label class="govuk-label govuk-!-font-weight-bold" for="file">
                         Select the file
                     </label>
-                    <input asp-for="File" class="govuk-file-upload" id="file" name="file" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                    <span asp-validation-for="File" class="govuk-form-group--error" id="file-error"></span>
+                    <span asp-validation-for="File" class="govuk-error-message"></span>
+                    <input asp-for="File" class="govuk-file-upload" type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                 </div>
             </div>
             <div class="govuk-grid-column-two-thirds">
