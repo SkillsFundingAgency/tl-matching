@@ -17,6 +17,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
+        public override async Task<int> Create(Path path)
+        {
+            return await BaseCreate(path);
+        }
+
         public override async Task<int> CreateMany(IEnumerable<Path> paths)
         {
             return await BaseCreateMany(paths);
@@ -30,6 +35,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public override Task<Path> GetSingleOrDefault(Func<Path, bool> predicate)
         {
             return _dbContext.Path.SingleOrDefaultAsync(path => predicate(path));
+        }
+
+        public override async Task Update(Path path)
+        {
+            await BaseUpdate(path);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return createdRecordsCount;
         }
 
-        public async Task<int> Create(T entity)
+        public async Task<int> BaseCreate(T entity)
         {
             await _dbContext.AddAsync(entity);
 
@@ -55,10 +55,28 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return entity.Id;
         }
 
+        public async Task BaseUpdate(T entity)
+        {
+            _dbContext.Update(entity);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogError(due.Message, due.InnerException);
+                throw;
+            }
+        }
+
+        public abstract Task<int> Create(T entity);
+
         public abstract Task<int> CreateMany(IEnumerable<T> entities);
 
         public abstract Task<IQueryable<T>> GetMany(Func<T, bool> predicate);
         
         public abstract Task<T> GetSingleOrDefault(Func<T, bool> predicate);
+        public abstract Task Update(T entity);
     }
 }

@@ -11,5 +11,6 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<int> CreateMany(IEnumerable<T> entities);
         Task<IQueryable<T>> GetMany(Func<T, bool> predicate);
         Task<T> GetSingleOrDefault(Func<T, bool> predicate);
+        Task Update(T entity);
     }
 }

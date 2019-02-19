@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -27,9 +26,15 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _repository.Create(opportunity);
         }
 
-        public void UpdateOpportunity()
+        public async Task<Opportunity> GetOpportunity(int id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetSingleOrDefault(o => o.Id == id);
+        }
+
+        public async Task UpdateOpportunity(OpportunityDto opportunityDto)
+        {
+            var opportunity = _mapper.Map<Opportunity>(opportunityDto);
+            await _repository.Update(opportunity);
         }
     }
 }

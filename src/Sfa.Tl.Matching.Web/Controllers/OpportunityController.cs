@@ -6,7 +6,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-    [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
+    [Authorize(Roles = RolesExtensions.AdminUser + "," + RolesExtensions.StandardUser)]
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;
