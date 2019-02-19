@@ -38,6 +38,7 @@
         }
     },
     "variables": {
+        "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/",
         "resourceNamePrefix": "[concat('tl-', toLower(parameters('environmentNameAbbreviation')))]",
         "workerASPName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-asp')]",
         "uiAppName": "[concat(variables('resourceNamePrefix'), '-mtchui-as')]",
@@ -50,12 +51,12 @@
     "resources": [
         {
             "apiVersion": "2017-05-10",
-            "name": "storageAccount",
+            "name": "storage-account",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/storage-account-arm.json",
+                    "uri": "[concat(variables('deploymentUrlBase'),'storage-account-arm.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -67,12 +68,12 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "workerAppServicePlan",
+            "name": "worker-app-service-plan",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/app-service-plan.json",
+                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-plan.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -90,12 +91,12 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "uiAppInsights",
+            "name": "ui-app-insights",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/application-insights.json",
+                    "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -110,12 +111,12 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "uiAppService",
+            "name": "ui-app-service",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/app-service.json",
+                    "uri": "[concat(variables('deploymentUrlBase'),'app-service.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -148,7 +149,7 @@
                             },
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                "value": "[reference('uiAppInsights').outputs.InstrumentationKey.value]"
+                                "value": "[reference('ui-app-insights').outputs.InstrumentationKey.value]"
                             }
                         ]
                     }
@@ -157,12 +158,12 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "functionAppInsights",
+            "name": "function-app-insights",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/application-insights.json",
+                    "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -177,12 +178,12 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "functionApp",
+            "name": "function-app",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/function-app.json",
+                    "uri": "[concat(variables('deploymentUrlBase'),'function-app.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -215,19 +216,19 @@
                             },
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                "value": "[reference('functionAppInsights').outputs.InstrumentationKey.value]"
+                                "value": "[reference('function-app-insights').outputs.InstrumentationKey.value]"
                             },
                             {
                                 "name": "BlobStorageConnectionString",
-                                "value": "[reference('storageAccount').outputs.storageConnectionString.value]"
+                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
                             {
                                 "name": "AzureWebJobsStorage",
-                                "value": "[reference('storageAccount').outputs.storageConnectionString.value]"
+                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
                             {
                                 "name": "AzureWebJobsDashboard",
-                                "value": "[reference('storageAccount').outputs.storageConnectionString.value]"
+                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
                             {
                                 "name": "FUNCTIONS_EXTENSION_VERSION",
@@ -238,17 +239,17 @@
                 }
             },
             "dependsOn": [
-                "workerAppServicePlan"
+                "worker-app-service-plan"
             ]
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "azureSearch",
+            "name": "azure-search",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/azure-search.json",
+                    "uri": "[concat(variables('deploymentUrlBase'),'azure-search.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -260,13 +261,13 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "sqlDatabase",
+            "name": "sql-database",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/sql-database.json",
+                    "uri": "[concat(variables('deploymentUrlBase'),'sql-database.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -287,12 +288,36 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "serviceBus",
+            "name": "sql-server-firewall-rules",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/service-bus.json",
+                    "uri": "[concat(variables('deploymentUrlBase'),'sql-server-firewall-rules.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "firewallRuleNamePrefix": {
+                        "value": "AZURE_IP-"
+                    },
+                    "ipAddresses": {
+                        "value": "[union(reference('ui-app-service').outputs.possibleOutboundIpAddresses.value, reference('function-app').outputs.possibleOutboundIpAddresses.value)]"
+                    },
+                    "serverName": {
+                        "value": "[parameters('sharedSQLServerName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "service-bus",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'service-bus.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
