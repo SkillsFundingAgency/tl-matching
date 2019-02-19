@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
@@ -47,6 +48,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         {
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Then_ViewModel_SearchRadius_Should_Be_Default_Search_Radius()
+        {
+            var viewModel = GetViewModel();
+            viewModel.SearchRadius.Should().Be(SearchParametersViewModel.DefaultSearchRadius);
+        }
+
+        private SearchParametersViewModel GetViewModel()
+        {
+            var viewResult = _result as ViewResult;
+            var viewModel = viewResult?.Model as SearchParametersViewModel;
+
+            return viewModel;
         }
     }
 }
