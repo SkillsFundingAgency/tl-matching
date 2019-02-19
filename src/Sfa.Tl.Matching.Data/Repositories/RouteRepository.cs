@@ -17,6 +17,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
+        public override async Task<int> Create(Route route)
+        {
+            return await BaseCreate(route);
+        }
+
         public override async Task<int> CreateMany(IEnumerable<Route> routes)
         {
             return await BaseCreateMany(routes);
@@ -30,6 +35,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public override Task<Route> GetSingleOrDefault(Func<Route, bool> predicate)
         {
             return _dbContext.Route.SingleOrDefaultAsync(route => predicate(route));
+        }
+
+        public override async Task Update(Route route)
+        {
+            await BaseUpdate(route);
         }
     }
 }
