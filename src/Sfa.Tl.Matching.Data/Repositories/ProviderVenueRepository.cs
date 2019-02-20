@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public override async Task Update(ProviderVenue providerVenue)
         {
-            await Update(providerVenue);
+            await BaseUpdate(providerVenue);
         }
     }
 }

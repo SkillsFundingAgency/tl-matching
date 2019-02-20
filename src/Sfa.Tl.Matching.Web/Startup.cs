@@ -129,7 +129,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddAutoMapper();
 
             //Inject DbContext
-            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString).EnableSensitiveDataLogging(true));
+            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString));
 
             //Inject services
             services.AddSingleton(_configuration);
