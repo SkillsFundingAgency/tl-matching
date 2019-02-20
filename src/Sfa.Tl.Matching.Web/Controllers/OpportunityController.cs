@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route(RouteTemplates.PlacementInformation)]
+        [Route(RouteTemplates.PlacementInformation, Name = RouteNames.PlacementsGet)]
         public async Task<IActionResult> Placements(OpportunityModel opportunityModel)
         {
             //var opportunity = await _opportunityService.GetOpportunity(opportunityModel.OpportunityId);
@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route(RouteTemplates.PlacementInformation)]
+        [Route(RouteTemplates.PlacementInformation, Name = RouteNames.PlacementsPost)]
         public async Task<IActionResult> Placements(PlacementInformationViewModel viewModel)
         {
             Validate(viewModel);

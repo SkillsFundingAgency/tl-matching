@@ -28,13 +28,31 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route(RouteTemplates.EmployerName, Name = RouteNames.EmployerNamePost)]
         public IActionResult Name(EmployerNameViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
             return RedirectToAction(nameof(Details));
         }
 
         [HttpGet]
         [Route(RouteTemplates.EmployerDetails, Name = RouteNames.EmployerDetailsGet)]
-        public IActionResult Details()
+        public IActionResult Details(OpportunityModel opportunityModel)
         {
+            var viewModel = new EmployerDetailsViewModel
+            {
+                OpportunityId = opportunityModel.OpportunityId
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route(RouteTemplates.EmployerDetails, Name = RouteNames.EmployerDetailsPost)]
+        public IActionResult Details(EmployerDetailsViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
             return View();
         }
 
