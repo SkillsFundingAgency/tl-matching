@@ -46,6 +46,8 @@ namespace Sfa.Tl.Matching.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(30));
+
             services.AddMvc(config =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -81,7 +83,7 @@ namespace Sfa.Tl.Matching.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseAuthentication();
 
@@ -94,6 +96,8 @@ namespace Sfa.Tl.Matching.Web
                     "ProviderStart",
                     "{controller=Provider}/{action=Start}");
             });
+
+            app.UseCookiePolicy();
         }
 
         private void AddAuthentication(IServiceCollection services)
