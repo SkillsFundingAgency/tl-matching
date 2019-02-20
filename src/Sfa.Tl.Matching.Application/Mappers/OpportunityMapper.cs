@@ -9,7 +9,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public OpportunityMapper()
         {
             CreateMap<OpportunityDto, Opportunity>()
-                .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
