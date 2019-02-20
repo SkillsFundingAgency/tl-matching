@@ -1,4 +1,4 @@
-﻿namespace Sfa.Tl.Matching.Web
+﻿namespace Sfa.Tl.Matching.Web.Constants
 {
     public static class RouteNames
     {

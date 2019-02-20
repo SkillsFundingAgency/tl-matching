@@ -6,15 +6,16 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Mappers
 {
-    public class ViewModelMapperProfile : Profile
+    public class DataImportViewModelMapper : Profile
     {
-        public ViewModelMapperProfile()
+        public DataImportViewModelMapper()
         {
             CreateMap<DataImportParametersViewModel, DataUploadDto>()
                 .ForMember(dest => dest.FileName, opt => opt.MapFrom<FileNameResolver>())
                 .ForMember(dest => dest.ImportType, opt => opt.MapFrom(source => source.SelectedImportType))
                 .ForMember(dest => dest.ContentType, opt => opt.MapFrom(source => source.File.ContentType))
                 .ForMember(dest => dest.Data, opt => opt.MapFrom(source => GetByteArray(source.File)))
+                .ForMember(dest => dest.UserName, opt => opt.Ignore())
                 ;
         }
 

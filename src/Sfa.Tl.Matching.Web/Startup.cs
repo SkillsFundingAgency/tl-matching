@@ -30,10 +30,10 @@ namespace Sfa.Tl.Matching.Web
         public Startup(IConfiguration configuration)
         {
             _configuration = ConfigurationLoader.Load(
-                configuration[Constants.EnvironmentNameConfigKey],
-                configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
-                configuration[Constants.VersionConfigKey],
-                configuration[Constants.ServiceNameConfigKey]);
+                configuration[Infrastructure.Configuration.Constants.EnvironmentNameConfigKey],
+                configuration[Infrastructure.Configuration.Constants.ConfigurationStorageConnectionStringConfigKey],
+                configuration[Infrastructure.Configuration.Constants.VersionConfigKey],
+                configuration[Infrastructure.Configuration.Constants.ServiceNameConfigKey]);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -45,6 +45,8 @@ namespace Sfa.Tl.Matching.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(30));
 
             services.AddMvc(config =>
             {
@@ -81,7 +83,7 @@ namespace Sfa.Tl.Matching.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseAuthentication();
 
@@ -94,6 +96,8 @@ namespace Sfa.Tl.Matching.Web
                     "ProviderStart",
                     "{controller=Provider}/{action=Start}");
             });
+
+            app.UseCookiePolicy();
         }
 
         private void AddAuthentication(IServiceCollection services)
@@ -125,7 +129,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddAutoMapper();
 
             //Inject DbContext
-            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString));
+            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString).EnableSensitiveDataLogging(true));
 
             //Inject services
             services.AddSingleton(_configuration);

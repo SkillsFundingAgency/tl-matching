@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
@@ -8,6 +7,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task<int> CreateOpportunity(OpportunityDto opportunityDto);
         Task UpdateOpportunity(OpportunityDto opportunityDto);
-        Task<Opportunity> GetOpportunity(int id);
+        Task<OpportunityDto> GetOpportunity(int id);
     }
 }

@@ -20,20 +20,24 @@ namespace Sfa.Tl.Matching.Application.Services
             _repository = repository;
         }
 
-        public async Task<int> CreateOpportunity(OpportunityDto opportunityDto)
+        public async Task<int> CreateOpportunity(OpportunityDto dto)
         {
-            var opportunity = _mapper.Map<Opportunity>(opportunityDto);
+            var opportunity = _mapper.Map<Opportunity>(dto);
+
             return await _repository.Create(opportunity);
         }
 
-        public async Task<Opportunity> GetOpportunity(int id)
+        public async Task<OpportunityDto> GetOpportunity(int id)
         {
-            return await _repository.GetSingleOrDefault(o => o.Id == id);
+            var opportunity = await _repository.GetSingleOrDefault(o => o.Id == id);
+            var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
+
+            return dto;
         }
 
-        public async Task UpdateOpportunity(OpportunityDto opportunityDto)
+        public async Task UpdateOpportunity(OpportunityDto dto)
         {
-            var opportunity = _mapper.Map<Opportunity>(opportunityDto);
+            var opportunity = _mapper.Map<Opportunity>(dto);
             await _repository.Update(opportunity);
         }
     }

@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public override async Task<Opportunity> GetSingleOrDefault(Func<Opportunity, bool> predicate)
         {
-            return await _dbContext.Opportunity.SingleOrDefaultAsync(o => predicate(o));
+            return await _dbContext.Opportunity.AsNoTracking().SingleOrDefaultAsync(o => predicate(o));
         }
 
         public override async Task Update(Opportunity opportunity)
