@@ -11,7 +11,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
 {
     public class OpportunityModel
     {
-        //[FromRoute]
         public int OpportunityId { get; set; }
     }
 
@@ -29,12 +28,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route(RouteTemplates.PlacementInformation)]
-        public async Task<IActionResult> Placements(OpportunityModel opportunityViewModel)
+        public async Task<IActionResult> Placements(OpportunityModel opportunityModel)
         {
-            var opportunity = await _opportunityService.GetOpportunity(opportunityViewModel.OpportunityId);
+            //var opportunity = await _opportunityService.GetOpportunity(opportunityModel.OpportunityId);
             var viewModel = new PlacementInformationViewModel
             {
-                OpportunityId = opportunity.Id
+                OpportunityId = opportunityModel.OpportunityId
             };
 
             return View(viewModel);
@@ -44,6 +43,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route(RouteTemplates.PlacementInformation)]
         public async Task<IActionResult> Placements(PlacementInformationViewModel viewModel)
         {
+            Validate(viewModel);
+
             if (!ModelState.IsValid)
                 return View(viewModel);
 
@@ -59,6 +60,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 OpportunityId = dto.Id
             });
+        }
+
+        private void Validate(PlacementInformationViewModel viewModel)
+        {
+            if (!viewModel.PlacementsKnown) return;
+            if (!viewModel.Placements.HasValue)
+                ModelState.AddModelError(nameof(viewModel.Placements), "You must estimate how many placements the employer wants at this location");
+            else if (viewModel.Placements < 1)
+                ModelState.AddModelError(nameof(viewModel.Placements), "You must enter a number that is 1 or more");
+            else if (viewModel.Placements > 999)
+                ModelState.AddModelError(nameof(viewModel.Placements), "You must enter a number that is 999 or less");
         }
     }
 }

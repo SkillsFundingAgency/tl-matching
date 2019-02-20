@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Sfa.Tl.Matching.Models.ValidationAttributes;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
@@ -15,9 +14,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         [Required(ErrorMessage = "You must tell us whether the employer knows how many placements they want at this location")]
         public bool PlacementsKnown { get; set; }
 
-        [Required(ErrorMessage = "You must estimate how many placements the employer wants at this location")]
-        [Min(1, ErrorMessage = "You must enter a number that is 1 or more")]
-        [Max(999, ErrorMessage = "You must enter a number that is 999 or less")]
-        public short Placements { get; set; }
+        public short? Placements { get; set; }
     }
 }

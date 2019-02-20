@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route(RouteTemplates.EmployerName, Name = RouteNames.EmployerNameGet)]
-        public IActionResult Name()
+        public IActionResult Name(OpportunityModel opportunityModel)
         {
             return View();
         }
