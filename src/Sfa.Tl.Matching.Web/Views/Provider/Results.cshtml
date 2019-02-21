@@ -1,4 +1,4 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
 
 @{
     ViewData["Title"] = "Select Providers";
@@ -12,7 +12,7 @@
         </h2>
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
-                <li><a sfa-validation-for="Postcode"></a></li>
+                <li><a sfa-validation-for="SearchParameters.Postcode"></a></li>
             </ul>
         </div>
     </div>
@@ -22,41 +22,70 @@
 
 
 @* TODO Add container and lay this out horizontally *@
+
+@* TODO: Move this to a partial view *@
 <form class="form" asp-controller="Provider" asp-action="Results">
-    <div class="govuk-form-group">
-        <label class="govuk-label" asp-for="SelectedRouteId">
-            Skill area
-        </label>
-        <select class="govuk-select" asp-for="SelectedRouteId" asp-items="Model.RoutesSelectList"></select>
-    </div>
-    <div class="govuk-form-group" sfa-validation-for="Postcode" sfa-validationerror-class="govuk-form-group--error">
-        <label class="govuk-label" asp-for="Postcode">
-            Postcode
-        </label>
-        <span class="govuk-error-message" asp-validation-for="Postcode"></span>
-        <input class="govuk-input govuk-input--width-5" asp-for="Postcode" type="text"
-               sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error">
-    </div>
-    <div class="govuk-form-group" sfa-validation-for="SearchRadius" sfa-validationerror-class="govuk-form-group--error">
-        <label class="govuk-label" asp-for="SearchRadius">
-            Providers within
-        </label>
-        <span class="govuk-error-message" asp-validation-for="SearchRadius"></span>
-        <select class="govuk-select" asp-for="SearchRadius">
-            <option value="5">5 miles</option>
-            <option value="10">10 miles</option>
-            <option value="15">15 miles</option>
-            <option value="20">20 miles</option>
-            <option value="25">25 miles</option>
-        </select>
-    </div>
+        <div class="govuk-form-group">
+            <label class="govuk-label" asp-for="SearchParameters.SelectedRouteId">
+                Skill area
+            </label>
+            <select class="govuk-select" asp-for="SearchParameters.SelectedRouteId" asp-items="Model.SearchParameters.RoutesSelectList"></select>
+        </div>
+        <div class="govuk-form-group" sfa-validation-for="SearchParameters.Postcode" sfa-validationerror-class="govuk-form-group--error">
+            <label class="govuk-label" asp-for="SearchParameters.Postcode">
+                Postcode
+            </label>
+            <span class="govuk-error-message" asp-validation-for="SearchParameters.Postcode"></span>
+            <input class="govuk-input govuk-input--width-5" asp-for="SearchParameters.Postcode" type="text"
+                   sfa-validation-for="SearchParameters.Postcode" sfa-validationerror-class="govuk-input--error">
+        </div>
+        <div class="govuk-form-group" sfa-validation-for="SearchParameters.SearchRadius" sfa-validationerror-class="govuk-form-group--error">
+            <label class="govuk-label" asp-for="SearchParameters.SearchRadius">
+                Providers within
+            </label>
+            <span class="govuk-error-message" asp-validation-for="SearchParameters.SearchRadius"></span>
+            <select class="govuk-select" asp-for="SearchParameters.SearchRadius">
+                <option value="5">5 miles</option>
+                <option value="10">10 miles</option>
+                <option value="15">15 miles</option>
+                <option value="20">20 miles</option>
+                <option value="25">25 miles</option>
+            </select>
+        </div>
 
-    <button type="submit" class="govuk-button">Search again</button>
-</form>
+        <button type="submit" class="govuk-button">Search again</button>
+    </form>
 
+@* TODO: Move this to a partial view *@
 <div>
     <h2 class="govuk-heading-m">Search results</h2>
-    
-    @* TODO: Add results container and styled list *@
 
+    @* TODO: Add results container and styled list *@
+    @if (Model.SearchResults.Results != null && Model.SearchResults.Results.Any())
+    {
+        <ul>
+        @foreach (var searchResult in Model.SearchResults.Results)
+        {
+            <li>
+                <h4>@searchResult.ProviderName</h4>
+                <h5>
+                    <span>searchResult.Postcode</span>
+                    <span>@($" {searchResult.Distance:#.00}") miles</span>
+                </h5>
+                <ul>
+                    @foreach (var qualification in searchResult.QualificationShortTitles)
+                    {
+                        <li>
+                            @qualification
+                        </li>
+                    }
+                </ul>
+            </li>    
+        }
+        </ul>
+    }
+    else
+    {
+        <p>No results</p>
+    }
 </div>

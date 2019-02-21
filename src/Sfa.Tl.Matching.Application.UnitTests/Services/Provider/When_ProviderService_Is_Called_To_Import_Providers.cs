@@ -25,6 +25,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         {
             var config = new MapperConfiguration(c => c.AddProfile<ProviderMapper>());
             var mapper = new Mapper(config);
+            var searchResultconfig = new MapperConfiguration(c => c.AddProfile<ProviderVenueSearchResultMapper>());
+            var searchResultMapper = new Mapper(searchResultconfig);
+
             _fileReader =
                 Substitute.For<IFileReader<ProviderFileImportDto, ProviderDto>>();
             _repository = Substitute.For<IRepository<Domain.Models.Provider>>();
@@ -46,8 +49,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(_fileReaderResults);
+            var searchProvider = Substitute.For<ISearchProvider>();
 
-            var service = new ProviderService(mapper, _fileReader, _repository);
+            var service = new ProviderService(mapper, _fileReader, _repository, searchResultMapper, searchProvider);
 
             _result = service.ImportProvider(_fileImportDto).GetAwaiter().GetResult();
         }

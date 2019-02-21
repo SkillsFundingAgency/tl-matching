@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
@@ -16,7 +17,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
     public class When_Provider_Controller_Results_Is_Loaded
     {
         private readonly IActionResult _result;
-
+        
         public When_Provider_Controller_Results_Is_Loaded()
         {
             var routes = new List<Route>
@@ -28,16 +29,37 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var logger = Substitute.For<ILogger<ProviderController>>();
             var mapper = Substitute.For<IMapper>();
 
+            var providerService = Substitute.For<IProviderService>();
+
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
-            var providerController = new ProviderController(logger, mapper, routePathService);
+            var providerController = new ProviderController(logger, mapper, routePathService, providerService);
             providerController.CreateContextWithSubstituteTempData();
 
-            _result = providerController.Results();
+            _result = providerController.Results().GetAwaiter().GetResult();
         }
-        
+
         [Fact]
         public void Then_Result_Is_Not_Null() =>
             _result.Should().NotBeNull();
+
+        [Fact]
+        public void Then_View_Result_Is_Returned() =>
+            _result.Should().BeAssignableTo<ViewResult>();
+
+        [Fact]
+        public void Then_Model_Is_Not_Null()
+        {
+            var viewResult = _result as ViewResult;
+            viewResult?.Model.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Then_ViewModel_SearchRadius_Should_Be_Default_Search_Radius()
+        {
+            //var viewModel = _result.GetViewModel<SearchParametersViewModel>();
+            var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
+            searchParametersViewModel.SearchRadius.Should().Be(SearchParametersViewModel.DefaultSearchRadius);
+        }
     }
 }

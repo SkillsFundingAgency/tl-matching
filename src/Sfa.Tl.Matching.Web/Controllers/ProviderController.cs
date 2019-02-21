@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,12 +21,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private readonly IMapper _mapper;
         private readonly ILogger<ProviderController> _logger;
+        private readonly IProviderService _providerService;
         private readonly IRoutePathService _routePathService;
 
-        public ProviderController(ILogger<ProviderController> logger, IMapper mapper, IRoutePathService routePathService)
+        public ProviderController(ILogger<ProviderController> logger, IMapper mapper, IRoutePathService routePathService, IProviderService providerService)
         {
             _logger = logger;
             _mapper = mapper;
+            _providerService = providerService;
             _routePathService = routePathService;
         }
 
@@ -66,36 +69,46 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("provider-results")]
-        public IActionResult Results()
+        public async Task<IActionResult> Results()
         {
             var obj = TempData[SearchParametersDataKey];
-            var viewModel = obj != null
-                ? JsonConvert.DeserializeObject<SearchParametersViewModel>((string)obj)
-                : new SearchParametersViewModel();
+            //var viewModel = obj != null
+            //    ? JsonConvert.DeserializeObject<SearchParametersViewModel>((string)obj)
+            //    : new SearchParametersViewModel();
 
-            viewModel.RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes());
+            //viewModel.RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes());
 
-            return View(viewModel);
+            SearchViewModel resultsViewModel;
+            if (obj != null)
+            {
+                var searchParametersViewModel = JsonConvert.DeserializeObject<SearchParametersViewModel>((string)obj);
+                resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
+            }
+            else
+            {
+                resultsViewModel = new SearchViewModel
+                    {
+                        SearchParameters = new SearchParametersViewModel
+                        {
+                            RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes())
+                        },
+                        SearchResults = new SearchResultsViewModel()
+                    };
+            }
+            
+            return View(resultsViewModel);
         }
 
         [HttpPost]
         [Route("provider-results")]
-        public IActionResult Results(SearchParametersViewModel viewModel)
+        public async Task<IActionResult> Results(SearchViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return GetResultsView(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius);
+                return GetResultsView(viewModel.SearchParameters.SelectedRouteId, viewModel.SearchParameters.Postcode, viewModel.SearchParameters.SearchRadius);
             }
 
-            _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
-
-            var resultsViewModel = new SearchParametersViewModel
-            {
-                RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
-                SearchRadius = viewModel.SearchRadius,
-                SelectedRouteId = viewModel.SelectedRouteId,
-                Postcode = viewModel.Postcode
-            };
+            var resultsViewModel = await GetSearchResultsAsync(viewModel.SearchParameters);
             return View(resultsViewModel);
         }
 
@@ -112,18 +125,46 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private IActionResult GetResultsView(string selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
         {
-            return View(nameof(Results), new SearchParametersViewModel
-            {
-                RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
-                SelectedRouteId = selectedRouteId,
-                SearchRadius = searchRadius,
-                Postcode = postCode
-            });
+            return View(nameof(Results), new SearchViewModel
+                {
+                    SearchParameters = new SearchParametersViewModel
+                    {
+                        RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
+                        SelectedRouteId = selectedRouteId,
+                        SearchRadius = searchRadius,
+                        Postcode = postCode
+                    },
+                    SearchResults = new SearchResultsViewModel()
+                });
         }
 
         private IOrderedQueryable<Route> GetRoutes()
         {
             return _routePathService.GetRoutes().OrderBy(r => r.Name);
+        }
+
+        private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
+        {
+            _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
+            
+            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(viewModel.Postcode, viewModel.SearchRadius, int.Parse(viewModel.SelectedRouteId));
+
+            var resultsViewModel = new SearchViewModel
+            {
+                SearchResults = new SearchResultsViewModel
+                {
+                    Results = searchResults
+                },
+                SearchParameters = new SearchParametersViewModel
+                {
+                    RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
+                    SearchRadius = viewModel.SearchRadius,
+                    SelectedRouteId = viewModel.SelectedRouteId,
+                    Postcode = viewModel.Postcode
+                }
+            };
+
+            return resultsViewModel;
         }
     }
 }

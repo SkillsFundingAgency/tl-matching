@@ -11,6 +11,7 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
@@ -25,6 +26,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var loggerRepository = new Logger<ProviderRepository>(
                 new NullLoggerFactory());
 
+            var loggerSearchProvider = new Logger<SqlSearchProvider>(
+                new NullLoggerFactory());
+
             var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderFileImportDto, ProviderDto>>(
                 new NullLoggerFactory());
 
@@ -37,10 +41,12 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var excelFileReader = new ExcelFileReader<ProviderFileImportDto, ProviderDto>(loggerExcelFileReader, dataParser, dataValidator);
 
             var config = new MapperConfiguration(c => c.AddProfile<ProviderMapper>());
-
             var mapper = new Mapper(config);
+            var searchResultconfig = new MapperConfiguration(c => c.AddProfile<ProviderVenueSearchResultMapper>());
+            var searchResultMapper = new Mapper(searchResultconfig);
+            var searchProvider = new SqlSearchProvider(loggerSearchProvider, MatchingDbContext);
 
-            ProviderService = new ProviderService(mapper, excelFileReader, repository);
+            ProviderService = new ProviderService(mapper, excelFileReader, repository, searchResultMapper, searchProvider);
         }
 
         internal void ResetData(string name)

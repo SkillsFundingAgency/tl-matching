@@ -33,22 +33,25 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             var config = new MapperConfiguration(c => c.AddProfile<SearchParametersViewModelMapper>());
             IMapper mapper = new Mapper(config);
-            
+
+            var providerService = Substitute.For<IProviderService>();
+
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
 
-            var providerController = new ProviderController(logger, mapper, routePathService);
+            var providerController = new ProviderController(logger, mapper, routePathService, providerService);
             providerController.CreateContextWithSubstituteTempData();
 
-            int _searchRadius = 5;
-            string _selectedRouteId = routes.First().Id.ToString();
-            string _postcode = "SW1A 2AA";
+            var selectedRouteId = routes.First().Id.ToString();
+            var searchRadius = 5;
+            var postcode = "SW1A 2AA";
+
             var viewModel = new SearchParametersViewModel
             {
                 RoutesSelectList = mapper.Map<SelectListItem[]>(routes),
-                SearchRadius = _searchRadius,
-                SelectedRouteId = _selectedRouteId,
-                Postcode = _postcode
+                SearchRadius = searchRadius,
+                SelectedRouteId = selectedRouteId,
+                Postcode = postcode
             };
             _result = providerController.Index(viewModel);
         }
@@ -56,5 +59,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_Result_Is_Not_Null() =>
             _result.Should().NotBeNull();
+        
+        [Fact]
+        public void Then_Result_Is_RedirectResult() =>
+            _result.Should().BeOfType<RedirectToActionResult>();
+
+        [Fact]
+        public void Then_Result_Is_Redirect_To_Results()
+        {
+            var redirect = _result as RedirectToActionResult;
+            redirect?.ActionName.Should().BeEquivalentTo("Results");
+        }
     }
 }
