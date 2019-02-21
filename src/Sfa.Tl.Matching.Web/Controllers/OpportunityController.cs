@@ -4,16 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Constants;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-    public class OpportunityModel
-    {
-        public int OpportunityId { get; set; }
-    }
-
     [Authorize(Roles = RolesExtensions.AdminUser + "," + RolesExtensions.StandardUser)]
     public class OpportunityController : Controller
     {
@@ -26,14 +22,31 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _opportunityService = opportunityService;
         }
 
+        [HttpPost]
+        [Route(RouteTemplates.OpportunityCreate, Name = RouteNames.OpportunityCreatePost)]
+        public async Task<IActionResult> Create(OpportunityDto dto)
+        {
+            // TODO AU REMOVE
+            dto.PostCode = "AA1 1AA";
+            dto.Distance = 1;
+            dto.RouteId = 1;
+
+            var opportunityId = await _opportunityService.CreateOpportunity(dto);
+
+            TempData[TempDataKeys.OpportunityId] = opportunityId;
+
+            return RedirectToRoute(RouteNames.PlacementsGet);
+        }
+
         [HttpGet]
         [Route(RouteTemplates.PlacementInformation, Name = RouteNames.PlacementsGet)]
-        public async Task<IActionResult> Placements(OpportunityModel opportunityModel)
+        public IActionResult Placements()
         {
-            //var opportunity = await _opportunityService.GetOpportunity(opportunityModel.OpportunityId);
+            var opportunityId = (int)TempData[TempDataKeys.OpportunityId];
+
             var viewModel = new PlacementInformationViewModel
             {
-                OpportunityId = opportunityModel.OpportunityId
+                OpportunityId = opportunityId
             };
 
             return View(viewModel);
@@ -43,6 +56,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route(RouteTemplates.PlacementInformation, Name = RouteNames.PlacementsPost)]
         public async Task<IActionResult> Placements(PlacementInformationViewModel viewModel)
         {
+            TempData[TempDataKeys.OpportunityId] = viewModel.OpportunityId;
+
             Validate(viewModel);
 
             if (!ModelState.IsValid)
@@ -56,10 +71,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute(RouteNames.EmployerNameGet, new OpportunityModel
-            {
-                OpportunityId = dto.Id
-            });
+            return RedirectToRoute(RouteNames.EmployerNameGet);
         }
 
         private void Validate(PlacementInformationViewModel viewModel)
