@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         private readonly int _routeId = 1;
         private readonly string _selectedRouteId;
         private readonly IActionResult _result;
-        
+
         public When_Provider_Controller_Results_Post_Is_Called()
         {
             var routes = new List<Route>
@@ -57,20 +57,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             _selectedRouteId = routes.First().Id.ToString();
 
-            var viewModel = new SearchViewModel
-            { 
-                SearchParameters = new SearchParametersViewModel
-                {
-                    RoutesSelectList = mapper.Map<SelectListItem[]>(routes),
-                    SearchRadius = _searchRadius,
-                    SelectedRouteId = _selectedRouteId,
-                    Postcode = _postcode
-                }
+            var viewModel = new SearchParametersViewModel
+            {
+                RoutesSelectList = mapper.Map<SelectListItem[]>(routes),
+                SearchRadius = _searchRadius,
+                SelectedRouteId = _selectedRouteId,
+                Postcode = _postcode
             };
 
             _result = providerController.Results(viewModel).GetAwaiter().GetResult();
         }
-        
+
         [Fact]
         public void Then_ProviderService_SearchProvidersByPostcodeProximity_Is_Called_Exactly_Once()
         {
@@ -114,21 +111,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var viewModel = _result.GetViewModel<SearchViewModel>();
             viewModel.SearchResults.Should().NotBeNull();
         }
-        
+
         [Fact]
         public void Then_ViewModel_SearchParameters_Postcode_Should_Be_Input_Postcode()
         {
             var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
             searchParametersViewModel.Postcode.Should().Be(_postcode);
         }
-        
+
         [Fact]
         public void Then_ViewModel_SearchParameters_SearchRadius_Should_Be_Input_SearchRadius()
         {
             var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
             searchParametersViewModel.SearchRadius.Should().Be(_searchRadius);
         }
-        
+
         [Fact]
         public void Then_ViewModel_SearchParameters_SelectedRouteIds_Should_Be_Input_SelectedRouteId()
         {

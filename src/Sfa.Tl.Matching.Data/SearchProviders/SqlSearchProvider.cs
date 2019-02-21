@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -22,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
         {
             _logger.LogInformation($"Searching for providers within radius {searchRadius} of postcode '{postcode}' with route {routeId}");
 
-            throw new NotImplementedException();
+            return await Task.FromResult(new List<ProviderVenueSearchResult>());
         }
     }
 }
