@@ -9,5 +9,6 @@
         public const string EmployerDetailsPost = "EmployerDetails_Post";
         public const string PlacementsGet = "Placements_Get";
         public const string PlacementsPost = "Placements_Post";
+        public const string OpportunityCreatePost = "OpportunityCreate_Post";
     }
 }

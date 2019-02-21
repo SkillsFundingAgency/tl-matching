@@ -11,28 +11,37 @@ namespace Sfa.Tl.Matching.Web.Controllers
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
     public class EmployerController : Controller
     {
-        private readonly IOpportunityService _opportunityService;
+        private readonly IEmployerService _employerService;
 
-        public EmployerController(IOpportunityService opportunityService)
+        public EmployerController(IEmployerService employerService)
         {
-            _opportunityService = opportunityService;
+            _employerService = employerService;
         }
 
         [HttpGet]
         [Route(RouteTemplates.EmployerName, Name = RouteNames.EmployerNameGet)]
-        public IActionResult Name(OpportunityModel opportunityModel)
+        public IActionResult Name()
         {
-            return View();
+            var opportunityId = (int)TempData[TempDataKeys.OpportunityId];
+
+            var viewModel = new EmployerNameViewModel
+            {
+                OpportunityId = opportunityId
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
         [Route(RouteTemplates.EmployerName, Name = RouteNames.EmployerNamePost)]
         public IActionResult Name(EmployerNameViewModel viewModel)
         {
+            TempData[TempDataKeys.OpportunityId] = viewModel.OpportunityId;
+
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            return RedirectToAction(nameof(Details));
+            return RedirectToRoute(RouteNames.EmployerDetailsGet);
         }
 
         [HttpGet]
@@ -50,11 +59,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route(RouteTemplates.EmployerDetails, Name = RouteNames.EmployerDetailsGet)]
-        public IActionResult Details(OpportunityModel opportunityModel)
+        public IActionResult Details()
         {
+            var opportunityId = (int)TempData[TempDataKeys.OpportunityId];
+
             var viewModel = new EmployerDetailsViewModel
             {
-                OpportunityId = opportunityModel.OpportunityId
+                OpportunityId = opportunityId
             };
 
             return View(viewModel);
@@ -64,12 +75,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route(RouteTemplates.EmployerDetails, Name = RouteNames.EmployerDetailsPost)]
         public IActionResult Details(EmployerDetailsViewModel viewModel)
         {
+            TempData[TempDataKeys.OpportunityId] = viewModel.OpportunityId;
+
             if (!ModelState.IsValid)
                 return View(viewModel);
 
             return View();
         }
-
 
         public IActionResult Check()
         {

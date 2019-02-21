@@ -6,5 +6,6 @@
         public const string EmployerDetails = "employer-details";
         public const string EmployerSearch = "employer-search";
         public const string PlacementInformation = "placement-information";
+        public const string OpportunityCreate = "opportunity-create";
     }
 }
