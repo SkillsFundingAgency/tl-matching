@@ -1,4 +1,4 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchResultsViewModel
 
 @{
     ViewData["Title"] = "Select Providers";
@@ -12,12 +12,10 @@
 
 <p class="govuk-hint">Choose who the employer wants to hear from</p>
 
-@if (Model.SearchResults.Results != null && Model.SearchResults.Results.Any())
+@if (Model.Results != null && Model.Results.Any())
 {
-
-
     <ol class="das-search-results">
-        @foreach (var searchResult in Model.SearchResults.Results)
+        @foreach (var searchResult in Model.Results)
         {
             <li class="das-search-results__list-item das-search-results__list-item--with-checkbox">
                 <div class="govuk-checkboxes">

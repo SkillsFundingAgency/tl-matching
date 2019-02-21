@@ -102,14 +102,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route(RouteTemplates.ProviderResults, Name = RouteNames.ProviderResultsPost)]
-        public async Task<IActionResult> Results(SearchViewModel viewModel)
+        public async Task<IActionResult> Results(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return GetResultsView(viewModel.SearchParameters.SelectedRouteId, viewModel.SearchParameters.Postcode, viewModel.SearchParameters.SearchRadius);
+                return GetResultsView(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius);
             }
 
-            var resultsViewModel = await GetSearchResultsAsync(viewModel.SearchParameters);
+            var resultsViewModel = await GetSearchResultsAsync(viewModel);
             return View(resultsViewModel);
         }
 
