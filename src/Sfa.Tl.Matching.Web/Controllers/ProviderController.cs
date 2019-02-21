@@ -11,6 +11,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Web.Constants;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -32,14 +33,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _routePathService = routePathService;
         }
 
-        [Route("Start")]
+        [Route(RouteTemplates.Start, Name = RouteNames.StartGet)]
         public IActionResult Start()
         {
             return View();
         }
 
         [HttpGet]
-        [Route("find-providers")]
+        [Route(RouteTemplates.ProvidersFind, Name = RouteNames.ProvidersGet)]
         public IActionResult Index()
         {
             try
@@ -54,7 +55,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("find-providers")]
+        [Route(RouteTemplates.ProvidersFind, Name = RouteNames.ProvidersPost)]
         public IActionResult Index(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -68,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("provider-results")]
+        [Route(RouteTemplates.ProviderResults, Name = RouteNames.ProviderResultsGet)]
         public async Task<IActionResult> Results()
         {
             var obj = TempData[SearchParametersDataKey];
@@ -100,7 +101,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("provider-results")]
+        [Route(RouteTemplates.ProviderResults, Name = RouteNames.ProviderResultsPost)]
         public async Task<IActionResult> Results(SearchViewModel viewModel)
         {
             if (!ModelState.IsValid)
