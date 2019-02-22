@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             var opportunityDto = new OpportunityDto
             {
                 RouteId = 1,
-                PostCode = Postcode,
+                Postcode = Postcode,
                 Distance = 4
             };
 
