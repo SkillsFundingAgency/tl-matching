@@ -37,10 +37,10 @@ namespace Sfa.Tl.Matching.Web
         public Startup(IConfiguration configuration)
         {
             _configuration = ConfigurationLoader.Load(
-                configuration[Infrastructure.Configuration.Constants.EnvironmentNameConfigKey],
-                configuration[Infrastructure.Configuration.Constants.ConfigurationStorageConnectionStringConfigKey],
-                configuration[Infrastructure.Configuration.Constants.VersionConfigKey],
-                configuration[Infrastructure.Configuration.Constants.ServiceNameConfigKey]);
+                configuration[Constants.EnvironmentNameConfigKey],
+                configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
+                configuration[Constants.VersionConfigKey],
+                configuration[Constants.ServiceNameConfigKey]);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
