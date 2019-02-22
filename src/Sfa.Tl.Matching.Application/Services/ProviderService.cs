@@ -13,17 +13,23 @@ namespace Sfa.Tl.Matching.Application.Services
     public class ProviderService : IProviderService
     {
         private readonly IMapper _mapper;
+        private readonly IMapper _searchResultMapper;
         private readonly IFileReader<ProviderFileImportDto, ProviderDto> _fileReader;
         private readonly IRepository<Provider> _repository;
+        private readonly ISearchProvider _searchProvider;
 
         public ProviderService(
             IMapper mapper,
             IFileReader<ProviderFileImportDto, ProviderDto> fileReader,
-            IRepository<Provider> repository)
+            IRepository<Provider> repository,
+            IMapper searchResultMapper,
+            ISearchProvider searchProvider)
         {
             _mapper = mapper;
             _fileReader = fileReader;
             _repository = repository;
+            _searchResultMapper = searchResultMapper;
+            _searchProvider = searchProvider;
         }
 
         public async Task<int> ImportProvider(ProviderFileImportDto fileImportDto)
@@ -45,9 +51,15 @@ namespace Sfa.Tl.Matching.Application.Services
             throw new NotImplementedException();
         }
 
-        public void SearchProviderByPostCodeProximity()
+        public async Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId)
         {
-            throw new NotImplementedException();
+            var searchResults = await _searchProvider.SearchProvidersByPostcodeProximity(postcode, searchRadius, routeId);
+
+            var results = searchResults.Any()
+                ? _searchResultMapper.Map<IEnumerable<ProviderVenueSearchResultDto>>(searchResults)
+                : new List<ProviderVenueSearchResultDto>();
+
+            return results;
         }
     }
 }
