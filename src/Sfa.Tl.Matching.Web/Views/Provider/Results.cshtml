@@ -7,15 +7,12 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <partial name="_searchbox" model="Model.SearchParameters" />
-@*        @await Html.PartialAsync("_searchbox.cshtml", Model.SearchParameters)*@
     </div>
 </div>
 
-@* TODO: Move this to a partial view *@
 <div class="govuk-grid-row govuk-!-margin-top-5">
     <div class="govuk-grid-column-two-thirds">
-        <partial name="_searchresults" model="Model.SearchResults" />
-        @*        @await Html.PartialAsync("Partials/_searchresults.cshtml", Model.SearchResults)*@
+        <partial name="_searchresults" model="Model" />
     </div>
 </div>
 

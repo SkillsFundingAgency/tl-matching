@@ -1,21 +1,27 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchResultsViewModel
+﻿@using Sfa.Tl.Matching.Models.ViewModel
+@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
 
 @{
     ViewData["Title"] = "Select Providers";
 }
 
-<h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">17 </span>results for <span class="govuk-!-font-weight-bold">test </span>in <span class="govuk-!-font-weight-bold">health and science </span>within <span class="govuk-!-font-weight-bold">10 miles </span>of <span class="govuk-!-font-weight-bold">CV1 2WT</span></h2>
+<h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">@Model.SearchResults?.Results?.Count() </span>results in <span class="govuk-!-font-weight-bold">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value.ToString() == @Model.SearchParameters.SelectedRouteId)?.Text </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
 
-<form>
+<form asp-controller="Opportunity" asp-action="Create">
+    <input type="hidden" name="Postcode" value="@Model.SearchParameters.Postcode" />
+    <input type="hidden" name="Distance" value="@Model.SearchParameters.SearchRadius" />
+    <input type="hidden" name="RouteId" value="@Model.SearchParameters.SelectedRouteId" />
+    @*TODO: replace link with link-styled button *@
     <a href="#" class="govuk-body govuk-link">No suitable providers? Let us know</a>
+    <button type="submit" class="govuk-button">No suitable providers? Let us know</button>
 </form>
 
 <p class="govuk-hint">Choose who the employer wants to hear from</p>
 
-@if (Model.Results != null && Model.Results.Any())
+@if (Model.SearchResults.Results != null && Model.SearchResults.Results.Any())
 {
     <ol class="das-search-results">
-        @foreach (var searchResult in Model.Results)
+        @foreach (var searchResult in Model.SearchResults.Results)
         {
             <li class="das-search-results__list-item das-search-results__list-item--with-checkbox">
                 <div class="govuk-checkboxes">

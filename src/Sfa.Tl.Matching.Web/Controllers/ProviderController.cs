@@ -11,7 +11,6 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Constants;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -33,14 +32,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _routePathService = routePathService;
         }
 
-        [Route(RouteTemplates.Start, Name = RouteNames.StartGet)]
+        [Route("Start", Name = "Start_Get")]
         public IActionResult Start()
         {
             return View();
         }
 
         [HttpGet]
-        [Route(RouteTemplates.ProvidersFind, Name = RouteNames.ProvidersGet)]
+        [Route("find-providers", Name = "Providers_Get")]
         public IActionResult Index()
         {
             try
@@ -55,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route(RouteTemplates.ProvidersFind, Name = RouteNames.ProvidersPost)]
+        [Route("find-providers", Name = "Providers_Post")]
         public IActionResult Index(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -69,7 +68,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route(RouteTemplates.ProviderResults, Name = RouteNames.ProviderResultsGet)]
+        [Route("provider-results", Name = "ProviderResults_Get")]
         public async Task<IActionResult> Results()
         {
             var obj = TempData[SearchParametersDataKey];
@@ -88,20 +87,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
             else
             {
                 resultsViewModel = new SearchViewModel
+                {
+                    SearchParameters = new SearchParametersViewModel
                     {
-                        SearchParameters = new SearchParametersViewModel
-                        {
-                            RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes())
-                        },
-                        SearchResults = new SearchResultsViewModel()
-                    };
+                        RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes())
+                    },
+                    SearchResults = new SearchResultsViewModel()
+                };
             }
-            
+
             return View(resultsViewModel);
         }
 
         [HttpPost]
-        [Route(RouteTemplates.ProviderResults, Name = RouteNames.ProviderResultsPost)]
+        [Route("provider-results", Name = "ProviderResults_Post")]
         public async Task<IActionResult> Results(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -120,23 +119,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
                 SelectedRouteId = selectedRouteId,
                 SearchRadius = searchRadius,
-                Postcode = postCode
+                Postcode = postCode?.Trim()
             });
         }
 
         private IActionResult GetResultsView(string selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
         {
             return View(nameof(Results), new SearchViewModel
+            {
+                SearchParameters = new SearchParametersViewModel
                 {
-                    SearchParameters = new SearchParametersViewModel
-                    {
-                        RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
-                        SelectedRouteId = selectedRouteId,
-                        SearchRadius = searchRadius,
-                        Postcode = postCode
-                    },
-                    SearchResults = new SearchResultsViewModel()
-                });
+                    RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
+                    SelectedRouteId = selectedRouteId,
+                    SearchRadius = searchRadius,
+                    Postcode = postCode
+                },
+                SearchResults = new SearchResultsViewModel()
+            });
         }
 
         private IOrderedQueryable<Route> GetRoutes()
@@ -147,7 +146,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
         {
             _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
-            
+
             var searchResults = await _providerService.SearchProvidersByPostcodeProximity(viewModel.Postcode, viewModel.SearchRadius, int.Parse(viewModel.SelectedRouteId));
 
             var resultsViewModel = new SearchViewModel
@@ -161,7 +160,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
                     SearchRadius = viewModel.SearchRadius,
                     SelectedRouteId = viewModel.SelectedRouteId,
-                    Postcode = viewModel.Postcode
+                    Postcode = viewModel.Postcode?.Trim()
                 }
             };
 
