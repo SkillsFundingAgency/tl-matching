@@ -72,11 +72,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> Results()
         {
             var obj = TempData[SearchParametersDataKey];
-            //var viewModel = obj != null
-            //    ? JsonConvert.DeserializeObject<SearchParametersViewModel>((string)obj)
-            //    : new SearchParametersViewModel();
-
-            //viewModel.RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes());
 
             SearchViewModel resultsViewModel;
             if (obj != null)
