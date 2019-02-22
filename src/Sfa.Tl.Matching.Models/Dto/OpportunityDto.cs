@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Models.Dto
     {
         public int Id { get; set; }
         public int RouteId { get; set; }
-        public string PostCode { get; set; }
+        public string Postcode { get; set; }
         public short Distance { get; set; }
         public string JobTitle { get; set; }
         public bool? PlacementsKnown { get; set; }

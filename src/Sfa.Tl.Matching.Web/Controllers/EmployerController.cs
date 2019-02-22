@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Constants;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -19,10 +18,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route(RouteTemplates.EmployerName, Name = RouteNames.EmployerNameGet)]
+        [Route("who-is-employer", Name = "EmployerName_Get")]
         public IActionResult Name()
         {
-            var opportunityId = (int)TempData[TempDataKeys.OpportunityId];
+            var opportunityId = (int)TempData["OpportunityId"];
 
             var viewModel = new EmployerNameViewModel
             {
@@ -33,19 +32,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route(RouteTemplates.EmployerName, Name = RouteNames.EmployerNamePost)]
+        [Route("who-is-employer", Name = "EmployerName_Post")]
         public IActionResult Name(EmployerNameViewModel viewModel)
         {
-            TempData[TempDataKeys.OpportunityId] = viewModel.OpportunityId;
+            TempData["OpportunityId"] = viewModel.OpportunityId;
 
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            return RedirectToRoute(RouteNames.EmployerDetailsGet);
+            return RedirectToRoute("EmployerDetails_Get");
         }
 
         [HttpGet]
-        [Route(RouteTemplates.EmployerSearch, Name = RouteNames.EmployerSearchGet)]
+        [Route("employer-search", Name = "EmployerSearch_Get")]
         public IActionResult Search(string query)
         {
             var employers = new List<string>();
@@ -58,10 +57,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route(RouteTemplates.EmployerDetails, Name = RouteNames.EmployerDetailsGet)]
+        [Route("employer-details", Name = "EmployerDetails_Get")]
         public IActionResult Details()
         {
-            var opportunityId = (int)TempData[TempDataKeys.OpportunityId];
+            var opportunityId = (int)TempData["OpportunityId"];
 
             var viewModel = new EmployerDetailsViewModel
             {
@@ -72,10 +71,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route(RouteTemplates.EmployerDetails, Name = RouteNames.EmployerDetailsPost)]
+        [Route("employer-details", Name = "EmployerDetails_Post")]
         public IActionResult Details(EmployerDetailsViewModel viewModel)
         {
-            TempData[TempDataKeys.OpportunityId] = viewModel.OpportunityId;
+            TempData["OpportunityId"] = viewModel.OpportunityId;
 
             if (!ModelState.IsValid)
                 return View(viewModel);
