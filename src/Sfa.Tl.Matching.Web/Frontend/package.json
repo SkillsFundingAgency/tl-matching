@@ -1,0 +1,28 @@
+{
+  "name": "tl-matching",
+  "version": "1.0.0",
+  "description": "T Levels Matching Service",
+  "main": "/",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkillsFundingAgency/tl-matching.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SkillsFundingAgency/tl-matching/issues"
+  },
+  "homepage": "https://github.com/SkillsFundingAgency/tl-matching#readme",
+  "dependencies": {
+    "accessible-autocomplete": "1.6.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-concat-css": "^3.1.0",
+    "gulp-uglify": "^3.0.1"
+  }
+}
