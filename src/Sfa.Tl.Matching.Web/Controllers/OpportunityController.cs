@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -23,11 +22,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("opportunity-create", Name = "OpportunityCreate_Post")]
         public async Task<IActionResult> Create(OpportunityDto dto)
         {
-            // TODO AU REMOVE
-            dto.Postcode = "AA1 1AA";
-            dto.Distance = 1;
-            dto.RouteId = 1;
-
             dto.CreatedBy = HttpContext.User.GetUserName();
 
             var opportunityId = await _opportunityService.CreateOpportunity(dto);
