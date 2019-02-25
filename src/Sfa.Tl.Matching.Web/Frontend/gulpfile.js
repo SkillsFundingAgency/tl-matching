@@ -7,6 +7,7 @@ gulp.task('default', ['copy-js', 'copy-css', 'copy-assets']);
 
 gulp.task('copy-js', function () {
     return gulp.src([
+        'node_modules/jquery/dist/jquery.min.js',
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
         'src/javascripts/*.js'
     ])
