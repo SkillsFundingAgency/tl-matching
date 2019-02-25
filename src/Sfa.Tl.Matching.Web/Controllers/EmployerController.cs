@@ -80,7 +80,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> Details()
         {
             var opportunityId = (int)TempData["OpportunityId"];
-
             var dto = await _opportunityService.GetOpportunity(opportunityId);
 
             var viewModel = new EmployerDetailsViewModel
