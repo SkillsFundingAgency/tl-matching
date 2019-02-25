@@ -25,7 +25,7 @@
             <input asp-for="OpportunityId" type="hidden" />
             <button type="submit" class="govuk-button--looks-like-link govuk-body">Find a different employer</button>
         </form>
-        <form asp-controller="Opportunity" asp-action="Update">
+        <form asp-controller="Employer" asp-action="Details">
             <input asp-for="OpportunityId" type="hidden" />
             <div class="govuk-form-group" sfa-validation-for="Contact" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" asp-for="Contact">

@@ -92,6 +92,27 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("employer-details", Name = "EmployerDetails_Post")]
+        public async Task<IActionResult> Details(EmployerDetailsViewModel viewModel)
+        {
+            TempData["OpportunityId"] = viewModel.OpportunityId;
+
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            var dto = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
+
+            dto.Contact = viewModel.Contact;
+            dto.ContactEmail = viewModel.ContactEmail;
+            dto.ContactPhone = viewModel.ContactPhone;
+            dto.ModifiedBy = HttpContext.User.GetUserName();
+
+            await _opportunityService.UpdateOpportunity(dto);
+
+            return RedirectToAction(nameof(OpportunityController.CheckAnswers), "Opportunity");
+        }
+
+        [HttpPost]
         public IActionResult GoBack(EmployerDetailsViewModel viewModel)
         {
             TempData["OpportunityId"] = viewModel.OpportunityId;

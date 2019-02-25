@@ -31,27 +31,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("Placements_Get");
         }
 
-        [HttpPost]
-        [Route("opportunity-update", Name = "OpportunityUpdate_Post")]
-        public async Task<IActionResult> Update(EmployerDetailsViewModel viewModel)
-        {
-            TempData["OpportunityId"] = viewModel.OpportunityId;
-
-            if (!ModelState.IsValid)
-                return View("/Views/Employer/Details.cshtml", viewModel);
-
-            var dto = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
-
-            dto.Contact = viewModel.Contact;
-            dto.ContactEmail = viewModel.ContactEmail;
-            dto.ContactPhone = viewModel.ContactPhone;
-            dto.ModifiedBy = HttpContext.User.GetUserName();
-
-            await _opportunityService.UpdateOpportunity(dto);
-
-            return RedirectToAction(nameof(OpportunityController.CheckAnswers), "Opportunity");
-        }
-
         [HttpGet]
         [Route("placement-information", Name = "Placements_Get")]
         public IActionResult Placements()
