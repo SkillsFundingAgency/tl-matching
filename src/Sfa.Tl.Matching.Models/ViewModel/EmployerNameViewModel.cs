@@ -34,6 +34,9 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         private bool IsAkaIncluded()
         {
+            if (string.IsNullOrEmpty(BusinessName))
+                return false;
+
             return BusinessName.Contains("(") && BusinessName.Substring(BusinessName.Length - 1) == ")";
         }
     }
