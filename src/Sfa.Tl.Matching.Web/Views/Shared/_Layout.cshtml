@@ -1,9 +1,10 @@
-﻿@using Microsoft.ApplicationInsights.AspNetCore
+﻿@using System.Net
+@using Microsoft.ApplicationInsights.AspNetCore
 @inject JavaScriptSnippet JavaScriptSnippet
 <!DOCTYPE html>
 <html class="govuk-template ">
 
-@Html.Partial("Partials/_govuk_Head")
+<partial name="_govuk_Head" />
 
 <body class="govuk-template__body ">
     <script>
@@ -11,22 +12,20 @@
     </script>
 
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
-    @Html.Partial("Partials/_govuk_Header")
-
-    @Html.Partial("Partials/_govuk_PhaseBanner")
-
-
-
+    
+    <partial name="_govuk_Header" />
+    <partial name="_govuk_PhaseBanner" />
+    
     <div class="govuk-width-container">
-        @Html.Partial("Partials/_govuk_BackLink")
+
+        @*<partial name="_govuk_BackLink"/>*@
         <main class="govuk-main-wrapper" id="main-content" role="main">
             @RenderBody()
         </main>
     </div>
 
-    @Html.Partial("Partials/_govuk_Footer")
-    @Html.Partial("Partials/_govuk_Scripts")
-
+    <partial name="_govuk_Footer" />
+    <partial name="_govuk_Scripts" />
 
 </body>
 </html>
