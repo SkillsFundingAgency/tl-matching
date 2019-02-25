@@ -23,10 +23,7 @@
         </h2>
         <form asp-controller="Employer" asp-action="GoBack">
             <input asp-for="OpportunityId" type="hidden" />
-
-            <p class="govuk-body">
-                <button type="submit">Find a different employer</button>
-            </p>
+            <button type="submit" class="govuk-button--looks-like-link govuk-body">Find a different employer</button>
         </form>
         <form asp-controller="Opportunity" asp-action="Update">
             <input asp-for="OpportunityId" type="hidden" />
