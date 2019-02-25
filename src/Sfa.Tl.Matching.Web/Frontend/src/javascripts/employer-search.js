@@ -18,11 +18,10 @@ var employer = (function () {
             success: function (employers) {
                 var filteredResults = employers.filter(e => e.indexOf(query) !== -1);
                 populateResults(filteredResults);
-                $("#BusinessName").val("");
             },
             timeout: 5000,
             error: function () {
-                alert("An error occurred.");
+                console.log("An error occurred.");
             }
         });
     }
