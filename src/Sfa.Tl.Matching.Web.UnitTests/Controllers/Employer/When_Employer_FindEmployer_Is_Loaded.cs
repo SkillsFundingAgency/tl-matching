@@ -9,12 +9,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Name_Is_Loaded
+    public class When_Employer_FindEmployer_Is_Loaded
     {
         private readonly IActionResult _result;
         private const int OpportunityId = 12;
 
-        public When_Employer_Name_Is_Loaded()
+        public When_Employer_FindEmployer_Is_Loaded()
         {
             var employerService = Substitute.For<IEmployerService>();
             var opportunityService = Substitute.For<IOpportunityService>();
@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 TempData = tempData
             };
 
-            _result = employerController.Name();
+            _result = employerController.FindEmployer();
         }
 
         [Fact]

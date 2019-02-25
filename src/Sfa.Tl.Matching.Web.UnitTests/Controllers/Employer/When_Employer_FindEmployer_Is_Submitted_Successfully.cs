@@ -10,18 +10,19 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Name_Is_Submitted_Successfully
+    public class When_Employer_FindEmployer_Is_Submitted_Successfully
     {
         private readonly IEmployerService _employerService;
         private readonly IOpportunityService _opportunityService;
         private readonly OpportunityDto _dto = new OpportunityDto();
         private const string EmployerName = "EmployerName";
+        private const string UserEmail = "UserEmail";
         private const string ModifiedBy = "ModifiedBy";
         private readonly EmployerNameViewModel _viewModel = new EmployerNameViewModel();
 
         private const int OpportunityId = 1;
 
-        public When_Employer_Name_Is_Submitted_Successfully()
+        public When_Employer_FindEmployer_Is_Submitted_Successfully()
         {
             _viewModel.OpportunityId = OpportunityId;
             _viewModel.BusinessName = EmployerName;
@@ -37,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             employerController.AddUsernameToContext(ModifiedBy);
 
             employerController.TempData = tempData;
-            employerController.Name(_viewModel).GetAwaiter().GetResult();
+            employerController.FindEmployer(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

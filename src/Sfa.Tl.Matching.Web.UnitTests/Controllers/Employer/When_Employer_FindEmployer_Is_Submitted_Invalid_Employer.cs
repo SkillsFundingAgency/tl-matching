@@ -10,12 +10,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Name_Is_Submitted_Invalid_Employer
+    public class When_Employer_FindEmployer_Is_Submitted_Invalid_Employer
     {
         private readonly IActionResult _result;
         private readonly EmployerController _employerController;
 
-        public When_Employer_Name_Is_Submitted_Invalid_Employer()
+        public When_Employer_FindEmployer_Is_Submitted_Invalid_Employer()
         {
             var employerService = Substitute.For<IEmployerService>();
             employerService.GetEmployer(Arg.Any<string>(), Arg.Any<string>())
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 TempData = tempData
             };
 
-            _result = _employerController.Name(viewModel).GetAwaiter().GetResult();
+            _result = _employerController.FindEmployer(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("who-is-employer", Name = "EmployerName_Get")]
-        public IActionResult Name()
+        public IActionResult FindEmployer()
         {
             var opportunityId = (int)TempData["OpportunityId"];
 
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("who-is-employer", Name = "EmployerName_Post")]
-        public async Task<IActionResult> Name(EmployerNameViewModel viewModel)
+        public async Task<IActionResult> FindEmployer(EmployerNameViewModel viewModel)
         {
             TempData["OpportunityId"] = viewModel.OpportunityId;
 
