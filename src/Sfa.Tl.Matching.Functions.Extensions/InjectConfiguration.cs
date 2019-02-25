@@ -134,7 +134,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
 
-            services.AddSingleton<ISearchProvider, SqlSearchProvider>();
+            services.AddTransient<ISearchProvider, SqlSearchProvider>();
         }
     }
 }
