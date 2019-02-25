@@ -92,7 +92,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("employer-details-back", Name = "EmployerDetailsBack_Post")]
         public IActionResult GoBack(EmployerDetailsViewModel viewModel)
         {
             TempData["OpportunityId"] = viewModel.OpportunityId;
