@@ -10,13 +10,16 @@ namespace Sfa.Tl.Matching.Application.Services
     public class OpportunityService : IOpportunityService
     {
         private readonly IMapper _mapper;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IRepository<Opportunity> _repository;
 
         public OpportunityService(
             IMapper mapper,
+            IDateTimeProvider dateTimeProvider,
             IRepository<Opportunity> repository)
         {
             _mapper = mapper;
+            _dateTimeProvider = dateTimeProvider;
             _repository = repository;
         }
 
@@ -37,6 +40,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task UpdateOpportunity(OpportunityDto dto)
         {
+            dto.ModifiedOn = _dateTimeProvider.UtcNow();
+
             var opportunity = _mapper.Map<Opportunity>(dto);
             await _repository.Update(opportunity);
         }

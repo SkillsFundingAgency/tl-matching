@@ -16,6 +16,8 @@
             </div>
         }
         <form asp-action="Name">
+            <input asp-for="OpportunityId" type="hidden" />
+
             <div class="govuk-form-group" sfa-validation-for="BusinessName" sfa-validationerror-class="govuk-form-group--error">
                 <h1 class="govuk-label-wrapper">
                     <label class="govuk-label govuk-label--xl" asp-for="BusinessName">
@@ -27,7 +29,8 @@
                     </span>
                 </h1>
 
-                <select id="businessName" class="govuk-input govuk-input" />
+                <select id="BusinessName" name="BusinessName" class="govuk-input govuk-input" asp-for="BusinessName">
+                </select>
 
             </div>
 
@@ -37,4 +40,3 @@
         </form>
     </div>
 </div>
-

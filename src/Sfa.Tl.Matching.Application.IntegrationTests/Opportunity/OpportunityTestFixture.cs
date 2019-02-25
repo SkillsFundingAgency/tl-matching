@@ -27,10 +27,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             var repository = new OpportunityRepository(loggerRepository, MatchingDbContext);
 
             var config = new MapperConfiguration(c => c.AddProfile<OpportunityMapper>());
-
             var mapper = new Mapper(config);
 
-            OpportunityService = new OpportunityService(mapper, repository);
+            var dateTimeProvider = new DateTimeProvider();
+
+            OpportunityService = new OpportunityService(mapper, dateTimeProvider , repository);
         }
 
         internal void ResetData(string postcode)

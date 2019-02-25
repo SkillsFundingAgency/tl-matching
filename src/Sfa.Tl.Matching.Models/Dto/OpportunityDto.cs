@@ -21,5 +21,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string LocalAuthority { get; set; }
         public string UserEmail { get; set; }
         public string CreatedBy { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public string ModifiedBy { get; set; }
     }
 }

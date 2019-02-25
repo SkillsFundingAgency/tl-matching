@@ -30,11 +30,34 @@ namespace Sfa.Tl.Matching.Web.Controllers
             dto.Distance = 1;
             dto.RouteId = 1;
 
+            dto.CreatedBy = HttpContext.User.GetUserName();
+
             var opportunityId = await _opportunityService.CreateOpportunity(dto);
 
             TempData["OpportunityId"] = opportunityId;
 
             return RedirectToRoute("Placements_Get");
+        }
+
+        [HttpPost]
+        [Route("opportunity-update", Name = "OpportunityUpdate_Post")]
+        public async Task<IActionResult> Update(EmployerDetailsViewModel viewModel)
+        {
+            TempData["OpportunityId"] = viewModel.OpportunityId;
+
+            if (!ModelState.IsValid)
+                return View("/Views/Employer/Details.cshtml", viewModel);
+
+            var dto = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
+
+            dto.Contact = viewModel.Contact;
+            dto.ContactEmail = viewModel.ContactEmail;
+            dto.ContactPhone = viewModel.ContactPhone;
+            dto.ModifiedBy = HttpContext.User.GetUserName();
+
+            await _opportunityService.UpdateOpportunity(dto);
+
+            return RedirectToAction(nameof(OpportunityController.CheckAnswers), "Opportunity");
         }
 
         [HttpGet]
@@ -67,10 +90,18 @@ namespace Sfa.Tl.Matching.Web.Controllers
             dto.JobTitle = viewModel.JobTitle;
             dto.PlacementsKnown = viewModel.PlacementsKnown;
             dto.Placements = viewModel.Placements;
+            dto.ModifiedBy = HttpContext.User.GetUserName();
 
             await _opportunityService.UpdateOpportunity(dto);
 
             return RedirectToRoute("EmployerName_Get");
+        }
+
+        [HttpGet]
+        [Route("check-answers", Name = "CheckAnswers_Get")]
+        public IActionResult CheckAnswers()
+        {
+            return View();
         }
 
         private void Validate(PlacementInformationViewModel viewModel)
