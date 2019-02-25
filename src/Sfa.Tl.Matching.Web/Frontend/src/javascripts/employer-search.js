@@ -17,11 +17,8 @@ var employer = (function () {
             data: { query: query },
             success: function (employers) {
                 var filteredResults = employers.filter(e => e.indexOf(query) !== -1);
-                //if (filteredResults.length > 0) {
-                    populateResults(filteredResults);
-                //} else {
-                    $("#BusinessName").val("");
-                //}
+                populateResults(filteredResults);
+                $("#BusinessName").val("");
             },
             timeout: 5000,
             error: function () {
