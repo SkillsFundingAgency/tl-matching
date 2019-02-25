@@ -1,0 +1,59 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
+
+@{
+    ViewData["Title"] = "Select Providers";
+}
+
+<h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">@Model.SearchResults?.Results?.Count() </span>results in <span class="govuk-!-font-weight-bold">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value.ToString() == @Model.SearchParameters.SelectedRouteId)?.Text </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
+
+<form asp-controller="Opportunity" asp-action="Create">
+    <input type="hidden" name="Postcode" value="@Model.SearchParameters.Postcode" />
+    <input type="hidden" name="Distance" value="@Model.SearchParameters.SearchRadius" />
+    <input type="hidden" name="RouteId" value="@Model.SearchParameters.SelectedRouteId" />
+    @*TODO: replace link with link-styled button *@
+    <button type="submit" class="govuk-button">No suitable providers? Let us know</button>
+</form>
+
+<p class="govuk-hint">Choose who the employer wants to hear from</p>
+
+@if (Model.SearchResults.Results != null && Model.SearchResults.Results.Any())
+{
+    <ol class="das-search-results">
+        @foreach (var searchResult in Model.SearchResults.Results)
+        {
+            <li class="das-search-results__list-item das-search-results__list-item--with-checkbox">
+                <div class="govuk-checkboxes">
+                    <div class="govuk-checkboxes__item">
+                        <input class="govuk-checkboxes__input" id="provider-1" name="provider" type="checkbox" value="1">
+                        <label class="govuk-heading-m govuk-checkboxes__label" for="provider-1">
+                            @searchResult.ProviderName
+                            <span class="das-search-results__click-area"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <ul class="das-inline-list das-inline-list--bar">
+                    <li>searchResult.Postcode</li>
+                    <li>@($" {searchResult.Distance:#.00}") miles</li>
+                </ul>
+                <p>Has students learning:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    @foreach (var qualification in searchResult.QualificationShortTitles)
+                    {
+                        <li>
+                            @qualification
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+    </ol>
+}
+else
+{
+    <p class="govuk-body">You can:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>increase the distance from the employer’s postcode</li>
+        <li>try a different skill area</li>
+    </ul>
+}

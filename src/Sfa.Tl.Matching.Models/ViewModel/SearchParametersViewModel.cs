@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     {
         public const int DefaultSearchRadius = 10;
 
-        [Required(ErrorMessage = "Postcode is not in a valid format, is partial postcode or does not exist")]
+        [Required(ErrorMessage = "You must enter a postcode")]
         public string Postcode { get; set; }
 
         public int SearchRadius { get; set; }

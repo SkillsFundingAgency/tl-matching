@@ -1,66 +1,22 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
 
 @{
     ViewData["Title"] = "Select Providers";
 }
 
-@if (!ViewData.ModelState.IsValid)
-{
-    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-        <h2 class="govuk-error-summary__title" id="error-summary-title">
-            This page has errors
-        </h2>
-        <div class="govuk-error-summary__body">
-            <ul class="govuk-list govuk-error-summary__list">
-                <li><a sfa-validation-for="Postcode"></a></li>
-            </ul>
-        </div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <partial name="_searchbox" model="Model.SearchParameters" />
     </div>
-}
-
-<h1>Select Providers</h1>
-
-
-@* TODO Add container and lay this out horizontally *@
-<form class="form" asp-controller="Provider" asp-action="Results">
-    <div class="govuk-form-group">
-        <label class="govuk-label" asp-for="SelectedRouteId">
-            Skill area
-        </label>
-        <select class="govuk-select" asp-for="SelectedRouteId" asp-items="Model.RoutesSelectList"></select>
-    </div>
-    <div class="govuk-form-group" sfa-validation-for="Postcode" sfa-validationerror-class="govuk-form-group--error">
-        <label class="govuk-label" asp-for="Postcode">
-            Postcode
-        </label>
-        <span class="govuk-error-message" asp-validation-for="Postcode"></span>
-        <input class="govuk-input govuk-input--width-5" asp-for="Postcode" type="text"
-               sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error">
-    </div>
-    <div class="govuk-form-group" sfa-validation-for="SearchRadius" sfa-validationerror-class="govuk-form-group--error">
-        <label class="govuk-label" asp-for="SearchRadius">
-            Providers within
-        </label>
-        <span class="govuk-error-message" asp-validation-for="SearchRadius"></span>
-        <select class="govuk-select" asp-for="SearchRadius">
-            <option value="5">5 miles</option>
-            <option value="10">10 miles</option>
-            <option value="15">15 miles</option>
-            <option value="20">20 miles</option>
-            <option value="25">25 miles</option>
-        </select>
-    </div>
-
-    <button type="submit" class="govuk-button">Search again</button>
-</form>
-
-<div>
-    <h2 class="govuk-heading-m">Search results</h2>
-    
-    @* TODO: Add results container and styled list *@
-
 </div>
 
-<form asp-controller="Opportunity" asp-action="Create">
-    <button type="submit" class="govuk-button--looks-like-link govuk-body">No suitable providers</button>
-</form>
+<div class="govuk-grid-row govuk-!-margin-top-5">
+    <div class="govuk-grid-column-two-thirds">
+        <partial name="_searchresults" model="Model" />
+    </div>
+</div>
+
+
+
+
+

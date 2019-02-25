@@ -16,13 +16,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.FileReader;
-using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
@@ -37,10 +37,10 @@ namespace Sfa.Tl.Matching.Web
         public Startup(IConfiguration configuration)
         {
             _configuration = ConfigurationLoader.Load(
-                configuration[Infrastructure.Configuration.Constants.EnvironmentNameConfigKey],
-                configuration[Infrastructure.Configuration.Constants.ConfigurationStorageConnectionStringConfigKey],
-                configuration[Infrastructure.Configuration.Constants.VersionConfigKey],
-                configuration[Infrastructure.Configuration.Constants.ServiceNameConfigKey]);
+                configuration[Constants.EnvironmentNameConfigKey],
+                configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
+                configuration[Constants.VersionConfigKey],
+                configuration[Constants.ServiceNameConfigKey]);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -141,9 +141,23 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddSingleton(_configuration);
 
-            RegisterEmployerFileReader(services); // TODO AU THIS NEEDS TO GO
+			RegisterEmployerFileReader(services); // TODO AU THIS NEEDS TO GO
+			RegisterProviderFileReader(services);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
+        }
+
+        //TODO: Remove RegisterProviderFileReader after merged with importer changes
+        private static void RegisterProviderFileReader(IServiceCollection services)
+        {
+            services.AddTransient<IDataParser<ProviderDto>, ProviderDataParser>();
+            services.AddTransient<IValidator<ProviderFileImportDto>, ProviderDataValidator>();
+
+            services.AddTransient<IFileReader<ProviderFileImportDto, ProviderDto>, ExcelFileReader<ProviderFileImportDto, ProviderDto>>(provider =>
+                new ExcelFileReader<ProviderFileImportDto, ProviderDto>(
+                    provider.GetService<ILogger<ExcelFileReader<ProviderFileImportDto, ProviderDto>>>(),
+                    provider.GetService<IDataParser<ProviderDto>>(),
+                    (IValidator<ProviderFileImportDto>)provider.GetServices(typeof(IValidator<ProviderFileImportDto>)).Single(t => t.GetType() == typeof(ProviderDataValidator))));
         }
 
         private static void RegisterRepositories(IServiceCollection services)
@@ -153,7 +167,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
             services.AddTransient<IRepository<Route>, RouteRepository>();
             services.AddTransient<IRepository<Path>, PathRepository>();
-            //services.AddTransient<IRepository<Provider>, ProviderRepository>();
+            services.AddTransient<IRepository<Provider>, ProviderRepository>();
+            services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -161,9 +176,10 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IOpportunityService, OpportunityService>();
-            //services.AddTransient<IProviderService, ProviderService>();
+            services.AddTransient<IProviderService, ProviderService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+            services.AddSingleton<ISearchProvider, DummySearchProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
         }

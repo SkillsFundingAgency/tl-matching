@@ -24,6 +24,9 @@
         "sharedEnvResourceGroup": {
             "type": "string"
         },
+        "sharedKeyVaultName": {
+            "type": "string"
+        },
         "sharedSQLServerName": {
             "type": "string"
         },
@@ -35,6 +38,12 @@
         },
         "configurationStorageConnectionString": {
             "type": "securestring"
+        },
+        "uiCustomHostName": {
+            "type": "string"
+        },
+        "certificateName": {
+            "type": "string"
         }
     },
     "variables": {
@@ -111,6 +120,30 @@
         },
         {
             "apiVersion": "2017-05-10",
+            "name": "ui-app-service-certificate",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-certificate.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultCertificateName": {
+                        "value": "[parameters('certificateName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('sharedKeyVaultName')]"
+                    },
+                    "keyVaultResourceGroup": {
+                        "value": "[parameters('sharedEnvResourceGroup')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
             "name": "ui-app-service",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -152,6 +185,12 @@
                                 "value": "[reference('ui-app-insights').outputs.InstrumentationKey.value]"
                             }
                         ]
+                    },
+                    "customHostName": {
+                        "value": "[parameters('uiCustomHostName')]"
+                    },
+                    "certificateThumbprint": {
+                        "value": "[reference('ui-app-service-certificate').outputs.certificateThumbprint.value]"
                     }
                 }
             }

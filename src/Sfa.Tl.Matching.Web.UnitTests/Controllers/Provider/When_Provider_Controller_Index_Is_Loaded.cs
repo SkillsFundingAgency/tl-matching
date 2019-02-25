@@ -9,6 +9,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
@@ -28,9 +29,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var logger = Substitute.For<ILogger<ProviderController>>();
             var mapper = Substitute.For<IMapper>();
 
+            var providerService = Substitute.For<IProviderService>();
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
-            var providerController = new ProviderController(logger, mapper, routePathService);
+            var providerController = new ProviderController(logger, mapper, routePathService, providerService);
 
             _result = providerController.Index();
         }
@@ -53,16 +55,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_ViewModel_SearchRadius_Should_Be_Default_Search_Radius()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<SearchParametersViewModel>();
             viewModel.SearchRadius.Should().Be(SearchParametersViewModel.DefaultSearchRadius);
-        }
-
-        private SearchParametersViewModel GetViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            var viewModel = viewResult?.Model as SearchParametersViewModel;
-
-            return viewModel;
         }
     }
 }

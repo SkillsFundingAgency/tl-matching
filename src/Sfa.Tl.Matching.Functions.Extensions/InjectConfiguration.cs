@@ -17,6 +17,7 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
@@ -132,6 +133,8 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRoutePathMappingService, RoutePathMappingService>();
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
+
+            services.AddSingleton<ISearchProvider, SqlSearchProvider>();
         }
     }
 }
