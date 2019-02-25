@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -11,10 +12,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class EmployerController : Controller
     {
         private readonly IEmployerService _employerService;
+        private readonly IOpportunityService _opportunityService;
 
-        public EmployerController(IEmployerService employerService)
+        public EmployerController(IEmployerService employerService,
+            IOpportunityService opportunityService)
         {
             _employerService = employerService;
+            _opportunityService = opportunityService;
         }
 
         [HttpGet]
@@ -33,38 +37,56 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("who-is-employer", Name = "EmployerName_Post")]
-        public IActionResult Name(EmployerNameViewModel viewModel)
+        public async Task<IActionResult> Name(EmployerNameViewModel viewModel)
         {
             TempData["OpportunityId"] = viewModel.OpportunityId;
 
+            await Validate(viewModel);
+
             if (!ModelState.IsValid)
                 return View(viewModel);
+
+            var dto = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
+
+            dto.EmployerName = viewModel.BusinessName;
+            dto.ModifiedBy = HttpContext.User.GetUserName();
+
+            await _opportunityService.UpdateOpportunity(dto);
 
             return RedirectToRoute("EmployerDetails_Get");
         }
 
         [HttpGet]
         [Route("employer-search", Name = "EmployerSearch_Get")]
-        public IActionResult Search(string query)
+        public async Task<IActionResult> Search(string query)
         {
-            var employers = new List<string>();
-            employers.Add("Employer1");
-            employers.Add("Employer2");
-            employers.Add("Employer3");
-            employers.Add("Employer4");
+            var employers = await _employerService.Search(query);
+            var employersSelectList = employers.Select(e => e.EmployerNameWithAka).ToList();
 
-            return Ok(employers);
+            return Ok(employersSelectList);
+        }
+
+        private async Task Validate(EmployerNameViewModel viewModel)
+        {
+            if (string.IsNullOrEmpty(viewModel.BusinessName)) return;
+
+            var employer = await _employerService.GetEmployer(viewModel.CompanyName, viewModel.AlsoKnownAs);
+            if (employer == null)
+                ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
         }
 
         [HttpGet]
         [Route("employer-details", Name = "EmployerDetails_Get")]
-        public IActionResult Details()
+        public async Task<IActionResult> Details()
         {
             var opportunityId = (int)TempData["OpportunityId"];
 
+            var dto = await _opportunityService.GetOpportunity(opportunityId);
+
             var viewModel = new EmployerDetailsViewModel
             {
-                OpportunityId = opportunityId
+                OpportunityId = opportunityId,
+                EmployerName = dto.EmployerName
             };
 
             return View(viewModel);
@@ -75,16 +97,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public IActionResult Details(EmployerDetailsViewModel viewModel)
         {
             TempData["OpportunityId"] = viewModel.OpportunityId;
-
+            
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            return View();
+            return RedirectToRoute("CheckAnswers_Get");
         }
 
-        public IActionResult Check()
+        [HttpPost]
+        [Route("employer-details-back", Name = "EmployerDetailsBack_Post")]
+        public IActionResult GoBack(EmployerDetailsViewModel viewModel)
         {
-            return View();
+            TempData["OpportunityId"] = viewModel.OpportunityId;
+            
+            return RedirectToRoute("EmployerName_Get");
         }
     }
 }

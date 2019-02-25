@@ -6,9 +6,11 @@
 var employer = (function () {
     accessibleAutocomplete.enhanceSelectElement({
         defaultValue: "",
-        selectElement: document.querySelector("#businessName"),
+        autoSelect: true,
+        selectElement: document.querySelector("#BusinessName"),
         minLength: 2,
-        source: search
+        source: search,
+        name: "BusinessName"
     });
 
     function search(query, populateResults) {
@@ -18,7 +20,11 @@ var employer = (function () {
             data: { query: query },
             success: function (employers) {
                 var filteredResults = employers.filter(e => e.indexOf(query) !== -1);
-                populateResults(filteredResults);
+                //if (filteredResults.length > 0) {
+                    populateResults(filteredResults);
+                //} else {
+                //    $("#BusinessName").val("");
+                //}
             },
             timeout: 5000,
             error: function () {

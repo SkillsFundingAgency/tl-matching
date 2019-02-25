@@ -44,6 +44,16 @@ namespace Sfa.Tl.Matching.Application.Services
             throw new NotImplementedException();
         }
 
+        public async Task<EmployerDto> GetEmployer(string companyName, string alsoKnownAs)
+        {
+            var employer = await _repository.GetSingleOrDefault(e => e.CompanyName == companyName &&
+                                                e.AlsoKnownAs == alsoKnownAs);
+
+            var dto = _mapper.Map<Employer, EmployerDto>(employer);
+
+            return dto;
+        }
+
         public void CreateEmployer()
         {
             throw new NotImplementedException();
@@ -60,7 +70,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var employers = searchResults.Select(e => new EmployerSearchResultDto
             {
-                EmployerName = $"{e.CompanyName} ({e.AlsoKnownAs})"
+                EmployerName = e.CompanyName,
+                AlsoKnownAs = e.AlsoKnownAs
             }).OrderBy(e => e.EmployerName);
 
             return employers;
