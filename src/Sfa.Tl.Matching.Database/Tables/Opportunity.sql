@@ -14,7 +14,6 @@
 	[Contact] NVARCHAR(100) NULL,
 	[ContactEmail] VARCHAR(320) NULL,
 	[ContactPhone] VARCHAR(150) NULL,
-	[LocalAuthority] NVARCHAR(50) NULL,
 	[UserEmail] VARCHAR(320) NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 

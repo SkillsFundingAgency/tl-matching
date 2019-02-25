@@ -17,7 +17,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string Contact { get; set; }
         public string ContactEmail { get; set; }
         public string ContactPhone { get; set; }
-        public string LocalAuthority { get; set; }
         public string UserEmail { get; set; }
     }
 }
