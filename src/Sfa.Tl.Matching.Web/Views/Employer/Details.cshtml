@@ -1,0 +1,54 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerDetailsViewModel
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">
+                    This page has errors
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a sfa-validation-for="Contact"></a></li>
+                        <li><a sfa-validation-for="ContactEmail"></a></li>
+                        <li><a sfa-validation-for="ContactPhone"></a></li>
+                    </ul>
+                </div>
+            </div>
+        }
+        <h1 class="govuk-heading-l">Check employer’s details</h1>
+        <h2 class="govuk-heading-m">
+            <label asp-for="EmployerName">@Model.EmployerName</label>
+        </h2>
+        <form asp-controller="Employer" asp-action="GoBack">
+            <input asp-for="OpportunityId" type="hidden" />
+            <button type="submit" class="govuk-button--looks-like-link govuk-body">Find a different employer</button>
+        </form>
+        <form asp-controller="Employer" asp-action="Details">
+            <input asp-for="OpportunityId" type="hidden" />
+            <div class="govuk-form-group" sfa-validation-for="Contact" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label" asp-for="Contact">
+                    Contact name for placements
+                </label>
+                <span class="govuk-error-message" asp-validation-for="Contact"></span>
+                <input asp-for="Contact" class="govuk-input govuk-input govuk-input--width-20" />
+            </div>
+            <div class="govuk-form-group" sfa-validation-for="ContactEmail" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label" asp-for="ContactEmail">
+                    Email
+                </label>
+                <span class="govuk-error-message" asp-validation-for="ContactEmail"></span>
+                <input asp-for="ContactEmail" class="govuk-input govuk-input--width-20" />
+            </div>
+            <div class="govuk-form-group" sfa-validation-for="ContactPhone" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label" asp-for="ContactPhone">
+                    Phone number
+                </label>
+                <span class="govuk-error-message" asp-validation-for="ContactPhone"></span>
+                <input asp-for="ContactPhone" class="govuk-input govuk-input--width-20" type="tel" autocomplete="tel" />
+            </div>
+            <button type="submit" class="govuk-button">Confirm and continue</button>
+        </form>
+    </div>
+</div>

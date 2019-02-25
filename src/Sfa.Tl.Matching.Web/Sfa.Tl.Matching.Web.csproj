@@ -8,18 +8,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\assetsss\**" />
     <Compile Remove="wwwroot\css\**" />
     <Compile Remove="wwwroot\js\**" />
     <Compile Remove="wwwroot\lib\**" />
+    <Content Remove="wwwroot\assetsss\**" />
     <Content Remove="wwwroot\css\**" />
     <Content Remove="wwwroot\js\**" />
     <Content Remove="wwwroot\lib\**" />
+    <EmbeddedResource Remove="wwwroot\assetsss\**" />
     <EmbeddedResource Remove="wwwroot\css\**" />
     <EmbeddedResource Remove="wwwroot\js\**" />
     <EmbeddedResource Remove="wwwroot\lib\**" />
+    <None Remove="wwwroot\assetsss\**" />
     <None Remove="wwwroot\css\**" />
     <None Remove="wwwroot\js\**" />
     <None Remove="wwwroot\lib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Frontend\src\javascripts\application.js" />
+    <Content Include="Frontend\src\javascripts\employer-search.js" />
+    <Content Include="Frontend\src\stylesheets\accessible-autocomplete.min.css" />
+    <Content Include="Frontend\src\stylesheets\application.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +51,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\fonts\" />
+    <Folder Include="wwwroot\assets\images\" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES2015</TypeScriptTarget>

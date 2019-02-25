@@ -29,8 +29,6 @@
                     <label class="govuk-label govuk-!-font-weight-bold" asp-for="SelectedRouteId">
                         Skill area
                     </label>
-                    <span class="govuk-error-message"></span>
-
                     <select class="govuk-select govuk-!-width-full" asp-for="SelectedRouteId" asp-items="Model.RoutesSelectList"></select>
 
                 </div>
@@ -40,7 +38,6 @@
                     <label class="govuk-label govuk-!-font-weight-bold" asp-for="Postcode">
                         Employer postcode
                     </label>
-                    <span class="govuk-error-message" asp-validation-for="Postcode"></span>
                     <input class="govuk-input govuk-input--width-5" asp-for="Postcode" type="text" sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error">
 
                 </div>
@@ -50,7 +47,6 @@
                     <label class="govuk-label govuk-!-font-weight-bold" asp-for="SearchRadius">
                         Providers within
                     </label>
-                    <span class="govuk-error-message" asp-validation-for="SearchRadius"></span>
                     <select class="govuk-select govuk-!-width-two-thirds" asp-for="SearchRadius">
                         <option value="5">5 miles</option>
                         <option value="10">10 miles</option>

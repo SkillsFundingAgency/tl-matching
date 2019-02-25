@@ -38,6 +38,38 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return createdRecordsCount;
         }
 
+        public virtual async Task<int> Create(T entity)
+        {
+            await _dbContext.AddAsync(entity);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogError(due.Message, due.InnerException);
+                throw;
+            }
+
+            return entity.Id;
+        }
+
+        public virtual async Task Update(T entity)
+        {
+            _dbContext.Update(entity);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogError(due.Message, due.InnerException);
+                throw;
+            }
+        }
+
         public abstract Task<int> CreateMany(IEnumerable<T> entities);
 
         public abstract Task<IQueryable<T>> GetMany(Func<T, bool> predicate);
