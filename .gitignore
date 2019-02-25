@@ -302,3 +302,6 @@ __pycache__/
 [Aa]pplication.[Mm]in.css
 
 !launchSettings.json
+
+# wwwroot Now populated via gulp
+/wwwroot/
