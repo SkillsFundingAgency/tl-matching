@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
@@ -17,7 +16,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Placement_Information_Is_Submitted_Below_Min_Placements()
         {
-            var mapper = Substitute.For<IMapper>();
             var opportunityService = Substitute.For<IOpportunityService>();
             
             var viewModel = new PlacementInformationViewModel
@@ -27,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             };
 
             var tempData = Substitute.For<ITempDataDictionary>();
-            _opportunityController = new OpportunityController(mapper, opportunityService)
+            _opportunityController = new OpportunityController(opportunityService)
             {
                 TempData = tempData
             };

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -20,14 +19,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Opportunity_Controller_Update_Post_Is_Called()
         {
-            var mapper = Substitute.For<IMapper>();
             _viewModel.OpportunityId = OpportunityId;
 
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(_dto);
 
             var tempData = Substitute.For<ITempDataDictionary>();
-            var opportunityController = new OpportunityController(mapper, _opportunityService);
+            var opportunityController = new OpportunityController(_opportunityService);
             opportunityController.AddUsernameToContext("username");
 
             opportunityController.TempData = tempData;

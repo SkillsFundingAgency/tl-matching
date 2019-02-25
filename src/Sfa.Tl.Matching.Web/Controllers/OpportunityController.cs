@@ -12,12 +12,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
     [Authorize(Roles = RolesExtensions.AdminUser + "," + RolesExtensions.StandardUser)]
     public class OpportunityController : Controller
     {
-        private readonly IMapper _mapper;
         private readonly IOpportunityService _opportunityService;
 
-        public OpportunityController(IMapper mapper, IOpportunityService opportunityService)
+        public OpportunityController(IOpportunityService opportunityService)
         {
-            _mapper = mapper;
             _opportunityService = opportunityService;
         }
 
