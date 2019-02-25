@@ -19,11 +19,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public override async Task<int> Create(Employer employer)
-        {
-            return await BaseCreate(employer);
-        }
-
         public override async Task<int> CreateMany(IEnumerable<Employer> employers)
         {
             await ResetData();
@@ -39,11 +34,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public override Task<Employer> GetSingleOrDefault(Func<Employer, bool> predicate)
         {
             return _dbContext.Employer.SingleOrDefaultAsync(employer => predicate(employer));
-        }
-
-        public override async Task Update(Employer employer)
-        {
-            await BaseCreate(employer);
         }
 
         public async Task ResetData()

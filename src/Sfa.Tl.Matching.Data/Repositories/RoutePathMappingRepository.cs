@@ -17,11 +17,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public override async Task<int> Create(RoutePathMapping routePath)
-        {
-            return await BaseCreate(routePath);
-        }
-
         public override async Task<int> CreateMany(IEnumerable<RoutePathMapping> routePathMappings)
         {
             return await BaseCreateMany(routePathMappings);
@@ -35,11 +30,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public override Task<RoutePathMapping> GetSingleOrDefault(Func<RoutePathMapping, bool> predicate)
         {
             return _dbContext.RoutePathMapping.SingleOrDefaultAsync(routePathMapping => predicate(routePathMapping));
-        }
-
-        public override async Task Update(RoutePathMapping routePath)
-        {
-            await BaseUpdate(routePath);
         }
     }
 }

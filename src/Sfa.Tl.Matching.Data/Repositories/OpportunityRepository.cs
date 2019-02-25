@@ -19,11 +19,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public override async Task<int> Create(Opportunity opportunity)
-        {
-            return await BaseCreate(opportunity);
-        }
-
         public override async Task<int> CreateMany(IEnumerable<Opportunity> opportunities)
         {
             return await BaseCreateMany(opportunities);
@@ -37,11 +32,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public override async Task<Opportunity> GetSingleOrDefault(Func<Opportunity, bool> predicate)
         {
             return await _dbContext.Opportunity.AsNoTracking().SingleOrDefaultAsync(o => predicate(o));
-        }
-
-        public override async Task Update(Opportunity opportunity)
-        {
-            await BaseUpdate(opportunity);
         }
     }
 }

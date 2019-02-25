@@ -17,11 +17,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public override async Task<int> Create(ProviderVenue providerVenue)
-        {
-            return await BaseCreate(providerVenue);
-        }
-
         public override async Task<int> CreateMany(IEnumerable<ProviderVenue> providerVenues)
         {
             return await BaseCreateMany(providerVenues);
@@ -35,11 +30,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public override async Task<ProviderVenue> GetSingleOrDefault(Func<ProviderVenue, bool> predicate)
         {
             return await _dbContext.ProviderVenue.SingleOrDefaultAsync(p => predicate(p));
-        }
-
-        public override async Task Update(ProviderVenue providerVenue)
-        {
-            await BaseUpdate(providerVenue);
         }
     }
 }
