@@ -182,7 +182,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderService, ProviderService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            services.AddSingleton<ISearchProvider, DummySearchProvider>();
+            services.AddTransient<ISearchProvider, DummySearchProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
         }
