@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IEnumerable<EmployerSearchResultDto>> Search(string employerName)
         {
-            var searchResults = await _repository.GetMany(e => e.CompanyName.Contains(employerName));
+            var searchResults = await _repository.GetMany(e => e.CompanyName.Contains(employerName, StringComparison.CurrentCultureIgnoreCase));
 
             var employers = searchResults.Select(e => new EmployerSearchResultDto
             {

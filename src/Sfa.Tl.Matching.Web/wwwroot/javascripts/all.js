@@ -25,7 +25,7 @@ var employer = (function () {
                 contentType: "application/json",
                 data: { query: query },
                 success: function (employers) {
-                    var filteredResults = employers.filter(e => e.indexOf(query) !== -1);
+                    var filteredResults = employers.filter(e => e.toLowerCase().indexOf(query.toLowerCase()) !== -1);
                     populateResults(filteredResults);
                 },
                 timeout: 5000,
