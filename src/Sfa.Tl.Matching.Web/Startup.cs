@@ -171,7 +171,7 @@ namespace Sfa.Tl.Matching.Web
         {
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
             services.AddTransient<IRepository<Opportunity>, OpportunityRepository>();
-            services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
+            services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Route>, RouteRepository>();
             services.AddTransient<IRepository<Path>, PathRepository>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();

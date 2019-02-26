@@ -4,7 +4,7 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePathMapping.Builders
 {
-    internal class PathListBuilder
+    public class PathListBuilder
     {
         private readonly IQueryable<Path> _provider;
 

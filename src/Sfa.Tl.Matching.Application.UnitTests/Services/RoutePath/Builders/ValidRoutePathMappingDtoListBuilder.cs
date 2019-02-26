@@ -3,13 +3,11 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath.Builders
 {
-    internal class ValidRoutePathMappingDtoListBuilder
+    public class ValidRoutePathMappingDtoListBuilder
     {
-        private readonly IList<RoutePathMappingDto> _routePathMappingDtos;
-
-        public ValidRoutePathMappingDtoListBuilder(int numberOfItems)
+        public IEnumerable<QualificationRoutePathMappingDto> Build(int numberOfItems)
         {
-            _routePathMappingDtos = new List<RoutePathMappingDto>();
+            var routePathMappingDtos = new List<QualificationRoutePathMappingDto>();
 
             for (var i = 0; i < numberOfItems; i++)
             {

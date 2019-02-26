@@ -25,13 +25,13 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
                 "test",
                 context,
                 logger,
-                _routePathMappingService).GetAwaiter().GetResult();
+                _qualificationRoutePathMappingService).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void ImportQualificationPathMapping_Is_Called_Exactly_Once()
         {
-            _routePathMappingService
+            _qualificationRoutePathMappingService
                 .Received(1)
                 .ImportQualificationPathMapping(
                     Arg.Any<QualificationRoutePathMappingFileImportDto>());

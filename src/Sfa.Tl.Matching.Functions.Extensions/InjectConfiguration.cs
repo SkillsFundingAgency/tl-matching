@@ -121,7 +121,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
             services.AddTransient<IRepository<Route>, RouteRepository>();
             services.AddTransient<IRepository<Path>, PathRepository>();
-            services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
+            services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
             services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
         }
@@ -130,7 +130,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         {
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
-            services.AddTransient<IRoutePathMappingService, RoutePathMappingService>();
+            services.AddTransient<IQualificationRoutePathMappingService, QualificationRoutePathMappingService>();
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
 

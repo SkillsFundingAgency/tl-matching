@@ -6,9 +6,9 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
 {
-    public class QualificationRoutePathMappingDataParser : IDataParser<RoutePathMappingDto>
+    public class QualificationRoutePathMappingDataParser : IDataParser<QualificationRoutePathMappingDto>
     {
-        public IEnumerable<RoutePathMappingDto> Parse(FileImportDto fileImportDto)
+        public IEnumerable<QualificationRoutePathMappingDto> Parse(FileImportDto fileImportDto)
         {
             if (!(fileImportDto is QualificationRoutePathMappingFileImportDto data)) return null;
 
