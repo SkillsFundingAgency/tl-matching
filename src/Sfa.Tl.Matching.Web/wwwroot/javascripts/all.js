@@ -37,7 +37,7 @@ var employer = (function () {
                     $("#employerNamesWithIds").val(employerNamesWithIds.join(","));
                     $("#SelectedEmployerId").val("");
 
-                    var filteredResults = employerNames.filter(e => e.indexOf(query) !== -1);
+                    var filteredResults = employerNames.filter(e => e.toLowerCase().indexOf(query.toLowerCase()) !== -1);
                     populateResults(filteredResults);
                 },
                 timeout: 5000,
