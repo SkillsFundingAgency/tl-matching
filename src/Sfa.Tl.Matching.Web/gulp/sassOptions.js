@@ -9,7 +9,7 @@ sassOptions = {
       'node_modules/govuk-elements-sass/public/sass',
       'node_modules/govuk-frontend',
       'node_modules/accessible-autocomplete',
-      'src/sass'
+      'Frontend/src/sass'
   ],
 };
 

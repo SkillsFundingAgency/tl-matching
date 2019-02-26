@@ -17,15 +17,14 @@ gulp.task('govuk-js', () => {
         'node_modules/govuk-frontend/vendor/**.js',
         'node_modules/govuk-frontend/components/**/*.js'
     ])
-        .pipe(gulp.dest('../wwwroot/govuk/javascripts'));
+        .pipe(gulp.dest('wwwroot/govuk/javascripts'));
 });
 
-gulp.task('copy-js', ['copy-js-main', 'copy-js-employer']);
-
-gulp.task('copy-js-main', function () {
+gulp.task('copy-js', function () {
     return gulp.src([
         'node_modules/jquery/dist/jquery.min.js',
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
+        'Frontend/src/javascripts/employer-search.js'
     ])
         .pipe(concat('all.js'))
         .pipe(minify({
@@ -37,23 +36,9 @@ gulp.task('copy-js-main', function () {
         .pipe(gulp.dest(paths.dist.defaultJs))
 });
 
-gulp.task('copy-js-employer', function () {
-return gulp.src([
-   'src/javascripts/employer-search.js'
-])
-    .pipe(minify({
-        noSource: true,
-        ext: {
-            min: '.min.js'
-        }
-    }))
-    .pipe(gulp.dest(paths.dist.defaultJs))
-});
-
-
 gulp.task('copy-assets', () => {
-    gulp.src('src/assets/**/*')
-        .pipe(gulp.dest('../wwwroot/assets'))
+    gulp.src('Frontend/src/assets/**/*')
+        .pipe(gulp.dest('wwwroot/assets'))
 });
 
 gulp.task('sass', () => gulp
@@ -64,9 +49,9 @@ gulp.task('sass', () => gulp
 gulp.task('merge-css', function () {
     return gulp.src([
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.css',
-        "src/stylesheets/css/*.css"
+        "Frontend/src/stylesheets/css/*.css"
     ])
         .pipe(concatCss("main.css"))
         .pipe(cleanCSS({ compatibility: 'ie8' }))
-        .pipe(gulp.dest('../wwwroot/stylesheets/'));
+        .pipe(gulp.dest('wwwroot/stylesheets/'));
 })
