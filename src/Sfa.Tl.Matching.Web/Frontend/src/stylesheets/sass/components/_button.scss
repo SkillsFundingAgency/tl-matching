@@ -1,0 +1,39 @@
+.tl-button {
+
+}
+
+.tl-button--blue {
+  background: govuk-colour("blue");
+  &:hover,
+  &:focus {
+    background: darken(govuk-colour("blue"), 10%);
+  }
+}
+
+// Rework button to look like a link
+.tl-button--looks-like-link {
+    display: block;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    text-decoration: underline;
+    background: none;
+    box-shadow: none;
+    text-align: left;
+    color: #005ea5;
+
+    &:hover, &:active {
+        top: 0;
+        background: none;
+        color: #2b8cc4;
+        text-decoration: underline;
+    }
+
+    &:focus {
+        background: #ffbf47;
+    }
+
+    &:visited {
+        color: #4c2c92;
+    }
+}

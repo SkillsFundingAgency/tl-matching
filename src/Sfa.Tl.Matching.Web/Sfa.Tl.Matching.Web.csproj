@@ -27,10 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Frontend\src\javascripts\application.js" />
     <Content Include="Frontend\src\javascripts\employer-search.js" />
-    <Content Include="Frontend\src\stylesheets\accessible-autocomplete.min.css" />
-    <Content Include="Frontend\src\stylesheets\application.css" />
   </ItemGroup>
 
   <ItemGroup>
