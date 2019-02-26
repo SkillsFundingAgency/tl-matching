@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<int> ImportEmployer(EmployerFileImportDto fileImportDto);
         Task<IEnumerable<EmployerSearchResultDto>> Search(string employerName);
         void GetEmployerByName();
-        Task<EmployerDto> GetEmployer(string companyName, string alsoKnownAs);
+        Task<EmployerDto> GetEmployer(int id);
         void CreateEmployer();
         void UpdateEmployer();
     }

@@ -2,18 +2,8 @@
 {
     public class EmployerSearchResultDto
     {
+        public int Id { get; set; }
         public string EmployerName { get; set; }
         public string AlsoKnownAs { get; set; }
-        public string EmployerNameWithAka
-        {
-            get
-            {
-                var employerName = EmployerName;
-                if (!string.IsNullOrEmpty(AlsoKnownAs))
-                    employerName += $" ({AlsoKnownAs})";
-
-                return employerName;
-            }
-        }
     }
 }

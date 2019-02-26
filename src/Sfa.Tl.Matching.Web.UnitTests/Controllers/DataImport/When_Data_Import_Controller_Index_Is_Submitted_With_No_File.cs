@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
         public void Then_Model_State_Has_File_Error()
         {
             var modelStateEntry = _dataImportController.ViewData.ModelState["file"];
-            modelStateEntry.Errors[0].ErrorMessage.Should().Be("A file must be selected");
+            modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must select a file");
         }
 
         [Fact]

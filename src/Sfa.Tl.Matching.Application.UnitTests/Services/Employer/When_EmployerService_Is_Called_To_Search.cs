@@ -49,21 +49,40 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         }
 
         [Fact]
-        public void Then_The_First_Employer_Is_In_Correct_Order()
+        public void Then_The_First_Employer_Is_In_Correct_Order_With_EmployerName()
         {
-            _firstEmployer.EmployerNameWithAka.Should().Be("Another Company (Another Also Known As)");
+            _firstEmployer.EmployerName.Should().Be("Another Company");
+        }
+
+
+        [Fact]
+        public void Then_The_First_Employer_Is_In_Correct_Order_With_AlsoKnownAs()
+        {
+            _firstEmployer.AlsoKnownAs.Should().Be("Another Also Known As");
         }
 
         [Fact]
-        public void Then_The_Second_Employer_Is_In_Correct_Order()
+        public void Then_The_Second_Employer_Is_In_Correct_Order_With_EmployerName()
         {
-            _secondEmployer.EmployerNameWithAka.Should().Be("Company (Also Known As)");
+            _secondEmployer.EmployerName.Should().Be("Company");
         }
 
         [Fact]
-        public void Then_The_Third_Employer_Is_In_Correct_Order()
+        public void Then_The_Second_Employer_Is_In_Correct_Order_With_AlsoKnownAs()
         {
-            _thirdEmployer.EmployerNameWithAka.Should().Be("Z Company (Z Also Known As)");
+            _secondEmployer.AlsoKnownAs.Should().Be("Also Known As");
+        }
+
+        [Fact]
+        public void Then_The_Third_Employer_Is_In_Correct_Order_With_EmployerName()
+        {
+            _thirdEmployer.EmployerName.Should().Be("Z Company");
+        }
+
+        [Fact]
+        public void Then_The_Third_Employer_Is_In_Correct_Order_With_AlsoKnownAs()
+        {
+            _thirdEmployer.AlsoKnownAs.Should().Be("Z Also Known As");
         }
     }
 }
