@@ -10,11 +10,21 @@
     </div>
 </div>
 
-<div class="govuk-grid-row govuk-!-margin-top-5">
-    <div class="govuk-grid-column-two-thirds">
-        <partial name="_searchresults" model="Model" />
+@if (ViewData.ModelState.IsValid)
+{
+    <div class="govuk-grid-row govuk-!-margin-top-5">
+        <div class="govuk-grid-column-two-thirds">
+            @if (Model.SearchResults?.Results != null && Model.SearchResults.Results.Any())
+            {
+                <partial name="_searchresults" model="Model" />
+            }
+            else
+            {
+                <partial name="_emptysearchresults" model="Model" />
+            }
+        </div>
     </div>
-</div>
+}
 
 
 
