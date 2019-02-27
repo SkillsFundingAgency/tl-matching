@@ -1,3 +1,6 @@
+﻿using System.Collections.Generic;
+
+namespace Sfa.Tl.Matching.Domain.Models
 {
     public class ProviderVenue : BaseEntity
     {
@@ -10,5 +13,6 @@
         public string Source { get; set; }
 
         public virtual Provider Provider { get; set; }
+        public virtual ICollection<ProviderQualification> ProviderQualification { get; set; }
     }
 }

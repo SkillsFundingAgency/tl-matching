@@ -18,8 +18,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
 
         public IDictionary<int, string> PathMapping { get; set; }
 
-
-        public QualificationRoutePathMappingDataValidator(IRepository<RoutePathMapping> repository, IRepository<Path> pathRepository)
+        public QualificationRoutePathMappingDataValidator(IRepository<Domain.Models.QualificationRoutePathMapping> qualificationRoutePathMappingRepository, IRepository<Qualification> qualificationRepository, IRepository<Path> pathRepository)
         {
             CascadeMode = CascadeMode.StopOnFirstFailure;
 
@@ -37,37 +36,46 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
             RuleFor(dto => dto)
                 .Must(MustHaveAtLeastOnePathId)
                     .WithErrorCode(ValidationErrorCode.WrongNumberOfColumns.ToString())
-                    .WithMessage(ValidationErrorCode.WrongNumberOfColumns.Humanize());
+                    .WithMessage(ValidationErrorCode.WrongNumberOfColumns.Humanize())
+                //We Must have at least 1 PathId in Row otherwise there is no Point processing other rules
+                .DependentRules(() =>
+                {
 
-            RuleFor(dto => dto)
-                .Must(PathIdValuesMustMatchColumnType)
-                    .WithErrorCode(ValidationErrorCode.ColumnValueDoesNotMatchType.ToString())
-                    .WithMessage(ValidationErrorCode.ColumnValueDoesNotMatchType.Humanize());
+                    RuleFor(dto => dto)
+                        .Must(PathIdValuesMustMatchColumnType)
+                            .WithErrorCode(ValidationErrorCode.ColumnValueDoesNotMatchType.ToString())
+                            .WithMessage(ValidationErrorCode.ColumnValueDoesNotMatchType.Humanize());
 
-            RuleFor(dto => dto.LarsId)
-                .NotNull()
-                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
-                .NotEmpty()
-                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
-                .Matches(ValidationConstants.LarsIdRegex)
-                    .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
-                .MustAsync((x, cancellation) => CanLarsIdBeAdded(repository, x))
-                    .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
-                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
+                    RuleFor(dto => dto.LarsId)
+                        .NotNull()
+                            .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                            .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                        .NotEmpty()
+                            .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                            .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                        .Matches(ValidationConstants.LarsIdRegex)
+                            .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
+                            .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
+                        //LarsId Must be valid Before we can check related Qualification in Qualification Table
+                        .DependentRules(() =>
+                        {
+                            RuleFor(dto => dto)
+                                .MustAsync((dto, cancellation) => BeUniqueueQualificationRoutePathMapping(qualificationRoutePathMappingRepository, qualificationRepository, dto))
+                                    .WithErrorCode(ValidationErrorCode.QualificationRoutePathMappingAlreadyExists.ToString())
+                                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.LarsId)}' - {ValidationErrorCode.QualificationRoutePathMappingAlreadyExists.Humanize()}");
+                        });
+                });
 
             RuleFor(dto => dto.Title)
-                .NotNull()
-                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
-                .NotEmpty()
-                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
-                .Length(0, MaximumTitleLength)
-                    .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
-                    .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
+                 .NotNull()
+                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                     .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                 .NotEmpty()
+                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                     .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                 .Length(0, MaximumTitleLength)
+                     .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
+                     .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Title)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
 
             RuleFor(dto => dto.ShortTitle)
                 .NotNull()
@@ -89,11 +97,25 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
                     .WithMessage($"'{nameof(QualificationRoutePathMappingFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
 
-        private async Task<bool> CanLarsIdBeAdded(IRepository<RoutePathMapping> repository, string larsId)
+        private async Task<bool> BeUniqueueQualificationRoutePathMapping(IRepository<Domain.Models.QualificationRoutePathMapping> routePathMappingRepository, IRepository<Qualification> qualificationRepository,  QualificationRoutePathMappingFileImportDto data)
         {
-            var routePathMapping = await repository.GetMany(p => p.LarsId == larsId);
+            var pathIds = data.GetQualificationRoutePathMappingPathIdColumnProperties().Select(p => int.Parse(p.GetValue(data).ToString()));
+            
+            //check if we are adding mapping for an existing qualification
+            var qualification = await qualificationRepository.GetSingleOrDefault(q => q.LarsId == data.LarsId);
 
-            return routePathMapping == null || !routePathMapping.Any();
+            if (qualification != null)
+            {
+                //if qualification exists then check if mapping already exists for this qualification path combination
+                data.QualificationId = qualification.Id;
+
+                var routePathMapping = routePathMappingRepository.GetMany(p => pathIds.Contains(p.PathId) && p.QualificationId == data.QualificationId);
+            
+                return !routePathMapping.Any();
+            }
+
+            //if there is no existing qualification then the route path map cant exists without it therefore the new qualification route path mapping will be definatly uniqueu
+            return true;
         }
 
         private static bool MustHaveAtLeastOnePathId(QualificationRoutePathMappingFileImportDto data)

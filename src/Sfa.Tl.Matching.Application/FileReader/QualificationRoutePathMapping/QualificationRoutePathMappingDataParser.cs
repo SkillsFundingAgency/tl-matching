@@ -14,16 +14,31 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
 
             var pathIdProperties = data.GetQualificationRoutePathMappingPathIdColumnProperties();
             var routePathMappingDto = pathIdProperties.Select(prop =>
-                    new RoutePathMappingDto
+            {
+                var qualificationRoutePathMapping  = new QualificationRoutePathMappingDto
+                {
+                    PathId = prop.GetValue(data).ToString().ToInt(),
+                    Source = data.Source,
+                    CreatedBy = data.CreatedBy
+                };
+
+                if (data.QualificationId != 0)
+                {
+                    qualificationRoutePathMapping.QualificationId = data.QualificationId;
+                }
+                else
+                {
+                    qualificationRoutePathMapping.Qualification = new QualificationDto
                     {
                         LarsId = data.LarsId,
                         Title = data.Title,
                         ShortTitle = data.ShortTitle,
-                        PathId = prop.GetValue(data).ToString().ToInt(),
-                        Source = data.Source,
                         CreatedBy = data.CreatedBy
-                    }
-                );
+                    };
+                }
+
+                return qualificationRoutePathMapping;
+            });
 
             return routePathMappingDto;
         }

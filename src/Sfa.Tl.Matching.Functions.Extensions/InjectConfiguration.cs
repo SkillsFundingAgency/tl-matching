@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
+using Sfa.Tl.Matching.Application.FileReader.ProviderQualification;
 using Sfa.Tl.Matching.Application.FileReader.ProviderVenue;
 using Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -50,8 +51,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddAutoMapper(expression => expression.AddProfiles(typeof(EmployerMapper).Assembly));
 
-            services.AddDbContext<MatchingDbContext>(options =>
-                options.UseSqlServer(_configuration.SqlConnectionString));
+            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString, builder => builder.EnableRetryOnFailure()));
 
             RegisterFileReaders(services);
 
@@ -65,6 +65,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             RegisterFileReader<EmployerDto, EmployerFileImportDto, Employer, EmployerDataParser, EmployerDataValidator>(services);
             RegisterFileReader<ProviderDto, ProviderFileImportDto, Provider, ProviderDataParser, ProviderDataValidator>(services);
             RegisterFileReader<ProviderVenueDto, ProviderVenueFileImportDto, ProviderVenue, ProviderVenueDataParser, ProviderVenueDataValidator>(services);
+            RegisterFileReader<ProviderQualificationDto, ProviderQualificationFileImportDto, ProviderQualification, ProviderQualificationDataParser, ProviderQualificationDataValidator>(services);
             RegisterFileReader<QualificationRoutePathMappingDto, QualificationRoutePathMappingFileImportDto, QualificationRoutePathMapping, QualificationRoutePathMappingDataParser, QualificationRoutePathMappingDataValidator>(services);
         }
 
@@ -92,8 +93,10 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
             services.AddTransient<IRepository<Route>, RouteRepository>();
             services.AddTransient<IRepository<Path>, PathRepository>();
+            services.AddTransient<IRepository<Qualification>, QualificationRepository>();
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
+            services.AddTransient<IRepository<ProviderQualification>, ProviderQualificationRepository>();
             services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
         }
 
@@ -103,6 +106,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IQualificationRoutePathMappingService, QualificationRoutePathMappingService>();
             services.AddTransient<IProviderService, ProviderService>();
+            services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
