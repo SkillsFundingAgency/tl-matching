@@ -75,31 +75,31 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
-            var dbSet = GetSetWithIncludes(navigationPropertyPath);
+            var queryable = GetQueryableWithIncludes(navigationPropertyPath);
 
-            return predicate != null ? dbSet.Where(predicate) : dbSet;
+            return predicate != null ? queryable.Where(predicate) : queryable;
         }
 
         public async Task<T> GetSingleOrDefault(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
-            var dbSet = GetSetWithIncludes(navigationPropertyPath);
+            var queryable = GetQueryableWithIncludes(navigationPropertyPath);
 
-            return await dbSet.SingleOrDefaultAsync(predicate);
+            return await queryable.SingleOrDefaultAsync(predicate);                                   
         }
 
-        private IQueryable<T> GetSetWithIncludes(Expression<Func<T, object>>[] navigationPropertyPath)
+        private IQueryable<T> GetQueryableWithIncludes(Expression<Func<T, object>>[] navigationPropertyPath)
         {
-            var dbSet = _dbContext.Set<T>().AsQueryable();
+            var queryable = _dbContext.Set<T>().AsQueryable();
 
             if (navigationPropertyPath.Any())
             {
                 foreach (var navProp in navigationPropertyPath)
                 {
-                    dbSet.Include(navProp);
+                    queryable.Include(navProp);
                 }
             }
 
-            return dbSet;
+            return queryable;
         }
     }
 }
