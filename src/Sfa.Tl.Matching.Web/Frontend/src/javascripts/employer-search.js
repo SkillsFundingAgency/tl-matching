@@ -25,4 +25,4 @@ var employer = (function () {
             }
         });
     }
-});
+})();
