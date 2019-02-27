@@ -48,14 +48,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
             => _result.County.Should().BeEquivalentTo("County");
 
         [Fact]
-        public void Then_ProviderVenue_Status_Is_Returned()
-            => _result.Status.Should().Be(true);
-
-        [Fact]
-        public void Then_ProviderVenue_StatusReason_Is_Returned()
-            => _result.StatusReason.Should().BeEquivalentTo("Reason");
-
-        [Fact]
         public void Then_ProviderVenue_Latitude_Is_Returned()
             => _result.Latitude.Should().Be(52.648869M);
 

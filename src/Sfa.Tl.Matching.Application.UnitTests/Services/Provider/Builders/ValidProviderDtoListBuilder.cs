@@ -4,7 +4,7 @@ using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
 {
-    internal class ValidProviderDtoListBuilder
+    public class ValidProviderDtoListBuilder
     {
         private readonly IList<ProviderDto> _providerDtos;
 

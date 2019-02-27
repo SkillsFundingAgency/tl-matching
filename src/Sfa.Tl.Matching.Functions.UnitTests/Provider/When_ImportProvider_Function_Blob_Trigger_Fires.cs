@@ -11,14 +11,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
 {
     public class When_ImportProvider_Function_Blob_Trigger_Fires
     {
-         private readonly IProviderService _providerService;
+         private readonly IFileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider> _providerService;
        public When_ImportProvider_Function_Blob_Trigger_Fires()
         {
             var blobStream = Substitute.For<ICloudBlob>();
             blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
-            _providerService = Substitute.For<IProviderService>();
+            _providerService = Substitute.For<IFileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>>();
             Functions.Provider.ImportProvider(
                 blobStream,
                 "test",
@@ -33,8 +33,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
         {
             _providerService
                 .Received(1)
-                .ImportProvider(
-                    Arg.Any<ProviderFileImportDto>());
+                .Import(Arg.Any<ProviderFileImportDto>());
         }
     }
 }

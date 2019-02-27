@@ -8,8 +8,14 @@
         InvalidFormat,
         InvalidLength,
         ColumnValueDoesNotMatchType,
-        RecordAlreadyExists,
+        
+        ProviderAlreadyExists,
+        ProviderVenueAlreadyExists,
+        ProviderQualificationAlreadyExists,
+        QualificationRoutePathMappingAlreadyExists,
+
         ProviderDoesntExist,
-        VenueAlreadyExists
+        ProviderVenueDoesntExist,
+        QualificationDoesntExist
     }
 }

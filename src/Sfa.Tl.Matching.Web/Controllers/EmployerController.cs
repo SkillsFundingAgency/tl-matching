@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var dto = await PopulateDto(viewModel.OpportunityId, employer);
+            var dto = PopulateDto(viewModel.OpportunityId, employer);
             await _opportunityService.UpdateOpportunity(dto);
 
             return RedirectToRoute("EmployerDetails_Get");
@@ -63,9 +63,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-search", Name = "EmployerSearch_Get")]
-        public async Task<IActionResult> Search(string query)
+        public IActionResult Search(string query)
         {
-            var employers = await _employerService.Search(query);
+            var employers = _employerService.Search(query);
 
             return Ok(employers.ToList());
         }
@@ -118,17 +118,21 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("EmployerName_Get");
         }
 
-        private async Task<OpportunityDto> PopulateDto(int opportunityId, EmployerDto employer)
+        private OpportunityDto PopulateDto(int opportunityId, EmployerDto employer)
         {
-            var dto = await _opportunityService.GetOpportunity(opportunityId);
-            dto.EmployerCrmId = employer.CrmId;
-            dto.EmployerName = employer.CompanyName; // TODO AU Should this also inclue the Aka?
-            dto.EmployerAupa = employer.Aupa;
-            dto.EmployerOwner = employer.Owner;
-            dto.Contact = employer.PrimaryContact;
-            dto.ContactEmail = employer.Email;
-            dto.ContactPhone = employer.Phone;
-            dto.ModifiedBy = HttpContext.User.GetUserName();
+            var dto = new OpportunityDto
+            {
+                Id = opportunityId,
+                EmployerCrmId = employer.CrmId,
+                EmployerName = employer.CompanyName,
+                EmployerAupa = employer.Aupa,
+                EmployerOwner = employer.Owner,
+                Contact = employer.PrimaryContact,
+                ContactEmail = employer.Email,
+                ContactPhone = employer.Phone,
+                ModifiedBy = HttpContext.User.GetUserName()
+            };
+            // TODO AU Should this also inclue the Aka?
 
             return dto;
         }

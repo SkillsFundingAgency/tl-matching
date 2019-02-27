@@ -38,8 +38,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
 
             RuleFor(dto => dto)
                  .MustAsync((dto, cancellation) => ProviderVenueMustBeUnique(venueRepository, dto))
-                     .WithErrorCode(ValidationErrorCode.VenueAlreadyExists.ToString())
-                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.VenueAlreadyExists.Humanize()}");
+                     .WithErrorCode(ValidationErrorCode.ProviderVenueAlreadyExists.ToString())
+                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.ProviderVenueAlreadyExists.Humanize()}");
 
             RuleFor(dto => dto.Source)
                 .NotEmpty()

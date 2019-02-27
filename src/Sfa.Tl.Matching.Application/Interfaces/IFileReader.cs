@@ -3,8 +3,8 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
 {
-    public interface IFileReader<in TImportDto, out TDto> where TDto : class, new()  where TImportDto : FileImportDto
+    public interface IFileReader<in TImportDto, TDto> where TDto : class, new()  where TImportDto : FileImportDto
     {
-        IEnumerable<TDto> ValidateAndParseFile(TImportDto fileImportDto);
+        IList<TDto> ValidateAndParseFile(TImportDto fileImportDto);
     }
 }

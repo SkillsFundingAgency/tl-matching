@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
         {
             _testFixture = testFixture;
             _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
-            _testFixture.ResetData(UkPrn);
+            _testFixture.ResetData();
             _createdProvider = _testFixture.CreateProvider(UkPrn);
         }
 
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                _createdRecordCount = await _testFixture.ProviderVenueService.ImportProviderVenue(
+                _createdRecordCount = await _testFixture.FileImportService.Import(
                     new ProviderVenueFileImportDto
                     {
                         FileDataStream = stream,

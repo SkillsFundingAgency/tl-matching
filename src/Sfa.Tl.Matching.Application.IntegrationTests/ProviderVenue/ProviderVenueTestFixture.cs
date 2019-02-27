@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sfa.Tl.Matching.Application.FileReader;
@@ -17,18 +16,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
 {
     public class ProviderVenueTestFixture : IDisposable
     {
-        internal readonly IProviderVenueService ProviderVenueService;
-        internal MatchingDbContext MatchingDbContext;
+        public readonly IFileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue> FileImportService;
+        public MatchingDbContext MatchingDbContext;
 
         public ProviderVenueTestFixture()
         {
-            var loggerRepository = new Logger<ProviderRepository>(
-                new NullLoggerFactory());
-            var providerVenueloggerRepository = new Logger<ProviderVenueRepository>(
-                new NullLoggerFactory());
+            var loggerRepository = new Logger<ProviderRepository>(new NullLoggerFactory());
+            var providerVenueloggerRepository = new Logger<ProviderVenueRepository>(new NullLoggerFactory());
+            var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>>(new NullLoggerFactory());
 
-            var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>>(
-                new NullLoggerFactory());
+            var logger = new Logger<FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
@@ -39,20 +36,25 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
 
             var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(loggerExcelFileReader, dataParser, dataValidator);
 
-            var config = new MapperConfiguration(c => c.AddProfile<ProviderVenueMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 
             var mapper = new Mapper(config);
 
-            ProviderVenueService = new ProviderVenueService(mapper, excelFileReader, providerVenuerepository);
+            FileImportService = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(logger, mapper, excelFileReader, providerVenuerepository);
         }
 
-        internal void ResetData(int ukprn)
+        public void ResetData()
         {
-            ResetProviderVenue(ukprn);
-            ResetProvider(ukprn);
+            var providerVenue = MatchingDbContext.ProviderVenue.FirstOrDefault(pv => pv.CreatedBy == nameof(ProviderVenueTestFixture));
+            if (providerVenue != null) MatchingDbContext.ProviderVenue.Remove(providerVenue);
+
+            var provider = MatchingDbContext.Provider.FirstOrDefault(p => p.Source == nameof(ProviderVenueTestFixture));
+            if (provider != null) MatchingDbContext.Provider.Remove(provider);
+
+            MatchingDbContext.SaveChanges();
         }
 
-        internal Domain.Models.Provider CreateProvider(int ukprn)
+        public Domain.Models.Provider CreateProvider(int ukprn)
         {
             var provider = new Domain.Models.Provider
             {
@@ -76,29 +78,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
 
         public void Dispose()
         {
+            ResetData();
             MatchingDbContext?.Dispose();
-        }
-
-        private void ResetProviderVenue(int ukprn)
-        {
-            var providerVenue = MatchingDbContext.ProviderVenue.FirstOrDefault(pv => pv.Provider.UkPrn == ukprn);
-            if (providerVenue != null)
-            {
-                MatchingDbContext.ProviderVenue.Remove(providerVenue);
-                var count = MatchingDbContext.SaveChanges();
-                count.Should().Be(1);
-            }
-        }
-
-        private void ResetProvider(int ukprn)
-        {
-            var provider = MatchingDbContext.Provider.FirstOrDefault(p => p.UkPrn == ukprn);
-            if (provider != null)
-            {
-                MatchingDbContext.Provider.Remove(provider);
-                var count = MatchingDbContext.SaveChanges();
-                count.Should().Be(1);
-            }
         }
     }
 }

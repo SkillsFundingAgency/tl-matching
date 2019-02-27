@@ -3,7 +3,6 @@ using System.Linq;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders;
@@ -15,30 +14,25 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 {
     public class When_ProviderService_Is_Called_To_Search_Providers_By_Postcode_Proximity
     {
-        //private readonly IRepository<Domain.Models.Provider> _repository;
-        private readonly string _postcode = "SW1A 2AA";
-        private readonly int _searchRadius = 5;
-        private readonly int _routeId = 2;
+        private const string Postcode = "SW1A 2AA";
+        private const int SearchRadius = 5;
+        private const int RouteId = 2;
         private readonly IEnumerable<ProviderVenueSearchResultDto> _result;
 
         public When_ProviderService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
         {
-            var config = new MapperConfiguration(c => c.AddProfile<ProviderMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
-            var searchResultconfig = new MapperConfiguration(c => c.AddProfile<ProviderVenueSearchResultMapper>());
-            var searchResultMapper = new Mapper(searchResultconfig);
 
-            var fileReader = Substitute.For<IFileReader<ProviderFileImportDto, ProviderDto>>();
-            var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
             var searchProvider = Substitute.For<ISearchProvider>();
 
             searchProvider
-                .SearchProvidersByPostcodeProximity(_postcode, _searchRadius, _routeId)
+                .SearchProvidersByPostcodeProximity(Postcode, SearchRadius, RouteId)
                 .Returns(new SearchResultsBuilder().Build());
 
-            var service = new ProviderService(mapper, fileReader, repository, searchResultMapper, searchProvider);
+            var service = new ProviderService(mapper, searchProvider);
 
-            _result = service.SearchProvidersByPostcodeProximity(_postcode, _searchRadius, _routeId).GetAwaiter().GetResult();
+            _result = service.SearchProvidersByPostcodeProximity(Postcode, SearchRadius, RouteId).GetAwaiter().GetResult();
         }
 
         [Fact]

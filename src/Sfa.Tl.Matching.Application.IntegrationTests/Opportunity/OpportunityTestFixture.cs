@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 
             var repository = new OpportunityRepository(loggerRepository, MatchingDbContext);
 
-            var config = new MapperConfiguration(c => c.AddProfile<OpportunityMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
 
             var dateTimeProvider = new DateTimeProvider();

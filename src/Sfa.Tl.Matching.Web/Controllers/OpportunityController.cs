@@ -56,12 +56,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var dto = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
-
-            dto.JobTitle = viewModel.JobTitle;
-            dto.PlacementsKnown = viewModel.PlacementsKnown;
-            dto.Placements = viewModel.Placements;
-            dto.ModifiedBy = HttpContext.User.GetUserName();
+            var dto = new OpportunityDto
+            {
+                Id = viewModel.OpportunityId,
+                JobTitle = viewModel.JobTitle,
+                PlacementsKnown = viewModel.PlacementsKnown,
+                Placements = viewModel.Placements,
+                ModifiedBy = HttpContext.User.GetUserName()
+            };
 
             await _opportunityService.UpdateOpportunity(dto);
 

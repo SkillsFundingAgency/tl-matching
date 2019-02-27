@@ -42,6 +42,18 @@
     <None Update="Employer\Employer-WrongDataType.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="ProviderQualification\ProviderQualification-InvalidFormat.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ProviderQualification\ProviderQualification-MissingMandatory.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ProviderQualification\ProviderQualification-Simple.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ProviderQualification\ProviderQualification-WrongDataType.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ProviderVenue\ProviderVenue-InvalidFormat.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -66,10 +78,10 @@
     <None Update="Provider\Provider-WrongDataType.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="QualificationRoutePathMapping\RoutePathMapping-RecordsAlreadyExist.xlsx">
+    <None Update="QualificationRoutePathMapping\QualificationRoutePathMapping-RecordsAlreadyExist.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="QualificationRoutePathMapping\RoutePathMapping-Simple.xlsx">
+    <None Update="QualificationRoutePathMapping\QualificationRoutePathMapping-Simple.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Employer\Employer-Simple.xlsx">

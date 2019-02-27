@@ -5,8 +5,6 @@
 	[Town] VARCHAR(100) NULL, 
 	[County] NVARCHAR(50) NULL, 
 	[Postcode] VARCHAR(10) NOT NULL,
-	[Status] bit NOT NULL,
-	[StatusReason] NVARCHAR(30) NULL,
 	[Latitude] [DECIMAL](9, 6) NULL,
 	[Longitude] [DECIMAL](9, 6) NULL,
 	[Source] VARCHAR(50) NOT NULL,

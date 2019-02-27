@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions
             AddClaim(controller, ClaimTypes.GivenName, username);
         }
 
-        private static void AddClaim(Controller controller, string type, string value)
+        private static void AddClaim(ControllerBase controller, string type, string value)
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new[]
             {

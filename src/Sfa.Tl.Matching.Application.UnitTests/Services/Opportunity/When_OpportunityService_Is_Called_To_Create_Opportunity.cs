@@ -17,22 +17,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
         public When_OpportunityService_Is_Called_To_Create_Opportunity()
         {
-            var config = new MapperConfiguration(c => c.AddProfile<OpportunityMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             var repository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
 
             repository.Create(Arg.Any<Domain.Models.Opportunity>())
                 .Returns(OpportunityId);
-            
-            var opportuntiyService = new OpportunityService(mapper, dateTimeProvider, repository);
+
+            var opportunityService = new OpportunityService(mapper, dateTimeProvider, repository);
 
             var dto = new OpportunityDto
             {
                 Contact = "Contact"
             };
 
-            _result = opportuntiyService.CreateOpportunity(dto).GetAwaiter().GetResult();
+            _result = opportunityService.CreateOpportunity(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
