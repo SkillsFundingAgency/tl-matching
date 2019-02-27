@@ -8,7 +8,7 @@
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 
 	[ModifiedBy] NVARCHAR(50) NULL
-	CONSTRAINT [PK_RoutePathMapping] PRIMARY KEY ([Id]),
-	CONSTRAINT [FK_RoutePathMapping_Path] FOREIGN KEY ([PathId]) REFERENCES [Path]([Id]),
-	CONSTRAINT [FK_RoutePathMapping_Qualification] FOREIGN KEY ([QualificationId]) REFERENCES [Qualification]([Id])
+	CONSTRAINT [PK_QualificationRoutePathMapping] PRIMARY KEY ([Id]),
+	CONSTRAINT [FK_QualificationRoutePathMapping_Path] FOREIGN KEY ([PathId]) REFERENCES [Path]([Id]),
+	CONSTRAINT [FK_QualificationRoutePathMapping_Qualification] FOREIGN KEY ([QualificationId]) REFERENCES [Qualification]([Id])
 )
