@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -34,7 +35,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public IEnumerable<EmployerSearchResultDto> Search(string employerName)
         {
-            var searchResults = _repository.GetMany(e => e.CompanyName.Contains(employerName, StringComparison.CurrentCultureIgnoreCase));
+            var searchResults = _repository
+                .GetMany(e => 
+                    EF.Functions.Like(e.CompanyName, $"%{employerName}%"));
 
             var employers = searchResults.Select(e => new EmployerSearchResultDto
             {
