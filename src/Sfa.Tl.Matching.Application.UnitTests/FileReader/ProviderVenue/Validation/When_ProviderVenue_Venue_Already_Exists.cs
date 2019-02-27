@@ -48,11 +48,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validat
         [Fact]
         public void Then_Error_Code_Is_VenueAlreadyExists() =>
             _validationResult.Errors[0].ErrorCode.Should()
-                .Be(ValidationErrorCode.VenueAlreadyExists.ToString());
+                .Be(ValidationErrorCode.ProviderVenueAlreadyExists.ToString());
 
         [Fact]
         public void Then_Error_Message_Is_VenueAlreadyExists() =>
             _validationResult.Errors[0].ErrorMessage.Should()
-                .Be($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.VenueAlreadyExists.Humanize()}");
+                .Be($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.ProviderVenueAlreadyExists.Humanize()}");
     }
 }

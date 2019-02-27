@@ -34,10 +34,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         [Fact]
         public void Then_Error_Code_Is_RecordExists() =>
-            _validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.RecordAlreadyExists.ToString());
+            _validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.ProviderAlreadyExists.ToString());
 
         [Fact]
         public void Then_Error_Message_Is_RecordExists() =>
-            _validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
+            _validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.ProviderAlreadyExists.Humanize()}");
     }
 }
