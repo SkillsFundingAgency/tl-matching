@@ -9,8 +9,9 @@ namespace Sfa.Tl.Matching.Data.Interfaces
     {
         Task<int> Create(T entity);
         Task<int> CreateMany(IEnumerable<T> entities);
-        Task<IQueryable<T>> GetMany(Func<T, bool> predicate);
-        Task<T> GetSingleOrDefault(Func<T, bool> predicate);
+        IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath);
+
+        Task<T> GetSingleOrDefault(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationPropertyPath);
         Task Update(T entity);
     }
 }

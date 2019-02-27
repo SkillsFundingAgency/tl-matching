@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
@@ -28,10 +29,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var mapper = new Mapper(config);
             var repository = Substitute.For<IRepository<Domain.Models.Employer>>();
 
-            repository.GetMany(Arg.Any<Func<Domain.Models.Employer, bool>>())
+            repository.GetMany(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new SearchResultsBuilder().Build().AsQueryable());
 
-            var employerService = new EmployerService(mapper, null, repository);
+            var employerService = new EmployerService(mapper, repository);
 
             const string employerName = "Co";
 

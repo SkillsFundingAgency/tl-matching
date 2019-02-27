@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
@@ -16,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validat
 
         public When_ProviderVenue_Venue_Already_Exists(ProviderVenueFileImportValidationTestFixture fixture)
         {
-            fixture.ProviderVenueRepository.GetSingleOrDefault(Arg.Any<Func<Domain.Models.ProviderVenue, bool>>())
+            fixture.ProviderVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new Domain.Models.ProviderVenue
                 {
                     Id = 1,
@@ -25,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validat
                     Source = "Test"
                 });
 
-            fixture.ProviderRepository.GetSingleOrDefault(Arg.Any<Func<Domain.Models.Provider, bool>>())
+            fixture.ProviderRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
                 .Returns(new Domain.Models.Provider
                 {
                     Id = 1,

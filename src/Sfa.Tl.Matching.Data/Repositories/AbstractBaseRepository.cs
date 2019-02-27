@@ -72,8 +72,33 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public abstract Task<int> CreateMany(IEnumerable<T> entities);
 
-        public abstract Task<IQueryable<T>> GetMany(Func<T, bool> predicate);
-        
-        public abstract Task<T> GetSingleOrDefault(Func<T, bool> predicate);
+        public IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath)
+        {
+            var dbSet = GetSetWithIncludes(navigationPropertyPath);
+
+            return predicate != null ? dbSet.Where(predicate) : dbSet;
+        }
+
+        public async Task<T> GetSingleOrDefault(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationPropertyPath)
+        {
+            var dbSet = GetSetWithIncludes(navigationPropertyPath);
+
+            return await dbSet.SingleOrDefaultAsync(predicate);
+        }
+
+        private IQueryable<T> GetSetWithIncludes(Expression<Func<T, object>>[] navigationPropertyPath)
+        {
+            var dbSet = _dbContext.Set<T>().AsQueryable();
+
+            if (navigationPropertyPath.Any())
+            {
+                foreach (var navProp in navigationPropertyPath)
+                {
+                    dbSet.Include(navProp);
+                }
+            }
+
+            return dbSet;
+        }
     }
 }

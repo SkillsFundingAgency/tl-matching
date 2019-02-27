@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
@@ -16,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         public When_Provider_Row_Already_Exists(ProviderFileImportFixture fixture)
         {
-            fixture.Repository.GetSingleOrDefault(Arg.Any<Func<Domain.Models.Provider, bool>>())
+            fixture.Repository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
                 .Returns(new Domain.Models.Provider());
 
             var validator = new ProviderDataValidator(fixture.Repository);

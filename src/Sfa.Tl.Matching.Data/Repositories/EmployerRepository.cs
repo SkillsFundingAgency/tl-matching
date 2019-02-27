@@ -23,17 +23,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             await ResetData();
 
-            return await BaseCreateMany(employers);
-        }
-
-        public override Task<IQueryable<Employer>> GetMany(Func<Employer, bool> predicate)
-        {
-            return Task.FromResult(_dbContext.Employer.Where(employer => predicate(employer)));
-        }
-
-        public override Task<Employer> GetSingleOrDefault(Func<Employer, bool> predicate)
-        {
-            return _dbContext.Employer.SingleOrDefaultAsync(employer => predicate(employer));
+            return await BaseCreateMany(entities);
         }
 
         public async Task ResetData()
