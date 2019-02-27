@@ -4,6 +4,8 @@
     ViewData["Title"] = "Select Providers";
 }
 
+<a asp-controller="Provider" asp-action="Index" class="govuk-back-link">Back</a>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <partial name="_searchbox" model="Model.SearchParameters" />
@@ -25,8 +27,3 @@
         </div>
     </div>
 }
-
-
-
-
-
