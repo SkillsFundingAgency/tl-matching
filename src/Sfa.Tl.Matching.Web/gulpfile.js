@@ -1,4 +1,6 @@
-﻿var gulp = require('gulp');
+﻿/// <binding BeforeBuild='default' />
+
+var gulp = require('gulp');
 var concat = require('gulp-concat');
 var minify = require('gulp-minify');
 var sass = require('gulp-sass');
