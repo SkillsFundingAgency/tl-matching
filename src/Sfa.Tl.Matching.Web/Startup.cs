@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using AutoMapper;
-using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +12,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Application.FileReader;
-using Sfa.Tl.Matching.Application.FileReader.Employer;
-using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
@@ -27,7 +21,6 @@ using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
-using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -150,19 +143,6 @@ namespace Sfa.Tl.Matching.Web
 
             RegisterRepositories(services);
             RegisterApplicationServices(services);
-        }
-
-        //TODO: Remove RegisterProviderFileReader after merged with importer changes
-        private static void RegisterProviderFileReader(IServiceCollection services)
-        {
-            services.AddTransient<IDataParser<ProviderDto>, ProviderDataParser>();
-            services.AddTransient<IValidator<ProviderFileImportDto>, ProviderDataValidator>();
-
-            services.AddTransient<IFileReader<ProviderFileImportDto, ProviderDto>, ExcelFileReader<ProviderFileImportDto, ProviderDto>>(provider =>
-                new ExcelFileReader<ProviderFileImportDto, ProviderDto>(
-                    provider.GetService<ILogger<ExcelFileReader<ProviderFileImportDto, ProviderDto>>>(),
-                    provider.GetService<IDataParser<ProviderDto>>(),
-                    (IValidator<ProviderFileImportDto>)provider.GetServices(typeof(IValidator<ProviderFileImportDto>)).Single(t => t.GetType() == typeof(ProviderDataValidator))));
         }
 
         private static void RegisterRepositories(IServiceCollection services)

@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using Humanizer;
 using NSubstitute;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
@@ -24,8 +25,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderQualification
                     Source = "Test"
                 });
 
-            fixture.QualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
-                .Returns(new Domain.Models.Qualification
+            fixture.QualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Qualification, bool>>>())
+                .Returns(new Qualification
                 {
                     Id = 1,
                     Title = "Test"

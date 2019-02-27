@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderQualification
         {
             var fixture1 = fixture;
             
-            fixture.QualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
+            fixture.QualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Qualification, bool>>>())
                 .Returns((Qualification)null);
 
             fixture.ProviderVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())

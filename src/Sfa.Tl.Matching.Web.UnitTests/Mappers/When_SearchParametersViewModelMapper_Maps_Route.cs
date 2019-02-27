@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers
             _routes = new List<Route>
                 {
                     new Route { Id = 1, Name = "Route 1" },
-                    new Route { Id = 2, Name = "Route 2" },
+                    new Route { Id = 2, Name = "Route 2" }
                 }
                 .AsQueryable();
 

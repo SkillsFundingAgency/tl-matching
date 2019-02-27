@@ -10,7 +10,6 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider

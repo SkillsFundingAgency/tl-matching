@@ -14,9 +14,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 {
     public class When_ProviderService_Is_Called_To_Search_Providers_By_Postcode_Proximity
     {
-        private readonly string _postcode = "SW1A 2AA";
-        private readonly int _searchRadius = 5;
-        private readonly int _routeId = 2;
+        private const string Postcode = "SW1A 2AA";
+        private const int SearchRadius = 5;
+        private const int RouteId = 2;
         private readonly IEnumerable<ProviderVenueSearchResultDto> _result;
 
         public When_ProviderService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
@@ -27,12 +27,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var searchProvider = Substitute.For<ISearchProvider>();
 
             searchProvider
-                .SearchProvidersByPostcodeProximity(_postcode, _searchRadius, _routeId)
+                .SearchProvidersByPostcodeProximity(Postcode, SearchRadius, RouteId)
                 .Returns(new SearchResultsBuilder().Build());
 
             var service = new ProviderService(mapper, searchProvider);
 
-            _result = service.SearchProvidersByPostcodeProximity(_postcode, _searchRadius, _routeId).GetAwaiter().GetResult();
+            _result = service.SearchProvidersByPostcodeProximity(Postcode, SearchRadius, RouteId).GetAwaiter().GetResult();
         }
 
         [Fact]

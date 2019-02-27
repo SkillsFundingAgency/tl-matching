@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -60,13 +59,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 
         public When_RoutePathService_Is_Called_To_Get_Paths()
         {
-            var logger = Substitute.For<ILogger<RoutePathService>>();
             var routeRepository = Substitute.For<IRepository<Route>>();
             _pathRepository = Substitute.For<IRepository<Path>>();
 
             _pathRepository.GetMany().Returns(_pathData);
 
-            var service = new RoutePathService(logger, routeRepository, _pathRepository);
+            var service = new RoutePathService(routeRepository, _pathRepository);
 
             _result = service.GetPaths();
         }
