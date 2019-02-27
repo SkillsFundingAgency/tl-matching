@@ -2,7 +2,5 @@
 {
     public interface IProviderQualificationService
     {
-        void ImportProviderQualification();
-        void UpdateProviderQualification();
     }
 }

@@ -25,8 +25,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         {
             var config = new MapperConfiguration(c => c.AddProfile<ProviderMapper>());
             var mapper = new Mapper(config);
-            var searchResultconfig = new MapperConfiguration(c => c.AddProfile<ProviderVenueSearchResultMapper>());
-            var searchResultMapper = new Mapper(searchResultconfig);
 
             var logger = Substitute.For<ILogger<FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>>>();
             _fileReader = Substitute.For<IFileReader<ProviderFileImportDto, ProviderDto>>();
