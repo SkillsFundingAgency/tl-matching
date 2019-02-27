@@ -148,8 +148,6 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddSingleton(_configuration);
 
-			RegisterEmployerFileReader(services); // TODO AU THIS NEEDS TO GO
-			RegisterProviderFileReader(services);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }
@@ -189,18 +187,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<ISearchProvider, DummySearchProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
-        }
-
-        private static void RegisterEmployerFileReader(IServiceCollection services) // TODO AU This needs to go
-        {
-            services.AddTransient<IDataParser<EmployerDto>, EmployerDataParser>();
-            services.AddTransient<IValidator<EmployerFileImportDto>, EmployerDataValidator>();
-
-            services.AddTransient<IFileReader<EmployerFileImportDto, EmployerDto>, ExcelFileReader<EmployerFileImportDto, EmployerDto>>(provider =>
-                new ExcelFileReader<EmployerFileImportDto, EmployerDto>(
-                    provider.GetService<ILogger<ExcelFileReader<EmployerFileImportDto, EmployerDto>>>(),
-                    provider.GetService<IDataParser<EmployerDto>>(),
-                    (IValidator<EmployerFileImportDto>)provider.GetServices(typeof(IValidator<EmployerFileImportDto>)).Single(t => t.GetType() == typeof(EmployerDataValidator))));
         }
     }
 }

@@ -6,11 +6,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IEmployerService
     {
-        Task<int> ImportEmployer(EmployerFileImportDto fileImportDto);
-        Task<IEnumerable<EmployerSearchResultDto>> Search(string employerName);
-        void GetEmployerByName();
         Task<EmployerDto> GetEmployer(int id);
-        void CreateEmployer();
-        void UpdateEmployer();
     }
 }

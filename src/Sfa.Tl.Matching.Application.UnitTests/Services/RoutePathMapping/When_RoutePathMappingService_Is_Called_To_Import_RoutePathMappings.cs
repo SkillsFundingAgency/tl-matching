@@ -9,6 +9,7 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -26,10 +27,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePathMapping
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
-            _fileReader =
-                Substitute.For<IFileReader<QualificationRoutePathMappingFileImportDto, RoutePathMappingDto>>();
+            
+            var logger = Substitute.For<ILogger<FileImportService<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto, QualificationRoutePathMapping>>>();
+            _fileReader = Substitute.For<IFileReader<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto>>();
+            
             _repository = Substitute.For<IRepository<QualificationRoutePathMapping>>();
-
             _repository
                 .CreateMany(Arg.Any<IList<QualificationRoutePathMapping>>())
                 .Returns(callinfo =>
@@ -48,10 +50,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePathMapping
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(_fileReaderResults);
 
-            var service =
-                new RoutePathMappingService(logger, mapper, _fileReader,  _repository);
+            var service = new FileImportService<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto, QualificationRoutePathMapping>(logger, mapper, _fileReader,  _repository);
 
-            _result = service.ImportQualificationPathMapping(_fileImportDto).GetAwaiter().GetResult();
+            _result = service.Import(_fileImportDto).GetAwaiter().GetResult();
         }
 
         [Fact]

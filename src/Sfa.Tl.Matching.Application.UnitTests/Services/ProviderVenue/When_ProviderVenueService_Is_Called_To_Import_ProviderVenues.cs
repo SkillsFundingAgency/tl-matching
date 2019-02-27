@@ -25,8 +25,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         {
             var config = new MapperConfiguration(c => c.AddProfile<ProviderVenueMapper>());
             var mapper = new Mapper(config);
-            _fileReader =
-                Substitute.For<IFileReader<ProviderVenueFileImportDto, ProviderVenueDto>>();
+            var logger = Substitute.For<ILogger<FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>>>();
+            _fileReader = Substitute.For<IFileReader<ProviderVenueFileImportDto, ProviderVenueDto>>();
             _repository = Substitute.For<IRepository<Domain.Models.ProviderVenue>>();
 
             _repository
@@ -47,9 +47,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(_fileReaderResults);
 
-            var service = new ProviderVenueService(mapper, _fileReader, _repository);
+            var service = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(logger, mapper, _fileReader, _repository);
 
-            _result = service.ImportProviderVenue(_fileImportDto).GetAwaiter().GetResult();
+            _result = service.Import(_fileImportDto).GetAwaiter().GetResult();
         }
 
         [Fact]

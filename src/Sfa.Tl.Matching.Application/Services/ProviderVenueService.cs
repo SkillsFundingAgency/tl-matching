@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -24,19 +21,6 @@ namespace Sfa.Tl.Matching.Application.Services
             _mapper = mapper;
             _fileReader = fileReader;
             _repository = repository;
-        }
-
-        public async Task<int> ImportProviderVenue(ProviderVenueFileImportDto fileImportDto)
-        {
-            var import = _fileReader.ValidateAndParseFile(fileImportDto);
-
-            if (import != null && import.Any())
-            {
-                var providerVenues = _mapper.Map<IEnumerable<ProviderVenue>>(import);
-                return await _repository.CreateMany(providerVenues);
-            }
-
-            return 0;
         }
 
         public void CreateProviderVenue()

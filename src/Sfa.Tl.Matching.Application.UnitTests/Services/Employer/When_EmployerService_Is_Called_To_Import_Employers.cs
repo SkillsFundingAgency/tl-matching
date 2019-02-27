@@ -25,8 +25,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         {
             var config = new MapperConfiguration(c => c.AddProfile<EmployerMapper>());
             var mapper = new Mapper(config);
-            _fileReader =
-                Substitute.For<IFileReader<EmployerFileImportDto, EmployerDto>>();
+            var logger = Substitute.For<ILogger<FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>>>();
+            _fileReader = Substitute.For<IFileReader<EmployerFileImportDto, EmployerDto>>();
             _repository = Substitute.For<IRepository<Domain.Models.Employer>>();
 
             _repository
@@ -47,9 +47,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(_fileReaderResults);
 
-            var service = new EmployerService(mapper, _fileReader, _repository);
+            var service = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(logger, mapper, _fileReader, _repository);
 
-            _result = service.ImportEmployer(_fileImportDto).GetAwaiter().GetResult();
+            _result = service.Import(_fileImportDto).GetAwaiter().GetResult();
         }
 
         [Fact]

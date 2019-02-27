@@ -16,6 +16,6 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Provider> Provider { get; set; }
         public virtual DbSet<ProviderVenue> ProviderVenue { get; set; }
         public virtual DbSet<Route> Route { get; set; }
-        public virtual DbSet<RoutePathMapping> RoutePathMapping { get; set; }
+        public virtual DbSet<QualificationRoutePathMapping> QualificationRoutePathMapping { get; set; }
     }
 }
