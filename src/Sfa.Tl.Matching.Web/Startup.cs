@@ -110,12 +110,6 @@ namespace Sfa.Tl.Matching.Web
 
         private void AddAuthentication(IServiceCollection services)
         {
-            //HACK: Temporarily adjust realm until devops update it for real
-            if (_configuration.Authentication.WtRealm == "https://at.industryplacementmatching.education.gov.uk/")
-                _configuration.Authentication.WtRealm = "https://tl-at-mtchui-as.azurewebsites.net/";
-            if (_configuration.Authentication.WtRealm == "https://test.industryplacementmatching.education.gov.uk/")
-                _configuration.Authentication.WtRealm = "https://tl-test-mtchui-as.azurewebsites.net/";
-
             services.AddAuthentication(sharedOptions =>
             {
                 sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
