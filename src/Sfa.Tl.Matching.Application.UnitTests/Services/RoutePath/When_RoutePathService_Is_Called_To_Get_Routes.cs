@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -60,9 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
             _routeRepository = Substitute.For<IRepository<Route>>();
             var pathRepository = Substitute.For<IRepository<Path>>();
 
-            _routeRepository
-                .GetMany(Arg.Any<Func<Route, bool>>())
-                .Returns(_routeData);
+            _routeRepository.GetMany().Returns(_routeData);
 
             IRoutePathService service = new RoutePathService(logger,  _routeRepository, pathRepository);
 
@@ -74,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         {
             _routeRepository
                 .Received(1)
-                .GetMany(Arg.Any<Func<Route, bool>>());
+                .GetMany();
         }
 
         [Fact]

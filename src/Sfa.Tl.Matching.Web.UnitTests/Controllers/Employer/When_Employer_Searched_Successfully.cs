@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             });
             var employerController = new EmployerController(_employerService, null);
 
-            _result = employerController.Search(query).GetAwaiter().GetResult();
+            _result = employerController.Search(query);
         }
 
         [Fact]

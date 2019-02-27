@@ -63,9 +63,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-search", Name = "EmployerSearch_Get")]
-        public async Task<IActionResult> Search(string query)
+        public IActionResult Search(string query)
         {
-            var employers = await _employerService.Search(query);
+            var employers = _employerService.Search(query);
 
             return Ok(employers.ToList());
         }

@@ -23,10 +23,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping
         {
             CascadeMode = CascadeMode.StopOnFirstFailure;
 
-            var paths = pathRepository
-                    .GetMany(x => true)
-                    .GetAwaiter()
-                    .GetResult();
+            var paths = pathRepository.GetMany();
 
             PathMapping = paths
                 .Select(p =>

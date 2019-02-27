@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 
             const string employerName = "Co";
 
-            _searchResults = employerService.Search(employerName).GetAwaiter().GetResult().ToList();
+            _searchResults = employerService.Search(employerName).ToList();
 
             _firstEmployer = _searchResults[0];
             _secondEmployer = _searchResults[1];

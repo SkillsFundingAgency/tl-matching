@@ -24,12 +24,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public IQueryable<Path> GetPaths()
         {
-            return _pathRepository.GetMany(x => true).GetAwaiter().GetResult();
+            return _pathRepository.GetMany();
         }
 
         public IQueryable<Route> GetRoutes()
         {
-            return _routeRepository.GetMany(x => true).GetAwaiter().GetResult();
+            return _routeRepository.GetMany();
         }
     }
 }
