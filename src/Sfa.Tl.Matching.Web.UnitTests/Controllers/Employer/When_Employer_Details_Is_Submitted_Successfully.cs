@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -32,11 +31,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(_dto);
 
-            var tempData = Substitute.For<ITempDataDictionary>();
             var employerController = new EmployerController(null, _opportunityService);
             employerController.AddUsernameToContext(ModifiedBy);
 
-            employerController.TempData = tempData;
             employerController.Details(_viewModel).GetAwaiter().GetResult();
         }
 
@@ -55,19 +52,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_Contact_Is_Populated()
         {
-            _dto.Contact.Should().Be(Contact);
+            _dto.EmployerContact.Should().Be(Contact);
         }
 
         [Fact]
         public void Then_ContactEmail_Is_Populated()
         {
-            _dto.ContactEmail.Should().Be(ContactEmail);
+            _dto.EmployerContactEmail.Should().Be(ContactEmail);
         }
 
         [Fact]
         public void Then_ContactPhone_Is_Populated()
         {
-            _dto.ContactPhone.Should().Be(ContactPhone);
+            _dto.EmployerContactPhone.Should().Be(ContactPhone);
         }
 
         [Fact]

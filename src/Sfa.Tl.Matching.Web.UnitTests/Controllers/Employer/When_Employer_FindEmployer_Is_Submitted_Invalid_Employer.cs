@@ -27,11 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 BusinessName = "Invalid Business Name"
             };
 
-            var tempData = Substitute.For<ITempDataDictionary>();
-            _employerController = new EmployerController(employerService, opportunityService)
-            {
-                TempData = tempData
-            };
+            _employerController = new EmployerController(employerService, opportunityService);
 
             _result = _employerController.FindEmployer(viewModel).GetAwaiter().GetResult();
         }

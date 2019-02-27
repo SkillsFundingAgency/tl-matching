@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -37,11 +36,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(_dto);
 
-            var tempData = Substitute.For<ITempDataDictionary>();
             var employerController = new EmployerController(_employerService, _opportunityService);
             employerController.AddUsernameToContext(ModifiedBy);
 
-            employerController.TempData = tempData;
             employerController.FindEmployer(_viewModel).GetAwaiter().GetResult();
         }
 
@@ -64,45 +61,27 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_EmployerCrmId_Is_Populated()
-        {
-            _dto.EmployerCrmId.Should().Be("D7A48843-44CA-46A4-A391-70D7B01C68BC");
-        }
-
-        [Fact]
         public void Then_EmployerName_Is_Populated()
         {
             _dto.EmployerName.Should().Be("EmployerName");
         }
 
         [Fact]
-        public void Then_EmployerAupa_Is_Populated()
-        {
-            _dto.EmployerAupa.Should().Be("EmployerAupa");
-        }
-
-        [Fact]
-        public void Then_EmployerOwner_Is_Populated()
-        {
-            _dto.EmployerOwner.Should().Be("EmployerOwner");
-        }
-
-        [Fact]
         public void Then_Contact_Is_Populated()
         {
-            _dto.Contact.Should().Be("Contact");
+            _dto.EmployerContact.Should().Be("Contact");
         }
 
         [Fact]
         public void Then_ContactEmail_Is_Populated()
         {
-            _dto.ContactEmail.Should().Be("ContactEmail");
+            _dto.EmployerContactEmail.Should().Be("ContactEmail");
         }
 
         [Fact]
         public void Then_ContactPhone_Is_Populated()
         {
-            _dto.ContactPhone.Should().Be("ContactPhone");
+            _dto.EmployerContactPhone.Should().Be("ContactPhone");
         }
 
         [Fact]

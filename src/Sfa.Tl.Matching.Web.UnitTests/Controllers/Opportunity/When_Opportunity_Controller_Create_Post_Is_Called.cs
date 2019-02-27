@@ -19,11 +19,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.CreateOpportunity(Arg.Any<OpportunityDto>()).Returns(opportunityId);
 
-            var tempData = Substitute.For<ITempDataDictionary>();
             var opportunityController = new OpportunityController(_opportunityService);
             opportunityController.AddUsernameToContext("username");
-
-            opportunityController.TempData = tempData;
 
             opportunityController.Create(_dto).GetAwaiter().GetResult();
         }

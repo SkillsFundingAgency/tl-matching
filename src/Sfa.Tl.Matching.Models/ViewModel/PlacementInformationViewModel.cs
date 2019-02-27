@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string JobTitle { get; set; }
 
         [Required(ErrorMessage = "You must tell us whether the employer knows how many placements they want at this location")]
-        public bool PlacementsKnown { get; set; }
+        public bool? PlacementsKnown { get; set; }
 
         public short? Placements { get; set; }
     }

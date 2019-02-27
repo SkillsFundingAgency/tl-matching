@@ -32,11 +32,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(_dto);
 
-            var tempData = Substitute.For<ITempDataDictionary>();
             var opportunityController = new OpportunityController(_opportunityService);
             opportunityController.AddUsernameToContext(ModifiedBy);
 
-            opportunityController.TempData = tempData;
             opportunityController.Placements(_viewModel).GetAwaiter().GetResult();
         }
 

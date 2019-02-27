@@ -26,20 +26,24 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var opportunityId = await _opportunityService.CreateOpportunity(dto);
 
-            TempData["OpportunityId"] = opportunityId;
-
-            return RedirectToRoute("Placements_Get");
+            return RedirectToRoute("Placements_Get", new
+            {
+                OpportunityId = opportunityId
+            });
         }
 
         [HttpGet]
         [Route("placement-information", Name = "Placements_Get")]
-        public IActionResult Placements()
+        public async Task<IActionResult> Placements(int opportunityId)
         {
-            var opportunityId = (int)TempData["OpportunityId"];
+            var dto = await _opportunityService.GetOpportunity(opportunityId);
 
             var viewModel = new PlacementInformationViewModel
             {
-                OpportunityId = opportunityId
+                OpportunityId = dto.Id,
+                JobTitle = dto.JobTitle,
+                PlacementsKnown = dto.PlacementsKnown ?? false,
+                Placements = dto.Placements
             };
 
             return View(viewModel);
@@ -49,8 +53,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("placement-information", Name = "Placements_Post")]
         public async Task<IActionResult> Placements(PlacementInformationViewModel viewModel)
         {
-            TempData["OpportunityId"] = viewModel.OpportunityId;
-
             Validate(viewModel);
 
             if (!ModelState.IsValid)
@@ -65,19 +67,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("EmployerName_Get");
+            return RedirectToRoute("EmployerFind_Get", new
+            {
+                OpportunityId = dto.Id
+            });
         }
 
         [HttpGet]
         [Route("check-answers", Name = "CheckAnswers_Get")]
-        public IActionResult CheckAnswers()
+        public IActionResult CheckAnswers(int opportunityId)
         {
             return View();
         }
 
         private void Validate(PlacementInformationViewModel viewModel)
         {
-            if (!viewModel.PlacementsKnown) return;
+            if (!viewModel.PlacementsKnown.HasValue || !viewModel.PlacementsKnown.Value) return;
             if (!viewModel.Placements.HasValue)
                 ModelState.AddModelError(nameof(viewModel.Placements), "You must estimate how many placements the employer wants at this location");
             else if (viewModel.Placements < 1)
