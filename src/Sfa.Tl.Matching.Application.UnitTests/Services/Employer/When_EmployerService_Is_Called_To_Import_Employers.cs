@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
@@ -23,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 
         public When_EmployerService_Is_Called_To_Import_Employers()
         {
-            var config = new MapperConfiguration(c => c.AddProfile<EmployerMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
             var logger = Substitute.For<ILogger<FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>>>();
             _fileReader = Substitute.For<IFileReader<EmployerFileImportDto, EmployerDto>>();

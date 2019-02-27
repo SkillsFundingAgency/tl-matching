@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
         {
             _testFixture = testFixture;
             _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
-            _testFixture.ResetData(UkPrn);
+            _testFixture.ResetData();
             _createdProvider = _testFixture.CreateProvider(UkPrn);
         }
 

@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
         {
             _testFixture = testFixture;
             var testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
-            _testFixture.ResetData(ProviderName);
+            _testFixture.ResetData();
 
             var filePath = Path.Combine(testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))

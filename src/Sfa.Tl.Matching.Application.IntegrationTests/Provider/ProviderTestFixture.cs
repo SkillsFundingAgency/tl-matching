@@ -40,18 +40,15 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             FileImportService = new FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>(logger, mapper, excelFileReader, repository);
         }
 
-        internal void ResetData(string name)
+        public void ResetData()
         {
-            var provider = MatchingDbContext.Provider.FirstOrDefault(p => p.Name == name);
-            if (provider != null)
-            {
-                MatchingDbContext.Provider.Remove(provider);
-                var count = MatchingDbContext.SaveChanges();
-                count.Should().Be(1);
-            }
+            var provider = MatchingDbContext.Provider.FirstOrDefault(p => p.CreatedBy == nameof(ProviderTestFixture));
+            if (provider != null) MatchingDbContext.Provider.Remove(provider);
+
+            MatchingDbContext.SaveChanges();
         }
 
-        internal int GetCountBy(string name)
+        public int GetCountBy(string name)
         {
             var providerCount = MatchingDbContext.Provider.Count(p => p.Name == name);
 
@@ -60,6 +57,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
 
         public void Dispose()
         {
+            ResetData();
             MatchingDbContext?.Dispose();
         }
     }

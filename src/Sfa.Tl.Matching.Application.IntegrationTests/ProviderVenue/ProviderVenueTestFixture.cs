@@ -43,13 +43,18 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             FileImportService = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(logger, mapper, excelFileReader, providerVenuerepository);
         }
 
-        internal void ResetData(int ukprn)
+        public void ResetData()
         {
-            ResetProviderVenue(ukprn);
-            ResetProvider(ukprn);
+            var providerVenue = MatchingDbContext.ProviderVenue.FirstOrDefault(pv => pv.CreatedBy == nameof(ProviderVenueTestFixture));
+            if (providerVenue != null) MatchingDbContext.ProviderVenue.Remove(providerVenue);
+
+            var provider = MatchingDbContext.Provider.FirstOrDefault(p => p.Source == nameof(ProviderVenueTestFixture));
+            if (provider != null) MatchingDbContext.Provider.Remove(provider);
+
+            MatchingDbContext.SaveChanges();
         }
 
-        internal Domain.Models.Provider CreateProvider(int ukprn)
+        public Domain.Models.Provider CreateProvider(int ukprn)
         {
             var provider = new Domain.Models.Provider
             {
@@ -73,29 +78,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
 
         public void Dispose()
         {
+            ResetData();
             MatchingDbContext?.Dispose();
-        }
-
-        private void ResetProviderVenue(int ukprn)
-        {
-            var providerVenue = MatchingDbContext.ProviderVenue.FirstOrDefault(pv => pv.Provider.UkPrn == ukprn);
-            if (providerVenue != null)
-            {
-                MatchingDbContext.ProviderVenue.Remove(providerVenue);
-                var count = MatchingDbContext.SaveChanges();
-                count.Should().Be(1);
-            }
-        }
-
-        private void ResetProvider(int ukprn)
-        {
-            var provider = MatchingDbContext.Provider.FirstOrDefault(p => p.UkPrn == ukprn);
-            if (provider != null)
-            {
-                MatchingDbContext.Provider.Remove(provider);
-                var count = MatchingDbContext.SaveChanges();
-                count.Should().Be(1);
-            }
         }
     }
 }
