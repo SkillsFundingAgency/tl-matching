@@ -51,7 +51,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Frontend\src\stylesheets\css\" />
     <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\javascripts\" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES2015</TypeScriptTarget>

@@ -11,11 +11,13 @@
 3. Gulp - https://gulpjs.com/
 
 ## Actions
-cd to "Frontend" directory
+cd to "root" directory
 
 |Task|Description|
 |----|-----------|
 | `npm install` | Installs all node packages |
 | `gulp` | Merges, compiles and moves all sass / js / assets |
+
+If the above has worked you should see files being generated in wwwwroot.
 
 

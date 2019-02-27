@@ -13,27 +13,27 @@
 // Rework button to look like a link
 .tl-button--looks-like-link {
     display: block;
-    padding: 0;
-    margin: 0;
+    padding: govuk-spacing(0);
+    margin: govuk-spacing(0);
     border: 0;
     text-decoration: underline;
     background: none;
     box-shadow: none;
     text-align: left;
-    color: #005ea5;
+    color: $govuk-link-colour;
 
     &:hover, &:active {
         top: 0;
         background: none;
-        color: #2b8cc4;
+        color: $govuk-link-hover-colour;
         text-decoration: underline;
     }
 
     &:focus {
-        background: #ffbf47;
+        background: $govuk-focus-colour;
     }
 
     &:visited {
-        color: #4c2c92;
+        color: $govuk-link-visited-colour;
     }
 }
