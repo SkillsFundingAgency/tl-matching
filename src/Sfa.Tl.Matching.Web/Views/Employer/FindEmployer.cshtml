@@ -1,4 +1,4 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerNameViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.FindEmployerViewModel
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -31,6 +31,10 @@
 
                 <select id="BusinessName" name="BusinessName" class="govuk-input govuk-input" asp-for="BusinessName">
                 </select>
+                
+                <input asp-for="SelectedEmployerId" type="hidden" />
+
+                <input id="employerNamesWithIds" type="hidden" />
 
             </div>
 

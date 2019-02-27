@@ -18,11 +18,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_FindEmployer_Is_Submitted_Invalid_Employer()
         {
             var employerService = Substitute.For<IEmployerService>();
-            employerService.GetEmployer(Arg.Any<string>(), Arg.Any<string>())
+            employerService.GetEmployer(Arg.Any<int>())
                 .ReturnsNull();
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            var viewModel = new EmployerNameViewModel
+            var viewModel = new FindEmployerViewModel
             {
                 BusinessName = "Invalid Business Name"
             };
@@ -46,13 +46,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         [Fact]
         public void Then_Model_State_Has_BusinessName_Key() =>
-            _employerController.ViewData.ModelState.ContainsKey(nameof(EmployerNameViewModel.BusinessName))
+            _employerController.ViewData.ModelState.ContainsKey(nameof(FindEmployerViewModel.BusinessName))
                 .Should().BeTrue();
 
         [Fact]
         public void Then_Model_State_Has_BusinessName_Error()
         {
-            var modelStateEntry = _employerController.ViewData.ModelState[nameof(EmployerNameViewModel.BusinessName)];
+            var modelStateEntry = _employerController.ViewData.ModelState[nameof(FindEmployerViewModel.BusinessName)];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must find and choose an employer");
         }
     }
