@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Domain.Models;
 
@@ -14,7 +11,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
         }
 
-        public override async Task<int> CreateMany(IEnumerable<Route> routes)
+        public override async Task<int> CreateMany(IList<Route> routes)
         {
             return await BaseCreateMany(routes);
         }

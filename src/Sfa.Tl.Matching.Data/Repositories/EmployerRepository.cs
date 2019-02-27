@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -19,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public override async Task<int> CreateMany(IEnumerable<Employer> employers)
+        public override async Task<int> CreateMany(IList<Employer> entities)
         {
             await ResetData();
 

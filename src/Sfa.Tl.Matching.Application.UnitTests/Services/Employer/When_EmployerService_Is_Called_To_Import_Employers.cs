@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _repository = Substitute.For<IRepository<Domain.Models.Employer>>();
 
             _repository
-                .CreateMany(Arg.Any<IEnumerable<Domain.Models.Employer>>())
+                .CreateMany(Arg.Any<IList<Domain.Models.Employer>>())
                 .Returns(callinfo =>
                 {
                     var passedEntities = callinfo.ArgAt<IEnumerable<Domain.Models.Employer>>(0);
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         {
             _repository
                 .Received(1)
-                .CreateMany(Arg.Any<IEnumerable<Domain.Models.Employer>>());
+                .CreateMany(Arg.Any<IList<Domain.Models.Employer>>());
         }
 
         [Fact]

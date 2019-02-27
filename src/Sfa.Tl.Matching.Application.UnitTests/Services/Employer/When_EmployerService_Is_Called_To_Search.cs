@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         [Fact]
         public void Then_Correct_Number_Of_Results()
         {
-            _searchResults.Count().Should().Be(3);
+            _searchResults.Count.Should().Be(3);
         }
 
         [Fact]

@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
             _validator = validator;
         }
 
-        public IEnumerable<TDto> ValidateAndParseFile(TImportDto fileImportDto)
+        public IList<TDto> ValidateAndParseFile(TImportDto fileImportDto)
         {
             var dtos = new List<TDto>();
 

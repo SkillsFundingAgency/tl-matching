@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -70,7 +71,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public abstract Task<int> CreateMany(IEnumerable<T> entities);
+        public abstract Task<int> CreateMany(IList<T> entities);
 
         public IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
