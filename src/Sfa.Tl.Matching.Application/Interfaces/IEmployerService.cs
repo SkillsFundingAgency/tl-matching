@@ -7,5 +7,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     public interface IEmployerService
     {
         Task<EmployerDto> GetEmployer(int id);
+        IEnumerable<EmployerSearchResultDto> Search(string employerName);
     }
 }
