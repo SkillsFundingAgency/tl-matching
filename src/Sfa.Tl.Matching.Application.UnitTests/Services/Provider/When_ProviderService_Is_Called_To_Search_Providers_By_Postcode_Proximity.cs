@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
         public When_ProviderService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
         {
-            var config = new MapperConfiguration(c => c.AddProfile<ProviderMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
 
             var searchProvider = Substitute.For<ISearchProvider>();

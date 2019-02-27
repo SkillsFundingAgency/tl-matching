@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 
         public When_EmployerService_Is_Called_To_Search()
         {
-            var config = new MapperConfiguration(c => c.AddProfile<EmployerMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
             var repository = Substitute.For<IRepository<Domain.Models.Employer>>();
 
@@ -54,8 +54,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         {
             _firstEmployer.EmployerName.Should().Be("Another Company");
         }
-
-
+        
         [Fact]
         public void Then_The_First_Employer_Is_In_Correct_Order_With_AlsoKnownAs()
         {

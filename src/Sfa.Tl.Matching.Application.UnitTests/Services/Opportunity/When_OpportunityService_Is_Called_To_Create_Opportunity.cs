@@ -25,14 +25,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             repository.Create(Arg.Any<Domain.Models.Opportunity>())
                 .Returns(OpportunityId);
 
-            var opportuntiyService = new OpportunityService(mapper, dateTimeProvider, repository);
+            var opportunityService = new OpportunityService(mapper, dateTimeProvider, repository);
 
             var dto = new OpportunityDto
             {
                 Contact = "Contact"
             };
 
-            _result = opportuntiyService.CreateOpportunity(dto).GetAwaiter().GetResult();
+            _result = opportunityService.CreateOpportunity(dto).GetAwaiter().GetResult();
         }
 
         [Fact]

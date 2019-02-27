@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
-    public class When_Placement_Information_Is_Submitted_Successfully
+    public class When_OpportunityService_Is_Called_To_Update_Opportunity
     {
         private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
         private const string JobTitle = "JobTitle";
@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const int Distance = 1;
         private const int RouteId = 1;
 
-        public When_Placement_Information_Is_Submitted_Successfully()
+        public When_OpportunityService_Is_Called_To_Update_Opportunity()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(opportunity);
 
-            var opportuntiyService = new OpportunityService(mapper, dateTimeProvider, _opportunityRepository);
+            var opportunityService = new OpportunityService(mapper, dateTimeProvider, _opportunityRepository);
 
             var dto = new OpportunityDto
             {
@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 ModifiedBy = ModifiedBy
             };
 
-            opportuntiyService.UpdateOpportunity(dto).GetAwaiter().GetResult();
+            opportunityService.UpdateOpportunity(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
