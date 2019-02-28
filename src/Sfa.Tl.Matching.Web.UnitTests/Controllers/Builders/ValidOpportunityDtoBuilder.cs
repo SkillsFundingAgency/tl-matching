@@ -1,5 +1,4 @@
-﻿using System;
-using Sfa.Tl.Matching.Models.Dto;
+﻿using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
 {

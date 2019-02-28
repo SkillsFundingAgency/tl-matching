@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Sfa.Tl.Matching.Domain.Models
+﻿namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Opportunity : BaseEntity
     {
