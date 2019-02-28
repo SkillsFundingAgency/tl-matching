@@ -12,7 +12,7 @@ var employer = (function () {
     });
 
     function search(query, populateResults) {
-        var delayInMs = 500;
+        var delayInMs = 100;
 
         setTimeout(function () {
             $.ajax({
