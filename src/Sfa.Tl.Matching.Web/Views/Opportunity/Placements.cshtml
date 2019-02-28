@@ -2,11 +2,8 @@
 
 <form asp-action="Placements">
     <input asp-for="OpportunityId" type="hidden" />
-    <a asp-controller="Provider" asp-action="Results"
-       asp-route-routeId="@Model.RouteId"
-       asp-route-postcode="@Model.Postcode"
-       asp-route-distance="@Model.Distance"
-       class="govuk-back-link">Back</a>
+    
+    <a href="/provider-results-for-@Model.RouteId-within-@Model.Distance-miles-of-@Model.Postcode" class="govuk-back-link">Back</a>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -44,7 +41,7 @@
             <div class="govuk-form-group" sfa-validation-for="PlacementsKnown" sfa-validationerror-class="govuk-form-group--error">
                 <fieldset class="govuk-fieldset">
                     <label class="govuk-label govuk-label--m" asp-for="PlacementsKnown">
-                        Does know how many placements they want at this location?
+                        Does the employer know how many placements they want at this location?
                     </label>
                     <span id="placement-location-hint" class="govuk-hint">
                         This can be an estimate

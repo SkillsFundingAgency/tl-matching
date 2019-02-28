@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             routePathService.GetRoutes().Returns(routes);
             var providerController = new ProviderController(logger, mapper, routePathService, _providerService);
 
-            _result = providerController.Results(_routeId, _postcode).GetAwaiter().GetResult();
+            _result = providerController.Results(_routeId, _postcode, _searchRadius).GetAwaiter().GetResult();
         }
 
         [Fact]
