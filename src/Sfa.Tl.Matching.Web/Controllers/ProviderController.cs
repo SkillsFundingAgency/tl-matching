@@ -53,13 +53,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("ProviderResults_Get", new
             {
                 routeId = viewModel.SelectedRouteId,
-                postcode = viewModel.Postcode
+                postcode = viewModel.Postcode,
+                searchRadius = SearchParametersViewModel.DefaultSearchRadius
             });
         }
 
         [HttpGet]
-        [Route("provider-results", Name = "ProviderResults_Get")]
-        public async Task<IActionResult> Results(int routeId, string postcode, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
+        [Route("provider-results-for-{routeId}-within-{searchRadius}-miles-of-{postcode}", Name = "ProviderResults_Get")]
+        public async Task<IActionResult> Results(int routeId, string postcode, int searchRadius)
         {
             var searchParametersViewModel = new SearchParametersViewModel
             {

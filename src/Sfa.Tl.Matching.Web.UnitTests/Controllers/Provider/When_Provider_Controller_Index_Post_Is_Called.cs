@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             var logger = Substitute.For<ILogger<ProviderController>>();
 
-            var config = new MapperConfiguration(c => c.AddProfile<SearchParametersViewModelMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
             var providerService = Substitute.For<IProviderService>();
