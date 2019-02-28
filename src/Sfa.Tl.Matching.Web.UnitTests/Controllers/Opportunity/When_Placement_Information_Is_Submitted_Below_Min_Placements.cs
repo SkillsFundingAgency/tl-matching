@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_Model_State_Has_Min_Error()
         {
             var modelStateEntry = _opportunityController.ViewData.ModelState[nameof(PlacementInformationViewModel.Placements)];
-            modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must enter a number that is 1 or more");
+            modelStateEntry.Errors[0].ErrorMessage.Should().Be("The number of placements must be 1 or more");
         }
     }
 }

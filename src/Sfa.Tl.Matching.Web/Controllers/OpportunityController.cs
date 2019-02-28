@@ -91,9 +91,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!viewModel.Placements.HasValue)
                 ModelState.AddModelError(nameof(viewModel.Placements), "You must estimate how many placements the employer wants at this location");
             else if (viewModel.Placements < 1)
-                ModelState.AddModelError(nameof(viewModel.Placements), "You must enter a number that is 1 or more");
+                ModelState.AddModelError(nameof(viewModel.Placements), "The number of placements must be 1 or more");
             else if (viewModel.Placements > 999)
-                ModelState.AddModelError(nameof(viewModel.Placements), "You must enter a number that is 999 or less");
+                ModelState.AddModelError(nameof(viewModel.Placements), "The number of placements must be 999 or less");
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_Model_State_Has_Max_Error()
         {
             var modelStateEntry = _opportunityController.ViewData.ModelState[nameof(PlacementInformationViewModel.Placements)];
-            modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must enter a number that is 999 or less");
+            modelStateEntry.Errors[0].ErrorMessage.Should().Be("The number of placements must be 999 or less");
         }
     }
 }
