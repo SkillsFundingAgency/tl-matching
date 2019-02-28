@@ -82,7 +82,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers", Name = "CheckAnswers_Get")]
         public IActionResult CheckAnswers(int opportunityId)
         {
-            return View();
+            var viewModel = new CheckAnswersViewModel
+            {
+                OpportunityId = opportunityId
+            };
+
+            return View(viewModel);
         }
 
         private void Validate(PlacementInformationViewModel viewModel)
