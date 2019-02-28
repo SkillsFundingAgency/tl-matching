@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 Distance = dto.Distance,
                 OpportunityId = dto.Id,
                 JobTitle = dto.JobTitle,
-                PlacementsKnown = dto.PlacementsKnown ?? false,
+                PlacementsKnown = dto.PlacementsKnown,
                 Placements = dto.Placements
             };
 
