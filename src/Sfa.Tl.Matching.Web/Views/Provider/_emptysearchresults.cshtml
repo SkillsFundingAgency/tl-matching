@@ -7,14 +7,16 @@
 <h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">0 </span>results in <span class="govuk-!-font-weight-bold">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value.ToString() == @Model.SearchParameters.SelectedRouteId)?.Text </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
 
 <form asp-controller="Opportunity" asp-action="Create">
-    <input type="hidden" name="Postcode" value="@Model.SearchParameters.Postcode" />
-    <input type="hidden" name="Distance" value="@Model.SearchParameters.SearchRadius" />
-    <input type="hidden" name="RouteId" value="@Model.SearchParameters.SelectedRouteId" />
+    <div class="govuk-form-group">
+        <input type="hidden" name="Postcode" value="@Model.SearchParameters.Postcode" />
+        <input type="hidden" name="Distance" value="@Model.SearchParameters.SearchRadius" />
+        <input type="hidden" name="RouteId" value="@Model.SearchParameters.SelectedRouteId" />
 
-    <button type="submit" class="tl-button--looks-like-link govuk-body">No suitable providers? Let us know</button>
+        <button type="submit" class="tl-button--looks-like-link govuk-body">No suitable providers? Let us know</button>
+    </div>
 </form>
 
-<p class="govuk-body">You can:</p>
+<p class="govuk-body govuk-!-margin-top-5">You can:</p>
 <ul class="govuk-list govuk-list--bullet">
     <li>increase the distance from the employer’s postcode</li>
     <li>try a different skill area</li>
