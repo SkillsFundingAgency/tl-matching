@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Domain\Sfa.Tl.Matching.Domain.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.Models\Sfa.Tl.Matching.Models.csproj" />
   </ItemGroup>
 
 </Project>

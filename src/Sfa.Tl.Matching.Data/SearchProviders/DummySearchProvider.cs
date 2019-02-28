@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Data.SearchProviders
 {
@@ -15,15 +15,15 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             _logger = logger;
         }
 
-        public Task<IEnumerable<ProviderVenueSearchResult>> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId)
+        public Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId)
         {
             _logger.LogInformation($"Searching for providers within radius {searchRadius} of postcode '{postcode}' with route {routeId}");
 
-            var items = new List<ProviderVenueSearchResult>();
+            var items = new List<ProviderVenueSearchResultDto>();
 
             if (postcode == "SW1A 2AA")
             {
-                items.Add(new ProviderVenueSearchResult
+                items.Add(new ProviderVenueSearchResultDto
                 {
                     ProviderId = 1,
                     ProviderName = "The WKCIC Group",
@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                         "health and physiotherapy"
                     }
                 });
-                items.Add(new ProviderVenueSearchResult
+                items.Add(new ProviderVenueSearchResultDto
                 {
                     ProviderId = 2,
                     ProviderName = "Lambeth College",
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                 });
             }
 
-            return Task.FromResult<IEnumerable<ProviderVenueSearchResult>>(items);
+            return Task.FromResult<IEnumerable<ProviderVenueSearchResultDto>>(items);
         }
     }
 }
