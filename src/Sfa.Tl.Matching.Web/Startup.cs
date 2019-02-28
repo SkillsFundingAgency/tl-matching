@@ -148,6 +148,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<Path>, PathRepository>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
             services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
+            services.AddTransient<IRepository<ProvisionGap>, ProvisionGapRepository>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
