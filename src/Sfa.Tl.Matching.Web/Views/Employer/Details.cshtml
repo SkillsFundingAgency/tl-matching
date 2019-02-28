@@ -1,7 +1,6 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerDetailsViewModel
 
-<a asp-controller="Employer" asp-action="FindEmployer" asp-route-opportunityId="@Model.OpportunityId"
-   class="govuk-back-link">Back</a>
+<a asp-controller="Employer" asp-action="FindEmployer" asp-route-opportunityId="@Model.OpportunityId" class="govuk-back-link">Back</a>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -26,8 +25,7 @@
         </h2>
 
         <form asp-controller="Employer" asp-action="Details">
-            <a asp-controller="Employer" asp-action="FindEmployer" asp-route-opportunityId="@Model.OpportunityId" 
-               class="govuk-button--looks-like-link govuk-body">Find a different employer</a>
+            <a asp-controller="Employer" asp-action="FindEmployer" asp-route-opportunityId="@Model.OpportunityId" class="govuk-button--looks-like-link govuk-body">Find a different employer</a>
 
             <input asp-for="OpportunityId" type="hidden"/>
             <div class="govuk-form-group" sfa-validation-for="Contact" sfa-validationerror-class="govuk-form-group--error">
