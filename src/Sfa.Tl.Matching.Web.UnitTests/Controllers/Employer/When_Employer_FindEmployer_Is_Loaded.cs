@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -18,15 +17,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             var employerService = Substitute.For<IEmployerService>();
             var opportunityService = Substitute.For<IOpportunityService>();
+            var employerController = new EmployerController(employerService, opportunityService);
 
-            var tempData = Substitute.For<ITempDataDictionary>();
-            tempData["OpportunityId"] = OpportunityId;
-            var employerController = new EmployerController(employerService, opportunityService)
-            {
-                TempData = tempData
-            };
-
-            _result = employerController.FindEmployer();
+            _result = employerController.FindEmployer(OpportunityId);
         }
 
         [Fact]

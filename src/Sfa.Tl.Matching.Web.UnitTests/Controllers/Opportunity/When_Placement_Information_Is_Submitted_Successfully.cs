@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using NSubstitute;
+﻿using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -23,11 +22,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
            
             _opportunityService = Substitute.For<IOpportunityService>();
 
-            var tempData = Substitute.For<ITempDataDictionary>();
             var opportunityController = new OpportunityController(_opportunityService);
             opportunityController.AddUsernameToContext(ModifiedBy);
 
-            opportunityController.TempData = tempData;
             opportunityController.Placements(_viewModel).GetAwaiter().GetResult();
         }
 

@@ -1,5 +1,8 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerDetailsViewModel
 
+<a asp-controller="Employer" asp-action="FindEmployer" asp-route-opportunityId="@Model.OpportunityId"
+   class="govuk-back-link">Back</a>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         @if (!ViewData.ModelState.IsValid)
@@ -21,32 +24,32 @@
         <h2 class="govuk-heading-m">
             <label asp-for="EmployerName">@Model.EmployerName</label>
         </h2>
-        <form asp-controller="Employer" asp-action="GoBack">
-            <input asp-for="OpportunityId" type="hidden" />
-            <button type="submit" class="govuk-button--looks-like-link govuk-body">Find a different employer</button>
-        </form>
+
         <form asp-controller="Employer" asp-action="Details">
-            <input asp-for="OpportunityId" type="hidden" />
+            <a asp-controller="Employer" asp-action="FindEmployer" asp-route-opportunityId="@Model.OpportunityId" 
+               class="govuk-button--looks-like-link govuk-body">Find a different employer</a>
+
+            <input asp-for="OpportunityId" type="hidden"/>
             <div class="govuk-form-group" sfa-validation-for="Contact" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" asp-for="Contact">
                     Contact name for placements
                 </label>
                 <span class="govuk-error-message" asp-validation-for="Contact"></span>
-                <input asp-for="Contact" class="govuk-input govuk-input govuk-input--width-20" />
+                <input asp-for="Contact" class="govuk-input govuk-input govuk-input--width-20"/>
             </div>
             <div class="govuk-form-group" sfa-validation-for="ContactEmail" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" asp-for="ContactEmail">
                     Email
                 </label>
                 <span class="govuk-error-message" asp-validation-for="ContactEmail"></span>
-                <input asp-for="ContactEmail" class="govuk-input govuk-input--width-20" />
+                <input asp-for="ContactEmail" class="govuk-input govuk-input--width-20"/>
             </div>
             <div class="govuk-form-group" sfa-validation-for="ContactPhone" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" asp-for="ContactPhone">
                     Phone number
                 </label>
                 <span class="govuk-error-message" asp-validation-for="ContactPhone"></span>
-                <input asp-for="ContactPhone" class="govuk-input govuk-input--width-20" type="tel" autocomplete="tel" />
+                <input asp-for="ContactPhone" class="govuk-input govuk-input--width-20" type="tel" autocomplete="tel"/>
             </div>
             <button type="submit" class="govuk-button">Confirm and continue</button>
         </form>

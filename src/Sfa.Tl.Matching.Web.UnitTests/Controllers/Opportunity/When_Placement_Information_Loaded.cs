@@ -1,8 +1,8 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -12,20 +12,33 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     public class When_Placement_Information_Loaded
     {
         private readonly IActionResult _result;
+        private readonly IOpportunityService _opportunityService;
+
+        private readonly OpportunityDto _dto = new OpportunityDto();
+        private const string JobTitle = "JobTitle";
+        private const bool PlacementsKnown = true;
+        private const int Placements = 5;
         private const int OpportunityId = 12;
 
         public When_Placement_Information_Loaded()
         {
-            var opportunityService = Substitute.For<IOpportunityService>();
+            _dto.Id = OpportunityId;
+            _dto.JobTitle = JobTitle;
+            _dto.PlacementsKnown = PlacementsKnown;
+            _dto.Placements = Placements;
 
-            var tempData = Substitute.For<ITempDataDictionary>();
-            tempData["OpportunityId"] = OpportunityId;
-            var opportunityController = new OpportunityController(opportunityService)
-            {
-                TempData = tempData
-            };
+            _opportunityService = Substitute.For<IOpportunityService>();
+            _opportunityService.GetOpportunity(OpportunityId).Returns(_dto);
 
-            _result = opportunityController.Placements();
+            var opportunityController = new OpportunityController(_opportunityService);
+
+            _result = opportunityController.Placements(OpportunityId).GetAwaiter().GetResult();
+        }
+
+        [Fact]
+        public void Then_GetOpportunity_Is_Called_Exactly_Once()
+        {
+            _opportunityService.Received(1).GetOpportunity(OpportunityId);
         }
 
         [Fact]
@@ -48,6 +61,27 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             var viewModel = GetViewModel();
             viewModel.OpportunityId.Should().Be(OpportunityId);
+        }
+
+        [Fact]
+        public void Then_JobTitle_Is_Set()
+        {
+            var viewModel = GetViewModel();
+            viewModel.JobTitle.Should().Be(JobTitle);
+        }
+
+        [Fact]
+        public void Then_PlacementsKnown_Is_Set()
+        {
+            var viewModel = GetViewModel();
+            viewModel.PlacementsKnown.Should().Be(PlacementsKnown);
+        }
+
+        [Fact]
+        public void Then_Placements_Is_Set()
+        {
+            var viewModel = GetViewModel();
+            viewModel.Placements.Should().Be(Placements);
         }
 
         private PlacementInformationViewModel GetViewModel()
