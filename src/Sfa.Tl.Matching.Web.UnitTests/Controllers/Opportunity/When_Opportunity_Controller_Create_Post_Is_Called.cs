@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_CreateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).CreateOpportunity(_dto);
+            _opportunityService.Received(1).CreateOpportunity(Arg.Is<OpportunityDto>(dto => dto.RouteId == 1 && dto.Postcode == "cv12wt" && dto.Distance == 10));
         }
     }
 }
