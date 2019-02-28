@@ -3,7 +3,7 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue.Builders
 {
-    internal class ValidProviderVenueDtoListBuilder
+    public class ValidProviderVenueDtoListBuilder
     {
         private readonly IList<ProviderVenueDto> _providerVenueDtos;
 

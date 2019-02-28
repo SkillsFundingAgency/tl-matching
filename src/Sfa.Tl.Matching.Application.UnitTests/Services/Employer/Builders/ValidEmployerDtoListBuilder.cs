@@ -4,7 +4,7 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
 {
-    internal class ValidEmployerDtoListBuilder
+    public class ValidEmployerDtoListBuilder
     {
         private readonly IList<EmployerDto> _employerDtos;
 

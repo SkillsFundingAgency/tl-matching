@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).UpdateOpportunity(_dto);
+            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<OpportunityDto>());
         }
 
         [Fact]

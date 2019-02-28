@@ -33,6 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<OpportunityDto> GetOpportunity(int id)
         {
             var opportunity = await _repository.GetSingleOrDefault(o => o.Id == id);
+            
             var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
 
             return dto;
@@ -41,9 +42,12 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task UpdateOpportunity(OpportunityDto dto)
         {
             dto.ModifiedOn = _dateTimeProvider.UtcNow();
-
-            var opportunity = _mapper.Map<Opportunity>(dto);
-            await _repository.Update(opportunity);
+            
+            var trackedEntity = await _repository.GetSingleOrDefault(o => o.Id == dto.Id);
+            
+            _mapper.Map(dto, trackedEntity);
+            
+            await _repository.Update(trackedEntity);
         }
     }
 }

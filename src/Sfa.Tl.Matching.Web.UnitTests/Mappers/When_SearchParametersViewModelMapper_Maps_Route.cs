@@ -19,11 +19,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers
             _routes = new List<Route>
                 {
                     new Route { Id = 1, Name = "Route 1" },
-                    new Route { Id = 2, Name = "Route 2" },
+                    new Route { Id = 2, Name = "Route 2" }
                 }
                 .AsQueryable();
 
-            var config = new MapperConfiguration(c => c.AddProfile<SearchParametersViewModelMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
             _result = mapper.Map<SelectListItem[]>(_routes);
         }

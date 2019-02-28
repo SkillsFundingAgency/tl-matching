@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants
 {
-    internal static class EntityCreationConstants
+    public static class EntityCreationConstants
     {
         public const string CreatedByUser = "TestUser";
         public static DateTime CreatedOn = DateTime.Parse("2019/02/15 11:12:13");

@@ -109,14 +109,21 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        private async Task<OpportunityDto> PopulateDto(int opportunityId, EmployerDto employer)
+ private OpportunityDto PopulateDto(int opportunityId, EmployerDto employer)
         {
-            var dto = await _opportunityService.GetOpportunity(opportunityId);
-            dto.EmployerName = employer.CompanyName; // TODO AU Should this also inclue the Aka?
-            dto.EmployerContact = employer.PrimaryContact;
-            dto.EmployerContactEmail = employer.Email;
-            dto.EmployerContactPhone = employer.Phone;
-            dto.ModifiedBy = HttpContext.User.GetUserName();
+            var dto = new OpportunityDto
+            {
+                Id = opportunityId,
+                EmployerCrmId = employer.CrmId,
+                EmployerName = employer.CompanyName,
+                EmployerAupa = employer.Aupa,
+                EmployerOwner = employer.Owner,
+                Contact = employer.PrimaryContact,
+                ContactEmail = employer.Email,
+                ContactPhone = employer.Phone,
+                ModifiedBy = HttpContext.User.GetUserName()
+            };
+            // TODO AU Should this also inclue the Aka?
 
             return dto;
         }

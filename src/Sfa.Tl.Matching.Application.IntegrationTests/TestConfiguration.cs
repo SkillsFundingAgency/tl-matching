@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests
         public MatchingDbContext GetDbContext()
         {
             var dbOptions = new DbContextOptionsBuilder<MatchingDbContext>()
-                .UseSqlServer(MatchingConfiguration.SqlConnectionString)
+                .UseSqlServer(MatchingConfiguration.SqlConnectionString, builder => builder.EnableRetryOnFailure())
                 .Options;
 
             var matchingDbContext = new MatchingDbContext(dbOptions);
