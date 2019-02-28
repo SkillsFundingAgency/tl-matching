@@ -6,13 +6,12 @@
 
 <h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">0 </span>results in <span class="govuk-!-font-weight-bold">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
 
-<form asp-controller="Opportunity" asp-action="Create">
-    <input type="hidden" name="Postcode" value="@Model.SearchParameters.Postcode" />
-    <input type="hidden" name="Distance" value="@Model.SearchParameters.SearchRadius" />
-    <input type="hidden" name="RouteId" value="@Model.SearchParameters.SelectedRouteId" />
-
-    <button type="submit" class="govuk-button--looks-like-link govuk-body">No suitable providers? Let us know</button>
-</form>
+<a asp-controller="Opportunity" 
+   asp-action="Create" 
+   asp-route-postcode="@Model.SearchParameters.Postcode" 
+   asp-route-distance="@Model.SearchParameters.SearchRadius" 
+   asp-route-routeId="@Model.SearchParameters.SelectedRouteId" 
+   class="govuk-button--looks-like-link govuk-body">No suitable providers? Let us know</a>
 
 <p class="govuk-body">You can:</p>
 <ul class="govuk-list govuk-list--bullet">
