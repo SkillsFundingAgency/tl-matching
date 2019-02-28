@@ -2,7 +2,11 @@
 
 <form asp-action="Placements">
     <input asp-for="OpportunityId" type="hidden" />
-    <a asp-controller="Provider" asp-action="Results" class="govuk-back-link">Back</a>
+    <a asp-controller="Provider" asp-action="Results"
+       asp-route-routeId="@Model.RouteId"
+       asp-route-postcode="@Model.Postcode"
+       asp-route-distance="@Model.Distance"
+       class="govuk-back-link">Back</a>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

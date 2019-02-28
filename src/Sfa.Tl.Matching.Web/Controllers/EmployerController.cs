@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return RedirectToRoute("EmployerDetails_Get", new
             {
-                OpportunityId = dto.Id
+                opportunityId = dto.Id
             });
         }
 
@@ -105,7 +105,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return RedirectToRoute("CheckAnswers_Get", new
             {
-                OpportunityId = dto.Id
+                opportunityId = dto.Id
             });
         }
 

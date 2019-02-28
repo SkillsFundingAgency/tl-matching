@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return GetResultsView(viewModel.SelectedRouteId.Value, viewModel.Postcode, viewModel.SearchRadius);
+                return GetResultsView(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius);
             }
 
             return RedirectToRoute("ProviderResults_Get", new
@@ -125,7 +125,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
 
-            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(viewModel.Postcode, viewModel.SearchRadius, viewModel.SelectedRouteId.Value);
+            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(viewModel.Postcode, viewModel.SearchRadius, viewModel.SelectedRouteId.GetValueOrDefault());
 
             var resultsViewModel = new SearchViewModel
             {

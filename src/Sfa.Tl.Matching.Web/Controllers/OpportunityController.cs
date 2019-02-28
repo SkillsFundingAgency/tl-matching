@@ -24,11 +24,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             dto.CreatedBy = HttpContext.User.GetUserName();
 
-            var opportunityId = await _opportunityService.CreateOpportunity(dto);
+            var id = await _opportunityService.CreateOpportunity(dto);
 
             return RedirectToRoute("Placements_Get", new
             {
-                OpportunityId = opportunityId
+                opportunityId = id
             });
         }
 
@@ -40,6 +40,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var viewModel = new PlacementInformationViewModel
             {
+                RouteId = dto.RouteId,
+                Postcode = dto.Postcode,
+                Distance = dto.Distance,
                 OpportunityId = dto.Id,
                 JobTitle = dto.JobTitle,
                 PlacementsKnown = dto.PlacementsKnown ?? false,
@@ -71,7 +74,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return RedirectToRoute("EmployerFind_Get", new
             {
-                OpportunityId = dto.Id
+                opportunityId = dto.Id
             });
         }
 
