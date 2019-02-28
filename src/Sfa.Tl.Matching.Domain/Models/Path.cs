@@ -10,6 +10,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string Summary { get; set; }
 
         public virtual Route Route { get; set; }
-        public virtual ICollection<RoutePathMapping> RoutePathMapping { get; set; }
+        public virtual ICollection<QualificationRoutePathMapping> QualificationRoutePathMapping { get; set; }
     }
 }

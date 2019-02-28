@@ -7,6 +7,7 @@ namespace Sfa.Tl.Matching.Models.Dto
     {
         public override Stream FileDataStream { get; set; }
         public override int? NumberOfHeaderRows => 3;
+        public int QualificationId { get; set; }
 
         [Column(Order = 0)] public string LarsId { get; set; }
         [Column(Order = 1)] public string Title { get; set; }

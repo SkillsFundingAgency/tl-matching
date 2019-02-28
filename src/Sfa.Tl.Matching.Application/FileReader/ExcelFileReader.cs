@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
             _validator = validator;
         }
 
-        public IEnumerable<TDto> ValidateAndParseFile(TImportDto fileImportDto)
+        public IList<TDto> ValidateAndParseFile(TImportDto fileImportDto)
         {
             var dtos = new List<TDto>();
 
@@ -153,40 +153,5 @@ namespace Sfa.Tl.Matching.Application.FileReader
             //TODO Logic to check if its a warning or error
             _logger.LogError(errorMessage);
         }
-
-        //public static string GetCellReferenceByIndex(int cellIndex)
-        //{
-        //    if (cellIndex <= 26)
-        //    {
-        //        return Convert.ToChar(cellIndex + 64).ToString();
-        //    }
-
-        //    var div = cellIndex / 26;
-
-        //    var mod = cellIndex % 26;
-
-        //    if (mod == 0)
-        //    {
-        //        mod = 26; div--;
-        //    }
-
-        //    return GetCellReferenceByIndex(div) + GetCellReferenceByIndex(mod);
-        //}
-
-        //public static int GetCellIndexByCellReference(string cellReference)
-        //{
-        //    var digits = new int[cellReference.Length];
-        //    for (var i = 0; i < cellReference.Length; ++i)
-        //    {
-        //        digits[i] = Convert.ToInt32(cellReference[i]) - 64;
-        //    }
-        //    var mul = 1; var res = 0;
-        //    for (var pos = digits.Length - 1; pos >= 0; --pos)
-        //    {
-        //        res += digits[pos] * mul;
-        //        mul *= 26;
-        //    }
-        //    return res;
-        //}
     }
 }

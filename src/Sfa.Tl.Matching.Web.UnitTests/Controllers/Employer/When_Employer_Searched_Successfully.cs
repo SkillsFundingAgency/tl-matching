@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             });
             var employerController = new EmployerController(_employerService, null);
 
-            _result = employerController.Search(query).GetAwaiter().GetResult();
+            _result = employerController.Search(query);
         }
 
         [Fact]
@@ -52,17 +52,31 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_First_Item_Is_Correct()
+        public void Then_First_Item_EmployerName_Is_Correct()
         {
             var resultList = GetResultList();
-            resultList[0].Should().Be("EmployerName1 (AlsoKnownAs1)");
+            resultList[0].EmployerName.Should().Be("EmployerName1");
         }
 
         [Fact]
-        public void Then_Second_Item_Is_Correct()
+        public void Then_First_Item_AlsoKnownAs_Is_Correct()
         {
             var resultList = GetResultList();
-            resultList[1].Should().Be("EmployerName2 (AlsoKnownAs2)");
+            resultList[0].AlsoKnownAs.Should().Be("AlsoKnownAs1");
+        }
+
+        [Fact]
+        public void Then_Second_Item_EmployerName_Is_Correct()
+        {
+            var resultList = GetResultList();
+            resultList[1].EmployerName.Should().Be("EmployerName2");
+        }
+
+        [Fact]
+        public void Then_Second_Item_AlsoKnownAs_Is_Correct()
+        {
+            var resultList = GetResultList();
+            resultList[1].AlsoKnownAs.Should().Be("AlsoKnownAs2");
         }
 
         [Fact]
@@ -71,10 +85,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _employerService.Received(1).Search("Employer");
         }
 
-        private List<string> GetResultList()
+        private List<EmployerSearchResultDto> GetResultList()
         {
             var viewResult = _result as OkObjectResult;
-            var viewModel = viewResult?.Value as List<string>;
+            var viewModel = viewResult?.Value as List<EmployerSearchResultDto>;
 
             return viewModel;
         }

@@ -25,8 +25,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
                 dbContext.SaveChanges();
 
                 var repository = new RouteRepository(logger, dbContext);
-                _result = repository.GetMany(x => true)
-                    .GetAwaiter().GetResult().ToList();
+                _result = repository.GetMany().ToList();
             }
         }
 

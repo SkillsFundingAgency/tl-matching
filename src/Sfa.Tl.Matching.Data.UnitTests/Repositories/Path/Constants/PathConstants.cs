@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path.Constants
 {
-    internal static class PathConstants
+    public static class PathConstants
     {
         public const int Id = 1;
         public const string Name = "Path 1";

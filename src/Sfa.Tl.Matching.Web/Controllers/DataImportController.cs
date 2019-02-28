@@ -30,10 +30,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> Index(DataImportParametersViewModel viewModel)
         {
             if (viewModel.File == null)
-                ModelState.AddModelError("file", "A file must be selected");
+                ModelState.AddModelError("file", "You must select a file");
 
             if (viewModel.File != null && viewModel.File.ContentType != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                ModelState.AddModelError("file", "A file must be Excel Document");
+                ModelState.AddModelError("file", "You must upload an Excel file with the XLSX file extension");
 
             if (ModelState.IsValid)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
@@ -24,18 +25,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 
         public When_EmployerService_Is_Called_To_Search()
         {
-            var config = new MapperConfiguration(c => c.AddProfile<EmployerMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
             var repository = Substitute.For<IRepository<Domain.Models.Employer>>();
 
-            repository.GetMany(Arg.Any<Func<Domain.Models.Employer, bool>>())
+            repository.GetMany(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new SearchResultsBuilder().Build().AsQueryable());
 
-            var employerService = new EmployerService(mapper, null, repository);
+            var employerService = new EmployerService(mapper, repository);
 
             const string employerName = "Co";
 
-            _searchResults = employerService.Search(employerName).GetAwaiter().GetResult().ToList();
+            _searchResults = employerService.Search(employerName).ToList();
 
             _firstEmployer = _searchResults[0];
             _secondEmployer = _searchResults[1];
@@ -45,25 +46,43 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         [Fact]
         public void Then_Correct_Number_Of_Results()
         {
-            _searchResults.Count().Should().Be(3);
+            _searchResults.Count.Should().Be(3);
         }
 
         [Fact]
-        public void Then_The_First_Employer_Is_In_Correct_Order()
+        public void Then_The_First_Employer_Is_In_Correct_Order_With_EmployerName()
         {
-            _firstEmployer.EmployerNameWithAka.Should().Be("Another Company (Another Also Known As)");
+            _firstEmployer.EmployerName.Should().Be("Another Company");
+        }
+        
+        [Fact]
+        public void Then_The_First_Employer_Is_In_Correct_Order_With_AlsoKnownAs()
+        {
+            _firstEmployer.AlsoKnownAs.Should().Be("Another Also Known As");
         }
 
         [Fact]
-        public void Then_The_Second_Employer_Is_In_Correct_Order()
+        public void Then_The_Second_Employer_Is_In_Correct_Order_With_EmployerName()
         {
-            _secondEmployer.EmployerNameWithAka.Should().Be("Company (Also Known As)");
+            _secondEmployer.EmployerName.Should().Be("Company");
         }
 
         [Fact]
-        public void Then_The_Third_Employer_Is_In_Correct_Order()
+        public void Then_The_Second_Employer_Is_In_Correct_Order_With_AlsoKnownAs()
         {
-            _thirdEmployer.EmployerNameWithAka.Should().Be("Z Company (Z Also Known As)");
+            _secondEmployer.AlsoKnownAs.Should().Be("Also Known As");
+        }
+
+        [Fact]
+        public void Then_The_Third_Employer_Is_In_Correct_Order_With_EmployerName()
+        {
+            _thirdEmployer.EmployerName.Should().Be("Z Company");
+        }
+
+        [Fact]
+        public void Then_The_Third_Employer_Is_In_Correct_Order_With_AlsoKnownAs()
+        {
+            _thirdEmployer.AlsoKnownAs.Should().Be("Z Also Known As");
         }
     }
 }

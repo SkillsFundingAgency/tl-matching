@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -70,10 +71,35 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public abstract Task<int> CreateMany(IEnumerable<T> entities);
+        public abstract Task<int> CreateMany(IList<T> entities);
 
-        public abstract Task<IQueryable<T>> GetMany(Func<T, bool> predicate);
-        
-        public abstract Task<T> GetSingleOrDefault(Func<T, bool> predicate);
+        public IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath)
+        {
+            var queryable = GetQueryableWithIncludes(navigationPropertyPath);
+
+            return predicate != null ? queryable.Where(predicate) : queryable;
+        }
+
+        public async Task<T> GetSingleOrDefault(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationPropertyPath)
+        {
+            var queryable = GetQueryableWithIncludes(navigationPropertyPath);
+
+            return await queryable.SingleOrDefaultAsync(predicate);                                   
+        }
+
+        private IQueryable<T> GetQueryableWithIncludes(Expression<Func<T, object>>[] navigationPropertyPath)
+        {
+            var queryable = _dbContext.Set<T>().AsQueryable();
+
+            if (navigationPropertyPath.Any())
+            {
+                foreach (var navProp in navigationPropertyPath)
+                {
+                    queryable.Include(navProp);
+                }
+            }
+
+            return queryable;
+        }
     }
 }

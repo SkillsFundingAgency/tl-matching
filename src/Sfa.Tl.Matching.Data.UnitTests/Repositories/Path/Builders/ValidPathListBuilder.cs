@@ -4,41 +4,32 @@ using Sfa.Tl.Matching.Data.UnitTests.Repositories.Path.Constants;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path.Builders
 {
-    internal class ValidPathListBuilder
+    public class ValidPathListBuilder
     {
-        private readonly IList<Domain.Models.Path> _paths;
-
-        public ValidPathListBuilder()
+        public IList<Domain.Models.Path> Build() => new List<Domain.Models.Path>
         {
-            _paths =
-                new List<Domain.Models.Path>
-                {
-                    new Domain.Models.Path
-                    {
-                        Id = PathConstants.Id,
-                        Name = PathConstants.Name,
-                        Keywords = PathConstants.Keywords,
-                        Summary = PathConstants.Summary,
-                        CreatedBy = EntityCreationConstants.CreatedByUser,
-                        CreatedOn = EntityCreationConstants.CreatedOn,
-                        ModifiedBy = EntityCreationConstants.ModifiedByUser,
-                        ModifiedOn = EntityCreationConstants.ModifiedOn
-                    },
-                    new Domain.Models.Path
-                    {
-                        Id = PathConstants.Id + 1,
-                        Name = PathConstants.SecondName,
-                        Keywords = PathConstants.Keywords,
-                        Summary = PathConstants.Summary,
-                        CreatedBy = EntityCreationConstants.CreatedByUser,
-                        CreatedOn = EntityCreationConstants.CreatedOn,
-                        ModifiedBy = EntityCreationConstants.ModifiedByUser,
-                        ModifiedOn = EntityCreationConstants.ModifiedOn
-                    }
-                };
-        }
-
-        public IEnumerable<Domain.Models.Path> Build() =>
-            _paths;
+            new Domain.Models.Path
+            {
+                Id = PathConstants.Id,
+                Name = PathConstants.Name,
+                Keywords = PathConstants.Keywords,
+                Summary = PathConstants.Summary,
+                CreatedBy = EntityCreationConstants.CreatedByUser,
+                CreatedOn = EntityCreationConstants.CreatedOn,
+                ModifiedBy = EntityCreationConstants.ModifiedByUser,
+                ModifiedOn = EntityCreationConstants.ModifiedOn
+            },
+            new Domain.Models.Path
+            {
+                Id = PathConstants.Id + 1,
+                Name = PathConstants.SecondName,
+                Keywords = PathConstants.Keywords,
+                Summary = PathConstants.Summary,
+                CreatedBy = EntityCreationConstants.CreatedByUser,
+                CreatedOn = EntityCreationConstants.CreatedOn,
+                ModifiedBy = EntityCreationConstants.ModifiedByUser,
+                ModifiedOn = EntityCreationConstants.ModifiedOn
+            }
+        };
     }
 }

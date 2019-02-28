@@ -51,10 +51,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             viewModel.OpportunityId.Should().Be(OpportunityId);
         }
 
-        private EmployerNameViewModel GetViewModel()
+        private FindEmployerViewModel GetViewModel()
         {
             var viewResult = _result as ViewResult;
-            var viewModel = viewResult?.Model as EmployerNameViewModel;
+            var viewModel = viewResult?.Model as FindEmployerViewModel;
 
             return viewModel;
         }

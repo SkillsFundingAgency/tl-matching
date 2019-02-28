@@ -21,9 +21,9 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 .Matches(ValidationConstants.UkprnRegex)
                     .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                     .WithMessage($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
-                .MustAsync((x, cancellation) => CanUkprnBeAdded(repository, x))
-                    .WithErrorCode(ValidationErrorCode.RecordAlreadyExists.ToString())
-                    .WithMessage($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
+                .MustAsync((x, cancellation) => HaveUniqueProvider(repository, x))
+                    .WithErrorCode(ValidationErrorCode.ProviderAlreadyExists.ToString())
+                    .WithMessage($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.ProviderAlreadyExists.Humanize()}");
 
             RuleFor(dto => dto.ProviderName)
                 .NotEmpty()
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                     .WithMessage($"'{nameof(ProviderFileImportDto.Source)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
 
-        private async Task<bool> CanUkprnBeAdded(IRepository<Domain.Models.Provider> repository, string ukPrn)
+        private async Task<bool> HaveUniqueProvider(IRepository<Domain.Models.Provider> repository, string ukPrn)
         {
             var result = int.TryParse(ukPrn, out var ukprnNumber);
 

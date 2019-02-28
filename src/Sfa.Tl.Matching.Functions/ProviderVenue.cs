@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Functions
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject]IProviderVenueService providerVenueService
+            [Inject] IFileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue> fileImportService
         )
         {
             var stream = await blockBlob.OpenReadAsync(null, null, null);
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRecords = await providerVenueService.ImportProviderVenue(new ProviderVenueFileImportDto
+            var createdRecords = await fileImportService.Import(new ProviderVenueFileImportDto
             {
                 FileDataStream = stream,
                 CreatedBy = blockBlob.GetCreatedByMetadata()

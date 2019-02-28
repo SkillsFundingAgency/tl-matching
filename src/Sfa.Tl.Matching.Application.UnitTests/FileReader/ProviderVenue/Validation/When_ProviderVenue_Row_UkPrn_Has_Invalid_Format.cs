@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using FluentAssertions;
 using Humanizer;
 using NSubstitute;
@@ -16,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validat
         public When_ProviderVenue_Row_UkPrn_Has_Invalid_Format(ProviderVenueFileImportValidationTestFixture fixture)
         {
             _fixture = fixture;
-            fixture.ProviderRepository.GetSingleOrDefault(Arg.Any<Func<Domain.Models.Provider, bool>>())
+            fixture.ProviderRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
                 .Returns(new Domain.Models.Provider
                 {
                     Id = 1,

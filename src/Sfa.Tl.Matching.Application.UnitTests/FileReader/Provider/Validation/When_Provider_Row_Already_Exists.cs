@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using FluentAssertions;
 using FluentValidation.Results;
 using Humanizer;
@@ -16,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         public When_Provider_Row_Already_Exists(ProviderFileImportFixture fixture)
         {
-            fixture.Repository.GetSingleOrDefault(Arg.Any<Func<Domain.Models.Provider, bool>>())
+            fixture.Repository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
                 .Returns(new Domain.Models.Provider());
 
             var validator = new ProviderDataValidator(fixture.Repository);
@@ -33,10 +34,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         [Fact]
         public void Then_Error_Code_Is_RecordExists() =>
-            _validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.RecordAlreadyExists.ToString());
+            _validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.ProviderAlreadyExists.ToString());
 
         [Fact]
         public void Then_Error_Message_Is_RecordExists() =>
-            _validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.RecordAlreadyExists.Humanize()}");
+            _validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(ProviderFileImportDto.UkPrn)}' - {ValidationErrorCode.ProviderAlreadyExists.Humanize()}");
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Internal;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 
@@ -9,7 +10,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public OpportunityMapper()
         {
             CreateMap<OpportunityDto, Opportunity>()
-                .ForMember(m => m.CreatedOn, config => config.Ignore());
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForAllMembers(expression => expression.Condition((src, dest, sourceMember) => sourceMember != null && !sourceMember.GetType().IsDefaultValue(sourceMember)));
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -27,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var opportunityId = (int)TempData["OpportunityId"];
 
-            var viewModel = new EmployerNameViewModel
+            var viewModel = new FindEmployerViewModel
             {
                 OpportunityId = opportunityId
             };
@@ -37,20 +38,24 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("who-is-employer", Name = "EmployerName_Post")]
-        public async Task<IActionResult> FindEmployer(EmployerNameViewModel viewModel)
+        public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
             TempData["OpportunityId"] = viewModel.OpportunityId;
 
-            await Validate(viewModel);
+            if (viewModel.SelectedEmployerId == 0)
+            {
+                ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
+                return View(viewModel);
+            }
+
+            var employer = await _employerService.GetEmployer(viewModel.SelectedEmployerId);
+            if (employer == null)
+                ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
 
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var dto = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
-
-            dto.EmployerName = viewModel.BusinessName;
-            dto.ModifiedBy = HttpContext.User.GetUserName();
-
+            var dto = PopulateDto(viewModel.OpportunityId, employer);
             await _opportunityService.UpdateOpportunity(dto);
 
             return RedirectToRoute("EmployerDetails_Get");
@@ -58,21 +63,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-search", Name = "EmployerSearch_Get")]
-        public async Task<IActionResult> Search(string query)
+        public IActionResult Search(string query)
         {
-            var employers = await _employerService.Search(query);
-            var employersSelectList = employers.Select(e => e.EmployerNameWithAka).ToList();
+            var employers = _employerService.Search(query);
 
-            return Ok(employersSelectList);
-        }
-
-        private async Task Validate(EmployerNameViewModel viewModel)
-        {
-            if (string.IsNullOrEmpty(viewModel.BusinessName)) return;
-
-            var employer = await _employerService.GetEmployer(viewModel.CompanyName, viewModel.AlsoKnownAs);
-            if (employer == null)
-                ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
+            return Ok(employers.ToList());
         }
 
         [HttpGet]
@@ -85,7 +80,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var viewModel = new EmployerDetailsViewModel
             {
                 OpportunityId = opportunityId,
-                EmployerName = dto.EmployerName
+                EmployerName = dto.EmployerName,
+                Contact = dto.Contact,
+                ContactEmail = dto.ContactEmail,
+                ContactPhone = dto.ContactPhone
             };
 
             return View(viewModel);
@@ -118,6 +116,25 @@ namespace Sfa.Tl.Matching.Web.Controllers
             TempData["OpportunityId"] = viewModel.OpportunityId;
             
             return RedirectToRoute("EmployerName_Get");
+        }
+
+        private OpportunityDto PopulateDto(int opportunityId, EmployerDto employer)
+        {
+            var dto = new OpportunityDto
+            {
+                Id = opportunityId,
+                EmployerCrmId = employer.CrmId,
+                EmployerName = employer.CompanyName,
+                EmployerAupa = employer.Aupa,
+                EmployerOwner = employer.Owner,
+                Contact = employer.PrimaryContact,
+                ContactEmail = employer.Email,
+                ContactPhone = employer.Phone,
+                ModifiedBy = HttpContext.User.GetUserName()
+            };
+            // TODO AU Should this also inclue the Aka?
+
+            return dto;
         }
     }
 }

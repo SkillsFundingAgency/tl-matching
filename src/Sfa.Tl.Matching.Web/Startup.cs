@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using AutoMapper;
-using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +12,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Application.FileReader;
-using Sfa.Tl.Matching.Application.FileReader.Employer;
-using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
@@ -27,7 +21,6 @@ using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Infrastructure.Configuration;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
-using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -148,30 +141,15 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddSingleton(_configuration);
 
-			RegisterEmployerFileReader(services); // TODO AU THIS NEEDS TO GO
-			RegisterProviderFileReader(services);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
-        }
-
-        //TODO: Remove RegisterProviderFileReader after merged with importer changes
-        private static void RegisterProviderFileReader(IServiceCollection services)
-        {
-            services.AddTransient<IDataParser<ProviderDto>, ProviderDataParser>();
-            services.AddTransient<IValidator<ProviderFileImportDto>, ProviderDataValidator>();
-
-            services.AddTransient<IFileReader<ProviderFileImportDto, ProviderDto>, ExcelFileReader<ProviderFileImportDto, ProviderDto>>(provider =>
-                new ExcelFileReader<ProviderFileImportDto, ProviderDto>(
-                    provider.GetService<ILogger<ExcelFileReader<ProviderFileImportDto, ProviderDto>>>(),
-                    provider.GetService<IDataParser<ProviderDto>>(),
-                    (IValidator<ProviderFileImportDto>)provider.GetServices(typeof(IValidator<ProviderFileImportDto>)).Single(t => t.GetType() == typeof(ProviderDataValidator))));
         }
 
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
             services.AddTransient<IRepository<Opportunity>, OpportunityRepository>();
-            services.AddTransient<IRepository<RoutePathMapping>, RoutePathMappingRepository>();
+            services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Route>, RouteRepository>();
             services.AddTransient<IRepository<Path>, PathRepository>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
@@ -189,18 +167,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<ISearchProvider, DummySearchProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
-        }
-
-        private static void RegisterEmployerFileReader(IServiceCollection services) // TODO AU This needs to go
-        {
-            services.AddTransient<IDataParser<EmployerDto>, EmployerDataParser>();
-            services.AddTransient<IValidator<EmployerFileImportDto>, EmployerDataValidator>();
-
-            services.AddTransient<IFileReader<EmployerFileImportDto, EmployerDto>, ExcelFileReader<EmployerFileImportDto, EmployerDto>>(provider =>
-                new ExcelFileReader<EmployerFileImportDto, EmployerDto>(
-                    provider.GetService<ILogger<ExcelFileReader<EmployerFileImportDto, EmployerDto>>>(),
-                    provider.GetService<IDataParser<EmployerDto>>(),
-                    (IValidator<EmployerFileImportDto>)provider.GetServices(typeof(IValidator<EmployerFileImportDto>)).Single(t => t.GetType() == typeof(EmployerDataValidator))));
         }
     }
 }

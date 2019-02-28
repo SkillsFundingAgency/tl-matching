@@ -25,13 +25,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var routes = new List<Route>
                 {
                     new Route { Id = 1, Name = "Route 1" },
-                    new Route { Id = 2, Name = "Route 2" },
+                    new Route { Id = 2, Name = "Route 2" }
                 }
                 .AsQueryable();
 
             var logger = Substitute.For<ILogger<ProviderController>>();
 
-            var config = new MapperConfiguration(c => c.AddProfile<SearchParametersViewModelMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
             var providerService = Substitute.For<IProviderService>();
@@ -43,8 +43,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             providerController.CreateContextWithSubstituteTempData();
 
             var selectedRouteId = routes.First().Id.ToString();
-            var searchRadius = 5;
-            var postcode = "SW1A 2AA";
+            const int searchRadius = 5;
+            const string postcode = "SW1A 2AA";
 
             var viewModel = new SearchParametersViewModel
             {

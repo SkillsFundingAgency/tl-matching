@@ -17,16 +17,15 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
 {
     public class EmployerTestFixture : IDisposable
     {
-        public IEmployerService EmployerService;
+        public IFileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer> FileImportService;
         public MatchingDbContext MatchingDbContext;
 
         public EmployerTestFixture()
         {
-            var loggerRepository = new Logger<EmployerRepository>(
-                new NullLoggerFactory());
+            var loggerRepository = new Logger<EmployerRepository>(new NullLoggerFactory());
+            var loggerExcelFileReader = new Logger<ExcelFileReader<EmployerFileImportDto, EmployerDto>>(new NullLoggerFactory());
 
-            var loggerExcelFileReader = new Logger<ExcelFileReader<EmployerFileImportDto, EmployerDto>>(
-                new NullLoggerFactory());
+            var logger = new Logger<FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
@@ -36,11 +35,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
 
             var excelFileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>(loggerExcelFileReader, dataParser, dataValidator);
 
-            var config = new MapperConfiguration(c => c.AddProfile<EmployerMapper>());
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 
             var mapper = new Mapper(config);
 
-            EmployerService = new EmployerService(mapper, excelFileReader, repository);
+            FileImportService = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(logger, mapper, excelFileReader, repository);
         }
 
         public void ResetData(string companyName)

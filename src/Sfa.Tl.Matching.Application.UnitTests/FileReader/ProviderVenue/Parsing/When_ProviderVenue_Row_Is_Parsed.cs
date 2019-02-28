@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Parsing
             _parseResult.First().Postcode.Should().BeEquivalentTo(ValidProviderVenueFileImportDtoBuilder.PostCode);
 
         [Fact]
-        public void Then_First_ParseResult_ShortTitle_Matches_Input() =>
+        public void Then_First_ParseResult_Source_Matches_Input() =>
             _parseResult.First().Source.Should().BeEquivalentTo(ValidProviderVenueFileImportDtoBuilder.Source);
         [Fact]
         public void Then_First_ParseResult_CreatedBy_Matches_Input() =>
