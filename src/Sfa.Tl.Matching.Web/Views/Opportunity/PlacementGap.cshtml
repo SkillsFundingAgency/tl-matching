@@ -1,4 +1,5 @@
-﻿<div class="govuk-grid-row">
+﻿@model Sfa.Tl.Matching.Models.ViewModel.PlacementGapViewModel
+<div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-8">
             <h1 class="govuk-panel__title">
@@ -9,7 +10,7 @@
         <h2 class="govuk-heading-m">What happens next</h2>
 
         <p class="govuk-body">We will try to find providers with students studying agriculture, environmental and animal care near.</p>
-        <p class="govuk-body">If IP: Micheal Gill has agreed that we can share their contact details, we will contact them when we find suitable providers.</p>
+        <p class="govuk-body">If @Model.EmployerContactName has agreed that we can share their contact details, we will contact them when we find suitable providers.</p>
 
         <a asp-controller="Provider" asp-action="Start" class="govuk-button">Finish</a>
     </div>

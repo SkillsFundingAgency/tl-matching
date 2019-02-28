@@ -98,14 +98,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             _opportunityService.CreateProvisionGap(viewModel);
 
-            return RedirectToAction(nameof(PlacementGap));
+            return RedirectToAction(nameof(PlacementGap), new { opportunityId = viewModel.OpportunityId });
         }
 
         [HttpGet]
         [Route("placement-gap", Name = "PlacementGap_Get")]
-        public IActionResult PlacementGap()
+        public async Task<IActionResult> PlacementGap(int opportunityId)
         {
-            return View();
+            var opportunity = await _opportunityService.GetOpportunity(opportunityId);
+
+            return View(new PlacementGapViewModel { EmployerContactName = opportunity.EmployerContact });
         }
 
         private void Validate(PlacementInformationViewModel viewModel)
