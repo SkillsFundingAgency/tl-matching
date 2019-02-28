@@ -11,15 +11,10 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         [Required(ErrorMessage = "You must enter a postcode")]
         public string Postcode { get; set; }
 
-        public int SearchRadius { get; set; }
+        public int SearchRadius { get; set; } = DefaultSearchRadius;
 
-        public string SelectedRouteId { get; set; }
+        public int? SelectedRouteId { get; set; }
 
         public IList<SelectListItem> RoutesSelectList { get; set; }
-
-        public SearchParametersViewModel()
-        {
-            SearchRadius = DefaultSearchRadius;
-        }
     }
 }

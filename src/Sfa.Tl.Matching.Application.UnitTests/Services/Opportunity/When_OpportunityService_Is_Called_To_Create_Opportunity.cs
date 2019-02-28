@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var dto = new OpportunityDto
             {
-                Contact = "Contact"
+                EmployerContact = "Contact"
             };
 
             _result = opportunityService.CreateOpportunity(dto).GetAwaiter().GetResult();

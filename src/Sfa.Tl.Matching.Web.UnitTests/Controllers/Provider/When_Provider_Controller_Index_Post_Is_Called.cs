@@ -11,7 +11,6 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
@@ -40,9 +39,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             routePathService.GetRoutes().Returns(routes);
 
             var providerController = new ProviderController(logger, mapper, routePathService, providerService);
-            providerController.CreateContextWithSubstituteTempData();
 
-            var selectedRouteId = routes.First().Id.ToString();
+            var selectedRouteId = routes.First().Id;
             const int searchRadius = 5;
             const string postcode = "SW1A 2AA";
 
@@ -55,20 +53,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             };
             _result = providerController.Index(viewModel);
         }
-        
+
         [Fact]
         public void Then_Result_Is_Not_Null() =>
             _result.Should().NotBeNull();
-        
+
         [Fact]
         public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToActionResult>();
+            _result.Should().BeOfType<RedirectToRouteResult>();
 
         [Fact]
         public void Then_Result_Is_Redirect_To_Results()
         {
-            var redirect = _result as RedirectToActionResult;
-            redirect?.ActionName.Should().BeEquivalentTo("Results");
+            var redirect = _result as RedirectToRouteResult;
+            redirect?.RouteName.Should().BeEquivalentTo("ProviderResults_Get");
         }
     }
 }

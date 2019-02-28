@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -23,11 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 PlacementsKnown = true
             };
 
-            var tempData = Substitute.For<ITempDataDictionary>();
-            _opportunityController = new OpportunityController(opportunityService)
-            {
-                TempData = tempData
-            };
+            _opportunityController = new OpportunityController(opportunityService);
 
             _result = _opportunityController.Placements(viewModel).GetAwaiter().GetResult();
         }

@@ -4,6 +4,8 @@
     ViewData["Title"] = "Select Providers";
 }
 
+<a asp-controller="Provider" asp-action="Index" class="govuk-back-link">Back</a>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <partial name="_searchbox" model="Model.SearchParameters" />
@@ -12,21 +14,20 @@
 
 @if (ViewData.ModelState.IsValid)
 {
-    <div class="govuk-grid-row govuk-!-margin-top-7">
-        <div class="govuk-grid-column-two-thirds">
-            @if (Model.SearchResults?.Results != null && Model.SearchResults.Results.Any())
-            {
-                <partial name="_searchresults" model="Model" />
-            }
-            else
-            {
-                <partial name="_emptysearchresults" model="Model" />
-            }
-        </div>
-    </div>
+    if (Model.SearchParameters.SelectedRouteId > 0 &&
+         !string.IsNullOrEmpty(Model.SearchParameters.Postcode))
+     {
+         <div class="govuk-grid-row govuk-!-margin-top-5">
+             <div class="govuk-grid-column-two-thirds">
+                 @if (Model.SearchResults?.Results != null && Model.SearchResults.Results.Any())
+                 {
+                     <partial name="_searchresults" model="Model"/>
+                 }
+                 else
+                 {
+                     <partial name="_emptysearchresults" model="Model"/>
+                 }
+             </div>
+         </div>
+     }
 }
-
-
-
-
-

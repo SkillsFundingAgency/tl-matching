@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
@@ -17,8 +15,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
     public class ProviderController : Controller
     {
-        private const string SearchParametersDataKey = "SearchParameters";
-
         private readonly IMapper _mapper;
         private readonly ILogger<ProviderController> _logger;
         private readonly IProviderService _providerService;
@@ -42,15 +38,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("find-providers", Name = "Providers_Get")]
         public IActionResult Index()
         {
-            try
-            {
-                return GetIndexView();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Loading of routes failed.");
-                throw;
-            }
+            return GetIndexView();
         }
 
         [HttpPost]
@@ -62,52 +50,48 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return GetIndexView(viewModel.SelectedRouteId, viewModel.Postcode);
             }
 
-            var serializedData = JsonConvert.SerializeObject(viewModel);
-            TempData[SearchParametersDataKey] = serializedData;
-            return RedirectToAction("Results");
+            return RedirectToRoute("ProviderResults_Get", new
+            {
+                routeId = viewModel.SelectedRouteId,
+                postcode = viewModel.Postcode,
+                searchRadius = SearchParametersViewModel.DefaultSearchRadius
+            });
         }
 
         [HttpGet]
-        [Route("provider-results", Name = "ProviderResults_Get")]
-        public async Task<IActionResult> Results()
+        [Route("provider-results-for-{routeId}-within-{searchRadius}-miles-of-{postcode}", Name = "ProviderResults_Get")]
+        public async Task<IActionResult> Results(int routeId, string postcode, int searchRadius)
         {
-            var obj = TempData[SearchParametersDataKey];
+            var searchParametersViewModel = new SearchParametersViewModel
+            {
+                SelectedRouteId = routeId,
+                Postcode = postcode,
+                SearchRadius = searchRadius
+            };
 
-            SearchViewModel resultsViewModel;
-            if (obj != null)
-            {
-                var searchParametersViewModel = JsonConvert.DeserializeObject<SearchParametersViewModel>((string)obj);
-                resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
-            }
-            else
-            {
-                resultsViewModel = new SearchViewModel
-                {
-                    SearchParameters = new SearchParametersViewModel
-                    {
-                        RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes())
-                    },
-                    SearchResults = new SearchResultsViewModel()
-                };
-            }
+            var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
 
             return View(resultsViewModel);
         }
 
         [HttpPost]
         [Route("provider-results", Name = "ProviderResults_Post")]
-        public async Task<IActionResult> Results(SearchParametersViewModel viewModel)
+        public IActionResult Results(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return GetResultsView(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius);
             }
 
-            var resultsViewModel = await GetSearchResultsAsync(viewModel);
-            return View(resultsViewModel);
+            return RedirectToRoute("ProviderResults_Get", new
+            {
+                routeId = viewModel.SelectedRouteId,
+                postcode = viewModel.Postcode,
+                searchRadius = viewModel.SearchRadius
+            });
         }
 
-        private IActionResult GetIndexView(string selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
+        private IActionResult GetIndexView(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
         {
             return View(nameof(Index), new SearchParametersViewModel
             {
@@ -118,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        private IActionResult GetResultsView(string selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
+        private IActionResult GetResultsView(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
         {
             return View(nameof(Results), new SearchViewModel
             {
@@ -142,7 +126,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
 
-            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(viewModel.Postcode, viewModel.SearchRadius, int.Parse(viewModel.SelectedRouteId));
+            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(viewModel.Postcode, viewModel.SearchRadius, viewModel.SelectedRouteId.GetValueOrDefault());
 
             var resultsViewModel = new SearchViewModel
             {

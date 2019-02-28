@@ -4,7 +4,7 @@
     ViewData["Title"] = "Select Providers";
 }
 
-<h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">0 </span>results in <span class="govuk-!-font-weight-bold">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value.ToString() == @Model.SearchParameters.SelectedRouteId)?.Text </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
+<h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">0 </span>results in <span class="govuk-!-font-weight-bold">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
 
 <form asp-controller="Opportunity" asp-action="Create">
     <div class="govuk-form-group">

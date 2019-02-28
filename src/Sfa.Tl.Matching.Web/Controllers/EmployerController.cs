@@ -23,11 +23,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("who-is-employer", Name = "EmployerName_Get")]
-        public IActionResult FindEmployer()
+        [Route("who-is-employer", Name = "EmployerFind_Get")]
+        public IActionResult FindEmployer(int opportunityId)
         {
-            var opportunityId = (int)TempData["OpportunityId"];
-
             var viewModel = new FindEmployerViewModel
             {
                 OpportunityId = opportunityId
@@ -37,11 +35,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("who-is-employer", Name = "EmployerName_Post")]
+        [Route("who-is-employer", Name = "EmployerFind_Post")]
         public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
-            TempData["OpportunityId"] = viewModel.OpportunityId;
-
             if (viewModel.SelectedEmployerId == 0)
             {
                 ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
@@ -58,7 +54,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = PopulateDto(viewModel.OpportunityId, employer);
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("EmployerDetails_Get");
+            return RedirectToRoute("EmployerDetails_Get", new
+            {
+                opportunityId = dto.Id
+            });
         }
 
         [HttpGet]
@@ -72,18 +71,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-details", Name = "EmployerDetails_Get")]
-        public async Task<IActionResult> Details()
+        public async Task<IActionResult> Details(int opportunityId)
         {
-            var opportunityId = (int)TempData["OpportunityId"];
             var dto = await _opportunityService.GetOpportunity(opportunityId);
 
             var viewModel = new EmployerDetailsViewModel
             {
                 OpportunityId = opportunityId,
                 EmployerName = dto.EmployerName,
-                Contact = dto.Contact,
-                ContactEmail = dto.ContactEmail,
-                ContactPhone = dto.ContactPhone
+                Contact = dto.EmployerContact,
+                ContactEmail = dto.EmployerContactEmail,
+                ContactPhone = dto.EmployerContactPhone
             };
 
             return View(viewModel);
@@ -93,29 +91,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("employer-details", Name = "EmployerDetails_Post")]
         public async Task<IActionResult> Details(EmployerDetailsViewModel viewModel)
         {
-            TempData["OpportunityId"] = viewModel.OpportunityId;
-
             if (!ModelState.IsValid)
                 return View(viewModel);
 
             var dto = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
 
-            dto.Contact = viewModel.Contact;
-            dto.ContactEmail = viewModel.ContactEmail;
-            dto.ContactPhone = viewModel.ContactPhone;
+            dto.EmployerContact = viewModel.Contact;
+            dto.EmployerContactEmail = viewModel.ContactEmail;
+            dto.EmployerContactPhone = viewModel.ContactPhone;
             dto.ModifiedBy = HttpContext.User.GetUserName();
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToAction(nameof(OpportunityController.CheckAnswers), "Opportunity");
-        }
-
-        [HttpPost]
-        public IActionResult GoBack(EmployerDetailsViewModel viewModel)
-        {
-            TempData["OpportunityId"] = viewModel.OpportunityId;
-            
-            return RedirectToRoute("EmployerName_Get");
+            return RedirectToRoute("CheckAnswers_Get", new
+            {
+                opportunityId = dto.Id
+            });
         }
 
         private OpportunityDto PopulateDto(int opportunityId, EmployerDto employer)
@@ -123,16 +114,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = new OpportunityDto
             {
                 Id = opportunityId,
-                EmployerCrmId = employer.CrmId,
-                EmployerName = employer.CompanyName,
-                EmployerAupa = employer.Aupa,
-                EmployerOwner = employer.Owner,
-                Contact = employer.PrimaryContact,
-                ContactEmail = employer.Email,
-                ContactPhone = employer.Phone,
+                EmployerName = employer.CompanyName, // TODO AU Should this also inclue the Aka?
+                EmployerContact = employer.PrimaryContact,
+                EmployerContactEmail = employer.Email,
+                EmployerContactPhone = employer.Phone,
                 ModifiedBy = HttpContext.User.GetUserName()
             };
-            // TODO AU Should this also inclue the Aka?
 
             return dto;
         }

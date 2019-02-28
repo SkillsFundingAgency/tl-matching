@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using NSubstitute;
+﻿using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -32,11 +31,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
-            var tempData = Substitute.For<ITempDataDictionary>();
             var employerController = new EmployerController(_employerService, _opportunityService);
             employerController.AddUsernameToContext(ModifiedBy);
 
-            employerController.TempData = tempData;
             employerController.FindEmployer(_viewModel).GetAwaiter().GetResult();
         }
 

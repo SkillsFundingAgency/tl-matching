@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -24,11 +23,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 Placements = 0
             };
 
-            var tempData = Substitute.For<ITempDataDictionary>();
-            _opportunityController = new OpportunityController(opportunityService)
-            {
-                TempData = tempData
-            };
+            _opportunityController = new OpportunityController(opportunityService);
 
             _result = _opportunityController.Placements(viewModel).GetAwaiter().GetResult();
         }
@@ -50,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_Model_State_Has_Min_Error()
         {
             var modelStateEntry = _opportunityController.ViewData.ModelState[nameof(PlacementInformationViewModel.Placements)];
-            modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must enter a number that is 1 or more");
+            modelStateEntry.Errors[0].ErrorMessage.Should().Be("The number of placements must be 1 or more");
         }
     }
 }
