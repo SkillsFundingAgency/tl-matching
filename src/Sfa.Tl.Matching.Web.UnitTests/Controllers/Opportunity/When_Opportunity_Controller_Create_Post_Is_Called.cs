@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var opportunityController = new OpportunityController(_opportunityService);
             opportunityController.AddUsernameToContext("username");
 
-            opportunityController.Create(_dto).GetAwaiter().GetResult();
+            opportunityController.Create(1, "cv12wt", 10).GetAwaiter().GetResult();
         }
 
         [Fact]

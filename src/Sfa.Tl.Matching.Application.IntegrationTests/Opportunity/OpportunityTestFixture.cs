@@ -19,19 +19,19 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 
         public OpportunityTestFixture()
         {
-            var loggerRepository = new Logger<OpportunityRepository>(
-                new NullLoggerFactory());
+            var loggerRepository = new Logger<OpportunityRepository>(new NullLoggerFactory());
+            var loggerProvisionGapRepository = new Logger<ProvisionGapRepository>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
-            var repository = new OpportunityRepository(loggerRepository, MatchingDbContext);
-
+            var opportunityRepository = new OpportunityRepository(loggerRepository, MatchingDbContext);
+            var provisionGapRepository = new ProvisionGapRepository(loggerProvisionGapRepository, MatchingDbContext);
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
 
             var dateTimeProvider = new DateTimeProvider();
 
-            OpportunityService = new OpportunityService(mapper, dateTimeProvider , repository);
+            OpportunityService = new OpportunityService(mapper, dateTimeProvider, opportunityRepository, provisionGapRepository);
         }
 
         internal void ResetData(string postcode)

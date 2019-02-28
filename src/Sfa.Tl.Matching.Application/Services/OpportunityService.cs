@@ -43,6 +43,17 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
+        public async Task UpdateOpportunity(OpportunityDto dto)
+        {
+            dto.ModifiedOn = _dateTimeProvider.UtcNow();
+
+            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.Id);
+
+            _mapper.Map(dto, trackedEntity);
+
+            await _opportunityRepository.Update(trackedEntity);
+        }
+
         public Task<int> CreateProvisionGap(CheckAnswersViewModel dto)
         {
             var provisionGap = _mapper.Map<ProvisionGap>(dto);
@@ -53,17 +64,6 @@ namespace Sfa.Tl.Matching.Application.Services
         public Task<int> CreateReferal(int opportunityId)
         {
             throw new System.NotImplementedException();
-        }
-
-        public async Task UpdateOpportunity(OpportunityDto dto)
-        {
-            dto.ModifiedOn = _dateTimeProvider.UtcNow();
-
-            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.Id);
-
-            _mapper.Map(dto, trackedEntity);
-
-            await _opportunityRepository.Update(trackedEntity);
         }
     }
 }

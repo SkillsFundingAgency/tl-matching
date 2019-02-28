@@ -20,12 +20,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
-            var repository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            var provisionGapRepository = Substitute.For<IRepository<Domain.Models.ProvisionGap>>();
 
-            repository.Create(Arg.Any<Domain.Models.Opportunity>())
+            opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
                 .Returns(OpportunityId);
 
-            var opportunityService = new OpportunityService(mapper, dateTimeProvider, repository);
+            var opportunityService = new OpportunityService(mapper, dateTimeProvider, opportunityRepository, provisionGapRepository);
 
             var dto = new OpportunityDto
             {
