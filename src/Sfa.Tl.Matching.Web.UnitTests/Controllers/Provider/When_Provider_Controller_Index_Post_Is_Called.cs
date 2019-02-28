@@ -41,8 +41,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var providerController = new ProviderController(logger, mapper, routePathService, providerService);
 
             var selectedRouteId = routes.First().Id;
-            var searchRadius = 5;
-            var postcode = "SW1A 2AA";
+            const int searchRadius = 5;
+            const string postcode = "SW1A 2AA";
 
             var viewModel = new SearchParametersViewModel
             {
