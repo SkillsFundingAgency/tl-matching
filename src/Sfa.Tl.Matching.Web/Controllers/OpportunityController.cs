@@ -82,12 +82,25 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers", Name = "CheckAnswers_Get")]
         public IActionResult CheckAnswers(int opportunityId)
         {
-            var viewModel = new CheckAnswersViewModel
-            {
-                OpportunityId = opportunityId
-            };
+            return View(new CheckAnswersViewModel { OpportunityId = opportunityId });
+        }
 
-            return View(viewModel);
+        [HttpPost]
+        [Route("check-answers", Name = "CheckAnswers_Post")]
+        public IActionResult CheckAnswers(CheckAnswersViewModel viewModel)
+        {
+            viewModel.CreatedBy = HttpContext.User.GetUserName();
+
+            _opportunityService.CreateProvisionGap(viewModel);
+
+            return RedirectToAction(nameof(PlacementGap));
+        }
+
+        [HttpGet]
+        [Route("placement-gap", Name = "PlacementGap_Get")]
+        public IActionResult PlacementGap()
+        {
+            return View();
         }
 
         private void Validate(PlacementInformationViewModel viewModel)
