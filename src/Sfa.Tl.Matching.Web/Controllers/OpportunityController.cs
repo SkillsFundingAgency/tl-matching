@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("check-answers", Name = "CheckAnswers_Post")]
+        [Route("check-answers/{id?}", Name = "CheckAnswers_Post")]
         public IActionResult CheckAnswers(CheckAnswersViewModel viewModel)
         {
             viewModel.CreatedBy = HttpContext.User.GetUserName();
