@@ -23,6 +23,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
             {
+                Id = OpportunityId,
                 EmployerName = EmployerName
             });
 

@@ -23,19 +23,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("who-is-employer", Name = "EmployerFind_Get")]
-        public IActionResult FindEmployer(int opportunityId)
+        [Route("who-is-employer/{id?}", Name = "EmployerFind_Get")]
+        public IActionResult FindEmployer(int id)
         {
             var viewModel = new FindEmployerViewModel
             {
-                OpportunityId = opportunityId
+                OpportunityId = id
             };
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("who-is-employer", Name = "EmployerFind_Post")]
+        [Route("who-is-employer/{id?}", Name = "EmployerFind_Post")]
         public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
             if (viewModel.SelectedEmployerId == 0)
@@ -54,10 +54,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = PopulateDto(viewModel.OpportunityId, employer);
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("EmployerDetails_Get", new
-            {
-                opportunityId = dto.Id
-            });
+            return RedirectToRoute("EmployerDetails_Get");
         }
 
         [HttpGet]
@@ -70,14 +67,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("employer-details", Name = "EmployerDetails_Get")]
-        public async Task<IActionResult> Details(int opportunityId)
+        [Route("employer-details/{id?}", Name = "EmployerDetails_Get")]
+        public async Task<IActionResult> Details(int id)
         {
-            var dto = await _opportunityService.GetOpportunity(opportunityId);
+            var dto = await _opportunityService.GetOpportunity(id);
 
             var viewModel = new EmployerDetailsViewModel
             {
-                OpportunityId = opportunityId,
+                OpportunityId = dto.Id,
                 EmployerName = dto.EmployerName,
                 Contact = dto.EmployerContact,
                 ContactEmail = dto.EmployerContactEmail,
@@ -88,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("employer-details", Name = "EmployerDetails_Post")]
+        [Route("employer-details/{id?}", Name = "EmployerDetails_Post")]
         public async Task<IActionResult> Details(EmployerDetailsViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -103,10 +100,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("CheckAnswers_Get", new
-            {
-                opportunityId = dto.Id
-            });
+            return RedirectToRoute("CheckAnswers_Get");
         }
 
         private OpportunityDto PopulateDto(int opportunityId, EmployerDto employer)
