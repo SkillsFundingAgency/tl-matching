@@ -2,7 +2,7 @@
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
@@ -11,6 +11,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     {
         private readonly IOpportunityService _opportunityService;
         private readonly OpportunityDto _dto = new OpportunityDto();
+        private const string UserName = "username";
+        private const string Email = "email@address.com";
 
         public When_Opportunity_Controller_Create_Opportunity_Is_Called()
         {
@@ -19,15 +21,18 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService.CreateOpportunity(Arg.Any<OpportunityDto>()).Returns(opportunityId);
 
             var opportunityController = new OpportunityController(_opportunityService);
-            opportunityController.AddUsernameToContext("username");
+            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
+                .AddUserName(UserName)
+                .AddEmail(Email)
+                .Build();
 
-            opportunityController.Create(1, "cv12wt", 10).GetAwaiter().GetResult();
+            controllerWithClaims.Create(1, "cv12wt", 10).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_CreateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).CreateOpportunity(Arg.Is<OpportunityDto>(dto => dto.RouteId == 1 && dto.Postcode == "cv12wt" && dto.Distance == 10));
+            _opportunityService.Received(1).CreateOpportunity(Arg.Any<OpportunityDto>());
         }
     }
 }

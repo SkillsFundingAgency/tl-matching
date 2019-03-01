@@ -4,7 +4,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
@@ -32,9 +32,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService.GetOpportunity(OpportunityId).Returns(_dto);
 
             var employerController = new EmployerController(null, _opportunityService);
-            employerController.AddUsernameToContext(ModifiedBy);
+            var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
+                .AddStandardUser()
+                .AddUserName(ModifiedBy)
+                .Build();
 
-            employerController.Details(_viewModel).GetAwaiter().GetResult();
+            controllerWithClaims.Details(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

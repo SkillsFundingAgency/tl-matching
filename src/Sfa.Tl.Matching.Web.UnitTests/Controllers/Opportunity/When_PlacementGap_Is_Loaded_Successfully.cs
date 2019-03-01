@@ -5,7 +5,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
@@ -26,9 +26,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto { Id = OpportunityId, EmployerContact = EmployerContact });
 
             var opportunityController = new OpportunityController(_opportunityService);
-            opportunityController.AddUsernameToContext(CreatedBy);
+            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
+                .AddUserName(CreatedBy)
+                .Build();
 
-            _result = opportunityController.PlacementGap(OpportunityId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.PlacementGap(OpportunityId).GetAwaiter().GetResult();
         }
 
         [Fact]
