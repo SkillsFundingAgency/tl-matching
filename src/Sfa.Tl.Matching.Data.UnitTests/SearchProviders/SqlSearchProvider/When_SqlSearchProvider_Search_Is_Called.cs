@@ -3,14 +3,14 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
 {
     public class When_SqlSearchProvider_Search_Is_Called
     {
-        private readonly IEnumerable<ProviderVenueSearchResult> _results;
+        private readonly IEnumerable<ProviderVenueSearchResultDto> _results;
 
         public When_SqlSearchProvider_Search_Is_Called()
         {

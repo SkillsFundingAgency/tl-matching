@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Data.SearchProviders
 {
@@ -17,11 +17,11 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<ProviderVenueSearchResult>> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId)
+        public async Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId)
         {
             _logger.LogInformation($"Searching for providers within radius {searchRadius} of postcode '{postcode}' with route {routeId}");
 
-            return await Task.FromResult(new List<ProviderVenueSearchResult>());
+            return await Task.FromResult(new List<ProviderVenueSearchResultDto>());
         }
     }
 }
