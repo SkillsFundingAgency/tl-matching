@@ -58,7 +58,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        [HttpGet]
         [Route("provider-results-within-{searchRadius}-miles-of-{postcode}-for-route-{routeId}", Name = "ProviderResults_Get")]
         public async Task<IActionResult> Results(int routeId, string postcode, int searchRadius)
         {

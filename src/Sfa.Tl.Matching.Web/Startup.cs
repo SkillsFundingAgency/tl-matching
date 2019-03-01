@@ -88,13 +88,8 @@ namespace Sfa.Tl.Matching.Web
 
             app.UseAuthentication();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    "default",
-                    "{controller=Home}/{action=Index}/{id?}");
-            });
-
+            //app.UseMvc();
+            app.UseMvcWithDefaultRoute();
             app.UseCookiePolicy();
         }
 

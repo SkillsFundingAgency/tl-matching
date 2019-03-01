@@ -5,8 +5,7 @@
 }
 
 <h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">0 </span>results in <span class="govuk-!-font-weight-bold">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
-<a asp-controller="Opportunity"
-   asp-action="Create"
+<a asp-route="OpportunityCreate_Get"
    asp-route-postcode="@Model.SearchParameters.Postcode"
    asp-route-distance="@Model.SearchParameters.SearchRadius"
    asp-route-routeId="@Model.SearchParameters.SelectedRouteId"
