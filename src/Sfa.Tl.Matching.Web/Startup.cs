@@ -142,13 +142,13 @@ namespace Sfa.Tl.Matching.Web
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
-            services.AddTransient<IRepository<Opportunity>, OpportunityRepository>();
+            services.AddTransient<IRepository<Opportunity>, GenericRepository<Opportunity>>();
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
-            services.AddTransient<IRepository<Route>, RouteRepository>();
-            services.AddTransient<IRepository<Path>, PathRepository>();
-            services.AddTransient<IRepository<Provider>, ProviderRepository>();
-            services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
-            services.AddTransient<IRepository<ProvisionGap>, ProvisionGapRepository>();
+            services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
+            services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
+            services.AddTransient<IRepository<Provider>, GenericRepository<Provider>>();
+            services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
+            services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)

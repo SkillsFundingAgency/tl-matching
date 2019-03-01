@@ -15,14 +15,14 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
 
         public When_PathRepository_GetSingleOrDefault_Is_Called()
         {
-            var logger = Substitute.For<ILogger<PathRepository>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Path>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
                 dbContext.AddRange(new ValidPathListBuilder().Build());
                 dbContext.SaveChanges();
 
-                var repository = new PathRepository(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
                 _result = repository.GetSingleOrDefault(x => x.Id == 1)
                     .GetAwaiter().GetResult();
             }

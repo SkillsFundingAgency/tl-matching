@@ -13,13 +13,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
 
         public When_ProviderVenueRepository_CreateMany_Is_Called()
         {
-            var logger = Substitute.For<ILogger<ProviderVenueRepository>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.ProviderVenue>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
                 var data = new ValidProviderVenueListBuilder().Build();
 
-                var repository = new ProviderVenueRepository(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.ProviderVenue>(logger, dbContext);
                 _result = repository.CreateMany(data)
                     .GetAwaiter().GetResult();
             }

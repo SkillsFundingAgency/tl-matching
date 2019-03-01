@@ -10,18 +10,18 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.Repositories
 {
-    public abstract class AbstractBaseRepository<T> : IRepository<T> where T : BaseEntity, new()
+    public class GenericRepository<T> : IRepository<T> where T : BaseEntity, new()
     {
         private readonly ILogger _logger;
         private readonly MatchingDbContext _dbContext;
 
-        protected AbstractBaseRepository(ILogger logger, MatchingDbContext dbContext)
+        public GenericRepository(ILogger<GenericRepository<T>> logger, MatchingDbContext dbContext)
         {
             _logger = logger;
             _dbContext = dbContext;
         }
 
-        public async Task<int> BaseCreateMany(IEnumerable<T> entities)
+        public virtual async Task<int> CreateMany(IList<T> entities)
         {
             await _dbContext.AddRangeAsync(entities);
 
@@ -70,8 +70,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 throw;
             }
         }
-
-        public abstract Task<int> CreateMany(IList<T> entities);
 
         public IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath)
         {

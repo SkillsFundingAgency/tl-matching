@@ -13,14 +13,14 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
 
         public When_ProviderVenueRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id()
         {
-            var logger = Substitute.For<ILogger<ProviderVenueRepository>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.ProviderVenue>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
                 dbContext.Add(new ValidProviderVenueBuilder().Build());
                 dbContext.SaveChanges();
 
-                var repository = new ProviderVenueRepository(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.ProviderVenue>(logger, dbContext);
                 _result = repository.GetSingleOrDefault(x => x.Id == 2)
                     .GetAwaiter().GetResult();
             }

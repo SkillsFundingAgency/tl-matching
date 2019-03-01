@@ -13,13 +13,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
 
         public When_PathRepository_CreateMany_Is_Called()
         {
-            var logger = Substitute.For<ILogger<PathRepository>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Path>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
                 var data = new ValidPathListBuilder().Build();
 
-                var repository = new PathRepository(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
                 _result = repository.CreateMany(data)
                     .GetAwaiter().GetResult();
             }

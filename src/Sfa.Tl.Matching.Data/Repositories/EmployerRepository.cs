@@ -7,7 +7,7 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.Repositories
 {
-    public class EmployerRepository : AbstractBaseRepository<Employer>
+    public class EmployerRepository : GenericRepository<Employer>
     {
         private readonly ILogger<EmployerRepository> _logger;
         private readonly MatchingDbContext _dbContext;
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             await ResetData();
 
-            return await BaseCreateMany(entities);
+            return await base.CreateMany(entities);
         }
 
         public async Task ResetData()

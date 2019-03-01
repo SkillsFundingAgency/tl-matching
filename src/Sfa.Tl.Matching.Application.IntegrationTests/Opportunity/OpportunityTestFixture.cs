@@ -9,6 +9,7 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 {
@@ -19,13 +20,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 
         public OpportunityTestFixture()
         {
-            var loggerRepository = new Logger<OpportunityRepository>(new NullLoggerFactory());
-            var loggerProvisionGapRepository = new Logger<ProvisionGapRepository>(new NullLoggerFactory());
+            var loggerRepository = new Logger<GenericRepository<Domain.Models.Opportunity>>(new NullLoggerFactory());
+            var loggerProvisionGapRepository = new Logger<GenericRepository<ProvisionGap>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
-            var opportunityRepository = new OpportunityRepository(loggerRepository, MatchingDbContext);
-            var provisionGapRepository = new ProvisionGapRepository(loggerProvisionGapRepository, MatchingDbContext);
+            var opportunityRepository = new GenericRepository<Domain.Models.Opportunity>(loggerRepository, MatchingDbContext);
+            var provisionGapRepository = new GenericRepository<ProvisionGap>(loggerProvisionGapRepository, MatchingDbContext);
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
 
