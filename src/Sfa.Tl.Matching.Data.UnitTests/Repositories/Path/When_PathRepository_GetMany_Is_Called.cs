@@ -17,14 +17,14 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
 
         public When_PathRepository_GetMany_Is_Called()
         {
-            var logger = Substitute.For<ILogger<PathRepository>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Path>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
                 dbContext.Add(new ValidPathBuilder().Build());
                 dbContext.SaveChanges();
 
-                var repository = new PathRepository(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
                 _result = repository.GetMany().ToList();
             }
         }

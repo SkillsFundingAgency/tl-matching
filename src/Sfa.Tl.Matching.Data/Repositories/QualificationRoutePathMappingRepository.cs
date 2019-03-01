@@ -6,7 +6,7 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.Repositories
 {
-    public class QualificationRoutePathMappingRepository : AbstractBaseRepository<QualificationRoutePathMapping>
+    public class QualificationRoutePathMappingRepository : GenericRepository<QualificationRoutePathMapping>
     {
         private readonly MatchingDbContext _dbContext;
 
@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             var mappingList = entities.ToList();
 
             //First Save All Mapping for Existing Qualification
-            var recordCount = await BaseCreateMany(mappingList.Where(mapping => mapping.QualificationId > 0));
+            var recordCount = await base.CreateMany(mappingList.Where(mapping => mapping.QualificationId > 0).ToList());
 
             var list = mappingList.Where(mapping => mapping.Qualification != null)
                                   .GroupBy(mapping => mapping.Qualification, new QualificationEqualityComparer()).ToList();

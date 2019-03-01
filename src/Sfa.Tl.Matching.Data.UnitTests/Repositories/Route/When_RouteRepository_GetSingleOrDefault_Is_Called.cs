@@ -15,14 +15,14 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
 
         public When_RouteRepository_GetSingleOrDefault_Is_Called()
         {
-            var logger = Substitute.For<ILogger<RouteRepository>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Route>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
                 dbContext.AddRange(new ValidRouteListBuilder().Build());
                 dbContext.SaveChanges();
 
-                var repository = new RouteRepository(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
                 _result = repository.GetSingleOrDefault(x => x.Id == 1)
                     .GetAwaiter().GetResult();
             }

@@ -13,13 +13,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider
 
         public When_ProviderRepository_CreateMany_Is_Called()
         {
-            var logger = Substitute.For<ILogger<ProviderRepository>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Provider>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
                 var data = new ValidProviderListBuilder().Build();
 
-                var repository = new ProviderRepository(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.Provider>(logger, dbContext);
                 _result = repository.CreateMany(data)
                     .GetAwaiter().GetResult();
             }

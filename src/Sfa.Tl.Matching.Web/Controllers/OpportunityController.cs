@@ -18,11 +18,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _opportunityService = opportunityService;
         }
 
-        [HttpPost]
-        [Route("opportunity-create", Name = "OpportunityCreate_Post")]
-        public async Task<IActionResult> Create(OpportunityDto dto)
+        [Route("opportunity-within-{distance}-miles-of-{postcode}-for-route-{routeId}", Name = "OpportunityCreate_Post")]
+        public async Task<IActionResult> Create(int routeId, string postcode, short distance)
         {
-            dto.CreatedBy = HttpContext.User.GetUserName();
+            var dto = new OpportunityDto
+            {
+                RouteId = routeId,
+                Postcode = postcode,
+                Distance = distance,
+                CreatedBy = HttpContext.User.GetUserName()
+            };
 
             var id = await _opportunityService.CreateOpportunity(dto);
 
@@ -72,19 +77,34 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("EmployerFind_Get");
+            return RedirectToRoute("EmployerFind_Get", new { dto.Id });
         }
 
         [HttpGet]
         [Route("check-answers/{id?}", Name = "CheckAnswers_Get")]
         public IActionResult CheckAnswers(int id)
         {
-            var viewModel = new CheckAnswersViewModel
-            {
-                OpportunityId = id
-            };
+            return View(new CheckAnswersViewModel { OpportunityId = id });
+        }
 
-            return View(viewModel);
+        [HttpPost]
+        [Route("check-answers", Name = "CheckAnswers_Post")]
+        public IActionResult CheckAnswers(CheckAnswersViewModel viewModel)
+        {
+            viewModel.CreatedBy = HttpContext.User.GetUserName();
+
+            _opportunityService.CreateProvisionGap(viewModel);
+
+            return RedirectToAction(nameof(PlacementGap), new { opportunityId = viewModel.OpportunityId });
+        }
+
+        [HttpGet]
+        [Route("placement-gap", Name = "PlacementGap_Get")]
+        public async Task<IActionResult> PlacementGap(int opportunityId)
+        {
+            var opportunity = await _opportunityService.GetOpportunity(opportunityId);
+
+            return View(new PlacementGapViewModel { EmployerContactName = opportunity.EmployerContact });
         }
 
         private void Validate(PlacementInformationViewModel viewModel)

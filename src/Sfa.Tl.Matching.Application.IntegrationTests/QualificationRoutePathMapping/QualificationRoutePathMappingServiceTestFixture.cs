@@ -24,16 +24,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
         public QualificationRoutePathMappingServiceTestFixture()
         {
             var loggerRepository = new Logger<QualificationRoutePathMappingRepository>(new NullLoggerFactory());
-            var loggerQualificationRepository = new Logger<QualificationRepository>(new NullLoggerFactory());
-            var loggerPathRepository = new Logger<PathRepository>(new NullLoggerFactory());
+            var loggerQualificationRepository = new Logger<GenericRepository<Qualification>>(new NullLoggerFactory());
+            var loggerPathRepository = new Logger<GenericRepository<Path>>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto>>(new NullLoggerFactory());
             var logger = new Logger<FileImportService<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto, Domain.Models.QualificationRoutePathMapping>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
             var qualificationRoutePathMappingRepository = new QualificationRoutePathMappingRepository(loggerRepository, MatchingDbContext);
-            var qualificationRepository = new QualificationRepository(loggerQualificationRepository, MatchingDbContext);
-            var pathRepository = new PathRepository(loggerPathRepository, MatchingDbContext);
+            var qualificationRepository = new GenericRepository<Qualification>(loggerQualificationRepository, MatchingDbContext);
+            var pathRepository = new GenericRepository<Path>(loggerPathRepository, MatchingDbContext);
             var dataValidator = new QualificationRoutePathMappingDataValidator(qualificationRoutePathMappingRepository, qualificationRepository, pathRepository);
             var dataParser = new QualificationRoutePathMappingDataParser();
 

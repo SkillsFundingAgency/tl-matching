@@ -26,18 +26,18 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
 
         public ProviderQualificationTestFixture()
         {
-            var providerQualificationloggerRepository = new Logger<ProviderQualificationRepository>(new NullLoggerFactory());
-            var providerVenueloggerRepository = new Logger<ProviderVenueRepository>(new NullLoggerFactory());
-            var qualificationloggerRepository = new Logger<QualificationRepository>(new NullLoggerFactory());
+            var providerQualificationloggerRepository = new Logger<GenericRepository<Domain.Models.ProviderQualification>>(new NullLoggerFactory());
+            var providerVenueloggerRepository = new Logger<GenericRepository<Domain.Models.ProviderVenue>>(new NullLoggerFactory());
+            var qualificationloggerRepository = new Logger<GenericRepository<Qualification>>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>>(new NullLoggerFactory());
 
             var logger = new Logger<FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
-            var providerVenuerepository = new ProviderVenueRepository(providerVenueloggerRepository, MatchingDbContext);
-            var providerQualificationrepository = new ProviderQualificationRepository(providerQualificationloggerRepository, MatchingDbContext);
-            var qualificationrepository = new QualificationRepository(qualificationloggerRepository, MatchingDbContext);
+            var providerVenuerepository = new GenericRepository<Domain.Models.ProviderVenue>(providerVenueloggerRepository, MatchingDbContext);
+            var providerQualificationrepository = new GenericRepository<Domain.Models.ProviderQualification>(providerQualificationloggerRepository, MatchingDbContext);
+            var qualificationrepository = new GenericRepository<Qualification>(qualificationloggerRepository, MatchingDbContext);
             var dataValidator = new ProviderQualificationDataValidator(providerVenuerepository, providerQualificationrepository, qualificationrepository);
             var dataParser = new ProviderQualificationDataParser();
 

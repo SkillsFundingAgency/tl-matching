@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("provider-results-for-{routeId}-within-{searchRadius}-miles-of-{postcode}", Name = "ProviderResults_Get")]
+        [Route("provider-results-within-{searchRadius}-miles-of-{postcode}-for-route-{routeId}", Name = "ProviderResults_Get")]
         public async Task<IActionResult> Results(int routeId, string postcode, int searchRadius)
         {
             var searchParametersViewModel = new SearchParametersViewModel

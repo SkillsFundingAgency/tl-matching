@@ -17,14 +17,14 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
 
         public When_RouteRepository_GetMany_Is_Called()
         {
-            var logger = Substitute.For<ILogger<RouteRepository>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Route>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
                 dbContext.Add(new ValidRouteBuilder().Build());
                 dbContext.SaveChanges();
 
-                var repository = new RouteRepository(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
                 _result = repository.GetMany().ToList();
             }
         }

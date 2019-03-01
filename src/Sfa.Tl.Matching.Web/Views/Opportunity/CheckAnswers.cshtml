@@ -1,7 +1,6 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.CheckAnswersViewModel
 
-<a asp-controller="Employer" asp-action="Details" asp-route-id="@Model.OpportunityId"
-   class="govuk-back-link">Back</a>
+<a asp-controller="Employer" asp-action="Details" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -31,7 +30,8 @@
                 </tr>
             </tbody>
         </table>
-        <form>
+        <form asp-action="CheckAnswers">
+            <input asp-for="OpportunityId" type="hidden" />
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -41,7 +41,7 @@
                     </legend>
                     <div class="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="waste-1" name="waste" type="checkbox" value="carcasses">
+                            <input asp-for="ConfirmationSelected" class="govuk-checkboxes__input" id="ConfirmationSelected" name="ConfirmationSelected" type="checkbox" value="true">
                             <label class="govuk-label govuk-checkboxes__label" for="waste-1">
                                 IP: Micheal Gill has confirmed that we can share their contact details. This might be to a local enterprise partnership, who can help find suitable providers, or to the providers themselves.
                             </label>

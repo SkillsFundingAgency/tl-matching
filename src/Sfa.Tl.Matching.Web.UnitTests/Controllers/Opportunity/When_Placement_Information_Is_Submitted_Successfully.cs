@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Placement_Information_Is_Submitted_Successfully()
         {
             _viewModel.OpportunityId = OpportunityId;
-           
+
             _opportunityService = Substitute.For<IOpportunityService>();
 
             var opportunityController = new OpportunityController(_opportunityService);

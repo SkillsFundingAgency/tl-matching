@@ -1,4 +1,5 @@
-﻿namespace Sfa.Tl.Matching.Domain.Models
+﻿using System.Collections.Generic;
+namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Opportunity : BaseEntity
     {
@@ -13,5 +14,7 @@
         public string EmployerContactEmail { get; set; }
         public string EmployerContactPhone { get; set; }
         public string UserEmail { get; set; }
+        public virtual Route Route { get; set; }
+        public virtual ICollection<ProvisionGap> ProvisionGap { get; set; }
     }
 }

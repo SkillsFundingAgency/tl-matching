@@ -13,14 +13,14 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
 
         public When_RouteRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id()
         {
-            var logger = Substitute.For<ILogger<RouteRepository>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Route>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
                 dbContext.Add(new ValidRouteBuilder().Build());
                 dbContext.SaveChanges();
 
-                var repository = new RouteRepository(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
                 _result = repository.GetSingleOrDefault(x => x.Id == 2)
                     .GetAwaiter().GetResult();
             }

@@ -13,13 +13,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
 
         public When_RouteRepository_CreateMany_Is_Called()
         {
-            var logger = Substitute.For<ILogger<RouteRepository>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Route>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
                 var data = new ValidRouteListBuilder().Build();
 
-                var repository = new RouteRepository(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
                 _result = repository.CreateMany(data)
                     .GetAwaiter().GetResult();
             }

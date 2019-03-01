@@ -21,16 +21,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
 
         public ProviderVenueTestFixture()
         {
-            var loggerRepository = new Logger<ProviderRepository>(new NullLoggerFactory());
-            var providerVenueloggerRepository = new Logger<ProviderVenueRepository>(new NullLoggerFactory());
+            var loggerRepository = new Logger<GenericRepository<Domain.Models.Provider>>(new NullLoggerFactory());
+            var providerVenueloggerRepository = new Logger<GenericRepository<Domain.Models.ProviderVenue>>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>>(new NullLoggerFactory());
 
             var logger = new Logger<FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
-            var repository = new ProviderRepository(loggerRepository, MatchingDbContext);
-            var providerVenuerepository = new ProviderVenueRepository(providerVenueloggerRepository, MatchingDbContext);
+            var repository = new GenericRepository<Domain.Models.Provider>(loggerRepository, MatchingDbContext);
+            var providerVenuerepository = new GenericRepository<Domain.Models.ProviderVenue>(providerVenueloggerRepository, MatchingDbContext);
             var dataValidator = new ProviderVenueDataValidator(repository, providerVenuerepository);
             var dataParser = new ProviderVenueDataParser();
 

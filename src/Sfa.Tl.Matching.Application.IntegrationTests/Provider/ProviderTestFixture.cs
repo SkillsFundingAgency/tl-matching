@@ -21,13 +21,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
 
         public ProviderTestFixture()
         {
-            var loggerRepository = new Logger<ProviderRepository>(new NullLoggerFactory());
+            var loggerRepository = new Logger<GenericRepository<Domain.Models.Provider>>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<ProviderFileImportDto, ProviderDto>>(new NullLoggerFactory());
             var logger = new Logger<FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
-            var repository = new ProviderRepository(loggerRepository, MatchingDbContext);
+            var repository = new GenericRepository<Domain.Models.Provider>(loggerRepository, MatchingDbContext);
             var dataValidator = new ProviderDataValidator(repository);
             var dataParser = new ProviderDataParser();
 

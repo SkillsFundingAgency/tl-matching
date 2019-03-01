@@ -29,12 +29,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var mapper = new Mapper(config);
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            var provisionGapRepository = Substitute.For<IRepository<Domain.Models.ProvisionGap>>();
 
             var opportunity = new Domain.Models.Opportunity { PostCode = PostCode, Distance = Distance, RouteId = RouteId };
 
             _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(opportunity);
 
-            var opportunityService = new OpportunityService(mapper, dateTimeProvider, _opportunityRepository);
+            var opportunityService = new OpportunityService(mapper, dateTimeProvider, _opportunityRepository, provisionGapRepository);
 
             var dto = new OpportunityDto
             {
