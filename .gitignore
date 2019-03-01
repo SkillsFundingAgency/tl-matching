@@ -305,6 +305,3 @@ __pycache__/
 
 # Ignore main.css created by gulp
 **/Frontend/src/stylesheets/css/main.css
-
-# wwwroot Now populated via gulp
-/wwwroot/
