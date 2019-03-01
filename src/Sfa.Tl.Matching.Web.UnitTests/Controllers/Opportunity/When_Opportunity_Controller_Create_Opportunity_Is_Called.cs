@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using NSubstitute;
+﻿using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -33,19 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_CreateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).CreateOpportunity(_dto);
-        }
-
-        [Fact]
-        public void Then_UserEmail_Is_Set()
-        {
-            _dto.UserEmail.Should().Be(Email);
-        }
-
-        [Fact]
-        public void Then_CreatedBy_Is_Set()
-        {
-            _dto.CreatedBy.Should().Be(UserName);
+            _opportunityService.Received(1).CreateOpportunity(Arg.Any<OpportunityDto>());
         }
     }
 }
