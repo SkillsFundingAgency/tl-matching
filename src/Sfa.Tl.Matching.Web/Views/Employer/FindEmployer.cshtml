@@ -1,6 +1,6 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.FindEmployerViewModel
 
-<a asp-controller="Opportunity" asp-action="Placements" asp-route-opportunityId="@Model.OpportunityId" class="govuk-back-link">Back</a>
+<a asp-controller="Opportunity" asp-action="Placements" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -31,8 +31,7 @@
                     </span>
                 </h1>
 
-                <select id="BusinessName" name="BusinessName" class="govuk-input govuk-input" asp-for="BusinessName">
-                </select>
+                <select id="BusinessName" name="BusinessName" class="govuk-input govuk-input" asp-for="BusinessName"></select>
                 
                 <input asp-for="SelectedEmployerId" type="hidden" />
 
@@ -46,3 +45,6 @@
         </form>
     </div>
 </div>
+@section jsfiles{
+<script src="~/javascripts/employer-search.min.js"></script>
+}

@@ -93,9 +93,6 @@ namespace Sfa.Tl.Matching.Web
                 routes.MapRoute(
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
-                    "ProviderStart",
-                    "{controller=Provider}/{action=Start}");
             });
 
             app.UseCookiePolicy();

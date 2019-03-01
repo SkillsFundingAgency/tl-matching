@@ -303,5 +303,5 @@ __pycache__/
 
 !launchSettings.json
 
-# wwwroot Now populated via gulp
-/wwwroot/
+# Ignore main.css created by gulp
+**/Frontend/src/stylesheets/css/main.css
