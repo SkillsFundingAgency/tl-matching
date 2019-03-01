@@ -28,15 +28,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return RedirectToRoute("Placements_Get", new
             {
-                opportunityId = id
+                id
             });
         }
 
         [HttpGet]
-        [Route("placement-information", Name = "Placements_Get")]
-        public async Task<IActionResult> Placements(int opportunityId)
+        [Route("placement-information/{id?}", Name = "Placements_Get")]
+        public async Task<IActionResult> Placements(int id)
         {
-            var dto = await _opportunityService.GetOpportunity(opportunityId);
+            var dto = await _opportunityService.GetOpportunity(id);
 
             var viewModel = new PlacementInformationViewModel
             {
@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("placement-information", Name = "Placements_Post")]
+        [Route("placement-information/{id?}", Name = "Placements_Post")]
         public async Task<IActionResult> Placements(PlacementInformationViewModel viewModel)
         {
             Validate(viewModel);
@@ -72,19 +72,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("EmployerFind_Get", new
-            {
-                opportunityId = dto.Id
-            });
+            return RedirectToRoute("EmployerFind_Get");
         }
 
         [HttpGet]
-        [Route("check-answers", Name = "CheckAnswers_Get")]
-        public IActionResult CheckAnswers(int opportunityId)
+        [Route("check-answers/{id?}", Name = "CheckAnswers_Get")]
+        public IActionResult CheckAnswers(int id)
         {
             var viewModel = new CheckAnswersViewModel
             {
-                OpportunityId = opportunityId
+                OpportunityId = id
             };
 
             return View(viewModel);
