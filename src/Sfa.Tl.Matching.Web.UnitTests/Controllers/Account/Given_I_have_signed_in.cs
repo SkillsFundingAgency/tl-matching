@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
@@ -20,9 +20,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
         [Fact]
         public void And_I_do_not_have_correct_role_Then_redirect_to_InvalidRole_page()
         {
-            _accountController.AddUsernameToContext("username");
+            var controllerWithClaims = new ClaimsBuilder<AccountController>(_accountController)
+                .AddUserName("username")
+                .Build();
 
-            var result = _accountController.PostSignIn();
+            var result = controllerWithClaims.PostSignIn();
 
             result.Should().BeOfType<RedirectToActionResult>();
 
@@ -34,9 +36,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
         [Fact]
         public void And_I_do_not_have_correct_role_Then_redirect_to_search_start_page()
         {
-            _accountController.AddStandardUserToContext();
+            var controllerWithClaims = new ClaimsBuilder<AccountController>(_accountController)
+                .AddStandardUser()
+                .Build();
 
-            var result = _accountController.PostSignIn();
+            var result = controllerWithClaims.PostSignIn();
 
             result.Should().BeOfType<RedirectToActionResult>();
 

@@ -26,7 +26,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 RouteId = routeId,
                 Postcode = postcode,
                 Distance = distance,
-                CreatedBy = HttpContext.User.GetUserName()
+                CreatedBy = HttpContext.User.GetUserName(),
+                UserEmail = HttpContext.User.GetUserEmail()
             };
 
             var id = await _opportunityService.CreateOpportunity(dto);
