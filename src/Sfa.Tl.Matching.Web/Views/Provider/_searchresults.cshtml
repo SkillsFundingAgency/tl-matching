@@ -8,42 +8,44 @@
 </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
 
 <form asp-controller="Opportunity" asp-action="Create">
-    <input type="hidden" name="Postcode" value="@Model.SearchParameters.Postcode" />
-    <input type="hidden" name="Distance" value="@Model.SearchParameters.SearchRadius" />
-    <input type="hidden" name="RouteId" value="@Model.SearchParameters.SelectedRouteId" />
+    <div class="govuk-form-group">
+        <input type="hidden" name="Postcode" value="@Model.SearchParameters.Postcode" />
+        <input type="hidden" name="Distance" value="@Model.SearchParameters.SearchRadius" />
+        <input type="hidden" name="RouteId" value="@Model.SearchParameters.SelectedRouteId" />
 
-    <button type="submit" class="govuk-button--looks-like-link govuk-body">No suitable providers? Let us know</button>
+        <button type="submit" class="tl-button--looks-like-link govuk-body">No suitable providers? Let us know</button>
+    </div>
 </form>
 
-<p class="govuk-hint">Choose who the employer wants to hear from</p>
+<p class="govuk-body">Choose who the employer wants to hear from</p>
 
-<ol class="das-search-results">
+    <ol class="tl-search-results">
     @foreach (var searchResult in Model.SearchResults.Results)
     {
-        <li class="das-search-results__list-item das-search-results__list-item--with-checkbox">
+            <li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
             <div class="govuk-checkboxes">
                 <div class="govuk-checkboxes__item">
                     <input class="govuk-checkboxes__input" id="provider-1" name="provider" type="checkbox" value="1">
                     <label class="govuk-heading-m govuk-checkboxes__label" for="provider-1">
                         @searchResult.ProviderName
-                        <span class="das-search-results__click-area"></span>
+                        <ul class="tl-inline-list tl-inline-list--bar">
+                            <li>searchResult.Postcode</li>
+                            <li>@($" {searchResult.Distance:#.00}") miles</li>
+                        </ul>
+                        <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
+                        <ul class="govuk-list govuk-list--bullet">
+                            @foreach (var qualification in searchResult.QualificationShortTitles)
+                            {
+                                <li>
+                                    @qualification
+                                </li>
+                            }
+                        </ul>
+
                     </label>
                 </div>
             </div>
 
-            <ul class="das-inline-list das-inline-list--bar">
-                <li>searchResult.Postcode</li>
-                <li>@($" {searchResult.Distance:#.00}") miles</li>
-            </ul>
-            <p>Has students learning:</p>
-            <ul class="govuk-list govuk-list--bullet">
-                @foreach (var qualification in searchResult.QualificationShortTitles)
-                {
-                    <li>
-                        @qualification
-                    </li>
-                }
-            </ul>
         </li>
     }
 </ol>

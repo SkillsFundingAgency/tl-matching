@@ -6,8 +6,8 @@
     <div class="govuk-grid-column-two-thirds">
         @if (Model.IsImportSuccessful)
         {
-            <div class="das-notification das-notification--success">
-                <p class="das-notification__body">File uploaded successfully</p>
+            <div class="tl-notification tl-notification--success">
+                <p class="tl-notification__body">File uploaded successfully</p>
             </div>
         }
         <h1 class="govuk-heading-xl">Data Import</h1>
@@ -30,6 +30,7 @@
         }
     </div>
 </div>
+
 <div class="govuk-grid-row">
     <form asp-controller="DataImport" asp-action="Index" enctype="multipart/form-data">
         <div class="govuk-grid-column-two-thirds">
@@ -44,7 +45,7 @@
         <div class="govuk-grid-column-two-thirds">
             <div class="govuk-form-group">
                 <label class="govuk-label govuk-!-font-weight-bold" asp-for="SelectedImportType">
-                        Choose file type
+                    Choose file type
                 </label>
                 <select class="govuk-select" asp-for="SelectedImportType" asp-items="Model.ImportType"></select>
             </div>

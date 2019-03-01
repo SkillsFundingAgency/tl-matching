@@ -5,7 +5,7 @@
 
 <partial name="_govuk_Head" />
 
-<body class="govuk-template__body ">
+<body class="govuk-template__body">
     <script>
         document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
@@ -24,6 +24,8 @@
 
     <partial name="_govuk_Footer" />
     <partial name="_govuk_Scripts" />
+
+    @RenderSection("jsfiles", false)
 
 </body>
 </html>
