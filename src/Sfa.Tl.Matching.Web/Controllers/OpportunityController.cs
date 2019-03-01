@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _opportunityService = opportunityService;
         }
 
-        [Route("opportunity-within-{distance}-miles-of-{postcode}-for-route-{routeId}", Name = "OpportunityCreate_Post")]
+        [Route("opportunity-within-{distance}-miles-of-{postcode}-for-route-{routeId}", Name = "OpportunityCreate_Get")]
         public async Task<IActionResult> Create(int routeId, string postcode, short distance)
         {
             var dto = new OpportunityDto
@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("placement-information/{id?}", Name = "Placements_Post")]
+        [Route("placement-information", Name = "Placements_Post")]
         public async Task<IActionResult> Placements(PlacementInformationViewModel viewModel)
         {
             Validate(viewModel);
@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("check-answers/{id?}", Name = "CheckAnswers_Post")]
+        [Route("check-answers", Name = "CheckAnswers_Post")]
         public IActionResult CheckAnswers(CheckAnswersViewModel viewModel)
         {
             viewModel.CreatedBy = HttpContext.User.GetUserName();

@@ -1,13 +1,13 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.PlacementInformationViewModel
 
-<form asp-action="Placements">
+<form asp-route="Placements_Post">
     <input asp-for="OpportunityId" type="hidden" />
 
-    <a asp-controller="Provider"
-       asp-action="Results"
-       asp-route-postcode="@@Model.Postcode"
-       asp-route-distance="@Model.Distance"
-       asp-route-routeId="@@Model.RouteId" class="govuk-back-link">Back</a>
+    <a class="govuk-back-link"
+       asp-route="ProviderResults_Get"
+       asp-route-routeId="@Model.RouteId"
+       asp-route-postcode="@Model.Postcode"
+       asp-route-searchRadius="@Model.Distance">Back</a>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
