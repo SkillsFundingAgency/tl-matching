@@ -21,30 +21,19 @@
             <input asp-for="OpportunityId" type="hidden" />
 
             <div class="govuk-form-group" sfa-validation-for="BusinessName" sfa-validationerror-class="govuk-form-group--error">
-                <h1 class="govuk-label-wrapper">
-                    <label class="govuk-label govuk-label--xl" asp-for="BusinessName">
-                        Who is the employer?
-                    </label>
-                    <span class="govuk-error-message" asp-validation-for="BusinessName"></span>
-                    <span id="employer-name-hint" class="govuk-hint">
-                        Start typing their business name
-                    </span>
-                </h1>
-
+                <h1 class="govuk-heading-l">Who is the employer?</h1>
+                <span id="employer-name-hint" class="govuk-hint">
+                    Start typing their business name
+                </span>
                 <select id="BusinessName" name="BusinessName" class="govuk-input govuk-input" asp-for="BusinessName"></select>
-                
                 <input asp-for="SelectedEmployerId" type="hidden" />
-
                 <input id="employerNamesWithIds" type="hidden" />
-
             </div>
 
-            <button type="submit" class="govuk-button">
-                Continue
-            </button>
+            <button type="submit" class="govuk-button">Continue</button>
         </form>
     </div>
 </div>
 @section jsfiles{
-<script src="~/javascripts/employer-search.min.js"></script>
+    <script src="~/javascripts/employer-search.min.js"></script>
 }
