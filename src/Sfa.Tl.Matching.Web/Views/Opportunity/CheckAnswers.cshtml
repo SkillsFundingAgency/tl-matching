@@ -4,29 +4,42 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">Check 's answers</h1>
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a sfa-validation-for="ConfirmationSelected"></a></li>
+                    </ul>
+                </div>
+            </div>
+        }
+        <h1 class="govuk-heading-l">Check @Model.EmployerName's answers</h1>
         <table class="govuk-table">
             <caption class="govuk-table__caption govuk-heading-m">Placement information</caption>
             <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Type of placement</th>
-                    <td class="govuk-table__cell">Agriculture, environmental and animal care</td>
+                    <td class="govuk-table__cell">@Model.Route</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Postcode of workplace</th>
-                    <td class="govuk-table__cell">B88 8BB</td>
+                    <td class="govuk-table__cell">@Model.Postcode</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Searched for providers within</th>
-                    <td class="govuk-table__cell">10 miles</td>
+                    <td class="govuk-table__cell">@Model.Distance miles</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Job role</th>
-                    <td class="govuk-table__cell">Test</td>
+                    <td class="govuk-table__cell">@Model.JobTitle</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Number of placements</th>
-                    <td class="govuk-table__cell">1</td>
+                    <td class="govuk-table__cell">@Model.Placements</td>
                 </tr>
             </tbody>
         </table>
@@ -41,12 +54,16 @@
                     </legend>
                     <div class="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
-                            <input asp-for="ConfirmationSelected" class="govuk-checkboxes__input" id="ConfirmationSelected" name="ConfirmationSelected" type="checkbox" value="true">
+
+
+                            <span class="govuk-error-message" asp-validation-for="ConfirmationSelected"></span>
+
+                            <input asp-for="ConfirmationSelected" class="govuk-checkboxes__input" type="checkbox"
+                                   sfa-validation-for="Placements" sfa-validationerror-class="govuk-input--error" />
                             <label class="govuk-label govuk-checkboxes__label" for="waste-1">
-                                IP: Micheal Gill has confirmed that we can share their contact details. This might be to a local enterprise partnership, who can help find suitable providers, or to the providers themselves.
+                                @Model.Contact has confirmed that we can share their contact details. This might be to a local enterprise partnership, who can help find suitable providers, or to the providers themselves.
                             </label>
                         </div>
-
                     </div>
                 </fieldset>
             </div>
