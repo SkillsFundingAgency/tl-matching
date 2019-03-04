@@ -5,6 +5,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 {
     public class SearchResultsViewModel
     {
-        public IEnumerable<ProviderVenueSearchResultDto> Results { get; set; }
+        public IList<SearchResultsViewModelItem> Results { get; set; }
+        //public IEnumerable<ProviderVenueSearchResultDto> Results { get; set; }
     }
 }

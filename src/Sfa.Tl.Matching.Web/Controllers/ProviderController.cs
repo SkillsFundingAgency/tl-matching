@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -136,7 +137,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 SearchResults = new SearchResultsViewModel
                 {
-                    Results = searchResults
+                    Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults),
                 },
                 SearchParameters = new SearchParametersViewModel
                 {

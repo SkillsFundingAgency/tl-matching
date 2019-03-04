@@ -1,7 +1,10 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
 
-<h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">@Model.SearchResults?.Results?.Count() </span>results in <span class="govuk-!-font-weight-bold">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text
-</span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
+<h2 class="govuk-body">
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">@Model.SearchResults?.Results?.Count() </span>results in <span class="govuk-!-font-weight-bold">
+        @Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text
+</span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span>
+</h2>
 
 <a asp-route="OpportunityCreate_Get"
    asp-route-searchResultProviderCount="@Model.SearchResults.Results.Count()"
@@ -13,9 +16,10 @@
 <p class="govuk-body">Choose who the employer wants to hear from</p>
 
 <ol class="tl-search-results">
-    @foreach (var searchResult in Model.SearchResults.Results)
+    @*@foreach (var searchResult in Model.SearchResults.Results)*@
+    @for (var i = 0; i < Model.SearchResults.Results.Count(); i++)
     {
-        <li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
+        @*<li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
             <div class="govuk-checkboxes">
                 <div class="govuk-checkboxes__item">
                     <input class="govuk-checkboxes__input" id="provider-1" name="provider" type="checkbox" value="1">
@@ -35,6 +39,36 @@
                             }
                         </ul>
 
+                    </label>
+                </div>
+            </div>
+
+        </li>*@
+
+        var searchResult = Model.SearchResults.Results[i];
+
+        <li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
+            <div class="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                    @* https://stackoverflow.com/questions/40555543/how-do-i-implement-a-checkbox-list-in-asp-net-core *@
+                    @*<input class="govuk-checkboxes__input" id="provider-1" name="provider" type="checkbox" value="1">*@
+                    <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" />
+                    <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderId" />
+                    <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].ProviderName">
+                        @searchResult.ProviderName
+                        <ul class="tl-inline-list tl-inline-list--bar">
+                            <li>searchResult.Postcode</li>
+                            <li>@($" {searchResult.Distance:#.00}") miles</li>
+                        </ul>
+                        <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
+                        <ul class="govuk-list govuk-list--bullet">
+                            @foreach (var qualification in searchResult.QualificationShortTitles)
+                            {
+                                <li>
+                                    @qualification
+                                </li>
+                            }
+                        </ul>
                     </label>
                 </div>
             </div>
