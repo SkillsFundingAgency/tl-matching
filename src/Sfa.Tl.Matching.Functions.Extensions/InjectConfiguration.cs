@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
@@ -20,7 +21,6 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Infrastructure.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions.Extensions

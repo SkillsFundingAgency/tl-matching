@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
@@ -19,8 +21,6 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Infrastructure.Configuration;
-using Sfa.Tl.Matching.Infrastructure.Extensions;
 
 namespace Sfa.Tl.Matching.Web
 {
