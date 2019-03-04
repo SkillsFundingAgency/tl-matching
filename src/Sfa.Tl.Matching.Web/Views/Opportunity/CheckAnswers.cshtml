@@ -1,7 +1,8 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.CheckAnswersViewModel
 
-<a asp-controller="Employer" asp-action="Details" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
-
+@section backButton{
+    <a asp-controller="Employer" asp-action="Details" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
+}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">Check 's answers</h1>

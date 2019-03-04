@@ -1,6 +1,9 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerDetailsViewModel
 
-<a asp-controller="Employer" asp-action="FindEmployer" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
+@section backButton{
+    <a asp-controller="Employer" asp-action="FindEmployer" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
+}
+
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
