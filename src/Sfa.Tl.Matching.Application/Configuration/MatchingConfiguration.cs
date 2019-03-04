@@ -1,4 +1,6 @@
 ﻿
+using SFA.DAS.Notifications.Api.Client.Configuration;
+
 namespace Sfa.Tl.Matching.Application.Configuration
 {
     public class MatchingConfiguration
@@ -11,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.Configuration
 
         public string ServiceBusConnectionString { get; set; }
 
-        public string GovNotifyApiKey { get; set; }
+        public NotificationsApiClientConfiguration NotificationsApiClientConfiguration { get; set; }
 
         public string PostcodeRetrieverBaseUrl { get; set; }
 
