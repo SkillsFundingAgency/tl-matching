@@ -53,7 +53,6 @@
                     @* https://stackoverflow.com/questions/40555543/how-do-i-implement-a-checkbox-list-in-asp-net-core *@
                     @*<input class="govuk-checkboxes__input" id="provider-1" name="provider" type="checkbox" value="1">*@
                     <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" />
-                    <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderId" />
                     <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].ProviderName">
                         @searchResult.ProviderName
                         <ul class="tl-inline-list tl-inline-list--bar">
@@ -70,6 +69,8 @@
                             }
                         </ul>
                     </label>
+
+                    <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderId" />
                 </div>
             </div>
 
