@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -80,37 +81,37 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         [Fact]
         public void Then_The_Expected_Number_Of_Items_Is_Returned()
         {
-            Assert.Equal(_pathData.Count(), _result.Count());
+            _pathData.Count().Should().Be(_result.Count());
         }
 
         [Fact]
         public void Then_Path_Id_Is_Returned()
         {
-            Assert.Equal(_expected.First().Id, _result.First().Id);
+            _expected.First().Id.Should().Be(_result.First().Id);
         }
 
         [Fact]
         public void Then_Path_Name_Is_Returned()
         {
-            Assert.Equal(_expected.First().Name, _result.First().Name);
+            _expected.First().Name.Should().Be(_result.First().Name);
         }
 
         [Fact]
         public void Then_Path_Keywords_Is_Returned()
         {
-            Assert.Equal(_expected.First().Keywords, _result.First().Keywords);
+            _expected.First().Keywords.Should().Be(_result.First().Keywords);
         }
 
         [Fact]
         public void Then_Path_Summary_Is_Returned()
         {
-            Assert.Equal(_expected.First().Summary, _result.First().Summary);
+            _expected.First().Summary.Should().Be(_result.First().Summary);
         }
 
         [Fact]
         public void Then_Path_RouteId_Is_Returned()
         {
-            Assert.Equal(_expected.First().RouteId, _result.First().RouteId);
+            _expected.First().RouteId.Should().Be(_result.First().RouteId);
         }
     }
 }

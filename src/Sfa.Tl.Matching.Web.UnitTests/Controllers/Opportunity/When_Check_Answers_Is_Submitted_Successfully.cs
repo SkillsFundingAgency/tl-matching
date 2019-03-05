@@ -4,7 +4,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
@@ -22,9 +22,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
 
             var opportunityController = new OpportunityController(_opportunityService);
-            opportunityController.AddUsernameToContext(CreatedBy);
+            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
+                .AddUserName(CreatedBy)
+                .Build();
 
-            _result = opportunityController.CheckAnswers(new CheckAnswersViewModel { OpportunityId = OpportunityId, ConfirmationSelected = true });
+            _result = controllerWithClaims.CheckAnswers(new CheckAnswersViewModel { OpportunityId = OpportunityId, ConfirmationSelected = true });
         }
 
         [Fact]

@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.QualificationRoutePat
 
         [Fact]
         public void Then_Second_ParseResult_LarsId_Matches_Input() =>
-            Assert.Equal(ValidQualificationRoutePathMappingFileImportDtoBuilder.LarsId, _parseResult.Skip(1).First().Qualification.LarsId);
+            ValidQualificationRoutePathMappingFileImportDtoBuilder.LarsId.Should().BeEquivalentTo(_parseResult.Skip(1).First().Qualification.LarsId);
 
         [Fact]
         public void Then_Second_ParseResult_Title_Matches_Input() =>

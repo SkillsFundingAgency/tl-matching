@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -72,7 +73,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         [Fact]
         public void Then_The_Expected_Number_Of_Created_Records_Is_Returned()
         {
-            Assert.Equal(_fileReaderResults.Count(), _result);
+            _fileReaderResults.Count().Should().Be(_result);
         }
     }
 }
