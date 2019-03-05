@@ -31,7 +31,9 @@
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="EmployerName" type="hidden" />
 
-            <a asp-controller="Employer" asp-action="FindEmployer" asp-route-id="@Model.OpportunityId" class="govuk-button--looks-like-link govuk-body">Find a different employer</a>
+            <p class="govuk-body">
+                <a asp-controller="Employer" asp-action="FindEmployer" asp-route-id="@Model.OpportunityId" class="govuk-link">Find a different employer</a>
+            </p>
 
             <div class="govuk-form-group" sfa-validation-for="Contact" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" asp-for="Contact">

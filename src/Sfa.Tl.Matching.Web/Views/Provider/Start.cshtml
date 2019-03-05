@@ -22,7 +22,7 @@
         @if (Context.User.HasAdminRole())
         {
             <p class="govuk-body">
-                <a asp-action="Index" asp-controller="DataImport">Upload Employer and Provider Data</a>
+                <a asp-action="Index" class="govuk-link" asp-controller="DataImport">Upload data files</a>
             </p>
         }
 
