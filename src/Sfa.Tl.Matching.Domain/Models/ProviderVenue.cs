@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GeoAPI.Geometries;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
@@ -10,6 +11,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string Postcode { get; set; }
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
+        public IGeometry Location { get; set; }
         public string Source { get; set; }
         public virtual Provider Provider { get; set; }
         public virtual ICollection<ProviderQualification> ProviderQualification { get; set; }
