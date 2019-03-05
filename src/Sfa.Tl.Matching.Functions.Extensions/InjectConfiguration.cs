@@ -59,7 +59,10 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddAutoMapper(expression => expression.AddProfiles(typeof(EmployerMapper).Assembly));
 
-            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString, builder => builder.EnableRetryOnFailure()));
+            services.AddDbContext<MatchingDbContext>(options => 
+                options.UseSqlServer(_configuration.SqlConnectionString, 
+                    builder => builder.UseNetTopologySuite()
+                        .EnableRetryOnFailure()));
 
             RegisterFileReaders(services);
 

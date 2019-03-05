@@ -19,7 +19,6 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Web
@@ -122,7 +121,10 @@ namespace Sfa.Tl.Matching.Web
             services.AddAutoMapper();
 
             //Inject DbContext
-            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString));
+            services.AddDbContext<MatchingDbContext>(options => 
+                options.UseSqlServer(_configuration.SqlConnectionString, 
+                    builder => builder.UseNetTopologySuite()
+                                      .EnableRetryOnFailure()));
 
             //Inject services
             services.AddSingleton(_configuration);
@@ -152,7 +154,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderService, ProviderService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            services.AddTransient<ISearchProvider, DummySearchProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
         }
