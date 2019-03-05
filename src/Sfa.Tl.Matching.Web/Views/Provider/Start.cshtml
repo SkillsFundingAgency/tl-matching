@@ -11,6 +11,10 @@
             <li>find local providers with suitable students</li>
             <li>talk to providers about placements</li>
             <li>tell us if there are not enough providers for them</li>
+            @if (Context.User.HasAdminRole())
+            {
+            <li> <a asp-action="Index" class="govuk-link" asp-controller="DataImport">Upload employer and provider data</a></li>
+            }
         </ul>
         <div class="govuk-inset-text">
             You will only be able to find one type of placement for one location at a time.
@@ -19,12 +23,7 @@
             <a asp-action="Index" asp-controller="Provider" class="govuk-button govuk-button--start">Start now</a>
         </div>
 
-        @if (Context.User.HasAdminRole())
-        {
-            <p class="govuk-body">
-                <a asp-action="Index" class="govuk-link" asp-controller="DataImport">Upload data files</a>
-            </p>
-        }
+
 
     </div>
 </div>
