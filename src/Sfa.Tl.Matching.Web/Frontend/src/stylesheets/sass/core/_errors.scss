@@ -1,0 +1,16 @@
+.govuk-error-message {
+    display: none;
+}
+
+.govuk-form-group--error {
+    .govuk-error-message {
+        display: block;
+    }
+    /*Autocompelte Error Override*/
+    .autocomplete__input {
+        @extend .govuk-input--error
+    }
+}
+
+
+

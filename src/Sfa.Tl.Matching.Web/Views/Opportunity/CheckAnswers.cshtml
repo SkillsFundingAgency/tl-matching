@@ -1,7 +1,10 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.CheckAnswersViewModel
 
-<a asp-controller="Employer" asp-action="Details" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
+@section backButton{
+    <a asp-controller="Employer" asp-action="Details" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
+    <a asp-controller="Provider" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3"> Finish and start again </a>
 
+}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         @if (!ViewData.ModelState.IsValid)

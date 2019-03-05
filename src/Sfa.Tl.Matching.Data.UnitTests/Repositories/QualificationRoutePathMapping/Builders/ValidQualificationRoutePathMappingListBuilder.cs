@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapping.Constants;
-using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapping.Builders
 {
@@ -18,7 +17,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapp
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn,
-                Qualification = new Qualification
+                Qualification = new Domain.Models.Qualification
                 {
                     LarsId = QualificationRoutePathMappingConstants.LarsId,
                     Title = QualificationRoutePathMappingConstants.Title,
@@ -34,7 +33,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapp
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn,
-                Qualification = new Qualification
+                Qualification = new Domain.Models.Qualification
                 {
                     LarsId = QualificationRoutePathMappingConstants.LarsId2,
                     Title = QualificationRoutePathMappingConstants.Title2,

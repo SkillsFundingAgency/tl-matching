@@ -66,5 +66,33 @@ namespace Sfa.Tl.Matching.Application.FileReader.Extensions
                 return false;
             }
         }
+        
+        public static bool IsAupaStatus(this string cellValue)
+        {
+            try
+            {
+                cellValue.DehumanizeTo<AupaStatus>();
+                return true;
+            }
+            catch (NoMatchFoundException)
+            {
+                return false;
+            }
+        }
+        
+        public static bool IsCompanyType(this string cellValue)
+        {
+            if (string.IsNullOrWhiteSpace(cellValue)) return true;
+
+            try
+            {
+                cellValue.DehumanizeTo<CompanyType>();
+                return true;
+            }
+            catch (NoMatchFoundException)
+            {
+                return false;
+            }
+        }
     }
 }

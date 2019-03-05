@@ -1,6 +1,7 @@
-﻿using NSubstitute;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
+using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
@@ -11,8 +12,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     public class When_Placement_Information_Is_Submitted_Successfully
     {
         private readonly IOpportunityService _opportunityService;
-        private const string ModifiedBy = "ModifiedBy";
         private readonly PlacementInformationViewModel _viewModel = new PlacementInformationViewModel();
+        private readonly IActionResult _result;
 
         private const int OpportunityId = 1;
 
@@ -27,13 +28,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("username")
                 .Build();
 
-            controllerWithClaims.Placements(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.Placements(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<OpportunityDto>());
+            _opportunityService.Received(1).SavePlacementInformation(_viewModel);
+        }
+
+        [Fact]
+        public void Then_Result_Is_Redirect_to_FindEmployer()
+        {
+            var result = _result as RedirectToRouteResult;
+            result.Should().NotBeNull();
+
+            result?.RouteName.Should().Be("EmployerFind_Get");
         }
     }
 }

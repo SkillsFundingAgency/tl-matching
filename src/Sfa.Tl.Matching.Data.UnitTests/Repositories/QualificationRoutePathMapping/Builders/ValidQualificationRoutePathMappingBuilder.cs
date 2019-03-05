@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapp
             CreatedOn = EntityCreationConstants.CreatedOn,
             ModifiedBy = EntityCreationConstants.ModifiedByUser,
             ModifiedOn = EntityCreationConstants.ModifiedOn,
-            Qualification = new Qualification
+            Qualification = new Domain.Models.Qualification
             {
                 LarsId = QualificationRoutePathMappingConstants.LarsId,
                 Title = QualificationRoutePathMappingConstants.Title,

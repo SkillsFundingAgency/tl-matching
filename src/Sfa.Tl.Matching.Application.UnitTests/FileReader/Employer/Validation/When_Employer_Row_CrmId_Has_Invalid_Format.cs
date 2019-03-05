@@ -15,18 +15,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
             _fixture = fixture;
         }
 
-        [Theory]
-        [InlineData("ABC")]
-        public void Then_Validation_Result_Is_Not_Valid(string crmId)
+        [Fact]
+        public void Then_Validation_Result_Is_Not_Valid()
         {
-            _fixture.Dto.CrmId = crmId;
+            _fixture.Dto.CrmId = "ABC";
             var validationResult = _fixture.Validator.Validate(_fixture.Dto);
-            Assert.False(validationResult.IsValid);
+            validationResult.IsValid.Should().BeFalse();
             validationResult.Errors.Count.Should().Be(1);
-            validationResult.Errors[0].ErrorCode.Should()
-                .Be(ValidationErrorCode.InvalidFormat.ToString());
-            validationResult.Errors[0].ErrorMessage.Should()
-                .Be($"'{nameof(EmployerFileImportDto.CrmId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+            validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.InvalidFormat.ToString());
+            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerFileImportDto.CrmId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
         }
     }
 }
