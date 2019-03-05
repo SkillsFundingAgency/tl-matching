@@ -43,6 +43,16 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
+        public async Task SavePlacementInformation(PlacementInformationViewModel dto)
+        {
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
+            var updatedOpportunity = _mapper.Map(dto, opportunity);
+
+            updatedOpportunity.ModifiedOn = _dateTimeProvider.UtcNow();
+
+            await _opportunityRepository.Update(updatedOpportunity);
+        }
+
         public async Task UpdateOpportunity(OpportunityDto dto)
         {
             dto.ModifiedOn = _dateTimeProvider.UtcNow();
