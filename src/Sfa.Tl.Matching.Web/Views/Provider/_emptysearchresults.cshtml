@@ -5,13 +5,17 @@
 }
 
 <h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">0 </span>results in <span class="govuk-!-font-weight-bold">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
-<a asp-route="OpportunityCreate_Get"
-   asp-route-postcode="@Model.SearchParameters.Postcode"
-   asp-route-distance="@Model.SearchParameters.SearchRadius"
-   asp-route-routeId="@Model.SearchParameters.SelectedRouteId"
-   class="govuk-button--looks-like-link govuk-body">No suitable providers? Let us know</a>
+
 <p class="govuk-body govuk-!-margin-top-5">You can:</p>
 <ul class="govuk-list govuk-list--bullet">
     <li>increase the distance from the employer’s postcode</li>
     <li>try a different skill area</li>
 </ul>
+<p class="govuk-body">
+    If neither of these work, 
+    <a asp-route="OpportunityCreate_Get"
+       asp-route-postcode="@Model.SearchParameters.Postcode"
+       asp-route-distance="@Model.SearchParameters.SearchRadius"
+       asp-route-routeId="@Model.SearchParameters.SelectedRouteId"
+       class="govuk-link">tell us that there are no suitable providers</a>.
+</p>
