@@ -22,12 +22,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderQualification
         {
             _fixture.Dto.UkPrn = ukPrn;
             var validationResult = _fixture.Validator.Validate(_fixture.Dto);
-            Assert.False(validationResult.IsValid);
+            validationResult.IsValid.Should().BeFalse();
             validationResult.Errors.Count.Should().Be(1);
-            validationResult.Errors[0].ErrorCode.Should()
-                .Be(ValidationErrorCode.MissingMandatoryData.ToString());
-            validationResult.Errors[0].ErrorMessage.Should()
-                .Be($"'{nameof(ProviderQualificationFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+            validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.MissingMandatoryData.ToString());
+            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(ProviderQualificationFileImportDto.UkPrn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
     }
 }

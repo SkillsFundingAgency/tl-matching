@@ -28,7 +28,16 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
             RuleFor(dto => dto.Aupa)
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(EmployerFileImportDto.Aupa)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+                    .WithMessage($"'{nameof(EmployerFileImportDto.Aupa)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .Must(dto => dto.IsAupaStatus())
+                    .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
+                    .WithMessage($"'{nameof(EmployerFileImportDto.Aupa)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+            
+            //this will return true if its null or a valid Company Type because this is a optional field
+            RuleFor(dto => dto.CompanyType)
+                .Must(dto => dto.IsCompanyType())
+                    .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
+                    .WithMessage($"'{nameof(EmployerFileImportDto.CompanyType)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(dto => dto.PostCode)
                 .NotEmpty()

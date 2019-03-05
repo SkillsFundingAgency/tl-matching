@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Validation
 
         [Fact]
         public void Then_Validation_Result_Is_Not_Valid() =>
-            Assert.False(_validationResult.IsValid);
+            _validationResult.IsValid.Should().BeFalse();
 
         [Fact]
         public void Then_Error_Count_Is_One() =>
