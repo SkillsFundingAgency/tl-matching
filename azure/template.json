@@ -57,8 +57,8 @@
         "serviceBusName": "[concat(variables('resourceNamePrefix'), '-mtch-ns')]",
         "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'mtchstr'), '-', '')]",
         "queues": {
-          "GetProximityMessageQueueName": "get-proximity-queue",
-          "SaveProximityMessageQueueName": "save-proximity-queue"
+          "getProximityMessageQueueName": "get-proximity-queue",
+          "saveProximityMessageQueueName": "save-proximity-queue"
         }
     },
     "resources": [
