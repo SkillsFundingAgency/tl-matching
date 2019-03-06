@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private readonly IOpportunityService _opportunityService;
         private readonly OpportunityDto _dto = new OpportunityDto();
         private const string Contact = "Contact";
-        private const string ContactPhone = "ContactPhone";
+        private const string ContactPhone = "123456789";
         private const string ContactEmail = "ContactEmail";
         private const string ModifiedBy = "ModifiedBy";
         private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel();

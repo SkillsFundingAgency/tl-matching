@@ -85,13 +85,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View(viewModel);
         }
 
-        private async Task<CheckAnswersViewModel> GetCheckAnswersViewModel(int id)
+        private CheckAnswersPlacementViewModel GetPlacementViewModel(OpportunityDto dto)
         {
-            var dto = await _opportunityService.GetOpportunityWithRoute(id);
-
-            var viewModel = new CheckAnswersViewModel
+            var viewModel = new CheckAnswersPlacementViewModel
             {
-                OpportunityId = dto.Id,
+
                 Contact = dto.EmployerContact,
                 Distance = dto.Distance,
                 EmployerName = dto.EmployerName,
@@ -100,6 +98,18 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 Placements = dto.Placements,
                 Postcode = dto.Postcode,
                 Route = dto.Route
+            };
+
+            return viewModel;
+        }
+        private async Task<CheckAnswersViewModel> GetCheckAnswersViewModel(int id)
+        {
+            var dto = await _opportunityService.GetOpportunityWithRoute(id);
+
+            var viewModel = new CheckAnswersViewModel
+            {
+                OpportunityId = dto.Id,
+                PlacementInformation = GetPlacementViewModel(dto)
             };
 
             viewModel.Providers = new List<ProviderViewModel>();
@@ -136,14 +146,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var viewModel = new CheckAnswersGapViewModel
             {
                 OpportunityId = dto.Id,
-                Contact = dto.EmployerContact,
-                Distance = dto.Distance,
-                EmployerName = dto.EmployerName,
-                JobTitle = dto.JobTitle,
-                PlacementsKnown = dto.PlacementsKnown,
-                Placements = dto.Placements,
-                Postcode = dto.Postcode,
-                Route = dto.Route
+                PlacementInformation = GetPlacementViewModel(dto)
             };
 
             return View(viewModel);

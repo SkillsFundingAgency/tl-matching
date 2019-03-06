@@ -20,6 +20,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
                 EmployerContact = "Contact",
                 EmployerContactEmail = "ContactEmail",
                 EmployerContactPhone = "ContactPhone",
+                Route = "Route",
                 ModifiedBy = "ModifiedBy"
             };
         }
