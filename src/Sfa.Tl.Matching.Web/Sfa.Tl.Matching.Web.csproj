@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Frontend\src\javascripts\employer-search.js" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -50,10 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Frontend\src\stylesheets\css\" />
     <Folder Include="wwwroot\" />
-    <Folder Include="wwwroot\javascripts\" />
-    <Folder Include="wwwroot\stylesheets\" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptTarget>ES2015</TypeScriptTarget>
