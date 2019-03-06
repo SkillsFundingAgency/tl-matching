@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.CreateReferral(viewModel);
 
-            return RedirectToAction(nameof(PlacementGap), new { id = viewModel.OpportunityId });
+            return RedirectToAction(nameof(EmailsSent), new { id = viewModel.OpportunityId });
         }
 
         [HttpGet]
