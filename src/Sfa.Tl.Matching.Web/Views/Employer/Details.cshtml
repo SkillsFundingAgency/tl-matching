@@ -29,7 +29,7 @@
             <label asp-for="EmployerName">@Model.EmployerName</label>
         </h2>
 
-        <form asp-controller="Employer" asp-action="Details">
+        <form asp-controller="Employer" asp-action="Details" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="EmployerName" type="hidden" />
 
