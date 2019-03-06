@@ -48,15 +48,14 @@
         </table>
         <hr class="govuk-section-break govuk-section-break--l ">
 
-
         <h2 class="govuk-heading-m">Provider information</h2>
-        <h3 class="govuk-heading-s govuk-!-margin-0">Provider 1</h3>
-        <p class="govuk-body govuk-!-margin-0">The WKCIC Group</p>
-        <p class="govuk-body govuk-!-margin-0">1.5 miles miles from <span style="text-transform: uppercase">CV1 2WT</span></p>
-        <hr class="govuk-section-break govuk-section-break--m ">
-        <h3 class="govuk-heading-s govuk-!-margin-0">Provider 2</h3>
-        <p class="govuk-body govuk-!-margin-0">Lambeth College </p>
-        <p class="govuk-body govuk-!-margin-0">4.3 miles from <span style="text-transform: uppercase">CV1 2WT</span></p>
+        @for (int i = 0; i < Model.Providers.Count(); i++)
+        {
+            <h3 class="govuk-heading-s govuk-!-margin-0">Provider @(i + 1)</h3>
+            <p class="govuk-body govuk-!-margin-0">@Model.Providers[i].Name</p>
+            <p class="govuk-body govuk-!-margin-0">@Model.Providers[i].Distance miles miles from <span style="text-transform: uppercase">@Model.Providers[i].Postcode</span></p>
+            <hr class="govuk-section-break govuk-section-break--m ">
+        }
         <hr class="govuk-section-break govuk-section-break--l ">
 
         <form asp-route="CheckAnswers_Post">
