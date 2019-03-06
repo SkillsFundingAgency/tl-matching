@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
 {
     public class ExcelFileReader<TImportDto, TDto> : IFileReader<TImportDto, TDto> where TDto : class, new() where TImportDto : FileImportDto
     {
-        private readonly ILogger<ExcelFileReader<TImportDto, TDto>> _logger;
+        public readonly ILogger<ExcelFileReader<TImportDto, TDto>> _logger;
         private readonly IDataParser<TDto> _dataParser;
         private readonly IValidator<TImportDto> _validator;
 

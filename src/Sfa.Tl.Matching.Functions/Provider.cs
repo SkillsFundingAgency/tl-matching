@@ -4,7 +4,9 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Extensions;
+using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
@@ -32,6 +34,17 @@ namespace Sfa.Tl.Matching.Functions
                 FileDataStream = stream,
                 CreatedBy = blockBlob.GetCreatedByMetadata()
             });
+
+            var service = fileImportService as FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>;
+
+            logger.LogInformation($"FileImportService Logger is {service?._logger.GetType()}");
+            service?._logger.LogInformation("This is a FileImportService Logger");
+
+            var reader = service?._fileReader as ExcelFileReader<ProviderFileImportDto, ProviderDto>;
+
+            logger.LogInformation($"FileImportService Logger is {reader?._logger.GetType()}");
+            reader?._logger.LogInformation("This is a ExcelFileReader Logger");
+
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
