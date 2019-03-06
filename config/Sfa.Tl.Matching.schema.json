@@ -54,10 +54,24 @@
       "type": "string",
       "environmentVariable": "PostCodeRetrieverBaseUrl"
     },
-    "GovNotifyApiKey": {
-      "minLength": 1,
-      "type": "string",
-      "environmentVariable": "GovNotifyAPIKey"
+    "NotificationsApiClientConfiguration": {
+      "properties": {
+        "ApiBaseUrl": {
+          "minLength": 1,
+          "type": "string",
+          "environmentVariable": "NotificationsApiBaseUrl"
+        },
+        "ClientToken": {
+          "minLength": 1,
+          "type": "string",
+          "environmentVariable": "NotificationsClientToken"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ClientToken"
+      ],
+      "type": "object"
     },
     "BlobStorageConnectionString": {
       "type": "string",
@@ -81,7 +95,7 @@
   "additionalProperties": false,
   "required": [
     "Authentication",
-    "GovNotifyApiKey",
+    "NotificationsApiClientConfiguration",
     "SessionRedisConnectionString",
     "SqlConnectionString"
   ],

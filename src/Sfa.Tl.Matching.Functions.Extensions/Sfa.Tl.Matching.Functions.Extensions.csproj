@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj" />
-    <ProjectReference Include="..\Sfa.Tl.Matching.Infrastructure\Sfa.Tl.Matching.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

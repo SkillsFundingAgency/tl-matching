@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 
-namespace Sfa.Tl.Matching.Infrastructure.Extensions
+namespace Sfa.Tl.Matching.Application.Extensions
 {
     public static class RolesExtensions
     {
