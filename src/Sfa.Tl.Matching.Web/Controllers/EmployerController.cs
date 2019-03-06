@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyModel.Resolution;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Infrastructure.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
@@ -100,7 +101,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("CheckAnswers_Get");
+            return RedirectToRoute(dto.IsReferral ?
+                "CheckAnswers_Get" :
+                "CheckAnswersGap_Get");
         }
 
         private OpportunityDto PopulateDto(int opportunityId, EmployerDto employer)

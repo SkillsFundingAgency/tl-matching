@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<OpportunityDto> GetOpportunity(int id)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id);
-
+                
             var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
 
             return dto;
@@ -64,14 +64,14 @@ namespace Sfa.Tl.Matching.Application.Services
             await _opportunityRepository.Update(trackedEntity);
         }
 
-        public Task<int> CreateProvisionGap(CheckAnswersViewModel dto)
+        public Task<int> CreateProvisionGap(CheckAnswersGapViewModel dto)
         {
             var provisionGap = _mapper.Map<ProvisionGap>(dto);
 
             return _provisionGapRepository.Create(provisionGap);
         }
 
-        public Task<int> CreateReferal(int opportunityId)
+        public Task<int> CreateReferral(CheckAnswersViewModel dto)
         {
             throw new System.NotImplementedException();
         }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -26,6 +27,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 RouteId = routeId,
                 Postcode = postcode,
                 Distance = distance,
+                IsReferral = false,  // TODO AU FIX THIS
                 CreatedBy = HttpContext.User.GetUserName(),
                 UserEmail = HttpContext.User.GetUserEmail()
             };
@@ -76,18 +78,84 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("check-answers/{id?}", Name = "CheckAnswers_Get")]
-        public IActionResult CheckAnswers(int id)
+        public async Task<IActionResult> CheckAnswers(int id)
         {
-            return View(new CheckAnswersViewModel { OpportunityId = id });
+            var viewModel = await GetCheckAnswersViewModel(id);
+
+            return View(viewModel);
+        }
+
+        private async Task<CheckAnswersViewModel> GetCheckAnswersViewModel(int id)
+        {
+            var dto = await _opportunityService.GetOpportunity(id);
+
+            var viewModel = new CheckAnswersViewModel
+            {
+                OpportunityId = dto.Id,
+                Contact = dto.EmployerContact,
+                Distance = dto.Distance,
+                EmployerName = dto.EmployerName,
+                JobTitle = dto.JobTitle,
+                PlacementsKnown = dto.PlacementsKnown,
+                Placements = dto.Placements,
+                Postcode = dto.Postcode,
+                //Route = dto.Route
+            };
+
+            viewModel.Providers = new List<ProviderViewModel>();
+            viewModel.Providers.Add(new ProviderViewModel
+            {
+                Name = "The WKCIC Group1111",
+                Distance = 2,
+                Postcode = "CV1 2WT",
+            });
+
+            return viewModel;
         }
 
         [HttpPost]
         [Route("check-answers", Name = "CheckAnswers_Post")]
-        public IActionResult CheckAnswers(CheckAnswersViewModel viewModel)
+        public async Task<IActionResult> CheckAnswers(CheckAnswersViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(await GetCheckAnswersViewModel(viewModel.OpportunityId));
+
+            viewModel.CreatedBy = HttpContext.User.GetUserName();
+
+            //await _opportunityService.CreateProvisionGap(viewModel);
+
+            return RedirectToAction(nameof(PlacementGap), new { opportunityId = viewModel.OpportunityId });
+        }
+
+        [HttpGet]
+        [Route("check-answers-gap/{id?}", Name = "CheckAnswersGap_Get")]
+        public async Task<IActionResult> CheckAnswersGap(int id)
+        {
+            var dto = await _opportunityService.GetOpportunity(id);
+
+            var viewModel = new CheckAnswersGapViewModel
+            {
+                OpportunityId = dto.Id,
+                Contact = dto.EmployerContact,
+                Distance = dto.Distance,
+                EmployerName = dto.EmployerName,
+                JobTitle = dto.JobTitle,
+                PlacementsKnown = dto.PlacementsKnown,
+                Placements = dto.Placements,
+                Postcode = dto.Postcode,
+                //Route = dto.Route
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("check-answers-gap", Name = "CheckAnswersGap_Post")]
+        public async Task<IActionResult> CheckAnswersGap(CheckAnswersGapViewModel viewModel)
         {
             viewModel.CreatedBy = HttpContext.User.GetUserName();
 
-            _opportunityService.CreateProvisionGap(viewModel);
+            await _opportunityService.CreateProvisionGap(viewModel);
 
             return RedirectToAction(nameof(PlacementGap), new { opportunityId = viewModel.OpportunityId });
         }

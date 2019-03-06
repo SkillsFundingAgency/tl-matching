@@ -5,6 +5,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
@@ -59,37 +60,29 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_OpportunityId_Is_Set()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<PlacementInformationViewModel>();
             viewModel.OpportunityId.Should().Be(OpportunityId);
         }
 
         [Fact]
         public void Then_JobTitle_Is_Set()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<PlacementInformationViewModel>();
             viewModel.JobTitle.Should().Be(JobTitle);
         }
 
         [Fact]
         public void Then_PlacementsKnown_Is_Set()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<PlacementInformationViewModel>();
             viewModel.PlacementsKnown.Should().Be(PlacementsKnown);
         }
 
         [Fact]
         public void Then_Placements_Is_Set()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<PlacementInformationViewModel>();
             viewModel.Placements.Should().Be(Placements);
-        }
-
-        private PlacementInformationViewModel GetViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            var viewModel = viewResult?.Model as PlacementInformationViewModel;
-
-            return viewModel;
         }
     }
 }

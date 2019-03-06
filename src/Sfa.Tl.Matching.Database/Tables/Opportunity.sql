@@ -12,6 +12,8 @@
 	[EmployerContactEmail] VARCHAR(320) NULL,
 	[EmployerContactPhone] VARCHAR(150) NULL,
 	[UserEmail] VARCHAR(320) NULL,
+	[IsReferral] BIT NOT NULL,
+	[DropOffStage] SMALLINT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 
