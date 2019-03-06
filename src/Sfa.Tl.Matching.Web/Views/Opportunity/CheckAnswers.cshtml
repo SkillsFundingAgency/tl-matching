@@ -56,18 +56,17 @@
             <p class="govuk-body govuk-!-margin-0">@Model.Providers[i].Distance miles from <span style="text-transform: uppercase">@Model.Providers[i].Postcode</span></p>
             <hr class="govuk-section-break govuk-section-break--m ">
         }
-        <hr class="govuk-section-break govuk-section-break--l ">
 
         <form asp-route="CheckAnswers_Post">
             <input asp-for="OpportunityId" type="hidden" />
-            <div class="govuk-form-group govuk-form-group--error">
+            <div class="govuk-form-group" sfa-validation-for="ConfirmationSelected" sfa-validationerror-class="govuk-form-group--error">
                 <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                         <h2 class="govuk-fieldset__heading">
                             Before you tell us there are no providers
                         </h2>
                     </legend>
-                    <span class="govuk-error-message">You must confirm that we can share the employer’s details with the selected providers.</span>
+                    <span class="govuk-error-message" asp-validation-for="ConfirmationSelected"></span>
 
                     <div class="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
