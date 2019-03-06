@@ -37,6 +37,8 @@ namespace Sfa.Tl.Matching.Functions
 
             var service = fileImportService as FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>;
 
+            logger.LogInformation($"Type of Main Ilogger is {logger.GetType()}");
+
             logger.LogInformation($"FileImportService Logger is {service?._logger.GetType()}");
             service?._logger.LogInformation("This is a FileImportService Logger");
 
