@@ -13,8 +13,6 @@
 <form asp-route="Placements_Post" novalidate>
     <input asp-for="OpportunityId" type="hidden" />
 
-
-
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (!ViewData.ModelState.IsValid)
@@ -71,7 +69,7 @@
                                     Number of placements
                                 </label>
                                 <span class="govuk-error-message" asp-validation-for="Placements"></span>
-                                <input asp-for="Placements" class="govuk-input govuk-input govuk-input--width-3" maxlength="4"
+                                <input asp-for="Placements" class="govuk-input govuk-input govuk-input--width-3"
                                        sfa-validation-for="Placements" sfa-validationerror-class="govuk-input--error" />
                             </div>
                         </div>

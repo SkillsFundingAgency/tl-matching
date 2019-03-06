@@ -10,7 +10,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     public class When_Opportunity_Controller_Create_Opportunity_Is_Called
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly OpportunityDto _dto = new OpportunityDto();
         private const string UserName = "username";
         private const string Email = "email@address.com";
 

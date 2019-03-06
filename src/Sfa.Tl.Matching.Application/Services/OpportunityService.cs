@@ -14,17 +14,20 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IRepository<Opportunity> _opportunityRepository;
         private readonly IRepository<ProvisionGap> _provisionGapRepository;
+        private readonly IRepository<Referral> _referralRepository;
 
         public OpportunityService(
             IMapper mapper,
             IDateTimeProvider dateTimeProvider,
             IRepository<Opportunity> opportunityRepository,
-            IRepository<ProvisionGap> provisionGapRepository)
+            IRepository<ProvisionGap> provisionGapRepository,
+            IRepository<Referral> referralRepository)
         {
             _mapper = mapper;
             _dateTimeProvider = dateTimeProvider;
             _opportunityRepository = opportunityRepository;
             _provisionGapRepository = provisionGapRepository;
+            _referralRepository = referralRepository;
         }
 
         public async Task<int> CreateOpportunity(OpportunityDto dto)
@@ -81,7 +84,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public Task<int> CreateReferral(CheckAnswersViewModel dto)
         {
-            throw new System.NotImplementedException();
+            var referral = _mapper.Map<Referral>(dto);
+
+            return _referralRepository.Create(referral);
         }
     }
 }
