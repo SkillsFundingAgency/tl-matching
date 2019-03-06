@@ -6,6 +6,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProviderService
     {
-        Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId);
+        IEnumerable<ProviderVenueSearchResultDto> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId);
     }
 }

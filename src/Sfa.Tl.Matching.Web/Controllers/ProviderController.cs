@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("provider-results-within-{searchRadius}-miles-of-{postcode}-for-route-{routeId}", Name = "ProviderResults_Get")]
-        public async Task<IActionResult> Results(int routeId, string postcode, int searchRadius)
+        public IActionResult Results(int routeId, string postcode, int searchRadius)
         {
             var searchParametersViewModel = new SearchParametersViewModel
             {
@@ -68,7 +67,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchRadius = searchRadius
             };
 
-            var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
+            var resultsViewModel = GetSearchResultsAsync(searchParametersViewModel);
 
             return View(resultsViewModel);
         }
@@ -121,11 +120,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return _routePathService.GetRoutes().OrderBy(r => r.Name);
         }
 
-        private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
+        private SearchViewModel GetSearchResultsAsync(SearchParametersViewModel viewModel)
         {
             _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
 
-            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(viewModel.Postcode, viewModel.SearchRadius, viewModel.SelectedRouteId.GetValueOrDefault());
+            var searchResults = _providerService.SearchProvidersByPostcodeProximity(viewModel.Postcode, viewModel.SearchRadius, viewModel.SelectedRouteId.GetValueOrDefault());
 
             var resultsViewModel = new SearchViewModel
             {

@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
             var service = new ProviderService(mapper, searchProvider);
 
-            _result = service.SearchProvidersByPostcodeProximity(Postcode, SearchRadius, RouteId).GetAwaiter().GetResult();
+            _result = service.SearchProvidersByPostcodeProximity(Postcode, SearchRadius, RouteId);
         }
 
         [Fact]

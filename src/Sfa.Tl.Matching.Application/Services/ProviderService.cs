@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Internal;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -21,9 +20,9 @@ namespace Sfa.Tl.Matching.Application.Services
             _searchProvider = searchProvider;
         }
 
-        public async Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId)
+        public IEnumerable<ProviderVenueSearchResultDto> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId)
         {
-            var searchResults = await _searchProvider.SearchProvidersByPostcodeProximity(postcode, searchRadius, routeId);
+            var searchResults = _searchProvider.SearchProvidersByPostcodeProximity(postcode, searchRadius, routeId);
 
             var results = searchResults.Any()
                 ? _searchResultMapper.Map<IEnumerable<ProviderVenueSearchResultDto>>(searchResults)
