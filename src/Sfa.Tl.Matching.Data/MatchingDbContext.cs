@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Data
         {
         }
 
+        public virtual DbSet<EmailTemplate> EmailTemplate { get; set; }
         public virtual DbSet<Employer> Employer { get; set; }
         public virtual DbSet<Opportunity> Opportunity { get; set; }
         public virtual DbSet<Path> Path { get; set; }

@@ -21,6 +21,10 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
+using SFA.DAS.Http;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -127,6 +131,7 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddSingleton(_configuration);
 
+            RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }
@@ -134,6 +139,7 @@ namespace Sfa.Tl.Matching.Web
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
+            services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
             services.AddTransient<IRepository<Opportunity>, GenericRepository<Opportunity>>();
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
@@ -143,8 +149,19 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
         }
 
+        private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
+        {
+            var httpClient = string.IsNullOrWhiteSpace(apiConfiguration.ClientId)
+                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(apiConfiguration)).Build()
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(apiConfiguration)).Build();
+
+           services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
+               new NotificationsApi(httpClient, apiConfiguration));
+        }
+
         private static void RegisterApplicationServices(IServiceCollection services)
         {
+            services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IOpportunityService, OpportunityService>();
