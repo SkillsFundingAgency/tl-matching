@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<CheckAnswersViewModel> GetCheckAnswersViewModel(int id)
         {
-            var dto = await _opportunityService.GetOpportunity(id);
+            var dto = await _opportunityService.GetOpportunityWithRoute(id);
 
             var viewModel = new CheckAnswersViewModel
             {
@@ -99,7 +99,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 PlacementsKnown = dto.PlacementsKnown,
                 Placements = dto.Placements,
                 Postcode = dto.Postcode,
-                //Route = dto.Route
+                Route = dto.Route
             };
 
             viewModel.Providers = new List<ProviderViewModel>();
@@ -131,7 +131,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers-gap/{id?}", Name = "CheckAnswersGap_Get")]
         public async Task<IActionResult> CheckAnswersGap(int id)
         {
-            var dto = await _opportunityService.GetOpportunity(id);
+            var dto = await _opportunityService.GetOpportunityWithRoute(id);
 
             var viewModel = new CheckAnswersGapViewModel
             {
@@ -143,7 +143,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 PlacementsKnown = dto.PlacementsKnown,
                 Placements = dto.Placements,
                 Postcode = dto.Postcode,
-                //Route = dto.Route
+                Route = dto.Route
             };
 
             return View(viewModel);

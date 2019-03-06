@@ -42,7 +42,16 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Number of placements</th>
-                    <td class="govuk-table__cell">@Model.Placements</td>
+                    <td class="govuk-table__cell">
+                        @if (Model.PlacementsKnown.HasValue && Model.PlacementsKnown.Value)
+                        {
+                            @Model.Placements
+                        }
+                        else
+                        {
+                            @:at least 1
+                        }
+                    </td>
                 </tr>
             </tbody>
         </table>

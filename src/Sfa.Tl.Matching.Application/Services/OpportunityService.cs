@@ -37,12 +37,20 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<OpportunityDto> GetOpportunity(int id)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id);
-                
             var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
 
             return dto;
         }
 
+        public async Task<OpportunityDto> GetOpportunityWithRoute(int id)
+        {
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id,
+                opp => opp.Route);
+            var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
+
+            return dto;
+        }
+        
         public async Task SavePlacementInformation(PlacementInformationViewModel dto)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);

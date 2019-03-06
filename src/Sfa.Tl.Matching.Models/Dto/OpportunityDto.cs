@@ -6,6 +6,7 @@ namespace Sfa.Tl.Matching.Models.Dto
     {
         public int Id { get; set; }
         public int RouteId { get; set; }
+        public string Route { get; set; }
         public string Postcode { get; set; }
         public short Distance { get; set; }
         public bool IsReferral { get; set; }

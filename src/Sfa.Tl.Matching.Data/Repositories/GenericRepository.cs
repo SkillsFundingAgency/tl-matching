@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             {
                 foreach (var navProp in navigationPropertyPath)
                 {
-                    queryable.Include(navProp);
+                    queryable = queryable.Include(navProp);
                 }
             }
 
