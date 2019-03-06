@@ -47,7 +47,15 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     Environment.GetEnvironmentVariable("Version"),
                     Environment.GetEnvironmentVariable("ServiceName"));
 
-            services.AddLogging();
+            services.AddLogging(logging =>
+            {
+                logging.AddConsole();
+                logging.AddDebug();
+                logging.AddAzureWebAppDiagnostics();
+                logging.AddFilter((category, level) =>
+                    level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
+ 
+            });
 
             services.AddAutoMapper(expression => expression.AddProfiles(typeof(EmployerMapper).Assembly));
 
