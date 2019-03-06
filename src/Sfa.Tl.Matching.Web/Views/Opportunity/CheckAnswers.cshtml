@@ -60,19 +60,17 @@
 
         <form asp-route="CheckAnswers_Post">
             <input asp-for="OpportunityId" type="hidden" />
-            <div class="govuk-form-group">
+            <div class="govuk-form-group govuk-form-group--error">
                 <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                         <h2 class="govuk-fieldset__heading">
                             Before you tell us there are no providers
                         </h2>
                     </legend>
+                    <span class="govuk-error-message">You must confirm that we can share the employer’s details with the selected providers.</span>
+
                     <div class="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
-
-
-                            <span class="govuk-error-message" asp-validation-for="ConfirmationSelected"></span>
-
                             <input asp-for="ConfirmationSelected" class="govuk-checkboxes__input" type="checkbox"
                                    sfa-validation-for="Placements" sfa-validationerror-class="govuk-input--error" />
                             <label class="govuk-label govuk-checkboxes__label" for="waste-1">
