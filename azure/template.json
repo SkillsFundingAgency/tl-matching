@@ -55,7 +55,11 @@
         "azureSearchName": "[concat(variables('resourceNamePrefix'), '-mtch-azs')]",
         "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-mtch-db')]",
         "serviceBusName": "[concat(variables('resourceNamePrefix'), '-mtch-ns')]",
-        "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'mtchstr'), '-', '')]"
+        "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'mtchstr'), '-', '')]",
+        "queues": {
+          "getProximityMessageQueueName": "get-proximity-queue",
+          "saveProximityMessageQueueName": "save-proximity-queue"
+        }
     },
     "resources": [
         {
@@ -362,6 +366,12 @@
                 "parameters": {
                     "serviceBusNamespaceName": {
                         "value": "[variables('serviceBusName')]"
+                  },
+                    "serviceBusQueues": {
+                        "value": [
+                            "[variables('queues').GetProximityMessageQueueName]",
+                            "[variables('queues').SaveProximityMessageQueueName]"
+                        ]
                     }
                 }
             }

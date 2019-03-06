@@ -1,6 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace Sfa.Tl.Matching.Infrastructure.Extensions
+namespace Sfa.Tl.Matching.Application.Extensions
 {
     public static class BlobExtensions
     {

@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Infrastructure.Extensions;
+using Sfa.Tl.Matching.Application.Extensions;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
 {

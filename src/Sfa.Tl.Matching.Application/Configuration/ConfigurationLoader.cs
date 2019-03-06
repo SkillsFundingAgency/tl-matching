@@ -3,7 +3,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 
-namespace Sfa.Tl.Matching.Infrastructure.Configuration
+namespace Sfa.Tl.Matching.Application.Configuration
 {
     public static class ConfigurationLoader
     {
