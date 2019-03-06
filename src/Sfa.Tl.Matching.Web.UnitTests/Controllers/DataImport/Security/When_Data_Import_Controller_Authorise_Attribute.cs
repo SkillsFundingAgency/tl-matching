@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Authorization;
-using Sfa.Tl.Matching.Infrastructure.Extensions;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 

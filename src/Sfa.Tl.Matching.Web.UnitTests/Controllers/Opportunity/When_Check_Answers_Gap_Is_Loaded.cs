@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             var dto = new ValidOpportunityDtoBuilder().Build();
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunity(OpportunityId).Returns(dto);
+            _opportunityService.GetOpportunityWithRoute(OpportunityId).Returns(dto);
 
             var opportunityController = new OpportunityController(_opportunityService);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
@@ -33,9 +33,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_GetOpportunity_Is_Called_Exactly_Once()
+        public void Then_GetOpportunityWithRoute_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetOpportunity(OpportunityId);
+            _opportunityService.Received(1).GetOpportunityWithRoute(OpportunityId);
         }
 
         [Fact]
@@ -64,56 +64,56 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerName_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
-            viewModel.EmployerName.Should().Be("EmployerName");
+            viewModel.PlacementInformation.EmployerName.Should().Be("EmployerName");
         }
 
         [Fact]
         public void Then_EmployerContact_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
-            viewModel.Contact.Should().Be("Contact");
+            viewModel.PlacementInformation.Contact.Should().Be("Contact");
         }
 
         [Fact]
         public void Then_Distance_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
-            viewModel.Distance.Should().Be(3);
+            viewModel.PlacementInformation.Distance.Should().Be(3);
         }
 
         [Fact]
         public void Then_JobTitle_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
-            viewModel.JobTitle.Should().Be("JobTitle");
+            viewModel.PlacementInformation.JobTitle.Should().Be("JobTitle");
         }
 
         [Fact]
         public void Then_PlacementsKnown_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
-            viewModel.PlacementsKnown.Should().BeTrue();
+            viewModel.PlacementInformation.PlacementsKnown.Should().BeTrue();
         }
 
         [Fact]
         public void Then_Placements_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
-            viewModel.Placements.Should().Be(2);
+            viewModel.PlacementInformation.Placements.Should().Be(2);
         }
 
         [Fact]
         public void Then_Postcode_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
-            viewModel.Postcode.Should().Be("AA1 1AA");
+            viewModel.PlacementInformation.Postcode.Should().Be("AA1 1AA");
         }
 
         [Fact]
         public void Then_Route_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
-            viewModel.Route.Should().Be("Route");
+            viewModel.PlacementInformation.Route.Should().Be("Route");
         }
     }
 }

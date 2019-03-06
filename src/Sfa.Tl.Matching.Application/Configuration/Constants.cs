@@ -1,5 +1,5 @@
 ﻿
-namespace Sfa.Tl.Matching.Infrastructure.Configuration
+namespace Sfa.Tl.Matching.Application.Configuration
 {
     public static class Constants
     {

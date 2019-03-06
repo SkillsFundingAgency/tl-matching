@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Infrastructure.Extensions;
+using Sfa.Tl.Matching.Application.Extensions;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
