@@ -18,7 +18,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string ContactEmail { get; set; }
 
         [Required(ErrorMessage = "You must enter a contact telephone number for placements")]
-        [RegularExpression(@"^(?:.*\d.*){7,}$", ErrorMessage = "You must enter a telephone number that has 7 or more numbers")]
         public string ContactPhone { get; set; }
     }
 }
