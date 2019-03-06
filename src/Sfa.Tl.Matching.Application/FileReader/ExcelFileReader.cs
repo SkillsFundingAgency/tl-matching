@@ -17,12 +17,12 @@ namespace Sfa.Tl.Matching.Application.FileReader
 {
     public class ExcelFileReader<TImportDto, TDto> : IFileReader<TImportDto, TDto> where TDto : class, new() where TImportDto : FileImportDto
     {
-        public readonly ILogger _logger;
+        public readonly ILogger<ExcelFileReader<TImportDto, TDto>> _logger;
         private readonly IDataParser<TDto> _dataParser;
         private readonly IValidator<TImportDto> _validator;
 
         public ExcelFileReader(
-            ILogger logger,
+            ILogger<ExcelFileReader<TImportDto, TDto>> logger,
             IDataParser<TDto> dataParser,
             IValidator<TImportDto> validator)
         {
