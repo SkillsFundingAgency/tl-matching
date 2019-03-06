@@ -151,7 +151,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
             var errorMessage = $"Row Number={rowIndex} failed with the following errors: \n\t{string.Join("\n\t", validationResult.Errors)}";
 
             //TODO Logic to check if its a warning or error
-            _logger.LogError(errorMessage);
+            _logger.LogInformation(errorMessage);
         }
     }
 }
