@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
 {
-    public class When_Employer_Row_CrmId_Has_Invalid_Format : IClassFixture<EmployerFileImportFixture>
+    public class When_Employer_Row_AupaStatus_Has_Invalid_Format : IClassFixture<EmployerFileImportFixture>
     {
         private readonly EmployerFileImportFixture _fixture;
 
-        public When_Employer_Row_CrmId_Has_Invalid_Format(EmployerFileImportFixture fixture)
+        public When_Employer_Row_AupaStatus_Has_Invalid_Format(EmployerFileImportFixture fixture)
         {
             _fixture = fixture;
         }
@@ -18,12 +18,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
         [Fact]
         public void Then_Validation_Result_Is_Not_Valid()
         {
-            _fixture.Dto.CrmId = "ABC";
+            _fixture.Dto.Aupa = "ABC";
+            
             var validationResult = _fixture.Validator.Validate(_fixture.Dto);
+            
             validationResult.IsValid.Should().BeFalse();
+            
             validationResult.Errors.Count.Should().Be(1);
             validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.InvalidFormat.ToString());
-            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerFileImportDto.CrmId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerFileImportDto.Aupa)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
         }
     }
 }

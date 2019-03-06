@@ -6,7 +6,7 @@
 	[Distance] SMALLINT NOT NULL,
 	[JobTitle] NVARCHAR(250) NULL,
 	[PlacementsKnown] BIT NULL,
-	[Placements] SMALLINT NULL,
+	[Placements] INT NULL,
 	[EmployerName] NVARCHAR(250) NULL, 
 	[EmployerContact] NVARCHAR(100) NULL,
 	[EmployerContactEmail] VARCHAR(320) NULL,
