@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
 {
     public class ProviderTestFixture : IDisposable
     {
-        public readonly IFileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider> FileImportService;
+        public readonly FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider> FileImportService;
         public MatchingDbContext MatchingDbContext;
 
         public ProviderTestFixture()
@@ -31,12 +31,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var dataValidator = new ProviderDataValidator(repository);
             var dataParser = new ProviderDataParser();
 
-            var excelFileReader = new ExcelFileReader<ProviderFileImportDto, ProviderDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var excelFileReader = new ExcelFileReader<ProviderFileImportDto, ProviderDto>(dataParser, dataValidator);
+            excelFileReader._logger = loggerExcelFileReader;
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
 
-            FileImportService = new FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>(logger, mapper, excelFileReader, repository);
+            FileImportService = new FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>(mapper, excelFileReader, repository);
+            FileImportService._logger = logger;
         }
 
         public void ResetData()

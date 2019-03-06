@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
     public class QualificationRoutePathMappingServiceTestFixture : IDisposable
     {
         public MatchingDbContext MatchingDbContext;
-        public IFileImportService<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto, Domain.Models.QualificationRoutePathMapping> FileImportService;
+        public FileImportService<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto, Domain.Models.QualificationRoutePathMapping> FileImportService;
 
         public QualificationRoutePathMappingServiceTestFixture()
         {
@@ -37,16 +37,17 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
             var dataValidator = new QualificationRoutePathMappingDataValidator(qualificationRoutePathMappingRepository, qualificationRepository, pathRepository);
             var dataParser = new QualificationRoutePathMappingDataParser();
 
-            var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto>(dataParser, dataValidator);
+            excelFileReader._logger = loggerExcelFileReader;
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
 
             FileImportService = new FileImportService<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto, Domain.Models.QualificationRoutePathMapping>(
-                logger,
                 mapper,
                 excelFileReader,
                 qualificationRoutePathMappingRepository);
+            FileImportService._logger = logger;
         }
 
         public void ResetData(string larsId)

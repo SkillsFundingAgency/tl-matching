@@ -12,10 +12,10 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
 {
-    public static class Provider
+    public class Provider
     {
         [FunctionName("ImportProvider")]
-        public static async Task ImportProvider(
+        public async Task ImportProvider(
             [BlobTrigger("provider/{name}", Connection = "BlobStorageConnectionString")]ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
@@ -28,6 +28,20 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tName:{name}\n" +
                                   $"\tSize: {stream.Length} Bytes");
 
+            if (fileImportService is FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider> service)
+            {
+                logger.LogInformation($"FileImportService Logger is {service?._logger.GetType()}");
+                service._logger = logger;
+                service._logger.LogInformation("This is a FileImportService Logger");
+
+                if (service._fileReader is ExcelFileReader<ProviderFileImportDto, ProviderDto> reader)
+                {
+                    logger.LogInformation($"FileImportService Logger is {reader?._logger.GetType()}");
+                    reader._logger = logger;
+                    reader?._logger.LogInformation("This is a ExcelFileReader Logger");
+                }
+            }
+
             var stopwatch = Stopwatch.StartNew();
             var createdRecords = await fileImportService.Import(new ProviderFileImportDto
             {
@@ -35,17 +49,7 @@ namespace Sfa.Tl.Matching.Functions
                 CreatedBy = blockBlob.GetCreatedByMetadata()
             });
 
-            var service = fileImportService as FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>;
-
             logger.LogInformation($"Type of Main Ilogger is {logger.GetType()}");
-
-            logger.LogInformation($"FileImportService Logger is {service?._logger.GetType()}");
-            service?._logger.LogInformation("This is a FileImportService Logger");
-
-            var reader = service?._fileReader as ExcelFileReader<ProviderFileImportDto, ProviderDto>;
-
-            logger.LogInformation($"FileImportService Logger is {reader?._logger.GetType()}");
-            reader?._logger.LogInformation("This is a ExcelFileReader Logger");
 
             stopwatch.Stop();
 
