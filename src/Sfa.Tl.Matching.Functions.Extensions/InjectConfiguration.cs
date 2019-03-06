@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.Azure.WebJobs.Host.Config;
@@ -63,6 +64,8 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 options.UseSqlServer(_configuration.SqlConnectionString, 
                     builder => builder.UseNetTopologySuite()
                         .EnableRetryOnFailure()));
+
+            services.AddSingleton(new HttpClient());
 
             RegisterFileReaders(services);
 
