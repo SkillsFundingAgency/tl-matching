@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddTransient<IFileReader<TImportDto, TDto>, ExcelFileReader<TImportDto, TDto>>(provider =>
                 new ExcelFileReader<TImportDto, TDto>(
-                    provider.GetService<ILogger<ExcelFileReader<TImportDto, TDto>>>(),
+                    provider.GetService<ILogger>(),
                     provider.GetService<IDataParser<TDto>>(),
                     (IValidator<TImportDto>)provider.GetServices(typeof(IValidator<TImportDto>)).Single(t => t.GetType() == typeof(TValidator))));
 
