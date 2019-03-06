@@ -134,11 +134,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View(new PlacementGapViewModel { EmployerContactName = opportunity.EmployerContact });
         }
 
+        [HttpGet]
+        [Route("emails-sent/{id?}", Name = "EmailsSent_Get")]
+        public async Task<IActionResult> EmailsSent(int id)
+        {
+            var opportunity = await _opportunityService.GetOpportunity(id);
+
+            return View(new EmailsSentViewModel
+            {
+                EmployerContactName = opportunity.EmployerContact,
+                EmployerBusinessName = opportunity.EmployerName
+            });
+        }
+
         private static CheckAnswersPlacementViewModel GetPlacementViewModel(OpportunityDto dto)
         {
             var viewModel = new CheckAnswersPlacementViewModel
             {
-
                 Contact = dto.EmployerContact,
                 Distance = dto.Distance,
                 EmployerName = dto.EmployerName,
