@@ -66,6 +66,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                         .EnableRetryOnFailure()));
 
             services.AddSingleton(new HttpClient());
+            services.AddTransient<ISearchProvider, SqlSearchProvider>();
 
             RegisterFileReaders(services);
 
@@ -121,5 +122,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
         }
+
     }
 }

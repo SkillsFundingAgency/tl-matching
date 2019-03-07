@@ -27,13 +27,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var mapper = new Mapper(config);
 
             var searchProvider = Substitute.For<ISearchProvider>();
-
+            var locationService = Substitute.For<ILocationService>();
             var dto = new ProviderSearchParametersDto { Postcode = Postcode, SearchRadius = SearchRadius, SelectedRouteId = RouteId };
             searchProvider
                 .SearchProvidersByPostcodeProximity(dto)
                 .Returns(new SearchResultsBuilder().Build());
 
-            var service = new ProviderService(mapper, searchProvider);
+            var service = new ProviderService(mapper, searchProvider, locationService);
 
             _result = service.SearchProvidersByPostcodeProximity(dto).GetAwaiter().GetResult();
         }

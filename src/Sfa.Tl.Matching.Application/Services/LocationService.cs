@@ -1,65 +1,38 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class LocationService : ILocationService
     {
-        public bool IsValidPostCode(string postCode)
+        private readonly HttpClient _httpClient;
+
+        public LocationService(HttpClient httpClient, MatchingConfiguration matchingConfiguration)
         {
-            throw new System.NotImplementedException();
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri(matchingConfiguration.PostcodeRetrieverBaseUrl);
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public LocationDto GetGeoLocationData(string postCode)
+        public async Task<bool> IsValidPostCode(string postCode)
         {
-            throw new System.NotImplementedException();
+            var response = await _httpClient.GetAsync($"/{postCode}/validate");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsAsync<bool>();
+        }
+
+        public async Task<PostCodeLookupResultDto> GetGeoLocationData(string postCode)
+        {
+            var response = await _httpClient.GetAsync($"/{postCode}");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsAsync<PostCodeLookupResultDto>();
         }
     }
-
-    public interface ILocationService
-    {
-        bool IsValidPostCode(string postCode);
-        LocationDto GetGeoLocationData(string postCode);
-    }
-
-    public class LocationDto
-    {
-        public string PostCode { get; set; }
-        public decimal? Longitude { get; set; }
-
-        public decimal? Latitude { get; set; }
-
-        public string Country { get; set; }
-
-        public string Region { get; set; }
-
-        public string OutCode { get; set; }
-
-        public string Admin_District { get; set; }
-
-        public string Admin_County { get; set; }
-
-        public Codes Codes { get; set; }
-    }
-
-    public class Codes
-    {
-        public string Admin_District { get; set; }
-
-        public string Admin_County { get; set; }
-
-        public string Admin_Ward { get; set; }
-
-        public string Parish { get; set; }
-
-        public string Parliamentary_Constituency { get; set; }
-
-        public string Ccg { get; set; }
-
-        public string Ced { get; set; }
-
-        public string Nuts { get; set; }
-    }
-
 }

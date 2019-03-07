@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
                 //dbContext.Add(new ValidProviderVenueSearchBuilder().Build());
                 //dbContext.SaveChanges();
 
-                var provider = new Data.SearchProviders.SqlSearchProvider(logger, dbContext);
+                var provider = new Data.SearchProviders.SqlSearchProvider(logger, new GenericRepository<QualificationRoutePathMapping>(new NullLogger<GenericRepository<QualificationRoutePathMapping>>(), dbContext), new GenericRepository<ProviderVenue>(new NullLogger<GenericRepository<ProviderVenue>>(), dbContext));
 
                 _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "AA1 1AA", SearchRadius = 5, SelectedRouteId = 1 });
             }
