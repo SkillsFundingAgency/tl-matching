@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId)
+        public IEnumerable<ProviderVenueSearchResultDto> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
             _logger.LogInformation($"Searching for providers within radius {searchRadius} of postcode '{postcode}' with route {routeId}");
 

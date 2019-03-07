@@ -2,8 +2,12 @@
 using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
@@ -23,10 +27,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
 
                 var provider = new Data.SearchProviders.SqlSearchProvider(logger, dbContext);
 
-                _results = provider
-                    .SearchProvidersByPostcodeProximity("AA1 1AA", 5, 1)
-                    .GetAwaiter()
-                    .GetResult();
+                _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "AA1 1AA", SearchRadius = 5, SelectedRouteId = 1 });
             }
         }
 

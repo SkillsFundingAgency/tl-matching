@@ -20,9 +20,10 @@ namespace Sfa.Tl.Matching.Application.Services
             _searchProvider = searchProvider;
         }
 
-        public IEnumerable<ProviderVenueSearchResultDto> SearchProvidersByPostcodeProximity(string postcode, int searchRadius, int routeId)
+        public async Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
-            var searchResults = _searchProvider.SearchProvidersByPostcodeProximity(postcode, searchRadius, routeId);
+
+            var searchResults = _searchProvider.SearchProvidersByPostcodeProximity(dto);
 
             var results = searchResults.Any()
                 ? _searchResultMapper.Map<IEnumerable<ProviderVenueSearchResultDto>>(searchResults)

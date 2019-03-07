@@ -3,11 +3,13 @@ using System.Linq;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
@@ -26,13 +28,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
             var searchProvider = Substitute.For<ISearchProvider>();
 
+            var dto = new ProviderSearchParametersDto { Postcode = Postcode, SearchRadius = SearchRadius, SelectedRouteId = RouteId };
             searchProvider
-                .SearchProvidersByPostcodeProximity(Postcode, SearchRadius, RouteId)
+                .SearchProvidersByPostcodeProximity(dto)
                 .Returns(new SearchResultsBuilder().Build());
 
             var service = new ProviderService(mapper, searchProvider);
 
-            _result = service.SearchProvidersByPostcodeProximity(Postcode, SearchRadius, RouteId);
+            _result = service.SearchProvidersByPostcodeProximity(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -64,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         {
             _result.First().ProviderName.Should().BeEquivalentTo("The WKCIC Group");
         }
-        
+
         [Fact]
         public void Then_The_First_Search_Result_QualificationShortTitles_Has_The_Expected_Number_Of_Items()
         {
