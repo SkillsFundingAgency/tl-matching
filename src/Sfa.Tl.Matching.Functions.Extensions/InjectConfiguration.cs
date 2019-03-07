@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using AutoMapper;
@@ -7,6 +8,7 @@ using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
@@ -52,16 +54,15 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             {
                 logging.AddConsole();
                 logging.AddDebug();
-                logging.AddAzureWebAppDiagnostics();
+                logging.AddApplicationInsights();
                 logging.AddFilter((category, level) =>
                     level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
- 
             });
 
             services.AddAutoMapper(expression => expression.AddProfiles(typeof(EmployerMapper).Assembly));
 
-            services.AddDbContext<MatchingDbContext>(options => 
-                options.UseSqlServer(_configuration.SqlConnectionString, 
+            services.AddDbContext<MatchingDbContext>(options =>
+                options.UseSqlServer(_configuration.SqlConnectionString,
                     builder => builder.UseNetTopologySuite()
                         .EnableRetryOnFailure()));
 
@@ -77,19 +78,20 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterFileReaders(IServiceCollection services)
         {
-            RegisterFileReader<EmployerDto, EmployerFileImportDto, Employer, EmployerDataParser, EmployerDataValidator>(services);
-            RegisterFileReader<ProviderDto, ProviderFileImportDto, Provider, ProviderDataParser, ProviderDataValidator>(services);
-            RegisterFileReader<ProviderVenueDto, ProviderVenueFileImportDto, ProviderVenue, ProviderVenueDataParser, ProviderVenueDataValidator>(services);
-            RegisterFileReader<ProviderQualificationDto, ProviderQualificationFileImportDto, ProviderQualification, ProviderQualificationDataParser, ProviderQualificationDataValidator>(services);
-            RegisterFileReader<QualificationRoutePathMappingDto, QualificationRoutePathMappingFileImportDto, QualificationRoutePathMapping, QualificationRoutePathMappingDataParser, QualificationRoutePathMappingDataValidator>(services);
+            RegisterFileReader<EmployerDto, EmployerFileImportDto, Employer, EmployerDataParser, EmployerDataValidator, NullDataProcessor<EmployerFileImportDto>>(services);
+            RegisterFileReader<ProviderDto, ProviderFileImportDto, Provider, ProviderDataParser, ProviderDataValidator, NullDataProcessor<ProviderFileImportDto>>(services);
+            RegisterFileReader<ProviderVenueDto, ProviderVenueFileImportDto, ProviderVenue, ProviderVenueDataParser, ProviderVenueDataValidator, DataProcessor<ProviderVenueFileImportDto>>(services);
+            RegisterFileReader<ProviderQualificationDto, ProviderQualificationFileImportDto, ProviderQualification, ProviderQualificationDataParser, ProviderQualificationDataValidator, NullDataProcessor<ProviderQualificationFileImportDto>>(services);
+            RegisterFileReader<QualificationRoutePathMappingDto, QualificationRoutePathMappingFileImportDto, QualificationRoutePathMapping, QualificationRoutePathMappingDataParser, QualificationRoutePathMappingDataValidator, NullDataProcessor<QualificationRoutePathMappingFileImportDto>>(services);
         }
 
-        private static void RegisterFileReader<TDto, TImportDto, TEntity, TParser, TValidator>(IServiceCollection services)
+        private static void RegisterFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
                 where TDto : class, new()
                 where TImportDto : FileImportDto
+                where TEntity : BaseEntity, new()
                 where TParser : class, IDataParser<TDto>
                 where TValidator : class, IValidator<TImportDto>
-                where TEntity : BaseEntity, new()
+                where TDataProcessor : class, IDataProcessor<TImportDto>
         {
             services.AddTransient<IDataParser<TDto>, TParser>();
             services.AddTransient<IValidator<TImportDto>, TValidator>();
@@ -98,7 +100,8 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 new ExcelFileReader<TImportDto, TDto>(
                     provider.GetService<ILogger<ExcelFileReader<TImportDto, TDto>>>(),
                     provider.GetService<IDataParser<TDto>>(),
-                    (IValidator<TImportDto>)provider.GetServices(typeof(IValidator<TImportDto>)).Single(t => t.GetType() == typeof(TValidator))));
+                    (IValidator<TImportDto>)provider.GetService(typeof(TValidator)),
+                    (IDataProcessor<FileImportDto>)provider.GetService(typeof(TDataProcessor))));
 
             services.AddTransient<IFileImportService<TImportDto, TDto, TEntity>, FileImportService<TImportDto, TDto, TEntity>>();
         }
@@ -122,6 +125,5 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
         }
-
     }
 }
