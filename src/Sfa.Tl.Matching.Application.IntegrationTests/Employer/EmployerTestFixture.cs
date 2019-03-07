@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
 {
     public class EmployerTestFixture : IDisposable
     {
-        public IFileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer> FileImportService;
+        public FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer> FileImportService;
         public MatchingDbContext MatchingDbContext;
 
         public EmployerTestFixture()
@@ -33,13 +33,15 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
             var dataValidator = new EmployerDataValidator();
             var dataParser = new EmployerDataParser();
 
-            var excelFileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var excelFileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>(dataParser, dataValidator);
+            excelFileReader._logger = loggerExcelFileReader;
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 
             var mapper = new Mapper(config);
 
-            FileImportService = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(logger, mapper, excelFileReader, repository);
+            FileImportService = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(mapper, excelFileReader, repository);
+            FileImportService._logger = logger;
         }
 
         public void ResetData(string companyName)

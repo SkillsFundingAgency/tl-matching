@@ -17,16 +17,14 @@ namespace Sfa.Tl.Matching.Application.FileReader
 {
     public class ExcelFileReader<TImportDto, TDto> : IFileReader<TImportDto, TDto> where TDto : class, new() where TImportDto : FileImportDto
     {
-        private readonly ILogger _logger;
+        public ILogger _logger;
         private readonly IDataParser<TDto> _dataParser;
         private readonly IValidator<TImportDto> _validator;
 
         public ExcelFileReader(
-            ILogger logger,
             IDataParser<TDto> dataParser,
             IValidator<TImportDto> validator)
         {
-            _logger = logger;
             _dataParser = dataParser;
             _validator = validator;
         }
@@ -151,7 +149,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
             var errorMessage = $"Row Number={rowIndex} failed with the following errors: \n\t{string.Join("\n\t", validationResult.Errors)}";
 
             //TODO Logic to check if its a warning or error
-            _logger.LogError(errorMessage);
+            _logger.LogInformation(errorMessage);
         }
     }
 }

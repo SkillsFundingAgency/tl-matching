@@ -15,18 +15,16 @@ namespace Sfa.Tl.Matching.Application.Services
         where TDto : class, new()
         where TEntity : BaseEntity, new()
     {
-        private readonly ILogger _logger;
+        public ILogger _logger;
         private readonly IMapper _mapper;
-        private readonly IFileReader<TImportDto, TDto> _fileReader;
+        public readonly IFileReader<TImportDto, TDto> _fileReader;
         private readonly IRepository<TEntity> _repository;
 
         public FileImportService(
-            ILogger logger,
             IMapper mapper,
             IFileReader<TImportDto, TDto> fileReader,
             IRepository<TEntity> repository)
         {
-            _logger = logger;
             _mapper = mapper;
             _fileReader = fileReader;
             _repository = repository;

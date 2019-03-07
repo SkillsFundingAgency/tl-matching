@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
 {
     public class ProviderVenueTestFixture : IDisposable
     {
-        public readonly IFileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue> FileImportService;
+        public readonly FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue> FileImportService;
         public MatchingDbContext MatchingDbContext;
 
         public ProviderVenueTestFixture()
@@ -34,13 +34,15 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             var dataValidator = new ProviderVenueDataValidator(repository, providerVenuerepository);
             var dataParser = new ProviderVenueDataParser();
 
-            var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(dataParser, dataValidator);
+            excelFileReader._logger = loggerExcelFileReader;
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 
             var mapper = new Mapper(config);
 
-            FileImportService = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(logger, mapper, excelFileReader, providerVenuerepository);
+            FileImportService = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(mapper, excelFileReader, providerVenuerepository);
+            FileImportService._logger = logger;
         }
 
         public void ResetData()

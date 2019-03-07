@@ -19,7 +19,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
             _providerService = Substitute.For<IFileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>>();
-            Functions.Provider.ImportProvider(
+
+            new Functions.Provider().ImportProvider(
                 blobStream,
                 "test",
                 context,
