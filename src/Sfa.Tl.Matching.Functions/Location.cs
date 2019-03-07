@@ -18,7 +18,20 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject]
-            ILocationService locationService,
+            ILocationService locationService
+        )
+        {
+
+        }
+
+        [FunctionName("SaveLocationData")]
+        public async Task SaveLocationData(
+            [QueueTrigger("{name}", Connection = "BlobStorageConnectionString")]
+            ICloudBlob blockBlob,
+            string name,
+            ExecutionContext context,
+            ILogger logger,
+            [Inject]
             IRepository<Domain.Models.ProviderVenue> providerVenueRepository
         )
         {
