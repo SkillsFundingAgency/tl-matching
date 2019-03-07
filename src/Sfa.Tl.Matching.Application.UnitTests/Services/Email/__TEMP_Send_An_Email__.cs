@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Principal;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using SFA.DAS.Http;
@@ -24,6 +23,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
         public const string APPLY_SIGNUP_ERROR = "ApplySignupError";
         public const string CANDIDATE_CONTACT_US = "VacancyService_CandidateContactUsMessage";
+        public const string TEST_TEMPLATE = "Test_Template";
+        public const string PROVIDER_REFERRAL = "ProviderReferral";
+        
 
         public __TEMP_Send_An_Email__()
         {
@@ -46,19 +48,41 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
                 var subject = "A test email";
                 //var templateName = APPLY_SIGNUP_ERROR;
-                var templateName = CANDIDATE_CONTACT_US;
+                //var templateName = CANDIDATE_CONTACT_US;
+                //var templateName = TEST_TEMPLATE;
+                var templateName = PROVIDER_REFERRAL;
+
                 var toAddress = "";
                 var replyToAddress = "reply@test.com";
-                //
-                var tokens = templateName == CANDIDATE_CONTACT_US
-                    ? (dynamic)new
-                    {
-                        UserEmailAddress = replyToAddress,
-                        UserFullName = "Test User",
-                        UserEnquiry = "I have a question",
-                        UserEnquiryDetails = "What colour is the sky?"
-                    }
-                    : new { first_name = "Tester" };
+
+                dynamic tokens;
+                switch (templateName)
+                {
+                    case APPLY_SIGNUP_ERROR:
+                        tokens = new { first_name = "Tester" };
+                        break;
+                    case CANDIDATE_CONTACT_US:
+                        tokens = (dynamic) new
+                        {
+                            UserEmailAddress = replyToAddress,
+                            UserFullName = "Test <strong>User</strong>",
+                            UserEnquiry = "I have a question",
+                            UserEnquiryDetails = "<ul><li>item</li><li>item</li></ul>"
+                        };
+                        break;
+                    case TEST_TEMPLATE:
+                        tokens = (dynamic)new
+                        {
+                            first_name = "Mike",
+                            under18 = "yes"
+                        };
+                        break;
+                    case PROVIDER_REFERRAL:
+                        tokens = null;
+                        break;
+                    default:
+                        throw new Exception("Test template {templateName} was not recognized");
+                }
 
                 emailService
                     .SendEmail(templateName, toAddress, subject, tokens, replyToAddress)
@@ -92,7 +116,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         }
 
         //[Fact]
-        //public void _Test_Runs_But_We_Dont_Want_It() 
+        //public void _Test_Runs_But_We_Dont_Want_It()
         //    => throw new Xunit.Sdk.XunitException("This test is for temporary development testing only");
     }
 }

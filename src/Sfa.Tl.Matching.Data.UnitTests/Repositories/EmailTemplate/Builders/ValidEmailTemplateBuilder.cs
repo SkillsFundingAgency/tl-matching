@@ -1,5 +1,4 @@
-﻿using System;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
+﻿using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailTemplate.Builders
 {
@@ -9,7 +8,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailTemplate.Builders
         {
             Id = 1,
             TemplateId = "TestTemplateId",
-            TemplateUniqueId = new Guid("0792406B-2E04-4FDC-A996-E4C724687668"),
             TemplateName = "TestTemplate",
             Recipients = "test@test.com",
             CreatedBy = EntityCreationConstants.CreatedByUser,

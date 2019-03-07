@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -40,10 +39,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailTemplate
         public void Then_EmailTemplate_TemplateName_Is_Returned() =>
             _result.TemplateName.Should().BeEquivalentTo("TestTemplate");
         
-        [Fact]
-        public void Then_EmailTemplate_TemplateUniqueId_Is_Returned() =>
-            _result.TemplateUniqueId.Should().Be(new Guid("A6979A6F-8A1F-4532-8CC8-120ABCFE4368"));
-
         [Fact]
         public void Then_EmailTemplate_Recipients_Is_Returned()
             => _result.Recipients.Should().BeEquivalentTo("test@test.com");

@@ -3,7 +3,6 @@
 	[Id] INT NOT NULL IDENTITY(1,1), 
 	[TemplateName] NVARCHAR(50) NOT NULL, 
 	[TemplateId] NVARCHAR(50) NOT NULL, 
-	[TemplateUniqueId] UNIQUEIDENTIFIER NOT NULL, 
 	[Recipients] [NVARCHAR](MAX) NOT NULL, 
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 

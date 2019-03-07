@@ -14,27 +14,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
     public class When_EmailService_Is_Called_To_Send_Email
     {
         private readonly INotificationsApi _notificationsApi;
-        IRepository<EmailTemplate> _emailTemplateRepository;
+        readonly IRepository<EmailTemplate> _emailTemplateRepository;
 
         private readonly string _subject;
-        private readonly string _templateName;
         private readonly string _toAddress;
         private readonly string _replyToAddress;
-        private readonly dynamic _tokens;
 
         public When_EmailService_Is_Called_To_Send_Email()
         {
             _notificationsApi = Substitute.For<INotificationsApi>();
 
             var logger = Substitute.For<ILogger<EmailService>>();
-            //var configuration = new MatchingConfiguration
-            //{
-            //    NotificationsApiClientConfiguration = new NotificationsApiClientConfiguration
-            //    {
-            //        ApiBaseUrl = "https://test",
-            //        ClientToken = ""
-            //    }
-            //};
 
             var emailTemplate = new Domain.Models.EmailTemplate
             {
@@ -49,13 +39,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             var emailService = new EmailService(_notificationsApi, _emailTemplateRepository, logger);
 
             _subject = "A test email";
-            _templateName = "TestTemplate";
             _toAddress = "test@test.com";
             _replyToAddress = "reply@test.com";
-            _tokens = (dynamic)new { contactname = "name" };
-            //_tokens = "name";
+            var tokens = (dynamic)new { contactname = "name" };
 
-            emailService.SendEmail(_templateName, _toAddress, _subject, _tokens, _replyToAddress);
+            var templateName = "TestTemplate";
+
+            emailService.SendEmail(templateName, _toAddress, _subject, tokens, _replyToAddress);
         }
         
         [Fact]
