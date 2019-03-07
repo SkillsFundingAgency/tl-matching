@@ -266,11 +266,11 @@
                                 "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
                             {
-                                "name": "AzureWebJobsStorage",
-                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
+                                "name": "ServiceBusConnectionString",
+                                "value": "[reference('service-bus').outputs.ServiceBusEndpoint.value]"
                             },
                             {
-                                "name": "AzureWebJobsDashboard",
+                                "name": "AzureWebJobsStorage",
                                 "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
                             {
@@ -369,8 +369,8 @@
                   },
                     "serviceBusQueues": {
                         "value": [
-                            "[variables('queues').GetProximityMessageQueueName]",
-                            "[variables('queues').SaveProximityMessageQueueName]"
+                            "[variables('queues').getProximityMessageQueueName]",
+                            "[variables('queues').saveProximityMessageQueueName]"
                         ]
                     }
                 }
