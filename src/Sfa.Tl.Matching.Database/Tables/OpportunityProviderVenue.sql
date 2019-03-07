@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[OpportunityProvider]
+﻿CREATE TABLE [dbo].[OpportunityProviderVenue]
 (
 	[Id] INT IDENTITY(1,1) NOT NULL, 
 	[ReferralId] INT NOT NULL, 
