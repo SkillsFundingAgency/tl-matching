@@ -9,14 +9,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Check_Answers_Is_Submitted_Successfully
+    public class When_Check_Answers_Gap_Is_Submitted_Successfully
     {
         private readonly IOpportunityService _opportunityService;
         private const string CreatedBy = "CreatedBy";
         private readonly IActionResult _result;
-        private readonly CheckAnswersViewModel _viewModel = new CheckAnswersViewModel();
+        private readonly CheckAnswersGapViewModel _viewModel = new CheckAnswersGapViewModel();
 
-        public When_Check_Answers_Is_Submitted_Successfully()
+        public When_Check_Answers_Gap_Is_Submitted_Successfully()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
 
@@ -25,22 +25,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(CreatedBy)
                 .Build();
 
-            _result = controllerWithClaims.CheckAnswers(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.CheckAnswersGap(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_CreateReferral_Is_Called_Exactly_Once()
+        public void Then_CreateProvisionGap_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).CreateReferral(_viewModel);
+            _opportunityService.Received(1).CreateProvisionGap(_viewModel);
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_to_EmailsSent()
+        public void Then_Result_Is_Redirect_to_PlacementGap()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("EmailsSent_Get");
+            result?.RouteName.Should().Be("PlacementGap_Get");
         }
     }
 }

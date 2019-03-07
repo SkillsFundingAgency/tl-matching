@@ -6,6 +6,7 @@ using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
@@ -49,6 +50,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewResult?.Model.Should().BeOfType<PlacementGapViewModel>();
 
             ((PlacementGapViewModel)viewResult?.Model)?.EmployerContactName.Should().Be(EmployerContact);
+        }
+
+        [Fact]
+        public void Then_EmployerContactName_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<PlacementGapViewModel>();
+            viewModel.EmployerContactName.Should().Be(EmployerContact);
         }
     }
 }
