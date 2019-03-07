@@ -78,6 +78,8 @@
     <Build Include="Tables\ProviderQualification.sql" />
     <Build Include="Tables\Opportunity.sql" />
     <Build Include="Tables\ProvisionGap.sql" />
+    <Build Include="Tables\Referral.sql" />
+    <Build Include="Tables\OpportunityProvider.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
