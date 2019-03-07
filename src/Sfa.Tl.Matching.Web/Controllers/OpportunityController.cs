@@ -52,7 +52,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 OpportunityId = dto.Id,
                 JobTitle = dto.JobTitle,
                 PlacementsKnown = dto.PlacementsKnown,
-                Placements = dto.Placements
+                Placements = !dto.PlacementsKnown.HasValue || !dto.PlacementsKnown.Value ? 
+                    default : dto.Placements
             };
 
             return View(viewModel);
