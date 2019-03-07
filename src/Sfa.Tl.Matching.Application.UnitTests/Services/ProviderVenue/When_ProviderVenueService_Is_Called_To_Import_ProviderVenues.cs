@@ -49,8 +49,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(_fileReaderResults);
 
-            var service = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(mapper, _fileReader, _repository);
-            service._logger = logger;
+            var service = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(logger, mapper, _fileReader, _repository);
+
             _result = service.Import(_fileImportDto).GetAwaiter().GetResult();
         }
 

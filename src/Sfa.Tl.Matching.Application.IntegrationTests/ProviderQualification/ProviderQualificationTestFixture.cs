@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
 {
     public class ProviderQualificationTestFixture : IDisposable
     {
-        public readonly FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification> FileImportService;
+        public readonly IFileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification> FileImportService;
         public MatchingDbContext MatchingDbContext;
 
         public const string CreatedByUser = "TestUser";
@@ -41,15 +41,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
             var dataValidator = new ProviderQualificationDataValidator(providerVenuerepository, providerQualificationrepository, qualificationrepository);
             var dataParser = new ProviderQualificationDataParser();
 
-            var excelFileReader = new ExcelFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>(dataParser, dataValidator);
-            excelFileReader._logger = loggerExcelFileReader;
+            var excelFileReader = new ExcelFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>(loggerExcelFileReader, dataParser, dataValidator);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 
             var mapper = new Mapper(config);
 
-            FileImportService = new FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>(mapper, excelFileReader, providerQualificationrepository);
-            FileImportService._logger = logger;
+            FileImportService = new FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>(logger, mapper, excelFileReader, providerQualificationrepository);
         }
 
         public void ResetData()

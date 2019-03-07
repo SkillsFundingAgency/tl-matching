@@ -24,7 +24,10 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ProvisionGap, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.Ignore())
-                .ForMember(m => m.ModifiedOn, config => config.Ignore());
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
+                .ForMember(m => m.Placements,
+                    opt => opt.MapFrom
+                        (src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ? src.Placements : 1));
         }
     }
 }
