@@ -14,7 +14,6 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly ILogger<DataBlobUploadService> _logger;
         private readonly MatchingConfiguration _configuration;
 
-
         public DataBlobUploadService(ILogger<DataBlobUploadService> logger, MatchingConfiguration configuration)
         {
             _logger = logger;
