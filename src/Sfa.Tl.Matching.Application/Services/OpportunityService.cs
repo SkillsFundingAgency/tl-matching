@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -53,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return dto;
         }
-        
+
         public async Task SavePlacementInformation(PlacementInformationViewModel dto)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
@@ -87,6 +89,23 @@ namespace Sfa.Tl.Matching.Application.Services
             var referral = _mapper.Map<Referral>(dto);
 
             return _referralRepository.Create(referral);
+        }
+
+        public List<ProviderViewModel> GetReferrals(int opportunityId)
+        {
+            var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId,
+                r => r.ProviderVenue, r => r.ProviderVenue.Provider);
+
+            var providers = referrals
+                .Select(r => new ProviderViewModel
+                {
+                    Name = r.ProviderVenue.Provider.Name,
+                    Postcode = r.ProviderVenue.Postcode,
+                    Distance = 1.1m // TODO AU
+                })
+                .ToList();
+
+            return providers;
         }
     }
 }

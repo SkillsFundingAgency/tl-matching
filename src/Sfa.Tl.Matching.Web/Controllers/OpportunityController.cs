@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -171,16 +170,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var viewModel = new CheckAnswersViewModel
             {
                 OpportunityId = dto.Id,
-                PlacementInformation = GetPlacementViewModel(dto)
+                PlacementInformation = GetPlacementViewModel(dto),
+                Providers = _opportunityService.GetReferrals(id)
             };
-
-            viewModel.Providers = new List<ProviderViewModel>();
-            viewModel.Providers.Add(new ProviderViewModel
-            {
-                Name = "The WKCIC Group1111",
-                Distance = 2,
-                Postcode = "CV1 2WT",
-            });
 
             return viewModel;
         }

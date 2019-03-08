@@ -13,8 +13,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Opportunity, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore())
-                .ForMember(m => m.EmailSent, opt => opt.MapFrom(source => true));
+                .ForMember(m => m.ModifiedBy, config => config.Ignore());
         }
     }
 }

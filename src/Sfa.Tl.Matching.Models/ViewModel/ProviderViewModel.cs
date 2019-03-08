@@ -4,6 +4,6 @@
     {
         public string Name { get; set; }
         public string Postcode { get; set; }
-        public short Distance { get; set; }
+        public decimal Distance { get; set; }
     }
 }
