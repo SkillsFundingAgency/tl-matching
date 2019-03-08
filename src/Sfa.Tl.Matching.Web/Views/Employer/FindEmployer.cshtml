@@ -1,4 +1,8 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.FindEmployerViewModel
+@{
+    ViewData["Title"] = "Who is the employer?";
+}
+
 
 @section backButton{
     <a asp-route="Placements_Get" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>

@@ -1,7 +1,8 @@
 {
   "src": {
     "default": "Frontend/src/stylesheets/sass/**/*.scss",
-    "defaultJs": "Frontend/src/javascripts/*.js"
+    "defaultJs": "Frontend/src/javascripts/*.js",
+    "defaultAssets": "Frontend/src/assets/**/*"
   },
 
   "mid": {
@@ -10,6 +11,7 @@
 
   "dist": {
     "default": "wwwroot/stylesheets",
-    "defaultJs": "wwwroot/javascripts"
+    "defaultJs": "wwwroot/javascripts",
+    "defaultAssets": "wwwroot/assets"
   }
 }

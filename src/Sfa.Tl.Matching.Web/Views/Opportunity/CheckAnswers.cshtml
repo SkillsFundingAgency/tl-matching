@@ -1,4 +1,7 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.CheckAnswersViewModel
+@{
+    ViewData["Title"] = "Check " + Model.PlacementInformation.EmployerName + "'s answers";
+}
 
 @section backButton{
     <a asp-controller="Employer" asp-action="Details" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>

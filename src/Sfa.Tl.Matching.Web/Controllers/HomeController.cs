@@ -42,5 +42,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View();
         }
+
+
+        public IActionResult Feedback()
+        {
+            return View();
+        }
     }
 }

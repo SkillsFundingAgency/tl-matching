@@ -49,8 +49,8 @@ gulp.task('copy-employer-js', function () {
 });
 
 gulp.task('copy-assets', () => {
-    gulp.src('Frontend/src/assets/**/*')
-        .pipe(gulp.dest('wwwroot/assets'))
+    gulp.src(paths.src.defaultAssets)
+        .pipe(gulp.dest(paths.dist.defaultAssets))
 });
 
 gulp.task('sass', () => gulp
@@ -65,5 +65,5 @@ gulp.task('merge-css', function () {
     ])
         .pipe(concatCss("main.css"))
         .pipe(cleanCSS({ compatibility: 'ie8' }))
-        .pipe(gulp.dest('wwwroot/stylesheets/'));
+        .pipe(gulp.dest(paths.dist.default));
 })
