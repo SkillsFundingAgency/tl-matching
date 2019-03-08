@@ -13,6 +13,9 @@ namespace Sfa.Tl.Matching.Application.Configuration
 
         public string ServiceBusConnectionString { get; set; }
 
+        public string GovNotifyApiKey { get; set; }
+        public string _MyConstant = "xxx";
+
         public NotificationsApiClientConfiguration NotificationsApiClientConfiguration { get; set; }
 
         public string PostcodeRetrieverBaseUrl { get; set; }

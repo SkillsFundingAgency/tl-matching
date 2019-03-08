@@ -20,22 +20,38 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         private readonly MatchingConfiguration _configuration;
         IRepository<EmailTemplate> _emailTemplateRepository;
         private readonly INotificationsApi _notificationsApi;
+        private readonly INotificationsApi _govNotifyApi;
 
         public const string APPLY_SIGNUP_ERROR = "ApplySignupError";
         public const string CANDIDATE_CONTACT_US = "VacancyService_CandidateContactUsMessage";
         public const string TEST_TEMPLATE = "Test_Template";
         public const string PROVIDER_REFERRAL = "ProviderReferral";
-        
+
 
         public __TEMP_Send_An_Email__()
         {
-            _configuration = ConfigurationLoader.Load(
-                "LOCAL",
-                "UseDevelopmentStorage=true;",
-                "1.0",
-                "Sfa.Tl.Matching");
+            try
+            {
+                _configuration = ConfigurationLoader.Load(
+                    "LOCAL",
+                    "UseDevelopmentStorage=true;",
+                    "1.0",
+                    "Sfa.Tl.Matching");
+            }
+            catch (Exception e)
+            {
+                //This will fail on a non-local environment
+                return;
+            }
 
+            if (_configuration == null)
+            {
+                return;
+            }
+
+            _govNotifyApi = RegisterGovNotifyApi();
             _notificationsApi = RegisterNotificationApi();
+
             var logger = Substitute.For<ILogger<EmailService>>();
             var loggerForRepository = Substitute.For<ILogger<GenericRepository<Domain.Models.EmailTemplate>>>();
             //var loggerForRepository = new Logger<GenericRepository<Domain.Models.EmailTemplate>>(new NullLoggerFactory());
@@ -62,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                         tokens = new { first_name = "Tester" };
                         break;
                     case CANDIDATE_CONTACT_US:
-                        tokens = (dynamic) new
+                        tokens = (dynamic)new
                         {
                             UserEmailAddress = replyToAddress,
                             UserFullName = "Test <strong>User</strong>",
@@ -100,6 +116,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             return matchingDbContext;
         }
 
+        private INotificationsApi RegisterGovNotifyApi()
+        {
+            var apiKey = _configuration.GovNotifyApiKey;
+            return null;
+        }
+
         private INotificationsApi RegisterNotificationApi()
         {
             var apiConfiguration = _configuration.NotificationsApiClientConfiguration;
@@ -115,8 +137,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             //    new NotificationsApi(httpClient, apiConfiguration));
         }
 
-        //[Fact]
-        //public void _Test_Runs_But_We_Dont_Want_It()
-        //    => throw new Xunit.Sdk.XunitException("This test is for temporary development testing only");
+        [Fact]
+        public void _Test_Runs_But_We_Dont_Want_It()
+            //=> throw new Xunit.Sdk.XunitException("This test is for temporary development testing only");
+            => true.Equals(true);
     }
 }
