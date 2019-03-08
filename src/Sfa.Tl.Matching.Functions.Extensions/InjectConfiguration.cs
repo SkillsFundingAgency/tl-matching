@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using AutoMapper;
 using FluentValidation;
@@ -8,7 +6,6 @@ using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
@@ -68,6 +65,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddSingleton(new HttpClient());
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
+            services.AddTransient<ILocationService, LocationService>();
 
             RegisterFileReaders(services);
 

@@ -132,7 +132,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddSingleton(_configuration);
             services.AddSingleton(new HttpClient());
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
-
+            services.AddTransient<IMessageQueueService, MessageQueueService>();
+            services.AddTransient<ILocationService, LocationService>();
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }
