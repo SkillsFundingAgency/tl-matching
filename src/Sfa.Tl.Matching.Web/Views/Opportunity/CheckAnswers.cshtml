@@ -39,7 +39,7 @@
 
             <h3 class="govuk-heading-s govuk-!-margin-0">Provider @(i + 1)</h3>
             <p class="govuk-body govuk-!-margin-0">@Model.Providers[i].Name</p>
-            <p class="govuk-body govuk-!-margin-0">@Model.Providers[i].Distance @milesText from <span style="text-transform: uppercase">@Model.Providers[i].Postcode</span></p>
+            <p class="govuk-body govuk-!-margin-0">@distance @milesText from <span style="text-transform: uppercase">@Model.Providers[i].Postcode</span></p>
             <hr class="govuk-section-break govuk-section-break--m ">
         }
 
