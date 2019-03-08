@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -10,6 +11,7 @@ using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -37,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var storageAccount = CloudStorageAccount.Parse(_configuration.BlobStorageConnectionString);
             var client = storageAccount.CreateCloudQueueClient();
 
-            var queueReference = client.GetQueueReference("get-proximity-queue");
+            var queueReference = client.GetQueueReference(QueueName.GetProximityQueue);
             await queueReference.CreateIfNotExistsAsync();
 
             return queueReference;

@@ -6,15 +6,16 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Functions
 {
     public class Proximity
     {
         [FunctionName("GetProximityData")]
-        [return: Queue("save-proximity-queue")]
+        [return: Queue(QueueName.SaveProximityQueue)]
         public async Task<SaveProximityData> GetProximityData(
-            [QueueTrigger("get-proximity-queue", Connection = "BlobStorageConnectionString")]GetProximityData getProximityData,
+            [QueueTrigger(QueueName.GetProximityQueue, Connection = "BlobStorageConnectionString")]GetProximityData getProximityData,
             ExecutionContext context,
             ILogger logger,
             [Inject] IMapper mapper,
@@ -30,7 +31,7 @@ namespace Sfa.Tl.Matching.Functions
 
         [FunctionName("SaveProximityData")]
         public async Task SaveProximityData(
-            [QueueTrigger("save-proximity-queue", Connection = "BlobStorageConnectionString")]SaveProximityData saveProximityData,
+            [QueueTrigger(QueueName.SaveProximityQueue, Connection = "BlobStorageConnectionString")]SaveProximityData saveProximityData,
             ExecutionContext context,
             ILogger logger,
             [Inject]IRepository<Domain.Models.ProviderVenue> providerVenueRepository
