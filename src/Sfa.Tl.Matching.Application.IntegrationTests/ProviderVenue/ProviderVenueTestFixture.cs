@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             var providerVenuerepository = new GenericRepository<Domain.Models.ProviderVenue>(providerVenueloggerRepository, MatchingDbContext);
             var dataValidator = new ProviderVenueDataValidator(repository, providerVenuerepository);
             var dataParser = new ProviderVenueDataParser();
-            var dataProcessor = new DataProcessor<ProviderVenueFileImportDto>();
+            var dataProcessor = new ProviderVenueDataProcessor();
             var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(loggerExcelFileReader, dataParser, dataValidator, dataProcessor);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
