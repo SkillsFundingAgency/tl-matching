@@ -6,7 +6,6 @@
         public int QualificationId { get; set; }
         public int? NumberOfPlacements { get; set; }
         public string Source { get; set; }
-
         public virtual ProviderVenue ProviderVenue { get; set; }
         public virtual Qualification Qualification { get; set; }
     }
