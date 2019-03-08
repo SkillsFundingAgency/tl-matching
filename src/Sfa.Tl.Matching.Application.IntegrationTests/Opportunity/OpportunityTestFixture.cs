@@ -22,17 +22,21 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
         {
             var loggerRepository = new Logger<GenericRepository<Domain.Models.Opportunity>>(new NullLoggerFactory());
             var loggerProvisionGapRepository = new Logger<GenericRepository<ProvisionGap>>(new NullLoggerFactory());
+            var loggerReferralRepository = new Logger<GenericRepository<Referral>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
             var opportunityRepository = new GenericRepository<Domain.Models.Opportunity>(loggerRepository, MatchingDbContext);
             var provisionGapRepository = new GenericRepository<ProvisionGap>(loggerProvisionGapRepository, MatchingDbContext);
+            var referralRepository = new GenericRepository<Referral>(loggerReferralRepository, MatchingDbContext);
+
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
 
             var dateTimeProvider = new DateTimeProvider();
 
-            OpportunityService = new OpportunityService(mapper, dateTimeProvider, opportunityRepository, provisionGapRepository);
+            OpportunityService = new OpportunityService(mapper, dateTimeProvider, 
+                opportunityRepository, provisionGapRepository, referralRepository);
         }
 
         internal void ResetData(string postcode)

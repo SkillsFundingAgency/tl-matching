@@ -5,16 +5,13 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
-    public class When_OpportunityService_Is_Called_To_Update_Opportunity
+    public class When_OpportunityService_Is_Called_To_Save_PlacementInformation
     {
         private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
         private const string JobTitle = "JobTitle";
@@ -26,35 +23,35 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const int Distance = 1;
         private const int RouteId = 1;
 
-        public When_OpportunityService_Is_Called_To_Update_Opportunity()
+        public When_OpportunityService_Is_Called_To_Save_PlacementInformation()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
-            var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
-            var referralRepository = Substitute.For<IRepository<Referral>>();
+            var provisionGapRepository = Substitute.For<IRepository<Domain.Models.ProvisionGap>>();
+            var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            var opportunity = new Domain.Models.Opportunity { PostCode = PostCode, Distance = Distance, RouteId = RouteId };
+            var opportunity = new Domain.Models.Opportunity { Id = OpportunityId, PostCode = PostCode, Distance = Distance, RouteId = RouteId };
 
             _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(opportunity);
 
             var opportunityService = new OpportunityService(mapper, dateTimeProvider, _opportunityRepository, provisionGapRepository, referralRepository);
 
-            var dto = new OpportunityDto
+            var dto = new PlacementInformationViewModel
             {
-                Id = OpportunityId,
+                OpportunityId = OpportunityId,
                 JobTitle = JobTitle,
                 PlacementsKnown = PlacementsKnown,
                 Placements = Placements,
                 ModifiedBy = ModifiedBy
             };
 
-            opportunityService.UpdateOpportunity(dto).GetAwaiter().GetResult();
+            opportunityService.SavePlacementInformation(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_Update_Is_Called_Exactly_Once()
+        public void Then_Update_Is_Called_Exactly_Once_With_1_Placement()
         {
             _opportunityRepository.Received(1).Update(Arg.Is<Domain.Models.Opportunity>(opportunity => 
                 opportunity.Id == OpportunityId &&
@@ -64,7 +61,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 opportunity.ModifiedBy == ModifiedBy &&
                 opportunity.PostCode == PostCode &&
                 opportunity.Distance == Distance &&
-                opportunity.RouteId == Distance));
+                opportunity.RouteId == Distance
+                ));
         }
 
         [Fact]

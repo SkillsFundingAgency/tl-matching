@@ -20,14 +20,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("opportunity-within-{distance}-miles-of-{postcode}-for-route-{routeId}", Name = "OpportunityCreate_Get")]
-        public async Task<IActionResult> Create(int routeId, string postcode, short distance)
+        public async Task<IActionResult> CreateProvisionGap(int routeId, string postcode, short distance)
         {
             var dto = new OpportunityDto
             {
                 RouteId = routeId,
                 Postcode = postcode,
                 Distance = distance,
-                IsReferral = false,  // TODO AU FIX THIS
+                IsReferral = false,
                 CreatedBy = HttpContext.User.GetUserName(),
                 UserEmail = HttpContext.User.GetUserEmail()
             };
@@ -54,7 +54,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 OpportunityId = dto.Id,
                 JobTitle = dto.JobTitle,
                 PlacementsKnown = dto.PlacementsKnown,
-                Placements = dto.Placements
+                Placements = !dto.PlacementsKnown.HasValue || !dto.PlacementsKnown.Value ? 
+                    default : dto.Placements
             };
 
             return View(viewModel);
@@ -96,7 +97,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.CreateReferral(viewModel);
 
-            return RedirectToAction(nameof(PlacementGap), new { id = viewModel.OpportunityId });
+            return RedirectToAction(nameof(EmailsSent), new { id = viewModel.OpportunityId });
         }
 
         [HttpGet]
