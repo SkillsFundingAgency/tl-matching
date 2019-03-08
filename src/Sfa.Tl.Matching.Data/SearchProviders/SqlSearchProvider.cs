@@ -29,14 +29,14 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
         {
             _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
 
-            if (dto.Latitude == null || dto.Longitude == null)
+            if (string.IsNullOrWhiteSpace(dto.Latitude) || string.IsNullOrWhiteSpace(dto.Longitude))
                 throw new InvalidOperationException("Latitude and Longitude can not be null");
 
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-            var employerLocation = geometryFactory.CreatePoint(new Coordinate(dto.Latitude.Value, dto.Longitude.Value));
+            var employerLocation = geometryFactory.CreatePoint(new Coordinate(double.Parse(dto.Latitude), double.Parse(dto.Longitude)));
 
             return _providerVenueRepository
-                .GetMany(p => p.Location.Distance(employerLocation) <= dto.SearchRadius && 
+                .GetMany(p => p.Location.Distance(employerLocation) <= dto.SearchRadius &&
                               p.ProviderQualification.Select(pq => pq.QualificationId)
                                   .Any(qId => _qualificationRoutePathMappingRepository
                                       .GetMany(qrpm => qrpm.Path.RouteId == dto.SelectedRouteId)
