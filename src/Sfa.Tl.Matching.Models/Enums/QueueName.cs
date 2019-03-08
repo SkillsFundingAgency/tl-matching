@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Sfa.Tl.Matching.Models.Enums
+﻿namespace Sfa.Tl.Matching.Models.Enums
 {
     public static class QueueName
     {
