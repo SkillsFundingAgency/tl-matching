@@ -3,6 +3,7 @@
 	[Id] INT IDENTITY(1,1) NOT NULL,
 	[OpportunityId] INT NOT NULL,
 	[ProviderVenueId] INT NOT NULL,
+	[EmailSent] BIT NOT NULL DEFAULT 0,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 
