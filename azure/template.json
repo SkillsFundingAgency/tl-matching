@@ -274,6 +274,10 @@
                                 "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
                             {
+                                "name": "AzureWebJobsDashboard",
+                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
+                            },
+                            {
                                 "name": "FUNCTIONS_EXTENSION_VERSION",
                                 "value": "~2"
                             }
