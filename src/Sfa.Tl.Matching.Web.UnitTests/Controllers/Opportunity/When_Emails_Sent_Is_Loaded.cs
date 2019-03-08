@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             var dto = new ValidOpportunityDtoBuilder().Build();
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunityWithRoute(OpportunityId).Returns(dto);
+            _opportunityService.GetOpportunity(OpportunityId).Returns(dto);
 
             var opportunityController = new OpportunityController(_opportunityService);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerBusinessName_Is_Set()
         {
             var viewModel = _result.GetViewModel<EmailsSentViewModel>();
-            viewModel.EmployerBusinessName.Should().Be("BusinessName");
+            viewModel.EmployerBusinessName.Should().Be("EmployerName");
         }
 
         [Fact]

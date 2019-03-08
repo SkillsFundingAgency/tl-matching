@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.CreateReferral(viewModel);
 
-            return RedirectToAction(nameof(EmailsSent), new { id = viewModel.OpportunityId });
+            return RedirectToRoute("EmailsSent_Get", new { id = viewModel.OpportunityId });
         }
 
         [HttpGet]
@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.CreateProvisionGap(viewModel);
 
-            return RedirectToAction(nameof(PlacementGap), new { id = viewModel.OpportunityId });
+            return RedirectToRoute("PlacementGap_Get", new { id = viewModel.OpportunityId });
         }
 
         [HttpGet]
