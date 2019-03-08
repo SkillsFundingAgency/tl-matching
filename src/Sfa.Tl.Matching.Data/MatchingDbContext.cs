@@ -10,12 +10,15 @@ namespace Sfa.Tl.Matching.Data
         {
         }
 
+        public virtual DbSet<EmailHistory> EmailHistory { get; set; }
+        public virtual DbSet<EmailPlaceholder> EmailPlaceholder { get; set; }
+        public virtual DbSet<EmailTemplate> EmailTemplate { get; set; }
         public virtual DbSet<Employer> Employer { get; set; }
         public virtual DbSet<Opportunity> Opportunity { get; set; }
         public virtual DbSet<Path> Path { get; set; }
         public virtual DbSet<Provider> Provider { get; set; }
-        public virtual DbSet<ProviderVenue> ProviderVenue { get; set; }
         public virtual DbSet<ProviderQualification> ProviderQualification { get; set; }
+        public virtual DbSet<ProviderVenue> ProviderVenue { get; set; }
         public virtual DbSet<ProvisionGap> ProvisionGap { get; set; }
         public virtual DbSet<Qualification> Qualification { get; set; }
         public virtual DbSet<QualificationRoutePathMapping> QualificationRoutePathMapping { get; set; }

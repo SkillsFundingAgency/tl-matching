@@ -1,11 +1,13 @@
-﻿namespace Sfa.Tl.Matching.Domain.Models
+﻿using System.Collections.Generic;
+
+namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Referral : BaseEntity
     {
         public int OpportunityId { get; set; }
+        public int ProviderVenueId { get; set; }
         public virtual Opportunity Opportunity { get; set; }
-        public int? EmailId { get; set; }
-        public bool EmailSent { get; set; }
-        public int TotalProviders { get; set; }
+        public virtual ProviderVenue ProviderVenue { get; set; }
+        public virtual ICollection<EmailHistory> EmailHistory { get; set; }
     }
 }
