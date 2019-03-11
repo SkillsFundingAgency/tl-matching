@@ -134,6 +134,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
             services.AddTransient<ILocationService, LocationService>();
+
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using AutoMapper;
 using FluentValidation;
@@ -63,8 +64,10 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     builder => builder.UseNetTopologySuite()
                         .EnableRetryOnFailure()));
 
+            services.AddSingleton(_configuration);
             services.AddSingleton(new HttpClient());
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
+            services.AddTransient<IMessageQueueService, MessageQueueService>();
             services.AddTransient<ILocationService, LocationService>();
 
             RegisterFileReaders(services);
@@ -93,13 +96,14 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         {
             services.AddTransient<IDataParser<TDto>, TParser>();
             services.AddTransient<IValidator<TImportDto>, TValidator>();
+            services.AddTransient<IDataProcessor<TImportDto>, TDataProcessor>();
 
             services.AddTransient<IFileReader<TImportDto, TDto>, ExcelFileReader<TImportDto, TDto>>(provider =>
                 new ExcelFileReader<TImportDto, TDto>(
                     provider.GetService<ILogger<ExcelFileReader<TImportDto, TDto>>>(),
                     provider.GetService<IDataParser<TDto>>(),
-                    (IValidator<TImportDto>)provider.GetService(typeof(TValidator)),
-                    (IDataProcessor<FileImportDto>)provider.GetService(typeof(TDataProcessor))));
+                    (IValidator<TImportDto>)provider.GetServices(typeof(IValidator<TImportDto>)).Single(t => t.GetType() == typeof(TValidator)),
+                    (IDataProcessor<TImportDto>)provider.GetServices(typeof(IDataProcessor<TImportDto>)).Single(t => t.GetType() == typeof(TDataProcessor))));
 
             services.AddTransient<IFileImportService<TImportDto, TDto, TEntity>, FileImportService<TImportDto, TDto, TEntity>>();
         }
@@ -122,6 +126,8 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
+
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         }
     }
 }
