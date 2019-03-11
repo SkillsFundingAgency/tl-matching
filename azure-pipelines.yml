@@ -27,6 +27,7 @@ steps:
     command: restore
     projects: 'src/**/*.csproj'
     noCache: true
+    nugetConfigPath: 'src/nuget.config'
 
 - task: DotNetCoreCLI@2
   displayName: Build
