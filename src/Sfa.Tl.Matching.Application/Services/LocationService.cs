@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -11,11 +10,13 @@ namespace Sfa.Tl.Matching.Application.Services
     public class LocationService : ILocationService
     {
         private readonly HttpClient _httpClient;
+        private readonly MatchingConfiguration _matchingConfiguration;
 
         public LocationService(HttpClient httpClient, MatchingConfiguration matchingConfiguration)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(matchingConfiguration.PostcodeRetrieverBaseUrl);
+            _matchingConfiguration = matchingConfiguration;
+            //_httpClient.BaseAddress = new Uri(matchingConfiguration.PostcodeRetrieverBaseUrl);
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
@@ -23,16 +24,19 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<bool> IsValidPostCode(string postCode)
         {
-            var response = await _httpClient.GetAsync($"/{postCode}/validate");
+            var validateUrl = $"{_matchingConfiguration.PostcodeRetrieverBaseUrl}/{postCode}/validate";
+            var response = await _httpClient.GetAsync(validateUrl);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsAsync<bool>();
         }
 
         public async Task<PostCodeLookupResultDto> GetGeoLocationData(string postCode)
         {
-            var response = await _httpClient.GetAsync($"/{postCode}");
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsAsync<PostCodeLookupResultDto>();
+            var lookupUrl = $"{_matchingConfiguration.PostcodeRetrieverBaseUrl}/{postCode}";
+            var responseMessage = await _httpClient.GetAsync(lookupUrl);
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.Content.ReadAsAsync<Response>();
+            return response.result;
         }
     }
 }
