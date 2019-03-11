@@ -15,6 +15,8 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
 {
     public class SqlSearchProvider : ISearchProvider
     {
+        public const double MilesToMeters = 1609.34d;
+
         private readonly ILogger<SqlSearchProvider> _logger;
         private readonly IRepository<QualificationRoutePathMapping> _qualificationRoutePathMappingRepository;
         private readonly IRepository<ProviderVenue> _providerVenueRepository;
@@ -36,24 +38,26 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
             var employerLocation = geometryFactory.CreatePoint(new Coordinate(double.Parse(dto.Latitude), double.Parse(dto.Longitude)));
 
-            return _providerVenueRepository
-                .GetMany(p => p.Location.Distance(employerLocation) <= dto.SearchRadius &&
-                              p.ProviderQualification.Select(pq => pq.QualificationId)
-                                  .Any(qId => _qualificationRoutePathMappingRepository
-                                      .GetMany(qrpm => qrpm.Path.RouteId == dto.SelectedRouteId)
-                                      .Select(qrpm => qrpm.QualificationId)
-                                      .Distinct()
-                                      .Contains(qId)))
+            var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
+
+            var qualificationIds = await _qualificationRoutePathMappingRepository
+                .GetMany(qrpm => qrpm.Path.RouteId == dto.SelectedRouteId)
+                .Select(qrpm => qrpm.QualificationId)
+                .Distinct().ToListAsync();
+
+            return await _providerVenueRepository
+                .GetMany(p => p.Location.Distance(employerLocation) <= searchRadiusInMeters &&
+                              p.ProviderQualification.Any(qId => qualificationIds.Contains(qId.QualificationId)), inc => inc.ProviderQualification)
+                .OrderBy(p => p.Location.Distance(employerLocation))
                 .Select(p => new ProviderVenueSearchResultDto
                 {
                     ProviderName = p.Provider.Name,
-                    Distance = decimal.Parse(p.Location.Distance(employerLocation).ToString(CultureInfo.InvariantCulture)),
+                    Distance = p.Location.Distance(employerLocation) / MilesToMeters,
                     ProviderVenueId = p.Id,
                     Postcode = p.Postcode,
                     ProviderId = p.ProviderId,
-                    QualificationShortTitles = p.ProviderQualification.Select(pq => pq.Qualification.ShortTitle)
-                })
-                .OrderBy(p => p.Distance);
+                    QualificationShortTitles = p.ProviderQualification.Select(pq => pq.Qualification.ShortTitle).ToList()
+                }).ToListAsync();
         }
     }
 }
