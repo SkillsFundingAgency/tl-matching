@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -21,8 +22,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Check_Answers_Is_Loaded()
         {
             var dto = new ValidOpportunityDtoBuilder().Build();
+            var providers = new List<ProviderViewModel>
+            {
+                new ProviderViewModel { Name = "Provider1", Distance = 1.3m, Postcode = "AA1 1AA" },
+                new ProviderViewModel { Name = "Provider2", Distance = 31.6m, Postcode = "BB1 1BB" }
+            };
+
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunityWithRoute(OpportunityId).Returns(dto);
+
+            _opportunityService.GetReferrals(OpportunityId).Returns(providers);
 
             var opportunityController = new OpportunityController(_opportunityService);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
@@ -114,6 +123,55 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
             viewModel.PlacementInformation.Route.Should().Be("Route");
+        }
+
+        [Fact]
+        public void Then_Providers_Count_Is_2()
+        {
+            var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
+            viewModel.Providers.Count.Should().Be(2);
+        }
+
+        [Fact]
+        public void Then_First_Provider_Name_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
+            viewModel.Providers[0].Name.Should().Be("Provider1");
+        }
+
+        [Fact]
+        public void Then_First_Provider_Distance_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
+            viewModel.Providers[0].Distance.Should().Be(1.3m);
+        }
+
+        [Fact]
+        public void Then_First_Provider_Postcode_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
+            viewModel.Providers[0].Postcode.Should().Be("AA1 1AA");
+        }
+
+        [Fact]
+        public void Then_Second_Provider_Name_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
+            viewModel.Providers[1].Name.Should().Be("Provider2");
+        }
+
+        [Fact]
+        public void Then_Second_Provider_Distance_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
+            viewModel.Providers[1].Distance.Should().Be(31.6m);
+        }
+
+        [Fact]
+        public void Then_Second_Provider_Postcode_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
+            viewModel.Providers[1].Postcode.Should().Be("BB1 1BB");
         }
     }
 }

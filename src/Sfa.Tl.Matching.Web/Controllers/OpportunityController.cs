@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 RouteId = routeId,
                 Postcode = postcode,
                 Distance = distance,
-                IsReferral = false,
+                Providers = 0,
                 CreatedBy = HttpContext.User.GetUserName(),
                 UserEmail = HttpContext.User.GetUserEmail()
             };
@@ -171,7 +171,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 OpportunityId = dto.Id,
                 PlacementInformation = GetPlacementViewModel(dto),
-                Providers = _opportunityService.GetReferrals(id)
+                Providers = _opportunityService.GetReferrals(id),
             };
 
             return viewModel;

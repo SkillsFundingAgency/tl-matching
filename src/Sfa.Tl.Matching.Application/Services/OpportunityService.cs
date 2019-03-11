@@ -47,6 +47,15 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
+        public async Task<OpportunityDto> GetOpportunityWithReferrals(int id)
+        {
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id,
+                opp => opp.Referral);
+            var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
+
+            return dto;
+        }
+
         public async Task<OpportunityDto> GetOpportunityWithRoute(int id)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id,
@@ -101,7 +110,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     Name = r.ProviderVenue.Provider.Name,
                     Postcode = r.ProviderVenue.Postcode,
-                    Distance = 1.1m // TODO AU
+                    Distance = r.Distance
                 })
                 .ToList();
 

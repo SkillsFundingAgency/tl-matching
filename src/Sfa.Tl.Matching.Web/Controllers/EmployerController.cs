@@ -94,7 +94,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var dto = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
+            var dto = await _opportunityService.GetOpportunityWithReferrals(viewModel.OpportunityId);
 
             dto.EmployerContact = viewModel.Contact;
             dto.EmployerContactEmail = viewModel.ContactEmail;
@@ -103,7 +103,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute(dto.IsReferral ?
+            return RedirectToRoute(dto.IsReferral.HasValue && dto.IsReferral.Value ?
                 "CheckAnswers_Get" :
                 "CheckAnswersGap_Get");
         }

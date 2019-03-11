@@ -16,7 +16,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForAllMembers(expression => expression.Condition((src, dest, sourceMember) => sourceMember != null && !sourceMember.GetType().IsDefaultValue(sourceMember)));
 
             CreateMap<Opportunity, OpportunityDto>()
-                .ForPath(m => m.Route, opt => opt.MapFrom(source => source.Route.Name));
+                .ForPath(m => m.Route, opt => opt.MapFrom(source => source.Route.Name))
+                .ForPath(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()));
         }
     }
 }
