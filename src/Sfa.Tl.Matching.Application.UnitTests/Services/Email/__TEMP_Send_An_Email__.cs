@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Dynamic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using SFA.DAS.Http;
@@ -12,6 +14,8 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data;
 using Microsoft.EntityFrameworkCore;
+using Notify.Interfaces;
+using Notify.Client;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 {
@@ -20,13 +24,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         private readonly MatchingConfiguration _configuration;
         IRepository<EmailTemplate> _emailTemplateRepository;
         private readonly INotificationsApi _notificationsApi;
-        private readonly INotificationsApi _govNotifyApi;
 
-        public const string APPLY_SIGNUP_ERROR = "ApplySignupError";
         public const string CANDIDATE_CONTACT_US = "VacancyService_CandidateContactUsMessage";
         public const string TEST_TEMPLATE = "Test_Template";
+        public const string EMPLOYER_REFERRAL = "EmployerReferral";
         public const string PROVIDER_REFERRAL = "ProviderReferral";
-
+        public const string PROVISION_GAP = "ProvisionGapReport";
 
         public __TEMP_Send_An_Email__()
         {
@@ -38,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                     "1.0",
                     "Sfa.Tl.Matching");
             }
-            catch (Exception e)
+            catch
             {
                 //This will fail on a non-local environment
                 return;
@@ -49,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 return;
             }
 
-            _govNotifyApi = RegisterGovNotifyApi();
+            var govNotifyApi = RegisterGovNotifyApi();
             _notificationsApi = RegisterNotificationApi();
 
             var logger = Substitute.For<ILogger<EmailService>>();
@@ -60,13 +63,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             {
                 _emailTemplateRepository = new GenericRepository<EmailTemplate>(loggerForRepository, dbContext);
 
-                var emailService = new EmailService(_notificationsApi, _emailTemplateRepository, logger);
-
                 var subject = "A test email";
-                //var templateName = APPLY_SIGNUP_ERROR;
                 //var templateName = CANDIDATE_CONTACT_US;
                 //var templateName = TEST_TEMPLATE;
+                //var templateName = EMPLOYER_REFERRAL;
                 var templateName = PROVIDER_REFERRAL;
+                //var templateName = PROVISION_GAP;
 
                 var toAddress = "";
                 var replyToAddress = "reply@test.com";
@@ -74,17 +76,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 dynamic tokens;
                 switch (templateName)
                 {
-                    case APPLY_SIGNUP_ERROR:
-                        tokens = new { first_name = "Tester" };
-                        break;
                     case CANDIDATE_CONTACT_US:
                         tokens = (dynamic)new
                         {
                             UserEmailAddress = replyToAddress,
                             UserFullName = "Test <strong>User</strong>",
                             UserEnquiry = "I have a question",
-                            UserEnquiryDetails = "<ul><li>item</li><li>item</li></ul>"
+                            UserEnquiryDetails = "And here is the question"
                         };
+                        govNotifyApi = null;
                         break;
                     case TEST_TEMPLATE:
                         tokens = (dynamic)new
@@ -93,12 +93,48 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                             under18 = "yes"
                         };
                         break;
+                    case EMPLOYER_REFERRAL:
+                        tokens = (dynamic)new
+                        {
+                            employer_business_name = "Big Co.",
+                            employer_contact_name = "Bog Boss",
+                            employer_contact_number = "0201 234 567",
+                            employer_contact_email = "test@test.com",
+                            employer_postcode = "XX1 2YY",
+                            route = "Engineering and manufacturing",
+                            job_role = "Welder"
+                        };
+                        break;
                     case PROVIDER_REFERRAL:
+                        tokens = (dynamic)new
+                        {
+                            primary_contact_name = "Mike",
+                            provider_name = "Your Provider",
+                            route = "Catering and hospitality",
+                            venue_postcode = "AA1 1AA",
+                            //venue_postcode = "&lt;ul&gt;&lt;li&gt;item+1&lt;/li&gt;&lt;li&gt;item+2&lt;/li&gt;&lt;/ul&gt;",
+                            distance = "3.6",
+                            job_role = "Assistant Chef",
+                            employer_business_name = "Big Co.",
+                            employer_contact_name = "Bog Boss",
+                            employer_contact_number = "0201 234 567",
+                            employer_contact_email = "test@test.com",
+                            employer_postcode = "XX1 2YY",
+                            number_of_placements = "at least 1"
+                        };
+                        break;
+                    case PROVISION_GAP:
                         tokens = null;
                         break;
                     default:
                         throw new Exception("Test template {templateName} was not recognized");
                 }
+
+                var emailService = new EmailService(_notificationsApi, _emailTemplateRepository, logger)
+                {
+                    //TODO: Remove this if it isn't going to be used
+                    GovNotifyApi = govNotifyApi
+                };
 
                 emailService
                     .SendEmail(templateName, toAddress, subject, tokens, replyToAddress)
@@ -116,10 +152,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             return matchingDbContext;
         }
 
-        private INotificationsApi RegisterGovNotifyApi()
+        private INotificationClient RegisterGovNotifyApi()
         {
-            var apiKey = _configuration.GovNotifyApiKey;
-            return null;
+            return !string.IsNullOrEmpty(_configuration.GovNotifyApiKey) ?
+                new NotificationClient(_configuration.GovNotifyApiKey)
+                : null;
         }
 
         private INotificationsApi RegisterNotificationApi()
@@ -137,9 +174,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             //    new NotificationsApi(httpClient, apiConfiguration));
         }
 
-        [Fact]
-        public void _Test_Runs_But_We_Dont_Want_It()
-            //=> throw new Xunit.Sdk.XunitException("This test is for temporary development testing only");
-            => true.Equals(true);
+        //[Fact]
+        //public void _Test_Runs_But_We_Dont_Want_It()
+        //    => throw new Xunit.Sdk.XunitException("This test is for temporary development testing only");
+        //=> true.Equals(true);
     }
 }

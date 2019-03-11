@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Notify.Interfaces;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -13,22 +15,24 @@ namespace Sfa.Tl.Matching.Application.Services
     public class EmailService : IEmailService
     {
         //TODO: Rename or move these constants
-        //TODO: Pass some of these in configuration or as parameters to the send method
         public const string SystemId = "TLevelsIndustryPlacement";
         //private const string REPLY_TO_ADDRESS = "digital.apprenticeship.service @notifications.service.gov.uk";
 
         private readonly ILogger<EmailService> _logger;
-        //private readonly MatchingConfiguration _configuration;
         private readonly INotificationsApi _notificationsApi;
+        private INotificationClient _govNotifyApi;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
 
+        public INotificationClient GovNotifyApi
+        {
+            get => _govNotifyApi;
+            set =>  _govNotifyApi = value;
+        }
+
         public EmailService(INotificationsApi notificationsApi,
-            //MatchingConfiguration configuration,
             IRepository<EmailTemplate> emailTemplateRepository,
             ILogger<EmailService> logger)
         {
-            //TODO: Is _configuration required?
-            //_configuration = configuration;
             _logger = logger;
 
             _emailTemplateRepository = emailTemplateRepository;
@@ -58,34 +62,72 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var personalisationTokens = new Dictionary<string, string>();
 
-            foreach (var property in tokens.GetType().GetProperties())
+            if (tokens != null)
             {
-                personalisationTokens[property.Name] = property.GetValue(tokens);
+                foreach (var property in tokens.GetType().GetProperties())
+                {
+                    personalisationTokens[property.Name] = property.GetValue(tokens);
+                }
             }
 
             foreach (var recipient in recipients)
             {
                 _logger.LogInformation($"Sending {templateName} email to {recipient}");
 
-                var email = new SFA.DAS.Notifications.Api.Types.Email
+                if (_govNotifyApi == null)
                 {
-                    RecipientsAddress = recipient,
-                    TemplateId = templateId,
-                    ReplyToAddress = replyToAddress,
-                    Subject = subject,
-                    SystemId = SystemId,
-                    Tokens = personalisationTokens
-                };
+                    await SendEmailViaNotificationsApi(recipient, subject, templateId, personalisationTokens, replyToAddress);
+                }
+                else
+                {
+                    SendEmailViaGovNotifyApi(recipient, subject, templateId, personalisationTokens, replyToAddress);
+                }
+            }
+        }
 
-                try
+        private async Task SendEmailViaNotificationsApi(string recipient, string subject, string templateId,
+            Dictionary<string, string> personalisationTokens, string replyToAddress)
+        {
+            var email = new SFA.DAS.Notifications.Api.Types.Email
+            {
+                RecipientsAddress = recipient,
+                TemplateId = templateId,
+                ReplyToAddress = replyToAddress,
+                Subject = subject,
+                SystemId = SystemId,
+                Tokens = personalisationTokens
+            };
+
+            try
+            {
+                await _notificationsApi.SendEmail(email);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex, $"Error sending email template {templateId} to {toAddress}");
+                _logger.LogError(ex, $"Error sending email to {recipient}");
+            }
+        }
+
+        private void SendEmailViaGovNotifyApi(string recipient, string subject, string templateId,
+            Dictionary<string, string> personalisationTokens, string replyToAddress)
+        {
+            try
+            {
+                var tokens = new Dictionary<string, dynamic>();
+                foreach (var token in personalisationTokens)
                 {
-                    await _notificationsApi.SendEmail(email);
+                    tokens[token.Key] = token.Value;
                 }
-                catch (Exception ex)
-                {
-                    //_logger.LogError(ex, $"Error sending email template {templateId} to {toAddress}");
-                    _logger.LogError(ex, $"Error sending email to {recipient}");
-                }
+
+                //TODO: Set up replytoid - see on https://docs.notifications.service.gov.uk/net.html#send-an-email-arguments-personalisation-optional
+                var response = _govNotifyApi.SendEmail(recipient, templateId, tokens);
+                _logger.LogInformation($"Successfully sent email '{response.content.subject}' email to {recipient} from {response.content.fromEmail}");
+                _logger.LogInformation($"     Email body: '{response.content.body}'");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error sending email to {recipient}");
             }
         }
     }
