@@ -16,10 +16,8 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _httpClient = httpClient;
             _matchingConfiguration = matchingConfiguration;
-            //_httpClient.BaseAddress = new Uri(matchingConfiguration.PostcodeRetrieverBaseUrl);
             _httpClient.DefaultRequestHeaders.Accept.Clear();
-            _httpClient.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public async Task<bool> IsValidPostCode(string postCode)
@@ -35,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var lookupUrl = $"{_matchingConfiguration.PostcodeRetrieverBaseUrl}/{postCode}";
             var responseMessage = await _httpClient.GetAsync(lookupUrl);
             responseMessage.EnsureSuccessStatusCode();
-            var response = await responseMessage.Content.ReadAsAsync<Response>();
+            var response = await responseMessage.Content.ReadAsAsync<PostCodeLookupResponse>();
             return response.result;
         }
     }
