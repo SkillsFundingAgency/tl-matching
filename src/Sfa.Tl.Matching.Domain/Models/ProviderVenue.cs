@@ -11,8 +11,8 @@ namespace Sfa.Tl.Matching.Domain.Models
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
         public string Source { get; set; }
-
         public virtual Provider Provider { get; set; }
         public virtual ICollection<ProviderQualification> ProviderQualification { get; set; }
+        public virtual ICollection<Referral> Referral { get; set; }
     }
 }
