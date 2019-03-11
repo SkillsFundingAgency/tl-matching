@@ -3,15 +3,11 @@
 <h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">@Model.SearchResults?.Results?.Count() </span>results in <span class="govuk-!-font-weight-bold">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text
 </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
 
-<form asp-controller="Opportunity" asp-action="Create">
-    <div class="govuk-form-group">
-        <input type="hidden" name="Postcode" value="@Model.SearchParameters.Postcode" />
-        <input type="hidden" name="Distance" value="@Model.SearchParameters.SearchRadius" />
-        <input type="hidden" name="RouteId" value="@Model.SearchParameters.SelectedRouteId" />
-
-        <button type="submit" class="tl-button--looks-like-link govuk-body">No suitable providers? Let us know</button>
-    </div>
-</form>
+<a asp-route="OpportunityCreate_Get"
+   asp-route-postcode="@Model.SearchParameters.Postcode"
+   asp-route-distance="@Model.SearchParameters.SearchRadius"
+   asp-route-routeId="@Model.SearchParameters.SelectedRouteId"
+   class="govuk-link">No suitable providers? Let us know</a>.
 
 <p class="govuk-body">Choose who the employer wants to hear from</p>
 
