@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using GeoAPI.Geometries;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetTopologySuite;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -25,7 +26,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             _providerVenueRepository = providerVenueRepository;
         }
 
-        public IEnumerable<ProviderVenueSearchResultDto> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
+        public async Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
             _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
 

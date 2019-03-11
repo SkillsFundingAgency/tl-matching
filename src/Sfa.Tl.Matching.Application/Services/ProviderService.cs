@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.Services
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 
-            var searchResults = _searchProvider.SearchProvidersByPostcodeProximity(dto);
+            var searchResults = await _searchProvider.SearchProvidersByPostcodeProximity(dto);
 
             var results = searchResults.Any()
                 ? _searchResultMapper.Map<IEnumerable<ProviderVenueSearchResultDto>>(searchResults)
