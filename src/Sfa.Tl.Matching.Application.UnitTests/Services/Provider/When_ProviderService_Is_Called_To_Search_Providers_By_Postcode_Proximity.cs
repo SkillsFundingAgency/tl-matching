@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         [Fact]
         public void Then_The_First_Search_Result_Distance_Is_As_Expected()
         {
-            _result.First().Distance.Should().Be(2.5M);
+            _result.First().Distance.Should().Be(2.5d);
         }
 
         [Fact]

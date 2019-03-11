@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 new ProviderVenueSearchResultDto
                 {
                     Postcode = Postcode,
-                    Distance = 1.5M
+                    Distance = 1.5d
                 }
             };
 

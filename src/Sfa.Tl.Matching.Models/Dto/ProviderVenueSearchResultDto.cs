@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public int ProviderVenueId { get; set; }
         public string ProviderName { get; set; }
         public string Postcode { get; set; }
-        public decimal? Distance { get; set; }
+        public double? Distance { get; set; }
         public IEnumerable<string> QualificationShortTitles { get; set; }
     }
 }
