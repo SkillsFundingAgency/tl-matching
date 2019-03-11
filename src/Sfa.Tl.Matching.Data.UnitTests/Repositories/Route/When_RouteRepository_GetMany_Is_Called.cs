@@ -21,14 +21,18 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
 
             using (var dbContext = InMemoryDbContext.Create())
             {
-                dbContext.Add(new ValidRouteBuilder().Build());
+                dbContext.AddRange(new ValidRouteListBuilder().Build());
                 dbContext.SaveChanges();
 
                 var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
                 _result = repository.GetMany().ToList();
             }
         }
-
+        
+        [Fact]
+        public void Then_The_Expected_Number_Of_Routes_Is_Returned() =>
+            _result.Count().Should().Be(2);
+        
         [Fact]
         public void Then_Route_Id_Is_Returned() => 
             _result.First().Id.Should().Be(RouteConstants.Id);
