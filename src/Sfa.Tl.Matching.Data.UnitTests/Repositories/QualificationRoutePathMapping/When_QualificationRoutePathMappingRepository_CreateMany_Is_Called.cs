@@ -27,6 +27,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapp
 
         [Fact]
         public void Then_Two_Records_Should_Have_Been_Created() =>
-            _result.Should().Be(2);
+            //This is returning four because qualification objects are also getting inserted
+            _result.Should().Be(4);
     }
 }
