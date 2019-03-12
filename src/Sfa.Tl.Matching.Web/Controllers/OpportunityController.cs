@@ -18,15 +18,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _opportunityService = opportunityService;
         }
 
-        [Route("opportunity-within-{distance}-miles-of-{postcode}-for-route-{routeId}", Name = "OpportunityCreate_Get")]
-        public async Task<IActionResult> CreateProvisionGap(int routeId, string postcode, short distance)
+        [Route("{searchResultProviderCount}-opportunities-within-{distance}-miles-of-{postcode}-for-route-{routeId}", Name = "OpportunityCreate_Get")]
+        public async Task<IActionResult> CreateProvisionGap(int searchResultProviderCount, int routeId, string postcode, short distance)
         {
             var dto = new OpportunityDto
             {
                 RouteId = routeId,
                 Postcode = postcode,
                 Distance = distance,
-                // TODO AU SearchResultProviderCount = 0,
+                SearchResultProviderCount = searchResultProviderCount,
                 CreatedBy = HttpContext.User.GetUserName(),
                 UserEmail = HttpContext.User.GetUserEmail()
             };

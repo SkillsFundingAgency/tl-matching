@@ -13,8 +13,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ProvisionGap, config => config.Ignore())
                 .ForMember(m => m.Referral, config => config.Ignore())
-                .ForMember(m => m.Route, config => config.Ignore())
-                .ForAllMembers(expression => expression.Condition((src, dest, sourceMember) => sourceMember != null && !sourceMember.GetType().IsDefaultValue(sourceMember)));
+                .ForMember(m => m.Route, config => config.Ignore());
 
             CreateMap<Opportunity, OpportunityDto>()
                 .ForPath(m => m.RouteName, opt => opt.MapFrom(source => source.Route.Name))

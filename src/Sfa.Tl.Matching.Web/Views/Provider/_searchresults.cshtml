@@ -4,6 +4,7 @@
 </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
 
 <a asp-route="OpportunityCreate_Get"
+   asp-route-searchResultProviderCount="@Model.SearchResults.Results.Count()"
    asp-route-postcode="@Model.SearchParameters.Postcode"
    asp-route-distance="@Model.SearchParameters.SearchRadius"
    asp-route-routeId="@Model.SearchParameters.SelectedRouteId"
