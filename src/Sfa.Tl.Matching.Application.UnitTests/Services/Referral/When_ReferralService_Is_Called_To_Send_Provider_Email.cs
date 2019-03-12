@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -7,6 +8,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using SFA.DAS.Notifications.Api.Client;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Mappers;
 using Xunit;
@@ -51,13 +53,27 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .Received(1)
                 .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<dynamic>(), Arg.Any<string>());
         }
+        
+        [Fact]
+        public void Then_EmailTemplateRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
+        {
+            _emailTemplateRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.EmailTemplate, bool>>>());
+        }
 
         [Fact]
-        public void Then_EmailPlaceholderRepository_CreateMany_Is_Called_Exactly_Once()
+        public void Then_EmailHistoryRepository_Create_Is_Called_Exactly_Once()
         {
-            _emailPlaceholderRepository
+            _emailHistoryRepository
                 .Received(1)
-                .CreateMany(Arg.Any<IList<Domain.Models.EmailPlaceholder>>());
+                .Create(Arg.Any<Domain.Models.EmailHistory>());
         }
+
+        //[Fact]
+        //public void Then_EmailPlaceholderRepository_CreateMany_Is_Called_Exactly_Once()
+        //{
+        //    _emailPlaceholderRepository
+        //        .Received(1)
+        //        .CreateMany(Arg.Any<IList<Domain.Models.EmailPlaceholder>>());
+        //}
     }
 }

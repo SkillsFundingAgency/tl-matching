@@ -61,6 +61,10 @@ namespace Sfa.Tl.Matching.Application.Services
               //TODO: What is ReplyToAddress?
             */
 
+            var templateName = ProviderReferralEmailTemplateName;
+
+            var emailTemplate = GetEmailTemplate(templateName);
+            
             var providerEmailAddress = "to@test.com";
 
             var placeholders = new List<EmailPlaceholderDto>
@@ -81,20 +85,35 @@ namespace Sfa.Tl.Matching.Application.Services
             
             var tokens = ConvertPlaceholdersToTokens(placeholders);
 
-            _emailService.SendEmail(ProviderReferralEmailTemplateName,
+            _emailService.SendEmail(templateName,
                 providerEmailAddress,
                 ProviderReferralEmailSubject,
                 tokens,
                 ReplyToAddress);
 
+
+
             var emailPlaceholders = _mapper.Map<IList<EmailPlaceholder>>(placeholders);
             _logger.LogInformation($"Saving { emailPlaceholders.Count } { nameof(EmailPlaceholder) }.");
-            await _emailPlaceholderRepository.CreateMany(emailPlaceholders);
+            //await _emailPlaceholderRepository.CreateMany(emailPlaceholders);
+
+            var emailHistory = new EmailHistory
+            {
+                EmailTemplateId = emailTemplate.Id,
+                EmailPlaceholder = emailPlaceholders
+            };
+            await _emailHistoryRepository.Create(emailHistory);
         }
 
         public Task SendProvisionGapEmail(int opportunityId)
         {
             throw new NotImplementedException();
+        }
+
+        private async Task<EmailTemplate> GetEmailTemplate(string templateName)
+        {
+            var emailTemplate = await _emailTemplateRepository.GetSingleOrDefault(t => t.TemplateName == templateName);
+            return emailTemplate;
         }
 
         private dynamic ConvertPlaceholdersToTokens(IEnumerable<EmailPlaceholderDto> placeholders)
