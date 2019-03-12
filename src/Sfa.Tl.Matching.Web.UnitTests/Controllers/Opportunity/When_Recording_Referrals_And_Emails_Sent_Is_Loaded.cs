@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Emails_Sent_Is_Loaded // TODO AU RENAME
+    public class When_Recording_Referrals_And_Emails_Sent_Is_Loaded
     {
         private readonly IOpportunityService _opportunityService;
         private const string CreatedBy = "CreatedBy";
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         private const int OpportunityId = 1;
 
-        public When_Emails_Sent_Is_Loaded()
+        public When_Recording_Referrals_And_Emails_Sent_Is_Loaded()
         {
             var dto = new ValidOpportunityDtoBuilder().Build();
             _opportunityService = Substitute.For<IOpportunityService>();

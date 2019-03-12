@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_PlacementGap_Is_Loaded_Successfully // TODO AU RENAME
+    public class When_Recording_PlacementGap_And_Email_Sent_Is_Loaded_Successfully
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         private const int OpportunityId = 1;
 
-        public When_PlacementGap_Is_Loaded_Successfully()
+        public When_Recording_PlacementGap_And_Email_Sent_Is_Loaded_Successfully()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
 
