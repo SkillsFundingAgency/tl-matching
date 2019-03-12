@@ -20,20 +20,30 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         private const int SearchRadius = 5;
         private const int RouteId = 2;
         private readonly IEnumerable<ProviderVenueSearchResultDto> _result;
+        private readonly ILocationService _locationService;
+        private readonly ISearchProvider _searchProvider;
 
         public When_ProviderService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var searchProvider = Substitute.For<ISearchProvider>();
-            var locationService = Substitute.For<ILocationService>();
             var dto = new ProviderSearchParametersDto { Postcode = Postcode, SearchRadius = SearchRadius, SelectedRouteId = RouteId };
-            searchProvider
+
+            _searchProvider = Substitute.For<ISearchProvider>();
+            _searchProvider
                 .SearchProvidersByPostcodeProximity(dto)
                 .Returns(new SearchResultsBuilder().Build());
 
-            var service = new ProviderService(mapper, searchProvider, locationService);
+            _locationService = Substitute.For<ILocationService>();
+            _locationService.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
+            {
+                PostCode = Postcode,
+                Longitude = "1.2",
+                Latitude = "1.2"
+            });
+
+            var service = new ProviderService(mapper, _searchProvider, _locationService);
 
             _result = service.SearchProvidersByPostcodeProximity(dto).GetAwaiter().GetResult();
         }
@@ -45,39 +55,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         }
 
         [Fact]
-        public void Then_The_First_Search_Result_Postcode_Is_As_Expected()
+        public void Then_The_LocationService_Is_Called_Exactly_Once()
         {
-            _result.First().Postcode.Should().BeEquivalentTo("NW1 3HB");
+            _locationService.Received(1).GetGeoLocationData(Postcode);
         }
 
         [Fact]
-        public void Then_The_First_Search_Result_Distance_Is_As_Expected()
+        public void Then_The_ISearchProvider_Is_Called_Exactly_Once()
         {
-            _result.First().Distance.Should().Be(2.5d);
-        }
-
-        [Fact]
-        public void Then_The_First_Search_Result_Provider_Id_Is_As_Expected()
-        {
-            _result.First().ProviderId.Should().Be(1);
-        }
-
-        [Fact]
-        public void Then_The_First_Search_Result_Provider_Name_Is_As_Expected()
-        {
-            _result.First().ProviderName.Should().BeEquivalentTo("The WKCIC Group");
-        }
-
-        [Fact]
-        public void Then_The_First_Search_Result_QualificationShortTitles_Has_The_Expected_Number_Of_Items()
-        {
-            _result.First().QualificationShortTitles.Count().Should().Be(2);
-        }
-
-        [Fact]
-        public void Then_The_First_Search_Result_First_QualificationShortTitle_Is_As_Expected()
-        {
-            _result.First().QualificationShortTitles.First().Should().BeEquivalentTo("applied science");
+            _searchProvider.Received(1).SearchProvidersByPostcodeProximity(Arg.Any<ProviderSearchParametersDto>());
         }
     }
 }

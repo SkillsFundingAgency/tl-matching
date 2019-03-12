@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             _providerService = Substitute.For<IProviderService>();
             _providerService
-                .SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = Postcode, SearchRadius = SearchRadius, SelectedRouteId = RouteId })
+                .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>( a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
             var routePathService = Substitute.For<IRoutePathService>();
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         {
             _providerService
                 .Received(1)
-                .SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = Postcode, SearchRadius = SearchRadius, SelectedRouteId = RouteId });
+                .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>( a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId));
         }
 
         [Fact]
