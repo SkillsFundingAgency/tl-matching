@@ -104,8 +104,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.UpdateOpportunity(dto);
 
             return RedirectToRoute(dto.IsReferral.HasValue && dto.IsReferral.Value ?
-                "CheckAnswers_Get" :
-                "CheckAnswersGap_Get");
+                "CheckAnswersReferrals_Get" :
+                "CheckAnswersProvisionGap_Get");
         }
 
         private OpportunityDto PopulateDto(int opportunityId, EmployerDto employer)

@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var opportunityService = new OpportunityService(mapper, dateTimeProvider, opportunityRepository, _provisionGapRepository, referralRepository);
 
-            var dto = new CheckAnswersGapViewModel
+            var dto = new CheckAnswersProvisionGapViewModel
             {
                 OpportunityId = 1,
                 ConfirmationSelected = true,

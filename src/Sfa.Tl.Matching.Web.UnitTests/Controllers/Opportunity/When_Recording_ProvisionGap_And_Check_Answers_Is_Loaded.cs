@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Check_Answers_Gap_Is_Loaded
+    public class When_Recording_ProvisionGap_And_Check_Answers_Is_Loaded
     {
         private readonly IOpportunityService _opportunityService;
         private const string CreatedBy = "CreatedBy";
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         private const int OpportunityId = 1;
 
-        public When_Check_Answers_Gap_Is_Loaded()
+        public When_Recording_ProvisionGap_And_Check_Answers_Is_Loaded()
         {
             var dto = new ValidOpportunityDtoBuilder().Build();
             _opportunityService = Substitute.For<IOpportunityService>();
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(CreatedBy)
                 .Build();
 
-            _result = controllerWithClaims.CheckAnswersGap(OpportunityId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.CheckAnswersProvisionGap(OpportunityId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -56,64 +56,64 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_OpportunityId_Is_Set()
         {
-            var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
+            var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
             viewModel.OpportunityId.Should().Be(OpportunityId);
         }
 
         [Fact]
         public void Then_EmployerName_Is_Set()
         {
-            var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
+            var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
             viewModel.PlacementInformation.EmployerName.Should().Be("EmployerName");
         }
 
         [Fact]
         public void Then_EmployerContact_Is_Set()
         {
-            var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
+            var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
             viewModel.PlacementInformation.Contact.Should().Be("Contact");
         }
 
         [Fact]
         public void Then_Distance_Is_Set()
         {
-            var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
+            var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
             viewModel.PlacementInformation.Distance.Should().Be(3);
         }
 
         [Fact]
         public void Then_JobTitle_Is_Set()
         {
-            var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
+            var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
             viewModel.PlacementInformation.JobTitle.Should().Be("JobTitle");
         }
 
         [Fact]
         public void Then_PlacementsKnown_Is_Set()
         {
-            var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
+            var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
             viewModel.PlacementInformation.PlacementsKnown.Should().BeTrue();
         }
 
         [Fact]
         public void Then_Placements_Is_Set()
         {
-            var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
+            var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
             viewModel.PlacementInformation.Placements.Should().Be(2);
         }
 
         [Fact]
         public void Then_Postcode_Is_Set()
         {
-            var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
+            var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
             viewModel.PlacementInformation.Postcode.Should().Be("AA1 1AA");
         }
 
         [Fact]
         public void Then_Route_Is_Set()
         {
-            var viewModel = _result.GetViewModel<CheckAnswersGapViewModel>();
-            viewModel.PlacementInformation.Route.Should().Be("Route");
+            var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
+            viewModel.PlacementInformation.RouteName.Should().Be("RouteName");
         }
     }
 }

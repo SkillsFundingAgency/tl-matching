@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var opportunityController = new OpportunityController(_opportunityService);
 
-            _result = opportunityController.Placements(OpportunityId).GetAwaiter().GetResult();
+            _result = opportunityController.PlacementInformationSave(OpportunityId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -60,28 +60,28 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_OpportunityId_Is_Set()
         {
-            var viewModel = _result.GetViewModel<PlacementInformationViewModel>();
+            var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.OpportunityId.Should().Be(OpportunityId);
         }
 
         [Fact]
         public void Then_JobTitle_Is_Set()
         {
-            var viewModel = _result.GetViewModel<PlacementInformationViewModel>();
+            var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.JobTitle.Should().Be(JobTitle);
         }
 
         [Fact]
         public void Then_PlacementsKnown_Is_Set()
         {
-            var viewModel = _result.GetViewModel<PlacementInformationViewModel>();
+            var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.PlacementsKnown.Should().Be(PlacementsKnown);
         }
 
         [Fact]
         public void Then_Placements_Is_Set()
         {
-            var viewModel = _result.GetViewModel<PlacementInformationViewModel>();
+            var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.Placements.Should().Be(Placements);
         }
     }

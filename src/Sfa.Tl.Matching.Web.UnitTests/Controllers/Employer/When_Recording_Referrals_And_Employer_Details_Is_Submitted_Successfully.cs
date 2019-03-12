@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Details_ProvisionGap_Is_Submitted_Successfully
+    public class When_Recording_Referrals_And_Employer_Details_Is_Submitted_Successfully
     {
         private readonly IOpportunityService _opportunityService;
         private readonly OpportunityDto _dto = new OpportunityDto();
@@ -24,12 +24,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         private readonly IActionResult _result;
 
-        public When_Employer_Details_ProvisionGap_Is_Submitted_Successfully()
+        public When_Recording_Referrals_And_Employer_Details_Is_Submitted_Successfully()
         {
             _viewModel.OpportunityId = OpportunityId;
             _viewModel.Contact = Contact;
             _viewModel.ContactEmail = ContactEmail;
             _viewModel.ContactPhone = ContactPhone;
+
+            _dto.IsReferral = true;
 
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunityWithReferrals(OpportunityId).Returns(_dto);
@@ -88,7 +90,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_Result_Is_Redirect_To_Results()
         {
             var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("CheckAnswersGap_Get");
+            redirect?.RouteName.Should().BeEquivalentTo("CheckAnswers_Get");
         }
     }
 }

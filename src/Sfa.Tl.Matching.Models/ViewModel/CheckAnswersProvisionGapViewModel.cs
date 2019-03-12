@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.ViewModel
 {
-    public class CheckAnswersGapViewModel
+    public class CheckAnswersProvisionGapViewModel
     {
         public int OpportunityId { get; set; }
         public bool ConfirmationSelected { get; set; }

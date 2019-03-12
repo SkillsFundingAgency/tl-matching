@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
     {
         public ProvisionGapMapper()
         {
-            CreateMap<CheckAnswersGapViewModel, ProvisionGap>()
+            CreateMap<CheckAnswersProvisionGapViewModel, ProvisionGap>()
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.Opportunity, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())

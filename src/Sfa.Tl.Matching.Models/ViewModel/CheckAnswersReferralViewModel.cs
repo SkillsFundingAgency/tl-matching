@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
-    public class CheckAnswersViewModel
+    public class CheckAnswersReferralViewModel
     {
         public int OpportunityId { get; set; }
         public CheckAnswersPlacementViewModel PlacementInformation { get; set; }
@@ -12,6 +12,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public bool ConfirmationSelected { get; set; }
         public decimal Distance { get; set; }
         public string CreatedBy { get; set; }
-        public List<ProviderViewModel> Providers { get; set; }
+        public List<ReferralsViewModel> Providers { get; set; }
     }
 }

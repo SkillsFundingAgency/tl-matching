@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var opportunityService = new OpportunityService(mapper, dateTimeProvider, _opportunityRepository, provisionGapRepository, referralRepository);
 
-            var dto = new PlacementInformationViewModel
+            var dto = new PlacementInformationSaveViewModel
             {
                 OpportunityId = OpportunityId,
                 JobTitle = JobTitle,

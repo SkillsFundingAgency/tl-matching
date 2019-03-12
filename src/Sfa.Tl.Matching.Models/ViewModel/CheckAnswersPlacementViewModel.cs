@@ -3,7 +3,7 @@
     public class CheckAnswersPlacementViewModel
     {
         public string EmployerName { get; set; }
-        public string Route { get; set; }
+        public string RouteName { get; set; }
         public string Postcode { get; set; }
         public short Distance { get; set; }
         public string JobTitle { get; set; }

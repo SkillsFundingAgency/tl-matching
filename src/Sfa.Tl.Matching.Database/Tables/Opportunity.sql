@@ -13,7 +13,7 @@
 	[EmployerContactPhone] VARCHAR(150) NULL,
 	[UserEmail] VARCHAR(320) NULL,
 	[DropOffStage] SMALLINT NULL,
-	[Providers] INT NULL,
+	[SearchResultProviderCount] INT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 

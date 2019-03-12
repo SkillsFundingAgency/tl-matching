@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
     {
         public ReferralMapper()
         {
-            CreateMap<CheckAnswersViewModel, Referral>()
+            CreateMap<CheckAnswersReferralViewModel, Referral>()
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.Opportunity, config => config.Ignore())
                 .ForMember(m => m.EmailHistory, config => config.Ignore())

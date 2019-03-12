@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Emails_Sent_Is_Loaded
+    public class When_Emails_Sent_Is_Loaded // TODO AU RENAME
     {
         private readonly IOpportunityService _opportunityService;
         private const string CreatedBy = "CreatedBy";
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(CreatedBy)
                 .Build();
 
-            _result = controllerWithClaims.EmailsSent(OpportunityId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.EmailSentReferrals(OpportunityId).GetAwaiter().GetResult();
         }
 
         [Fact]

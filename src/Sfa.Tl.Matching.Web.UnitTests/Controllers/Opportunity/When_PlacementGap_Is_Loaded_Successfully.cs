@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_PlacementGap_Is_Loaded_Successfully
+    public class When_PlacementGap_Is_Loaded_Successfully // TODO AU RENAME
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(CreatedBy)
                 .Build();
 
-            _result = controllerWithClaims.PlacementGap(OpportunityId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.EmailSentProvisionGap(OpportunityId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -47,15 +47,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             viewResult.Should().NotBeNull();
 
-            viewResult?.Model.Should().BeOfType<PlacementGapViewModel>();
+            viewResult?.Model.Should().BeOfType<EmailSentProvisionGapViewModel>();
 
-            ((PlacementGapViewModel)viewResult?.Model)?.EmployerContactName.Should().Be(EmployerContact);
+            ((EmailSentProvisionGapViewModel)viewResult?.Model)?.EmployerContactName.Should().Be(EmployerContact);
         }
 
         [Fact]
         public void Then_EmployerContactName_Is_Set()
         {
-            var viewModel = _result.GetViewModel<PlacementGapViewModel>();
+            var viewModel = _result.GetViewModel<EmailSentProvisionGapViewModel>();
             viewModel.EmployerContactName.Should().Be(EmployerContact);
         }
     }

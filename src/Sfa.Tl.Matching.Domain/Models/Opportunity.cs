@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string JobTitle { get; set; }
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
-        public int? Providers { get; set; }
+        public int? SearchResultProviderCount { get; set; }
         public string EmployerName { get; set; }
         public string EmployerContact { get; set; }
         public string EmployerContactEmail { get; set; }

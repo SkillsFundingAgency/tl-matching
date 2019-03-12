@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.Enums
 {
-    public enum OpportunityStage
+    public enum JourneyStage
     {
         PlacementInformation = 1,
         FindEmployer,

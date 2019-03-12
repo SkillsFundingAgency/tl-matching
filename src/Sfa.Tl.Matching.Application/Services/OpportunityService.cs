@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task SavePlacementInformation(PlacementInformationViewModel dto)
+        public async Task SavePlacementInformation(PlacementInformationSaveViewModel dto)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
             var updatedOpportunity = _mapper.Map(dto, opportunity);
@@ -86,31 +86,31 @@ namespace Sfa.Tl.Matching.Application.Services
             await _opportunityRepository.Update(trackedEntity);
         }
 
-        public Task<int> CreateProvisionGap(CheckAnswersGapViewModel dto)
+        public Task<int> CreateProvisionGap(CheckAnswersProvisionGapViewModel dto)
         {
             var provisionGap = _mapper.Map<ProvisionGap>(dto);
 
             return _provisionGapRepository.Create(provisionGap);
         }
 
-        public Task<int> CreateReferral(CheckAnswersViewModel dto)
+        public Task<int> CreateReferral(CheckAnswersReferralViewModel dto)
         {
             var referral = _mapper.Map<Referral>(dto);
 
             return _referralRepository.Create(referral);
         }
 
-        public List<ProviderViewModel> GetReferrals(int opportunityId)
+        public List<ReferralsViewModel> GetReferrals(int opportunityId)
         {
             var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId,
                 r => r.ProviderVenue, r => r.ProviderVenue.Provider);
 
             var providers = referrals
-                .Select(r => new ProviderViewModel
+                .Select(r => new ReferralsViewModel
                 {
                     Name = r.ProviderVenue.Provider.Name,
                     Postcode = r.ProviderVenue.Postcode,
-                    Distance = r.Distance
+                    DistanceFromEmployer = r.DistanceFromEmployer
                 })
                 .ToList();
 
