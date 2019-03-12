@@ -1,12 +1,14 @@
+@using Sfa.Tl.Matching.Application.Extensions
 @{
-    ViewData["Title"] = "Giv us your feedback";
+    ViewData["Title"] = "Give us your feedback";
     Layout = "_Layout";
 }
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">Give us your feedback</h1>
-        <script id="ss-embed-654114">(function(d,w){var s,ss;ss=d.createElement('script');ss.type='text/javascript';ss.async=true;ss.src=('https:'==d.location.protocol?'https://':'http://')+'www.smartsurvey.co.uk/s/r/embed.aspx?i=562329&c=654114';s=d.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ss, s);})(document,window);</script>
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-1">Give us your feedback</h1>
+        <iframe id="ss-embed-frame" onload="window.parent.parent.scrollTo(0,0)" src="https://www.smartsurvey.co.uk/s/5GJEF/?username= @Context.User.GetUserName()" style="width:100%;height:600px;border:0px;padding-bottom:4px;" frameborder="0"><a href="https://www.smartsurvey.co.uk/s/5GJEF/">Please take our survey</a></iframe>
     </div>
 </div>
 
+<p></p>
