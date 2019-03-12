@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -39,6 +40,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        // TODO - Decide whats happening with this. Add tests
+        [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
+        public IActionResult Feedback()
         {
             return View();
         }

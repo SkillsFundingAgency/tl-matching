@@ -7,14 +7,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Controller_Create_Opportunity_Is_Called
+    public class When_Opportunity_Controller_Create_ProvisionGap_Is_Called
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly OpportunityDto _dto = new OpportunityDto();
         private const string UserName = "username";
         private const string Email = "email@address.com";
 
-        public When_Opportunity_Controller_Create_Opportunity_Is_Called()
+        public When_Opportunity_Controller_Create_ProvisionGap_Is_Called()
         {
             const int opportunityId = 1;
             _opportunityService = Substitute.For<IOpportunityService>();
@@ -26,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddEmail(Email)
                 .Build();
 
-            controllerWithClaims.Create(1, "cv12wt", 10).GetAwaiter().GetResult();
+            controllerWithClaims.CreateProvisionGap(0, 1, "cv12wt", 10).GetAwaiter().GetResult();
         }
 
         [Fact]

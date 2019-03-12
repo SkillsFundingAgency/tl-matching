@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
-    public class PlacementInformationViewModel
+    public class PlacementInformationSaveViewModel
     {
         public int OpportunityId { get; set; }
 

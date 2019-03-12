@@ -149,6 +149,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<Provider>, GenericRepository<Provider>>();
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
+            services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)

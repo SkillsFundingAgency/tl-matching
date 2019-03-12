@@ -7,6 +7,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
@@ -42,30 +43,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
         [Fact]
         public void Then_Data_Import_Type_Is_Not_Null()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<DataImportParametersViewModel>();
             viewModel.ImportType.Should().NotBeEmpty();
         }
 
         [Fact]
         public void Then_Data_Import_Type_Contains_Data()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<DataImportParametersViewModel>();
             viewModel.ImportType.Length.Should().BeGreaterThan(0);
         }
 
         [Fact]
         public void Then_DataImportType_Text_Is_Populated_With_Description()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<DataImportParametersViewModel>();
             viewModel.ImportType[4].Text.Should().Be(DataImportType.QualificationRoutePathMapping.Humanize());
-        }
-
-        private DataImportParametersViewModel GetViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            var viewModel = viewResult?.Model as DataImportParametersViewModel;
-
-            return viewModel;
         }
     }
 }

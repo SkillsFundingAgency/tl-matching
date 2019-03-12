@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -14,17 +16,20 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IRepository<Opportunity> _opportunityRepository;
         private readonly IRepository<ProvisionGap> _provisionGapRepository;
+        private readonly IRepository<Referral> _referralRepository;
 
         public OpportunityService(
             IMapper mapper,
             IDateTimeProvider dateTimeProvider,
             IRepository<Opportunity> opportunityRepository,
-            IRepository<ProvisionGap> provisionGapRepository)
+            IRepository<ProvisionGap> provisionGapRepository,
+            IRepository<Referral> referralRepository)
         {
             _mapper = mapper;
             _dateTimeProvider = dateTimeProvider;
             _opportunityRepository = opportunityRepository;
             _provisionGapRepository = provisionGapRepository;
+            _referralRepository = referralRepository;
         }
 
         public async Task<int> CreateOpportunity(OpportunityDto dto)
@@ -37,13 +42,30 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<OpportunityDto> GetOpportunity(int id)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id);
-
             var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
 
             return dto;
         }
 
-        public async Task SavePlacementInformation(PlacementInformationViewModel dto)
+        public async Task<OpportunityDto> GetOpportunityWithReferrals(int id)
+        {
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id,
+                opp => opp.Referral);
+            var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
+
+            return dto;
+        }
+
+        public async Task<OpportunityDto> GetOpportunityWithRoute(int id)
+        {
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id,
+                opp => opp.Route);
+            var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
+
+            return dto;
+        }
+
+        public async Task SavePlacementInformation(PlacementInformationSaveViewModel dto)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
             var updatedOpportunity = _mapper.Map(dto, opportunity);
@@ -64,16 +86,35 @@ namespace Sfa.Tl.Matching.Application.Services
             await _opportunityRepository.Update(trackedEntity);
         }
 
-        public Task<int> CreateProvisionGap(CheckAnswersViewModel dto)
+        public Task<int> CreateProvisionGap(CheckAnswersProvisionGapViewModel dto)
         {
             var provisionGap = _mapper.Map<ProvisionGap>(dto);
 
             return _provisionGapRepository.Create(provisionGap);
         }
 
-        public Task<int> CreateReferal(int opportunityId)
+        public Task<int> CreateReferral(CheckAnswersReferralViewModel dto)
         {
-            throw new System.NotImplementedException();
+            var referral = _mapper.Map<Referral>(dto);
+
+            return _referralRepository.Create(referral);
+        }
+
+        public List<ReferralsViewModel> GetReferrals(int opportunityId)
+        {
+            var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId,
+                r => r.ProviderVenue, r => r.ProviderVenue.Provider);
+
+            var providers = referrals
+                .Select(r => new ReferralsViewModel
+                {
+                    Name = r.ProviderVenue.Provider.Name,
+                    Postcode = r.ProviderVenue.Postcode,
+                    DistanceFromEmployer = r.DistanceFromEmployer
+                })
+                .ToList();
+
+            return providers;
         }
     }
 }

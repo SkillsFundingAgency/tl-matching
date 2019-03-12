@@ -5,6 +5,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
@@ -50,14 +51,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_OpportunityId_Is_Set()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
             viewModel.OpportunityId.Should().Be(OpportunityId);
         }
 
         [Fact]
         public void Then_EmployerName_Is_Populated()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
             viewModel.EmployerName.Should().Be(EmployerName);
         }
 
@@ -65,14 +66,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetOpportunity(OpportunityId);
-        }
-
-        private EmployerDetailsViewModel GetViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            var viewModel = viewResult?.Model as EmployerDetailsViewModel;
-
-            return viewModel;
         }
     }
 }
