@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_Result_Is_Redirect_To_Results()
         {
             var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("CheckAnswersGap_Get");
+            redirect?.RouteName.Should().BeEquivalentTo("CheckAnswersProvisionGap_Get");
         }
     }
 }
