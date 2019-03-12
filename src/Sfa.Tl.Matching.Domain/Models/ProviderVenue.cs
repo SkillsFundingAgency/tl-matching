@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 
 namespace Sfa.Tl.Matching.Domain.Models
