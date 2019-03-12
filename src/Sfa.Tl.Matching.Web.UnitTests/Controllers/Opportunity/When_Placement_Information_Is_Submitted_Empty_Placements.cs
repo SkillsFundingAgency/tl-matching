@@ -17,14 +17,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             var opportunityService = Substitute.For<IOpportunityService>();
             
-            var viewModel = new PlacementInformationViewModel
+            var viewModel = new PlacementInformationSaveViewModel
             {
                 PlacementsKnown = true
             };
 
             _opportunityController = new OpportunityController(opportunityService);
 
-            _result = _opportunityController.Placements(viewModel).GetAwaiter().GetResult();
+            _result = _opportunityController.PlacementInformationSave(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -37,13 +37,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         [Fact]
         public void Then_Model_State_Has_Empty_Key() =>
-            _opportunityController.ViewData.ModelState.ContainsKey(nameof(PlacementInformationViewModel.Placements))
+            _opportunityController.ViewData.ModelState.ContainsKey(nameof(PlacementInformationSaveViewModel.Placements))
                 .Should().BeTrue();
 
         [Fact]
         public void Then_Model_State_Has_Empty_Error()
         {
-            var modelStateEntry = _opportunityController.ViewData.ModelState[nameof(PlacementInformationViewModel.Placements)];
+            var modelStateEntry = _opportunityController.ViewData.ModelState[nameof(PlacementInformationSaveViewModel.Placements)];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must estimate how many placements the employer wants at this location");
         }
     }

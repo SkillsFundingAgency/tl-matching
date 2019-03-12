@@ -1,0 +1,25 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.EmailsSentViewModel
+@{
+    ViewData["Title"] = "Emails sent";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-8">
+            <h1 class="govuk-panel__title">
+                Emails sent
+            </h1>
+        </div>
+
+        <p class="govuk-body">You must send your own confirmation email to the employer.</p>
+        <div class="govuk-inset-text">
+            Remember to update the employer’s CRM record with any new information.
+        </div>
+
+        <h2 class="govuk-heading-m">What happens next</h2>
+
+        <p class="govuk-body">We expect the provider will contact @Model.EmployerContactName within 2 to 3 working days. The provider will work with @Model.EmployerBusinessName to arrange the terms and details of each placement.</p>
+
+        <a asp-controller="Provider" asp-action="Start" class="govuk-button">Finish</a>
+    </div>
+</div>

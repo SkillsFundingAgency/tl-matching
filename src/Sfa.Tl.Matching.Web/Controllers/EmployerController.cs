@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -88,10 +89,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("employer-details/{id?}", Name = "EmployerDetails_Post")]
         public async Task<IActionResult> Details(EmployerDetailsViewModel viewModel)
         {
+            Validate(viewModel);
+
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var dto = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
+            var dto = await _opportunityService.GetOpportunityWithReferrals(viewModel.OpportunityId);
 
             dto.EmployerContact = viewModel.Contact;
             dto.EmployerContactEmail = viewModel.ContactEmail;
@@ -100,7 +103,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("CheckAnswers_Get");
+            return RedirectToRoute(dto.IsReferral.HasValue && dto.IsReferral.Value ?
+                "CheckAnswersReferrals_Get" :
+                "CheckAnswersProvisionGap_Get");
         }
 
         private OpportunityDto PopulateDto(int opportunityId, EmployerDto employer)
@@ -116,6 +121,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
             };
 
             return dto;
+        }
+
+        private void Validate(EmployerDetailsViewModel viewModel)
+        {
+            if (string.IsNullOrEmpty(viewModel.ContactPhone))
+                return;
+
+            if (!viewModel.ContactPhone.Any(char.IsDigit))
+                ModelState.AddModelError(nameof(viewModel.ContactPhone), "You must enter a number");
+            else if (!Regex.IsMatch(viewModel.ContactPhone, @"^(?:.*\d.*){7,}$"))
+                ModelState.AddModelError(nameof(viewModel.ContactPhone), "You must enter a telephone number that has 7 or more numbers");
         }
     }
 }

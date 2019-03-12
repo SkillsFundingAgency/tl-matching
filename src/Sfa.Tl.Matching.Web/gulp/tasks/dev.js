@@ -1,0 +1,21 @@
+﻿/*Reserved for dev build only gulp tasks */
+
+var gulp = require('gulp');
+var concat = require('gulp-concat');
+var minify = require('gulp-minify');
+var sass = require('gulp-sass');
+var cleanCSS = require('gulp-clean-css');
+var concatCss = require('gulp-concat-css');
+
+const paths = require('../paths.json')
+const sassOptions = require('../sassOptions.js')
+
+
+gulp.task('dev-copy-employer-js', function () {
+    return gulp.src([
+        'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
+        'Frontend/src/javascripts/employer-search.js'
+    ])
+        .pipe(concat('employer-search.min.js'))
+        .pipe(gulp.dest(paths.dist.defaultJs))
+});

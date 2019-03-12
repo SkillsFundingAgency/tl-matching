@@ -12,8 +12,9 @@
     <li>try a different skill area</li>
 </ul>
 <p class="govuk-body">
-    If neither of these work, 
+    If neither of these work,
     <a asp-route="OpportunityCreate_Get"
+       asp-route-searchResultProviderCount="@Model.SearchResults.Results.Count()"
        asp-route-postcode="@Model.SearchParameters.Postcode"
        asp-route-distance="@Model.SearchParameters.SearchRadius"
        asp-route-routeId="@Model.SearchParameters.SelectedRouteId"

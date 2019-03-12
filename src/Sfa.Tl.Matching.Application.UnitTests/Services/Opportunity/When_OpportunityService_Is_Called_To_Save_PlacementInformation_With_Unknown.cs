@@ -30,14 +30,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
             var provisionGapRepository = Substitute.For<IRepository<Domain.Models.ProvisionGap>>();
+            var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             var opportunity = new Domain.Models.Opportunity { Id = OpportunityId, PostCode = PostCode, Distance = Distance, RouteId = RouteId };
 
             _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(opportunity);
 
-            var opportunityService = new OpportunityService(mapper, dateTimeProvider, _opportunityRepository, provisionGapRepository);
+            var opportunityService = new OpportunityService(mapper, dateTimeProvider, _opportunityRepository, provisionGapRepository, referralRepository);
 
-            var dto = new PlacementInformationViewModel
+            var dto = new PlacementInformationSaveViewModel
             {
                 OpportunityId = OpportunityId,
                 JobTitle = JobTitle,
