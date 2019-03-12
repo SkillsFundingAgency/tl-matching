@@ -13,7 +13,7 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
     public class When_OpportunityService_Is_Called_To_Get_Referrals
     {
@@ -29,14 +29,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
-            _referralRepository = Substitute.For<IRepository<Referral>>();
+            _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            _referralRepository.GetMany(Arg.Any<Expression<Func<Referral, bool>>>(),
-                Arg.Any<Expression<Func<Referral, object>>>(),
-                Arg.Any<Expression<Func<Referral, object>>>()).Returns(
-                new List<Referral>
+            _referralRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>(),
+                Arg.Any<Expression<Func<Domain.Models.Referral, object>>>(),
+                Arg.Any<Expression<Func<Domain.Models.Referral, object>>>()).Returns(
+                new List<Domain.Models.Referral>
                 {
-                    new Referral
+                    new Domain.Models.Referral
                     {
                         ProviderVenue = new Domain.Models.ProviderVenue
                         {
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         [Fact]
         public void Then_GetMany_Is_Called_Exactly_Once()
         {
-            _referralRepository.GetMany(Arg.Any<Expression<Func<Referral, bool>>>());
+            _referralRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>());
         }
 
         [Fact]
