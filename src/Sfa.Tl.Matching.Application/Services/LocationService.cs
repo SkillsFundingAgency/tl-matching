@@ -23,17 +23,24 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<bool> IsValidPostCode(string postCode)
         {
             var validateUrl = $"{_matchingConfiguration.PostcodeRetrieverBaseUrl}/{postCode}/validate";
+            
             var response = await _httpClient.GetAsync(validateUrl);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsAsync<bool>();
+            
+            var result = await response.Content.ReadAsStringAsync();
+            
+            return !string.IsNullOrWhiteSpace(result) && !result.Contains("false");
         }
 
         public async Task<PostCodeLookupResultDto> GetGeoLocationData(string postCode)
         {
             var lookupUrl = $"{_matchingConfiguration.PostcodeRetrieverBaseUrl}/{postCode}";
+            
             var responseMessage = await _httpClient.GetAsync(lookupUrl);
+            
             responseMessage.EnsureSuccessStatusCode();
+            
             var response = await responseMessage.Content.ReadAsAsync<PostCodeLookupResponse>();
+            
             return response.result;
         }
     }
