@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
@@ -18,8 +19,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     {
         private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
         private const string JobTitle = "JobTitle";
+        private const short DropOffStage = (short) JourneyStage.FindEmployer;
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
+        private const int SearchResultProviderCount  = 0;
         private const string ModifiedBy = "ModifiedBy";
         private const int OpportunityId = 1;
         private const string PostCode = "ModifiedBy";
@@ -45,9 +48,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             {
                 Id = OpportunityId,
                 JobTitle = JobTitle,
+                DropOffStage = DropOffStage,
                 PlacementsKnown = PlacementsKnown,
                 Placements = Placements,
-                ModifiedBy = ModifiedBy
+                SearchResultProviderCount = SearchResultProviderCount,
+                ModifiedBy = ModifiedBy,
+                Postcode = PostCode,
+                Distance = Distance,
+                RouteId = RouteId
             };
 
             opportunityService.UpdateOpportunity(dto).GetAwaiter().GetResult();
@@ -59,8 +67,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _opportunityRepository.Received(1).Update(Arg.Is<Domain.Models.Opportunity>(opportunity => 
                 opportunity.Id == OpportunityId &&
                 opportunity.JobTitle == JobTitle &&
+                opportunity.DropOffStage == DropOffStage &&
                 opportunity.PlacementsKnown == PlacementsKnown &&
                 opportunity.Placements == Placements &&
+                opportunity.SearchResultProviderCount == SearchResultProviderCount &&
                 opportunity.ModifiedBy == ModifiedBy &&
                 opportunity.PostCode == PostCode &&
                 opportunity.Distance == Distance &&

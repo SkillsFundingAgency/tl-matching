@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddEmail(Email)
                 .Build();
 
-            controllerWithClaims.CreateProvisionGap(1, "cv12wt", 10).GetAwaiter().GetResult();
+            controllerWithClaims.CreateProvisionGap(0, 1, "cv12wt", 10).GetAwaiter().GetResult();
         }
 
         [Fact]
