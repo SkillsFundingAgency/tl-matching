@@ -2,10 +2,8 @@
 {
     public class EmailPlaceholderDto
     {
-        public int ReferralId { get; set; }
-        public int EmailTemplateId { get; set; }
-        public string SentTo { get; set; }
-        public string CopiedTo { get; set; }
-        public string BlindCopiedTo { get; set; }
+        public int EmailHistoryId { get; set; }
+        public string Key { get; set; }
+        public string Value { get; set; }
     }
 }
