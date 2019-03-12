@@ -139,6 +139,8 @@ namespace Sfa.Tl.Matching.Web
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
+            services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
+            services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
             services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
             services.AddTransient<IRepository<Opportunity>, GenericRepository<Opportunity>>();
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
@@ -166,6 +168,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IOpportunityService, OpportunityService>();
             services.AddTransient<IProviderService, ProviderService>();
+            services.AddTransient<IReferralService, ReferralService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<ISearchProvider, DummySearchProvider>();

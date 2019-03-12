@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
     public class When_EmailService_Is_Called_To_Send_Email
     {
         private readonly INotificationsApi _notificationsApi;
-        readonly IRepository<EmailTemplate> _emailTemplateRepository;
+        private readonly IRepository<EmailTemplate> _emailTemplateRepository;
 
         private readonly string _subject;
         private readonly string _toAddress;

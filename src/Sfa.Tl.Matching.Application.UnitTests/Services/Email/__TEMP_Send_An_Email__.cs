@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Dynamic;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using SFA.DAS.Http;
@@ -112,7 +111,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                             provider_name = "Your Provider",
                             route = "Catering and hospitality",
                             venue_postcode = "AA1 1AA",
-                            //venue_postcode = "&lt;ul&gt;&lt;li&gt;item+1&lt;/li&gt;&lt;li&gt;item+2&lt;/li&gt;&lt;/ul&gt;",
                             distance = "3.6",
                             job_role = "Assistant Chef",
                             employer_business_name = "Big Co.",

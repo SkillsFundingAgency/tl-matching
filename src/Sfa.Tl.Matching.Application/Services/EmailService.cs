@@ -16,7 +16,6 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         //TODO: Rename or move these constants
         public const string SystemId = "TLevelsIndustryPlacement";
-        //private const string REPLY_TO_ADDRESS = "digital.apprenticeship.service @notifications.service.gov.uk";
 
         private readonly ILogger<EmailService> _logger;
         private readonly INotificationsApi _notificationsApi;
