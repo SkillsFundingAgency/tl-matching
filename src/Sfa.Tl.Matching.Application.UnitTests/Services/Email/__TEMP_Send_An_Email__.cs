@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Dynamic;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using SFA.DAS.Http;
@@ -13,8 +12,6 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data;
 using Microsoft.EntityFrameworkCore;
-using Notify.Interfaces;
-using Notify.Client;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 {
@@ -51,7 +48,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 return;
             }
 
-            var govNotifyApi = RegisterGovNotifyApi();
             _notificationsApi = RegisterNotificationApi();
 
             var logger = Substitute.For<ILogger<EmailService>>();
@@ -83,7 +79,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                             UserEnquiry = "I have a question",
                             UserEnquiryDetails = "And here is the question"
                         };
-                        govNotifyApi = null;
                         break;
                     case TEST_TEMPLATE:
                         tokens = (dynamic)new
@@ -128,11 +123,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                         throw new Exception("Test template {templateName} was not recognized");
                 }
 
-                var emailService = new EmailService(_notificationsApi, _emailTemplateRepository, logger)
-                {
-                    //TODO: Remove this if it isn't going to be used
-                    GovNotifyApi = govNotifyApi
-                };
+                var emailService = new EmailService(_notificationsApi, _emailTemplateRepository, logger);
 
                 emailService
                     .SendEmail(templateName, toAddress, subject, tokens, replyToAddress)
@@ -148,13 +139,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             var matchingDbContext = new MatchingDbContext(dbOptions);
             return matchingDbContext;
-        }
-
-        private INotificationClient RegisterGovNotifyApi()
-        {
-            return !string.IsNullOrEmpty(_configuration.GovNotifyApiKey) ?
-                new NotificationClient(_configuration.GovNotifyApiKey)
-                : null;
         }
 
         private INotificationsApi RegisterNotificationApi()
