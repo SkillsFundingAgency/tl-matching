@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
@@ -44,9 +45,17 @@ namespace Sfa.Tl.Matching.Functions
         {
             var saveProximityData = new SaveProximityData { PostCode = getProximityData.PostCode, UkPrn = getProximityData.UkPrn };
 
-            var geoLocationData = await locationService.GetGeoLocationData(getProximityData.PostCode);
+            try
+            {
+                var geoLocationData = await locationService.GetGeoLocationData(getProximityData.PostCode);
+                return mapper.Map(geoLocationData, saveProximityData);
+            }
+            catch (Exception e)
+            {
+                logger.LogError($"Error Getting Geo Location Data for PostCode: { getProximityData.PostCode }, Please Check the PostCode, Internal Error Message {e}");
+            }
 
-            return mapper.Map(geoLocationData, saveProximityData);
+            return saveProximityData;
         }
 
         [FunctionName("SaveProximityData")]
@@ -58,7 +67,17 @@ namespace Sfa.Tl.Matching.Functions
             [Inject]IRepository<Domain.Models.ProviderVenue> providerVenueRepository
         )
         {
+            if (saveProximityData.UkPrn <= 0 ||
+                string.IsNullOrWhiteSpace(saveProximityData.PostCode) ||
+                string.IsNullOrWhiteSpace(saveProximityData.Longitude) ||
+                string.IsNullOrWhiteSpace(saveProximityData.Latitude))
+            {
+                logger.LogError($"Error Saving Geo Location Data for UkPrn: { saveProximityData.UkPrn }, Please Check the PostCode.");
+                return;
+            }
+
             var providerVenue = await providerVenueRepository.GetSingleOrDefault(venue => venue.Provider.UkPrn == saveProximityData.UkPrn && venue.Postcode == saveProximityData.PostCode);
+
             if (providerVenue == null) return;
 
             providerVenue = mapper.Map(saveProximityData, providerVenue);
