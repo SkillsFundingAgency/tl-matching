@@ -3,18 +3,18 @@ using GeoAPI.Geometries;
 using NetTopologySuite;
 using Sfa.Tl.Matching.Domain.Models;
 
-namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider.Builders
+namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider.Builders
 {
     public class ValidProviderVenueSearchBuilder
     {
-        public ProviderVenue Build()
+        public Domain.Models.ProviderVenue Build()
         {
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
             var location = geometryFactory.CreatePoint(new Coordinate(double.Parse("52.400997"), double.Parse("-1.508122")));
 
-            return new ProviderVenue
+            return new Domain.Models.ProviderVenue
             {
-                Provider = new Provider
+                Provider = new Domain.Models.Provider
                 {
                     UkPrn = 10203040,
                     Name = "SQL Search Provider",
@@ -31,18 +31,18 @@ namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider.Build
                 Longitude = -1.508122m,
                 Location = location,
                 Source = "Test",
-                ProviderQualification = new List<ProviderQualification>
+                ProviderQualification = new List<Domain.Models.ProviderQualification>
                 {
-                    new ProviderQualification
+                    new Domain.Models.ProviderQualification
                     {
                         Qualification = new Qualification
                         {
                             LarsId = "12345678",
                             Title = "Qualification Title",
                             ShortTitle = "Short Title",
-                            QualificationRoutePathMapping = new List<QualificationRoutePathMapping>
+                            QualificationRoutePathMapping = new List<Domain.Models.QualificationRoutePathMapping>
                             {
-                                new QualificationRoutePathMapping
+                                new Domain.Models.QualificationRoutePathMapping
                                 {
                                     PathId = 16,
                                     Source = "Test"

@@ -5,20 +5,20 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider.Builders;
+using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider.Builders;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
+namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider
 {
     public class When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters : IDisposable
     {
         private readonly IEnumerable<ProviderVenueSearchResultDto> _results;
         private readonly MatchingDbContext _dbContext;
-        private readonly ProviderVenue _providerVenue;
+        private readonly Domain.Models.ProviderVenue _providerVenue;
 
         public When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters()
         {
@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
             _dbContext.Add(_providerVenue);
             _dbContext.SaveChanges();
 
-            var provider = new Data.SearchProviders.SqlSearchProvider(logger, new GenericRepository<QualificationRoutePathMapping>(new NullLogger<GenericRepository<QualificationRoutePathMapping>>(), _dbContext), new GenericRepository<ProviderVenue>(new NullLogger<GenericRepository<ProviderVenue>>(), _dbContext));
+            var provider = new Data.SearchProviders.SqlSearchProvider(logger, new GenericRepository<Domain.Models.QualificationRoutePathMapping>(new NullLogger<GenericRepository<Domain.Models.QualificationRoutePathMapping>>(), _dbContext), new GenericRepository<Domain.Models.ProviderVenue>(new NullLogger<GenericRepository<Domain.Models.ProviderVenue>>(), _dbContext));
 
             _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "CV1 2WT", SearchRadius = 5, SelectedRouteId = 7, Latitude = "52.400997", Longitude = "-1.508122" }).GetAwaiter().GetResult();
         }
@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
     {
         private readonly IEnumerable<ProviderVenueSearchResultDto> _results;
         private readonly MatchingDbContext _dbContext;
-        private readonly ProviderVenue _providerVenue;
+        private readonly Domain.Models.ProviderVenue _providerVenue;
 
         public When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_Distance_Greater_Then_Search_Radius()
         {
@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
             _dbContext.Add(_providerVenue);
             _dbContext.SaveChanges();
 
-            var provider = new Data.SearchProviders.SqlSearchProvider(logger, new GenericRepository<QualificationRoutePathMapping>(new NullLogger<GenericRepository<QualificationRoutePathMapping>>(), _dbContext), new GenericRepository<ProviderVenue>(new NullLogger<GenericRepository<ProviderVenue>>(), _dbContext));
+            var provider = new Data.SearchProviders.SqlSearchProvider(logger, new GenericRepository<Domain.Models.QualificationRoutePathMapping>(new NullLogger<GenericRepository<Domain.Models.QualificationRoutePathMapping>>(), _dbContext), new GenericRepository<Domain.Models.ProviderVenue>(new NullLogger<GenericRepository<Domain.Models.ProviderVenue>>(), _dbContext));
 
             _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "MK1 1AD", SearchRadius = 5, SelectedRouteId = 7, Latitude = "52.010709", Longitude = "-0.736412" }).GetAwaiter().GetResult();
         }
@@ -106,7 +106,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
     {
         private readonly IEnumerable<ProviderVenueSearchResultDto> _results;
         private readonly MatchingDbContext _dbContext;
-        private readonly ProviderVenue _providerVenue;
+        private readonly Domain.Models.ProviderVenue _providerVenue;
 
         public When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_No_Provider_For_Selected_Route()
         {
@@ -118,7 +118,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
             _dbContext.Add(_providerVenue);
             _dbContext.SaveChanges();
 
-            var provider = new Data.SearchProviders.SqlSearchProvider(logger, new GenericRepository<QualificationRoutePathMapping>(new NullLogger<GenericRepository<QualificationRoutePathMapping>>(), _dbContext), new GenericRepository<ProviderVenue>(new NullLogger<GenericRepository<ProviderVenue>>(), _dbContext));
+            var provider = new Data.SearchProviders.SqlSearchProvider(logger, new GenericRepository<Domain.Models.QualificationRoutePathMapping>(new NullLogger<GenericRepository<Domain.Models.QualificationRoutePathMapping>>(), _dbContext), new GenericRepository<Domain.Models.ProviderVenue>(new NullLogger<GenericRepository<Domain.Models.ProviderVenue>>(), _dbContext));
 
             _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "MK1 1AD", SearchRadius = 5, SelectedRouteId = 1, Latitude = "52.010709", Longitude = "-0.736412" }).GetAwaiter().GetResult();
         }
@@ -155,7 +155,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.SearchProviders.SqlSearchProvider
             var logger = Substitute.For<ILogger<Data.SearchProviders.SqlSearchProvider>>();
 
             var dbContext = new TestConfiguration().GetDbContext();
-            _provider = new Data.SearchProviders.SqlSearchProvider(logger, new GenericRepository<QualificationRoutePathMapping>(new NullLogger<GenericRepository<QualificationRoutePathMapping>>(), dbContext), new GenericRepository<ProviderVenue>(new NullLogger<GenericRepository<ProviderVenue>>(), dbContext));
+            _provider = new Data.SearchProviders.SqlSearchProvider(logger, new GenericRepository<Domain.Models.QualificationRoutePathMapping>(new NullLogger<GenericRepository<Domain.Models.QualificationRoutePathMapping>>(), dbContext), new GenericRepository<Domain.Models.ProviderVenue>(new NullLogger<GenericRepository<Domain.Models.ProviderVenue>>(), dbContext));
         }
 
         [Fact]

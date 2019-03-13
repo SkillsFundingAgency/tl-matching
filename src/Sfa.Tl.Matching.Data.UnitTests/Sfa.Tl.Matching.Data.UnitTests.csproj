@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SearchProviders\**" />
+    <EmbeddedResource Remove="SearchProviders\**" />
+    <None Remove="SearchProviders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
@@ -26,12 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="appsettings.test.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
