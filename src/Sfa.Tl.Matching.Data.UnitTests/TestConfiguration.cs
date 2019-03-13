@@ -1,12 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Sfa.Tl.Matching.Application.Configuration;
-using Sfa.Tl.Matching.Data;
 
-namespace Sfa.Tl.Matching.Application.IntegrationTests
+namespace Sfa.Tl.Matching.Data.UnitTests
 {
     public class TestConfiguration
     {
@@ -36,13 +32,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests
 
             var matchingDbContext = new MatchingDbContext(dbOptions);
             return matchingDbContext;
-        }
-
-        public static string GetTestExecutionDirectory()
-        {
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
-            return Path.GetDirectoryName(codeBasePath);
         }
     }
 }

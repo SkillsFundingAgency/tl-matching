@@ -17,17 +17,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Longitude, o => o.MapFrom(s => s.Longitude.ToDecimal()))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver>())
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => "System"))
-                .ForMember(m => m.Id, o => o.Ignore())
-                .ForMember(m => m.Postcode, o => o.Ignore())
-                .ForMember(m => m.Referral, o => o.Ignore())
-                .ForMember(m => m.Source, o => o.Ignore())
-                .ForMember(m => m.Town, o => o.Ignore())
-                .ForMember(m => m.County, o => o.Ignore())
-                .ForMember(m => m.Provider, o => o.Ignore())
-                .ForMember(m => m.ProviderId, o => o.Ignore())
-                .ForMember(m => m.ProviderQualification, o => o.Ignore())
-                .ForMember(m => m.CreatedBy, o => o.Ignore())
-                .ForMember(m => m.CreatedOn, o => o.Ignore())
+                .ForAllOtherMembers(o => o.Ignore())
                 ;
         }
 

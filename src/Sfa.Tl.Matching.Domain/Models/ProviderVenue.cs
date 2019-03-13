@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using NetTopologySuite.Geometries;
+using GeoAPI.Geometries;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
@@ -17,7 +16,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public virtual ICollection<ProviderQualification> ProviderQualification { get; set; }
         public virtual ICollection<Referral> Referral { get; set; }
 
-        [NotMapped]
-        public Point Location { get; set; }
+        public IPoint Location { get; set; }
     }
 }

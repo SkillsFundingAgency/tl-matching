@@ -61,8 +61,10 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(_configuration.SqlConnectionString,
-                    builder => builder.UseNetTopologySuite()
-                        .EnableRetryOnFailure()));
+                    builder => 
+                        builder
+                            .EnableRetryOnFailure()
+                            .UseNetTopologySuite()));
 
             services.AddSingleton(_configuration);
             services.AddSingleton(new HttpClient());
