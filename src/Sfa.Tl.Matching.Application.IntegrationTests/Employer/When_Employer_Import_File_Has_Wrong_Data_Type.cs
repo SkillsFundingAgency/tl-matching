@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
         public When_Employer_Import_File_Has_Wrong_Data_Type(EmployerTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            _testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
         }
 
         [Fact]

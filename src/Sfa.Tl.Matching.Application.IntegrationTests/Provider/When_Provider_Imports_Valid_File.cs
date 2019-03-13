@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
         public When_Provider_Imports_Valid_File(ProviderTestFixture testFixture)
         {
             _testFixture = testFixture;
-            var testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            var testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
             _testFixture.ResetData();
 
             var filePath = Path.Combine(testExecutionDirectory, DataFilePath);

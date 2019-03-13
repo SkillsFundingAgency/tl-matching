@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
         public When_ProviderQualification_Imports_File_With_Invalid_Format(ProviderQualificationTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            _testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
         }
 
         [Fact]
