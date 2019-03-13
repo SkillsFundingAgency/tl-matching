@@ -1,14 +1,48 @@
 "use strict";
 
 var employer = (function () {
+    var businessNameMinLength = 2;
+
     accessibleAutocomplete.enhanceSelectElement({
         defaultValue: "",
         autoSelect: true,
         selectElement: document.querySelector("#BusinessName"),
-        minLength: 2,
+        minLength: businessNameMinLength,
         source: search,
         name: "BusinessName",
         onConfirm: setSelectedEmployerId
+    });
+
+    $("#continue").click(function () {
+        var currentBusinessName = document.querySelector("#BusinessName").value;
+        if (currentBusinessName.length < businessNameMinLength) {
+            $("#SelectedEmployerId").val("");
+            $("#findEmployer").submit();
+            return;
+        }
+
+        var selectedEmployerId = $("#SelectedEmployerId").val();
+        if (selectedEmployerId > 0) {
+            $("#findEmployer").submit();
+            return;
+        }
+
+        var employerNamesWithIds = $("#employerNamesWithIds").val();
+        if (employerNamesWithIds === "") {
+            $("#findEmployer").submit();
+            return;
+        }
+
+        var employerNamesWithIdsCommaSplit = employerNamesWithIds.split(",");
+        $.each(employerNamesWithIdsCommaSplit, function () {
+            var splitValues = this.split(":");
+            $.each(splitValues,
+                function () {
+                    $("#SelectedEmployerId").val(splitValues[1]);
+                    return false;
+                });
+            return false;
+        });
     });
 
     function search(query, populateResults) {

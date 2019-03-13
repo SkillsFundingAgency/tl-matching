@@ -28,6 +28,18 @@ steps:
     projects: 'src/**/*.csproj'
     noCache: true
 
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    workingDir: src/Sfa.Tl.Matching.Web/
+    verbose: false
+
+- task: Gulp@0
+  displayName: gulp
+  inputs:
+    gulpFile: src/Sfa.Tl.Matching.Web/gulpfile.js
+    targets: default
+
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
