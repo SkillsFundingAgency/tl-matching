@@ -88,6 +88,11 @@ namespace Sfa.Tl.Matching.Web
                 app.UseHsts();
             }
 
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(opts => opts.NoReferrer());
+            app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
+            app.UseXfo(xfo => xfo.Deny());
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
