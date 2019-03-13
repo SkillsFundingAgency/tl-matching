@@ -92,13 +92,15 @@ namespace Sfa.Tl.Matching.Web
             app.UseReferrerPolicy(opts => opts.NoReferrer());
             app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
             app.UseXfo(xfo => xfo.Deny());
+            app.UseCsp(options => options
+                .DefaultSources(s => s.Self())
+                .ScriptSources(s => s.Self().UnsafeInline()));
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseAuthentication();
 
-            //app.UseMvc();
             app.UseMvcWithDefaultRoute();
             app.UseCookiePolicy();
         }
