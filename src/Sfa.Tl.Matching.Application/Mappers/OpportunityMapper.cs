@@ -14,6 +14,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ProvisionGap, config => config.Ignore())
                 .ForMember(m => m.Referral, config => config.Ignore())
                 .ForMember(m => m.Route, config => config.Ignore())
+                .ForMember(m => m.EmailHistory, config => config.Ignore())
                 .ForAllMembers(expression => expression.Condition((src, dest, sourceMember) => sourceMember != null && !sourceMember.GetType().IsDefaultValue(sourceMember)));
 
             CreateMap<Opportunity, OpportunityDto>()

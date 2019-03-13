@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string UserEmail { get; set; }
 
         public virtual Route Route { get; set; }
+        public virtual ICollection<EmailHistory> EmailHistory { get; set; }
         public virtual ICollection<ProvisionGap> ProvisionGap { get; set; }
         public virtual ICollection<Referral> Referral { get; set; }
     }
