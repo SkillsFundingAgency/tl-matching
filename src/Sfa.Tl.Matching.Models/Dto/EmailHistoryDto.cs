@@ -2,7 +2,7 @@
 {
     public class EmailHistoryDto
     {
-        public int ReferralId { get; set; }
+        public int OpportunityId { get; set; }
         public int EmailTemplateId { get; set; }
         public string SentTo { get; set; }
         public string CopiedTo { get; set; }

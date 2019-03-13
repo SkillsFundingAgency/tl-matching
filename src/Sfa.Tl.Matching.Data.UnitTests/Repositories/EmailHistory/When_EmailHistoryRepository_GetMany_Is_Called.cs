@@ -37,8 +37,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory
             _result.First().Id.Should().Be(1);
         
         [Fact]
-        public void Then_EmailHistory_ReferralId_Is_Returned() =>
-            _result.First().ReferralId.Should().Be(1);
+        public void Then_EmailHistory_OpportunityId_Is_Returned() =>
+            _result.First().OpportunityId.Should().Be(1);
 
         [Fact]
         public void Then_EmailHistory_EmailTemplateId_Is_Returned() =>

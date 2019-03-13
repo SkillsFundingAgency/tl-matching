@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailTemplate
         
         [Fact]
         public void Then_EmailTemplate_TemplateId_Is_Returned() =>
-            _result.TemplateId.Should().BeEquivalentTo("TestTemplateId");
+            _result.TemplateId.Should().BeEquivalentTo("1777EF96-70F5-4537-A6B1-41E8A0D8E0EC");
 
         [Fact]
         public void Then_EmailTemplate_TemplateName_Is_Returned() =>

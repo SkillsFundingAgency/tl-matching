@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory.Builders
             new Domain.Models.EmailHistory
             {
                 Id = 1,
-                ReferralId = 1,
+                OpportunityId = 1,
                 EmailTemplateId  = 2,
                 SentTo = "recipient@test.com",
                 CopiedTo = "copy@test.com",
@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory.Builders
             new Domain.Models.EmailHistory
             {
                 Id = 2,
-                ReferralId = 3,
+                OpportunityId = 3,
                 EmailTemplateId  = 4,
                 SentTo = "recipient@test.com",
                 CopiedTo = "copy@test.com",

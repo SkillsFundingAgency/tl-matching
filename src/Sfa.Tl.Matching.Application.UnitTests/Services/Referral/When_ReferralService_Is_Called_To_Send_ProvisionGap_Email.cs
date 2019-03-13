@@ -15,7 +15,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 {
-    public class When_ReferralService_Is_Called_To_Send_Provider_Email
+    public class When_ReferralService_Is_Called_To_Send_ProvisionGap_Email
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IEmailService _emailService;
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
         private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
 
-        public When_ReferralService_Is_Called_To_Send_Provider_Email()
+        public When_ReferralService_Is_Called_To_Send_ProvisionGap_Email()
         {
             _configuration = new MatchingConfiguration();
             _notificationsApi = Substitute.For<INotificationsApi>();
@@ -49,13 +49,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .GetSingleOrDefault(
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(), 
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>[]>())
-                .Returns(new ValidOpportunityWithReferralBuilder().Build());
+                .Returns(new ValidOpportunityWithProvisionGapBuilder().Build());
 
             var referralService = new ReferralService(_emailService, 
                 _emailHistoryRepository,_emailPlaceholderRepository,_emailTemplateRepository, _opportunityRepository,
                 mapper, logger);
 
-            referralService.SendProviderEmail(1).GetAwaiter().GetResult();
+            referralService.SendProvisionGapEmail(1).GetAwaiter().GetResult();
         }
 
         [Fact]
