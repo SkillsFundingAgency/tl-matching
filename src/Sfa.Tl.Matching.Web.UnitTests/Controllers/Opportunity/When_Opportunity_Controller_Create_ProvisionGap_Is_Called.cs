@@ -19,7 +19,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.CreateOpportunity(Arg.Any<OpportunityDto>()).Returns(opportunityId);
 
-            var opportunityController = new OpportunityController(_opportunityService);
+            var referralService = Substitute.For<IReferralService>();
+
+            var opportunityController = new OpportunityController(_opportunityService, referralService);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(UserName)
                 .AddEmail(Email)

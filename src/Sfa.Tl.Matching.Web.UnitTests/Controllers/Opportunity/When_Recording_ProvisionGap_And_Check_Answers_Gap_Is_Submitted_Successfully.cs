@@ -19,8 +19,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Recording_ProvisionGap_And_Check_Answers_Gap_Is_Submitted_Successfully()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
+            var referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(_opportunityService);
+            var opportunityController = new OpportunityController(_opportunityService, referralService);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(CreatedBy)
                 .Build();

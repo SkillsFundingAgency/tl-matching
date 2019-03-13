@@ -53,22 +53,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SendProviderEmail(int opportunityId)
         {
-            /*
-              Get opportunity with referral or
-              Get opportunity with providers
+            //TODO: What is ReplyToAddress?
 
-              Create list of placeholder dtos
-              
-              Pass placeholder dtos or convert to tokens
-
-              Save placeholders and email history
-
-              //TODO: What is ReplyToAddress?
-            */
-
-            var templateName = ProviderReferralEmailTemplateName;
-
-            var emailTemplate = await GetEmailTemplate(templateName);
+            var emailTemplate = await GetEmailTemplate(ProviderReferralEmailTemplateName);
             var opportunity = await GetOpportunity(opportunityId);
 
             //TODO: This should be a loop over referrals#
@@ -94,19 +81,24 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var tokens = ConvertPlaceholdersToTokens(placeholders);
 
-            _emailService.SendEmail(templateName,
+            await _emailService.SendEmail(emailTemplate.TemplateName,
                 providerEmailAddress,
                 ProviderReferralEmailSubject,
                 tokens,
                 ReplyToAddress);
-            
+
             await SaveEmailHistory(emailTemplate, placeholders, opportunity, providerEmailAddress);
         }
 
         public async Task SendProvisionGapEmail(int opportunityId)
         {
-            var templateName = ProvisionGapReportEmailSubject;
-            var emailTemplate = await GetEmailTemplate(templateName);
+            var emailTemplate = await GetEmailTemplate(ProvisionGapReportEmailTemplateName);
+
+            if (emailTemplate == null)
+            {
+                return;
+            }
+
             var opportunity = await GetOpportunity(opportunityId);
 
             var placeholders = new List<EmailPlaceholderDto>
@@ -116,7 +108,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var tokens = ConvertPlaceholdersToTokens(placeholders);
             var providerEmailAddress = "";
 
-            _emailService.SendEmail(templateName,
+            await _emailService.SendEmail(emailTemplate.TemplateName,
                 providerEmailAddress,
                 ProviderReferralEmailSubject,
                 tokens,
@@ -129,8 +121,6 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var emailPlaceholders = _mapper.Map<IList<EmailPlaceholder>>(placeholders);
             _logger.LogInformation($"Saving {emailPlaceholders.Count} { nameof(EmailPlaceholder) }.");
-
-            //await _emailPlaceholderRepository.CreateMany(emailPlaceholders);
 
             var emailHistory = new EmailHistory
             {

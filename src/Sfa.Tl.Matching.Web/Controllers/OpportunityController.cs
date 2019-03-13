@@ -12,10 +12,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;
+        private readonly IReferralService _referralService;
 
-        public OpportunityController(IOpportunityService opportunityService)
+        public OpportunityController(IOpportunityService opportunityService, IReferralService referralService)
         {
             _opportunityService = opportunityService;
+            _referralService = referralService;
         }
 
         [Route("{searchResultProviderCount}-opportunities-within-{distance}-miles-of-{postcode}-for-route-{routeId}", Name = "OpportunityCreate_Get")]
@@ -130,6 +132,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> EmailSentProvisionGap(int id)
         {
             var opportunity = await _opportunityService.GetOpportunity(id);
+
+            await _referralService.SendProvisionGapEmail(id);
 
             return View(new EmailSentProvisionGapViewModel
             {

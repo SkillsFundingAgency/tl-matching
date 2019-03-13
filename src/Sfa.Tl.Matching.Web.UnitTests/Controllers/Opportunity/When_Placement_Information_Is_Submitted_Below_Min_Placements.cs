@@ -16,14 +16,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Placement_Information_Is_Submitted_Below_Min_Placements()
         {
             var opportunityService = Substitute.For<IOpportunityService>();
-            
+            var referralService = Substitute.For<IReferralService>();
+
             var viewModel = new PlacementInformationSaveViewModel
             {
                 PlacementsKnown = true,
                 Placements = 0
             };
 
-            _opportunityController = new OpportunityController(opportunityService);
+            _opportunityController = new OpportunityController(opportunityService, referralService);
 
             _result = _opportunityController.PlacementInformationSave(viewModel).GetAwaiter().GetResult();
         }
