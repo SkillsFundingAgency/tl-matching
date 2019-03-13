@@ -48,7 +48,12 @@ namespace Sfa.Tl.Matching.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(30));
+            services.AddAntiforgery(options =>
+            {
+                options.Cookie.Name = "tlevels-x-csrf";
+                options.FormFieldName = "_csrfToken";
+                options.HeaderName = "X-XSRF-TOKEN";
+            });
 
             services.AddMvc(config =>
             {
@@ -56,6 +61,7 @@ namespace Sfa.Tl.Matching.Web
                     .RequireAuthenticatedUser()
                     .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
+                config.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -83,13 +89,19 @@ namespace Sfa.Tl.Matching.Web
                 app.UseHsts();
             }
 
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(opts => opts.NoReferrer());
+            app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
+            app.UseXfo(xfo => xfo.Deny());
+            app.UseCsp(options => options
+                .DefaultSources(s => s.Self())
+                .ScriptSources(s => s.Self().UnsafeInline()));
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSession();
 
             app.UseAuthentication();
 
-            //app.UseMvc();
             app.UseMvcWithDefaultRoute();
             app.UseCookiePolicy();
         }

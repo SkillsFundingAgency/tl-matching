@@ -7,7 +7,6 @@
 @section backButton{
     <a asp-route="PlacementInformationSave_Get" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
     <a asp-controller="Provider" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3"> Finish and start again </a>
-
 }
 
 <div class="govuk-grid-row">
@@ -25,7 +24,7 @@
                 </div>
             </div>
         }
-        <form asp-action="FindEmployer" novalidate>
+        <form asp-action="FindEmployer" id="findEmployer" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
 
             <div class="govuk-form-group" sfa-validation-for="BusinessName" sfa-validationerror-class="govuk-form-group--error">
@@ -48,7 +47,7 @@
 
             </div>
 
-            <button type="submit" class="govuk-button">Continue</button>
+            <button id="continue" class="govuk-button">Continue</button>
         </form>
     </div>
 </div>

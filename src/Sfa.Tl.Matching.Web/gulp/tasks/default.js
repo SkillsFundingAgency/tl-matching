@@ -58,7 +58,7 @@ gulp.task('sass', () => gulp
     .pipe(sass(sassOptions))
     .pipe(gulp.dest(paths.mid.default)));
 
-gulp.task('merge-css', function () {
+gulp.task('merge-css', ['sass'], function () {
     return gulp.src([
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.css',
         "Frontend/src/stylesheets/css/*.css"
