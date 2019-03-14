@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.EmployerContactEmail, config => config.Ignore())
                 .ForMember(m => m.EmployerContactPhone, config => config.Ignore())
                 .ForMember(m => m.UserEmail, config => config.Ignore())
+                .ForMember(m => m.ConfirmationSelected, config => config.Ignore())
                 .ForMember(m => m.DropOffStage, config => config.Ignore())
                 .ForMember(m => m.Route, config => config.Ignore())
                 .ForMember(m => m.SearchResultProviderCount, config => config.Ignore())

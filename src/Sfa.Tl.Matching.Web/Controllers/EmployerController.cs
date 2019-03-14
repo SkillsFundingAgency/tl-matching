@@ -48,17 +48,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{id?}", Name = "EmployerFind_Post")]
         public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
-            if (viewModel.SelectedEmployerId == 0 || 
-                await _employerService.GetEmployer(viewModel.SelectedEmployerId) == null)
+            if (viewModel.SelectedEmployerId == 0)
             {
                 ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
                 return View(viewModel);
             }
 
+            var employer = await _employerService.GetEmployer(viewModel.SelectedEmployerId);
+            if (employer == null)
+                ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
+
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var dto = PopulateEmployerNameDto(viewModel);
+            var dto = PopulateEmployerNameDto(viewModel, employer);
 
             await _opportunityService.SaveEmployerName(dto);
 
@@ -103,18 +106,21 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 "CheckAnswersProvisionGap_Get");
         }
 
-        private EmployerNameDto PopulateEmployerNameDto(FindEmployerViewModel employer)
+        private EmployerNameDto PopulateEmployerNameDto(FindEmployerViewModel viewModel, EmployerDto employer)
         {
             var dto = new EmployerNameDto
             {
-                OpportunityId = employer.OpportunityId,
-                CompanyName = employer.BusinessName, // TODO AU Should this also inclue the Aka?
+                OpportunityId = viewModel.OpportunityId,
+                CompanyName = employer.CompanyName, // TODO AU Should this also inclue the Aka?
+                EmployerContact = employer.PrimaryContact,
+                EmployerContactEmail = employer.Email,
+                EmployerContactPhone = employer.Phone,
                 ModifiedBy = HttpContext.User.GetUserName()
             };
 
             return dto;
         }
-
+        
         private EmployerDetailDto PopulateEmployerDetailsDto(EmployerDetailsViewModel employer)
         {
             var dto = new EmployerDetailDto

@@ -33,8 +33,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dto = new CheckAnswersProvisionGapViewModel
             {
                 OpportunityId = 1,
-                ConfirmationSelected = true,
-                CreatedBy = "Test"
+                ConfirmationSelected = true
             };
 
             _result = opportunityService.CreateProvisionGap(dto).GetAwaiter().GetResult();
@@ -43,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_Create_Is_Called_Exactly_Once()
         {
-            _provisionGapRepository.Received(1).Create(Arg.Is<ProvisionGap>(p => p.OpportunityId == 1 && p.ConfirmationSelected == true && p.CreatedBy == "Test"));
+            _provisionGapRepository.Received(1).Create(Arg.Is<ProvisionGap>(p => p.OpportunityId == 1));
         }
 
         [Fact]

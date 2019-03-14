@@ -20,6 +20,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string EmployerContactEmail { get; set; }
         public string EmployerContactPhone { get; set; }
         public string UserEmail { get; set; }
+        public bool? ConfirmationSelected { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
