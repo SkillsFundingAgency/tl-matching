@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
 
         public When_Employer_Imports_File_With_Invalid_Format(EmployerTestFixture testFixture)
         {
-            var testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            var testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
 
             var filePath = Path.Combine(testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))

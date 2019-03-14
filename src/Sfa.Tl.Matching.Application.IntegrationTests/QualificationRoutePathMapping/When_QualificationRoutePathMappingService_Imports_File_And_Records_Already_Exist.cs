@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
         public When_QualificationRoutePathMappingService_Imports_File_And_Records_Already_Exist(QualificationRoutePathMappingServiceTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            _testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
             _testFixture.ResetData(LarsId);
             _testFixture.CreateQualificationRoutePathMapping(LarsId);
         }

@@ -36,8 +36,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
             var pathRepository = new GenericRepository<Path>(loggerPathRepository, MatchingDbContext);
             var dataValidator = new QualificationRoutePathMappingDataValidator(qualificationRoutePathMappingRepository, qualificationRepository, pathRepository);
             var dataParser = new QualificationRoutePathMappingDataParser();
-
-            var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var nullDataProcessor = new NullDataProcessor<QualificationRoutePathMappingFileImportDto>();
+            var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator, nullDataProcessor);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);

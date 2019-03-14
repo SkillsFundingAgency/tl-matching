@@ -138,10 +138,16 @@ namespace Sfa.Tl.Matching.Web
             services.AddAutoMapper();
 
             //Inject DbContext
-            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString));
+            services.AddDbContext<MatchingDbContext>(options => 
+                options.UseSqlServer(_configuration.SqlConnectionString, 
+                    builder => builder.UseNetTopologySuite()
+                                      .EnableRetryOnFailure()));
 
             //Inject services
             services.AddSingleton(_configuration);
+            services.AddHttpClient<ILocationService, LocationService>();
+            services.AddTransient<ISearchProvider, SqlSearchProvider>();
+            services.AddTransient<IMessageQueueService, MessageQueueService>();
 
             RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);
@@ -184,7 +190,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IReferralService, ReferralService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            services.AddTransient<ISearchProvider, DummySearchProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
         }

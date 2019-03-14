@@ -8,7 +8,8 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     public interface IOpportunityService
     {
         Task<int> CreateOpportunity(OpportunityDto opportunityDto);
-        Task UpdateOpportunity(OpportunityDto opportunityDto);
+        Task SaveEmployerName(EmployerNameDto dto);
+        Task SaveEmployerDetail(EmployerDetailDto dto);
         Task<OpportunityDto> GetOpportunity(int id);
         Task<OpportunityDto> GetOpportunityWithRoute(int id);
         Task<int> CreateProvisionGap(CheckAnswersProvisionGapViewModel dto);

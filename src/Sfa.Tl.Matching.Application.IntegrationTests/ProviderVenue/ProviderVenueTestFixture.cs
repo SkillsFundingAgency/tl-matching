@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.ProviderVenue;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -33,8 +34,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             var providerVenuerepository = new GenericRepository<Domain.Models.ProviderVenue>(providerVenueloggerRepository, MatchingDbContext);
             var dataValidator = new ProviderVenueDataValidator(repository, providerVenuerepository);
             var dataParser = new ProviderVenueDataParser();
-
-            var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var dataProcessor = new ProviderVenueDataProcessor(new MessageQueueService(new NullLogger<MessageQueueService>(), new MatchingConfiguration()));
+            var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(loggerExcelFileReader, dataParser, dataValidator, dataProcessor);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 

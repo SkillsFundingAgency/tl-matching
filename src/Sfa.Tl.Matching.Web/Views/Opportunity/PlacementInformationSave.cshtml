@@ -36,23 +36,21 @@
             <p class="govuk-body">This information helps us understand where there are not enough providers for industry placements.</p>
 
             <div class="govuk-form-group" sfa-validation-for="JobTitle" sfa-validationerror-class="govuk-form-group--error">
-                <fieldset class="govuk-fieldset">
-                    <label class="govuk-label govuk-label--m" asp-for="JobTitle">
-                        What specific job would the placement student do?
-                    </label>
-                    <span id="placement-role-hint" class="govuk-hint">
-                        For example, admin assistant, care worker, bricklayer
-                    </span>
-                    <span class="govuk-error-message" asp-validation-for="JobTitle"></span>
-                    <input asp-for="JobTitle" class="govuk-input govuk-!-width-one-half" sfa-validation-for="JobTitle" sfa-validationerror-class="govuk-input--error" />
-                </fieldset>
+                <label class="govuk-label govuk-label--m" asp-for="JobTitle">
+                    What specific job would the placement student do?
+                </label>
+                <span id="placement-role-hint" class="govuk-hint">
+                    For example, admin assistant, care worker, bricklayer
+                </span>
+                <span class="govuk-error-message" asp-validation-for="JobTitle"></span>
+                <input asp-for="JobTitle" class="govuk-input govuk-!-width-one-half" sfa-validation-for="JobTitle" sfa-validationerror-class="govuk-input--error" />
             </div>
 
             <div class="govuk-form-group" sfa-validation-for="PlacementsKnown" sfa-validationerror-class="govuk-form-group--error">
-                <fieldset class="govuk-fieldset">
-                    <label class="govuk-label govuk-label--m" asp-for="PlacementsKnown">
-                        Does the employer know how many placements they want at this location?
-                    </label>
+                <fieldset class="govuk-fieldset" aria-describedby="placement-location-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m" id="PlacementsKnown" name="PlacementsKnown">
+                            Does the employer know how many placements they want at this location?
+                    </legend>
                     <span id="placement-location-hint" class="govuk-hint">
                         This can be an estimate
                     </span>

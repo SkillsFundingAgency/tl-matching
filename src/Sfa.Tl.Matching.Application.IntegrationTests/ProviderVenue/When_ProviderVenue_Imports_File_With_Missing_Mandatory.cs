@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
         public When_ProviderVenue_Imports_File_With_Missing_Mandatory(ProviderVenueTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            _testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
         }
 
         [Fact]

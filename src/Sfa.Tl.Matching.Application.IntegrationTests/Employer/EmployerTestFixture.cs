@@ -32,8 +32,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
             var repository = new EmployerRepository(loggerRepository, MatchingDbContext);
             var dataValidator = new EmployerDataValidator();
             var dataParser = new EmployerDataParser();
-
-            var excelFileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var nullDataProcessor = new NullDataProcessor<EmployerFileImportDto>();
+            var excelFileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>(loggerExcelFileReader, dataParser, dataValidator, nullDataProcessor);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 

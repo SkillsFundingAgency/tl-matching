@@ -5,6 +5,6 @@
         Active = 1,
         Understand,
         Planning,
-        Aware,
+        Aware
     }
 }

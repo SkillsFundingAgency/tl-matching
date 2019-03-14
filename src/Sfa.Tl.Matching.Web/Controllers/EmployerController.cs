@@ -24,6 +24,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
+        [Route("employer-search", Name = "EmployerSearch_Get")]
+        public IActionResult Search(string query)
+        {
+            var employers = _employerService.Search(query);
+
+            return Ok(employers.ToList());
+        }
+
+        [HttpGet]
         [Route("who-is-employer/{id?}", Name = "EmployerFind_Get")]
         public IActionResult FindEmployer(int id)
         {
@@ -39,32 +48,21 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{id?}", Name = "EmployerFind_Post")]
         public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
-            if (viewModel.SelectedEmployerId == 0)
+            if (viewModel.SelectedEmployerId == 0 || 
+                await _employerService.GetEmployer(viewModel.SelectedEmployerId) == null)
             {
                 ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
                 return View(viewModel);
             }
 
-            var employer = await _employerService.GetEmployer(viewModel.SelectedEmployerId);
-            if (employer == null)
-                ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
-
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var dto = PopulateDto(viewModel.OpportunityId, employer);
-            await _opportunityService.UpdateOpportunity(dto);
+            var dto = PopulateEmployerNameDto(viewModel);
+
+            await _opportunityService.SaveEmployerName(dto);
 
             return RedirectToRoute("EmployerDetails_Get");
-        }
-
-        [HttpGet]
-        [Route("employer-search", Name = "EmployerSearch_Get")]
-        public IActionResult Search(string query)
-        {
-            var employers = _employerService.Search(query);
-
-            return Ok(employers.ToList());
         }
 
         [HttpGet]
@@ -94,29 +92,37 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
+            var employerDetailDto = PopulateEmployerDetailsDto(viewModel);
+
+            await _opportunityService.SaveEmployerDetail(employerDetailDto);
+
             var dto = await _opportunityService.GetOpportunityWithReferrals(viewModel.OpportunityId);
-
-            dto.EmployerContact = viewModel.Contact;
-            dto.EmployerContactEmail = viewModel.ContactEmail;
-            dto.EmployerContactPhone = viewModel.ContactPhone;
-            dto.ModifiedBy = HttpContext.User.GetUserName();
-
-            await _opportunityService.UpdateOpportunity(dto);
 
             return RedirectToRoute(dto.IsReferral.HasValue && dto.IsReferral.Value ?
                 "CheckAnswersReferrals_Get" :
                 "CheckAnswersProvisionGap_Get");
         }
 
-        private OpportunityDto PopulateDto(int opportunityId, EmployerDto employer)
+        private EmployerNameDto PopulateEmployerNameDto(FindEmployerViewModel employer)
         {
-            var dto = new OpportunityDto
+            var dto = new EmployerNameDto
             {
-                Id = opportunityId,
-                EmployerName = employer.CompanyName, // TODO AU Should this also inclue the Aka?
-                EmployerContact = employer.PrimaryContact,
-                EmployerContactEmail = employer.Email,
-                EmployerContactPhone = employer.Phone,
+                OpportunityId = employer.OpportunityId,
+                CompanyName = employer.BusinessName, // TODO AU Should this also inclue the Aka?
+                ModifiedBy = HttpContext.User.GetUserName()
+            };
+
+            return dto;
+        }
+
+        private EmployerDetailDto PopulateEmployerDetailsDto(EmployerDetailsViewModel employer)
+        {
+            var dto = new EmployerDetailDto
+            {
+                OpportunityId = employer.OpportunityId,
+                EmployerContact = employer.Contact,
+                EmployerContactEmail = employer.ContactEmail,
+                EmployerContactPhone = employer.ContactPhone,
                 ModifiedBy = HttpContext.User.GetUserName()
             };
 
