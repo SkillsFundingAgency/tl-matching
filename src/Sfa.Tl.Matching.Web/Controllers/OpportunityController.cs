@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -12,24 +13,26 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;
+        private readonly IMapper _mapper;
 
-        public OpportunityController(IOpportunityService opportunityService)
+        public OpportunityController(IOpportunityService opportunityService, IMapper mapper)
         {
             _opportunityService = opportunityService;
+            _mapper = mapper;
         }
 
-        public async Task<IActionResult> CreateProvisionGap(int searchResultProviderCount, int routeId, string postcode, short distance)
         [Route("{SearchResultProviderCount}-provisiongap-opportunities-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "OpportunityCreate_Get")]
+        public async Task<IActionResult> CreateProvisionGap(CreateProvisionGapViewModel viewModel)
         {
-            var dto = new OpportunityDto
+            var dto = _mapper.Map<OpportunityDto>(viewModel);
+
+            var id = await _opportunityService.CreateOpportunity(dto);
+
+            return RedirectToRoute("PlacementInformationSave_Get", new
             {
-                RouteId = routeId,
-                Postcode = postcode,
-                Distance = distance,
-                SearchResultProviderCount = searchResultProviderCount,
-                CreatedBy = HttpContext.User.GetUserName(),
-                UserEmail = HttpContext.User.GetUserEmail()
-            };
+                id
+            });
+        }
 
             var id = await _opportunityService.CreateOpportunity(dto);
 
