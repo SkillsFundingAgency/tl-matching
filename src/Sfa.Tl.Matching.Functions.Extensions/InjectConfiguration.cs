@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Http;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.Azure.WebJobs.Host.Config;
@@ -67,10 +66,9 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                             .UseNetTopologySuite()));
 
             services.AddSingleton(_configuration);
-            services.AddSingleton(new HttpClient());
+            services.AddHttpClient<ILocationService, LocationService>();
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
-            services.AddTransient<ILocationService, LocationService>();
 
             RegisterFileReaders(services);
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Net.Http;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
@@ -142,10 +141,9 @@ namespace Sfa.Tl.Matching.Web
 
             //Inject services
             services.AddSingleton(_configuration);
-            services.AddSingleton(new HttpClient());
+            services.AddHttpClient<ILocationService, LocationService>();
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
-            services.AddTransient<ILocationService, LocationService>();
 
             RegisterRepositories(services);
             RegisterApplicationServices(services);
