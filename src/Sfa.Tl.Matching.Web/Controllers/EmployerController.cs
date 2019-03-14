@@ -48,15 +48,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{id?}", Name = "EmployerFind_Post")]
         public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
-            if (viewModel.SelectedEmployerId == 0 ||
-                await _employerService.GetEmployer(viewModel.SelectedEmployerId) == null)
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
+                if (viewModel.SelectedEmployerId == 0 || await _employerService.GetEmployer(viewModel.SelectedEmployerId) == null)
+                {
+                    ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
+                }
+
                 return View(viewModel);
             }
-
-            if (!ModelState.IsValid)
-                return View(viewModel);
 
             var dto = PopulateEmployerNameDto(viewModel);
 
@@ -103,11 +103,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 "CheckAnswersProvisionGap_Get");
         }
 
-        private EmployerNameDto PopulateEmployerNameDto(FindEmployerViewModel viewModel, EmployerDto employer)
+        private EmployerNameDto PopulateEmployerNameDto(FindEmployerViewModel viewModel)
         {
             var dto = new EmployerNameDto
             {
-                OpportunityId = employer.OpportunityId,
+                OpportunityId = viewModel.OpportunityId,
                 CompanyName = viewModel.CompanyName,
                 ModifiedBy = HttpContext.User.GetUserName()
             };
