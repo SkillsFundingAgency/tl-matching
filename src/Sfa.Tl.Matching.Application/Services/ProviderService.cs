@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -38,6 +39,11 @@ namespace Sfa.Tl.Matching.Application.Services
                 : new List<ProviderVenueSearchResultDto>();
 
             return results;
+        }
+
+        public async Task<bool> IsValidPostCode(string postCode)
+        {
+           return await _locationService.IsValidPostCode(postCode);
         }
     }
 }

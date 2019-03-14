@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 SelectedRouteId = selectedRouteId,
                 Postcode = postcode
             };
-            _result = providerController.Index(viewModel);
+            _result = providerController.Index(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
