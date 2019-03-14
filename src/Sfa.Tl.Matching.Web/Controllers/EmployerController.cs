@@ -48,24 +48,21 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{id?}", Name = "EmployerFind_Post")]
         public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
-            if (viewModel.SelectedEmployerId == 0)
+            if (viewModel.SelectedEmployerId == 0 ||
+                await _employerService.GetEmployer(viewModel.SelectedEmployerId) == null)
             {
                 ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
                 return View(viewModel);
             }
 
-            var employer = await _employerService.GetEmployer(viewModel.SelectedEmployerId);
-            if (employer == null)
-                ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
-
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var dto = PopulateEmployerNameDto(viewModel, employer);
+            var dto = PopulateEmployerNameDto(viewModel);
 
             await _opportunityService.SaveEmployerName(dto);
 
-            return RedirectToRoute("EmployerDetails_Get");
+            return RedirectToRoute("EmployerDetails_Get", new { id = viewModel.OpportunityId });
         }
 
         [HttpGet]
@@ -110,17 +107,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var dto = new EmployerNameDto
             {
-                OpportunityId = viewModel.OpportunityId,
-                CompanyName = employer.CompanyName, // TODO AU Should this also inclue the Aka?
-                EmployerContact = employer.PrimaryContact,
-                EmployerContactEmail = employer.Email,
-                EmployerContactPhone = employer.Phone,
+                OpportunityId = employer.OpportunityId,
+                CompanyName = employer.BusinessName, // TODO AU Should this also inclue the Aka?
                 ModifiedBy = HttpContext.User.GetUserName()
             };
 
             return dto;
         }
-        
+
         private EmployerDetailDto PopulateEmployerDetailsDto(EmployerDetailsViewModel employer)
         {
             var dto = new EmployerDetailDto
