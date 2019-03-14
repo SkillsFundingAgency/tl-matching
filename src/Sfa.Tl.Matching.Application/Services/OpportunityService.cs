@@ -75,11 +75,21 @@ namespace Sfa.Tl.Matching.Application.Services
             await _opportunityRepository.Update(updatedOpportunity);
         }
 
-        public async Task UpdateOpportunity(OpportunityDto dto)
+        public async Task SaveEmployerName(EmployerNameDto dto)
         {
             dto.ModifiedOn = _dateTimeProvider.UtcNow();
 
-            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.Id);
+            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
+
+            _mapper.Map(dto, trackedEntity);
+
+            await _opportunityRepository.Update(trackedEntity);
+        }
+        public async Task SaveEmployerDetail(EmployerDetailDto dto)
+        {
+            dto.ModifiedOn = _dateTimeProvider.UtcNow();
+
+            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
 
             _mapper.Map(dto, trackedEntity);
 

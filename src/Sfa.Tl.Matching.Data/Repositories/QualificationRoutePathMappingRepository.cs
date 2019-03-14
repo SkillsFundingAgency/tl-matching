@@ -25,30 +25,17 @@ namespace Sfa.Tl.Matching.Data.Repositories
             var list = mappingList.Where(mapping => mapping.Qualification != null)
                                   .GroupBy(mapping => mapping.Qualification, new QualificationEqualityComparer()).ToList();
 
-            foreach (var grouping in list)
+            var qualificationRoutePathMappings = list.SelectMany(grouping => new List<QualificationRoutePathMapping>(grouping.ToList()).Select(mapping =>
             {
-                recordCount += await SaveQualificationAndProviderQualification(grouping);
-            }
-
-            return recordCount;
-        }
-
-        public async Task<int> SaveQualificationAndProviderQualification(IGrouping<Qualification, QualificationRoutePathMapping> qualificationMappingGroup)
-        {
-            //for each qualificationMappingGroup first save the qualification
-            await _dbContext.AddAsync(qualificationMappingGroup.Key);
-
-            await _dbContext.SaveChangesAsync();
-
-            //for each item in qualificationMappingGroup update qualificationid and then save 
-            await _dbContext.AddRangeAsync(qualificationMappingGroup.Select(mapping =>
-            {
-                mapping.Qualification = null;
-                mapping.QualificationId = qualificationMappingGroup.Key.Id;
+                mapping.Qualification = grouping.Key;
                 return mapping;
             }));
 
-            return await _dbContext.SaveChangesAsync();
+            await _dbContext.AddRangeAsync(qualificationRoutePathMappings);
+
+            recordCount += await _dbContext.SaveChangesAsync();
+
+            return recordCount;
         }
     }
 }

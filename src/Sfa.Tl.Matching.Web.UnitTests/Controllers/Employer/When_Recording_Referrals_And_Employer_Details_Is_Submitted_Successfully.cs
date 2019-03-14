@@ -13,12 +13,26 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
     public class When_Recording_Referrals_And_Employer_Details_Is_Submitted_Successfully
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly OpportunityDto _dto = new OpportunityDto();
         private const string Contact = "Contact";
         private const string ContactPhone = "123456789";
         private const string ContactEmail = "ContactEmail";
         private const string ModifiedBy = "ModifiedBy";
-        private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel();
+        private readonly EmployerDetailDto _dto = new EmployerDetailDto
+        {
+            OpportunityId = OpportunityId,
+            EmployerContact = Contact,
+            EmployerContactEmail = ContactEmail,
+            EmployerContactPhone = ContactPhone,
+            ModifiedBy = ModifiedBy
+        };
+
+        private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel
+        {
+            OpportunityId = OpportunityId,
+            Contact = Contact,
+            ContactEmail = ContactEmail,
+            ContactPhone = ContactPhone
+        };
 
         private const int OpportunityId = 1;
 
@@ -26,15 +40,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         public When_Recording_Referrals_And_Employer_Details_Is_Submitted_Successfully()
         {
-            _viewModel.OpportunityId = OpportunityId;
-            _viewModel.Contact = Contact;
-            _viewModel.ContactEmail = ContactEmail;
-            _viewModel.ContactPhone = ContactPhone;
-
-            _dto.IsReferral = true;
-
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunityWithReferrals(OpportunityId).Returns(_dto);
+            _opportunityService.GetOpportunityWithReferrals(OpportunityId).Returns(new OpportunityDto { IsReferral = true });
 
             var employerController = new EmployerController(null, _opportunityService);
             var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
@@ -54,7 +61,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).UpdateOpportunity(_dto);
+            _opportunityService.Received(1).SaveEmployerDetail(Arg.Is<EmployerDetailDto>(a => 
+                a.EmployerContact == Contact && 
+                a.EmployerContactEmail == ContactEmail &&
+                a.EmployerContactPhone == ContactPhone &&
+                a.ModifiedBy == ModifiedBy));
         }
 
         [Fact]
@@ -80,7 +91,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             _dto.ModifiedBy.Should().Be(ModifiedBy);
         }
-
 
         [Fact]
         public void Then_Result_Is_RedirectResult() =>
