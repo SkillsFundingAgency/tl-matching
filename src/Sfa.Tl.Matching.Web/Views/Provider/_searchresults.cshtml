@@ -15,26 +15,28 @@
 
 <p class="govuk-body">Choose who the employer wants to hear from</p>
 
-@* TODO: This should post to a different action, which takes the list of selected items.
-    It probably needs more hidden fields for Postcode/SearchRadius/SelectedRouteId *@
 <form asp-controller="Opportunity" asp-action="Create">
+    <input asp-for="SearchParameters.Postcode" type="hidden"/>
+    <input asp-for="SearchParameters.SearchRadius" type="hidden"/>
+    <input asp-for="SearchParameters.SelectedRouteId" type="hidden"/>
+    <input asp-for="@Model.SearchResults.Results.Count()" type="hidden"/>
     <ol class="tl-search-results">
-        @*@foreach (var searchResult in Model.SearchResults.Results)*@
-        @for (var i = 0; i < Model.SearchResults.Results.Count(); i++)
+        @for (var i = 0; i < @Model.SearchResults?.Results?.Count(); i++)
         {
             var searchResult = Model.SearchResults.Results[i];
 
             <li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
                 <div class="govuk-checkboxes">
                     <div class="govuk-checkboxes__item">
-                        @* https://stackoverflow.com/questions/40555543/how-do-i-implement-a-checkbox-list-in-asp-net-core *@
-                        @*<input class="govuk-checkboxes__input" id="provider-1" name="provider" type="checkbox" value="1">*@
+                        <input type="hidden" asp-for="@searchResult.Distance" />
+                        <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderId" />
+
                         <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" />
                         <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].ProviderName">
                             @searchResult.ProviderName
                             <ul class="tl-inline-list tl-inline-list--bar">
-                                <li>searchResult.Postcode</li>
-                                <li>@($" {searchResult.Distance:#.00}") miles</li>
+                                <li>@searchResult.Postcode</li>
+                                <li>@($" {searchResult.Distance:#0.00}") miles</li>
                             </ul>
                             <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
                             <ul class="govuk-list govuk-list--bullet">
@@ -46,14 +48,12 @@
                                 }
                             </ul>
                         </label>
-
-                        <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderId" />
                     </div>
                 </div>
 
             </li>
         }
     </ol>
-    
+
     <button type="submit" class="govuk-button">Continue with selected providers</button>
 </form>
