@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Builders
         public const string PrimaryContact = "PrimaryContact";
         public const string Email = "email@address.com";
         public const string Phone = "01474777777";
-        public const string PostCode = "AB1 1AA";
+        public const string Postcode = "AB1 1AA";
         public const string Owner = "Owner";
         public const string CreatedBy = "CreatedBy";
 
@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Builders
             PrimaryContact = PrimaryContact,
             Phone = Phone,
             Email = Email,
-            PostCode = PostCode,
+            Postcode = Postcode,
             Owner = Owner,
             CreatedBy = CreatedBy
         };

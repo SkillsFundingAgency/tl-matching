@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             _locationService = Substitute.For<ILocationService>();
             _locationService.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
             {
-                PostCode = Postcode,
+                Postcode = Postcode,
                 Longitude = "1.2",
                 Latitude = "1.2"
             });

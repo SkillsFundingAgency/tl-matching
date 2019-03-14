@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
         {
             CreateMap<PlacementInformationSaveViewModel, Opportunity>()
                 .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.PostCode, config => config.Ignore())
+                .ForMember(m => m.Postcode, config => config.Ignore())
                 .ForMember(m => m.RouteId, config => config.Ignore())
                 .ForMember(m => m.Distance, config => config.Ignore())
                 .ForMember(m => m.EmployerName, config => config.Ignore())

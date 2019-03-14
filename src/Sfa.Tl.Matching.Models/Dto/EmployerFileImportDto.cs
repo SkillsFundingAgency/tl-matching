@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         [Column(Order = 7)] public string PrimaryContact { get; set; }
         [Column(Order = 8)] public string Phone { get; set; }
         [Column(Order = 9)] public string Email { get; set; }
-        [Column(Order = 10)] public string PostCode { get; set; }
+        [Column(Order = 10)] public string Postcode { get; set; }
         [Column(Order = 11)] public string Owner { get; set; }
     }
 }

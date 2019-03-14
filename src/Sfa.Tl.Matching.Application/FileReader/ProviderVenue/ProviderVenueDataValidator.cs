@@ -28,18 +28,18 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
                      .WithErrorCode(ValidationErrorCode.ProviderDoesntExist.ToString())
                      .WithMessage($"'{nameof(ProviderVenueFileImportDto.UkPrn)}' - {ValidationErrorCode.ProviderDoesntExist.Humanize()}");
 
-            RuleFor(dto => dto.PostCode)
+            RuleFor(dto => dto.Postcode)
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.Postcode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .Matches(dto => ValidationConstants.UkPostCodeRegex)
                     .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                    .WithMessage($"'{nameof(ProviderVenueFileImportDto.Postcode)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(dto => dto)
                  .MustAsync((dto, cancellation) => ProviderVenueMustBeUnique(venueRepository, dto))
                      .WithErrorCode(ValidationErrorCode.ProviderVenueAlreadyExists.ToString())
-                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.ProviderVenueAlreadyExists.Humanize()}");
+                     .WithMessage($"'{nameof(ProviderVenueFileImportDto.Postcode)}' - {ValidationErrorCode.ProviderVenueAlreadyExists.Humanize()}");
 
             RuleFor(dto => dto.Source)
                 .NotEmpty()
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
 
             var venue = await providerVenueRepository.GetSingleOrDefault(v =>
                 v.ProviderId == dto.ProviderId
-             && v.Postcode == dto.PostCode);
+             && v.Postcode == dto.Postcode);
 
             return venue == null;
         }

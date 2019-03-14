@@ -19,11 +19,11 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         {
             var mapper = Substitute.For<IMapper>();
             var locationService = Substitute.For<ILocationService>();
-            locationService.GetGeoLocationData("CV1234").Throws(new HttpRequestException("Invalid PostCode"));
+            locationService.GetGeoLocationData("CV1234").Throws(new HttpRequestException("Invalid Postcode"));
 
             _logger = Substitute.For<ILogger>();
             var proximityfunctions = new Functions.Proximity();
-            proximityfunctions.GetProximityData(new GetProximityData { PostCode = "CV1234" }, new ExecutionContext(), _logger, mapper, locationService).GetAwaiter().GetResult();
+            proximityfunctions.GetProximityData(new GetProximityData { Postcode = "CV1234" }, new ExecutionContext(), _logger, mapper, locationService).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _logger.Received(1).Log(
                 LogLevel.Error,
                 Arg.Any<EventId>(),
-                Arg.Is<object>(o => o.ToString().Contains("Error Getting Geo Location Data for PostCode: CV1234, Please Check the PostCode, Internal Error Message")),
+                Arg.Is<object>(o => o.ToString().Contains("Error Getting Geo Location Data for Postcode: CV1234, Please Check the Postcode, Internal Error Message")),
                 null,
                 Arg.Any<Func<object, Exception, string>>());
         }

@@ -18,8 +18,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _opportunityService = opportunityService;
         }
 
-        [Route("{searchResultProviderCount}-opportunities-within-{distance}-miles-of-{postcode}-for-route-{routeId}", Name = "OpportunityCreate_Get")]
         public async Task<IActionResult> CreateProvisionGap(int searchResultProviderCount, int routeId, string postcode, short distance)
+        [Route("{SearchResultProviderCount}-provisiongap-opportunities-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "OpportunityCreate_Get")]
         {
             var dto = new OpportunityDto
             {
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 RouteId = dto.RouteId,
                 Postcode = dto.Postcode,
-                Distance = dto.Distance,
+                Distance = dto.SearchRadius,
                 OpportunityId = dto.Id,
                 JobTitle = dto.JobTitle,
                 PlacementsKnown = dto.PlacementsKnown,
@@ -161,7 +161,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var viewModel = new CheckAnswersPlacementViewModel
             {
                 Contact = dto.EmployerContact,
-                Distance = dto.Distance,
+                Distance = dto.SearchRadius,
                 EmployerName = dto.EmployerName,
                 JobTitle = dto.JobTitle,
                 PlacementsKnown = dto.PlacementsKnown,

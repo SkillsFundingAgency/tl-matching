@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 
         internal void ResetData(string postcode)
         {
-            var opportunity = MatchingDbContext.Opportunity.FirstOrDefault(o => o.PostCode == postcode);
+            var opportunity = MatchingDbContext.Opportunity.FirstOrDefault(o => o.Postcode == postcode);
             if (opportunity != null)
             {
                 MatchingDbContext.Opportunity.Remove(opportunity);
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 
         internal int GetCountBy(string postcode)
         {
-            var opportunityCount = MatchingDbContext.Opportunity.Count(o => o.PostCode == postcode);
+            var opportunityCount = MatchingDbContext.Opportunity.Count(o => o.Postcode == postcode);
 
             return opportunityCount;
         }

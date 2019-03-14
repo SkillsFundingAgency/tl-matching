@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
 
         public void PostProcessingHandler(ProviderVenueFileImportDto fileImportDto)
         {
-            _messageQueueService.Push(new GetProximityData { PostCode = fileImportDto.PostCode, UkPrn = fileImportDto.UkPrn.ToLong() });
+            _messageQueueService.Push(new GetProximityData { Postcode = fileImportDto.Postcode, UkPrn = fileImportDto.UkPrn.ToLong() });
         }
     }
 }

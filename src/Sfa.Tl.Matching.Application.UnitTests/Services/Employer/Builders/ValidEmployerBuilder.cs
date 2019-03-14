@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
                 PrimaryContact = "Primary Contact",
                 Phone = "01474777777",
                 Email = "email@address.com",
-                PostCode = "AB1 1AA",
+                Postcode = "AB1 1AA",
                 Owner = "Owner",
                 CreatedBy = "CreatedBy",
                 ModifiedBy = "ModifiedBy"

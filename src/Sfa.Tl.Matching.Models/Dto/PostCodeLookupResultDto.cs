@@ -3,7 +3,7 @@ namespace Sfa.Tl.Matching.Models.Dto
 {
     public class PostCodeLookupResultDto
     {
-        public string PostCode { get; set; }
+        public string Postcode { get; set; }
         public string Longitude { get; set; }
 
         public string Latitude { get; set; }

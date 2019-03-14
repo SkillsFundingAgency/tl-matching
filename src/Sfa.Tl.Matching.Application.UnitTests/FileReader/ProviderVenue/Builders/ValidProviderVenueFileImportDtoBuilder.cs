@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Builder
     {
         public static int ProviderId = 1;
         public static string UkPrn = "10000546";
-        public static string PostCode = "CV1 2WT";
+        public static string Postcode = "CV1 2WT";
         public static string Source = "PMF_1018";
         public static string CreatedBy = "CreatedBy";
 
@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Builder
         {
             ProviderId = ProviderId,
             UkPrn = UkPrn,
-            PostCode = PostCode,
+            Postcode = Postcode,
             Source = Source,
             CreatedBy = CreatedBy
         };

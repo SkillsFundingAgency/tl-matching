@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
             var providerVenueDto = new ProviderVenueDto
             {
                 ProviderId = data.ProviderId,
-                Postcode = data.PostCode,
+                Postcode = data.Postcode,
                 Source = data.Source,
                 CreatedBy = data.CreatedBy
             };

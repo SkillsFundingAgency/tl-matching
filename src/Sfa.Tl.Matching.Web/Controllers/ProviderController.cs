@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private IActionResult GetIndexView(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius, bool isValidPostCode = true)
         {
-            if(!isValidPostCode) ModelState.AddModelError("PostCode", "You must enter a valid postcode");
+            if(!isValidPostCode) ModelState.AddModelError("Postcode", "You must enter a valid postcode");
 
             return View(nameof(Index), new SearchParametersViewModel
             {
@@ -108,7 +108,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private IActionResult GetResultsView(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius, bool isValidPostCode = true)
         {
-            if(!isValidPostCode) ModelState.AddModelError("PostCode", "You must enter a valid postcode");
+            if(!isValidPostCode) ModelState.AddModelError("Postcode", "You must enter a valid postcode");
             
             return View(nameof(Results), new SearchViewModel
             {

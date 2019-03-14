@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
         [Fact]
         public async Task Then_Message_Is_Queued()
         {
-           await _messageQueueService.Push(new GetProximityData {PostCode = "CV12WT", UkPrn = 123});
+           await _messageQueueService.Push(new GetProximityData {Postcode = "CV12WT", UkPrn = 123});
            var retrievedMessage = await _queue.GetMessageAsync();
            retrievedMessage.Should().NotBeNull();
            retrievedMessage.AsString.Should().Contain("CV12WT");
