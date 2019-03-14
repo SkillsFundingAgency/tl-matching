@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (viewModel.SelectedEmployerId == 0 ||
                 await _employerService.GetEmployer(viewModel.SelectedEmployerId) == null)
             {
-                ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
+                ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
                 return View(viewModel);
             }
 
@@ -108,7 +108,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = new EmployerNameDto
             {
                 OpportunityId = employer.OpportunityId,
-                CompanyName = employer.BusinessName, // TODO AU Should this also inclue the Aka?
+                CompanyName = viewModel.CompanyName,
                 ModifiedBy = HttpContext.User.GetUserName()
             };
 
