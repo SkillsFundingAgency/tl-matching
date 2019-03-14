@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
         public When_ProviderVenue_Imports_Valid_File(ProviderVenueTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            _testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
             _testFixture.ResetData();
             _createdProvider = _testFixture.CreateProvider(UkPrn);
         }

@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
         public When_Provider_Imports_File_With_Missing_Mandatory(ProviderTestFixture testFixture)
         {
             _testFixture = testFixture;
-            var testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            var testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
 
             var filePath = Path.Combine(testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))

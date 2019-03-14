@@ -7,6 +7,7 @@
 	[Postcode] VARCHAR(10) NOT NULL,
 	[Latitude] [DECIMAL](9, 6) NULL,
 	[Longitude] [DECIMAL](9, 6) NULL,
+	[Location] GEOGRAPHY NULL,
 	[Source] VARCHAR(50) NOT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 

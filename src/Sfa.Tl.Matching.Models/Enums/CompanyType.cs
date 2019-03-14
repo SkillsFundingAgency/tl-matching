@@ -3,6 +3,6 @@
     public enum CompanyType
     {
         Employer = 1,
-        EmployerProvider,
+        EmployerProvider
     }
 }

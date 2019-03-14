@@ -20,15 +20,18 @@ namespace Sfa.Tl.Matching.Application.FileReader
         private readonly ILogger<ExcelFileReader<TImportDto, TDto>> _logger;
         private readonly IDataParser<TDto> _dataParser;
         private readonly IValidator<TImportDto> _validator;
+        private readonly IDataProcessor<TImportDto> _dataProcessor;
 
         public ExcelFileReader(
             ILogger<ExcelFileReader<TImportDto, TDto>> logger,
             IDataParser<TDto> dataParser,
-            IValidator<TImportDto> validator)
+            IValidator<TImportDto> validator,
+            IDataProcessor<TImportDto> dataProcessor)
         {
             _logger = logger;
             _dataParser = dataParser;
             _validator = validator;
+            _dataProcessor = dataProcessor;
         }
 
         public IList<TDto> ValidateAndParseFile(TImportDto fileImportDto)
@@ -60,7 +63,10 @@ namespace Sfa.Tl.Matching.Application.FileReader
 
                     startIndex++;
 
+                    _dataProcessor.PreProcessingHandler(fileImportDto);
+
                     var validationResult = _validator.Validate(fileImportDto);
+                    
                     if (!validationResult.IsValid)
                     {
                         LogErrorsAndWarnings(startIndex, validationResult);
@@ -68,7 +74,10 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     }
 
                     var dto = _dataParser.Parse(fileImportDto);
+                    
                     dtos.AddRange(dto);
+
+                    _dataProcessor.PostProcessingHandler(fileImportDto);
                 }
             }
 

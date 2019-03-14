@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
         public When_ProviderQualification_Imports_Valid_File(ProviderQualificationTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            _testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
             _testFixture.ResetData();
             _createdProvider = _testFixture.CreateVenueAndQualification(UkPrn, PostCode, LarsId);
         }

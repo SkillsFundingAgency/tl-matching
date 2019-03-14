@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
         public When_QualificationRoutePathMappingService_Imports_File(QualificationRoutePathMappingServiceTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
+            _testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
             _testFixture.ResetData(LarsId);
         }
 
@@ -34,8 +34,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
                     CreatedBy = nameof(QualificationRoutePathMappingServiceTestFixture)
                 });
             }
-
-            _createdRecordCount.Should().Be(3);
+            //This is returning four because qualification object is also getting inserted
+            _createdRecordCount.Should().Be(4);
         }
 
         public void Dispose()

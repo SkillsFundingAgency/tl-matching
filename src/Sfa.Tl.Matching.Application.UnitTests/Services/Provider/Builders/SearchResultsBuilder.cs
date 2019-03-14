@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                     ProviderId = 1,
                     ProviderName = "The WKCIC Group",
                     Postcode = "NW1 3HB",
-                    Distance = 2.5M,
+                    Distance = 2.5d,
                     QualificationShortTitles = new List<string>
                     {
                         "applied science",
@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                     ProviderId = 2,
                     ProviderName = "Lambeth College",
                     Postcode = "SW4 9BL",
-                    Distance = 2.5M,
+                    Distance = 2.5d,
                     QualificationShortTitles = new List<string>
                     {
                         "applied science",

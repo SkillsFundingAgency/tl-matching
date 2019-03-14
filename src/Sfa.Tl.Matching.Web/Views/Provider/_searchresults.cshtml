@@ -12,18 +12,18 @@
 
 <p class="govuk-body">Choose who the employer wants to hear from</p>
 
-    <ol class="tl-search-results">
+<ol class="tl-search-results">
     @foreach (var searchResult in Model.SearchResults.Results)
     {
-            <li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
+        <li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
             <div class="govuk-checkboxes">
                 <div class="govuk-checkboxes__item">
                     <input class="govuk-checkboxes__input" id="provider-1" name="provider" type="checkbox" value="1">
                     <label class="govuk-heading-m govuk-checkboxes__label" for="provider-1">
                         @searchResult.ProviderName
                         <ul class="tl-inline-list tl-inline-list--bar">
-                            <li>searchResult.Postcode</li>
-                            <li>@($" {searchResult.Distance:#.00}") miles</li>
+                            <li>@searchResult.Postcode</li>
+                            <li>@($" {searchResult.Distance:#0.00}") miles</li>
                         </ul>
                         <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
                         <ul class="govuk-list govuk-list--bullet">
