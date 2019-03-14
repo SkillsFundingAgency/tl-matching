@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             _dto = new OpportunityDto
             {
                 Id = 1,
-                Distance = 3,
+                SearchRadius = 3,
                 JobTitle = "JobTitle",
                 PlacementsKnown = true,
                 Placements = 2,
