@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<Domain.Models.ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            var opportunity = new Domain.Models.Opportunity { Id = OpportunityId, Postcode = Postcode, Distance = Distance, RouteId = RouteId };
+            var opportunity = new Domain.Models.Opportunity { Id = OpportunityId, Postcode = Postcode, SearchRadius = Distance, RouteId = RouteId };
 
             _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(opportunity);
 
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 opportunity.Placements == 1 &&
                 opportunity.ModifiedBy == ModifiedBy &&
                 opportunity.Postcode == Postcode &&
-                opportunity.Distance == Distance &&
+                opportunity.SearchRadius == Distance &&
                 opportunity.RouteId == Distance
                 ));
         }

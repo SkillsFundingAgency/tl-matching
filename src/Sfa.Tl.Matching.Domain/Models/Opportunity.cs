@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Domain.Models
     {
         public int RouteId { get; set; }
         public string Postcode { get; set; }
-        public short Distance { get; set; }
+        public short SearchRadius { get; set; }
         public short? DropOffStage { get; set; }
         public string JobTitle { get; set; }
         public bool? PlacementsKnown { get; set; }

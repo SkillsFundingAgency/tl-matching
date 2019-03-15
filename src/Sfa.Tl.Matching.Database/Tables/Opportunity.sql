@@ -3,7 +3,7 @@
 	[Id] INT IDENTITY(1,1) NOT NULL, 
 	[RouteId] INT NOT NULL, 
 	[Postcode] VARCHAR(10) NOT NULL,
-	[Distance] SMALLINT NOT NULL,
+	[SearchRadius] SMALLINT NOT NULL,
 	[JobTitle] NVARCHAR(250) NULL,
 	[PlacementsKnown] BIT NULL,
 	[Placements] INT NULL,
