@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _providerVenueRepository = Substitute.For<IRepository<Domain.Models.ProviderVenue>>();
             _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>()).Returns(new Domain.Models.ProviderVenue());
             var proximityfunctions = new Functions.Proximity();
-            proximityfunctions.SaveProximityData(new SaveProximityData { Postcode = "CV12WT", Longitude = "1.2", Latitude = "3.4", UkPrn = 12345678 }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, _providerVenueRepository).GetAwaiter().GetResult();
+            proximityfunctions.SaveProximityData(new SaveProximityData { Postcode = "CV12WT", Longitude = "1.2", Latitude = "3.4", ProviderVenueId = 12345678 }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, _providerVenueRepository).GetAwaiter().GetResult();
         }
 
         [Fact]

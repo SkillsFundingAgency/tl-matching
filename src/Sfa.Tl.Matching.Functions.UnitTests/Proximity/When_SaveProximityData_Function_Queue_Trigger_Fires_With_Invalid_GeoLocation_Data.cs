@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _logger = Substitute.For<ILogger>();
 
             var proximityfunctions = new Functions.Proximity();
-            proximityfunctions.SaveProximityData(new SaveProximityData { Postcode = "CV12WT", UkPrn = 123 }, new ExecutionContext(), _logger, mapper, _providerVenueRepository).GetAwaiter().GetResult();
+            proximityfunctions.SaveProximityData(new SaveProximityData { Postcode = "CV12WT", ProviderVenueId = 123 }, new ExecutionContext(), _logger, mapper, _providerVenueRepository).GetAwaiter().GetResult();
         }
 
         [Fact]

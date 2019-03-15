@@ -2,7 +2,7 @@
 {
     public class SaveProximityData
     {
-        public long UkPrn { get; set; }
+        public long ProviderVenueId { get; set; }
         public string Postcode { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }

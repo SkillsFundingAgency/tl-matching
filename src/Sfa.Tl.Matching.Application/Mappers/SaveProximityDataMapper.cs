@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public SaveProximityDataMapper()
         {
             CreateMap<PostCodeLookupResultDto, SaveProximityData>()
-                .ForMember(m => m.UkPrn, o => o.Ignore())
+                .ForMember(m => m.ProviderVenueId, o => o.Ignore())
                 .ForMember(m => m.Postcode, o => o.Ignore());
         }
     }
