@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Recording_Referrals_And_Employer_Details_Is_Submitted_Successfully()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsReferralOpportunity(OpportunityId).Returns(new OpportunityDto { IsReferral = true });
+            _opportunityService.IsReferralOpportunity(OpportunityId).Returns(true);
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
