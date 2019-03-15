@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerContactName_Is_Set()
         {
             var viewModel = _result.GetViewModel<EmailsSentViewModel>();
-            viewModel.EmployerContactName.Should().Be("Contact");
+            viewModel.EmployerContactName.Should().Be("EmployerContact");
         }
     }
 }

@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerContact_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
-            viewModel.PlacementInformation.Contact.Should().Be("Contact");
+            viewModel.PlacementInformation.Contact.Should().Be("EmployerContact");
         }
 
         [Fact]

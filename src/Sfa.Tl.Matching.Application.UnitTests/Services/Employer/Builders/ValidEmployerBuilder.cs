@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
                 AlsoKnownAs = "Another Also Known As",
                 Aupa = "Active",
                 CompanyType = "Employer",
-                PrimaryContact = "Primary Contact",
+                PrimaryContact = "Primary EmployerContact",
                 Phone = "01474777777",
                 Email = "email@address.com",
                 Postcode = "AB1 1AA",

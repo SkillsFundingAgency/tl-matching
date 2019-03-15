@@ -15,9 +15,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
                 CompanyName = "CompanyName",
                 Aupa = "EmployerAupa",
                 Owner = "EmployerOwner",
-                PrimaryContact = "Contact",
-                Email = "ContactEmail",
-                Phone = "ContactPhone"
+                PrimaryContact = "EmployerContact",
+                Email = "EmployerContactEmail",
+                Phone = "EmployerContactPhone"
             };
         }
 

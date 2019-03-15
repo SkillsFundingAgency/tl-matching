@@ -21,9 +21,9 @@
                 </h2>
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
-                        <li><a sfa-validation-for="Contact"></a></li>
-                        <li><a sfa-validation-for="ContactEmail"></a></li>
-                        <li><a sfa-validation-for="ContactPhone"></a></li>
+                        <li><a sfa-validation-for="EmployerContact"></a></li>
+                        <li><a sfa-validation-for="EmployerContactEmail"></a></li>
+                        <li><a sfa-validation-for="EmployerContactPhone"></a></li>
                     </ul>
                 </div>
             </div>
@@ -41,26 +41,26 @@
                 <a asp-controller="Employer" asp-action="FindEmployer" asp-route-id="@Model.OpportunityId" class="govuk-link">Find a different employer</a>
             </p>
 
-            <div class="govuk-form-group" sfa-validation-for="Contact" sfa-validationerror-class="govuk-form-group--error">
-                <label class="govuk-label" asp-for="Contact">
-                    Contact name for placements
+            <div class="govuk-form-group" sfa-validation-for="EmployerContact" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label" asp-for="EmployerContact">
+                    EmployerContact name for placements
                 </label>
-                <span class="govuk-error-message" asp-validation-for="Contact"></span>
-                <input asp-for="Contact" class="govuk-input govuk-input govuk-input--width-20" sfa-validation-for="Contact" sfa-validationerror-class="govuk-input--error" />
+                <span class="govuk-error-message" asp-validation-for="EmployerContact"></span>
+                <input asp-for="EmployerContact" class="govuk-input govuk-input govuk-input--width-20" sfa-validation-for="EmployerContact" sfa-validationerror-class="govuk-input--error" />
             </div>
-            <div class="govuk-form-group" sfa-validation-for="ContactEmail" sfa-validationerror-class="govuk-form-group--error">
-                <label class="govuk-label" asp-for="ContactEmail">
+            <div class="govuk-form-group" sfa-validation-for="EmployerContactEmail" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label" asp-for="EmployerContactEmail">
                     Email
                 </label>
-                <span class="govuk-error-message" asp-validation-for="ContactEmail"></span>
-                <input asp-for="ContactEmail" class="govuk-input govuk-input--width-20" sfa-validation-for="ContactEmail" sfa-validationerror-class="govuk-input--error" align` />
+                <span class="govuk-error-message" asp-validation-for="EmployerContactEmail"></span>
+                <input asp-for="EmployerContactEmail" class="govuk-input govuk-input--width-20" sfa-validation-for="EmployerContactEmail" sfa-validationerror-class="govuk-input--error" align` />
             </div>
-            <div class="govuk-form-group" sfa-validation-for="ContactPhone" sfa-validationerror-class="govuk-form-group--error">
-                <label class="govuk-label" asp-for="ContactPhone">
+            <div class="govuk-form-group" sfa-validation-for="EmployerContactPhone" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label" asp-for="EmployerContactPhone">
                     Phone number
                 </label>
-                <span class="govuk-error-message" asp-validation-for="ContactPhone"></span>
-                <input asp-for="ContactPhone" class="govuk-input govuk-input--width-20" type="tel" sfa-validation-for="ContactPhone" sfa-validationerror-class="govuk-input--error" />
+                <span class="govuk-error-message" asp-validation-for="EmployerContactPhone"></span>
+                <input asp-for="EmployerContactPhone" class="govuk-input govuk-input--width-20" type="tel" sfa-validation-for="EmployerContactPhone" sfa-validationerror-class="govuk-input--error" />
             </div>
             <button type="submit" class="govuk-button">Confirm and continue</button>
         </form>

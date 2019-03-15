@@ -15,17 +15,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
     public class When_Recording_Referrals_And_Employer_Details_Is_Submitted_Successfully
     {
         private readonly IOpportunityService _opportunityService;
-        private const string Contact = "Contact";
+        private const string Contact = "EmployerContact";
         private const string ContactPhone = "123456789";
-        private const string ContactEmail = "ContactEmail";
+        private const string ContactEmail = "EmployerContactEmail";
         private const string ModifiedBy = "ModifiedBy";
         
         private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel
         {
             OpportunityId = OpportunityId,
-            Contact = Contact,
-            ContactEmail = ContactEmail,
-            ContactPhone = ContactPhone
+            EmployerContact = Contact,
+            EmployerContactEmail = ContactEmail,
+            EmployerContactPhone = ContactPhone
         };
 
         private const int OpportunityId = 1;

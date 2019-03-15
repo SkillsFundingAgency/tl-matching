@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         [Fact]
         public void Then_The_Employer_PrimaryContact_Is_As_Expected()
         {
-            _employerResult.PrimaryContact.Should().Be("Primary Contact");
+            _employerResult.PrimaryContact.Should().Be("Primary EmployerContact");
         }
         [Fact]
         public void Then_The_Employer_Phone_Is_As_Expected()
