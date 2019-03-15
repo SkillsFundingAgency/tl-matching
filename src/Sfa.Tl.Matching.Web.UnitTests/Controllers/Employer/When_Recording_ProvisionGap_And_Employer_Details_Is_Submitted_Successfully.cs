@@ -38,7 +38,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Recording_ProvisionGap_And_Employer_Details_Is_Submitted_Successfully()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunityWithReferrals(OpportunityId).Returns(new OpportunityDto());
+            _opportunityService.IsReferralOpportunity(OpportunityId).Returns(false);
+
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
@@ -69,7 +70,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetOpportunityWithReferrals(OpportunityId);
+            _opportunityService.Received(1).IsReferralOpportunity(OpportunityId);
         }
 
         [Fact]

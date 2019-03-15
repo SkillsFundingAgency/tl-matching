@@ -97,11 +97,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.SaveEmployerDetail(employerDetailDto);
 
-            var dto = await _opportunityService.GetOpportunityWithReferrals(viewModel.OpportunityId);
+            var isReferralOpportunity = await _opportunityService.IsReferralOpportunity(viewModel.OpportunityId);
 
-            return RedirectToRoute(dto.IsReferral.HasValue && dto.IsReferral.Value ?
-                "CheckAnswersReferrals_Get" :
-                "CheckAnswersProvisionGap_Get");
+            return RedirectToRoute(isReferralOpportunity ? "CheckAnswersReferrals_Get" : "CheckAnswersProvisionGap_Get");
         }
 
         private void Validate(EmployerDetailsViewModel viewModel)

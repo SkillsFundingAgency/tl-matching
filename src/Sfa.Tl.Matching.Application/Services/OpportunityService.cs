@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -42,18 +43,15 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<OpportunityDto> GetOpportunity(int id)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id);
+
             var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
 
             return dto;
         }
 
-        public async Task<OpportunityDto> GetOpportunityWithReferrals(int id)
+        public async Task<bool> IsReferralOpportunity(int id)
         {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id,
-                opp => opp.Referral);
-            var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
-
-            return dto;
+            return await _opportunityRepository.GetMany(o => o.Id == id && o.Referral.Any()).AnyAsync();
         }
 
         public async Task<OpportunityDto> GetOpportunityWithRoute(int id)
@@ -79,7 +77,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
 
-            _mapper.Map(dto, trackedEntity);
+            trackedEntity = _mapper.Map(dto, trackedEntity);
 
             await _opportunityRepository.Update(trackedEntity);
         }
