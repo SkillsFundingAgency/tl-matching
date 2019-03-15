@@ -12,8 +12,9 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class EmailService : IEmailService
     {
-        //TODO: Rename or move these constants
         public const string SystemId = "TLevelsIndustryPlacement";
+        public const string DefaultReplyToAddress = "DummyAddressToBeOverriddebByService"; //reply address is currently ignored by DAS Notifications
+        //public const string DefaultSubject = "SubjectToBeOverriddebByService";
 
         private readonly ILogger<EmailService> _logger;
         private readonly INotificationsApi _notificationsApi;
@@ -28,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _logger = logger;
         }
 
-        public async Task SendEmail(string templateName, string toAddress, string subject, dynamic tokens, string replyToAddress)
+        public async Task SendEmail(string templateName, string toAddress, string subject, IDictionary<string, string> personalisationTokens, string replyToAddress)
         {
             var emailTemplate = await _emailTemplateRepository.GetSingleOrDefault(t => t.TemplateName == templateName);
             if (emailTemplate == null)
@@ -49,15 +50,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var templateId = emailTemplate.TemplateId;
 
-            var personalisationTokens = new Dictionary<string, string>();
-
-            if (tokens != null)
-            {
-                foreach (var property in tokens.GetType().GetProperties())
-                {
-                    personalisationTokens[property.Name] = property.GetValue(tokens);
-                }
-            }
+            replyToAddress = !string.IsNullOrWhiteSpace(replyToAddress)
+                ? replyToAddress
+                : DefaultReplyToAddress;
 
             foreach (var recipient in recipients)
             {
@@ -68,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.Services
         }
 
         private async Task SendEmailViaNotificationsApi(string recipient, string subject, string templateId,
-            Dictionary<string, string> personalisationTokens, string replyToAddress)
+            IDictionary<string, string> personalisationTokens, string replyToAddress)
         {
             var email = new SFA.DAS.Notifications.Api.Types.Email
             {
@@ -77,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 ReplyToAddress = replyToAddress,
                 Subject = subject,
                 SystemId = SystemId,
-                Tokens = personalisationTokens
+                Tokens = (Dictionary<string, string>)personalisationTokens
             };
 
             try
@@ -86,8 +81,7 @@ namespace Sfa.Tl.Matching.Application.Services
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, $"Error sending email template {templateId} to {toAddress}");
-                _logger.LogError(ex, $"Error sending email to {recipient}");
+                _logger.LogError(ex, $"Error sending email template {templateId} to {recipient}");
             }
         }
     }

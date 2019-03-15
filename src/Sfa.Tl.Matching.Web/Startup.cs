@@ -160,7 +160,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
             services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
             services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
-            services.AddTransient<IRepository<Opportunity>, GenericRepository<Opportunity>>();
+            services.AddTransient<IRepository<Opportunity>, OpportunityRepository>();
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();

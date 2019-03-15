@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -16,22 +14,18 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         //public const string EmployerReferralEmailTemplateName = "EmployerReferral";
         public const string ProviderReferralEmailTemplateName = "ProviderReferral";
-        public const string ProvisionGapReportEmailTemplateName = "ProvisionGapReport";
         public const string ProviderReferralEmailSubject = "Industry Placement Matching Referral";
-        public const string ProvisionGapReportEmailSubject = "Industry Placement Matching Provision Gap Report";
-        public const string ReplyToAddress = "reply@test.com";
+        public const string ReplyToAddress = "DummyAddressToBeOverriddebByService"; //reply address is currently ignored by DAS Notifications
 
         private readonly ILogger<ReferralService> _logger;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         private readonly IRepository<EmailHistory> _emailHistoryRepository;
-        private readonly IRepository<EmailPlaceholder> _emailPlaceholderRepository;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
-        private readonly IRepository<Opportunity> _opportunityRepository;
+        private readonly IOpportunityRepository _opportunityRepository;
 
         public ReferralService(IEmailService emailService,
             IRepository<EmailHistory> emailHistoryRepository,
-            IRepository<EmailPlaceholder> emailPlaceholderRepository,
             IRepository<EmailTemplate> emailTemplateRepository,
             IRepository<Opportunity> opportunityRepository,
             IMapper mapper,
@@ -40,8 +34,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _emailService = emailService;
             _emailTemplateRepository = emailTemplateRepository;
             _emailHistoryRepository = emailHistoryRepository;
-            _emailPlaceholderRepository = emailPlaceholderRepository;
-            _opportunityRepository = opportunityRepository;
+            _opportunityRepository = (IOpportunityRepository)opportunityRepository;
             _mapper = mapper;
             _logger = logger;
         }
@@ -49,82 +42,83 @@ namespace Sfa.Tl.Matching.Application.Services
         public Task SendEmployerEmail(int opportunityId)
         {
             throw new NotImplementedException();
+            /* Note: can set up list of providers into a single placeholder using code like this:
+            var sb = new StringBuilder();
+            sb.AppendLine("# This is a heading");
+            sb.AppendLine("This is some text.");
+            sb.AppendLine("* bullet 1");
+            sb.AppendLine("* bullet 2");
+            sb.AppendLine("---");
+            sb.Append("\r\n");
+            sb.Append("Some final text\r\n");
+            sb.Append("...");
+            sb.Append("and a footer");
+
+            var placeholders = new List<EmailPlaceholderDto>
+            {
+                new EmailPlaceholderDto {Key = "prpviders_list", Value = sb.ToString()}
+            };
+            */
         }
 
         public async Task SendProviderEmail(int opportunityId)
         {
-            //TODO: What is ReplyToAddress?
-
             var emailTemplate = await GetEmailTemplate(ProviderReferralEmailTemplateName);
-            var opportunity = await GetOpportunity(opportunityId);
 
-            //TODO: This should be a loop over referrals#
-            var referral = opportunity.Referral.First();
+            var referrals = await GetOpportunityReferrals(opportunityId);
 
-            var providerEmailAddress = "";
+            foreach (var referral in referrals)
+            {
+                var toAddress = referral.ProviderPrimaryContactEmail;
 
-            var placeholders = new List<EmailPlaceholderDto>
+                var numberOfPlacements = referral.PlacementsKnown.GetValueOrDefault()
+                    ? referral.Placements.ToString()
+                    : "at least one";
+
+                var placeholders = new List<EmailPlaceholderDto>
                 {
-                    new EmailPlaceholderDto { Key = "primary_contact_name", Value = "Mike" },
-                    new EmailPlaceholderDto { Key = "provider_name", Value = "Your Provider" },
-                    new EmailPlaceholderDto { Key = "route", Value = opportunity.Route?.Name },
-                    new EmailPlaceholderDto { Key = "venue_postcode", Value = "AA1 1AA" },
-                    new EmailPlaceholderDto { Key = "distance", Value = opportunity.Distance.ToString() },
-                    new EmailPlaceholderDto { Key = "job_role", Value = "Assistant Chef" },
-                    new EmailPlaceholderDto { Key = "employer_business_name", Value = "Big Co." },
-                    new EmailPlaceholderDto { Key = "employer_contact_name ", Value = "Bog Boss" },
-                    new EmailPlaceholderDto { Key = "employer_contact_number", Value = "0201 234 567" },
-                    new EmailPlaceholderDto { Key = "employer_contact_email ", Value = "test@test.com" },
-                    new EmailPlaceholderDto { Key = "employer_postcode", Value = "XX1 2YY" },
-                    new EmailPlaceholderDto { Key = "number_of_placements", Value = "at least 1" }
+                    new EmailPlaceholderDto { Key = "primary_contact_name", Value = referral.ProviderPrimaryContact },
+                    new EmailPlaceholderDto { Key = "provider_name", Value = referral.ProviderName },
+                    new EmailPlaceholderDto { Key = "route", Value = referral.RouteName },
+                    new EmailPlaceholderDto { Key = "venue_postcode", Value = referral.ProviderVenuePostcode },
+                    new EmailPlaceholderDto { Key = "distance", Value = referral.SearchRadius.ToString() },
+                    new EmailPlaceholderDto { Key = "job_role", Value = referral.JobTitle },
+                    new EmailPlaceholderDto { Key = "employer_business_name", Value = referral.EmployerName},
+                    new EmailPlaceholderDto { Key = "employer_contact_name ", Value = referral.EmployerContact },
+                    new EmailPlaceholderDto { Key = "employer_contact_number", Value = referral.EmployerContactPhone },
+                    new EmailPlaceholderDto { Key = "employer_contact_email ", Value = referral.EmployerContactEmail },
+                    new EmailPlaceholderDto { Key = "employer_postcode", Value = referral.Postcode },
+                    new EmailPlaceholderDto { Key = "number_of_placements", Value = numberOfPlacements }
                 };
 
-            var tokens = ConvertPlaceholdersToTokens(placeholders);
+                var tokens = ConvertPlaceholdersToTokens(placeholders);
 
-            await _emailService.SendEmail(emailTemplate.TemplateName,
-                providerEmailAddress,
-                ProviderReferralEmailSubject,
-                tokens,
-                ReplyToAddress);
+                await _emailService.SendEmail(emailTemplate.TemplateName,
+                    toAddress,
+                    ProviderReferralEmailSubject,
+                    tokens,
+                    ReplyToAddress);
 
-            await SaveEmailHistory(emailTemplate, placeholders, opportunity, providerEmailAddress);
+                await SaveEmailHistory(emailTemplate, placeholders, opportunityId, toAddress);
+            }
         }
 
         public async Task SendProvisionGapEmail(int opportunityId)
         {
-            var emailTemplate = await GetEmailTemplate(ProvisionGapReportEmailTemplateName);
-
-            if (emailTemplate == null)
-            {
-                return;
-            }
-
-            var opportunity = await GetOpportunity(opportunityId);
-
-            var placeholders = new List<EmailPlaceholderDto>
-            {
-            };
-
-            var tokens = ConvertPlaceholdersToTokens(placeholders);
-            var providerEmailAddress = "";
-
-            await _emailService.SendEmail(emailTemplate.TemplateName,
-                providerEmailAddress,
-                ProviderReferralEmailSubject,
-                tokens,
-                ReplyToAddress);
-
-            await SaveEmailHistory(emailTemplate, placeholders, opportunity, providerEmailAddress);
+            //TODO: Remove provision gap email completely, won't use it
+            //TODO: Move call to SendProviderEmail(opportunityId) to the controller
+            //For testing, send a known item that was already added to the database
+            //await SendProviderEmail(16);
         }
 
-        private async Task SaveEmailHistory(EmailTemplate emailTemplate, List<EmailPlaceholderDto> placeholders, Opportunity opportunity, string emailAddress)
+        private async Task SaveEmailHistory(EmailTemplate emailTemplate, List<EmailPlaceholderDto> placeholders, int opportunityId, string emailAddress)
         {
             var emailPlaceholders = _mapper.Map<IList<EmailPlaceholder>>(placeholders);
-            _logger.LogInformation($"Saving {emailPlaceholders.Count} { nameof(EmailPlaceholder) }.");
+            _logger.LogInformation($"Saving {emailPlaceholders.Count} {nameof(EmailPlaceholder)} items.");
 
             var emailHistory = new EmailHistory
             {
-                OpportunityId = opportunity.Id,
+                OpportunityId = opportunityId,
                 EmailTemplateId = emailTemplate.Id,
                 EmailPlaceholder = emailPlaceholders,
                 SentTo = emailAddress,
@@ -138,20 +132,15 @@ namespace Sfa.Tl.Matching.Application.Services
             return emailTemplate;
         }
 
-        private async Task<Opportunity> GetOpportunity(int opportunityId)
+        private async Task<IList<OpportunityReferralDto>> GetOpportunityReferrals(int opportunityId)
         {
-            var opportunity = await _opportunityRepository
-                .GetSingleOrDefault(
-                    t => t.Id == opportunityId,
-                    opp => opp.ProvisionGap,
-                    opp => opp.Referral,
-                    opp => opp.Route);
-            return opportunity;
+            var opportunityReferralDto = await _opportunityRepository.GetProviderOpportunities(opportunityId);
+            return opportunityReferralDto;
         }
 
-        private dynamic ConvertPlaceholdersToTokens(IEnumerable<EmailPlaceholderDto> placeholders)
+        private IDictionary<string, string> ConvertPlaceholdersToTokens(IEnumerable<EmailPlaceholderDto> placeholders)
         {
-            IDictionary<string, object> tokens = new ExpandoObject();
+            var tokens = new Dictionary<string, string>();
 
             foreach (var placeholder in placeholders)
             {
@@ -161,4 +150,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return tokens;
         }
     }
+
+
 }

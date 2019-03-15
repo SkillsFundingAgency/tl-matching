@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NSubstitute;
 using System.Linq;
 using System.Linq.Expressions;
@@ -26,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             var logger = Substitute.For<ILogger<EmailService>>();
 
-            var emailTemplate = new Domain.Models.EmailTemplate
+            var emailTemplate = new EmailTemplate
             {
                 Id = 1,
                 TemplateId = "TemplateId",
@@ -34,18 +35,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             };
 
             _emailTemplateRepository = Substitute.For<IRepository<EmailTemplate>>();
-            _emailTemplateRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.EmailTemplate, bool>>>()).Returns(emailTemplate);
+            _emailTemplateRepository.GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>()).Returns(emailTemplate);
 
             var emailService = new EmailService(_notificationsApi, _emailTemplateRepository, logger);
 
             _subject = "A test email";
             _toAddress = "test@test.com";
             _replyToAddress = "reply@test.com";
-            var tokens = (dynamic)new { contactname = "name" };
+            var tokens = new Dictionary<string, string>
+            {
+                    { "contactname",  "name" }
+            };
 
             var templateName = "TestTemplate";
 
-            emailService.SendEmail(templateName, _toAddress, _subject, tokens, _replyToAddress);
+            emailService.SendEmail(templateName, _toAddress, _subject, tokens, _replyToAddress).GetAwaiter().GetResult();
         }
         
         [Fact]
