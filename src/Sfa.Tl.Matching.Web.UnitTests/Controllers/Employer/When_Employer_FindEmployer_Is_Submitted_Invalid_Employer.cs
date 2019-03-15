@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -26,7 +28,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 CompanyName = "Invalid Business Name"
             };
 
-            _employerController = new EmployerController(employerService, opportunityService);
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+
+            _employerController = new EmployerController(employerService, opportunityService, mapper);
 
             _result = _employerController.FindEmployer(viewModel).GetAwaiter().GetResult();
         }

@@ -28,10 +28,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var id = await _opportunityService.CreateOpportunity(dto);
 
-            return RedirectToRoute("PlacementInformationSave_Get", new
-            {
-                id
-            });
+            return RedirectToRoute("PlacementInformationSave_Get", new { id });
         }
 
         [Route("{SearchResultProviderCount}-referral-opportunities-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "CreateReferral_Get")]
@@ -41,10 +38,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var id = await _opportunityService.CreateOpportunity(dto);
 
-            return RedirectToRoute("PlacementInformationSave_Get", new
-            {
-                id
-            });
+            return RedirectToRoute("PlacementInformationSave_Get", new { id });
         }
 
         [HttpGet]

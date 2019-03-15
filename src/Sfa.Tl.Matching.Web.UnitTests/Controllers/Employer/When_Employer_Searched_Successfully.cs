@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -31,7 +33,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                     AlsoKnownAs = "AlsoKnownAs2"
                 }
             });
-            var employerController = new EmployerController(_employerService, null);
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+
+            var employerController = new EmployerController(_employerService, null, mapper);
 
             _result = employerController.Search(query);
         }

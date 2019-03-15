@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -15,12 +16,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly IEmployerService _employerService;
         private readonly IOpportunityService _opportunityService;
+        private readonly IMapper _mapper;
 
-        public EmployerController(IEmployerService employerService,
-            IOpportunityService opportunityService)
+        public EmployerController(IEmployerService employerService, IOpportunityService opportunityService, IMapper mapper)
         {
             _employerService = employerService;
             _opportunityService = opportunityService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -48,9 +50,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{id?}", Name = "EmployerFind_Post")]
         public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
-            if (!ModelState.IsValid)
+            var employerDto = viewModel.SelectedEmployerId != 0 ?
+                await _employerService.GetEmployer(viewModel.SelectedEmployerId) :
+                null;
+
+            if (!ModelState.IsValid || employerDto == null)
             {
-                if (viewModel.SelectedEmployerId == 0 || await _employerService.GetEmployer(viewModel.SelectedEmployerId) == null)
+                if (employerDto == null)
                 {
                     ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
                 }
@@ -58,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(viewModel);
             }
 
-            var dto = PopulateEmployerNameDto(viewModel);
+            var dto = _mapper.Map<EmployerNameDto>(viewModel);
 
             await _opportunityService.SaveEmployerName(dto);
 
@@ -71,14 +77,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var dto = await _opportunityService.GetOpportunity(id);
 
-            var viewModel = new EmployerDetailsViewModel
-            {
-                OpportunityId = dto.Id,
-                EmployerName = dto.EmployerName,
-                Contact = dto.EmployerContact,
-                ContactEmail = dto.EmployerContactEmail,
-                ContactPhone = dto.EmployerContactPhone
-            };
+            var employerDto = await _employerService.GetEmployer(dto.EmployerId ?? 0);
+
+            var viewModel = _mapper.Map(employerDto, new EmployerDetailsViewModel { OpportunityId = dto.Id });
 
             return View(viewModel);
         }
@@ -92,7 +93,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var employerDetailDto = PopulateEmployerDetailsDto(viewModel);
+            var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
             await _opportunityService.SaveEmployerDetail(employerDetailDto);
 
@@ -101,32 +102,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute(dto.IsReferral.HasValue && dto.IsReferral.Value ?
                 "CheckAnswersReferrals_Get" :
                 "CheckAnswersProvisionGap_Get");
-        }
-
-        private EmployerNameDto PopulateEmployerNameDto(FindEmployerViewModel viewModel)
-        {
-            var dto = new EmployerNameDto
-            {
-                OpportunityId = viewModel.OpportunityId,
-                CompanyName = viewModel.CompanyName,
-                ModifiedBy = HttpContext.User.GetUserName()
-            };
-
-            return dto;
-        }
-
-        private EmployerDetailDto PopulateEmployerDetailsDto(EmployerDetailsViewModel employer)
-        {
-            var dto = new EmployerDetailDto
-            {
-                OpportunityId = employer.OpportunityId,
-                EmployerContact = employer.Contact,
-                EmployerContactEmail = employer.ContactEmail,
-                EmployerContactPhone = employer.ContactPhone,
-                ModifiedBy = HttpContext.User.GetUserName()
-            };
-
-            return dto;
         }
 
         private void Validate(EmployerDetailsViewModel viewModel)

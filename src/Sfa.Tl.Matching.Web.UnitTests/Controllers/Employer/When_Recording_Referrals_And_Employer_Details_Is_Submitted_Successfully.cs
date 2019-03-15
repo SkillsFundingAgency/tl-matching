@@ -1,7 +1,9 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -35,7 +37,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunityWithReferrals(OpportunityId).Returns(new OpportunityDto { IsReferral = true });
 
-            var employerController = new EmployerController(null, _opportunityService);
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+
+            var employerController = new EmployerController(null, _opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
                 .AddStandardUser()
                 .AddUserName(ModifiedBy)

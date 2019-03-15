@@ -1,7 +1,9 @@
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -20,6 +22,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         public When_Employer_Details_Is_Loaded()
         {
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+
             var employerService = Substitute.For<IEmployerService>();
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
@@ -28,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 EmployerName = EmployerName
             });
 
-            var employerController = new EmployerController(employerService, _opportunityService);
+            var employerController = new EmployerController(employerService, _opportunityService, mapper);
 
             _result = employerController.Details(OpportunityId).GetAwaiter().GetResult();
         }

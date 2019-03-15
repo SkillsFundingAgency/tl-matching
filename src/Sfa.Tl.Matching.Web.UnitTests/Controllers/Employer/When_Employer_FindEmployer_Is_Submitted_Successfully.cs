@@ -1,5 +1,7 @@
-﻿using NSubstitute;
+﻿using AutoMapper;
+using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -30,7 +32,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
-            var employerController = new EmployerController(_employerService, _opportunityService);
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+
+            var employerController = new EmployerController(_employerService, _opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
                 .AddUserName(ModifiedBy)
                 .Build();

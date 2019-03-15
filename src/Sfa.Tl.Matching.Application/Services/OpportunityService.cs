@@ -77,8 +77,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SaveEmployerName(EmployerNameDto dto)
         {
-            dto.ModifiedOn = _dateTimeProvider.UtcNow();
-
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
 
             _mapper.Map(dto, trackedEntity);
@@ -88,8 +86,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SaveEmployerDetail(EmployerDetailDto dto)
         {
-            dto.ModifiedOn = _dateTimeProvider.UtcNow();
-
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
 
             _mapper.Map(dto, trackedEntity);

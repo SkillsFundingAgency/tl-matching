@@ -1,6 +1,9 @@
-﻿using NSubstitute;
+﻿using AutoMapper;
+using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
@@ -19,13 +22,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.CreateOpportunity(Arg.Any<OpportunityDto>()).Returns(opportunityId);
 
-            var opportunityController = new OpportunityController(_opportunityService);
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+
+            var opportunityController = new OpportunityController(_opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(UserName)
                 .AddEmail(Email)
                 .Build();
 
-            controllerWithClaims.CreateProvisionGap(0, 1, "cv12wt", 10).GetAwaiter().GetResult();
+            controllerWithClaims.CreateProvisionGap(new CreateProvisionGapViewModel { SearchResultProviderCount = 0, SelectedRouteId = 1, Postcode = "cv12wt", SearchRadius = 10 }).GetAwaiter().GetResult();
         }
 
         [Fact]
