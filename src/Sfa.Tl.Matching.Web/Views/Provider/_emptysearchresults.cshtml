@@ -14,7 +14,7 @@
 <p class="govuk-body">
     If neither of these work,
     <a asp-route="OpportunityCreate_Get"
-       asp-route-SearchResultProviderCount="@Model.SearchResults.Results.Count()"
+       asp-route-SearchResultProviderCount="@Model.SearchResults.SearchResultProviderCount"
        asp-route-Postcode="@Model.SearchParameters.Postcode"
        asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
        asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"

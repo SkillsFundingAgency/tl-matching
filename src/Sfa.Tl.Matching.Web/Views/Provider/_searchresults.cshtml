@@ -1,13 +1,13 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
 
 <h2 class="govuk-body">
-    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">@Model.SearchResults?.Results?.Count() </span>results in <span class="govuk-!-font-weight-bold">
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">@Model.SearchResults.SearchResultProviderCount </span>results in <span class="govuk-!-font-weight-bold">
         @Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text
     </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span>
 </h2>
 
 <a asp-route="OpportunityCreate_Get"
-   asp-route-SearchResultProviderCount="@Model.SearchResults.Results.Count()"
+   asp-route-SearchResultProviderCount="@Model.SearchResults.SearchResultProviderCount"
    asp-route-Postcode="@Model.SearchParameters.Postcode"
    asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
    asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
@@ -15,24 +15,24 @@
 
 <p class="govuk-body">Choose who the employer wants to hear from</p>
 
-<form asp-route="CreateReferral_Get">
-    <input asp-for="SearchParameters.Postcode" type="hidden"/>
-    <input asp-for="SearchParameters.SearchRadius" type="hidden"/>
-    <input asp-for="SearchParameters.SelectedRouteId" type="hidden"/>
-    <input asp-for="@Model.SearchResults.Results.Count()" type="hidden"/>
+<form asp-controller="Opportunity" asp-action="CreateReferfal">
+    <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden"/>
+    <input asp-for="SearchParameters.SearchRadius" name="SearchRadius" type="hidden"/>
+    <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden"/>
+    <input asp-for="@Model.SearchResults.SearchResultProviderCount" name="SearchResultProviderCount" type="hidden"/>
     <ol class="tl-search-results">
-        @for (var i = 0; i < @Model.SearchResults?.Results?.Count(); i++)
+        @for (var i = 0; i < Model.SearchResults.SearchResultProviderCount; i++)
         {
             var searchResult = Model.SearchResults.Results[i];
 
             <li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
                 <div class="govuk-checkboxes">
                     <div class="govuk-checkboxes__item">
-                        <input type="hidden" asp-for="@searchResult.Distance" />
-                        <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderId" />
+                        <input type="hidden" asp-for="@searchResult.Distance" name="SelectedProvider[@i].DistanceFromEmployer" />
+                        <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderVenueId" name="SelectedProvider[@i].ProviderVenueId" />
 
-                        <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" />
-                        <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].ProviderName">
+                        <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected"  name="SelectedProvider[@i].IsSelected" />
+                        <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].ProviderName" name="SelectedProvider[@i].ProviderName">
                             @searchResult.ProviderName
                             <ul class="tl-inline-list tl-inline-list--bar">
                                 <li>@searchResult.Postcode</li>
