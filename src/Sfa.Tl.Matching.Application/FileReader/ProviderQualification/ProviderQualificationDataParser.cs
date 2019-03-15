@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderQualification
             {
                 ProviderVenueId = data.ProviderVenueId,
                 QualificationId = data.QualificationId,
-                NumberOfPlacements = data.NumberOfPlacements.ToInt(),
+                NumberOfPlacements = data.NumberOfPlacements.ToNullableInt(),
                 Source = data.Source,
                 CreatedBy = data.CreatedBy
             };

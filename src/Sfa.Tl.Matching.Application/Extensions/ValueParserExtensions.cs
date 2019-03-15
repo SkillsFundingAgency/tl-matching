@@ -14,6 +14,11 @@ namespace Sfa.Tl.Matching.Application.Extensions
             return int.Parse(value);
         }
 
+        public static int? ToNullableInt(this string value)
+        {
+            return string.IsNullOrEmpty(value) ? default(int?) : int.Parse(value);
+        }
+
         public static long ToLong(this string value)
         {
             return long.Parse(value);
