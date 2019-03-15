@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<int> CreateOpportunity(OpportunityDto opportunityDto);
         Task SaveEmployerName(EmployerNameDto dto);
         Task SaveEmployerDetail(EmployerDetailDto dto);
+        Task SaveCheckAnswers(CheckAnswersDto dto);
         Task<OpportunityDto> GetOpportunity(int id);
         Task<OpportunityDto> GetOpportunityWithRoute(int id);
         Task<int> CreateProvisionGap(CheckAnswersProvisionGapViewModel dto);

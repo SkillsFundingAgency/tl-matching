@@ -17,6 +17,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string EmployerContactEmail { get; set; }
         public string EmployerContactPhone { get; set; }
         public string UserEmail { get; set; }
+        public bool? ConfirmationSelected { get; set; }
 
         public virtual Route Route { get; set; }
         public virtual ICollection<EmailHistory> EmailHistory { get; set; }

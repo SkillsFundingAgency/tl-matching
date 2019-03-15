@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
@@ -12,27 +13,43 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     public class When_Recording_ProvisionGap_And_Check_Answers_Gap_Is_Submitted_Successfully
     {
         private readonly IOpportunityService _opportunityService;
-        private const string CreatedBy = "CreatedBy";
+        private const string ModifiedBy = "ModifiedBy";
         private readonly IActionResult _result;
-        private readonly CheckAnswersProvisionGapViewModel _viewModel = new CheckAnswersProvisionGapViewModel();
+        private const bool ConfirmationSelected = true;
+
+        private readonly OpportunityDto _dto = new OpportunityDto
+        {
+            Id = OpportunityId,
+            ConfirmationSelected = false
+        };
+
+        private const int OpportunityId = 1;
 
         public When_Recording_ProvisionGap_And_Check_Answers_Gap_Is_Submitted_Successfully()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            var referralService = Substitute.For<IReferralService>();
+            _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto { Id = OpportunityId, ConfirmationSelected = false });
+             
+			 var referralService = Substitute.For<IReferralService>();
 
             var opportunityController = new OpportunityController(_opportunityService, referralService);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
-                .AddUserName(CreatedBy)
+                .AddUserName(ModifiedBy)
                 .Build();
 
-            _result = controllerWithClaims.CheckAnswersProvisionGap(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.CheckAnswersProvisionGap(new CheckAnswersProvisionGapViewModel
+            {
+                OpportunityId = OpportunityId,
+                ConfirmationSelected = true
+            }).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_CreateProvisionGap_Is_Called_Exactly_Once()
+        public void Then_SaveCheckAnswers_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).CreateProvisionGap(_viewModel);
+            _opportunityService.Received(1).SaveCheckAnswers(Arg.Is<CheckAnswersDto>(a =>
+                a.ConfirmationSelected == ConfirmationSelected &&
+                a.ModifiedBy == ModifiedBy));
         }
 
         [Fact]

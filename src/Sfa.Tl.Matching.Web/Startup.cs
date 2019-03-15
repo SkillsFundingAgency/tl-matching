@@ -97,8 +97,17 @@ namespace Sfa.Tl.Matching.Web
             app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
             app.UseXfo(xfo => xfo.Deny());
             app.UseCsp(options => options
-                .DefaultSources(s => s.Self())
-                .ScriptSources(s => s.Self().UnsafeInline()));
+                          .DefaultSources(s => s.Self())
+                          .ScriptSources(s =>
+                          {
+                              s.Self()
+                      .CustomSources(
+                                "https://www.google-analytics.com/analytics.js",
+                                   "https://www.googletagmanager.com/"
+                                   )
+                      .UnsafeInline();
+                          }
+                          ));
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

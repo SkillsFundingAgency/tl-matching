@@ -85,7 +85,19 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await _opportunityRepository.Update(trackedEntity);
         }
+
         public async Task SaveEmployerDetail(EmployerDetailDto dto)
+        {
+            dto.ModifiedOn = _dateTimeProvider.UtcNow();
+
+            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
+
+            _mapper.Map(dto, trackedEntity);
+
+            await _opportunityRepository.Update(trackedEntity);
+        }
+
+        public async Task SaveCheckAnswers(CheckAnswersDto dto)
         {
             dto.ModifiedOn = _dateTimeProvider.UtcNow();
 

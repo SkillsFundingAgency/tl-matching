@@ -17,14 +17,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private const string ContactPhone = "123456789";
         private const string ContactEmail = "ContactEmail";
         private const string ModifiedBy = "ModifiedBy";
-        private readonly EmployerDetailDto _dto = new EmployerDetailDto
-        {
-            OpportunityId = OpportunityId,
-            EmployerContact = Contact,
-            EmployerContactEmail = ContactEmail,
-            EmployerContactPhone = ContactPhone,
-            ModifiedBy = ModifiedBy
-        };
+        
         private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel
         {
             OpportunityId = OpportunityId,
@@ -58,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
+        public void Then_SaveEmployerDetail_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).SaveEmployerDetail(Arg.Is<EmployerDetailDto>(a => 
                 a.EmployerContact == Contact && 
@@ -66,32 +59,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 a.EmployerContactPhone == ContactPhone &&
                 a.ModifiedBy == ModifiedBy));
         }
-
-        [Fact]
-        public void Then_Contact_Is_Populated()
-        {
-            _dto.EmployerContact.Should().Be(Contact);
-        }
-
-        [Fact]
-        public void Then_ContactEmail_Is_Populated()
-        {
-            _dto.EmployerContactEmail.Should().Be(ContactEmail);
-        }
-
-        [Fact]
-        public void Then_ContactPhone_Is_Populated()
-        {
-            _dto.EmployerContactPhone.Should().Be(ContactPhone);
-        }
-
-        [Fact]
-        public void Then_ModifiedBy_Is_Populated()
-        {
-            _dto.ModifiedBy.Should().Be(ModifiedBy);
-        }
-
-
+        
         [Fact]
         public void Then_Result_Is_RedirectResult() =>
             _result.Should().BeOfType<RedirectToRouteResult>();
