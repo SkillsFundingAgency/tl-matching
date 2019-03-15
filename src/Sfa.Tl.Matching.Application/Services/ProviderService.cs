@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore.Internal;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -11,16 +10,11 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class ProviderService : IProviderService
     {
-        private readonly IMapper _searchResultMapper;
         private readonly ISearchProvider _searchProvider;
         private readonly ILocationService _locationService;
 
-        public ProviderService(
-            IMapper searchResultMapper,
-            ISearchProvider searchProvider,
-            ILocationService locationService)
+        public ProviderService(ISearchProvider searchProvider, ILocationService locationService)
         {
-            _searchResultMapper = searchResultMapper;
             _searchProvider = searchProvider;
             _locationService = locationService;
         }
