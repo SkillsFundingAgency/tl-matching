@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -45,7 +46,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             };
 
             var logger = Substitute.For<ILogger<ProviderController>>();
-            var mapper = Substitute.For<IMapper>();
+
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
+            IMapper mapper = new Mapper(config);
 
             _providerService = Substitute.For<IProviderService>();
             _providerService

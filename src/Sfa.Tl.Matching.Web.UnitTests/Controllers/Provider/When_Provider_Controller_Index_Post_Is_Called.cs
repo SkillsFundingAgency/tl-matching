@@ -34,6 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             IMapper mapper = new Mapper(config);
 
             var providerService = Substitute.For<IProviderService>();
+            providerService.IsValidPostCode(Arg.Any<string>()).Returns(true);
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
