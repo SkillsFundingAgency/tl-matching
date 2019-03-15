@@ -7,6 +7,7 @@
 	[JobTitle] NVARCHAR(250) NULL,
 	[PlacementsKnown] BIT NULL,
 	[Placements] INT NULL,
+	[EmployerId] INT NULL,
 	[EmployerName] NVARCHAR(250) NULL, 
 	[EmployerContact] NVARCHAR(100) NULL,
 	[EmployerContactEmail] VARCHAR(320) NULL,
