@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             };
         }
 
-        public IEnumerable<ProviderVenueSearchResultDto> Build() =>
+        public IList<ProviderVenueSearchResultDto> Build() =>
             _searchResults;
     }
 }

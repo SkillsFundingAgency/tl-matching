@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _locationService = locationService;
         }
 
-        public async Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
+        public async Task<IList<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
             var geoLocationData = await _locationService.GetGeoLocationData(dto.Postcode);
             dto.Latitude = geoLocationData.Latitude;
@@ -33,9 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var searchResults = await _searchProvider.SearchProvidersByPostcodeProximity(dto);
 
-            var results = searchResults.Any()
-                ? _searchResultMapper.Map<IEnumerable<ProviderVenueSearchResultDto>>(searchResults)
-                : new List<ProviderVenueSearchResultDto>();
+            var results = searchResults.Any() ? searchResults : new List<ProviderVenueSearchResultDto>();
 
             return results;
         }

@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             _providerVenueRepository = providerVenueRepository;
         }
 
-        public async Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
+        public async Task<IList<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
             _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
 
