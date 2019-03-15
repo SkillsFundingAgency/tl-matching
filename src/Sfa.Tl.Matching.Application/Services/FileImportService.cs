@@ -19,17 +19,20 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IMapper _mapper;
         private readonly IFileReader<TImportDto, TDto> _fileReader;
         private readonly IRepository<TEntity> _repository;
+        private readonly IDataProcessor<TEntity> _dataProcessor;
 
         public FileImportService(
             ILogger<FileImportService<TImportDto, TDto, TEntity>> logger,
             IMapper mapper,
             IFileReader<TImportDto, TDto> fileReader,
-            IRepository<TEntity> repository)
+            IRepository<TEntity> repository,
+            IDataProcessor<TEntity> dataProcessor)
         {
             _logger = logger;
             _mapper = mapper;
             _fileReader = fileReader;
             _repository = repository;
+            _dataProcessor = dataProcessor;
         }
 
         public async Task<int> Import(TImportDto fileImportDto)
@@ -38,16 +41,24 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var import = _fileReader.ValidateAndParseFile(fileImportDto);
 
-            if (import != null && import.Any())
+            if (import == null || !import.Any())
             {
-                var providerQualifications = _mapper.Map<IList<TEntity>>(import);
+                _logger.LogInformation("No Data Imported.");
 
-                _logger.LogInformation($"Saving { providerQualifications.Count } { nameof(TEntity) }.");
-                return await _repository.CreateMany(providerQualifications);
+                return 0;
             }
 
-            _logger.LogInformation("No Data Imported.");
-            return 0;
+            var entities = _mapper.Map<IList<TEntity>>(import);
+                
+            _dataProcessor.PreProcessingHandler(entities);
+
+            _logger.LogInformation($"Saving { entities.Count } { nameof(TEntity) }.");
+                
+            var result = await _repository.CreateMany(entities);
+
+            _dataProcessor.PostProcessingHandler(entities);
+
+            return result;
         }
     }
 }
