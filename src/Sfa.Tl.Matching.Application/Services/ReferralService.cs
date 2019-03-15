@@ -54,9 +54,21 @@ namespace Sfa.Tl.Matching.Application.Services
             sb.Append("...");
             sb.Append("and a footer");
 
+            Will be something like:
+            # [Provider name]
+            [Venue postcode]
+            Contact name: [provider primary contact name]
+            Telephone: [provider primary contact number]
+            Email: [provider primary contact email]
+            Has students learning:
+            * [shortened qual title 1]
+            * [shortened qual title 2]
+            * Etc
+
+
             var placeholders = new List<EmailPlaceholderDto>
             {
-                new EmailPlaceholderDto {Key = "prpviders_list", Value = sb.ToString()}
+                new EmailPlaceholderDto {Key = "providers_list", Value = sb.ToString()}
             };
             */
         }

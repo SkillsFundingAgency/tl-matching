@@ -40,10 +40,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailTemplate
             _result.TemplateName.Should().BeEquivalentTo("TestTemplate");
         
         [Fact]
-        public void Then_EmailTemplate_Recipients_Is_Returned()
-            => _result.Recipients.Should().BeEquivalentTo("test@test.com");
-
-        [Fact]
         public void Then_EmailTemplate_CreatedBy_Is_Returned() =>
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
 

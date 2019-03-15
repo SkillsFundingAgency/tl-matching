@@ -43,11 +43,6 @@ namespace Sfa.Tl.Matching.Application.Services
                 recipients.Add(toAddress.Trim());
             }
 
-            if (!string.IsNullOrWhiteSpace(emailTemplate.Recipients))
-            {
-                recipients.AddRange(emailTemplate.Recipients.Split(';').Select(x => x.Trim()));
-            }
-
             var templateId = emailTemplate.TemplateId;
 
             replyToAddress = !string.IsNullOrWhiteSpace(replyToAddress)
