@@ -4,7 +4,6 @@ namespace Sfa.Tl.Matching.Models.Dto
 {
     public class ProviderVenueSearchResultDto
     {
-        public int ProviderId { get; set; }
         public int ProviderVenueId { get; set; }
         public string ProviderName { get; set; }
         public string Postcode { get; set; }
