@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     public class EmployerDetailsViewModel
     {
         public int OpportunityId { get; set; }
-        public string EmployerName { get; set; }
+        public string CompanyName { get; set; }
 
         [Required(ErrorMessage = "You must enter a contact name for placements")]
         [MinLength(2, ErrorMessage = "You must enter a contact name using 2 or more characters")]

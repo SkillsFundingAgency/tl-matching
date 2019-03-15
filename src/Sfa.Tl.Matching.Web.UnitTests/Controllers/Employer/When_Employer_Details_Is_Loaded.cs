@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private readonly IOpportunityService _opportunityService;
 
         private const int OpportunityId = 12;
-        private const string EmployerName = "EmployerName";
+        private const string EmployerName = "CompanyName";
 
         public When_Employer_Details_Is_Loaded()
         {
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_EmployerName_Is_Populated()
         {
             var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
-            viewModel.EmployerName.Should().Be(EmployerName);
+            viewModel.CompanyName.Should().Be(EmployerName);
         }
 
         [Fact]

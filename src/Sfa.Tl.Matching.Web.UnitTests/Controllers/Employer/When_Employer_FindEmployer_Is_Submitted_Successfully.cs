@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
     {
         private readonly IEmployerService _employerService;
         private readonly IOpportunityService _opportunityService;
-        private const string EmployerName = "EmployerName";
+        private const string EmployerName = "CompanyName";
         private const string ModifiedBy = "ModifiedBy";
         private readonly FindEmployerViewModel _viewModel = new FindEmployerViewModel();
 

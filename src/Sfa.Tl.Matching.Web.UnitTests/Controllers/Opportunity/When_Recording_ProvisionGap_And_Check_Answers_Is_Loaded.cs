@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerName_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
-            viewModel.PlacementInformation.EmployerName.Should().Be("EmployerName");
+            viewModel.PlacementInformation.EmployerName.Should().Be("CompanyName");
         }
 
         [Fact]

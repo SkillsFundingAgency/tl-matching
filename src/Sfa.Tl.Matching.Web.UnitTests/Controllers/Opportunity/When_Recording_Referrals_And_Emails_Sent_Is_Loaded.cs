@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerBusinessName_Is_Set()
         {
             var viewModel = _result.GetViewModel<EmailsSentViewModel>();
-            viewModel.EmployerBusinessName.Should().Be("EmployerName");
+            viewModel.EmployerBusinessName.Should().Be("CompanyName");
         }
 
         [Fact]
