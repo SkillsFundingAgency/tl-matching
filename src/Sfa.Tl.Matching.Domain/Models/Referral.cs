@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Sfa.Tl.Matching.Domain.Models
+﻿namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Referral : BaseEntity
     {

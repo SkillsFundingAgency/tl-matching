@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 
