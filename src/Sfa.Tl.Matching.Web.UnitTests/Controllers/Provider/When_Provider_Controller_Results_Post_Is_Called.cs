@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             var viewModel = new SearchParametersViewModel();
 
-            _result = providerController.Results(viewModel).GetAwaiter().GetResult();
+            _result = providerController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
