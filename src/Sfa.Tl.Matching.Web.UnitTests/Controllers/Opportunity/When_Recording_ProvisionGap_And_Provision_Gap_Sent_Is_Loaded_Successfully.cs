@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Recording_PlacementGap_And_Email_Sent_Is_Loaded_Successfully
+    public class When_Recording_ProvisionGap_And_Provision_Gap_Sent_Is_Loaded_Successfully
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         private const int OpportunityId = 1;
 
-        public When_Recording_PlacementGap_And_Email_Sent_Is_Loaded_Successfully()
+        public When_Recording_ProvisionGap_And_Provision_Gap_Sent_Is_Loaded_Successfully()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(CreatedBy)
                 .Build();
 
-            _result = controllerWithClaims.EmailSentProvisionGap(OpportunityId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.ProvisionGapSent(OpportunityId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -54,15 +54,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             viewResult.Should().NotBeNull();
 
-            viewResult?.Model.Should().BeOfType<EmailSentProvisionGapViewModel>();
+            viewResult?.Model.Should().BeOfType<ProvisionGapSentViewModel>();
 
-            ((EmailSentProvisionGapViewModel)viewResult?.Model)?.EmployerContactName.Should().Be(EmployerContact);
+            ((ProvisionGapSentViewModel)viewResult?.Model)?.EmployerContactName.Should().Be(EmployerContact);
         }
 
         [Fact]
         public void Then_EmployerContactName_Is_Set()
         {
-            var viewModel = _result.GetViewModel<EmailSentProvisionGapViewModel>();
+            var viewModel = _result.GetViewModel<ProvisionGapSentViewModel>();
             viewModel.EmployerContactName.Should().Be(EmployerContact);
         }
     }

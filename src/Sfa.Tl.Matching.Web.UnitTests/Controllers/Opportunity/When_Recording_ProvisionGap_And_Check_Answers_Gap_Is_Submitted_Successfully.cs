@@ -58,12 +58,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_to_PlacementGap()
+        public void Then_Result_Is_Redirected_to_Provision_Gap_Sent()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("EmailSentProvisionGap_Get");
+            result?.RouteName.Should().Be("ProvisionGapSent_Get");
         }
     }
 }
