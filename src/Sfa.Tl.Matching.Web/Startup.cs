@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -21,6 +22,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Web.Extensions.ApplicationBuilder;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -70,7 +72,8 @@ namespace Sfa.Tl.Matching.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            ILoggerFactory loggerFactory)
         {
             var cultureInfo = new CultureInfo("en-GB");
 
@@ -83,7 +86,8 @@ namespace Sfa.Tl.Matching.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseGlobalExceptionHandler(loggerFactory);
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
