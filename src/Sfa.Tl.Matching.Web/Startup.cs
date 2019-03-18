@@ -22,9 +22,11 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Web.Extensions.ApplicationBuilder;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace Sfa.Tl.Matching.Web
 {
