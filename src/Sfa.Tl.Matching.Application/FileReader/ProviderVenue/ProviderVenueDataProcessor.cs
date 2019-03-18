@@ -1,10 +1,11 @@
-﻿using Sfa.Tl.Matching.Application.Extensions;
+﻿using System.Collections.Generic;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
 {
-    public class ProviderVenueDataProcessor : IDataProcessor<ProviderVenueFileImportDto>
+    public class ProviderVenueDataProcessor : IDataProcessor<Domain.Models.ProviderVenue>
     {
         private readonly IMessageQueueService _messageQueueService;
 
@@ -13,11 +14,14 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
             _messageQueueService = messageQueueService;
         }
 
-        public void PreProcessingHandler(ProviderVenueFileImportDto fileImportDto) { }
+        public void PreProcessingHandler(IList<Domain.Models.ProviderVenue> entities) { }
 
-        public void PostProcessingHandler(ProviderVenueFileImportDto fileImportDto)
+        public void PostProcessingHandler(IList<Domain.Models.ProviderVenue> entities)
         {
-            _messageQueueService.Push(new GetProximityData { PostCode = fileImportDto.PostCode, UkPrn = fileImportDto.UkPrn.ToLong() });
+            foreach (var providerVenue in entities)
+            {
+                _messageQueueService.Push(new GetProximityData { Postcode = providerVenue.Postcode, ProviderVenueId = providerVenue.Id });
+            }
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             {
                 new ProviderVenueSearchResultDto
                 {
-                    ProviderId = 1,
+                    ProviderVenueId = 1,
                     ProviderName = "The WKCIC Group",
                     Postcode = "NW1 3HB",
                     Distance = 2.5d,
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                 },
                 new ProviderVenueSearchResultDto
                 {
-                    ProviderId = 2,
+                    ProviderVenueId = 2,
                     ProviderName = "Lambeth College",
                     Postcode = "SW4 9BL",
                     Distance = 2.5d,
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             };
         }
 
-        public IEnumerable<ProviderVenueSearchResultDto> Build() =>
+        public IList<ProviderVenueSearchResultDto> Build() =>
             _searchResults;
     }
 }

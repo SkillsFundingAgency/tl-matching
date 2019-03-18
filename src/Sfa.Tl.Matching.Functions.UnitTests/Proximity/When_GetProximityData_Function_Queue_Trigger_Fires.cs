@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _locationService = Substitute.For<ILocationService>();
 
             var proximityfunctions = new Functions.Proximity();
-            proximityfunctions.GetProximityData(new GetProximityData { PostCode = "CV12WT" }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, _locationService).GetAwaiter().GetResult();
+            proximityfunctions.GetProximityData(new GetProximityData { Postcode = "CV12WT" }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, _locationService).GetAwaiter().GetResult();
         }
 
         [Fact]

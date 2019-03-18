@@ -1,7 +1,9 @@
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -28,12 +30,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _dto.PlacementsKnown = PlacementsKnown;
             _dto.Placements = Placements;
 
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+            
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(_dto);
 
             var referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(_opportunityService, referralService);
+            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
 
             _result = opportunityController.PlacementInformationSave(OpportunityId).GetAwaiter().GetResult();
         }

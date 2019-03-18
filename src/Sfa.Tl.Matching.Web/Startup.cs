@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -24,7 +25,6 @@ using Sfa.Tl.Matching.Domain.Models;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -74,7 +74,8 @@ namespace Sfa.Tl.Matching.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            ILoggerFactory loggerFactory)
         {
             var cultureInfo = new CultureInfo("en-GB");
 
@@ -87,7 +88,8 @@ namespace Sfa.Tl.Matching.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseGlobalExceptionHandler(loggerFactory);
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -97,17 +99,15 @@ namespace Sfa.Tl.Matching.Web
             app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
             app.UseXfo(xfo => xfo.Deny());
             app.UseCsp(options => options
-                          .DefaultSources(s => s.Self())
-                          .ScriptSources(s =>
-                          {
-                              s.Self()
-                      .CustomSources(
-                                "https://www.google-analytics.com/analytics.js",
-                                   "https://www.googletagmanager.com/"
-                                   )
-                      .UnsafeInline();
-                          }
-                          ));
+                .ScriptSources(s =>
+                {
+                    s.Self()
+                        .CustomSources("https://www.google-analytics.com/analytics.js",
+                                       "https://www.googletagmanager.com/",
+                                       "https://www.smartsurvey.co.uk/")
+                        .UnsafeInline();
+                }
+            ));
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -147,8 +147,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddAutoMapper();
 
             //Inject DbContext
-            services.AddDbContext<MatchingDbContext>(options => 
-                options.UseSqlServer(_configuration.SqlConnectionString, 
+            services.AddDbContext<MatchingDbContext>(options =>
+                options.UseSqlServer(_configuration.SqlConnectionString,
                     builder => builder.UseNetTopologySuite()
                                       .EnableRetryOnFailure()));
 

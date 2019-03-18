@@ -22,6 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         private readonly IFileReader<EmployerFileImportDto, EmployerDto> _fileReader;
         private readonly IRepository<Domain.Models.Employer> _repository;
         private readonly int _result;
+        private readonly IDataProcessor<Domain.Models.Employer> _dataProcessor;
 
         public When_EmployerService_Is_Called_To_Import_Employers()
         {
@@ -30,6 +31,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var logger = Substitute.For<ILogger<FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>>>();
             _fileReader = Substitute.For<IFileReader<EmployerFileImportDto, EmployerDto>>();
             _repository = Substitute.For<IRepository<Domain.Models.Employer>>();
+            _dataProcessor = Substitute.For<IDataProcessor<Domain.Models.Employer>>();
 
             _repository
                 .CreateMany(Arg.Any<IList<Domain.Models.Employer>>())
@@ -49,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(_fileReaderResults);
 
-            var service = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(logger, mapper, _fileReader, _repository);
+            var service = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
             _result = service.Import(_fileImportDto).GetAwaiter().GetResult();
         }
@@ -68,6 +70,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _repository
                 .Received(1)
                 .CreateMany(Arg.Any<IList<Domain.Models.Employer>>());
+        }
+
+        [Fact]
+        public void Then_PreProcessingHandler_Is_Called_Exactly_Once()
+        {
+            _dataProcessor
+                .Received(1)
+                .PreProcessingHandler(Arg.Any<IList<Domain.Models.Employer>>());
+        }
+
+        [Fact]
+        public void Then_PostProcessingHandler_Is_Called_Exactly_Once()
+        {
+            _dataProcessor
+                .Received(1)
+                .PostProcessingHandler(Arg.Any<IList<Domain.Models.Employer>>());
         }
 
         [Fact]

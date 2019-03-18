@@ -1,7 +1,9 @@
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
@@ -18,7 +20,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             var employerService = Substitute.For<IEmployerService>();
             var opportunityService = Substitute.For<IOpportunityService>();
-            var employerController = new EmployerController(employerService, opportunityService);
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+
+            var employerController = new EmployerController(employerService, opportunityService, mapper);
 
             _result = employerController.FindEmployer(OpportunityId);
         }

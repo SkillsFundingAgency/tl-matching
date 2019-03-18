@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Employer.Builders
             PrimaryContact = "PrimaryContact",
             Phone = "01777757777",
             Email = "primary@contact.co.uk",
-            PostCode = "AA1 1AA",
+            Postcode = "AA1 1AA",
             Owner = "Owner",
             CreatedBy = EntityCreationConstants.CreatedByUser,
             CreatedOn = EntityCreationConstants.CreatedOn,

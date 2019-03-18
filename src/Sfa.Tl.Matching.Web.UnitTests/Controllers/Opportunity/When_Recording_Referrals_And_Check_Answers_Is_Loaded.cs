@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
@@ -21,6 +23,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Recording_Referrals_And_Check_Answers_Is_Loaded()
         {
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+            
             var dto = new ValidOpportunityDtoBuilder().Build();
             var providers = new List<ReferralsViewModel>
             {
@@ -35,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(_opportunityService, referralService);
+            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(CreatedBy)
                 .Build();
@@ -75,14 +80,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerName_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
-            viewModel.PlacementInformation.EmployerName.Should().Be("EmployerName");
+            viewModel.PlacementInformation.EmployerName.Should().Be("CompanyName");
         }
 
         [Fact]
         public void Then_EmployerContact_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
-            viewModel.PlacementInformation.Contact.Should().Be("Contact");
+            viewModel.PlacementInformation.Contact.Should().Be("EmployerContact");
         }
 
         [Fact]

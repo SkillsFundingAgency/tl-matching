@@ -1,7 +1,9 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
@@ -20,13 +22,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Recording_Referrals_And_Emails_Sent_Is_Loaded()
         {
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+
+            var mapper = new Mapper(config);
+
             var dto = new ValidOpportunityDtoBuilder().Build();
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(dto);
 
             var referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(_opportunityService, referralService);
+            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(CreatedBy)
                 .Build();
@@ -59,14 +65,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerBusinessName_Is_Set()
         {
             var viewModel = _result.GetViewModel<EmailsSentViewModel>();
-            viewModel.EmployerBusinessName.Should().Be("EmployerName");
+            viewModel.EmployerBusinessName.Should().Be("CompanyName");
         }
 
         [Fact]
         public void Then_EmployerContactName_Is_Set()
         {
             var viewModel = _result.GetViewModel<EmailsSentViewModel>();
-            viewModel.EmployerContactName.Should().Be("Contact");
+            viewModel.EmployerContactName.Should().Be("EmployerContact");
         }
     }
 }

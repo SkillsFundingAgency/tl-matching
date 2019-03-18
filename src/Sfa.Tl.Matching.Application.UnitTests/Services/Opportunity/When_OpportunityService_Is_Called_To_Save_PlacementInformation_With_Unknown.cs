@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const int Placements = 5;
         private const string ModifiedBy = "ModifiedBy";
         private const int OpportunityId = 1;
-        private const string PostCode = "ModifiedBy";
+        private const string Postcode = "ModifiedBy";
         private const int Distance = 1;
         private const int RouteId = 1;
 
@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<Domain.Models.ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            var opportunity = new Domain.Models.Opportunity { Id = OpportunityId, PostCode = PostCode, Distance = Distance, RouteId = RouteId };
+            var opportunity = new Domain.Models.Opportunity { Id = OpportunityId, Postcode = Postcode, SearchRadius = Distance, RouteId = RouteId };
 
             _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(opportunity);
 
@@ -59,8 +59,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 opportunity.PlacementsKnown == PlacementsKnown &&
                 opportunity.Placements == 1 &&
                 opportunity.ModifiedBy == ModifiedBy &&
-                opportunity.PostCode == PostCode &&
-                opportunity.Distance == Distance &&
+                opportunity.Postcode == Postcode &&
+                opportunity.SearchRadius == Distance &&
                 opportunity.RouteId == Distance
                 ));
         }

@@ -18,9 +18,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
         private const int OpportunityId = 1;
 
-        private const string Contact = "Contact";
+        private const string Contact = "EmployerContact";
         private const string ContactPhone = "123456789";
-        private const string ContactEmail = "ContactEmail";
+        private const string ContactEmail = "EmployerContactEmail";
         private const string ModifiedBy = "ModifiedBy";
 
         public When_OpportunityService_Is_Called_To_Save_EmployerDetail()

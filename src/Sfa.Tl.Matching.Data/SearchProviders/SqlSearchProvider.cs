@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             _providerVenueRepository = providerVenueRepository;
         }
 
-        public async Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
+        public async Task<IList<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
             _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
 
@@ -51,12 +51,11 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                 .OrderBy(p => p.Location.Distance(employerLocation))
                 .Select(p => new ProviderVenueSearchResultDto
                 {
+                    ProviderVenueId = p.Id,
                     ProviderName = p.Provider.Name,
                     Distance = p.Location.Distance(employerLocation) / MilesToMeters,
-                    ProviderVenueId = p.Id,
                     Postcode = p.Postcode,
-                    ProviderId = p.ProviderId,
-                    QualificationShortTitles = p.ProviderQualification.Select(pq => pq.Qualification.ShortTitle).ToList()
+                    QualificationShortTitles = p.ProviderQualification.Select(pq => pq.Qualification.ShortTitle).Distinct().ToList()
                 }).ToListAsync();
         }
     }

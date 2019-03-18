@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -23,10 +25,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var viewModel = new FindEmployerViewModel
             {
-                BusinessName = "Invalid Business Name"
+                CompanyName = "Invalid Business Name"
             };
 
-            _employerController = new EmployerController(employerService, opportunityService);
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+
+            _employerController = new EmployerController(employerService, opportunityService, mapper);
 
             _result = _employerController.FindEmployer(viewModel).GetAwaiter().GetResult();
         }
@@ -41,13 +46,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         [Fact]
         public void Then_Model_State_Has_BusinessName_Key() =>
-            _employerController.ViewData.ModelState.ContainsKey(nameof(FindEmployerViewModel.BusinessName))
+            _employerController.ViewData.ModelState.ContainsKey(nameof(FindEmployerViewModel.CompanyName))
                 .Should().BeTrue();
 
         [Fact]
         public void Then_Model_State_Has_BusinessName_Error()
         {
-            var modelStateEntry = _employerController.ViewData.ModelState[nameof(FindEmployerViewModel.BusinessName)];
+            var modelStateEntry = _employerController.ViewData.ModelState[nameof(FindEmployerViewModel.CompanyName)];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must find and choose an employer");
         }
     }

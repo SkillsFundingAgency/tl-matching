@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderQualification
     public class ValidProviderQualificationFileImportDtoBuilder
     {
         public static string UkPrn = "10000546";
-        public static string PostCode = "CV1 2WT";
+        public static string Postcode = "CV1 2WT";
         public static string LarsId = "12345678";
         public static int NumberOfPlacements = 1;
         public static string Source = "PMF_1018";
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderQualification
             ProviderVenueId = ProviderVenueId,
             QualificationId = QualificationId,
             UkPrn = UkPrn,
-            PostCode = PostCode,
+            Postcode = Postcode,
             LarsId = LarsId,
             NumberOfPlacements = NumberOfPlacements.ToString(),
             Source = Source,

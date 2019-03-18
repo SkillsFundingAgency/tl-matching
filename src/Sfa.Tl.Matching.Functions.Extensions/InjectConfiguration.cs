@@ -79,11 +79,11 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterFileReaders(IServiceCollection services)
         {
-            RegisterFileReader<EmployerDto, EmployerFileImportDto, Employer, EmployerDataParser, EmployerDataValidator, NullDataProcessor<EmployerFileImportDto>>(services);
-            RegisterFileReader<ProviderDto, ProviderFileImportDto, Provider, ProviderDataParser, ProviderDataValidator, NullDataProcessor<ProviderFileImportDto>>(services);
+            RegisterFileReader<EmployerDto, EmployerFileImportDto, Employer, EmployerDataParser, EmployerDataValidator, NullDataProcessor<Employer>>(services);
+            RegisterFileReader<ProviderDto, ProviderFileImportDto, Provider, ProviderDataParser, ProviderDataValidator, NullDataProcessor<Provider>>(services);
             RegisterFileReader<ProviderVenueDto, ProviderVenueFileImportDto, ProviderVenue, ProviderVenueDataParser, ProviderVenueDataValidator, ProviderVenueDataProcessor>(services);
-            RegisterFileReader<ProviderQualificationDto, ProviderQualificationFileImportDto, ProviderQualification, ProviderQualificationDataParser, ProviderQualificationDataValidator, NullDataProcessor<ProviderQualificationFileImportDto>>(services);
-            RegisterFileReader<QualificationRoutePathMappingDto, QualificationRoutePathMappingFileImportDto, QualificationRoutePathMapping, QualificationRoutePathMappingDataParser, QualificationRoutePathMappingDataValidator, NullDataProcessor<QualificationRoutePathMappingFileImportDto>>(services);
+            RegisterFileReader<ProviderQualificationDto, ProviderQualificationFileImportDto, ProviderQualification, ProviderQualificationDataParser, ProviderQualificationDataValidator, NullDataProcessor<ProviderQualification>>(services);
+            RegisterFileReader<QualificationRoutePathMappingDto, QualificationRoutePathMappingFileImportDto, QualificationRoutePathMapping, QualificationRoutePathMappingDataParser, QualificationRoutePathMappingDataValidator, NullDataProcessor<QualificationRoutePathMapping>>(services);
         }
 
         private static void RegisterFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
@@ -92,18 +92,17 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 where TEntity : BaseEntity, new()
                 where TParser : class, IDataParser<TDto>
                 where TValidator : class, IValidator<TImportDto>
-                where TDataProcessor : class, IDataProcessor<TImportDto>
+                where TDataProcessor : class, IDataProcessor<TEntity>
         {
             services.AddTransient<IDataParser<TDto>, TParser>();
             services.AddTransient<IValidator<TImportDto>, TValidator>();
-            services.AddTransient<IDataProcessor<TImportDto>, TDataProcessor>();
+            services.AddTransient<IDataProcessor<TEntity>, TDataProcessor>();
 
             services.AddTransient<IFileReader<TImportDto, TDto>, ExcelFileReader<TImportDto, TDto>>(provider =>
                 new ExcelFileReader<TImportDto, TDto>(
                     provider.GetService<ILogger<ExcelFileReader<TImportDto, TDto>>>(),
                     provider.GetService<IDataParser<TDto>>(),
-                    (IValidator<TImportDto>)provider.GetServices(typeof(IValidator<TImportDto>)).Single(t => t.GetType() == typeof(TValidator)),
-                    (IDataProcessor<TImportDto>)provider.GetServices(typeof(IDataProcessor<TImportDto>)).Single(t => t.GetType() == typeof(TDataProcessor))));
+                    (IValidator<TImportDto>)provider.GetServices(typeof(IValidator<TImportDto>)).Single(t => t.GetType() == typeof(TValidator))));
 
             services.AddTransient<IFileImportService<TImportDto, TDto, TEntity>, FileImportService<TImportDto, TDto, TEntity>>();
         }

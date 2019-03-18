@@ -36,8 +36,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
             var pathRepository = new GenericRepository<Path>(loggerPathRepository, MatchingDbContext);
             var dataValidator = new QualificationRoutePathMappingDataValidator(qualificationRoutePathMappingRepository, qualificationRepository, pathRepository);
             var dataParser = new QualificationRoutePathMappingDataParser();
-            var nullDataProcessor = new NullDataProcessor<QualificationRoutePathMappingFileImportDto>();
-            var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator, nullDataProcessor);
+            var nullDataProcessor = new NullDataProcessor<Domain.Models.QualificationRoutePathMapping>();
+            var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
@@ -46,7 +46,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
                 logger,
                 mapper,
                 excelFileReader,
-                qualificationRoutePathMappingRepository);
+                qualificationRoutePathMappingRepository,
+                nullDataProcessor);
         }
 
         public void ResetData(string larsId)
