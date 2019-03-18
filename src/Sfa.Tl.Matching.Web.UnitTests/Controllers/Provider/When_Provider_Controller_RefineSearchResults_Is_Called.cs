@@ -10,11 +10,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_Results_Post_Is_Called
+    public class When_Provider_Controller_RefineSearchResults_Is_Called
     {
         private readonly IActionResult _result;
 
-        public When_Provider_Controller_Results_Post_Is_Called()
+        public When_Provider_Controller_RefineSearchResults_Is_Called()
         {
             var logger = Substitute.For<ILogger<ProviderController>>();
             var mapper = Substitute.For<IMapper>();
