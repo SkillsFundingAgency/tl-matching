@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             _replyToAddress = "reply@test.com";
             var tokens = new Dictionary<string, string>
             {
-                    { "contactname",  "name" }
+                { "contactname",  "name" }
             };
 
             var templateName = "TestTemplate";

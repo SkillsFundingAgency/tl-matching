@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -86,24 +87,22 @@ namespace Sfa.Tl.Matching.Application.Services
                 var numberOfPlacements = referral.PlacementsKnown.GetValueOrDefault()
                     ? referral.Placements.ToString()
                     : "at least one";
-
-                var placeholders = new List<EmailPlaceholderDto>
+                
+                var tokens = new Dictionary<string, string>
                 {
-                    new EmailPlaceholderDto { Key = "primary_contact_name", Value = referral.ProviderPrimaryContact },
-                    new EmailPlaceholderDto { Key = "provider_name", Value = referral.ProviderName },
-                    new EmailPlaceholderDto { Key = "route", Value = referral.RouteName },
-                    new EmailPlaceholderDto { Key = "venue_postcode", Value = referral.ProviderVenuePostcode },
-                    new EmailPlaceholderDto { Key = "distance", Value = referral.SearchRadius.ToString() },
-                    new EmailPlaceholderDto { Key = "job_role", Value = referral.JobTitle },
-                    new EmailPlaceholderDto { Key = "employer_business_name", Value = referral.EmployerName},
-                    new EmailPlaceholderDto { Key = "employer_contact_name ", Value = referral.EmployerContact },
-                    new EmailPlaceholderDto { Key = "employer_contact_number", Value = referral.EmployerContactPhone },
-                    new EmailPlaceholderDto { Key = "employer_contact_email ", Value = referral.EmployerContactEmail },
-                    new EmailPlaceholderDto { Key = "employer_postcode", Value = referral.Postcode },
-                    new EmailPlaceholderDto { Key = "number_of_placements", Value = numberOfPlacements }
+                    { "primary_contact_name", referral.ProviderPrimaryContact },
+                    { "provider_name", referral.ProviderName },
+                    { "route", referral.RouteName },
+                    { "venue_postcode", referral.ProviderVenuePostcode },
+                    { "distance", referral.SearchRadius.ToString() },
+                    { "job_role", referral.JobTitle },
+                    { "employer_business_name", referral.EmployerName },
+                    { "employer_contact_name", referral.EmployerContact},
+                    { "employer_contact_number", referral.EmployerContactPhone },
+                    { "employer_contact_email", referral.EmployerContactEmail },
+                    { "employer_postcode", referral.Postcode },
+                    { "number_of_placements", numberOfPlacements }
                 };
-
-                var tokens = ConvertPlaceholdersToTokens(placeholders);
 
                 await _emailService.SendEmail(emailTemplate.TemplateName,
                     toAddress,
@@ -111,12 +110,14 @@ namespace Sfa.Tl.Matching.Application.Services
                     tokens,
                     ReplyToAddress);
 
-                await SaveEmailHistory(emailTemplate, placeholders, opportunityId, toAddress);
+                await SaveEmailHistory(emailTemplate, tokens, opportunityId, toAddress);
             }
         }
 
-        private async Task SaveEmailHistory(EmailTemplate emailTemplate, List<EmailPlaceholderDto> placeholders, int opportunityId, string emailAddress)
+        private async Task SaveEmailHistory(EmailTemplate emailTemplate, IDictionary<string, string> tokens, int opportunityId, string emailAddress)
         {
+            var placeholders = ConvertTokensToPlaceholders(tokens);
+
             var emailPlaceholders = _mapper.Map<IList<EmailPlaceholder>>(placeholders);
             _logger.LogInformation($"Saving {emailPlaceholders.Count} {nameof(EmailPlaceholder)} items.");
 
@@ -142,16 +143,21 @@ namespace Sfa.Tl.Matching.Application.Services
             return opportunityReferralDto;
         }
 
-        private IDictionary<string, string> ConvertPlaceholdersToTokens(IEnumerable<EmailPlaceholderDto> placeholders)
+        private IEnumerable<EmailPlaceholderDto> ConvertTokensToPlaceholders(IDictionary<string, string> tokens)
         {
-            var tokens = new Dictionary<string, string>();
+            var placeholders = new List<EmailPlaceholderDto>();
 
-            foreach (var placeholder in placeholders)
+            foreach (var token in tokens)
             {
-                tokens[placeholder.Key] = placeholder.Value;
+                placeholders.Add(
+                    new EmailPlaceholderDto
+                    {
+                        Key = token.Key,
+                        Value = token.Value
+                    });
             }
 
-            return tokens;
+            return placeholders;
         }
     }
 
