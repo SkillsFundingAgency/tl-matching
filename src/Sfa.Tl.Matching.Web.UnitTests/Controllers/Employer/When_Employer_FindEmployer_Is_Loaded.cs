@@ -4,6 +4,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
@@ -40,16 +41,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_OpportunityId_Is_Set()
         {
-            var viewModel = GetViewModel();
+            var viewModel = _result.GetViewModel<FindEmployerViewModel>();
             viewModel.OpportunityId.Should().Be(OpportunityId);
-        }
-
-        private FindEmployerViewModel GetViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            var viewModel = viewResult?.Model as FindEmployerViewModel;
-
-            return viewModel;
         }
     }
 }

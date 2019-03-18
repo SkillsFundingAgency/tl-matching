@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
     {
         public PlacementInformationMapper()
         {
-            CreateMap<PlacementInformationViewModel, Opportunity>()
+            CreateMap<PlacementInformationSaveViewModel, Opportunity>()
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.PostCode, config => config.Ignore())
                 .ForMember(m => m.RouteId, config => config.Ignore())
@@ -18,8 +18,12 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.EmployerContactEmail, config => config.Ignore())
                 .ForMember(m => m.EmployerContactPhone, config => config.Ignore())
                 .ForMember(m => m.UserEmail, config => config.Ignore())
+                .ForMember(m => m.ConfirmationSelected, config => config.Ignore())
+                .ForMember(m => m.DropOffStage, config => config.Ignore())
                 .ForMember(m => m.Route, config => config.Ignore())
+                .ForMember(m => m.SearchResultProviderCount, config => config.Ignore())
                 .ForMember(m => m.ProvisionGap, config => config.Ignore())
+                .ForMember(m => m.Referral, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Sfa.Tl.Matching.Application.FileReader.Extensions;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 
@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderQualification
             {
                 ProviderVenueId = data.ProviderVenueId,
                 QualificationId = data.QualificationId,
-                NumberOfPlacements = data.NumberOfPlacements.ToInt(),
+                NumberOfPlacements = data.NumberOfPlacements.ToNullableInt(),
                 Source = data.Source,
                 CreatedBy = data.CreatedBy
             };

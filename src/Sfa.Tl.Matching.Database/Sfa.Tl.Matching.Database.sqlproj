@@ -78,6 +78,10 @@
     <Build Include="Tables\ProviderQualification.sql" />
     <Build Include="Tables\Opportunity.sql" />
     <Build Include="Tables\ProvisionGap.sql" />
+    <Build Include="Tables\Referral.sql" />
+    <Build Include="Tables\EmailTemplate.sql" />
+    <Build Include="Tables\EmailPlaceholder.sql" />
+    <Build Include="Tables\EmailHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

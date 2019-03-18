@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     public class When_Placement_Information_Is_Submitted_Successfully
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly PlacementInformationViewModel _viewModel = new PlacementInformationViewModel();
+        private readonly PlacementInformationSaveViewModel _viewModel = new PlacementInformationSaveViewModel();
         private readonly IActionResult _result;
 
         private const int OpportunityId = 1;
@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("username")
                 .Build();
 
-            _result = controllerWithClaims.Placements(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.PlacementInformationSave(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

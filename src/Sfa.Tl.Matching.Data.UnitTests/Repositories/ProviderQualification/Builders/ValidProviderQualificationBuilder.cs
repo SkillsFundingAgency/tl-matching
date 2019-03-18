@@ -4,25 +4,17 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification.Buil
 {
     public class ValidProviderQualificationBuilder
     {
-        private readonly Domain.Models.ProviderQualification _ProviderQualification;
-
-        public ValidProviderQualificationBuilder()
+        public Domain.Models.ProviderQualification Build() => new Domain.Models.ProviderQualification
         {
-            _ProviderQualification = new Domain.Models.ProviderQualification
-            {
-                Id = 1,
-                NumberOfPlacements = 1,
-                ProviderVenueId = 1,
-                QualificationId = 1,
-                Source = "Test",
-                CreatedBy = EntityCreationConstants.CreatedByUser,
-                CreatedOn = EntityCreationConstants.CreatedOn,
-                ModifiedBy = EntityCreationConstants.ModifiedByUser,
-                ModifiedOn = EntityCreationConstants.ModifiedOn
-            };
-        }
-
-        public Domain.Models.ProviderQualification Build() =>
-            _ProviderQualification;
+            Id = 1,
+            NumberOfPlacements = 1,
+            ProviderVenueId = 1,
+            QualificationId = 1,
+            Source = "Test",
+            CreatedBy = EntityCreationConstants.CreatedByUser,
+            CreatedOn = EntityCreationConstants.CreatedOn,
+            ModifiedBy = EntityCreationConstants.ModifiedByUser,
+            ModifiedOn = EntityCreationConstants.ModifiedOn
+        };
     }
 }

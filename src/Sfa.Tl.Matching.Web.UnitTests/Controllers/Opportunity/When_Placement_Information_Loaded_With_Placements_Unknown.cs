@@ -30,20 +30,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var opportunityController = new OpportunityController(opportunityService);
 
-            _result = opportunityController.Placements(OpportunityId).GetAwaiter().GetResult();
+            _result = opportunityController.PlacementInformationSave(OpportunityId).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_PlacementsKnown_Is_Set()
         {
-            var viewModel = _result.GetViewModel<PlacementInformationViewModel>();
+            var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.PlacementsKnown.Should().Be(PlacementsKnown);
         }
 
         [Fact]
         public void Then_Placements_Is_Set_To_Default_Int()
         {
-            var viewModel = _result.GetViewModel<PlacementInformationViewModel>();
+            var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.Placements.Should().BeNull();
         }
     }

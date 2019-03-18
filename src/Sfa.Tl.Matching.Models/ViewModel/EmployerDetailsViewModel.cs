@@ -14,11 +14,10 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string Contact { get; set; }
 
         [Required(ErrorMessage = "You must enter a contact email for placements")]
-        [EmailAddress(ErrorMessage = "You must enter a valid email")]
+        [RegularExpression(@"^[a-zA-Z0-9\u0080-\uFFA7?$#()""'!,+\-=_:;.&€£*%\s\/]+@[a-zA-Z0-9\u0080-\uFFA7?$#()""'!,+\-=_:;.&€£*%\s\/]+\.([a-zA-Z0-9\u0080-\uFFA7]{2,10})$", ErrorMessage = "You must enter a valid email")]
         public string ContactEmail { get; set; }
 
         [Required(ErrorMessage = "You must enter a contact telephone number for placements")]
-        [RegularExpression(@"^(?:.*\d.*){7,}$", ErrorMessage = "You must enter a telephone number that has 7 or more numbers")]
         public string ContactPhone { get; set; }
     }
 }

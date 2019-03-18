@@ -1,0 +1,23 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.EmailSentProvisionGapViewModel
+@{
+    ViewData["Title"] = "Report sent to the industry placement team";
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-8">
+            <h1 class="govuk-panel__title">
+                Report sent to the industry placement team
+            </h1>
+        </div>
+
+        <h2 class="govuk-heading-m">What happens next</h2>
+
+        <p class="govuk-body">We will try to find providers with students studying @Model.RouteName near @Model.Postcode.</p>
+        <p class="govuk-body">If @Model.EmployerContactName has agreed that we can share their contact details, we will contact them when we find suitable providers.</p>
+
+        <a asp-controller="Provider" asp-action="Start" class="govuk-button">Finish</a>
+        <p class="govuk-body">
+            <a class="govuk-link" href="/Feedback">Give us feedback</a>
+        </p>
+    </div>
+</div>

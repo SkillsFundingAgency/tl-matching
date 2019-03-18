@@ -24,16 +24,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
             _provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
+            var referralRepository = Substitute.For<IRepository<Referral>>();
 
             _provisionGapRepository.Create(Arg.Any<ProvisionGap>()).Returns(Id);
 
-            var opportunityService = new OpportunityService(mapper, dateTimeProvider, opportunityRepository, _provisionGapRepository);
+            var opportunityService = new OpportunityService(mapper, dateTimeProvider, opportunityRepository, _provisionGapRepository, referralRepository);
 
-            var dto = new CheckAnswersViewModel
+            var dto = new CheckAnswersProvisionGapViewModel
             {
                 OpportunityId = 1,
-                ConfirmationSelected = true,
-                CreatedBy = "Test"
+                ConfirmationSelected = true
             };
 
             _result = opportunityService.CreateProvisionGap(dto).GetAwaiter().GetResult();
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_Create_Is_Called_Exactly_Once()
         {
-            _provisionGapRepository.Received(1).Create(Arg.Is<ProvisionGap>(p => p.OpportunityId == 1 && p.ConfirmationSelected == true && p.CreatedBy == "Test"));
+            _provisionGapRepository.Received(1).Create(Arg.Is<ProvisionGap>(p => p.OpportunityId == 1));
         }
 
         [Fact]

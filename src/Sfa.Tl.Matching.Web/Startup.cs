@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -21,6 +22,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Web.Extensions.ApplicationBuilder;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -47,7 +49,12 @@ namespace Sfa.Tl.Matching.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(30));
+            services.AddAntiforgery(options =>
+            {
+                options.Cookie.Name = "tlevels-x-csrf";
+                options.FormFieldName = "_csrfToken";
+                options.HeaderName = "X-XSRF-TOKEN";
+            });
 
             services.AddMvc(config =>
             {
@@ -55,6 +62,7 @@ namespace Sfa.Tl.Matching.Web
                     .RequireAuthenticatedUser()
                     .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
+                config.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -64,7 +72,8 @@ namespace Sfa.Tl.Matching.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            ILoggerFactory loggerFactory)
         {
             var cultureInfo = new CultureInfo("en-GB");
 
@@ -77,18 +86,34 @@ namespace Sfa.Tl.Matching.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseGlobalExceptionHandler(loggerFactory);
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(opts => opts.NoReferrer());
+            app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
+            app.UseXfo(xfo => xfo.Deny());
+            app.UseCsp(options => options
+                          .DefaultSources(s => s.Self())
+                          .ScriptSources(s =>
+                          {
+                              s.Self()
+                      .CustomSources(
+                                "https://www.google-analytics.com/analytics.js",
+                                   "https://www.googletagmanager.com/"
+                                   )
+                      .UnsafeInline();
+                          }
+                          ));
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSession();
 
             app.UseAuthentication();
 
-            //app.UseMvc();
             app.UseMvcWithDefaultRoute();
             app.UseCookiePolicy();
         }
@@ -122,10 +147,16 @@ namespace Sfa.Tl.Matching.Web
             services.AddAutoMapper();
 
             //Inject DbContext
-            services.AddDbContext<MatchingDbContext>(options => options.UseSqlServer(_configuration.SqlConnectionString));
+            services.AddDbContext<MatchingDbContext>(options => 
+                options.UseSqlServer(_configuration.SqlConnectionString, 
+                    builder => builder.UseNetTopologySuite()
+                                      .EnableRetryOnFailure()));
 
             //Inject services
             services.AddSingleton(_configuration);
+            services.AddHttpClient<ILocationService, LocationService>();
+            services.AddTransient<ISearchProvider, SqlSearchProvider>();
+            services.AddTransient<IMessageQueueService, MessageQueueService>();
 
             RegisterRepositories(services);
             RegisterApplicationServices(services);
@@ -141,6 +172,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<Provider>, GenericRepository<Provider>>();
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
+            services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -151,7 +183,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderService, ProviderService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            services.AddTransient<ISearchProvider, DummySearchProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
         }

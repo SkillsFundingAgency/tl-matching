@@ -1,0 +1,36 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.CheckAnswersPlacementViewModel
+
+<table class="govuk-table">
+    <caption class="govuk-table__caption govuk-heading-m">Placement information</caption>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Type of placement</th>
+            <td class="govuk-table__cell">@Model.RouteName</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Postcode of workplace</th>
+            <td class="govuk-table__cell">@Model.Postcode</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Searched for providers within</th>
+            <td class="govuk-table__cell">@Model.Distance miles</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Job role</th>
+            <td class="govuk-table__cell">@Model.JobTitle</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Number of placements</th>
+            <td class="govuk-table__cell">
+                @if (Model.PlacementsKnown.HasValue && Model.PlacementsKnown.Value)
+                {
+                    @Model.Placements
+                }
+                else
+                {
+                    @:at least 1
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>

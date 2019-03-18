@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchRadius = searchRadius
             };
 
-            var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
+            var resultsViewModel = await GetSearchResults(searchParametersViewModel);
 
             return View(resultsViewModel);
         }
@@ -121,11 +121,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return _routePathService.GetRoutes().OrderBy(r => r.Name);
         }
 
-        private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
+        private async Task<SearchViewModel> GetSearchResults(SearchParametersViewModel viewModel)
         {
             _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
 
-            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(viewModel.Postcode, viewModel.SearchRadius, viewModel.SelectedRouteId.GetValueOrDefault());
+            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto
+            {
+                Postcode = viewModel.Postcode,
+                SelectedRouteId = viewModel.SelectedRouteId,
+                SearchRadius = viewModel.SearchRadius
+            } );
 
             var resultsViewModel = new SearchViewModel
             {
