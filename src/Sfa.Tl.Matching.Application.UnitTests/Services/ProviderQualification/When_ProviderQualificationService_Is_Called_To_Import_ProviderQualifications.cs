@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -22,6 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
         private readonly IFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto> _fileReader;
         private readonly IRepository<Domain.Models.ProviderQualification> _repository;
         private readonly int _result;
+        private readonly IDataProcessor<Domain.Models.ProviderQualification> _dataProcessor;
 
         public When_ProviderQualificationService_Is_Called_To_Import_ProviderQualifications()
         {
@@ -30,6 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
             var logger = Substitute.For<ILogger<FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>>>();
             _fileReader = Substitute.For<IFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>>();
             _repository = Substitute.For<IRepository<Domain.Models.ProviderQualification>>();
+            _dataProcessor = Substitute.For<IDataProcessor<Domain.Models.ProviderQualification>>();
 
             _repository
                 .CreateMany(Arg.Any<IList<Domain.Models.ProviderQualification>>())
@@ -49,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(_fileReaderResults);
 
-            var service = new FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>(logger, mapper, _fileReader, _repository);
+            var service = new FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
             _result = service.Import(_fileImportDto).GetAwaiter().GetResult();
         }
@@ -70,6 +73,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
                 .CreateMany(Arg.Any<IList<Domain.Models.ProviderQualification>>());
         }
 
+        [Fact]
+        public void Then_PreProcessingHandler_Is_Called_Exactly_Once()
+        {
+            _dataProcessor
+                .Received(1)
+                .PreProcessingHandler(Arg.Any<IList<Domain.Models.ProviderQualification>>());
+        }
+
+        [Fact]
+        public void Then_PostProcessingHandler_Is_Called_Exactly_Once()
+        {
+            _dataProcessor
+                .Received(1)
+                .PostProcessingHandler(Arg.Any<IList<Domain.Models.ProviderQualification>>());
+        }
         [Fact]
         public void Then_The_Expected_Number_Of_Created_Records_Is_Returned()
         {

@@ -30,13 +30,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var repository = new GenericRepository<Domain.Models.Provider>(loggerRepository, MatchingDbContext);
             var dataValidator = new ProviderDataValidator(repository);
             var dataParser = new ProviderDataParser();
-            var nullDataProcessor = new NullDataProcessor<ProviderFileImportDto>();
-            var excelFileReader = new ExcelFileReader<ProviderFileImportDto, ProviderDto>(loggerExcelFileReader, dataParser, dataValidator, nullDataProcessor);
+            var nullDataProcessor = new NullDataProcessor<Domain.Models.Provider>();
+            var excelFileReader = new ExcelFileReader<ProviderFileImportDto, ProviderDto>(loggerExcelFileReader, dataParser, dataValidator);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
 
-            FileImportService = new FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>(logger, mapper, excelFileReader, repository);
+            FileImportService = new FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>(logger, mapper, excelFileReader, repository, nullDataProcessor);
         }
 
         public void ResetData()

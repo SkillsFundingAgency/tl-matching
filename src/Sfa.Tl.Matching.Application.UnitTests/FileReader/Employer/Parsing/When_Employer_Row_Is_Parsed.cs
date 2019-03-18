@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Parsing
 
         [Fact]
         public void Then_First_ParseResult_PostCode_Matches_Input() =>
-            _firstEmployerDto.PostCode.Should().Be(ValidEmployerFileImportDtoBuilder.PostCode);
+            _firstEmployerDto.Postcode.Should().Be(ValidEmployerFileImportDtoBuilder.Postcode);
 
         [Fact]
         public void Then_First_ParseResult_Owner_Matches_Input() =>

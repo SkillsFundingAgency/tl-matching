@@ -1,10 +1,13 @@
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -14,21 +17,29 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
     {
         private readonly IActionResult _result;
         private readonly IOpportunityService _opportunityService;
+        private readonly IEmployerService _employerService;
 
         private const int OpportunityId = 12;
-        private const string EmployerName = "EmployerName";
+        private const string CompanyName = "CompanyName";
 
         public When_Employer_Details_Is_Loaded()
         {
-            var employerService = Substitute.For<IEmployerService>();
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerDtoMapper).Assembly));
+            var mapper = new Mapper(config);
+
+            _employerService = Substitute.For<IEmployerService>();
+            _employerService.GetEmployer(Arg.Any<int>()).Returns(new EmployerDto
+            {
+                CompanyName = CompanyName,
+            });
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
             {
                 Id = OpportunityId,
-                EmployerName = EmployerName
+                EmployerName = CompanyName
             });
 
-            var employerController = new EmployerController(employerService, _opportunityService);
+            var employerController = new EmployerController(_employerService, _opportunityService, mapper);
 
             _result = employerController.Details(OpportunityId).GetAwaiter().GetResult();
         }
@@ -59,13 +70,18 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_EmployerName_Is_Populated()
         {
             var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
-            viewModel.EmployerName.Should().Be(EmployerName);
+            viewModel.CompanyName.Should().Be(CompanyName);
         }
 
         [Fact]
         public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetOpportunity(OpportunityId);
+        }
+        [Fact]
+        public void Then_GetEmployer_Is_Called_Exactly_Once()
+        {
+            _employerService.Received(1).GetEmployer(Arg.Any<int>());
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
@@ -11,16 +13,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
     public class When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully
     {
-        private readonly IOpportunityService _opportunityService;
         private const string CreatedBy = "CreatedBy";
         private readonly IActionResult _result;
         private readonly CheckAnswersReferralViewModel _viewModel = new CheckAnswersReferralViewModel();
 
         public When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully()
         {
-            _opportunityService = Substitute.For<IOpportunityService>();
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 
-            var opportunityController = new OpportunityController(_opportunityService);
+            var mapper = new Mapper(config);
+
+            var opportunityService = Substitute.For<IOpportunityService>();
+
+            var opportunityController = new OpportunityController(opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(CreatedBy)
                 .Build();

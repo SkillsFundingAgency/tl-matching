@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -15,12 +16,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly IEmployerService _employerService;
         private readonly IOpportunityService _opportunityService;
+        private readonly IMapper _mapper;
 
-        public EmployerController(IEmployerService employerService,
-            IOpportunityService opportunityService)
+        public EmployerController(IEmployerService employerService, IOpportunityService opportunityService, IMapper mapper)
         {
             _employerService = employerService;
             _opportunityService = opportunityService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -48,24 +50,25 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{id?}", Name = "EmployerFind_Post")]
         public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
-            if (viewModel.SelectedEmployerId == 0)
+            var employerDto = viewModel.SelectedEmployerId != 0 ?
+                await _employerService.GetEmployer(viewModel.SelectedEmployerId) :
+                null;
+
+            if (!ModelState.IsValid || employerDto == null)
             {
-                ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
+                if (employerDto == null)
+                {
+                    ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
+                }
+
                 return View(viewModel);
             }
 
-            var employer = await _employerService.GetEmployer(viewModel.SelectedEmployerId);
-            if (employer == null)
-                ModelState.AddModelError(nameof(viewModel.BusinessName), "You must find and choose an employer");
-
-            if (!ModelState.IsValid)
-                return View(viewModel);
-
-            var dto = PopulateEmployerNameDto(viewModel, employer);
+            var dto = _mapper.Map<EmployerNameDto>(viewModel);
 
             await _opportunityService.SaveEmployerName(dto);
 
-            return RedirectToRoute("EmployerDetails_Get");
+            return RedirectToRoute("EmployerDetails_Get", new { id = viewModel.OpportunityId });
         }
 
         [HttpGet]
@@ -74,14 +77,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var dto = await _opportunityService.GetOpportunity(id);
 
-            var viewModel = new EmployerDetailsViewModel
-            {
-                OpportunityId = dto.Id,
-                EmployerName = dto.EmployerName,
-                Contact = dto.EmployerContact,
-                ContactEmail = dto.EmployerContactEmail,
-                ContactPhone = dto.EmployerContactPhone
-            };
+            var employerDto = await _employerService.GetEmployer(dto.EmployerId ?? 0);
+
+            var viewModel = _mapper.Map(employerDto, new EmployerDetailsViewModel { OpportunityId = dto.Id });
 
             return View(viewModel);
         }
@@ -95,55 +93,24 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var employerDetailDto = PopulateEmployerDetailsDto(viewModel);
+            var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
             await _opportunityService.SaveEmployerDetail(employerDetailDto);
 
-            var dto = await _opportunityService.GetOpportunityWithReferrals(viewModel.OpportunityId);
+            var isReferralOpportunity = await _opportunityService.IsReferralOpportunity(viewModel.OpportunityId);
 
-            return RedirectToRoute(dto.IsReferral.HasValue && dto.IsReferral.Value ?
-                "CheckAnswersReferrals_Get" :
-                "CheckAnswersProvisionGap_Get");
-        }
-
-        private EmployerNameDto PopulateEmployerNameDto(FindEmployerViewModel viewModel, EmployerDto employer)
-        {
-            var dto = new EmployerNameDto
-            {
-                OpportunityId = viewModel.OpportunityId,
-                CompanyName = employer.CompanyName, // TODO AU Should this also inclue the Aka?
-                EmployerContact = employer.PrimaryContact,
-                EmployerContactEmail = employer.Email,
-                EmployerContactPhone = employer.Phone,
-                ModifiedBy = HttpContext.User.GetUserName()
-            };
-
-            return dto;
-        }
-        
-        private EmployerDetailDto PopulateEmployerDetailsDto(EmployerDetailsViewModel employer)
-        {
-            var dto = new EmployerDetailDto
-            {
-                OpportunityId = employer.OpportunityId,
-                EmployerContact = employer.Contact,
-                EmployerContactEmail = employer.ContactEmail,
-                EmployerContactPhone = employer.ContactPhone,
-                ModifiedBy = HttpContext.User.GetUserName()
-            };
-
-            return dto;
+            return RedirectToRoute(isReferralOpportunity ? "CheckAnswersReferrals_Get" : "CheckAnswersProvisionGap_Get");
         }
 
         private void Validate(EmployerDetailsViewModel viewModel)
         {
-            if (string.IsNullOrEmpty(viewModel.ContactPhone))
+            if (string.IsNullOrEmpty(viewModel.EmployerContactPhone))
                 return;
 
-            if (!viewModel.ContactPhone.Any(char.IsDigit))
-                ModelState.AddModelError(nameof(viewModel.ContactPhone), "You must enter a number");
-            else if (!Regex.IsMatch(viewModel.ContactPhone, @"^(?:.*\d.*){7,}$"))
-                ModelState.AddModelError(nameof(viewModel.ContactPhone), "You must enter a telephone number that has 7 or more numbers");
+            if (!viewModel.EmployerContactPhone.Any(char.IsDigit))
+                ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a number");
+            else if (!Regex.IsMatch(viewModel.EmployerContactPhone, @"^(?:.*\d.*){7,}$"))
+                ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a telephone number that has 7 or more numbers");
         }
     }
 }

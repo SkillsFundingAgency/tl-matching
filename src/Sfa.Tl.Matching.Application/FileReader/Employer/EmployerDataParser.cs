@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
                 PrimaryContact = data.PrimaryContact,
                 Email = data.Email,
                 Phone = data.Phone,
-                PostCode = data.PostCode,
+                Postcode = data.Postcode,
                 Owner = data.Owner,
                 CreatedBy = data.CreatedBy
             };

@@ -35,13 +35,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             var dataValidator = new ProviderVenueDataValidator(repository, providerVenuerepository);
             var dataParser = new ProviderVenueDataParser();
             var dataProcessor = new ProviderVenueDataProcessor(new MessageQueueService(new NullLogger<MessageQueueService>(), new MatchingConfiguration()));
-            var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(loggerExcelFileReader, dataParser, dataValidator, dataProcessor);
+            var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(loggerExcelFileReader, dataParser, dataValidator);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 
             var mapper = new Mapper(config);
 
-            FileImportService = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(logger, mapper, excelFileReader, providerVenuerepository);
+            FileImportService = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(logger, mapper, excelFileReader, providerVenuerepository, dataProcessor);
         }
 
         public void ResetData()

@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -45,18 +46,25 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             };
 
             var logger = Substitute.For<ILogger<ProviderController>>();
-            var mapper = Substitute.For<IMapper>();
+
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
+            IMapper mapper = new Mapper(config);
 
             _providerService = Substitute.For<IProviderService>();
             _providerService
-                .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>( a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId))
+                .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>(a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
             var providerController = new ProviderController(logger, mapper, routePathService, _providerService);
 
-            _result = providerController.Results(RouteId, Postcode, SearchRadius).GetAwaiter().GetResult();
+            _result = providerController.Results(new SearchParametersViewModel
+            {
+                SelectedRouteId = RouteId,
+                Postcode = Postcode,
+                SearchRadius = SearchRadius
+            }).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -64,7 +72,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         {
             _providerService
                 .Received(1)
-                .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>( a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId));
+                .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>(a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId));
         }
 
         [Fact]

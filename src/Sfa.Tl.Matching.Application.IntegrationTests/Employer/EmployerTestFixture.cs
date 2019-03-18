@@ -32,14 +32,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
             var repository = new EmployerRepository(loggerRepository, MatchingDbContext);
             var dataValidator = new EmployerDataValidator();
             var dataParser = new EmployerDataParser();
-            var nullDataProcessor = new NullDataProcessor<EmployerFileImportDto>();
-            var excelFileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>(loggerExcelFileReader, dataParser, dataValidator, nullDataProcessor);
+            var nullDataProcessor = new NullDataProcessor<Domain.Models.Employer>();
+            var excelFileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>(loggerExcelFileReader, dataParser, dataValidator);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 
             var mapper = new Mapper(config);
 
-            FileImportService = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(logger, mapper, excelFileReader, repository);
+            FileImportService = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(logger, mapper, excelFileReader, repository, nullDataProcessor);
         }
 
         public void ResetData(string companyName)

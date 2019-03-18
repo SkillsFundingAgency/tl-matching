@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -25,9 +23,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
         public When_ProviderService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
-            var mapper = new Mapper(config);
-
             var dto = new ProviderSearchParametersDto { Postcode = Postcode, SearchRadius = SearchRadius, SelectedRouteId = RouteId };
 
             _searchProvider = Substitute.For<ISearchProvider>();
@@ -38,12 +33,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             _locationService = Substitute.For<ILocationService>();
             _locationService.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
             {
-                PostCode = Postcode,
+                Postcode = Postcode,
                 Longitude = "1.2",
                 Latitude = "1.2"
             });
 
-            var service = new ProviderService(mapper, _searchProvider, _locationService);
+            var service = new ProviderService(_searchProvider, _locationService);
 
             _result = service.SearchProvidersByPostcodeProximity(dto).GetAwaiter().GetResult();
         }

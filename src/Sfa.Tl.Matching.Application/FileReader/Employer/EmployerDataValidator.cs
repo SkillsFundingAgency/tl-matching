@@ -39,10 +39,10 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
                     .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                     .WithMessage($"'{nameof(EmployerFileImportDto.CompanyType)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
-            RuleFor(dto => dto.PostCode)
+            RuleFor(dto => dto.Postcode)
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                    .WithMessage($"'{nameof(EmployerFileImportDto.PostCode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+                    .WithMessage($"'{nameof(EmployerFileImportDto.Postcode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
             RuleFor(dto => dto.Owner)
                 .NotEmpty()

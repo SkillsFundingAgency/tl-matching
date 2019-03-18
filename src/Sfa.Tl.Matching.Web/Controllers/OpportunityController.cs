@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -12,31 +13,32 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;
+        private readonly IMapper _mapper;
 
-        public OpportunityController(IOpportunityService opportunityService)
+        public OpportunityController(IOpportunityService opportunityService, IMapper mapper)
         {
             _opportunityService = opportunityService;
+            _mapper = mapper;
         }
 
-        [Route("{searchResultProviderCount}-opportunities-within-{distance}-miles-of-{postcode}-for-route-{routeId}", Name = "OpportunityCreate_Get")]
-        public async Task<IActionResult> CreateProvisionGap(int searchResultProviderCount, int routeId, string postcode, short distance)
+        [Route("{SearchResultProviderCount}-provisiongap-opportunities-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "OpportunityCreate_Get")]
+        public async Task<IActionResult> CreateProvisionGap(CreateProvisionGapViewModel viewModel)
         {
-            var dto = new OpportunityDto
-            {
-                RouteId = routeId,
-                Postcode = postcode,
-                Distance = distance,
-                SearchResultProviderCount = searchResultProviderCount,
-                CreatedBy = HttpContext.User.GetUserName(),
-                UserEmail = HttpContext.User.GetUserEmail()
-            };
+            var dto = _mapper.Map<OpportunityDto>(viewModel);
 
             var id = await _opportunityService.CreateOpportunity(dto);
 
-            return RedirectToRoute("PlacementInformationSave_Get", new
-            {
-                id
-            });
+            return RedirectToRoute("PlacementInformationSave_Get", new { id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateReferfal(CreateReferralViewModel viewModel)
+        {
+            var dto = _mapper.Map<OpportunityDto>(viewModel);
+
+            var id = await _opportunityService.CreateOpportunity(dto);
+
+            return RedirectToRoute("PlacementInformationSave_Get", new { id });
         }
 
         [HttpGet]
@@ -49,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 RouteId = dto.RouteId,
                 Postcode = dto.Postcode,
-                Distance = dto.Distance,
+                Distance = dto.SearchRadius,
                 OpportunityId = dto.Id,
                 JobTitle = dto.JobTitle,
                 PlacementsKnown = dto.PlacementsKnown,
@@ -161,7 +163,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var viewModel = new CheckAnswersPlacementViewModel
             {
                 Contact = dto.EmployerContact,
-                Distance = dto.Distance,
+                Distance = dto.SearchRadius,
                 EmployerName = dto.EmployerName,
                 JobTitle = dto.JobTitle,
                 PlacementsKnown = dto.PlacementsKnown,

@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
         private readonly ProviderQualificationTestFixture _testFixture;
         private readonly Domain.Models.Provider _createdProvider;
         private const int UkPrn = 10000006;
-        private const string PostCode = "CV1 2WT";
+        private const string Postcode = "CV1 2WT";
         private const string LarsId = "12345678";
 
         public When_ProviderQualification_Imports_Valid_File(ProviderQualificationTestFixture testFixture)
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
             _testFixture = testFixture;
             _testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
             _testFixture.ResetData();
-            _createdProvider = _testFixture.CreateVenueAndQualification(UkPrn, PostCode, LarsId);
+            _createdProvider = _testFixture.CreateVenueAndQualification(UkPrn, Postcode, LarsId);
         }
 
         [Fact]

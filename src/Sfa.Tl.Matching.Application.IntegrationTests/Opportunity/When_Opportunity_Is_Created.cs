@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             {
                 RouteId = 1,
                 Postcode = Postcode,
-                Distance = 4
+                SearchRadius = 4
             };
 
             _opportunityId = _testFixture.OpportunityService.CreateOpportunity(opportunityDto).GetAwaiter().GetResult();

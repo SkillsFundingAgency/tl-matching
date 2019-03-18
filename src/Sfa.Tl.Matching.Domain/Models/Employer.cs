@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string PrimaryContact { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public string PostCode { get; set; }
+        public string Postcode { get; set; }
         public string Owner { get; set; }
     }
 }

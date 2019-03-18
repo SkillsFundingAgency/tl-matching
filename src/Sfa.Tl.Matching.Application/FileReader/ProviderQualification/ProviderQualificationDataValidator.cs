@@ -24,13 +24,13 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderQualification
                     .WithMessage($"'{nameof(ProviderQualificationFileImportDto.UkPrn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
                 .DependentRules(() =>
                 {
-                    RuleFor(dto => dto.PostCode)
+                    RuleFor(dto => dto.Postcode)
                         .NotEmpty()
                             .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                            .WithMessage($"'{nameof(ProviderQualificationFileImportDto.PostCode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                            .WithMessage($"'{nameof(ProviderQualificationFileImportDto.Postcode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                         .Matches(dto => ValidationConstants.UkPostCodeRegex)
                             .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                            .WithMessage($"'{nameof(ProviderQualificationFileImportDto.PostCode)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
+                            .WithMessage($"'{nameof(ProviderQualificationFileImportDto.Postcode)}' - {ValidationErrorCode.InvalidFormat.Humanize()}")
                         .DependentRules(() =>
                         {
                             RuleFor(dto => dto)
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderQualification
         {
             var ukprn = long.Parse(dto.UkPrn);
 
-            var providerVenue = await providerRepository.GetSingleOrDefault(pv => pv.Provider.UkPrn == ukprn && pv.Postcode == dto.PostCode);
+            var providerVenue = await providerRepository.GetSingleOrDefault(pv => pv.Provider.UkPrn == ukprn && pv.Postcode == dto.Postcode);
 
             if (providerVenue == null) return false;
 

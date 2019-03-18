@@ -19,7 +19,7 @@
                 </h2>
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
-                        <li><a sfa-validation-for="BusinessName"></a></li>
+                        <li><a sfa-validation-for="CompanyName"></a></li>
                     </ul>
                 </div>
             </div>
@@ -27,9 +27,9 @@
         <form asp-action="FindEmployer" id="findEmployer" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
 
-            <div class="govuk-form-group" sfa-validation-for="BusinessName" sfa-validationerror-class="govuk-form-group--error">
+            <div class="govuk-form-group" sfa-validation-for="CompanyName" sfa-validationerror-class="govuk-form-group--error">
                 <h1 class="govuk-label-wrapper">
-                    <label class="govuk-label govuk-label--l" asp-for="BusinessName">
+                    <label class="govuk-label govuk-label--l" asp-for="CompanyName">
                         Who is the employer?
                     </label>
                     <span id="employer-name-hint" class="govuk-hint">
@@ -37,9 +37,9 @@
                     </span>
 
                 </h1>
-                <span class="govuk-error-message" asp-validation-for="BusinessName"></span>
+                <span class="govuk-error-message" asp-validation-for="CompanyName"></span>
 
-                <select id="BusinessName" name="BusinessName" class="govuk-input govuk-input" asp-for="BusinessName"></select>
+                <select id="CompanyName" name="CompanyName" class="govuk-input govuk-input" asp-for="CompanyName"></select>
 
                 <input asp-for="SelectedEmployerId" type="hidden" />
 

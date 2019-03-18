@@ -53,6 +53,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ProviderVenue.Validat
         [Fact]
         public void Then_Error_Message_Is_VenueAlreadyExists() =>
             _validationResult.Errors[0].ErrorMessage.Should()
-                .Be($"'{nameof(ProviderVenueFileImportDto.PostCode)}' - {ValidationErrorCode.ProviderVenueAlreadyExists.Humanize()}");
+                .Be($"'{nameof(ProviderVenueFileImportDto.Postcode)}' - {ValidationErrorCode.ProviderVenueAlreadyExists.Humanize()}");
     }
 }

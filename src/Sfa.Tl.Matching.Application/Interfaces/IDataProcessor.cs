@@ -1,10 +1,11 @@
-﻿using Sfa.Tl.Matching.Models.Dto;
+﻿using System.Collections.Generic;
+using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
 {
-    public interface IDataProcessor<in TImportDto> where TImportDto : FileImportDto
+    public interface IDataProcessor<TEntity> where TEntity : BaseEntity
     {
-        void PreProcessingHandler(TImportDto fileImportDto);
-        void PostProcessingHandler(TImportDto fileImportDto);
+        void PreProcessingHandler(IList<TEntity> entities);
+        void PostProcessingHandler(IList<TEntity> entities);
     }
 }

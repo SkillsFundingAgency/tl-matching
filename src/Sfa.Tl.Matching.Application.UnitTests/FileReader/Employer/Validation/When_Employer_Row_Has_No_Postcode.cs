@@ -20,12 +20,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
         [InlineData(null)]
         public void Then_Validation_Result_Is_Not_Valid(string postcode)
         {
-            _fixture.Dto.PostCode = postcode;
+            _fixture.Dto.Postcode = postcode;
             var validationResult = _fixture.Validator.Validate(_fixture.Dto);
             validationResult.IsValid.Should().BeFalse();
             validationResult.Errors.Count.Should().Be(1);
             validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.MissingMandatoryData.ToString());
-            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerFileImportDto.PostCode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerFileImportDto.Postcode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Functions
             [Inject]ILocationService locationService
         )
         {
-            var saveProximityData = new SaveProximityData { PostCode = req.Query["PostCode"].ToString(), UkPrn = req.Query["UkPrn"].ToString().ToLong() };
+            var saveProximityData = new SaveProximityData { Postcode = req.Query["Postcode"].ToString(), ProviderVenueId = req.Query["ProviderVenueId"].ToString().ToLong() };
 
             var geoLocationData = await locationService.GetGeoLocationData(req.Query["postcode"].ToString());
 
@@ -43,16 +43,16 @@ namespace Sfa.Tl.Matching.Functions
             [Inject]ILocationService locationService
         )
         {
-            var saveProximityData = new SaveProximityData { PostCode = getProximityData.PostCode, UkPrn = getProximityData.UkPrn };
+            var saveProximityData = new SaveProximityData { Postcode = getProximityData.Postcode, ProviderVenueId = getProximityData.ProviderVenueId };
 
             try
             {
-                var geoLocationData = await locationService.GetGeoLocationData(getProximityData.PostCode);
+                var geoLocationData = await locationService.GetGeoLocationData(getProximityData.Postcode);
                 return mapper.Map(geoLocationData, saveProximityData);
             }
             catch (Exception e)
             {
-                logger.LogError($"Error Getting Geo Location Data for PostCode: { getProximityData.PostCode }, Please Check the PostCode, Internal Error Message {e}");
+                logger.LogError($"Error Getting Geo Location Data for Postcode: { getProximityData.Postcode }, Please Check the Postcode, Internal Error Message {e}");
             }
 
             return saveProximityData;
@@ -67,16 +67,16 @@ namespace Sfa.Tl.Matching.Functions
             [Inject]IRepository<Domain.Models.ProviderVenue> providerVenueRepository
         )
         {
-            if (saveProximityData.UkPrn <= 0 ||
-                string.IsNullOrWhiteSpace(saveProximityData.PostCode) ||
+            if (saveProximityData.ProviderVenueId <= 0 ||
+                string.IsNullOrWhiteSpace(saveProximityData.Postcode) ||
                 string.IsNullOrWhiteSpace(saveProximityData.Longitude) ||
                 string.IsNullOrWhiteSpace(saveProximityData.Latitude))
             {
-                logger.LogError($"Error Saving Geo Location Data for UkPrn: { saveProximityData.UkPrn }, Please Check the PostCode.");
+                logger.LogError($"Error Saving Geo Location Data for ProviderVenueId: { saveProximityData.ProviderVenueId }, Please Check the Postcode.");
                 return;
             }
 
-            var providerVenue = await providerVenueRepository.GetSingleOrDefault(venue => venue.Provider.UkPrn == saveProximityData.UkPrn && venue.Postcode == saveProximityData.PostCode);
+            var providerVenue = await providerVenueRepository.GetSingleOrDefault(venue => venue.Id == saveProximityData.ProviderVenueId && venue.Postcode == saveProximityData.Postcode);
 
             if (providerVenue == null) return;
 

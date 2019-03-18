@@ -1,7 +1,9 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -20,10 +22,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var viewModel = new EmployerDetailsViewModel
             {
-                ContactPhone = "ABC"
+                EmployerContactPhone = "ABC"
             };
 
-            _employerController = new EmployerController(employerService, opportunityService);
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+
+            _employerController = new EmployerController(employerService, opportunityService, mapper);
 
             _result = _employerController.Details(viewModel).GetAwaiter().GetResult();
         }
@@ -38,14 +43,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         [Fact]
         public void Then_Model_State_Has_ContactPhone_Key() =>
-            _employerController.ViewData.ModelState.ContainsKey(nameof(EmployerDetailsViewModel.ContactPhone))
+            _employerController.ViewData.ModelState.ContainsKey(nameof(EmployerDetailsViewModel.EmployerContactPhone))
                 .Should().BeTrue();
 
         [Fact]
         public void Then_Model_State_Has_ContactPhone_Error()
         {
             var modelStateEntry =
-                _employerController.ViewData.ModelState[nameof(EmployerDetailsViewModel.ContactPhone)];
+                _employerController.ViewData.ModelState[nameof(EmployerDetailsViewModel.EmployerContactPhone)];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must enter a number");
         }
     }

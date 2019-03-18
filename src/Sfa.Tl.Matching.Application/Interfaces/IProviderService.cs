@@ -7,6 +7,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProviderService
     {
-        Task<IEnumerable<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto);
+        Task<IList<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto);
+        Task<bool> IsValidPostCode(string postCode);
     }
 }

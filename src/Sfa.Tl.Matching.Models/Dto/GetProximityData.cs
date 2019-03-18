@@ -2,7 +2,7 @@
 {
     public class GetProximityData
     {
-        public long UkPrn { get; set; }
-        public string PostCode { get; set; }
+        public long ProviderVenueId { get; set; }
+        public string Postcode { get; set; }
     }
 }

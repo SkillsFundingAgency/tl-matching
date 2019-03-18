@@ -1,7 +1,9 @@
-﻿using FluentAssertions;
+﻿using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -23,7 +25,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 Placements = 1000
             };
 
-            _opportunityController = new OpportunityController(opportunityService);
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var mapper = new Mapper(config);
+            
+            _opportunityController = new OpportunityController(opportunityService, mapper);
             _result = _opportunityController.PlacementInformationSave(viewModel).GetAwaiter().GetResult();
         }
 

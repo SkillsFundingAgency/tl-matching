@@ -40,14 +40,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
             var qualificationrepository = new GenericRepository<Qualification>(qualificationloggerRepository, MatchingDbContext);
             var dataValidator = new ProviderQualificationDataValidator(providerVenuerepository, providerQualificationrepository, qualificationrepository);
             var dataParser = new ProviderQualificationDataParser();
-            var nullDataProcessor = new NullDataProcessor<ProviderQualificationFileImportDto>();
-            var excelFileReader = new ExcelFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>(loggerExcelFileReader, dataParser, dataValidator, nullDataProcessor);
+            var nullDataProcessor = new NullDataProcessor<Domain.Models.ProviderQualification>();
+            var excelFileReader = new ExcelFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>(loggerExcelFileReader, dataParser, dataValidator);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 
             var mapper = new Mapper(config);
 
-            FileImportService = new FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>(logger, mapper, excelFileReader, providerQualificationrepository);
+            FileImportService = new FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>(logger, mapper, excelFileReader, providerQualificationrepository, nullDataProcessor);
         }
 
         public void ResetData()
