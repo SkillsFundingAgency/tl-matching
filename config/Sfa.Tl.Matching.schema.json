@@ -73,6 +73,10 @@
       ],
       "type": "object"
     },
+    "SendEmailEnabled": {
+      "type": "boolean",
+      "environmentVariable": "SendEmailEnabled"
+    },
     "BlobStorageConnectionString": {
       "type": "string",
       "environmentVariable": "BlobStorageConnectionString"
