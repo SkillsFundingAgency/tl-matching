@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NSubstitute;
-using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -13,7 +12,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 {
-    public class When_EmailService_Is_Called_To_Send_Email
+    public class When_EmailService_Is_Called_To_Send_Email_But_Send_Email_Is_Disabled
     {
         private readonly INotificationsApi _notificationsApi;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
@@ -22,11 +21,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         private readonly string _toAddress;
         private readonly string _replyToAddress;
 
-        public When_EmailService_Is_Called_To_Send_Email()
+        public When_EmailService_Is_Called_To_Send_Email_But_Send_Email_Is_Disabled()
         {
             var configuration = new MatchingConfiguration
             {
-                SendEmailEnabled = true
+                SendEmailEnabled = false
             };
 
             _notificationsApi = Substitute.For<INotificationsApi>();
@@ -65,45 +64,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         }
 
         [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_Exactly_Once()
+        public void Then_NotificationsApi_SendEmail_Is_Not_Called()
         {
-            _notificationsApi.Received(1).SendEmail(Arg.Any<SFA.DAS.Notifications.Api.Types.Email>());
-        }
-
-        [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_With_Subject()
-        {
-            _notificationsApi.Received(1).SendEmail(Arg.Is<SFA.DAS.Notifications.Api.Types.Email>(e => e.Subject == _subject));
-        }
-
-        [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_With_Send_To_Address()
-        {
-            _notificationsApi.Received(1).SendEmail(Arg.Is<SFA.DAS.Notifications.Api.Types.Email>(e => e.RecipientsAddress == _toAddress));
-        }
-
-        [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_With_Reply_To_Address()
-        {
-            _notificationsApi.Received(1).SendEmail(Arg.Is<SFA.DAS.Notifications.Api.Types.Email>(e => e.ReplyToAddress == _replyToAddress));
-        }
-
-        [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_With_SystemId_From_EmailService()
-        {
-            _notificationsApi.Received(1).SendEmail(Arg.Is<SFA.DAS.Notifications.Api.Types.Email>(e => e.SystemId == EmailService.SystemId));
-        }
-
-        [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_With_First_Token_Key()
-        {
-            _notificationsApi.Received(1).SendEmail(Arg.Is<SFA.DAS.Notifications.Api.Types.Email>(e => e.Tokens.First().Key == "contactname"));
-        }
-
-        [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_With_First_Token_Value()
-        {
-            _notificationsApi.Received(1).SendEmail(Arg.Is<SFA.DAS.Notifications.Api.Types.Email>(e => e.Tokens.First().Value == "name"));
+            _notificationsApi.Received(0).SendEmail(Arg.Any<SFA.DAS.Notifications.Api.Types.Email>());
         }
     }
 }
