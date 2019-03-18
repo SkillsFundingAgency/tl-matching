@@ -127,6 +127,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = PopulateCheckAnswersDto(viewModel);
 
             await _opportunityService.SaveCheckAnswers(dto);
+            await _opportunityService.CreateProvisionGap(viewModel);
 
             return RedirectToRoute("EmailSentProvisionGap_Get", new { id = viewModel.OpportunityId });
         }
