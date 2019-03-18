@@ -97,17 +97,15 @@ namespace Sfa.Tl.Matching.Web
             app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
             app.UseXfo(xfo => xfo.Deny());
             app.UseCsp(options => options
-                          .DefaultSources(s => s.Self())
-                          .ScriptSources(s =>
-                          {
-                              s.Self()
-                      .CustomSources(
-                                "https://www.google-analytics.com/analytics.js",
-                                   "https://www.googletagmanager.com/"
-                                   )
-                      .UnsafeInline();
-                          }
-                          ));
+                .ScriptSources(s =>
+                {
+                    s.Self()
+                        .CustomSources("https://www.google-analytics.com/analytics.js",
+                                       "https://www.googletagmanager.com/",
+                                       "https://www.smartsurvey.co.uk/")
+                        .UnsafeInline();
+                }
+            ));
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -147,8 +145,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddAutoMapper();
 
             //Inject DbContext
-            services.AddDbContext<MatchingDbContext>(options => 
-                options.UseSqlServer(_configuration.SqlConnectionString, 
+            services.AddDbContext<MatchingDbContext>(options =>
+                options.UseSqlServer(_configuration.SqlConnectionString,
                     builder => builder.UseNetTopologySuite()
                                       .EnableRetryOnFailure()));
 
