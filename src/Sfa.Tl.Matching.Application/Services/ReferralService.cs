@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Application.Services
             */
         }
 
-        public async Task SendProviderEmail(int opportunityId)
+        public async Task SendProviderReferralEmail(int opportunityId)
         {
             var emailTemplate = await GetEmailTemplate(ProviderReferralEmailTemplateName);
 
@@ -113,14 +113,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await SaveEmailHistory(emailTemplate, placeholders, opportunityId, toAddress);
             }
-        }
-
-        public async Task SendProvisionGapEmail(int opportunityId)
-        {
-            //TODO: Remove provision gap email completely, won't use it
-            //TODO: Move call to SendProviderEmail(opportunityId) to the controller
-            //For testing, send a known item that was already added to the database
-            //await SendProviderEmail(16);
         }
 
         private async Task SaveEmailHistory(EmailTemplate emailTemplate, List<EmailPlaceholderDto> placeholders, int opportunityId, string emailAddress)

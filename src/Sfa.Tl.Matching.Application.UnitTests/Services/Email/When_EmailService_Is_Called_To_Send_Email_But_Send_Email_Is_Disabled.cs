@@ -56,12 +56,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             emailService.SendEmail(templateName, _toAddress, _subject, tokens, _replyToAddress).GetAwaiter().GetResult();
         }
-        
-        [Fact]
-        public void Then_EmailTemplateRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
-        {
-            _emailTemplateRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.EmailTemplate, bool>>>());
-        }
 
         [Fact]
         public void Then_NotificationsApi_SendEmail_Is_Not_Called()

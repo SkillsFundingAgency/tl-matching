@@ -6,8 +6,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task SendEmployerEmail(int opportunityId);
 
-        Task SendProviderEmail(int opportunityId);
-
-        Task SendProvisionGapEmail(int opportunityId);
+        Task SendProviderReferralEmail(int opportunityId);
     }
 }

@@ -140,8 +140,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var opportunity = await _opportunityService.GetOpportunity(id);
 
-            await _referralService.SendProvisionGapEmail(id);
-
             return View(new EmailSentProvisionGapViewModel
             {
                 EmployerContactName = opportunity.EmployerContact,
@@ -155,6 +153,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> EmailSentReferrals(int id)
         {
             var opportunity = await _opportunityService.GetOpportunity(id);
+
+            await _referralService.SendProviderReferralEmail(id);
 
             return View(new EmailsSentViewModel
             {

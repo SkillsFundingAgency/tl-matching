@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 _emailHistoryRepository, _emailTemplateRepository, _opportunityRepository,
                 mapper, logger);
 
-            referralService.SendProviderEmail(1).GetAwaiter().GetResult();
+            referralService.SendProviderReferralEmail(1).GetAwaiter().GetResult();
         }
 
         [Fact]
