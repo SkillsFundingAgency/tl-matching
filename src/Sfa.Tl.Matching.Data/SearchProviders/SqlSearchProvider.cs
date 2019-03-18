@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                     ProviderName = p.Provider.Name,
                     Distance = p.Location.Distance(employerLocation) / MilesToMeters,
                     Postcode = p.Postcode,
-                    QualificationShortTitles = p.ProviderQualification.Select(pq => pq.Qualification.ShortTitle).ToList()
+                    QualificationShortTitles = p.ProviderQualification.Select(pq => pq.Qualification.ShortTitle).Distinct().ToList()
                 }).ToListAsync();
         }
     }
