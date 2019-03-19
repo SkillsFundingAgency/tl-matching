@@ -10,7 +10,7 @@ sassOptions = {
       'node_modules/govuk-frontend',
       'node_modules/accessible-autocomplete',
       'Frontend/src/sass'
-  ],
+  ]
 };
 
 module.exports = sassOptions;

@@ -45,6 +45,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                 .Select(qrpm => qrpm.QualificationId)
                 .Distinct().ToListAsync();
 
+            // ReSharper disable ImplicitlyCapturedClosure
             return await _providerVenueRepository
                 .GetMany(p => p.Location.Distance(employerLocation) <= searchRadiusInMeters &&
                               p.ProviderQualification.Any(qId => qualificationIds.Contains(qId.QualificationId)), inc => inc.ProviderQualification)

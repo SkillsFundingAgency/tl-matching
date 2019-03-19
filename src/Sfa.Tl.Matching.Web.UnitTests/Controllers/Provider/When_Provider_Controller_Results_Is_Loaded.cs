@@ -114,7 +114,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         public void Then_SearchViewModel_SearchResults_Should_Have_Expected_Number_Of_Items()
         {
             var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
-            searchResultsViewModel.Results.Count().Should().Be(1);
+            searchResultsViewModel.Results.Count.Should().Be(1);
         }
 
         [Fact]

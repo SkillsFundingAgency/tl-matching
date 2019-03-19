@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 EmployerContact = Contact,
                 EmployerContactEmail = ContactEmail,
                 EmployerContactPhone = ContactPhone,
-                ModifiedBy = ModifiedBy,
+                ModifiedBy = ModifiedBy
             };
 
             opportunityService.SaveEmployerDetail(dto).GetAwaiter().GetResult();

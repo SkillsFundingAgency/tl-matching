@@ -91,10 +91,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
             if (navigationPropertyPath.Any())
             {
-                foreach (var navProp in navigationPropertyPath)
-                {
-                    queryable = queryable.Include(navProp);
-                }
+                queryable = navigationPropertyPath.Aggregate(queryable, (current, navProp) => current.Include(navProp));
             }
 
             return queryable;
