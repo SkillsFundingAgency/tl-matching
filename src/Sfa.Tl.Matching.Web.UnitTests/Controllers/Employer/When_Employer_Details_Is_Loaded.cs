@@ -3,7 +3,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -30,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _employerService = Substitute.For<IEmployerService>();
             _employerService.GetEmployer(Arg.Any<int>()).Returns(new EmployerDto
             {
-                CompanyName = CompanyName,
+                CompanyName = CompanyName
             });
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto

@@ -13,12 +13,12 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
     public class When_OpportunityService_Is_Called_To_Get_Referrals
     {
         private readonly List<ReferralsViewModel> _providerViewModels;
-        private readonly IRepository<Domain.Models.Referral> _referralRepository;
+        private readonly IRepository<Referral> _referralRepository;
 
         private const int OpportunityId = 1;
 
