@@ -126,13 +126,13 @@ namespace Sfa.Tl.Matching.Application.Services
             return _referralRepository.Create(referral);
         }
 
-        public List<ReferralsViewModel> GetReferrals(int opportunityId)
+        public List<ReferralDto> GetReferrals(int opportunityId)
         {
             var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId,
                 r => r.ProviderVenue, r => r.ProviderVenue.Provider);
 
             var providers = referrals
-                .Select(r => new ReferralsViewModel
+                .Select(r => new ReferralDto
                 {
                     Name = r.ProviderVenue.Provider.Name,
                     Postcode = r.ProviderVenue.Postcode,

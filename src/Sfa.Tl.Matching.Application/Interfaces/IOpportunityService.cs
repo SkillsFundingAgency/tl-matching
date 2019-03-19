@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<int> CreateProvisionGap(CheckAnswersProvisionGapViewModel dto);
         Task<int> CreateReferral(CheckAnswersReferralViewModel dto);
         Task SavePlacementInformation(PlacementInformationSaveViewModel dto);
-        List<ReferralsViewModel> GetReferrals(int opportunityId);
+        List<ReferralDto> GetReferrals(int opportunityId);
         Task<bool> IsReferralOpportunity(int id);
         Task<CheckAnswersDto> GetCheckAnswers(int id);
     }

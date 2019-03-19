@@ -4,6 +4,8 @@
     {
         public int ProviderVenueId { get; set; }
         public decimal DistanceFromEmployer { get; set; }
+        public string Name { get; set; }
+        public string Postcode { get; set; }
         public string CreatedBy { get; set; }
     }
 }

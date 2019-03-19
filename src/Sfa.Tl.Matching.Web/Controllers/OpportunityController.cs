@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -82,39 +83,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers/{id?}", Name = "CheckAnswersReferrals_Get")]
         public async Task<IActionResult> CheckAnswersReferrals(int id)
         {
-            var dto = await _opportunityService.GetCheckAnswers(id);
-            
-            var viewModel = new CheckAnswersReferralViewModel
-            {
-                OpportunityId = dto.OpportunityId,
-                PlacementInformation = _mapper.Map<CheckAnswersPlacementViewModel>(dto),
-                Providers = _opportunityService.GetReferrals(dto.OpportunityId),
-            };
+            var viewModel = await GetCheckAnswersReferralViewModel(id);
 
             return View(viewModel);
         }
-
+        
         [HttpPost]
         [Route("check-answers/{id?}", Name = "CheckAnswersReferrals_Post")]
         public async Task<IActionResult> CheckAnswersReferrals(CheckAnswersReferralViewModel viewModel)
         {
-            var opportuntity = await _opportunityService.GetOpportunityWithRoute(viewModel.OpportunityId);
-
             if (!ModelState.IsValid)
-                return View(new CheckAnswersReferralViewModel
-                {
-                    OpportunityId = opportuntity.Id,
-                    PlacementInformation = _mapper.Map<CheckAnswersPlacementViewModel>(opportuntity),
-                    Providers = _opportunityService.GetReferrals(opportuntity.Id),
-                });
+                return View(await GetCheckAnswersReferralViewModel(viewModel.OpportunityId));
 
-            var dto = new CheckAnswersDto
-            {
-                OpportunityId = viewModel.OpportunityId,
-                ConfirmationSelected = viewModel.ConfirmationSelected,
-                ModifiedBy = HttpContext.User.GetUserName()
-            };
-
+            var dto = _mapper.Map<CheckAnswersDto>(viewModel);
             await _opportunityService.SaveCheckAnswers(dto);
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
@@ -179,6 +160,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of placements must be 1 or more");
             else if (viewModel.Placements > 999)
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of placements must be 999 or less");
+        }
+
+        private async Task<CheckAnswersReferralViewModel> GetCheckAnswersReferralViewModel(int id)
+        {
+            var dto = await _opportunityService.GetCheckAnswers(id);
+            var providersForReferral = _opportunityService.GetReferrals(id);
+
+            var viewModel = _mapper.Map<CheckAnswersReferralViewModel>(dto);
+            viewModel.Providers = _mapper.Map<List<ReferralsViewModel>>(providersForReferral);
+
+            return viewModel;
         }
     }
 }

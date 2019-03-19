@@ -4,10 +4,10 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
@@ -24,14 +24,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Recording_Referrals_And_Check_Answers_Is_Loaded()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(CheckAnswersDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
             var dto = new ValidCheckAnswersDtoBuilder().Build();
-            var providers = new List<ReferralsViewModel>
+
+            var providers = new List<ReferralDto>
             {
-                new ReferralsViewModel { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
-                new ReferralsViewModel { Name = "Provider2", DistanceFromEmployer = 31.6m, Postcode = "BB1 1BB" }
+                new ReferralDto { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
+                new ReferralDto { Name = "Provider2", DistanceFromEmployer = 31.6m, Postcode = "BB1 1BB" }
             };
 
             _opportunityService = Substitute.For<IOpportunityService>();

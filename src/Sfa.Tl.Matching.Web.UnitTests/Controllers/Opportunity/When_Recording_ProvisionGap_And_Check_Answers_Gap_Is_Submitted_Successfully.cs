@@ -38,11 +38,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 c.AddProfiles(typeof(CheckAnswersDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<FindEmployerViewModel, EmployerNameDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<FindEmployerViewModel, EmployerNameDto>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>(httpcontextAccesor) :
                             type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<FindEmployerViewModel, EmployerNameDto>(new DateTimeProvider()) :
+                                new UtcNowResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>(new DateTimeProvider()) :
                                 null);
             });
             var mapper = new Mapper(config);
