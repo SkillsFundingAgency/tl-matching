@@ -48,7 +48,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             });
             var mapper = new Mapper(config);
 
-            var opportunityController = new OpportunityController(_opportunityService, mapper);
+            var referralService = Substitute.For<IReferralService>();
+            
+            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(UserName)
                 .AddEmail(Email)
