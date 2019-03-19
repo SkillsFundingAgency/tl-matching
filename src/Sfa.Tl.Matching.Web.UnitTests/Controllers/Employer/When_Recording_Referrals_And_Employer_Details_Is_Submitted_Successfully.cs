@@ -67,13 +67,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_GetOpportunity_Is_Called_Exectlt_Once()
+        public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).IsReferralOpportunity(OpportunityId);
         }
 
         [Fact]
-        public void Then_SaveEmployerDetail_Is_Called_Exectlt_Once()
+        public void Then_SaveEmployerDetail_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).SaveEmployerDetail(Arg.Is<EmployerDetailDto>(a => 
                 a.EmployerContact == Contact && 

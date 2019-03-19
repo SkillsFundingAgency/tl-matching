@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         [Fact]
-        public void Then_Update_Is_Called_Exectlt_Once()
+        public void Then_Update_Is_Called_Exactly_Once()
         {
             _opportunityRepository.Received(1).Update(Arg.Is<Domain.Models.Opportunity>(opportunity =>
                 opportunity.Id == OpportunityId &&
@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         [Fact]
-        public void Then_GetSingleOrDefault_Is_Called_Exectlt_Once()
+        public void Then_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
             _opportunityRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
         }

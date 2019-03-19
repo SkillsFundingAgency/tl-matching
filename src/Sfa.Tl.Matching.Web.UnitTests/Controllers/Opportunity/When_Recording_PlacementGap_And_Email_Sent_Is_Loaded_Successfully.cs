@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_CreateProvisionGap_Is_Called_Exectlt_Once()
+        public void Then_CreateProvisionGap_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetOpportunity(OpportunityId);
         }

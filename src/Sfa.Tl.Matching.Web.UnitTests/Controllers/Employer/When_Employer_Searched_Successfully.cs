@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_Search_Is_Called_Exectlt_Once()
+        public void Then_Search_Is_Called_Exactly_Once()
         {
             _employerService.Received(1).Search("Employer");
         }

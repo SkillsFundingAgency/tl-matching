@@ -73,12 +73,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_GetOpportunity_Is_Called_Exectlt_Once()
+        public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetOpportunity(OpportunityId);
         }
         [Fact]
-        public void Then_GetEmployer_Is_Called_Exectlt_Once()
+        public void Then_GetEmployer_Is_Called_Exactly_Once()
         {
             _employerService.Received(1).GetEmployer(Arg.Any<int>());
         }

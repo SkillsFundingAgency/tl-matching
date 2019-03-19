@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
         }
 
         [Fact]
-        public void ImportQualificationPathMapping_Is_Called_Exectlt_Once()
+        public void ImportQualificationPathMapping_Is_Called_Exactly_Once()
         {
             _qualificationRoutePathMappingService
                 .Received(1)

@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         }
 
         [Fact]
-        public void Then_Path_Repository_GetMany_Is_Called_Exectlt_Once()
+        public void Then_Path_Repository_GetMany_Is_Called_Exactly_Once()
         {
             _pathRepository
                 .Received(1)

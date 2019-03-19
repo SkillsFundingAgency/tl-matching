@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         }
 
         [Fact]
-        public void Then_GetEmployer_Is_Called_Exectlt_Once()
+        public void Then_GetEmployer_Is_Called_Exactly_Once()
         {
             _employerRepository.Received(1)
                 .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>());

@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         [Fact]
-        public void Then_GetMany_Is_Called_Exectlt_Once()
+        public void Then_GetMany_Is_Called_Exactly_Once()
         {
             _referralRepository.GetMany(Arg.Any<Expression<Func<Referral, bool>>>());
         }

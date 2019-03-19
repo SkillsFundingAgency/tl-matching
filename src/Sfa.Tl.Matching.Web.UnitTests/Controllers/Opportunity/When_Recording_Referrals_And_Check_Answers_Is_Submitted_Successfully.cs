@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         // TODO AU This should be updating the opportunity
         //[Fact]
-        //public void Then_CreateReferral_Is_Called_Exectlt_Once()
+        //public void Then_CreateReferral_Is_Called_Exactly_Once()
         //{
         //    _opportunityService.Received(1).CreateReferral(_viewModel);
         //}

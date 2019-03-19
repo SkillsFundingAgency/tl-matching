@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_GetOpportunityWithRoute_Is_Called_Exectlt_Once()
+        public void Then_GetOpportunityWithRoute_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetOpportunityWithRoute(OpportunityId);
         }

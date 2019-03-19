@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Employer
         }
 
         [Fact]
-        public void ImportEmployer_Is_Called_Exectlt_Once()
+        public void ImportEmployer_Is_Called_Exactly_Once()
         {
             _employerService
                 .Received(1)
