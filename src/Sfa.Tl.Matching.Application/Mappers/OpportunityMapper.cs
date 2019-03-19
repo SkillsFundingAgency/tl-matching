@@ -65,6 +65,30 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
                 .ForAllOtherMembers(config => config.Ignore());
+
+            CreateMap<Opportunity, PlacementInformationSaveDto>()
+                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
+                .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
+                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
+                .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                .ForMember(m => m.Placements,
+                    opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ? 
+                        src.Placements : null))
+                .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
+                .ForAllOtherMembers(config => config.Ignore());
+
+            CreateMap<PlacementInformationSaveDto, Opportunity>()
+                .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
+                .ForMember(m => m.Placements,
+                    opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ? 
+                        src.Placements : 1))
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForAllOtherMembers(config => config.Ignore());
         }
     }
 }
