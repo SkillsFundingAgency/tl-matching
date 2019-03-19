@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -36,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
             _functionLogRepository = functionLogRepository;
         }
 
-        public IList<TDto> ValidateAndParseFile(TImportDto fileImportDto)
+        public async Task<IList<TDto>> ValidateAndParseFile(TImportDto fileImportDto)
         {
             var dtos = new List<TDto>();
 
@@ -63,19 +64,22 @@ namespace Sfa.Tl.Matching.Application.FileReader
                         prop.SetValue(fileImportDto, cellValue);
                     }
 
-                    startIndex++;
-
-                    var validationResult = _validator.Validate(fileImportDto);
+                    var validationResult = await _validator.ValidateAsync(fileImportDto);
                     
                     if (!validationResult.IsValid)
                     {
-                        LogErrorsAndWarnings(startIndex, validationResult);
+                        await LogErrorsAndWarnings(startIndex, validationResult);
+
+                        startIndex++;
+
                         continue;
                     }
 
                     var dto = _dataParser.Parse(fileImportDto);
                     
                     dtos.AddRange(dto);
+
+                    startIndex++;
                 }
             }
 
@@ -153,12 +157,17 @@ namespace Sfa.Tl.Matching.Application.FileReader
             return sb.ToString();
         }
 
-        private void LogErrorsAndWarnings(int rowIndex, ValidationResult validationResult)
+        private async Task LogErrorsAndWarnings(int rowIndex, ValidationResult validationResult)
         {
-            var errorMessage = $"Row Number={rowIndex} failed with the following errors: \n\t{string.Join("\n\t", validationResult.Errors)}";
+           await _functionLogRepository.CreateMany(validationResult.Errors.Select(errorMessage => new FunctionLog
+            {
+                FunctionName = GetType().GetGenericArguments().ElementAt(0).Name.Replace("FileImportDto", string.Empty),
+                RowNumber = rowIndex,
+                ErrorMessage = errorMessage.ToString()
+            }).ToList());
 
             //TODO Logic to check if its a warning or error
-            _logger.LogError(errorMessage);
+            _logger.LogError($"Row Number={rowIndex} failed with the following errors: \n\t{string.Join("\n\t", validationResult.Errors)}");
         }
     }
 }
