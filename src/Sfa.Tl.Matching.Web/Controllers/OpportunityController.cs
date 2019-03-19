@@ -46,19 +46,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("placement-information/{id?}", Name = "PlacementInformationSave_Get")]
         public async Task<IActionResult> PlacementInformationSave(int id)
         {
-            var dto = await _opportunityService.GetOpportunity(id);
+            var dto = await _opportunityService.GetPlacementInformationSave(id);
 
-            var viewModel = new PlacementInformationSaveViewModel
-            {
-                RouteId = dto.RouteId,
-                Postcode = dto.Postcode,
-                Distance = dto.SearchRadius,
-                OpportunityId = dto.Id,
-                JobTitle = dto.JobTitle,
-                PlacementsKnown = dto.PlacementsKnown,
-                Placements = !dto.PlacementsKnown.HasValue || !dto.PlacementsKnown.Value ?
-                    default : dto.Placements
-            };
+            var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
 
             return View(viewModel);
         }
@@ -72,9 +62,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            viewModel.ModifiedBy = HttpContext.User.GetUserName();
-
-            await _opportunityService.SavePlacementInformation(viewModel);
+            var dto = _mapper.Map<PlacementInformationSaveDto>(viewModel);
+            await _opportunityService.SavePlacementInformation(dto);
 
             return RedirectToRoute("EmployerFind_Get", new { id = viewModel.OpportunityId });
         }

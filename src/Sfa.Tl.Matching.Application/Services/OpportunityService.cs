@@ -54,21 +54,20 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _opportunityRepository.GetMany(o => o.Id == id && o.Referral.Any()).AnyAsync();
         }
 
-        public async Task<OpportunityDto> GetOpportunityWithRoute(int id)
+        public async Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id)
         {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id,
+            var placementInformation = await _opportunityRepository.GetSingleOrDefault(e => e.Id == id,
                 opp => opp.Route);
-            var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
+
+            var dto = _mapper.Map<Opportunity, PlacementInformationSaveDto>(placementInformation);
 
             return dto;
         }
 
-        public async Task SavePlacementInformation(PlacementInformationSaveViewModel dto)
+        public async Task SavePlacementInformation(PlacementInformationSaveDto dto)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
             var updatedOpportunity = _mapper.Map(dto, opportunity);
-
-            updatedOpportunity.ModifiedOn = _dateTimeProvider.UtcNow();
 
             await _opportunityRepository.Update(updatedOpportunity);
         }

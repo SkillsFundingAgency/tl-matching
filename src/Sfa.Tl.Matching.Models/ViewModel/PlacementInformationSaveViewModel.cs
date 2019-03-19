@@ -18,7 +18,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         public int RouteId { get; set; }
         public string Postcode { get; set; }
-        public short Distance { get; set; }
-        public string ModifiedBy { get; set; } // TODO AU REMOVE THIS
+        public short SearchRadius { get; set; }
     }
 }

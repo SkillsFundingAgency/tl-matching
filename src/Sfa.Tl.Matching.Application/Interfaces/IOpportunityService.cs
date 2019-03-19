@@ -12,10 +12,10 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task SaveEmployerDetail(EmployerDetailDto dto);
         Task SaveCheckAnswers(CheckAnswersDto dto);
         Task<OpportunityDto> GetOpportunity(int id);
-        Task<OpportunityDto> GetOpportunityWithRoute(int id);
         Task<int> CreateProvisionGap(CheckAnswersProvisionGapViewModel dto);
         Task<int> CreateReferral(CheckAnswersReferralViewModel dto);
-        Task SavePlacementInformation(PlacementInformationSaveViewModel dto);
+        Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id);
+        Task SavePlacementInformation(PlacementInformationSaveDto dto);
         List<ReferralDto> GetReferrals(int opportunityId);
         Task<bool> IsReferralOpportunity(int id);
         Task<CheckAnswersDto> GetCheckAnswers(int id);
