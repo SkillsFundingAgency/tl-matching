@@ -73,6 +73,16 @@ namespace Sfa.Tl.Matching.Application.Services
             await _opportunityRepository.Update(updatedOpportunity);
         }
 
+        public async Task<CheckAnswersDto> GetCheckAnswers(int id)
+        {
+            var checkAnswers = await _opportunityRepository.GetSingleOrDefault(e => e.Id == id,
+                opp => opp.Route);
+
+            var dto = _mapper.Map<Opportunity, CheckAnswersDto>(checkAnswers);
+
+            return dto;
+        }
+
         public async Task SaveEmployerName(EmployerNameDto dto)
         {
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);

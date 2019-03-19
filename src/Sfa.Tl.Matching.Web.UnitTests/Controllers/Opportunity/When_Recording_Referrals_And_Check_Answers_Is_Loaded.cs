@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
@@ -25,8 +26,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
-            
-            var dto = new ValidOpportunityDtoBuilder().Build();
+
+            var dto = new ValidCheckAnswersDtoBuilder().Build();
             var providers = new List<ReferralsViewModel>
             {
                 new ReferralsViewModel { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
@@ -34,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             };
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunityWithRoute(OpportunityId).Returns(dto);
+            _opportunityService.GetCheckAnswers(OpportunityId).Returns(dto);
 
             _opportunityService.GetReferrals(OpportunityId).Returns(providers);
 
@@ -47,9 +48,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_GetOpportunityWithRoute_Is_Called_Exactly_Once()
+        public void Then_GetCheckAnswers_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetOpportunityWithRoute(OpportunityId);
+            _opportunityService.Received(1).GetCheckAnswers(OpportunityId);
         }
 
         [Fact]
@@ -85,14 +86,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerContact_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
-            viewModel.PlacementInformation.Contact.Should().Be("EmployerContact");
+            viewModel.PlacementInformation.EmployerContact.Should().Be("EmployerContact");
         }
 
         [Fact]
         public void Then_Distance_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
-            viewModel.PlacementInformation.Distance.Should().Be(3);
+            viewModel.PlacementInformation.SearchRadius.Should().Be(3);
         }
 
         [Fact]

@@ -18,5 +18,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task SavePlacementInformation(PlacementInformationSaveViewModel dto);
         List<ReferralsViewModel> GetReferrals(int opportunityId);
         Task<bool> IsReferralOpportunity(int id);
+        Task<CheckAnswersDto> GetCheckAnswers(int id);
     }
 }

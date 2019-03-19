@@ -33,13 +33,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _result = controllerWithClaims.CheckAnswersReferrals(_viewModel).GetAwaiter().GetResult();
         }
 
-        // TODO AU This should be updating the opportunity
-        //[Fact]
-        //public void Then_CreateReferral_Is_Called_Exactly_Once()
-        //{
-        //    _opportunityService.Received(1).CreateReferral(_viewModel);
-        //}
-
         [Fact]
         public void Then_Result_Is_Redirect_to_EmailsSent()
         {
