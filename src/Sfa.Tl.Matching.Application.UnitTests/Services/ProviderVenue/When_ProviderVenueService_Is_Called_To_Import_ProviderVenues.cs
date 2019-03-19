@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -10,7 +11,6 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
     public class When_ProviderVenueService_Is_Called_To_Import_ProviderVenues
     {
         private readonly ProviderVenueFileImportDto _fileImportDto;
-        private readonly IEnumerable<ProviderVenueDto> _fileReaderResults;
+        private readonly IList<ProviderVenueDto> _fileReaderResults;
         private readonly IFileReader<ProviderVenueFileImportDto, ProviderVenueDto> _fileReader;
         private readonly IRepository<Domain.Models.ProviderVenue> _repository;
         private readonly int _result;
@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             _fileReaderResults = new ValidProviderVenueDtoListBuilder(2).Build();
 
             _fileReader.ValidateAndParseFile(_fileImportDto)
-                .Returns(_fileReaderResults);
+                .Returns(Task.FromResult(_fileReaderResults));
 
             var service = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         [Fact]
         public void Then_The_Expected_Number_Of_Created_Records_Is_Returned()
         {
-            _fileReaderResults.Count().Should().Be(_result);
+            _fileReaderResults.Count.Should().Be(_result);
         }
     }
 }

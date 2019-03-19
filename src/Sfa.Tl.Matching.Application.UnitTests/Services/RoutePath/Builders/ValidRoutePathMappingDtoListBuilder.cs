@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath.Builders
 {
     public class ValidRoutePathMappingDtoListBuilder
     {
-        public IEnumerable<QualificationRoutePathMappingDto> Build(int numberOfItems)
+        public IList<QualificationRoutePathMappingDto> Build(int numberOfItems)
         {
             var routePathMappingDtos = new List<QualificationRoutePathMappingDto>();
 

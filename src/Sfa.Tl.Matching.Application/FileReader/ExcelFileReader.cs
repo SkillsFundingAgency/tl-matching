@@ -11,6 +11,8 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileReader
@@ -20,15 +22,18 @@ namespace Sfa.Tl.Matching.Application.FileReader
         private readonly ILogger<ExcelFileReader<TImportDto, TDto>> _logger;
         private readonly IDataParser<TDto> _dataParser;
         private readonly IValidator<TImportDto> _validator;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
 
         public ExcelFileReader(
             ILogger<ExcelFileReader<TImportDto, TDto>> logger,
             IDataParser<TDto> dataParser,
-            IValidator<TImportDto> validator)
+            IValidator<TImportDto> validator,
+            IRepository<FunctionLog> functionLogRepository)
         {
             _logger = logger;
             _dataParser = dataParser;
             _validator = validator;
+            _functionLogRepository = functionLogRepository;
         }
 
         public IList<TDto> ValidateAndParseFile(TImportDto fileImportDto)

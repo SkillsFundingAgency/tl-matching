@@ -31,7 +31,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
             }
         }
 
-        public IEnumerable<EmployerDto> Build() =>
-            _employerDtos;
+        public IList<EmployerDto> Build() => _employerDtos;
     }
 }

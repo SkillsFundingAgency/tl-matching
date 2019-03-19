@@ -33,7 +33,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             }
         }
 
-        public IEnumerable<ProviderDto> Build() =>
-            _providerDtos;
+        public IList<ProviderDto> Build() => _providerDtos;
     }
 }
