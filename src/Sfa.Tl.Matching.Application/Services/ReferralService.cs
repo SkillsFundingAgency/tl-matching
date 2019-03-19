@@ -110,13 +110,13 @@ namespace Sfa.Tl.Matching.Application.Services
                     tokens,
                     ReplyToAddress);
 
-                await SaveEmailHistory(emailTemplate, tokens, opportunityId, toAddress);
+                await SaveEmailHistory(emailTemplate, tokens, opportunityId, toAddress, referral.CreatedBy);
             }
         }
 
-        private async Task SaveEmailHistory(EmailTemplate emailTemplate, IDictionary<string, string> tokens, int opportunityId, string emailAddress)
+        private async Task SaveEmailHistory(EmailTemplate emailTemplate, IDictionary<string, string> tokens, int opportunityId, string emailAddress, string createdBy)
         {
-            var placeholders = ConvertTokensToPlaceholders(tokens);
+            var placeholders = ConvertTokensToEmailPlaceholderDtos(tokens, createdBy);
 
             var emailPlaceholders = _mapper.Map<IList<EmailPlaceholder>>(placeholders);
             _logger.LogInformation($"Saving {emailPlaceholders.Count} {nameof(EmailPlaceholder)} items.");
@@ -127,6 +127,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 EmailTemplateId = emailTemplate.Id,
                 EmailPlaceholder = emailPlaceholders,
                 SentTo = emailAddress,
+                CreatedBy = createdBy
             };
             await _emailHistoryRepository.Create(emailHistory);
         }
@@ -143,7 +144,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return opportunityReferralDto;
         }
 
-        private IEnumerable<EmailPlaceholderDto> ConvertTokensToPlaceholders(IDictionary<string, string> tokens)
+        private IEnumerable<EmailPlaceholderDto> ConvertTokensToEmailPlaceholderDtos(IDictionary<string, string> tokens, string createdBy)
         {
             var placeholders = new List<EmailPlaceholderDto>();
 
@@ -153,13 +154,12 @@ namespace Sfa.Tl.Matching.Application.Services
                     new EmailPlaceholderDto
                     {
                         Key = token.Key,
-                        Value = token.Value
+                        Value = token.Value,
+                        CreatedBy = createdBy
                     });
             }
 
             return placeholders;
         }
     }
-
-
 }

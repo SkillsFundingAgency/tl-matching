@@ -25,7 +25,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                 ProviderVenuePostcode = "AA2 2AA",
                 PlacementsKnown = true,
                 Placements = 3,
-                RouteName = "Agriculture, environmental and animal care"
+                RouteName = "Agriculture, environmental and animal care",
+                CreatedBy = "CreatedBy"
             }
         };
     }

@@ -19,5 +19,6 @@
         public string EmployerContactEmail { get; set; }
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

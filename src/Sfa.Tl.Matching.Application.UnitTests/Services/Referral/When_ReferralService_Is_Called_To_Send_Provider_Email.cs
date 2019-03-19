@@ -73,6 +73,42 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
+        public void Then_EmailHistoryRepository_Create_Is_With_OpportunityId()
+        {
+            _emailHistoryRepository
+                .Received(1)
+                .Create(Arg.Is<EmailHistory>(email =>
+                    email.OpportunityId == 1));
+        }
+
+        [Fact]
+        public void Then_EmailHistoryRepository_Create_Is_With_EmailTemplateId()
+        {
+            _emailHistoryRepository
+                .Received(1)
+                .Create(Arg.Is<EmailHistory>(email =>
+                    email.EmailTemplateId == 1));
+        }
+
+        [Fact]
+        public void Then_EmailHistoryRepository_Create_Is_With_SentTo()
+        {
+            _emailHistoryRepository
+                .Received(1)
+                .Create(Arg.Is<EmailHistory>(email =>
+                    email.SentTo == "primary.contact@provider.co.uk"));
+        }
+
+        [Fact]
+        public void Then_EmailHistoryRepository_Create_Is_With_CreatedBy()
+        {
+            _emailHistoryRepository
+                .Received(1)
+                .Create(Arg.Is<EmailHistory>(email =>
+                    email.CreatedBy == "CreatedBy"));
+        }
+
+        [Fact]
         public void Then_OpportunityRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
             _opportunityRepository

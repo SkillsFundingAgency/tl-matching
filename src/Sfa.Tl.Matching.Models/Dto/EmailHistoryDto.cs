@@ -7,5 +7,6 @@
         public string SentTo { get; set; }
         public string CopiedTo { get; set; }
         public string BlindCopiedTo { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

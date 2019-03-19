@@ -47,7 +47,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                               ProviderVenuePostcode = pv.Postcode,
                               PlacementsKnown = op.PlacementsKnown,
                               Placements = op.Placements,
-                              RouteName = r.Name
+                              RouteName = r.Name,
+                              CreatedBy = op.CreatedBy
                           }).ToListAsync();
         }
     }
