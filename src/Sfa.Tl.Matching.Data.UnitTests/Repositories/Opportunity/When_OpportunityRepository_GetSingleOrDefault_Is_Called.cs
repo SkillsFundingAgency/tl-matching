@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
         
         [Fact]
         public void Then_Opportunity_RouteId_Is_Returned() =>
-            _result.RouteId.Should().Be(2);
+            _result.RouteId.Should().Be(1);
 
         [Fact]
         public void Then_Opportunity_Postcode_Is_Returned() =>

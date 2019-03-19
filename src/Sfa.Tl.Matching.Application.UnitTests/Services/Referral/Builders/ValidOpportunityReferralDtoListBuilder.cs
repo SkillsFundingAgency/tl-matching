@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                 Postcode = "AA1 1AA",
                 JobTitle = "Testing Job Title",
                 ProviderVenuePostcode = "AA2 2AA",
-                PlacementsKnown = true,
+                PlacementsKnown = false,
                 Placements = 3,
                 RouteName = "Agriculture, environmental and animal care",
                 CreatedBy = "CreatedBy"

@@ -15,6 +15,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     public class When_Recording_Referrals_And_Emails_Sent_Is_Loaded
     {
         private readonly IOpportunityService _opportunityService;
+        private readonly IReferralService _referralService;
+
         private const string CreatedBy = "CreatedBy";
         private readonly IActionResult _result;
 
@@ -30,9 +32,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(dto);
 
-            var referralService = Substitute.For<IReferralService>();
+            _referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService, _referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(CreatedBy)
                 .Build();
@@ -44,6 +46,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetOpportunity(OpportunityId);
+        }
+
+        [Fact]
+        public void Then_SendProviderReferralEmail_Is_Called_Exactly_Once()
+        {
+            _referralService.Received(1).SendProviderReferralEmail(OpportunityId);
         }
 
         [Fact]

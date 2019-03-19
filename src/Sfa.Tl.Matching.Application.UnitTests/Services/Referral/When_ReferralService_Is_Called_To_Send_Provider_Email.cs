@@ -59,6 +59,227 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_TemplateName()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Is<string>(
+                        
+                        templateName => templateName == "TestTemplate"),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_ToAddress()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Is<string>(
+                        toAddress => toAddress == "primary.contact@provider.co.uk"),
+                    Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Subject()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<string>(
+                        subject => subject == "Industry Placement Matching Referral"),
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_ReplyToAddress()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Is<string>(
+                        replyToAddress => replyToAddress == "DummyAddressToBeOverriddebByService"));
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_PrimaryContactName_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("primary_contact_name")
+                                  && tokens["primary_contact_name"] == "Provider Contact"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_ProviderName_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("provider_name")
+                        && tokens["provider_name"] == "Provider"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Route_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("route")
+                                  && tokens["route"] == "Agriculture, environmental and animal care"),
+                    Arg.Any<string>());
+        }
+        
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("venue_postcode")
+                                  && tokens["venue_postcode"] == "AA2 2AA"),
+                    Arg.Any<string>());
+        }
+        
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Search_Radius_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("search_radius")
+                                  && tokens["search_radius"] == "10"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Job_Role_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("job_role")
+                                  && tokens["job_role"] == "Testing Job Title"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Business_Name_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("employer_business_name")
+                                  && tokens["employer_business_name"] == "Employer"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Name_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("employer_contact_name")
+                                  && tokens["employer_contact_name"] == "Employer Contact"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Number_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("employer_contact_number")
+                                  && tokens["employer_contact_number"] == "020 123 4567"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Email_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("employer_contact_email")
+                                  && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Postcode_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("employer_postcode")
+                                  && tokens["employer_postcode"] == "AA1 1AA"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Number_Of_Placements_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("number_of_placements")
+                                  && tokens["number_of_placements"] == "at least one"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
         public void Then_EmailTemplateRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
             _emailTemplateRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
@@ -73,7 +294,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_With_OpportunityId()
+        public void Then_EmailHistoryRepository_Create_Is_Called_With_OpportunityId()
         {
             _emailHistoryRepository
                 .Received(1)
@@ -82,7 +303,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_With_EmailTemplateId()
+        public void Then_EmailHistoryRepository_Create_Is_Called_With_EmailTemplateId()
         {
             _emailHistoryRepository
                 .Received(1)
@@ -91,7 +312,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_With_SentTo()
+        public void Then_EmailHistoryRepository_Create_Is_Called_With_SentTo()
         {
             _emailHistoryRepository
                 .Received(1)
@@ -100,7 +321,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_With_CreatedBy()
+        public void Then_EmailHistoryRepository_Create_Is_Called_With_CreatedBy()
         {
             _emailHistoryRepository
                 .Received(1)
