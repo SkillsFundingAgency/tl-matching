@@ -64,14 +64,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task SavePlacementInformation(PlacementInformationSaveDto dto)
-        {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
-            var updatedOpportunity = _mapper.Map(dto, opportunity);
-
-            await _opportunityRepository.Update(updatedOpportunity);
-        }
-
         public async Task<CheckAnswersDto> GetCheckAnswers(int id)
         {
             var checkAnswers = await _opportunityRepository.GetSingleOrDefault(e => e.Id == id,
@@ -82,31 +74,10 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task SaveEmployerName(EmployerNameDto dto)
+        public async Task Save<T>(T dto) where T : BaseOpportunityUpdateDto
         {
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
-
             trackedEntity = _mapper.Map(dto, trackedEntity);
-
-            await _opportunityRepository.Update(trackedEntity);
-        }
-
-        public async Task SaveEmployerDetail(EmployerDetailDto dto)
-        {
-            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
-
-            _mapper.Map(dto, trackedEntity);
-
-            await _opportunityRepository.Update(trackedEntity);
-        }
-
-        public async Task SaveCheckAnswers(CheckAnswersDto dto)
-        {
-            dto.ModifiedOn = _dateTimeProvider.UtcNow();
-
-            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
-
-            _mapper.Map(dto, trackedEntity);
 
             await _opportunityRepository.Update(trackedEntity);
         }

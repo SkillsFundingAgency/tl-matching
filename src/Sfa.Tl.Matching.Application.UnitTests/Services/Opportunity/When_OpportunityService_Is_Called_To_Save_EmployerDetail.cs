@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 ModifiedBy = ModifiedBy,
             };
 
-            opportunityService.SaveEmployerDetail(dto).GetAwaiter().GetResult();
+            opportunityService.Save(dto).GetAwaiter().GetResult();
         }
 
         [Fact]

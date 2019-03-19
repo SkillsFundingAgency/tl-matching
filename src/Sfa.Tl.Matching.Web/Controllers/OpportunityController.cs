@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(viewModel);
 
             var dto = _mapper.Map<PlacementInformationSaveDto>(viewModel);
-            await _opportunityService.SavePlacementInformation(dto);
+            await _opportunityService.Save(dto);
 
             return RedirectToRoute("EmployerFind_Get", new { id = viewModel.OpportunityId });
         }
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(await GetCheckAnswersReferralViewModel(viewModel.OpportunityId));
 
             var dto = _mapper.Map<CheckAnswersDto>(viewModel);
-            await _opportunityService.SaveCheckAnswers(dto);
+            await _opportunityService.Save(dto);
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }
@@ -107,7 +107,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var dto = _mapper.Map<CheckAnswersDto>(viewModel);
 
-            await _opportunityService.SaveCheckAnswers(dto);
+            await _opportunityService.Save(dto);
             await _opportunityService.CreateProvisionGap(viewModel);
 
             return RedirectToRoute("EmailSentProvisionGap_Get", new { id = viewModel.OpportunityId });

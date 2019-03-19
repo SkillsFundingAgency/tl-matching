@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace Sfa.Tl.Matching.Models.Dto
+﻿namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class CheckAnswersDto
+    public class CheckAnswersDto : BaseOpportunityUpdateDto
     {
-        public int OpportunityId { get; set; }
         public bool? ConfirmationSelected { get; set; }
         public string EmployerName { get; set; }
         public string RouteName { get; set; }
@@ -14,7 +11,5 @@ namespace Sfa.Tl.Matching.Models.Dto
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
         public string EmployerContact { get; set; }
-        public DateTime? ModifiedOn { get; set; }
-        public string ModifiedBy { get; set; }
     }
 }
