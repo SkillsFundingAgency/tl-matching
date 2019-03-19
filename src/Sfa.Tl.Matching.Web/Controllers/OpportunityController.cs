@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateReferfal(CreateReferralViewModel viewModel)
+        public async Task<IActionResult> CreateReferral(CreateReferralViewModel viewModel)
         {
             var dto = _mapper.Map<OpportunityDto>(viewModel);
 
@@ -181,7 +181,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 OpportunityId = dto.Id,
                 PlacementInformation = GetPlacementViewModel(dto),
-                Providers = _opportunityService.GetReferrals(dto.Id),
+                Providers = _opportunityService.GetReferrals(dto.Id)
             };
 
             return viewModel;

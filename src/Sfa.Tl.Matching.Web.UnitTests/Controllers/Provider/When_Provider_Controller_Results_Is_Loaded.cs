@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_ProviderService_SearchProvidersByPostcodeProximity_Is_Called_Exactly_Once()
+        public void Then_ProviderService_SearchProvidersByPostcodeProximity_Is_Called_Exectlt_Once()
         {
             _providerService
                 .Received(1)
@@ -114,7 +114,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         public void Then_SearchViewModel_SearchResults_Should_Have_Expected_Number_Of_Items()
         {
             var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
-            searchResultsViewModel.Results.Count().Should().Be(1);
+            searchResultsViewModel.Results.Count.Should().Be(1);
         }
 
         [Fact]
@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_ViewModel_SearchRadius_Should_Be_Default_Search_Radius()
+        public void Then_ViewModel_SearchRadius_Should_Be_Default_Search_Radious()
         {
             //var viewModel = _result.GetViewModel<SearchParametersViewModel>();
             var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;

@@ -50,13 +50,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         }
 
         [Fact]
-        public void Then_The_LocationService_Is_Called_Exactly_Once()
+        public void Then_The_LocationService_Is_Called_Exectlt_Once()
         {
             _locationService.Received(1).GetGeoLocationData(Postcode);
         }
 
         [Fact]
-        public void Then_The_ISearchProvider_Is_Called_Exactly_Once()
+        public void Then_The_ISearchProvider_Is_Called_Exectlt_Once()
         {
             _searchProvider.Received(1).SearchProvidersByPostcodeProximity(Arg.Any<ProviderSearchParametersDto>());
         }

@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         }
 
         [Fact]
-        public void GetGeoLocationData_Is_Called_Exactly_Once()
+        public void GetGeoLocationData_Is_Called_Exectlt_Once()
         {
             _locationService
                 .Received(1)

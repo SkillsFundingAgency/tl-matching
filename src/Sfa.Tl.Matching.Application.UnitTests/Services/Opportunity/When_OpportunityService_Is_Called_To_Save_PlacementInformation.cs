@@ -6,6 +6,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
@@ -29,8 +30,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var mapper = new Mapper(config);
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
-            var provisionGapRepository = Substitute.For<IRepository<Domain.Models.ProvisionGap>>();
-            var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
+            var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
+            var referralRepository = Substitute.For<IRepository<Referral>>();
 
             var opportunity = new Domain.Models.Opportunity { Id = OpportunityId, Postcode = Postcode, SearchRadius = Distance, RouteId = RouteId };
 
@@ -51,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         [Fact]
-        public void Then_Update_Is_Called_Exactly_Once_With_1_Placement()
+        public void Then_Update_Is_Called_Exectlt_Once_With_1_Placement()
         {
             _opportunityRepository.Received(1).Update(Arg.Is<Domain.Models.Opportunity>(opportunity => 
                 opportunity.Id == OpportunityId &&
@@ -66,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         [Fact]
-        public void Then_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_GetSingleOrDefault_Is_Called_Exectlt_Once()
         {
             _opportunityRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
         }

@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Should().NotBeNull();
 
         [Fact]
-        public void Then_Exectlt_One_Provider_is_Fund_Within_Search_Radious() =>
+        public void Then_Exectlt_One_Provider_is_Found_Within_Search_Radious() =>
             _results.Count().Should().Be(1);
 
         public void Dispose()
@@ -58,13 +58,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _dbContext.Dispose();
         }
     }
-    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_Distance_Greater_Then_Search_Radius : IDisposable
+    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_Distance_Greater_Then_Search_Radious : IDisposable
     {
         private readonly IEnumerable<ProviderVenueSearchResultDto> _results;
         private readonly MatchingDbContext _dbContext;
         private readonly Domain.Models.ProviderVenue _providerVenue;
 
-        public When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_Distance_Greater_Then_Search_Radius()
+        public When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_Distance_Greater_Then_Search_Radious()
         {
             var logger = Substitute.For<ILogger<Data.SearchProviders.SqlSearchProvider>>();
 
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Should().NotBeNull();
 
         [Fact]
-        public void Then_No_Provider_is_Fund_Within_Search_Radious() =>
+        public void Then_No_Provider_is_Found_Within_Search_Radious() =>
             _results.Count().Should().Be(0);
 
         public void Dispose()
@@ -128,7 +128,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Should().NotBeNull();
 
         [Fact]
-        public void Then_No_Provider_is_Fund_Within_Search_Radious() =>
+        public void Then_No_Provider_is_Found_Within_Search_Radious() =>
             _results.Count().Should().Be(0);
 
         public void Dispose()

@@ -6,8 +6,8 @@ var sass = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
 var concatCss = require('gulp-concat-css');
 
-const paths = require('../paths.json')
-const sassOptions = require('../sassOptions.js')
+const paths = require('../paths.json');
+const sassOptions = require('../sassOptions.js');
 
 gulp.task('govuk-js', () => {
     gulp.src([
@@ -20,8 +20,8 @@ gulp.task('govuk-js', () => {
 
 gulp.task('copy-js', function () {
     return gulp.src([
-        'node_modules/jquery/dist/jquery.min.js',
-    ])
+            'node_modules/jquery/dist/jquery.min.js'
+        ])
         .pipe(concat('all.js'))
         .pipe(minify({
             noSource: true,
@@ -29,7 +29,7 @@ gulp.task('copy-js', function () {
                 min: '.min.js'
             }
         }))
-        .pipe(gulp.dest(paths.dist.defaultJs))
+        .pipe(gulp.dest(paths.dist.defaultJs));
 });
 
 
@@ -45,12 +45,12 @@ gulp.task('copy-employer-js', function () {
                 min: '.min.js'
             }
         }))
-        .pipe(gulp.dest(paths.dist.defaultJs))
+        .pipe(gulp.dest(paths.dist.defaultJs));
 });
 
 gulp.task('copy-assets', () => {
     gulp.src(paths.src.defaultAssets)
-        .pipe(gulp.dest(paths.dist.defaultAssets))
+        .pipe(gulp.dest(paths.dist.defaultAssets));
 });
 
 gulp.task('sass', () => gulp
@@ -66,4 +66,4 @@ gulp.task('merge-css', ['sass'], function () {
         .pipe(concatCss("main.css"))
         .pipe(cleanCSS({ compatibility: 'ie8' }))
         .pipe(gulp.dest(paths.dist.default));
-})
+});

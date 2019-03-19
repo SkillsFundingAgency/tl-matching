@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
 
 
         [Fact]
-        public void ImportProvider_Is_Called_Exactly_Once()
+        public void ImportProvider_Is_Called_Exectlt_Once()
         {
             _providerService
                 .Received(1)

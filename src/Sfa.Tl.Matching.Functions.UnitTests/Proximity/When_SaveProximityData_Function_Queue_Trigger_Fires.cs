@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         }
 
         [Fact]
-        public void Update_ProviderVenue_Is_Called_Exactly_Once()
+        public void Update_ProviderVenue_Is_Called_Exectlt_Once()
         {
             _providerVenueRepository
                 .Received(1)

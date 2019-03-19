@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         [Fact]
-        public void Then_Create_Is_Called_Exactly_Once()
+        public void Then_Create_Is_Called_Exectlt_Once()
         {
             _provisionGapRepository.Received(1).Create(Arg.Is<ProvisionGap>(p => p.OpportunityId == 1));
         }

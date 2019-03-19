@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _employerService = Substitute.For<IEmployerService>();
             _employerService.GetEmployer(Arg.Any<int>()).Returns(new EmployerDto
             {
-                CompanyName = CompanyName,
+                CompanyName = CompanyName
             });
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
@@ -73,12 +73,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_GetOpportunity_Is_Called_Exactly_Once()
+        public void Then_GetOpportunity_Is_Called_Exectlt_Once()
         {
             _opportunityService.Received(1).GetOpportunity(OpportunityId);
         }
         [Fact]
-        public void Then_GetEmployer_Is_Called_Exactly_Once()
+        public void Then_GetEmployer_Is_Called_Exectlt_Once()
         {
             _employerService.Received(1).GetEmployer(Arg.Any<int>());
         }

@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_ViewModel_SearchRadius_Should_Be_Default_Search_Radius()
+        public void Then_ViewModel_SearchRadius_Should_Be_Default_Search_Radious()
         {
             var viewModel = _result.GetViewModel<SearchParametersViewModel>();
             viewModel.SearchRadius.Should().Be(SearchParametersViewModel.DefaultSearchRadius);

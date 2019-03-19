@@ -14,14 +14,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Controller_Create_Referfal_Is_Called
+    public class When_Opportunity_Controller_Create_Referral_Is_Called
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
         private const string UserName = "username";
         private const string Email = "email@address.com";
 
-        public When_Opportunity_Controller_Create_Referfal_Is_Called()
+        public When_Opportunity_Controller_Create_Referral_Is_Called()
         {
             const int opportunityId = 1;
             _opportunityService = Substitute.For<IOpportunityService>();
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.CreateReferfal(new CreateReferralViewModel
+            _result = controllerWithClaims.CreateReferral(new CreateReferralViewModel
             {
                 SearchResultProviderCount = 2,
                 SelectedRouteId = 1,
@@ -75,13 +75,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                         ProviderVenueId = 2,
                         DistanceFromEmployer = 3.4m,
                         IsSelected = true
-                    },
+                    }
                 }
             }).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_CreateOpportunity_Is_Called_Exactly_Once()
+        public void Then_CreateOpportunity_Is_Called_Exectlt_Once()
         {
             _opportunityService.Received(1).CreateOpportunity(Arg.Is<OpportunityDto>(arg =>
                 arg.SearchResultProviderCount == 2 &&

@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         }
 
         [Fact]
-        public void Then_ValidateAndParseFile_Is_Called_Exactly_Once()
+        public void Then_ValidateAndParseFile_Is_Called_Exectlt_Once()
         {
             _fileReader
                 .Received(1)
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         }
 
         [Fact]
-        public void Then_CreateMany_Is_Called_Exactly_Once()
+        public void Then_CreateMany_Is_Called_Exectlt_Once()
         {
             _repository
                 .Received(1)
@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         }
 
         [Fact]
-        public void Then_PreProcessingHandler_Is_Called_Exactly_Once()
+        public void Then_PreProcessingHandler_Is_Called_Exectlt_Once()
         {
             _dataProcessor
                 .Received(1)
@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         }
 
         [Fact]
-        public void Then_PostProcessingHandler_Is_Called_Exactly_Once()
+        public void Then_PostProcessingHandler_Is_Called_Exectlt_Once()
         {
             _dataProcessor
                 .Received(1)

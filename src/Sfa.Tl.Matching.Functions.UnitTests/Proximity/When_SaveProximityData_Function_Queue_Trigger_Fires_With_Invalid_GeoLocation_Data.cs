@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         }
 
         [Fact]
-        public void Log_Error_Is_Called_Exactly_Once()
+        public void Log_Error_Is_Called_Exectlt_Once()
         {
             _logger.Received(1).Log(
                 LogLevel.Error,
