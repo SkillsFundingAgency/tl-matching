@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
         private readonly IDataParser<TDto> _dataParser;
         private readonly IValidator<TImportDto> _validator;
         private readonly IRepository<FunctionLog> _functionLogRepository;
-
+        private List<FunctionLog> _validationErros = new List<FunctionLog>();
         public ExcelFileReader(
             ILogger<ExcelFileReader<TImportDto, TDto>> logger,
             IDataParser<TDto> dataParser,
@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     
                     if (!validationResult.IsValid)
                     {
-                        await LogErrorsAndWarnings(startIndex, validationResult);
+                        LogErrorsAndWarnings(startIndex, validationResult);
 
                         startIndex++;
 
@@ -82,6 +82,8 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     startIndex++;
                 }
             }
+
+            await _functionLogRepository.CreateMany(_validationErros);
 
             return dtos;
         }
@@ -157,9 +159,9 @@ namespace Sfa.Tl.Matching.Application.FileReader
             return sb.ToString();
         }
 
-        private async Task LogErrorsAndWarnings(int rowIndex, ValidationResult validationResult)
+        private void LogErrorsAndWarnings(int rowIndex, ValidationResult validationResult)
         {
-           await _functionLogRepository.CreateMany(validationResult.Errors.Select(errorMessage => new FunctionLog
+            _validationErros.AddRange(validationResult.Errors.Select(errorMessage => new FunctionLog
             {
                 FunctionName = GetType().GetGenericArguments().ElementAt(0).Name.Replace("FileImportDto", string.Empty),
                 RowNumber = rowIndex,
