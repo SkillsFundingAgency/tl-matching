@@ -140,7 +140,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-                Providers = _opportunityService.GetReferrals(dto.Id),
         private void Validate(PlacementInformationSaveViewModel viewModel)
         {
             if (!viewModel.PlacementsKnown.HasValue || !viewModel.PlacementsKnown.Value) return;
