@@ -104,7 +104,8 @@ namespace Sfa.Tl.Matching.Web
                 .ScriptSources(s =>
                 {
                     s.Self()
-                        .CustomSources("https://www.google-analytics.com/analytics.js",
+                        .CustomSources("https://az416426.vo.msecnd.net/",
+                                       "https://www.google-analytics.com/analytics.js",
                                        "https://www.googletagmanager.com/",
                                        "https://www.smartsurvey.co.uk/")
                         .UnsafeInline();
