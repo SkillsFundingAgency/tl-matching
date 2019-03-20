@@ -14,6 +14,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         List<ReferralDto> GetReferrals(int opportunityId);
         Task<bool> IsReferralOpportunity(int id);
         Task<CheckAnswersDto> GetCheckAnswers(int id);
-        Task Save<T>(T dto) where T : BaseOpportunityUpdateDto;
+        Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto;
     }
 }

@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task Save<T>(T dto) where T : BaseOpportunityUpdateDto
+        public async Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto
         {
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
             trackedEntity = _mapper.Map(dto, trackedEntity);

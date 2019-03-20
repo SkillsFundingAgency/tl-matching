@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var dto = _mapper.Map<EmployerNameDto>(viewModel);
 
-            await _opportunityService.Save(dto);
+            await _opportunityService.UpdateOpportunity(dto);
 
             return RedirectToRoute("EmployerDetails_Get", new { id = viewModel.OpportunityId });
         }
@@ -92,7 +92,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
-            await _opportunityService.Save(employerDetailDto);
+            await _opportunityService.UpdateOpportunity(employerDetailDto);
 
             var isReferralOpportunity = await _opportunityService.IsReferralOpportunity(viewModel.OpportunityId);
 

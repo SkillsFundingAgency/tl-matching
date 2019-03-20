@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).Save(Arg.Any<PlacementInformationSaveDto>());
+            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<PlacementInformationSaveDto>());
         }
 
         [Fact]
