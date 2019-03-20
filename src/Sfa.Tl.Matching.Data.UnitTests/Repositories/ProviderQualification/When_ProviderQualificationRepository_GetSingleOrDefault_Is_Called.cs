@@ -8,11 +8,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification
 {
-    public class When_ProviderQualificationRepository_GetSingleOrDefault_Is_Called
+    public class When_OpportunityRepository_GetSingleOrDefault_Is_Called
     {
         private readonly Domain.Models.ProviderQualification _result;
 
-        public When_ProviderQualificationRepository_GetSingleOrDefault_Is_Called()
+        public When_OpportunityRepository_GetSingleOrDefault_Is_Called()
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.ProviderQualification>>>();
 

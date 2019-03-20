@@ -13,11 +13,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly IMapper _mapper;
+        private readonly IReferralService _referralService;
+		private readonly IMapper _mapper;
 
-        public OpportunityController(IOpportunityService opportunityService, IMapper mapper)
+        public OpportunityController(IOpportunityService opportunityService, IReferralService referralService, IMapper mapper)
         {
             _opportunityService = opportunityService;
+            _referralService = referralService;
             _mapper = mapper;
         }
 
@@ -129,16 +131,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.SaveCheckAnswers(dto);
             await _opportunityService.CreateProvisionGap(viewModel);
 
-            return RedirectToRoute("EmailSentProvisionGap_Get", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("ProvisionGapSent_Get", new { id = viewModel.OpportunityId });
         }
         
         [HttpGet]
-        [Route("placement-gap/{id?}", Name = "EmailSentProvisionGap_Get")]
-        public async Task<IActionResult> EmailSentProvisionGap(int id)
+        [Route("placement-gap/{id?}", Name = "ProvisionGapSent_Get")]
+        public async Task<IActionResult> ProvisionGapSent(int id)
         {
             var opportunity = await _opportunityService.GetOpportunity(id);
 
-            return View(new EmailSentProvisionGapViewModel
+            return View(new ProvisionGapSentViewModel
             {
                 EmployerContactName = opportunity.EmployerContact,
                 Postcode = opportunity.Postcode,
@@ -151,6 +153,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> EmailSentReferrals(int id)
         {
             var opportunity = await _opportunityService.GetOpportunity(id);
+
+            await _referralService.SendProviderReferralEmail(id);
 
             return View(new EmailsSentViewModel
             {

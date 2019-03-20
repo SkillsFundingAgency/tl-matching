@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.ViewModel
 {
-    public class EmailSentProvisionGapViewModel
+    public class ProvisionGapSentViewModel
     {
         public string EmployerContactName { get; set; }
         public string RouteName { get; set; }

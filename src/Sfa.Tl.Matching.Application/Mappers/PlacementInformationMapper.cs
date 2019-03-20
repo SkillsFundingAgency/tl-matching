@@ -25,6 +25,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.SearchResultProviderCount, config => config.Ignore())
                 .ForMember(m => m.ProvisionGap, config => config.Ignore())
                 .ForMember(m => m.Referral, config => config.Ignore())
+                .ForMember(m => m.EmailHistory, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())

@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public bool? ConfirmationSelected { get; set; }
 
         public virtual Route Route { get; set; }
+        public virtual ICollection<EmailHistory> EmailHistory { get; set; }
         public virtual ICollection<ProvisionGap> ProvisionGap { get; set; }
         public virtual ICollection<Referral> Referral { get; set; }
     }

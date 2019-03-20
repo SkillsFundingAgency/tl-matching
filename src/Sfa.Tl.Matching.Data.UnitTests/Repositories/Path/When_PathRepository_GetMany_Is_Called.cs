@@ -21,13 +21,17 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
 
             using (var dbContext = InMemoryDbContext.Create())
             {
-                dbContext.Add(new ValidPathBuilder().Build());
+                dbContext.AddRange(new ValidPathListBuilder().Build());
                 dbContext.SaveChanges();
 
                 var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
                 _result = repository.GetMany().ToList();
             }
         }
+        
+        [Fact]
+        public void Then_The_Expected_Number_Of_Paths_Is_Returned() =>
+            _result.Count().Should().Be(2);
 
         [Fact]
         public void Then_Path_Id_Is_Returned() => 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Sfa.Tl.Matching.Domain.Models
+﻿namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Referral : BaseEntity
     {
@@ -9,6 +7,5 @@ namespace Sfa.Tl.Matching.Domain.Models
         public decimal DistanceFromEmployer { get; set; }
         public virtual Opportunity Opportunity { get; set; }
         public virtual ProviderVenue ProviderVenue { get; set; }
-        public virtual ICollection<EmailHistory> EmailHistory { get; set; }
     }
 }

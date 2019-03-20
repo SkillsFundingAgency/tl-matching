@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
+    <None Include="PostDeployment\Seed Email Templates.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />

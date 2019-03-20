@@ -24,22 +24,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
 
             var opportunityService = Substitute.For<IOpportunityService>();
+            var referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(opportunityService, mapper);
+            var opportunityController = new OpportunityController(opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(CreatedBy)
                 .Build();
 
             _result = controllerWithClaims.CheckAnswersReferrals(_viewModel).GetAwaiter().GetResult();
         }
-
-        // TODO AU This should be updating the opportunity
-        //[Fact]
-        //public void Then_CreateReferral_Is_Called_Exactly_Once()
-        //{
-        //    _opportunityService.Received(1).CreateReferral(_viewModel);
-        //}
-
+        
         [Fact]
         public void Then_Result_Is_Redirect_to_EmailsSent()
         {
