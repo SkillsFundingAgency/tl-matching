@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Details_Is_Loaded
+    public class When_Employer_Details_Is_Loaded_With_Existing_Details
     {
         private readonly IActionResult _result;
         private readonly IOpportunityService _opportunityService;
@@ -20,8 +20,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         private const int OpportunityId = 12;
         private const string CompanyName = "CompanyName";
+        private const string EmployerContact = "EmployerContact";
+        private const string EmployerContactPhone = "EmployerContactPhone";
+        private const string EmployerContactEmail = "EmployerContactEmail";
 
-        public When_Employer_Details_Is_Loaded()
+        public When_Employer_Details_Is_Loaded_With_Existing_Details()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
@@ -35,7 +38,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
             {
                 Id = OpportunityId,
-                EmployerName = CompanyName
+                EmployerName = CompanyName,
+                EmployerContact = EmployerContact,
+                EmployerContactPhone = EmployerContactPhone,
+                EmployerContactEmail = EmployerContactEmail
             });
 
             var employerController = new EmployerController(_employerService, _opportunityService, mapper);
@@ -73,14 +79,28 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
+        public void Then_EmployerContactPhone_Is_Populated()
+        {
+            var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
+            viewModel.EmployerContactPhone.Should().Be(EmployerContactPhone);
+        }
+
+        [Fact]
+        public void Then_EmployerContactEmail_Is_Populated()
+        {
+            var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
+            viewModel.EmployerContactEmail.Should().Be(EmployerContactEmail);
+        }
+
+        [Fact]
         public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetOpportunity(OpportunityId);
         }
         [Fact]
-        public void Then_GetEmployer_Is_Called_Exactly_Once()
+        public void Then_GetEmployer_Is_Not_Called()
         {
-            _employerService.Received(1).GetEmployer(Arg.Any<int>());
+            _employerService.Received(0).GetEmployer(Arg.Any<int>());
         }
     }
 }

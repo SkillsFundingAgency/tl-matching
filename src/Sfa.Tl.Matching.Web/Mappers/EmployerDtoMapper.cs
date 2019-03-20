@@ -25,6 +25,13 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.Email))
                 .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.Phone))
                 ;
+
+            CreateMap<OpportunityDto, EmployerDetailsViewModel>()
+                .ForMember(m => m.CompanyName, 
+                    o => o.MapFrom(s => s.EmployerName))
+                .ForMember(m => m.OpportunityId,
+                    o => o.MapFrom(s => s.Id))
+                ;
         }
     }
 }
