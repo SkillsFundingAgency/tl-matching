@@ -100,7 +100,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_GetEmployer_Is_Not_Called()
         {
-            _employerService.Received(0).GetEmployer(Arg.Any<int>());
+            _employerService.DidNotReceive().GetEmployer(Arg.Any<int>());
         }
     }
 }
