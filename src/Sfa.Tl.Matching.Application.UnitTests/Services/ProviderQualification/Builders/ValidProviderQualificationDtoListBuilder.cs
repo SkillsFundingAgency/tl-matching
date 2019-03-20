@@ -24,7 +24,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification.B
             }
         }
 
-        public IEnumerable<ProviderQualificationDto> Build() =>
-            _providerQualificationDtos;
+        public IList<ProviderQualificationDto> Build() => _providerQualificationDtos;
     }
 }

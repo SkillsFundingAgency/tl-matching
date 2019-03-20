@@ -82,6 +82,7 @@
     <Build Include="Tables\EmailTemplate.sql" />
     <Build Include="Tables\EmailPlaceholder.sql" />
     <Build Include="Tables\EmailHistory.sql" />
+    <Build Include="Tables\FunctionLog.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

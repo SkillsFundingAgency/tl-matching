@@ -38,10 +38,12 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
             var providerVenuerepository = new GenericRepository<Domain.Models.ProviderVenue>(providerVenueloggerRepository, MatchingDbContext);
             var providerQualificationrepository = new GenericRepository<Domain.Models.ProviderQualification>(providerQualificationloggerRepository, MatchingDbContext);
             var qualificationrepository = new GenericRepository<Qualification>(qualificationloggerRepository, MatchingDbContext);
+            var functionLogRepository = new GenericRepository<FunctionLog>(new NullLogger<GenericRepository<FunctionLog>>(), MatchingDbContext);
+            
             var dataValidator = new ProviderQualificationDataValidator(providerVenuerepository, providerQualificationrepository, qualificationrepository);
             var dataParser = new ProviderQualificationDataParser();
             var nullDataProcessor = new NullDataProcessor<Domain.Models.ProviderQualification>();
-            var excelFileReader = new ExcelFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var excelFileReader = new ExcelFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>(loggerExcelFileReader, dataParser, dataValidator, functionLogRepository);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
     public class When_EmployerService_Is_Called_To_Import_Employers
     {
         private readonly EmployerFileImportDto _fileImportDto;
-        private readonly IEnumerable<EmployerDto> _fileReaderResults;
+        private readonly IList<EmployerDto> _fileReaderResults;
         private readonly IFileReader<EmployerFileImportDto, EmployerDto> _fileReader;
         private readonly IRepository<Domain.Models.Employer> _repository;
         private readonly int _result;
@@ -49,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _fileReaderResults = new ValidEmployerDtoListBuilder(2).Build();
 
             _fileReader.ValidateAndParseFile(_fileImportDto)
-                .Returns(_fileReaderResults);
+                .Returns(Task.FromResult(_fileReaderResults));
 
             var service = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
@@ -91,7 +92,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         [Fact]
         public void Then_The_Expected_Number_Of_Created_Records_Is_Returned()
         {
-            _fileReaderResults.Count().Should().Be(_result);
+            _fileReaderResults.Count.Should().Be(_result);
         }
     }
 }

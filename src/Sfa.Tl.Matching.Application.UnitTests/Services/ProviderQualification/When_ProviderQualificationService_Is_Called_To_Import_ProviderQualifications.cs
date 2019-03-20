@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
     public class When_ProviderQualificationService_Is_Called_To_Import_ProviderQualifications
     {
         private readonly ProviderQualificationFileImportDto _fileImportDto;
-        private readonly IEnumerable<ProviderQualificationDto> _fileReaderResults;
+        private readonly IList<ProviderQualificationDto> _fileReaderResults;
         private readonly IFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto> _fileReader;
         private readonly IRepository<Domain.Models.ProviderQualification> _repository;
         private readonly int _result;
@@ -49,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
             _fileReaderResults = new ValidProviderQualificationDtoListBuilder(2).Build();
 
             _fileReader.ValidateAndParseFile(_fileImportDto)
-                .Returns(_fileReaderResults);
+                .Returns(Task.FromResult(_fileReaderResults));
 
             var service = new FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
@@ -90,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
         [Fact]
         public void Then_The_Expected_Number_Of_Created_Records_Is_Returned()
         {
-            _fileReaderResults.Count().Should().Be(_result);
+            _fileReaderResults.Count.Should().Be(_result);
         }
     }
 }

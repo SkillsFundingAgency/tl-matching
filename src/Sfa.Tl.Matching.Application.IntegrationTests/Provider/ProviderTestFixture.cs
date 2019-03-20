@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
@@ -28,10 +29,12 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
             var repository = new GenericRepository<Domain.Models.Provider>(loggerRepository, MatchingDbContext);
+            var functionLogRepository = new GenericRepository<FunctionLog>(new NullLogger<GenericRepository<FunctionLog>>(), MatchingDbContext);
+
             var dataValidator = new ProviderDataValidator(repository);
             var dataParser = new ProviderDataParser();
             var nullDataProcessor = new NullDataProcessor<Domain.Models.Provider>();
-            var excelFileReader = new ExcelFileReader<ProviderFileImportDto, ProviderDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var excelFileReader = new ExcelFileReader<ProviderFileImportDto, ProviderDto>(loggerExcelFileReader, dataParser, dataValidator, functionLogRepository);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);

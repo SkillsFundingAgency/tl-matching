@@ -23,7 +23,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue.Builders
             }
         }
 
-        public IEnumerable<ProviderVenueDto> Build() =>
-            _providerVenueDtos;
+        public IList<ProviderVenueDto> Build() => _providerVenueDtos;
     }
 }
