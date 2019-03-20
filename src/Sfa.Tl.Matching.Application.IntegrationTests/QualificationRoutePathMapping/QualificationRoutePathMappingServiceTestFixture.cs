@@ -34,10 +34,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
             var qualificationRoutePathMappingRepository = new QualificationRoutePathMappingRepository(loggerRepository, MatchingDbContext);
             var qualificationRepository = new GenericRepository<Qualification>(loggerQualificationRepository, MatchingDbContext);
             var pathRepository = new GenericRepository<Path>(loggerPathRepository, MatchingDbContext);
+            var functionLogRepository = new GenericRepository<FunctionLog>(new NullLogger<GenericRepository<FunctionLog>>(), MatchingDbContext);
             var dataValidator = new QualificationRoutePathMappingDataValidator(qualificationRoutePathMappingRepository, qualificationRepository, pathRepository);
             var dataParser = new QualificationRoutePathMappingDataParser();
             var nullDataProcessor = new NullDataProcessor<Domain.Models.QualificationRoutePathMapping>();
-            var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator);
+            var excelFileReader = new ExcelFileReader<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto>(loggerExcelFileReader, dataParser, dataValidator, functionLogRepository);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);

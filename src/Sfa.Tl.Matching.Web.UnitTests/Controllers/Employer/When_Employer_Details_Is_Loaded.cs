@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _employerService = Substitute.For<IEmployerService>();
             _employerService.GetEmployer(Arg.Any<int>()).Returns(new EmployerDto
             {
-                CompanyName = CompanyName,
+                CompanyName = CompanyName
             });
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto

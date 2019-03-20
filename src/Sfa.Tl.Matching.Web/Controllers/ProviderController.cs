@@ -131,7 +131,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 SearchResults = new SearchResultsViewModel
                 {
-                    Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults),
+                    Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults)
                 },
                 SearchParameters = new SearchParametersViewModel
                 {

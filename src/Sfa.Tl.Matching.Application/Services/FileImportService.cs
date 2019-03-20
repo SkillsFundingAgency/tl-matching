@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _logger.LogInformation($"Processing { nameof(TImportDto) }.");
 
-            var import = _fileReader.ValidateAndParseFile(fileImportDto);
+            var import = await _fileReader.ValidateAndParseFile(fileImportDto);
 
             if (import == null || !import.Any())
             {

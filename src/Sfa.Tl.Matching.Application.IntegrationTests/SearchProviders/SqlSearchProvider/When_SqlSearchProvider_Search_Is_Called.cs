@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Should().NotBeNull();
 
         [Fact]
-        public void Then_Exectlt_One_Provider_is_Fund_Within_Search_Radious() =>
+        public void Then_Exactly_One_Provider_is_Found_Within_Search_Radius() =>
             _results.Count().Should().Be(1);
 
         public void Dispose()
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Should().NotBeNull();
 
         [Fact]
-        public void Then_No_Provider_is_Fund_Within_Search_Radious() =>
+        public void Then_No_Provider_is_Found_Within_Search_Radius() =>
             _results.Count().Should().Be(0);
 
         public void Dispose()
@@ -128,7 +128,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Should().NotBeNull();
 
         [Fact]
-        public void Then_No_Provider_is_Fund_Within_Search_Radious() =>
+        public void Then_No_Provider_is_Found_Within_Search_Radius() =>
             _results.Count().Should().Be(0);
 
         public void Dispose()

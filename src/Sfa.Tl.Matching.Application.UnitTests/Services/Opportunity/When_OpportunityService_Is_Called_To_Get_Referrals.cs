@@ -13,7 +13,7 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
     public class When_OpportunityService_Is_Called_To_Get_Referrals
     {

@@ -21,12 +21,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private readonly IActionResult _result;
         private const bool ConfirmationSelected = true;
 
-        private readonly OpportunityDto _dto = new OpportunityDto
-        {
-            Id = OpportunityId,
-            ConfirmationSelected = false
-        };
-
         private const int OpportunityId = 1;
 
         public When_Recording_ProvisionGap_And_Check_Answers_Gap_Is_Submitted_Successfully()

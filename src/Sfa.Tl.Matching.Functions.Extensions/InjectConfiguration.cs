@@ -102,7 +102,9 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 new ExcelFileReader<TImportDto, TDto>(
                     provider.GetService<ILogger<ExcelFileReader<TImportDto, TDto>>>(),
                     provider.GetService<IDataParser<TDto>>(),
-                    (IValidator<TImportDto>)provider.GetServices(typeof(IValidator<TImportDto>)).Single(t => t.GetType() == typeof(TValidator))));
+                    (IValidator<TImportDto>)provider.GetServices(typeof(IValidator<TImportDto>)).Single(t => t.GetType() == typeof(TValidator)),
+                    provider.GetService<IRepository<FunctionLog>>()
+                    ));
 
             services.AddTransient<IFileImportService<TImportDto, TDto, TEntity>, FileImportService<TImportDto, TDto, TEntity>>();
         }
@@ -117,6 +119,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<Provider>, GenericRepository<Provider>>();
             services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
+            services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
