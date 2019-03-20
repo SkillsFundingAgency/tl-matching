@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[FunctionLog]
 (
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[FunctionName] VARCHAR(20) NOT NULL,
+	[FunctionName] VARCHAR(50) NOT NULL,
 	[RowNumber] int NOT NULL,
 	[ErrorMessage] VARCHAR(4000) NOT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
