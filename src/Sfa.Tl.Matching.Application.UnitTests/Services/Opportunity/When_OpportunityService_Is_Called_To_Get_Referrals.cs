@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     public class When_OpportunityService_Is_Called_To_Get_Referrals
     {
         private readonly List<ReferralDto> referralDtos;
-        private readonly IRepository<Referral> _referralRepository;
+        private readonly IRepository<Domain.Models.Referral> _referralRepository;
 
         private const int OpportunityId = 1;
 
@@ -29,14 +29,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
-            _referralRepository = Substitute.For<IRepository<Referral>>();
+            _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            _referralRepository.GetMany(Arg.Any<Expression<Func<Referral, bool>>>(),
-                Arg.Any<Expression<Func<Referral, object>>>(),
-                Arg.Any<Expression<Func<Referral, object>>>()).Returns(
-                new List<Referral>
+            _referralRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>(),
+                Arg.Any<Expression<Func<Domain.Models.Referral, object>>>(),
+                Arg.Any<Expression<Func<Domain.Models.Referral, object>>>()).Returns(
+                new List<Domain.Models.Referral>
                 {
-                    new Referral
+                    new Domain.Models.Referral
                     {
                         ProviderVenue = new Domain.Models.ProviderVenue
                         {
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_GetMany_Is_Called_Exactly_Once()
         {
-            _referralRepository.GetMany(Arg.Any<Expression<Func<Referral, bool>>>());
+            _referralRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>());
         }
 
         [Fact]

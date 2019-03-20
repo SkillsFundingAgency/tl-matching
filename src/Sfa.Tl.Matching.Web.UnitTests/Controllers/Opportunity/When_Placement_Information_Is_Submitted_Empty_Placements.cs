@@ -18,7 +18,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Placement_Information_Is_Submitted_Empty_Placements()
         {
             var opportunityService = Substitute.For<IOpportunityService>();
-            
+            var referralService = Substitute.For<IReferralService>();
+
             var viewModel = new PlacementInformationSaveViewModel
             {
                 PlacementsKnown = true
@@ -27,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
             
-            _opportunityController = new OpportunityController(opportunityService, mapper);
+            _opportunityController = new OpportunityController(opportunityService, referralService, mapper);
 
             _result = _opportunityController.PlacementInformationSave(viewModel).GetAwaiter().GetResult();
         }

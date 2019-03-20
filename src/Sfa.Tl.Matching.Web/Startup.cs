@@ -23,6 +23,10 @@ using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Web.Extensions.ApplicationBuilder;
+using SFA.DAS.Http;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -156,6 +160,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
+            RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }
@@ -163,7 +168,10 @@ namespace Sfa.Tl.Matching.Web
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
-            services.AddTransient<IRepository<Opportunity>, GenericRepository<Opportunity>>();
+            services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
+            services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
+            services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
+            services.AddTransient<IRepository<Opportunity>, OpportunityRepository>();
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
@@ -173,12 +181,24 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
         }
 
+        private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
+        {
+            var httpClient = string.IsNullOrWhiteSpace(apiConfiguration.ClientId)
+                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(apiConfiguration)).Build()
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(apiConfiguration)).Build();
+
+           services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
+               new NotificationsApi(httpClient, apiConfiguration));
+        }
+
         private static void RegisterApplicationServices(IServiceCollection services)
         {
+            services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IOpportunityService, OpportunityService>();
             services.AddTransient<IProviderService, ProviderService>();
+            services.AddTransient<IReferralService, ReferralService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 

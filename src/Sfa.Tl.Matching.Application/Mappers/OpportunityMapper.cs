@@ -11,6 +11,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
         {
             CreateMap<OpportunityDto, Opportunity>()
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.EmailHistory, o => o.Ignore())
                 .ForMember(m => m.Route, config => config.Ignore())
                 .ForMember(m => m.ProvisionGap, config => config.Ignore())
                 .ForAllMembers(expression => expression.Condition((src, dest, sourceMember) => sourceMember != null && !sourceMember.GetType().IsDefaultValue(sourceMember)));
@@ -19,7 +20,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.OpportunityId, o => o.Ignore())
                 .ForMember(m => m.Opportunity, o => o.Ignore())
                 .ForMember(m => m.ProviderVenue, o => o.Ignore())
-                .ForMember(m => m.EmailHistory, o => o.Ignore())
                 .ForMember(m => m.Id, o => o.Ignore())
                 .ForMember(m => m.CreatedOn, o => o.Ignore())
                 .ForMember(m => m.ModifiedOn, o => o.Ignore())

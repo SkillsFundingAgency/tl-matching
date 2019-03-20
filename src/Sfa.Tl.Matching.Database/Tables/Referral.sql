@@ -3,7 +3,7 @@
 	[Id] INT IDENTITY(1,1) NOT NULL,
 	[OpportunityId] INT NOT NULL,
 	[ProviderVenueId] INT NOT NULL,
-	[DistanceFromEmployer] DECIMAL(18, 2),
+	[DistanceFromEmployer] DECIMAL(18, 2) NOT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 

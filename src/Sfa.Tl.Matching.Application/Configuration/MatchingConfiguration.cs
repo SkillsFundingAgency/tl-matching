@@ -1,5 +1,4 @@
-﻿
-using SFA.DAS.Notifications.Api.Client.Configuration;
+﻿using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace Sfa.Tl.Matching.Application.Configuration
 {

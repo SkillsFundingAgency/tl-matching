@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
-            var referralRepository = Substitute.For<IRepository<Referral>>();
+            var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
                 .Returns(OpportunityId);

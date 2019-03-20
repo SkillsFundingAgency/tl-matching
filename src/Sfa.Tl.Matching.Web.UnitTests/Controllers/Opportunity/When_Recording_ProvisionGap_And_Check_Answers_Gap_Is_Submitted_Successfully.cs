@@ -42,8 +42,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
+             
+			 var referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(_opportunityService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(ModifiedBy)
                 .Build();
@@ -65,12 +67,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_to_PlacementGap()
+        public void Then_Result_Is_Redirected_to_Provision_Gap_Sent()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("EmailSentProvisionGap_Get");
+            result?.RouteName.Should().Be("ProvisionGapSent_Get");
         }
     }
 }

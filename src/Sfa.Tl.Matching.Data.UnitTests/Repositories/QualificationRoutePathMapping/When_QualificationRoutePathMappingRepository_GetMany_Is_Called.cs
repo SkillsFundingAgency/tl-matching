@@ -21,13 +21,17 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapp
 
             using (var dbContext = InMemoryDbContext.Create())
             {
-                dbContext.Add(new ValidQualificationRoutePathMappingBuilder().Build());
+                dbContext.AddRange(new ValidQualificationRoutePathMappingListBuilder().Build());
                 dbContext.SaveChanges();
 
                 var repository = new QualificationRoutePathMappingRepository(logger, dbContext);
                 _result = repository.GetMany().ToList();
             }
         }
+
+        [Fact]
+        public void Then_The_Expected_Number_Of_QualificationRoutePathMappings_Is_Returned() =>
+            _result.Count().Should().Be(2);
 
         [Fact]
         public void Then_RoutePathMapping_Id_Is_Returned() => 
