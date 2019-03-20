@@ -68,15 +68,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         }
 
         [Fact]
-        public void Then_FunctionLog_Repository_Create_Many_Is_NOT_Called()
+        public void Then_FunctionLog_Repository_Create_Many_Is_Called_With_Empty_List()
         {
-            _functionLogRepository.DidNotReceive().CreateMany(Arg.Any<List<FunctionLog>>());
+            _functionLogRepository.Received(1).CreateMany(Arg.Is<List<FunctionLog>>(logs => logs.Count == 0));
         }
 
         [Fact]
         public void Then_Data_Parser_Parse_Is_Called_Exactly_Once()
         {
-            _employerDataParser.Received(1).Parse(Arg.Is<EmployerFileImportDto>(dto => 
+            _employerDataParser.Received(1).Parse(Arg.Is<EmployerFileImportDto>(dto =>
                 dto.CompanyName == "Employer-Simple"));
         }
     }
