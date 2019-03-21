@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.EmailHistory, o => o.Ignore())
                 .ForMember(m => m.Route, config => config.Ignore())
                 .ForMember(m => m.ProvisionGap, config => config.Ignore())
-                .ForAllMembers(expression => expression.Condition((src, dest, sourceMember) => sourceMember != null && !sourceMember.GetType().IsDefaultValue(sourceMember)));
+                ;
             
             CreateMap<ReferralDto, Referral>()
                 .ForMember(m => m.OpportunityId, o => o.Ignore())
@@ -62,8 +62,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<CheckAnswersDto, Opportunity>()
                 .ForMember(m => m.ConfirmationSelected, o => o.MapFrom(s => s.ConfirmationSelected))
-                .ForMember(m => m.ModifiedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<Opportunity, PlacementInformationSaveDto>()
@@ -86,8 +86,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Placements,
                     opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ? 
                         src.Placements : 1))
-                .ForMember(m => m.ModifiedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
         }
     }
