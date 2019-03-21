@@ -11,8 +11,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
             CreateMap<CheckAnswersPlacementViewModel, CheckAnswersDto>()
                 .ForMember(m => m.ConfirmationSelected, opt => opt.Ignore())
                 .ForMember(m => m.OpportunityId, opt => opt.Ignore())
-                .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<CheckAnswersPlacementViewModel, CheckAnswersDto>>())
-                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<CheckAnswersPlacementViewModel, CheckAnswersDto>>())
+                .ForMember(m => m.ModifiedBy, o => o.Ignore())
+                .ForMember(m => m.ModifiedOn, o => o.Ignore())
                 ;
 
             // Provision Gap
@@ -25,6 +25,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
                     o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.ConfirmationSelected,
                     o => o.MapFrom(s => s.ConfirmationSelected))
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>>())
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 

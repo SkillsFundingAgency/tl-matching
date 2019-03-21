@@ -62,8 +62,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<CheckAnswersDto, Opportunity>()
                 .ForMember(m => m.ConfirmationSelected, o => o.MapFrom(s => s.ConfirmationSelected))
-                .ForMember(m => m.ModifiedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<Opportunity, PlacementInformationSaveDto>()
