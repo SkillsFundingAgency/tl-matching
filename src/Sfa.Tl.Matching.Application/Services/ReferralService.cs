@@ -39,13 +39,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SendEmployerReferralEmail(int opportunityId)
         {
-            //Test in AT
-            //See comments in https://github.com/SkillsFundingAgency/tl-matching/pull/75
-
-            // await _referralService.SendProviderReferralEmail(id);
-            //This need to happen before we redirect to Email Sent Screen i.e. in the post of CheckAnswers
-            //Also you might want to move this call to Opportunity service
-
             var emailTemplate = await GetEmailTemplate(EmployerReferralEmailTemplateName);
 
             var employerReferral = await GetEmployerReferrals(opportunityId);

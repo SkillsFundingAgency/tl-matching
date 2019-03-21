@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NSubstitute;
-using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using NSubstitute.ReturnsExtensions;
@@ -19,10 +18,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         private readonly ILogger<EmailService> _logger;
         private readonly INotificationsApi _notificationsApi;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
-
-        private readonly string _subject;
-        private readonly string _toAddress;
-        private readonly string _replyToAddress;
 
         public When_EmailService_Is_Called_To_Send_Email_With_Incorrect_Template()
         {
@@ -42,9 +37,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, _logger);
 
-            _subject = "A test email";
-            _toAddress = "test@test.com";
-            _replyToAddress = "reply@test.com";
+            var subject = "A test email";
+            var toAddress = "test@test.com";
+            var replyToAddress = "reply@test.com";
             var tokens = new Dictionary<string, string>
             {
                 { "contactname",  "name" }
@@ -52,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             var templateName = "MissingTestTemplate";
 
-            emailService.SendEmail(templateName, _toAddress, _subject, tokens, _replyToAddress).GetAwaiter().GetResult();
+            emailService.SendEmail(templateName, toAddress, subject, tokens, replyToAddress).GetAwaiter().GetResult();
         }
         
         [Fact]
