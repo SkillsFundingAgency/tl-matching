@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         [Fact]
         public void Then_NotificationsApi_SendEmail_Is_Not_Called()
         {
-            _notificationsApi.Received(0).SendEmail(Arg.Any<SFA.DAS.Notifications.Api.Types.Email>());
+            _notificationsApi.DidNotReceive().SendEmail(Arg.Any<SFA.DAS.Notifications.Api.Types.Email>());
         }
     }
 }

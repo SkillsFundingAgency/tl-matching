@@ -108,7 +108,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Is<string>(
-                        replyToAddress => replyToAddress == "DummyAddressToBeOverriddebByService"));
+                        replyToAddress => replyToAddress == ""));
         }
 
         [Fact]
