@@ -7,7 +7,7 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const int Placements = 5;
         private const string ModifiedBy = "ModifiedBy";
         private const int OpportunityId = 1;
-        private const string Postcode = "ModifiedBy";
+        private const string Postcode = "AA1 1AA";
         private const int Distance = 1;
         private const int RouteId = 1;
 
@@ -39,16 +39,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var opportunityService = new OpportunityService(mapper, dateTimeProvider, _opportunityRepository, provisionGapRepository, referralRepository);
 
-            var dto = new PlacementInformationSaveViewModel
+            var dto = new PlacementInformationSaveDto
             {
                 OpportunityId = OpportunityId,
                 JobTitle = JobTitle,
                 PlacementsKnown = PlacementsKnown,
-                Placements = Placements,
-                ModifiedBy = ModifiedBy
+                Placements = Placements
             };
 
-            opportunityService.SavePlacementInformation(dto).GetAwaiter().GetResult();
+            opportunityService.UpdateOpportunity(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -59,7 +58,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 opportunity.JobTitle == JobTitle &&
                 opportunity.PlacementsKnown == PlacementsKnown &&
                 opportunity.Placements == Placements &&
-                opportunity.ModifiedBy == ModifiedBy &&
                 opportunity.Postcode == Postcode &&
                 opportunity.SearchRadius == Distance &&
                 opportunity.RouteId == Distance

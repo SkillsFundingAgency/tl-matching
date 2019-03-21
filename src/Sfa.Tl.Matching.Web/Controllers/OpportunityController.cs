@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,19 +48,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("placement-information/{id?}", Name = "PlacementInformationSave_Get")]
         public async Task<IActionResult> PlacementInformationSave(int id)
         {
-            var dto = await _opportunityService.GetOpportunity(id);
+            var dto = await _opportunityService.GetPlacementInformationSave(id);
 
-            var viewModel = new PlacementInformationSaveViewModel
-            {
-                RouteId = dto.RouteId,
-                Postcode = dto.Postcode,
-                Distance = dto.SearchRadius,
-                OpportunityId = dto.Id,
-                JobTitle = dto.JobTitle,
-                PlacementsKnown = dto.PlacementsKnown,
-                Placements = !dto.PlacementsKnown.HasValue || !dto.PlacementsKnown.Value ?
-                    default : dto.Placements
-            };
+            var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
 
             return View(viewModel);
         }
@@ -73,9 +64,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            viewModel.ModifiedBy = HttpContext.User.GetUserName();
-
-            await _opportunityService.SavePlacementInformation(viewModel);
+            var dto = _mapper.Map<PlacementInformationSaveDto>(viewModel);
+            await _opportunityService.UpdateOpportunity(dto);
 
             return RedirectToRoute("EmployerFind_Get", new { id = viewModel.OpportunityId });
         }
@@ -84,25 +74,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers/{id?}", Name = "CheckAnswersReferrals_Get")]
         public async Task<IActionResult> CheckAnswersReferrals(int id)
         {
-            var dto = await _opportunityService.GetOpportunityWithRoute(id);
-
-            var viewModel = GetCheckAnswersViewModel(dto);
+            var viewModel = await GetCheckAnswersReferralViewModel(id);
 
             return View(viewModel);
         }
-
+        
         [HttpPost]
         [Route("check-answers/{id?}", Name = "CheckAnswersReferrals_Post")]
         public async Task<IActionResult> CheckAnswersReferrals(CheckAnswersReferralViewModel viewModel)
         {
-            var opportuntity = await _opportunityService.GetOpportunityWithRoute(viewModel.OpportunityId);
-
             if (!ModelState.IsValid)
-                return View(GetCheckAnswersViewModel(opportuntity));
+                return View(await GetCheckAnswersReferralViewModel(viewModel.OpportunityId));
 
-            var dto = PopulateCheckAnswersDto(viewModel);
-
-            await _opportunityService.SaveCheckAnswers(dto);
+            var dto = _mapper.Map<CheckAnswersDto>(viewModel);
+            await _opportunityService.UpdateOpportunity(dto);
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }
@@ -111,13 +96,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers-gap/{id?}", Name = "CheckAnswersProvisionGap_Get")]
         public async Task<IActionResult> CheckAnswersProvisionGap(int id)
         {
-            var dto = await _opportunityService.GetOpportunityWithRoute(id);
+            var dto = await _opportunityService.GetCheckAnswers(id);
 
-            var viewModel = new CheckAnswersProvisionGapViewModel
-            {
-                OpportunityId = dto.Id,
-                PlacementInformation = GetPlacementViewModel(dto)
-            };
+            var viewModel = _mapper.Map<CheckAnswersProvisionGapViewModel>(dto);
 
             return View(viewModel);
         }
@@ -126,14 +107,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers-gap/{id?}", Name = "CheckAnswersProvisionGap_Post")]
         public async Task<IActionResult> CheckAnswersProvisionGap(CheckAnswersProvisionGapViewModel viewModel)
         {
-            var dto = PopulateCheckAnswersDto(viewModel);
+            var dto = _mapper.Map<CheckAnswersDto>(viewModel);
 
-            await _opportunityService.SaveCheckAnswers(dto);
+            await _opportunityService.UpdateOpportunity(dto);
             await _opportunityService.CreateProvisionGap(viewModel);
 
             return RedirectToRoute("ProvisionGapSent_Get", new { id = viewModel.OpportunityId });
         }
-        
+
         [HttpGet]
         [Route("placement-gap/{id?}", Name = "ProvisionGapSent_Get")]
         public async Task<IActionResult> ProvisionGapSent(int id)
@@ -163,58 +144,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        private static CheckAnswersPlacementViewModel GetPlacementViewModel(OpportunityDto dto)
-        {
-            var viewModel = new CheckAnswersPlacementViewModel
-            {
-                Contact = dto.EmployerContact,
-                Distance = dto.SearchRadius,
-                EmployerName = dto.EmployerName,
-                JobTitle = dto.JobTitle,
-                PlacementsKnown = dto.PlacementsKnown,
-                Placements = dto.Placements,
-                Postcode = dto.Postcode,
-                RouteName = dto.RouteName
-            };
-
-            return viewModel;
-        }
-        private CheckAnswersReferralViewModel GetCheckAnswersViewModel(OpportunityDto dto)
-        {
-            var viewModel = new CheckAnswersReferralViewModel
-            {
-                OpportunityId = dto.Id,
-                PlacementInformation = GetPlacementViewModel(dto),
-                Providers = _opportunityService.GetReferrals(dto.Id)
-            };
-
-            return viewModel;
-        }
-
-        private CheckAnswersDto PopulateCheckAnswersDto(CheckAnswersProvisionGapViewModel checkAnswers)
-        {
-            var dto = new CheckAnswersDto
-            {
-                OpportunityId = checkAnswers.OpportunityId,
-                ConfirmationSelected = checkAnswers.ConfirmationSelected,
-                ModifiedBy = HttpContext.User.GetUserName()
-            };
-
-            return dto;
-        }
-
-        private CheckAnswersDto PopulateCheckAnswersDto(CheckAnswersReferralViewModel checkAnswers)
-        {
-            var dto = new CheckAnswersDto
-            {
-                OpportunityId = checkAnswers.OpportunityId,
-                ConfirmationSelected = checkAnswers.ConfirmationSelected,
-                ModifiedBy = HttpContext.User.GetUserName()
-            };
-
-            return dto;
-        }
-
         private void Validate(PlacementInformationSaveViewModel viewModel)
         {
             if (!viewModel.PlacementsKnown.HasValue || !viewModel.PlacementsKnown.Value) return;
@@ -224,6 +153,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of placements must be 1 or more");
             else if (viewModel.Placements > 999)
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of placements must be 999 or less");
+        }
+
+        private async Task<CheckAnswersReferralViewModel> GetCheckAnswersReferralViewModel(int id)
+        {
+            var dto = await _opportunityService.GetCheckAnswers(id);
+            var providersForReferral = _opportunityService.GetReferrals(id);
+
+            var viewModel = _mapper.Map<CheckAnswersReferralViewModel>(dto);
+            viewModel.Providers = _mapper.Map<List<ReferralsViewModel>>(providersForReferral);
+
+            return viewModel;
         }
     }
 }

@@ -55,7 +55,11 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 ;
 
             CreateMap<SelectedProviderViewModel, ReferralDto>()
-                .ForMember(m => m.CreatedBy, o => o.MapFrom<LoggedInUserNameResolver<SelectedProviderViewModel, ReferralDto>>());
+                .ForMember(m => m.CreatedBy,
+                    o => o.MapFrom<LoggedInUserNameResolver<SelectedProviderViewModel, ReferralDto>>())
+                .ForMember(m => m.Name, o => o.Ignore())
+                .ForMember(m => m.Postcode, o => o.Ignore())
+                ;
         }
     }
 }

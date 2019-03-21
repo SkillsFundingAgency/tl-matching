@@ -54,50 +54,30 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _opportunityRepository.GetMany(o => o.Id == id && o.Referral.Any()).AnyAsync();
         }
 
-        public async Task<OpportunityDto> GetOpportunityWithRoute(int id)
+        public async Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id)
         {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id,
+            var placementInformation = await _opportunityRepository.GetSingleOrDefault(e => e.Id == id,
                 opp => opp.Route);
-            var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
+
+            var dto = _mapper.Map<Opportunity, PlacementInformationSaveDto>(placementInformation);
 
             return dto;
         }
 
-        public async Task SavePlacementInformation(PlacementInformationSaveViewModel dto)
+        public async Task<CheckAnswersDto> GetCheckAnswers(int id)
         {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
-            var updatedOpportunity = _mapper.Map(dto, opportunity);
+            var checkAnswers = await _opportunityRepository.GetSingleOrDefault(e => e.Id == id,
+                opp => opp.Route);
 
-            updatedOpportunity.ModifiedOn = _dateTimeProvider.UtcNow();
+            var dto = _mapper.Map<Opportunity, CheckAnswersDto>(checkAnswers);
 
-            await _opportunityRepository.Update(updatedOpportunity);
+            return dto;
         }
 
-        public async Task SaveEmployerName(EmployerNameDto dto)
+        public async Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto
         {
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
-
             trackedEntity = _mapper.Map(dto, trackedEntity);
-
-            await _opportunityRepository.Update(trackedEntity);
-        }
-
-        public async Task SaveEmployerDetail(EmployerDetailDto dto)
-        {
-            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
-
-            _mapper.Map(dto, trackedEntity);
-
-            await _opportunityRepository.Update(trackedEntity);
-        }
-
-        public async Task SaveCheckAnswers(CheckAnswersDto dto)
-        {
-            dto.ModifiedOn = _dateTimeProvider.UtcNow();
-
-            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
-
-            _mapper.Map(dto, trackedEntity);
 
             await _opportunityRepository.Update(trackedEntity);
         }
@@ -116,13 +96,13 @@ namespace Sfa.Tl.Matching.Application.Services
             return _referralRepository.Create(referral);
         }
 
-        public List<ReferralsViewModel> GetReferrals(int opportunityId)
+        public List<ReferralDto> GetReferrals(int opportunityId)
         {
             var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId,
                 r => r.ProviderVenue, r => r.ProviderVenue.Provider);
 
             var providers = referrals
-                .Select(r => new ReferralsViewModel
+                .Select(r => new ReferralDto
                 {
                     Name = r.ProviderVenue.Provider.Name,
                     Postcode = r.ProviderVenue.Postcode,

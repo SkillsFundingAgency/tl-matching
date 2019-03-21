@@ -4,9 +4,10 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
@@ -23,18 +24,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Recording_Referrals_And_Check_Answers_Is_Loaded()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(CheckAnswersDtoMapper).Assembly));
             var mapper = new Mapper(config);
-            
-            var dto = new ValidOpportunityDtoBuilder().Build();
-            var providers = new List<ReferralsViewModel>
+
+            var dto = new ValidCheckAnswersDtoBuilder().Build();
+
+            var providers = new List<ReferralDto>
             {
-                new ReferralsViewModel { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
-                new ReferralsViewModel { Name = "Provider2", DistanceFromEmployer = 31.6m, Postcode = "BB1 1BB" }
+                new ReferralDto { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
+                new ReferralDto { Name = "Provider2", DistanceFromEmployer = 31.6m, Postcode = "BB1 1BB" }
             };
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunityWithRoute(OpportunityId).Returns(dto);
+            _opportunityService.GetCheckAnswers(OpportunityId).Returns(dto);
 
             _opportunityService.GetReferrals(OpportunityId).Returns(providers);
 
@@ -49,9 +51,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_GetOpportunityWithRoute_Is_Called_Exactly_Once()
+        public void Then_GetCheckAnswers_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetOpportunityWithRoute(OpportunityId);
+            _opportunityService.Received(1).GetCheckAnswers(OpportunityId);
         }
 
         [Fact]
@@ -87,14 +89,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerContact_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
-            viewModel.PlacementInformation.Contact.Should().Be("EmployerContact");
+            viewModel.PlacementInformation.EmployerContact.Should().Be("EmployerContact");
         }
 
         [Fact]
         public void Then_Distance_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
-            viewModel.PlacementInformation.Distance.Should().Be(3);
+            viewModel.PlacementInformation.SearchRadius.Should().Be(3);
         }
 
         [Fact]

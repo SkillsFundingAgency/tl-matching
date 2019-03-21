@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
@@ -23,11 +25,23 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Recording_ProvisionGap_And_Check_Answers_Gap_Is_Submitted_Successfully()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddProfiles(typeof(CheckAnswersDtoMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver") ?
+                        new LoggedInUserEmailResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>(httpcontextAccesor) :
+                        type.Name.Contains("LoggedInUserNameResolver") ?
+                            (object)new LoggedInUserNameResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>(httpcontextAccesor) :
+                            type.Name.Contains("UtcNowResolver") ?
+                                new UtcNowResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>(new DateTimeProvider()) :
+                                null);
+            });
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto { Id = OpportunityId, ConfirmationSelected = false });
              
 			 var referralService = Substitute.For<IReferralService>();
 
@@ -35,6 +49,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(ModifiedBy)
                 .Build();
+
+            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             _result = controllerWithClaims.CheckAnswersProvisionGap(new CheckAnswersProvisionGapViewModel
             {
@@ -46,9 +62,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_SaveCheckAnswers_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).SaveCheckAnswers(Arg.Is<CheckAnswersDto>(a =>
-                a.ConfirmationSelected == ConfirmationSelected &&
-                a.ModifiedBy == ModifiedBy));
+            _opportunityService.Received(1).UpdateOpportunity(Arg.Is<CheckAnswersDto>(a =>
+                a.ConfirmationSelected == ConfirmationSelected));
         }
 
         [Fact]

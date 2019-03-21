@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private readonly IActionResult _result;
         private readonly IOpportunityService _opportunityService;
 
-        private readonly OpportunityDto _dto = new OpportunityDto();
+        private readonly PlacementInformationSaveDto _dto = new PlacementInformationSaveDto();
         private const string JobTitle = "JobTitle";
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Placement_Information_Loaded()
         {
-            _dto.Id = OpportunityId;
+            _dto.OpportunityId = OpportunityId;
             _dto.JobTitle = JobTitle;
             _dto.PlacementsKnown = PlacementsKnown;
             _dto.Placements = Placements;
@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunity(OpportunityId).Returns(_dto);
+            _opportunityService.GetPlacementInformationSave(OpportunityId).Returns(_dto);
 
             var referralService = Substitute.For<IReferralService>();
 
@@ -44,9 +44,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_GetOpportunity_Is_Called_Exactly_Once()
+        public void Then_GetPlacementInformationSave_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetOpportunity(OpportunityId);
+            _opportunityService.Received(1).GetPlacementInformationSave(OpportunityId);
         }
 
         [Fact]

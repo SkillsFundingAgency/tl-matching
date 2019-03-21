@@ -3,10 +3,10 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -16,22 +16,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     {
         private readonly IActionResult _result;
 
-        private readonly OpportunityDto _dto = new OpportunityDto();
+        private readonly PlacementInformationSaveDto _dto = new PlacementInformationSaveDto();
         private const bool PlacementsKnown = false;
         private const int Placements = 5;
         private const int OpportunityId = 12;
 
         public When_Placement_Information_Loaded_With_Placements_Unknown()
         {
-            _dto.Id = OpportunityId;
+            _dto.OpportunityId = OpportunityId;
             _dto.PlacementsKnown = PlacementsKnown;
             _dto.Placements = Placements;
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(PlacementInformationSaveDtoMapper).Assembly));
             var mapper = new Mapper(config);
             
             var opportunityService = Substitute.For<IOpportunityService>();
-            opportunityService.GetOpportunity(Arg.Any<int>()).Returns(_dto);
+            opportunityService.GetPlacementInformationSave(Arg.Any<int>()).Returns(_dto);
 
             var referralService = Substitute.For<IReferralService>();
 

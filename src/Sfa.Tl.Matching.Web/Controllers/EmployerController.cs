@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var dto = _mapper.Map<EmployerNameDto>(viewModel);
 
-            await _opportunityService.SaveEmployerName(dto);
+            await _opportunityService.UpdateOpportunity(dto);
 
             return RedirectToRoute("EmployerDetails_Get", new { id = viewModel.OpportunityId });
         }
@@ -76,10 +76,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var dto = await _opportunityService.GetOpportunity(id);
-
-            var employerDto = await _employerService.GetEmployer(dto.EmployerId ?? 0);
-
-            var viewModel = _mapper.Map(employerDto, new EmployerDetailsViewModel { OpportunityId = dto.Id });
+            var viewModel = await GetEmployerDetailsViewModel(dto);
 
             return View(viewModel);
         }
@@ -95,7 +92,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
-            await _opportunityService.SaveEmployerDetail(employerDetailDto);
+            await _opportunityService.UpdateOpportunity(employerDetailDto);
 
             var isReferralOpportunity = await _opportunityService.IsReferralOpportunity(viewModel.OpportunityId);
 
@@ -111,6 +108,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a number");
             else if (!Regex.IsMatch(viewModel.EmployerContactPhone, @"^(?:.*\d.*){7,}$"))
                 ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a telephone number that has 7 or more numbers");
+        }
+
+        private async Task<EmployerDetailsViewModel> GetEmployerDetailsViewModel(OpportunityDto dto)
+        {
+            if (IsEmployerPopulated(dto))
+                return _mapper.Map<EmployerDetailsViewModel>(dto);
+
+            var employerDto = await _employerService.GetEmployer(dto.EmployerId ?? 0);
+
+            return _mapper.Map(employerDto, new EmployerDetailsViewModel { OpportunityId = dto.Id });
+        }
+
+        private static bool IsEmployerPopulated(OpportunityDto dto)
+        {
+            return !string.IsNullOrEmpty(dto.EmployerContact) &&
+                   !string.IsNullOrEmpty(dto.EmployerContactEmail) &&
+                   !string.IsNullOrEmpty(dto.EmployerContactPhone);
         }
     }
 }

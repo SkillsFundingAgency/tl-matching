@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
@@ -23,7 +26,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _viewModel.OpportunityId = OpportunityId;
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddProfiles(typeof(PlacementInformationSaveDtoMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver") ?
+                        new LoggedInUserEmailResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(httpcontextAccesor) :
+                        type.Name.Contains("LoggedInUserNameResolver") ?
+                            (object)new LoggedInUserNameResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(httpcontextAccesor) :
+                            type.Name.Contains("UtcNowResolver") ?
+                                new UtcNowResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(new DateTimeProvider()) :
+                                null);
+            });
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
@@ -34,13 +50,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("username")
                 .Build();
 
+            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+
             _result = controllerWithClaims.PlacementInformationSave(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).SavePlacementInformation(_viewModel);
+            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<PlacementInformationSaveDto>());
         }
 
         [Fact]

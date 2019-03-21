@@ -10,14 +10,14 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
     public class When_OpportunityService_Is_Called_To_Get_Referrals
     {
-        private readonly List<ReferralsViewModel> _providerViewModels;
+        private readonly List<ReferralDto> referralDtos;
         private readonly IRepository<Domain.Models.Referral> _referralRepository;
 
         private const int OpportunityId = 1;
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var opportunityService = new OpportunityService(mapper, dateTimeProvider, opportunityRepository, provisionGapRepository, _referralRepository);
 
-            _providerViewModels = opportunityService.GetReferrals(OpportunityId);
+            referralDtos = opportunityService.GetReferrals(OpportunityId);
         }
 
         [Fact]
@@ -63,19 +63,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_ViewModel_Count_Is_1()
         {
-            _providerViewModels.Count.Should().Be(1);
+            referralDtos.Count.Should().Be(1);
         }
 
         [Fact]
         public void Then_Postcode_Is_Set()
         {
-            _providerViewModels[0].Postcode.Should().Be("AA1 1AA");
+            referralDtos[0].Postcode.Should().Be("AA1 1AA");
         }
 
         [Fact]
         public void Then_Name_Is_Set()
         {
-            _providerViewModels[0].Name.Should().Be("Provider1");
+            referralDtos[0].Name.Should().Be("Provider1");
         }
     }
 }
