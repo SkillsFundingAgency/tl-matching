@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                           (from pq in _dbContext.ProviderQualification
                                               join q in _dbContext.Qualification on pq.QualificationId equals q.Id
                                               where pv.Id == pq.ProviderVenueId
-                                              select q.ShortTitle).ToList(),
+                                              select q.ShortTitle).Distinct().ToList(),
                                   }).ToList()
         }).SingleOrDefaultAsync();
     }
