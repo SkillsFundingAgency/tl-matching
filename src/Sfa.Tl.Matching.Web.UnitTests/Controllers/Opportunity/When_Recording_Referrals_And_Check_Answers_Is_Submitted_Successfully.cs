@@ -17,8 +17,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     public class When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully
     {
         private const string ModifiedBy = "ModifiedBy";
+        private const int OpportunityId = 1;
+
+        private readonly IReferralService _referralService;
         private readonly IActionResult _result;
-        private readonly CheckAnswersReferralViewModel _viewModel = new CheckAnswersReferralViewModel();
+        private readonly CheckAnswersReferralViewModel _viewModel = new CheckAnswersReferralViewModel
+        {
+            OpportunityId = OpportunityId
+        };
 
         public When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully()
         {
@@ -40,9 +46,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
 
             var opportunityService = Substitute.For<IOpportunityService>();
-            var referralService = Substitute.For<IReferralService>();
+            _referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(opportunityService, referralService, mapper);
+            var opportunityController = new OpportunityController(opportunityService, _referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(ModifiedBy)
                 .Build();
@@ -51,7 +57,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             _result = controllerWithClaims.CheckAnswersReferrals(_viewModel).GetAwaiter().GetResult();
         }
-        //{
+        
         [Fact]
         public void Then_Result_Is_Redirect_to_EmailsSent()
         {
@@ -59,6 +65,18 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("EmailSentReferrals_Get");
+        }
+        
+        [Fact]
+        public void Then_SendProviderReferralEmail_Is_Called_Exactly_Once()
+        {
+            _referralService.Received(1).SendProviderReferralEmail(OpportunityId);
+        }
+
+        [Fact]
+        public void Then_SendEmployerReferralEmail_Is_Called_Exactly_Once()
+        {
+            _referralService.Received(1).SendEmployerReferralEmail(OpportunityId);
         }
     }
 }

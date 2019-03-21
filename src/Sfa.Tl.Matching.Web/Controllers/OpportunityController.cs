@@ -89,6 +89,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = _mapper.Map<CheckAnswersDto>(viewModel);
             await _opportunityService.UpdateOpportunity(dto);
 
+            await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
+            await _referralService.SendProviderReferralEmail(dto.OpportunityId);
+
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }
 
@@ -134,8 +137,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> EmailSentReferrals(int id)
         {
             var opportunity = await _opportunityService.GetOpportunity(id);
-
-            await _referralService.SendProviderReferralEmail(id);
 
             return View(new EmailsSentViewModel
             {

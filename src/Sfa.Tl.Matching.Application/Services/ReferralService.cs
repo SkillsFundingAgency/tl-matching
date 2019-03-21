@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _logger = logger;
         }
 
-        public async Task SendEmployerEmail(int opportunityId)
+        public async Task SendEmployerReferralEmail(int opportunityId)
         {
             //Test in AT
             //See comments in https://github.com/SkillsFundingAgency/tl-matching/pull/75
