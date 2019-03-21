@@ -18,14 +18,12 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
         public const double MilesToMeters = 1609.34d;
 
         private readonly ILogger<SqlSearchProvider> _logger;
-        private readonly IRepository<QualificationRoutePathMapping> _qualificationRoutePathMappingRepository;
-        private readonly IRepository<ProviderVenue> _providerVenueRepository;
+        private readonly MatchingDbContext _matchingDbContext;
 
-        public SqlSearchProvider(ILogger<SqlSearchProvider> logger, IRepository<QualificationRoutePathMapping> qualificationRoutePathMappingRepository, IRepository<ProviderVenue> providerVenueRepository)
+        public SqlSearchProvider(ILogger<SqlSearchProvider> logger, MatchingDbContext matchingDbContext)
         {
             _logger = logger;
-            _qualificationRoutePathMappingRepository = qualificationRoutePathMappingRepository;
-            _providerVenueRepository = providerVenueRepository;
+            _matchingDbContext = matchingDbContext;
         }
 
         public async Task<IList<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
@@ -40,24 +38,42 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
 
             var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
 
-            var qualificationIds = await _qualificationRoutePathMappingRepository
-                .GetMany(qrpm => qrpm.Path.RouteId == dto.SelectedRouteId)
-                .Select(qrpm => qrpm.QualificationId)
-                .Distinct().ToListAsync();
+            var result = await (from provider in _matchingDbContext.Provider
+                                join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId
+                                join providerQualification in _matchingDbContext.ProviderQualification on providerVenue.Id equals providerQualification.ProviderVenueId
+                                join qualificationRoutePathMapping in _matchingDbContext.QualificationRoutePathMapping on providerQualification.QualificationId equals qualificationRoutePathMapping.QualificationId
+                                join path in _matchingDbContext.Path on qualificationRoutePathMapping.PathId equals path.Id
+                                orderby providerVenue.Location.Distance(employerLocation)
+                                where path.RouteId == dto.SelectedRouteId && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters
+                                select new
+                                {
+                                    ProviderVenueId = providerVenue.Id,
+                                    ProviderName = provider.Name,
+                                    Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
+                                    Postcode = providerVenue.Postcode,
+                                }).Distinct().ToListAsync();
 
-            // ReSharper disable ImplicitlyCapturedClosure
-            return await _providerVenueRepository
-                .GetMany(p => p.Location.Distance(employerLocation) <= searchRadiusInMeters &&
-                              p.ProviderQualification.Any(qId => qualificationIds.Contains(qId.QualificationId)), inc => inc.ProviderQualification)
-                .OrderBy(p => p.Location.Distance(employerLocation))
-                .Select(p => new ProviderVenueSearchResultDto
-                {
-                    ProviderVenueId = p.Id,
-                    ProviderName = p.Provider.Name,
-                    Distance = p.Location.Distance(employerLocation) / MilesToMeters,
-                    Postcode = p.Postcode,
-                    QualificationShortTitles = p.ProviderQualification.Select(pq => pq.Qualification.ShortTitle).Distinct().ToList()
-                }).ToListAsync();
+            var venueIds = result.Select(v => v.ProviderVenueId);
+
+            var qualificationShortTitles = await (from providerQualification in _matchingDbContext.ProviderQualification
+                                           join routePathMapping in _matchingDbContext.QualificationRoutePathMapping on providerQualification.QualificationId equals routePathMapping.QualificationId
+                                           join qualification in _matchingDbContext.Qualification on routePathMapping.QualificationId equals qualification.Id 
+                                           join path1 in _matchingDbContext.Path on routePathMapping.PathId equals path1.Id
+                                           where path1.RouteId == dto.SelectedRouteId && venueIds.Any(venueId => venueId == providerQualification.ProviderVenueId)
+                                           select new
+                                           {
+                                               ProviderVenueId = providerQualification.ProviderVenueId,
+                                               QualificationShortTitle = qualification.ShortTitle
+                                           }).Distinct().ToListAsync();
+
+            return result.Select(r => new ProviderVenueSearchResultDto
+            {
+                Postcode = r.Postcode,
+                ProviderVenueId = r.ProviderVenueId,
+                ProviderName = r.ProviderName,
+                Distance = r.Distance,
+                QualificationShortTitles = qualificationShortTitles.Where(q => q.ProviderVenueId == r.ProviderVenueId).Select(q => q.QualificationShortTitle)
+            }).OrderBy(r => r.Distance).ToList();
         }
     }
 }
