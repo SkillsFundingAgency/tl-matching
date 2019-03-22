@@ -21,11 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 
             using (var dbContext = InMemoryDbContext.Create())
             {
-                dbContext.Add(new ValidRouteBuilder().Build());
-                dbContext.Add(new ValidProviderBuilder().Build());
-                dbContext.Add(new ValidProviderVenueBuilder().Build());
-                dbContext.Add(new ValidReferralBuilder().Build());
-                dbContext.AddRange(new ValidOpportunityListBuilder().Build());
+                dbContext.Add(new ValidOpportunityReferralBuilder().Build());
                 dbContext.SaveChanges();
 
                 var repository = new OpportunityRepository(logger, dbContext);
