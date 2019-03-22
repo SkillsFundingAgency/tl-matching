@@ -28,7 +28,7 @@
             <li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
                 <div class="govuk-checkboxes">
                     <div class="govuk-checkboxes__item">
-                        <input type="hidden" asp-for="@searchResult.Distance" name="SelectedProvider[@i].DistanceFromEmployer" />
+                        <input type="hidden" asp-for="@Model.SearchResults.Results[i].Distance" name="SelectedProvider[@i].DistanceFromEmployer" />
                         <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderVenueId" name="SelectedProvider[@i].ProviderVenueId" />
 
                         <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected"  name="SelectedProvider[@i].IsSelected" />
