@@ -31,8 +31,8 @@
                         <input type="hidden" asp-for="@Model.SearchResults.Results[i].Distance" name="SelectedProvider[@i].DistanceFromEmployer" />
                         <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderVenueId" name="SelectedProvider[@i].ProviderVenueId" />
 
-                        <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" />
-                        <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" >
+                        <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" />
+                        <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" >
                             @searchResult.ProviderName
                             <ul class="tl-inline-list tl-inline-list--bar">
                                 <li>@searchResult.Postcode</li>
