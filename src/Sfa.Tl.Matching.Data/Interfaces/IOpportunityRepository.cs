@@ -8,5 +8,6 @@ namespace Sfa.Tl.Matching.Data.Interfaces
     public interface IOpportunityRepository : IRepository<Opportunity>
     {
         Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId);
+        Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId);
     }
 }

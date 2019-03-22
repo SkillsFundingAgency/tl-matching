@@ -3,7 +3,7 @@
 	[Id] INT IDENTITY(1,1) NOT NULL, 
 	[EmailHistoryId] INT NOT NULL, 
 	[Key] VARCHAR(50) NOT NULL, 
-	[Value] NVARCHAR(500) NOT NULL, 
+	[Value] NVARCHAR(MAX) NOT NULL, 
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 

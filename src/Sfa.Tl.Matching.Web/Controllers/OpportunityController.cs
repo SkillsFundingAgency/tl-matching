@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IReferralService _referralService;
-		private readonly IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public OpportunityController(IOpportunityService opportunityService, IReferralService referralService, IMapper mapper)
         {
@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return View(viewModel);
         }
-        
+
         [HttpPost]
         [Route("check-answers/{id?}", Name = "CheckAnswersReferrals_Post")]
         public async Task<IActionResult> CheckAnswersReferrals(CheckAnswersReferralViewModel viewModel)
@@ -88,6 +88,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var dto = _mapper.Map<CheckAnswersDto>(viewModel);
             await _opportunityService.UpdateOpportunity(dto);
+
+            await Task.WhenAll(
+                _referralService.SendEmployerReferralEmail(dto.OpportunityId),
+                _referralService.SendProviderReferralEmail(dto.OpportunityId));
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }
@@ -134,8 +138,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> EmailSentReferrals(int id)
         {
             var opportunity = await _opportunityService.GetOpportunity(id);
-
-            await _referralService.SendProviderReferralEmail(id);
 
             return View(new EmailsSentViewModel
             {

@@ -13,8 +13,7 @@ namespace Sfa.Tl.Matching.Application.Services
     public class EmailService : IEmailService
     {
         public const string SystemId = "TLevelsIndustryPlacement";
-        public const string DefaultReplyToAddress = "DummyAddressToBeOverriddebByService"; //reply address is currently ignored by DAS Notifications
-        //public const string DefaultSubject = "SubjectToBeOverriddebByService";
+        public const string DefaultReplyToAddress = "DummyAddressOverriddenByNotificationsService"; //reply address is currently ignored by DAS Notifications
 
         private readonly MatchingConfiguration _configuration;
         private readonly ILogger<EmailService> _logger;
@@ -42,6 +41,8 @@ namespace Sfa.Tl.Matching.Application.Services
             var emailTemplate = await _emailTemplateRepository.GetSingleOrDefault(t => t.TemplateName == templateName);
             if (emailTemplate == null)
             {
+                _logger.LogWarning($"Email template {templateName} not found. No emails sent.");
+
                 return;
             }
 

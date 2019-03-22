@@ -14,14 +14,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 {
-    public class When_ReferralService_Is_Called_To_Send_Provider_Email
+    public class When_ReferralService_Is_Called_To_Send_Employer_Email
     {
         private readonly IEmailService _emailService;
         private readonly IRepository<EmailHistory> _emailHistoryRepository;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
         private readonly IOpportunityRepository _opportunityRepository;
 
-        public When_ReferralService_Is_Called_To_Send_Provider_Email()
+        public When_ReferralService_Is_Called_To_Send_Employer_Email()
         {
             _emailService = Substitute.For<IEmailService>();
 
@@ -39,15 +39,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .Returns(new ValidEmailTemplateBuilder().Build());
 
             _opportunityRepository
-                .GetProviderOpportunities(
+                .GetEmployerReferrals(
                     Arg.Any<int>())
-                .Returns(new ValidOpportunityReferralDtoListBuilder().Build());
+                .Returns(new ValidEmployerReferralDtoBuilder().Build());
 
             var referralService = new ReferralService(_emailService,
                 _emailHistoryRepository, _emailTemplateRepository, _opportunityRepository,
                 mapper, logger);
 
-            referralService.SendProviderReferralEmail(1).GetAwaiter().GetResult();
+            referralService.SendEmployerReferralEmail(1).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .Received(1)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Is<string>(
-                        toAddress => toAddress == "primary.contact@provider.co.uk"),
+                        toAddress => toAddress == "employer.contact@employer.co.uk"),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Any<string>());
@@ -112,7 +112,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_PrimaryContactName_Token()
+        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Name_Token()
         {
             _emailService
                 .Received(1)
@@ -120,78 +120,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("primary_contact_name")
-                                  && tokens["primary_contact_name"] == "Provider Contact"),
-                    Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_ProviderName_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("provider_name")
-                        && tokens["provider_name"] == "Provider"),
-                    Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Route_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("route")
-                                  && tokens["route"] == "Agriculture, environmental and animal care"),
-                    Arg.Any<string>());
-        }
-        
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("venue_postcode")
-                                  && tokens["venue_postcode"] == "AA2 2AA"),
-                    Arg.Any<string>());
-        }
-        
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Search_Radius_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("search_radius")
-                                  && tokens["search_radius"] == "10"),
-                    Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Job_Role_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("job_role")
-                                  && tokens["job_role"] == "Testing Job Title"),
+                        tokens => tokens.ContainsKey("employer_contact_name")
+                                  && tokens["employer_contact_name"] == "Employer Contact"),
                     Arg.Any<string>());
         }
 
@@ -205,21 +135,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("employer_business_name")
-                                  && tokens["employer_business_name"] == "Employer"),
-                    Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Name_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_contact_name")
-                                  && tokens["employer_contact_name"] == "Employer Contact"),
+                        && tokens["employer_business_name"] == "Employer"),
                     Arg.Any<string>());
         }
 
@@ -236,7 +152,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                   && tokens["employer_contact_number"] == "020 123 4567"),
                     Arg.Any<string>());
         }
-
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Email_Token()
         {
@@ -262,6 +177,57 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("employer_postcode")
                                   && tokens["employer_postcode"] == "AA1 1AA"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Route_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("route")
+                                  && tokens["route"] == "Agriculture, environmental and animal care"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
+        {
+            var expectedProvidersList = "# Provider\r\n"
+                                        + "AA2 2AA\r\n"
+                                        + "Contact name: Provider Contact\r\n"
+                                        + "Telephone: 01777757777\r\n"
+                                        + "Email: primary.contact@provider.co.uk\r\n"
+                                        + "Has students learning: \r\n"
+                                        + "* Qualification 1\r\n"
+                                        + "* Qualification 2\r\n"
+                                        + "\r\n";
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("providers_list")
+                                  && tokens["providers_list"] == expectedProvidersList),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Job_Role_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("job_role")
+                                  && tokens["job_role"] == "Testing Job Title"),
                     Arg.Any<string>());
         }
 
@@ -317,7 +283,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailHistoryRepository
                 .Received(1)
                 .Create(Arg.Is<EmailHistory>(email =>
-                    email.SentTo == "primary.contact@provider.co.uk"));
+                    email.SentTo == "employer.contact@employer.co.uk"));
         }
 
         [Fact]
@@ -334,7 +300,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         {
             _opportunityRepository
                 .Received(1)
-                .GetProviderOpportunities(Arg.Any<int>());
+                .GetEmployerReferrals(Arg.Any<int>());
         }
     }
 }

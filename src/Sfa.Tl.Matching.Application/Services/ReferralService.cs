@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -12,10 +12,8 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class ReferralService : IReferralService
     {
-        //public const string EmployerReferralEmailTemplateName = "EmployerReferral";
+        public const string EmployerReferralEmailTemplateName = "EmployerReferral";
         public const string ProviderReferralEmailTemplateName = "ProviderReferral";
-        public const string ProviderReferralEmailSubject = "Industry Placement Matching Referral";
-        public const string ReplyToAddress = "DummyAddressToBeOverriddebByService"; //reply address is currently ignored by DAS Notifications
 
         private readonly ILogger<ReferralService> _logger;
         private readonly IEmailService _emailService;
@@ -39,38 +37,60 @@ namespace Sfa.Tl.Matching.Application.Services
             _logger = logger;
         }
 
-        public Task SendEmployerEmail(int opportunityId)
+        public async Task SendEmployerReferralEmail(int opportunityId)
         {
-            throw new NotImplementedException();
-            /* Note: can set up list of providers into a single placeholder using code like this:
-            var sb = new StringBuilder();
-            sb.AppendLine("# This is a heading");
-            sb.AppendLine("This is some text.");
-            sb.AppendLine("* bullet 1");
-            sb.AppendLine("* bullet 2");
-            sb.AppendLine("---");
-            sb.Append("\r\n");
-            sb.Append("Some final text\r\n");
-            sb.Append("...");
-            sb.Append("and a footer");
+            var emailTemplate = await GetEmailTemplate(EmployerReferralEmailTemplateName);
 
-            Will be something like:
-            # [Provider name]
-            [Venue postcode]
-            Contact name: [provider primary contact name]
-            Telephone: [provider primary contact number]
-            Email: [provider primary contact email]
-            Has students learning:
-            * [shortened qual title 1]
-            * [shortened qual title 2]
-            * Etc
+            var employerReferral = await GetEmployerReferrals(opportunityId);
 
-
-            var placeholders = new List<EmailPlaceholderDto>
+            if (employerReferral == null)
             {
-                new EmailPlaceholderDto {Key = "providers_list", Value = sb.ToString()}
+                return;
+            }
+
+            var toAddress = employerReferral.EmployerContactEmail;
+
+            var numberOfPlacements = GetNumberOfPlacements(employerReferral.PlacementsKnown, employerReferral.Placements);
+
+            var tokens = new Dictionary<string, string>
+            {
+                { "employer_contact_name", employerReferral.EmployerContact },
+                { "employer_business_name", employerReferral.EmployerName },
+                { "employer_contact_number", employerReferral.EmployerContactPhone },
+                { "employer_contact_email", employerReferral.EmployerContactEmail },
+                { "employer_postcode", employerReferral.Postcode },
+                { "number_of_placements", numberOfPlacements },
+                { "route", employerReferral.RouteName },
+                { "job_role", employerReferral.JobTitle }
             };
-            */
+
+            var sb = new StringBuilder();
+
+            foreach (var providerReferral in employerReferral.ProviderReferralInfo)
+            {
+                sb.AppendLine($"# {providerReferral.ProviderName}");
+                sb.AppendLine($"{providerReferral.ProviderVenuePostcode}");
+                sb.AppendLine($"Contact name: {providerReferral.ProviderPrimaryContact}");
+                sb.AppendLine($"Telephone: {providerReferral.ProviderPrimaryContactPhone}");
+                sb.AppendLine($"Email: {providerReferral.ProviderPrimaryContactEmail}");
+                sb.AppendLine("Has students learning: ");
+
+                foreach (var qualificationShortTitle in providerReferral.QualificationShortTitles)
+                {
+                    sb.AppendLine($"* {qualificationShortTitle}");
+                }
+                sb.AppendLine(""); //Need a blank line, otherwise the next heading won't be formatted
+            }
+
+            tokens.Add("providers_list", sb.ToString());
+
+            await _emailService.SendEmail(emailTemplate.TemplateName,
+                toAddress,
+                "Industry Placement Matching Referral",
+                tokens,
+                "");
+
+            await SaveEmailHistory(emailTemplate, tokens, opportunityId, toAddress, employerReferral.CreatedBy);
         }
 
         public async Task SendProviderReferralEmail(int opportunityId)
@@ -83,9 +103,7 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 var toAddress = referral.ProviderPrimaryContactEmail;
 
-                var numberOfPlacements = referral.PlacementsKnown.GetValueOrDefault()
-                    ? referral.Placements.ToString()
-                    : "at least one";
+                var numberOfPlacements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
                 
                 var tokens = new Dictionary<string, string>
                 {
@@ -105,12 +123,52 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await _emailService.SendEmail(emailTemplate.TemplateName,
                     toAddress,
-                    ProviderReferralEmailSubject,
+                    "Industry Placement Matching Referral",
                     tokens,
-                    ReplyToAddress);
+                    "");
 
                 await SaveEmailHistory(emailTemplate, tokens, opportunityId, toAddress, referral.CreatedBy);
             }
+        }
+
+        private async Task<EmailTemplate> GetEmailTemplate(string templateName)
+        {
+            return await _emailTemplateRepository.GetSingleOrDefault(t => t.TemplateName == templateName);
+        }
+
+        private async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
+        {
+            return await _opportunityRepository.GetEmployerReferrals(opportunityId);
+        }
+
+        private async Task<IList<OpportunityReferralDto>> GetOpportunityReferrals(int opportunityId)
+        {
+            return await _opportunityRepository.GetProviderOpportunities(opportunityId);
+        }
+
+        private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
+        {
+            return placementsKnown.GetValueOrDefault()
+                ? placements.ToString()
+                : "at least one";
+        }
+
+        private IEnumerable<EmailPlaceholderDto> ConvertTokensToEmailPlaceholderDtos(IDictionary<string, string> tokens, string createdBy)
+        {
+            var placeholders = new List<EmailPlaceholderDto>();
+
+            foreach (var (key, value) in tokens)
+            {
+                placeholders.Add(
+                    new EmailPlaceholderDto
+                    {
+                        Key = key,
+                        Value = value,
+                        CreatedBy = createdBy
+                    });
+            }
+
+            return placeholders;
         }
 
         private async Task SaveEmailHistory(EmailTemplate emailTemplate, IDictionary<string, string> tokens, int opportunityId, string emailAddress, string createdBy)
@@ -129,36 +187,6 @@ namespace Sfa.Tl.Matching.Application.Services
                 CreatedBy = createdBy
             };
             await _emailHistoryRepository.Create(emailHistory);
-        }
-
-        private async Task<EmailTemplate> GetEmailTemplate(string templateName)
-        {
-            var emailTemplate = await _emailTemplateRepository.GetSingleOrDefault(t => t.TemplateName == templateName);
-            return emailTemplate;
-        }
-
-        private async Task<IList<OpportunityReferralDto>> GetOpportunityReferrals(int opportunityId)
-        {
-            var opportunityReferralDto = await _opportunityRepository.GetProviderOpportunities(opportunityId);
-            return opportunityReferralDto;
-        }
-
-        private IEnumerable<EmailPlaceholderDto> ConvertTokensToEmailPlaceholderDtos(IDictionary<string, string> tokens, string createdBy)
-        {
-            var placeholders = new List<EmailPlaceholderDto>();
-
-            foreach (var token in tokens)
-            {
-                placeholders.Add(
-                    new EmailPlaceholderDto
-                    {
-                        Key = token.Key,
-                        Value = token.Value,
-                        CreatedBy = createdBy
-                    });
-            }
-
-            return placeholders;
         }
     }
 }
