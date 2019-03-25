@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("PlacementInformationSave_Get", new { id });
         }
 
-        [HttpPost]
+        [Route("referral-create", Name = "CreateReferral")]
         public async Task<IActionResult> CreateReferral(CreateReferralViewModel viewModel)
         {
             var dto = _mapper.Map<OpportunityDto>(viewModel);

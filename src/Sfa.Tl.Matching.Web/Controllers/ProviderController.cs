@@ -83,7 +83,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private IActionResult GetIndexView(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius, bool isValidPostCode = true)
         {
-            if(!isValidPostCode) ModelState.AddModelError("Postcode", "You must enter a valid postcode");
+            if (!isValidPostCode) ModelState.AddModelError("Postcode", "You must enter a valid postcode");
 
             return View(nameof(Index), new SearchParametersViewModel
             {
@@ -96,8 +96,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private IActionResult GetResultsView(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius, bool isValidPostCode = true)
         {
-            if(!isValidPostCode) ModelState.AddModelError("Postcode", "You must enter a valid postcode");
-            
+            if (!isValidPostCode) ModelState.AddModelError("SearchParameters.Postcode", "You must enter a valid postcode");
+
+            if (string.IsNullOrEmpty(postCode)) ModelState.AddModelError("SearchParameters.Postcode", "You must enter a postcode");
+
             return View(nameof(Results), new SearchViewModel
             {
                 SearchParameters = new SearchParametersViewModel
@@ -120,29 +122,50 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
 
+            var searchViewModel = await SearchProviders(viewModel.Postcode, viewModel.SelectedRouteId, viewModel.SearchRadius);
+            
+            return searchViewModel;
+        }
+
+        private async Task<SearchViewModel> SearchProviders(string postcode, int? routeId, int searchRadius)
+        {
             var searchResults = await _providerService.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto
             {
-                Postcode = viewModel.Postcode,
-                SelectedRouteId = viewModel.SelectedRouteId,
-                SearchRadius = viewModel.SearchRadius
-            } );
+                Postcode = postcode,
+                SelectedRouteId = routeId,
+                SearchRadius = searchRadius
+            });
 
-            var resultsViewModel = new SearchViewModel
+            var viewModel = new SearchViewModel
             {
+                SearchParameters = new SearchParametersViewModel
+                {
+                    SearchRadius = searchRadius,
+                    Postcode = postcode,
+                    SelectedRouteId = routeId,
+                    RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
+                },
                 SearchResults = new SearchResultsViewModel
                 {
                     Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults)
-                },
-                SearchParameters = new SearchParametersViewModel
-                {
-                    RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
-                    SearchRadius = viewModel.SearchRadius,
-                    SelectedRouteId = viewModel.SelectedRouteId,
-                    Postcode = viewModel.Postcode?.Trim()
                 }
             };
 
-            return resultsViewModel;
+            return viewModel;
+        }
+
+        [HttpPost]
+        [Route("provider-results-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "CreateReferral_Post")]
+        public async Task<IActionResult> CreateReferral(CreateReferralViewModel viewModel)
+        {
+            if (viewModel.SelectedProvider.Any(p => p.IsSelected))
+                return RedirectToRoute("CreateReferral", viewModel);
+
+            ModelState.AddModelError("SearchResults.Results[0].IsSelected", "You must select at least one provider");
+
+            var searchViewModel = await SearchProviders(viewModel.Postcode, viewModel.SelectedRouteId, viewModel.SearchRadius);
+            
+            return View(nameof(Results), searchViewModel);
         }
     }
 }
