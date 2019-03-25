@@ -134,7 +134,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("emails-sent/{id?}", Name = "EmailSentReferrals_Get")]
-        public async Task<IActionResult> EmailSentReferrals(int id)
+        public async Task<IActionResult> ReferralEmailSent(int id)
         {
             var opportunity = await _opportunityService.GetOpportunity(id);
 
