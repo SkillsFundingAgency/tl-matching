@@ -73,7 +73,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> RefineSearchResults(SearchParametersViewModel viewModel)
         {
             var isValidPostCode = await _providerService.IsValidPostCode(viewModel.Postcode);
-            if (!ModelState.IsValid || !isValidPostCode)
+
+            if (!isValidPostCode) ModelState.AddModelError("Postcode", "You must enter a valid postcode");
+
+            if (!ModelState.IsValid)
             {
                 return GetResultsView(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius, isValidPostCode);
             }
@@ -96,10 +99,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private IActionResult GetResultsView(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius, bool isValidPostCode = true)
         {
-            if (!isValidPostCode) ModelState.AddModelError("SearchParameters.Postcode", "You must enter a valid postcode");
-
-            if (string.IsNullOrEmpty(postCode)) ModelState.AddModelError("SearchParameters.Postcode", "You must enter a postcode");
-
             return View(nameof(Results), new SearchViewModel
             {
                 SearchParameters = new SearchParametersViewModel
