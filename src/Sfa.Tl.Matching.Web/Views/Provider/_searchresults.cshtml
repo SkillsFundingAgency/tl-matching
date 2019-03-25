@@ -15,7 +15,7 @@
 
 <p class="govuk-body">Choose who the employer wants to hear from</p>
 
-<form asp-controller="Provider" asp-action="CreateReferral">
+<form asp-controller="Provider" asp-action="ValidateIfAtLeastOneProviderIsSelectedfromSearchResult">
     <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden"/>
     <input asp-for="SearchParameters.SearchRadius" name="SearchRadius" type="hidden"/>
     <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden"/>

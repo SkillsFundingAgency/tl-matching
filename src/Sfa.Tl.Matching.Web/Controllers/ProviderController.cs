@@ -159,8 +159,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("provider-results-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "CreateReferral_Post")]
-        public async Task<IActionResult> CreateReferral(CreateReferralViewModel viewModel)
+        public async Task<IActionResult> ValidateIfAtLeastOneProviderIsSelectedfromSearchResult(CreateReferralViewModel viewModel)
         {
             if (viewModel.SelectedProvider.Any(p => p.IsSelected))
                 return RedirectToRoute("CreateReferral", viewModel);
