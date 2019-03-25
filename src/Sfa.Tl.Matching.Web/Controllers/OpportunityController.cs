@@ -126,9 +126,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return View(new ProvisionGapSentViewModel
             {
+                EmployerCrmRecord = opportunity.EmployerCrmId.ToString(),
                 EmployerContactName = opportunity.EmployerContact,
                 Postcode = opportunity.Postcode,
-                RouteName = opportunity.RouteName
+                RouteName = opportunity.RouteName,
             });
         }
 
@@ -140,6 +141,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return View(new EmailsSentViewModel
             {
+                EmployerCrmRecord = opportunity.EmployerCrmId.ToString(),
                 EmployerContactName = opportunity.EmployerContact,
                 EmployerBusinessName = opportunity.EmployerName
             });

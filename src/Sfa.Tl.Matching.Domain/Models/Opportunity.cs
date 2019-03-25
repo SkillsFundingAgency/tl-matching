@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
@@ -13,6 +14,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public int? Placements { get; set; }
         public int? SearchResultProviderCount { get; set; }
         public int? EmployerId { get; set; }
+        public Guid EmployerCrmId { get; set; }
         public string EmployerName { get; set; }
         public string EmployerContact { get; set; }
         public string EmployerContactEmail { get; set; }

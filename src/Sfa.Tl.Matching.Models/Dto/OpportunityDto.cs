@@ -17,6 +17,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public int? Placements { get; set; }
         public int? SearchResultProviderCount { get; set; }
         public int? EmployerId { get; set; }
+        public Guid EmployerCrmId { get; set; }
         public string EmployerName { get; set; }
         public string EmployerContact { get; set; }
         public string EmployerContactEmail { get; set; }

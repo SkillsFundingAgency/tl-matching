@@ -8,6 +8,7 @@
 	[PlacementsKnown] BIT NULL,
 	[Placements] INT NULL,
 	[EmployerId] INT NULL,
+	[EmployerCrmId] UNIQUEIDENTIFIER NULL,
 	[EmployerName] NVARCHAR(250) NULL, 
 	[EmployerContact] NVARCHAR(100) NULL,
 	[EmployerContactEmail] VARCHAR(320) NULL,

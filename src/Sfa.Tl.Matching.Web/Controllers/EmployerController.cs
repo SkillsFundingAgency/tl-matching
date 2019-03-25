@@ -65,6 +65,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             var dto = _mapper.Map<EmployerNameDto>(viewModel);
+            
+            dto.EmployerCrmId = employerDto.CrmId;
 
             await _opportunityService.UpdateOpportunity(dto);
 
