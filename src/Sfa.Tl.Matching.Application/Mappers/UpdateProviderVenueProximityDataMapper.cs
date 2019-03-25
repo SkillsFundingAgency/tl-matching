@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public IPoint GetLocation(string longitude, string latitude)
         {
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-            return geometryFactory.CreatePoint(new Coordinate(double.Parse(latitude), double.Parse(longitude)));
+            return geometryFactory.CreatePoint(new Coordinate(double.Parse(longitude), double.Parse(latitude)));
         }
     }
 }

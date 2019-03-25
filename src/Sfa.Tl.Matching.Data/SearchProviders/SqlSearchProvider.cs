@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                 throw new InvalidOperationException("Latitude and Longitude can not be null");
 
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-            var employerLocation = geometryFactory.CreatePoint(new Coordinate(double.Parse(dto.Latitude), double.Parse(dto.Longitude)));
+            var employerLocation = geometryFactory.CreatePoint(new Coordinate(double.Parse(dto.Longitude), double.Parse(dto.Latitude)));
 
             var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
 

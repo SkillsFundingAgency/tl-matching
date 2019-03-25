@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
             trackedEntity = _mapper.Map(dto, trackedEntity);
-
+            
             await _opportunityRepository.Update(trackedEntity);
         }
 
