@@ -5,7 +5,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -37,9 +36,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("find-providers", Name = "Providers_Get")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return await GetIndexViewAsync();
+            return GetIndexViewAsync();
         }
 
         [HttpPost]
@@ -48,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel.SelectedRouteId, viewModel.Postcode, SearchParametersViewModel.DefaultSearchRadius))
             {
-                return await GetIndexViewAsync(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius);
+                return GetIndexViewAsync(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius);
             }
 
             return RedirectToRoute("ProviderResults_Get", new SearchParametersViewModel
@@ -75,7 +74,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 return View(nameof(Results), new SearchViewModel
                 {
-                    SearchParameters = await GetSearchParametersViewModelAsync(viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius),
+                    SearchParameters = GetSearchParametersViewModelAsync(viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius),
                     SearchResults = new SearchResultsViewModel()
                 });
             }
@@ -83,9 +82,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("ProviderResults_Get", viewModel);
         }
 
-        private async Task<IActionResult> GetIndexViewAsync(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
+        private IActionResult GetIndexViewAsync(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
         {
-            return View(nameof(Index), await GetSearchParametersViewModelAsync(selectedRouteId, postCode?.Trim(), searchRadius));
+            return View(nameof(Index), GetSearchParametersViewModelAsync(selectedRouteId, postCode?.Trim(), searchRadius));
         }
 
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
@@ -105,15 +104,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 {
                     Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults)
                 },
-                SearchParameters = await GetSearchParametersViewModelAsync(viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius)
+                SearchParameters = GetSearchParametersViewModelAsync(viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius)
             };
 
             return resultsViewModel;
         }
 
-        private async Task<SearchParametersViewModel> GetSearchParametersViewModelAsync(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
+        private SearchParametersViewModel GetSearchParametersViewModelAsync(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
         {
-            var routes = await _routePathService.GetRoutes().OrderBy(r => r.Name).ToListAsync();
+            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
 
             return new SearchParametersViewModel
             {
@@ -128,7 +127,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var result = true;
 
-            var routes = await _routePathService.GetRoutes().OrderBy(r => r.Name).ToListAsync();
+            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
             if (selectedRouteId == null || routes.All(r => r.Id != selectedRouteId))
             {
                 ModelState.AddModelError("SelectedRouteId", "You must select a valid skill area");
