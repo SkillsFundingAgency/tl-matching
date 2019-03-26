@@ -5,6 +5,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using MockQueryable.NSubstitute;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -22,11 +23,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         public When_Provider_Controller_Index_Post_Is_Called()
         {
             var routes = new List<Route>
-                {
-                    new Route { Id = 1, Name = "Route 1" },
-                    new Route { Id = 2, Name = "Route 2" }
-                }
-                .AsQueryable();
+            {
+                new Route { Id = 1, Name = "Route 1" },
+                new Route { Id = 2, Name = "Route 2" }
+            }
+            .AsQueryable();
 
             var logger = Substitute.For<ILogger<ProviderController>>();
 

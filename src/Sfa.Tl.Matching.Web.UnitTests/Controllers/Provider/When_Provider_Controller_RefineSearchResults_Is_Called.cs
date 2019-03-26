@@ -1,9 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -16,6 +19,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
         public When_Provider_Controller_RefineSearchResults_Is_Called()
         {
+            var routes = new List<Route>
+            {
+                new Route {Id = 1, Name = "Route 1"}
+            }.AsQueryable();
+            
             var logger = Substitute.For<ILogger<ProviderController>>();
             var mapper = Substitute.For<IMapper>();
 
@@ -23,10 +31,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             providerService.IsValidPostCode(Arg.Any<string>()).Returns(true);
 
             var routePathService = Substitute.For<IRoutePathService>();
+            routePathService.GetRoutes().Returns(routes);
 
             var providerController = new ProviderController(logger, mapper, routePathService, providerService);
 
-            var viewModel = new SearchParametersViewModel();
+            var viewModel = new SearchParametersViewModel
+            {
+                Postcode = "CV12WT",
+                SelectedRouteId = 1,
+                SearchRadius = 10
+            };
 
             _result = providerController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
         }

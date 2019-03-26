@@ -12,25 +12,26 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider
 {
-    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters : IDisposable
+    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_Provider_Is_Disabled_For_Selected_Route : IDisposable
     {
         private readonly IEnumerable<ProviderVenueSearchResultDto> _results;
         private readonly MatchingDbContext _dbContext;
         private readonly Domain.Models.ProviderVenue _providerVenue;
 
-        public When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters()
+        public When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_Provider_Is_Disabled_For_Selected_Route()
         {
             var logger = Substitute.For<ILogger<Data.SearchProviders.SqlSearchProvider>>();
 
             _dbContext = new TestConfiguration().GetDbContext();
 
             _providerVenue = new ValidProviderVenueSearchBuilder().Build();
+            _providerVenue.Provider.Status = false;
             _dbContext.Add(_providerVenue);
             _dbContext.SaveChanges();
 
             var provider = new Data.SearchProviders.SqlSearchProvider(logger, _dbContext);
 
-            _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "CV1 2WT", SearchRadius = 5, SelectedRouteId = 7, Latitude = "52.400997", Longitude = "-1.508122" }).GetAwaiter().GetResult();
+            _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "MK1 1AD", SearchRadius = 5, SelectedRouteId = 7, Latitude = "52.010709", Longitude = "-0.736412" }).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -38,8 +39,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Should().NotBeNull();
 
         [Fact]
-        public void Then_Exactly_One_Provider_is_Found_Within_Search_Radius() =>
-            _results.Count().Should().Be(1);
+        public void Then_No_Provider_is_Found_Within_Search_Radius() =>
+            _results.Count().Should().Be(0);
 
         public void Dispose()
         {

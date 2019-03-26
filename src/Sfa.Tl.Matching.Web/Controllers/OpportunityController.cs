@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("placement-information/{id?}", Name = "PlacementInformationSave_Post")]
         public async Task<IActionResult> PlacementInformationSave(PlacementInformationSaveViewModel viewModel)
         {
-            Validate(viewModel);
+            await Validate(viewModel);
 
             if (!ModelState.IsValid)
                 return View(viewModel);
@@ -147,8 +147,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        private void Validate(PlacementInformationSaveViewModel viewModel)
+        private async Task Validate(PlacementInformationSaveViewModel viewModel)
         {
+            var opportunity = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
+            if (opportunity != null)
+            {
+                viewModel.Postcode = opportunity.Postcode;
+                viewModel.SearchRadius = opportunity.SearchRadius;
+                viewModel.RouteId = opportunity.RouteId;
+            }
+
             if (!viewModel.PlacementsKnown.HasValue || !viewModel.PlacementsKnown.Value) return;
             if (!viewModel.Placements.HasValue)
                 ModelState.AddModelError(nameof(viewModel.Placements), "You must estimate how many placements the employer wants at this location");
