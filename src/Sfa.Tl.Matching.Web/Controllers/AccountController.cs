@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     Response.Cookies.Delete(cookie);
                 }
 
-                return RedirectToAction("InvalidRole", "Home");
+                return RedirectToAction("FailedLogin", "Home");
             }
 
             return RedirectToAction("Start", "Provider");

@@ -119,6 +119,7 @@ namespace Sfa.Tl.Matching.Web
 
             app.UseMvcWithDefaultRoute();
             app.UseCookiePolicy();
+            app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
         }
 
         private void AddAuthentication(IServiceCollection services)
@@ -138,7 +139,7 @@ namespace Sfa.Tl.Matching.Web
             {
                 options.Cookie.Name = "qa-auth-cookie";
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.AccessDeniedPath = "/Error/403";
+                options.AccessDeniedPath = "/Home/Error/403";
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
             });
