@@ -155,7 +155,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var isPostcodeValidation = await _providerService.IsValidPostCode(postCode);
             if (string.IsNullOrWhiteSpace(postCode) || !isPostcodeValidation)
             {
-                ModelState.AddModelError("Postcode", "You must enter a valid postcode");
+                ModelState.AddModelError("Postcode", "You must enter a real postcode");
                 result = false;
             }
 
