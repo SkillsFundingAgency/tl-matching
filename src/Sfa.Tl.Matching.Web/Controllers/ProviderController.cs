@@ -82,6 +82,24 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("ProviderResults_Get", viewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ValidateProviderSearchResult(CreateReferralViewModel viewModel)
+        {
+            if (viewModel.SelectedProvider.Any(p => p.IsSelected))
+                return RedirectToRoute("CreateReferral", viewModel);
+
+            ModelState.AddModelError("SearchResults.Results[0].IsSelected", "You must select at least one provider");
+
+            var searchViewModel = await GetSearchResultsAsync(new SearchParametersViewModel
+            {
+                Postcode = viewModel.Postcode,
+                SelectedRouteId = viewModel.SelectedRouteId,
+                SearchRadius = viewModel.SearchRadius
+            });
+
+            return View(nameof(Results), searchViewModel);
+        }
+
         private IActionResult GetIndexViewAsync(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
         {
             return View(nameof(Index), GetSearchParametersViewModelAsync(selectedRouteId, postCode?.Trim(), searchRadius));
@@ -141,7 +159,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 result = false;
             }
 
-            if(searchRadius == null || searchRadius < 5 || searchRadius > 25)
+            if (searchRadius == null || searchRadius < 5 || searchRadius > 25)
             {
                 ModelState.AddModelError("SearchRadius", "You must select a valid SearchRadius");
                 result = false;
