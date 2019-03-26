@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetTopologySuite;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
@@ -44,7 +43,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                 join qualificationRoutePathMapping in _matchingDbContext.QualificationRoutePathMapping on providerQualification.QualificationId equals qualificationRoutePathMapping.QualificationId
                                 join path in _matchingDbContext.Path on qualificationRoutePathMapping.PathId equals path.Id
                                 orderby providerVenue.Location.Distance(employerLocation)
-                                where path.RouteId == dto.SelectedRouteId && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters
+                                where path.RouteId == dto.SelectedRouteId && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters && provider.Status
                                 select new
                                 {
                                     ProviderVenueId = providerVenue.Id,

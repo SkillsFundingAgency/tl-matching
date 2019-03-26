@@ -2,7 +2,9 @@
 @model Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel
 
 @if (!ViewData.ModelState.IsValid &&
-     ViewData.ModelState.GetValidationState("Postcode") == ModelValidationState.Invalid)
+     (ViewData.ModelState.GetValidationState("Postcode") == ModelValidationState.Invalid ||
+     ViewData.ModelState.GetValidationState("SelectedRouteId") == ModelValidationState.Invalid ||
+     ViewData.ModelState.GetValidationState("SearchRadius") == ModelValidationState.Invalid))
 {
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
         <h2 class="govuk-error-summary__title" id="error-summary-title">
@@ -11,6 +13,8 @@
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 <li><a sfa-validation-for="Postcode"></a></li>
+                <li><a sfa-validation-for="SelectedRouteId"></a></li>
+                <li><a sfa-validation-for="SearchRadius"></a></li>
             </ul>
         </div>
     </div>

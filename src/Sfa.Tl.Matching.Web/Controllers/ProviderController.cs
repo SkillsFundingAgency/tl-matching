@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -19,13 +19,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<ProviderController> _logger;
         private readonly IProviderService _providerService;
+        private readonly IOpportunityService _opportunityService;
         private readonly IRoutePathService _routePathService;
 
-        public ProviderController(ILogger<ProviderController> logger, IMapper mapper, IRoutePathService routePathService, IProviderService providerService)
+        public ProviderController(ILogger<ProviderController> logger, IMapper mapper, IRoutePathService routePathService, IProviderService providerService,
+            IOpportunityService opportunityService)
         {
             _logger = logger;
             _mapper = mapper;
             _providerService = providerService;
+            _opportunityService = opportunityService;
             _routePathService = routePathService;
         }
 
@@ -39,17 +42,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("find-providers", Name = "Providers_Get")]
         public IActionResult Index()
         {
-            return GetIndexView();
+            return GetIndexViewAsync();
         }
 
         [HttpPost]
         [Route("find-providers", Name = "Providers_Post")]
         public async Task<IActionResult> Index(SearchParametersViewModel viewModel)
         {
-            var isValidPostCode = await _providerService.IsValidPostCode(viewModel.Postcode);
-            if (!ModelState.IsValid || !isValidPostCode)
+            if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel.SelectedRouteId, viewModel.Postcode, SearchParametersViewModel.DefaultSearchRadius))
             {
-                return GetIndexView(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius, isValidPostCode);
+                return GetIndexViewAsync(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius);
             }
 
             return RedirectToRoute("ProviderResults_Get", new SearchParametersViewModel
@@ -63,7 +65,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("provider-results-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "ProviderResults_Get")]
         public async Task<IActionResult> Results(SearchParametersViewModel searchParametersViewModel)
         {
-            var resultsViewModel = await GetSearchResults(searchParametersViewModel);
+            var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
 
             return View(resultsViewModel);
         }
@@ -72,95 +74,108 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("provider-results", Name = "ProviderResults_Post")]
         public async Task<IActionResult> RefineSearchResults(SearchParametersViewModel viewModel)
         {
-            var isValidPostCode = await _providerService.IsValidPostCode(viewModel.Postcode);
-            if (!ModelState.IsValid || !isValidPostCode)
+            if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius))
             {
-                return GetResultsView(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius, isValidPostCode);
+                return View(nameof(Results), new SearchViewModel
+                {
+                    SearchParameters = GetSearchParametersViewModelAsync(viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius),
+                    SearchResults = new SearchResultsViewModel()
+                });
             }
 
             return RedirectToRoute("ProviderResults_Get", viewModel);
         }
 
-        private IActionResult GetIndexView(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius, bool isValidPostCode = true)
-        {
-            return View(nameof(Index), new SearchParametersViewModel
-            {
-                RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
-                SelectedRouteId = selectedRouteId,
-                SearchRadius = searchRadius,
-                Postcode = postCode?.Trim()
-            });
-        }
-
-        private IActionResult GetResultsView(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius, bool isValidPostCode = true)
-        {
-            if (!isValidPostCode) ModelState.AddModelError("Postcode", "You must enter a valid postcode");
-
-            return View(nameof(Results), new SearchViewModel
-            {
-                SearchParameters = new SearchParametersViewModel
-                {
-                    RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
-                    SelectedRouteId = selectedRouteId,
-                    SearchRadius = searchRadius,
-                    Postcode = postCode
-                },
-                SearchResults = new SearchResultsViewModel()
-            });
-        }
-
-        private IOrderedQueryable<Route> GetRoutes()
-        {
-            return _routePathService.GetRoutes().OrderBy(r => r.Name);
-        }
-
-        private async Task<SearchViewModel> GetSearchResults(SearchParametersViewModel viewModel)
-        {
-            _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
-
-            var searchViewModel = await SearchProviders(viewModel.Postcode, viewModel.SelectedRouteId, viewModel.SearchRadius);
-            
-            return searchViewModel;
-        }
-
-        private async Task<SearchViewModel> SearchProviders(string postcode, int? routeId, int searchRadius)
-        {
-            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto
-            {
-                Postcode = postcode,
-                SelectedRouteId = routeId,
-                SearchRadius = searchRadius
-            });
-
-            var viewModel = new SearchViewModel
-            {
-                SearchParameters = new SearchParametersViewModel
-                {
-                    SearchRadius = searchRadius,
-                    Postcode = postcode,
-                    SelectedRouteId = routeId,
-                    RoutesSelectList = _mapper.Map<SelectListItem[]>(GetRoutes()),
-                },
-                SearchResults = new SearchResultsViewModel
-                {
-                    Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults)
-                }
-            };
-
-            return viewModel;
-        }
-
         [HttpPost]
-        public async Task<IActionResult> ValidateIfAtLeastOneProviderIsSelectedfromSearchResult(CreateReferralViewModel viewModel)
+        public async Task<IActionResult> ValidateProviderSearchResult(CreateReferralViewModel viewModel)
         {
             if (viewModel.SelectedProvider.Any(p => p.IsSelected))
-                return RedirectToRoute("CreateReferral", viewModel);
+            {
+                var dto = _mapper.Map<OpportunityDto>(viewModel);
+
+                var id = await _opportunityService.CreateOpportunity(dto);
+
+                return RedirectToRoute("PlacementInformationSave_Get", new { id });
+            }
 
             ModelState.AddModelError("SearchResults.Results[0].IsSelected", "You must select at least one provider");
 
-            var searchViewModel = await SearchProviders(viewModel.Postcode, viewModel.SelectedRouteId, viewModel.SearchRadius);
-            
+            var searchViewModel = await GetSearchResultsAsync(new SearchParametersViewModel
+            {
+                Postcode = viewModel.Postcode,
+                SelectedRouteId = viewModel.SelectedRouteId,
+                SearchRadius = viewModel.SearchRadius
+            });
+
             return View(nameof(Results), searchViewModel);
+        }
+
+        private IActionResult GetIndexViewAsync(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
+        {
+            return View(nameof(Index), GetSearchParametersViewModelAsync(selectedRouteId, postCode?.Trim(), searchRadius));
+        }
+
+        private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
+        {
+            _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
+
+            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto
+            {
+                Postcode = viewModel.Postcode,
+                SelectedRouteId = viewModel.SelectedRouteId,
+                SearchRadius = viewModel.SearchRadius
+            });
+
+            var resultsViewModel = new SearchViewModel
+            {
+                SearchResults = new SearchResultsViewModel
+                {
+                    Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults)
+                },
+                SearchParameters = GetSearchParametersViewModelAsync(viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius)
+            };
+
+            return resultsViewModel;
+        }
+
+        private SearchParametersViewModel GetSearchParametersViewModelAsync(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
+        {
+            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
+
+            return new SearchParametersViewModel
+            {
+                RoutesSelectList = _mapper.Map<SelectListItem[]>(routes),
+                SelectedRouteId = selectedRouteId,
+                SearchRadius = searchRadius != 0 ? searchRadius : SearchParametersViewModel.DefaultSearchRadius,
+                Postcode = postCode?.Trim()
+            };
+        }
+
+        private async Task<bool> IsSearchParametersValidAsync(int? selectedRouteId, string postCode, int? searchRadius)
+        {
+            var result = true;
+
+            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
+            if (selectedRouteId == null || routes.All(r => r.Id != selectedRouteId))
+            {
+                ModelState.AddModelError("SelectedRouteId", "You must select a valid skill area");
+                result = false;
+            }
+
+            var isPostcodeValidation = await _providerService.IsValidPostCode(postCode);
+            if (string.IsNullOrWhiteSpace(postCode) || !isPostcodeValidation)
+            {
+                ModelState.AddModelError("Postcode", "You must enter a valid postcode");
+                result = false;
+            }
+
+            if (searchRadius == null || searchRadius < 5 || searchRadius > 25)
+            {
+                ModelState.AddModelError("SearchRadius", "You must select a valid SearchRadius");
+                result = false;
+            }
+
+            return result;
         }
     }
 }
