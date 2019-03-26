@@ -39,6 +39,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
             CreateMap<CheckAnswersReferralViewModel, CheckAnswersDto>()
                 .ForMember(m => m.OpportunityId,
                     o => o.MapFrom(s => s.OpportunityId))
+                .ForMember(m => m.Postcode,
+                    o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.ConfirmationSelected,
                     o => o.MapFrom(s => s.ConfirmationSelected))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<CheckAnswersReferralViewModel, CheckAnswersDto>>())
