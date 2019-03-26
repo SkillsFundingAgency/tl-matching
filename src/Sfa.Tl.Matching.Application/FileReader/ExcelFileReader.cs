@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
         private readonly IDataParser<TDto> _dataParser;
         private readonly IValidator<TImportDto> _validator;
         private readonly IRepository<FunctionLog> _functionLogRepository;
-        private List<FunctionLog> _validationErros = new List<FunctionLog>();
+        
         public ExcelFileReader(
             ILogger<ExcelFileReader<TImportDto, TDto>> logger,
             IDataParser<TDto> dataParser,
@@ -40,6 +40,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
         public async Task<IList<TDto>> ValidateAndParseFile(TImportDto fileImportDto)
         {
             var dtos = new List<TDto>();
+            var validationErrors = new List<FunctionLog>();
 
             using (var document = SpreadsheetDocument.Open(fileImportDto.FileDataStream, false))
             {
@@ -68,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     
                     if (!validationResult.IsValid)
                     {
-                        LogErrorsAndWarnings(startIndex, validationResult);
+                        LogErrorsAndWarnings(startIndex, validationResult, validationErrors);
 
                         startIndex++;
 
@@ -83,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                 }
             }
 
-            await _functionLogRepository.CreateMany(_validationErros);
+            await _functionLogRepository.CreateMany(validationErrors);
 
             return dtos;
         }
@@ -159,9 +160,9 @@ namespace Sfa.Tl.Matching.Application.FileReader
             return sb.ToString();
         }
 
-        private void LogErrorsAndWarnings(int rowIndex, ValidationResult validationResult)
+        private void LogErrorsAndWarnings(int rowIndex, ValidationResult validationResult, List<FunctionLog> validationErrors)
         {
-            _validationErros.AddRange(validationResult.Errors.Select(errorMessage => new FunctionLog
+            validationErrors.AddRange(validationResult.Errors.Select(errorMessage => new FunctionLog
             {
                 FunctionName = GetType().GetGenericArguments().ElementAt(0).Name.Replace("FileImportDto", string.Empty),
                 RowNumber = rowIndex,
