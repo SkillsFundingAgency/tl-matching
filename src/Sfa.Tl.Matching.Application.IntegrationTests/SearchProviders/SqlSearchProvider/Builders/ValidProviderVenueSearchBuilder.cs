@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         public Domain.Models.ProviderVenue Build()
         {
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-            var location = geometryFactory.CreatePoint(new Coordinate(double.Parse("52.400997"), double.Parse("-1.508122")));
+            var location = geometryFactory.CreatePoint(new Coordinate(double.Parse("-1.508122"), double.Parse("52.400997")));
 
             return new Domain.Models.ProviderVenue
             {
@@ -27,8 +27,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Source = "Test"
                 },
                 Postcode = "CV1 2WT",
-                Latitude = 52.400997m,
-                Longitude = -1.508122m,
+                Latitude = -1.508122m,
+                Longitude = 52.400997m,
                 Location = location,
                 Source = "Test",
                 ProviderQualification = new List<Domain.Models.ProviderQualification>
