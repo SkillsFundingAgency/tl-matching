@@ -12,8 +12,8 @@
    asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
    asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
    class="govuk-link">No suitable providers? Let us know</a>.
-
-<p class="govuk-body">Choose who the employer wants to hear from</p>
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+<p class="govuk-hint">Choose who the employer wants to hear from</p>
 
 <form asp-controller="Provider" asp-action="ValidateProviderSearchResult">
     <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden"/>

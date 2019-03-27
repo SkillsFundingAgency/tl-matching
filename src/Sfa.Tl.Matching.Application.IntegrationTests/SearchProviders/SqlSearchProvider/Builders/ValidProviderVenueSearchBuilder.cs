@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         public Domain.Models.ProviderVenue Build()
         {
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-            var location = geometryFactory.CreatePoint(new Coordinate(double.Parse("52.400997"), double.Parse("-1.508122")));
+            var location = geometryFactory.CreatePoint(new Coordinate(double.Parse("-1.508122"), double.Parse("52.400997")));
 
             return new Domain.Models.ProviderVenue
             {
@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 {
                     UkPrn = 10203040,
                     Name = "SQL Search Provider",
+                    Status = true,
                     PrimaryContact = "Test",
                     PrimaryContactEmail = "Test@test.com",
                     PrimaryContactPhone = "0123456789",

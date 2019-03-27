@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
         }
 
         [Fact]
-        public void Then_I_receive_a_ChallengeResult()
+        public void Then_I_Receive_A_ChallengeResult()
         {
             var result = _accountController.SignIn();
 

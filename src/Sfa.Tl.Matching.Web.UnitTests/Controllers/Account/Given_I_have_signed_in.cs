@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
         }
 
         [Fact]
-        public void And_I_do_not_have_correct_role_Then_redirect_to_InvalidRole_page()
+        public void And_I_Do_Not_Have_Correct_Role_Then_Redirect_To_FailedLogin_Page()
         {
             var controllerWithClaims = new ClaimsBuilder<AccountController>(_accountController)
                 .AddUserName("username")
@@ -30,11 +30,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
 
             var redirectResult = result as RedirectToActionResult;
             redirectResult?.ControllerName.Should().Be("Home");
-            redirectResult?.ActionName.Should().Be("InvalidRole");
+            redirectResult?.ActionName.Should().Be("FailedLogin");
         }
 
         [Fact]
-        public void And_I_do_not_have_correct_role_Then_redirect_to_search_start_page()
+        public void And_I_Do_Not_Have_Correct_Role_Then_Redirect_To_Search_Start_Page()
         {
             var controllerWithClaims = new ClaimsBuilder<AccountController>(_accountController)
                 .AddStandardUser()
