@@ -14,20 +14,17 @@ namespace Sfa.Tl.Matching.Application.Services
     public class OpportunityService : IOpportunityService
     {
         private readonly IMapper _mapper;
-        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IRepository<Opportunity> _opportunityRepository;
         private readonly IRepository<ProvisionGap> _provisionGapRepository;
         private readonly IRepository<Referral> _referralRepository;
 
         public OpportunityService(
             IMapper mapper,
-            IDateTimeProvider dateTimeProvider,
             IRepository<Opportunity> opportunityRepository,
             IRepository<ProvisionGap> provisionGapRepository,
             IRepository<Referral> referralRepository)
         {
             _mapper = mapper;
-            _dateTimeProvider = dateTimeProvider;
             _opportunityRepository = opportunityRepository;
             _provisionGapRepository = provisionGapRepository;
             _referralRepository = referralRepository;

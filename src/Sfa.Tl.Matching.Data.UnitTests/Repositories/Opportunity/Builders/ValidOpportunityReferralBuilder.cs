@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
+using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 {
@@ -36,8 +37,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn
             },
-            Referral = new List<Domain.Models.Referral>
-            { new Domain.Models.Referral
+            Referral = new List<Referral>
+            { new Referral
                 {
                     Id = 1,
                     OpportunityId = 1,
@@ -129,7 +130,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                                 }
                             }
                         }
-                    },
+                    }
                 }
             }
         };

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -35,9 +36,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("referral-create", Name = "CreateReferral")]
-        public async Task<IActionResult> CreateReferral(CreateReferralViewModel viewModel)
+        public async Task<IActionResult> CreateReferral(string viewModel)
         {
-            var dto = _mapper.Map<OpportunityDto>(viewModel);
+
+            var createReferralViewModel = JsonConvert.DeserializeObject<CreateReferralViewModel>(viewModel);
+
+            var dto = _mapper.Map<OpportunityDto>(createReferralViewModel);
 
             var id = await _opportunityService.CreateOpportunity(dto);
 
@@ -129,7 +133,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 EmployerCrmRecord = opportunity.EmployerCrmId.ToString(),
                 EmployerContactName = opportunity.EmployerContact,
                 Postcode = opportunity.Postcode,
-                RouteName = opportunity.RouteName,
+                RouteName = opportunity.RouteName
             });
         }
 

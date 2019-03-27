@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -20,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
-            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
+            
             var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
@@ -28,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
                 .Returns(OpportunityId);
 
-            var opportunityService = new OpportunityService(mapper, dateTimeProvider, opportunityRepository, provisionGapRepository, referralRepository);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, provisionGapRepository, referralRepository);
 
             var dto = new OpportunityDto
             {

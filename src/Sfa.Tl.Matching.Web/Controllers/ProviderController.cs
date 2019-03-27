@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -19,16 +19,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<ProviderController> _logger;
         private readonly IProviderService _providerService;
-        private readonly IOpportunityService _opportunityService;
         private readonly IRoutePathService _routePathService;
 
-        public ProviderController(ILogger<ProviderController> logger, IMapper mapper, IRoutePathService routePathService, IProviderService providerService,
-            IOpportunityService opportunityService)
+        public ProviderController(ILogger<ProviderController> logger, IMapper mapper, IRoutePathService routePathService, IProviderService providerService)
         {
             _logger = logger;
             _mapper = mapper;
             _providerService = providerService;
-            _opportunityService = opportunityService;
             _routePathService = routePathService;
         }
 
@@ -91,11 +88,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (viewModel.SelectedProvider.Any(p => p.IsSelected))
             {
-                var dto = _mapper.Map<OpportunityDto>(viewModel);
+                viewModel.SelectedProvider = viewModel.SelectedProvider.Where(p => p.IsSelected).ToArray();
 
-                var id = await _opportunityService.CreateOpportunity(dto);
+                var selectedProviders = JsonConvert.SerializeObject(viewModel);
 
-                return RedirectToRoute("PlacementInformationSave_Get", new { id });
+                return RedirectToRoute("CreateReferral", new { viewModel = selectedProviders });
             }
 
             ModelState.AddModelError("SearchResults.Results[0].IsSelected", "You must select at least one provider");
@@ -165,7 +162,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var isPostcodeValidation = await _providerService.IsValidPostCode(postCode);
             if (string.IsNullOrWhiteSpace(postCode) || !isPostcodeValidation)
             {
-                ModelState.AddModelError("Postcode", "You must enter a valid postcode");
+                ModelState.AddModelError("Postcode", "You must enter a real postcode");
                 result = false;
             }
 

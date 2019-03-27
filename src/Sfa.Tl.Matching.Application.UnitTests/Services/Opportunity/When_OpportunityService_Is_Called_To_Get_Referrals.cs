@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -17,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
     public class When_OpportunityService_Is_Called_To_Get_Referrals
     {
-        private readonly List<ReferralDto> referralDtos;
+        private readonly List<ReferralDto> _referralDtos;
         private readonly IRepository<Domain.Models.Referral> _referralRepository;
 
         private const int OpportunityId = 1;
@@ -26,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
-            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
+            
             var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
@@ -49,9 +48,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     }
                 }.AsQueryable());
 
-            var opportunityService = new OpportunityService(mapper, dateTimeProvider, opportunityRepository, provisionGapRepository, _referralRepository);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, provisionGapRepository, _referralRepository);
 
-            referralDtos = opportunityService.GetReferrals(OpportunityId);
+            _referralDtos = opportunityService.GetReferrals(OpportunityId);
         }
 
         [Fact]
@@ -63,19 +62,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_ViewModel_Count_Is_1()
         {
-            referralDtos.Count.Should().Be(1);
+            _referralDtos.Count.Should().Be(1);
         }
 
         [Fact]
         public void Then_Postcode_Is_Set()
         {
-            referralDtos[0].Postcode.Should().Be("AA1 1AA");
+            _referralDtos[0].Postcode.Should().Be("AA1 1AA");
         }
 
         [Fact]
         public void Then_Name_Is_Set()
         {
-            referralDtos[0].Name.Should().Be("Provider1");
+            _referralDtos[0].Name.Should().Be("Provider1");
         }
     }
 }

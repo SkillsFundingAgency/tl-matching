@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                     QualificationShortTitles = new List<string>
                     {
                         "Qualification 1",
-                        "Qualification 2",
+                        "Qualification 2"
                     }
                 }
             },

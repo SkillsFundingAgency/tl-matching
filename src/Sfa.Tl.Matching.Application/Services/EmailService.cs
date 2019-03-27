@@ -7,6 +7,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Types;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -69,7 +70,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private async Task SendEmailViaNotificationsApi(string recipient, string subject, string templateId,
             IDictionary<string, string> personalisationTokens, string replyToAddress)
         {
-            var email = new SFA.DAS.Notifications.Api.Types.Email
+            var email = new Email
             {
                 RecipientsAddress = recipient,
                 TemplateId = templateId,

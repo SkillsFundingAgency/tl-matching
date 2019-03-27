@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using AutoMapper;
-using NSubstitute;
 using Microsoft.Extensions.Logging;
+using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
@@ -197,16 +197,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
         {
-            var expectedProvidersList = "# Provider\r\n"
-                                        + "AA2 2AA\r\n"
-                                        + "Contact name: Provider Contact\r\n"
-                                        + "Telephone: 01777757777\r\n"
-                                        + "Email: primary.contact@provider.co.uk\r\n"
-                                        + "\r\n"
-                                        + "Has students learning: \r\n"
-                                        + "* Qualification 1\r\n"
-                                        + "* Qualification 2\r\n"
-                                        + "\r\n";
+            const string expectedProvidersList = "# Provider\r\n"
+                                                 + "AA2 2AA\r\n"
+                                                 + "Contact name: Provider Contact\r\n"
+                                                 + "Telephone: 01777757777\r\n"
+                                                 + "Email: primary.contact@provider.co.uk\r\n"
+                                                 + "\r\n"
+                                                 + "Has students learning: \r\n"
+                                                 + "* Qualification 1\r\n"
+                                                 + "* Qualification 2\r\n"
+                                                 + "\r\n";
             _emailService
                 .Received(1)
                 .SendEmail(Arg.Any<string>(),

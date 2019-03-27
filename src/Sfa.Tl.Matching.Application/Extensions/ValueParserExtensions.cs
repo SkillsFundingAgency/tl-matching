@@ -41,9 +41,9 @@ namespace Sfa.Tl.Matching.Application.Extensions
                     return true;
                 case No:
                     return false;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(value)} cannot be parsed ({nameof(ToBool)})");
             }
-
-            throw new InvalidOperationException($"{nameof(value)} cannot be parsed ({nameof(ToBool)})");
         }
 
         public static OfstedRating ToOfstedRating(this string value)
