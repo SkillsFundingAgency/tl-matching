@@ -28,8 +28,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Source = "Test"
                 },
                 Postcode = "CV1 2WT",
-                Latitude = -1.508122m,
-                Longitude = 52.400997m,
+                Latitude = 52.400997m,
+                Longitude = -1.508122m,
                 Location = location,
                 Source = "Test",
                 ProviderQualification = new List<Domain.Models.ProviderQualification>
