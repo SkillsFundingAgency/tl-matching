@@ -1,9 +1,9 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
 
 <h2 class="govuk-body">
-    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold">@Model.SearchResults.SearchResultProviderCount </span>results in <span class="govuk-!-font-weight-bold">
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount </span>results in <span class="govuk-!-font-weight-bold" id="tl-search-skillarea">
         @Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text
-    </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span>
+    </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span>
 </h2>
 
 <a asp-route="OpportunityCreate_Get"
@@ -11,7 +11,7 @@
    asp-route-Postcode="@Model.SearchParameters.Postcode"
    asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
    asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
-   class="govuk-link">No suitable providers? Let us know</a>.
+   class="govuk-link" id="tl-search-nosuitable">No suitable providers? Let us know</a>.
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <p class="govuk-hint">Choose who the employer wants to hear from</p>
 
@@ -54,5 +54,5 @@
         }
     </ol>
 
-    <button id="Continue" type="submit" class="govuk-button">Continue with selected providers</button>
+    <button id="tl-continue" type="submit" class="govuk-button">Continue with selected providers</button>
 </form>

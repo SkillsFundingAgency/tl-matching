@@ -5,7 +5,7 @@
 
 @section backButton{
     <a asp-controller="Provider" asp-action="Start" class="govuk-back-link">Back</a>
-    <a asp-controller="Provider" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3"> Finish and start again </a>
+    <a asp-controller="Provider" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Finish and start again </a>
 
 }
 
@@ -44,7 +44,7 @@
                 <input class="govuk-input govuk-input--width-5" asp-for="Postcode" type="text"
                        sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error">
             </div>
-            <button type="submit" class="govuk-button">Search</button>
+            <button type="submit" class="govuk-button" id="tl-search">Search</button>
         </form>
     </div>
 </div>

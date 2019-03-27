@@ -13,14 +13,14 @@
 
         <p class="govuk-body">We have also sent a confirmation email to the employer.</p>
         <div class="govuk-inset-text">
-            Remember to <a href="@Model.EmployerCrmRecord" target="_blank">update the employer’s CRM record (opens in a new window or tab)</a> with any new information.
+            Remember to <a href="@Model.EmployerCrmRecord" target="_blank" id="tl-crm-link">update the employer’s CRM record (opens in a new window or tab)</a> with any new information.
         </div>
 
         <h2 class="govuk-heading-m">What happens next</h2>
 
         <p class="govuk-body">We expect the provider will contact @Model.EmployerContactName within 2 to 3 working days. The provider will work with @Model.EmployerBusinessName to arrange the terms and details of each placement.</p>
 
-        <a asp-controller="Provider" asp-action="Start" class="govuk-button">Finish</a>
+        <a asp-controller="Provider" asp-action="Start" class="govuk-button" id="tl-finish">Finish</a>
 
     </div>
 </div>
