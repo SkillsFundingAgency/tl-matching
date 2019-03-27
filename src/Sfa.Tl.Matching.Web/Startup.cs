@@ -107,6 +107,7 @@ namespace Sfa.Tl.Matching.Web
                         .CustomSources("https://az416426.vo.msecnd.net/",
                                        "https://www.google-analytics.com/analytics.js",
                                        "https://www.googletagmanager.com/",
+                                       "https://tagmanager.google.com/",
                                        "https://www.smartsurvey.co.uk/")
                         .UnsafeInline();
                 }
