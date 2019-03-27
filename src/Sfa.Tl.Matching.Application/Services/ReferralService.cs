@@ -73,6 +73,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 sb.AppendLine($"Contact name: {providerReferral.ProviderPrimaryContact}");
                 sb.AppendLine($"Telephone: {providerReferral.ProviderPrimaryContactPhone}");
                 sb.AppendLine($"Email: {providerReferral.ProviderPrimaryContactEmail}");
+                sb.AppendLine("");
                 sb.AppendLine("Has students learning: ");
 
                 foreach (var qualificationShortTitle in providerReferral.QualificationShortTitles)
