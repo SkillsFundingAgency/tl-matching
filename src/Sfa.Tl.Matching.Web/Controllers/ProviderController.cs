@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -86,7 +87,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> ValidateProviderSearchResult(CreateReferralViewModel viewModel)
         {
             if (viewModel.SelectedProvider.Any(p => p.IsSelected))
-                return RedirectToRoute("CreateReferral", viewModel);
+            {
+                viewModel.SelectedProvider = viewModel.SelectedProvider.Where(p => p.IsSelected).ToArray();
+
+                var selectedProviders = JsonConvert.SerializeObject(viewModel);
+
+                return RedirectToRoute("CreateReferral", new { viewModel = selectedProviders });
+            }
 
             ModelState.AddModelError("SearchResults.Results[0].IsSelected", "You must select at least one provider");
 

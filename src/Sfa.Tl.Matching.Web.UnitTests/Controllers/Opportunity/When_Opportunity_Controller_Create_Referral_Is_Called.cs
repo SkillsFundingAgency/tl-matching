@@ -3,6 +3,7 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -58,14 +59,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.CreateReferral(new CreateReferralViewModel
+            var viewModel = new CreateReferralViewModel
             {
                 SearchResultProviderCount = 2,
                 SelectedRouteId = 1,
                 Postcode = "cv12wt",
                 SearchRadius = 10,
                 SelectedProvider = new[]
-                  {
+                {
                     new SelectedProviderViewModel
                     {
                         ProviderVenueId = 1,
@@ -79,7 +80,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                         IsSelected = true
                     }
                 }
-            }).GetAwaiter().GetResult();
+            };
+
+            var serializeObject = JsonConvert.SerializeObject(viewModel);
+
+            _result = controllerWithClaims.CreateReferral(serializeObject).GetAwaiter().GetResult();
         }
 
         [Fact]
