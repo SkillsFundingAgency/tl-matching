@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using NSubstitute;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
+using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Services;
@@ -37,15 +37,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, _logger);
 
-            var subject = "A test email";
-            var toAddress = "test@test.com";
-            var replyToAddress = "reply@test.com";
+            const string subject = "A test email";
+            const string toAddress = "test@test.com";
+            const string replyToAddress = "reply@test.com";
             var tokens = new Dictionary<string, string>
             {
                 { "contactname",  "name" }
             };
 
-            var templateName = "MissingTestTemplate";
+            const string templateName = "MissingTestTemplate";
 
             emailService.SendEmail(templateName, toAddress, subject, tokens, replyToAddress).GetAwaiter().GetResult();
         }
@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         [Fact]
         public void Then_EmailTemplateRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _emailTemplateRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.EmailTemplate, bool>>>());
+            _emailTemplateRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
         }
 
         [Fact]

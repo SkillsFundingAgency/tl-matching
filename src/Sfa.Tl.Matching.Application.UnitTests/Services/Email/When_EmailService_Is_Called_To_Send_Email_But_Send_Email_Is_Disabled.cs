@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using NSubstitute;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
+using NSubstitute;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -39,15 +39,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             var emailService = new EmailService(configuration, _notificationsApi, emailTemplateRepository, logger);
 
-            var subject = "A test email";
-            var toAddress = "test@test.com";
-            var replyToAddress = "reply@test.com";
+            const string subject = "A test email";
+            const string toAddress = "test@test.com";
+            const string replyToAddress = "reply@test.com";
             var tokens = new Dictionary<string, string>
             {
                 { "contactname",  "name" }
             };
 
-            var templateName = "TestTemplate";
+            const string templateName = "TestTemplate";
 
             emailService.SendEmail(templateName, toAddress, subject, tokens, replyToAddress).GetAwaiter().GetResult();
         }

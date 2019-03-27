@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                     ProviderVenueId = providerVenue.Id,
                                     ProviderName = provider.Name,
                                     Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
-                                    Postcode = providerVenue.Postcode,
+                                    providerVenue.Postcode
                                 }).Distinct().ToListAsync();
 
             var venueIds = result.Select(v => v.ProviderVenueId);
@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                            where path1.RouteId == dto.SelectedRouteId && venueIds.Any(venueId => venueId == providerQualification.ProviderVenueId)
                                            select new
                                            {
-                                               ProviderVenueId = providerQualification.ProviderVenueId,
+                                               providerQualification.ProviderVenueId,
                                                QualificationShortTitle = qualification.ShortTitle
                                            }).Distinct().ToListAsync();
 

@@ -33,9 +33,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var dateTimeProvider = new DateTimeProvider();
-
-            OpportunityService = new OpportunityService(mapper, dateTimeProvider, 
+            OpportunityService = new OpportunityService(mapper, 
                 opportunityRepository, provisionGapRepository, referralRepository);
         }
 

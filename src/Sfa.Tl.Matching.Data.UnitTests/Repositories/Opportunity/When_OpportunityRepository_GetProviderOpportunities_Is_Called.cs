@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 
         [Fact]
         public void Then_One_Item_Is_Returned() =>
-            _result.Count().Should().Be(1);
+            _result.Count.Should().Be(1);
 
         [Fact]
         public void Then_OpportunityId_Is_Returned() =>

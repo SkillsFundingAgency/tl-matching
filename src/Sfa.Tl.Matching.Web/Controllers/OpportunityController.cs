@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 EmployerCrmRecord = opportunity.EmployerCrmId.ToString(),
                 EmployerContactName = opportunity.EmployerContact,
                 Postcode = opportunity.Postcode,
-                RouteName = opportunity.RouteName,
+                RouteName = opportunity.RouteName
             });
         }
 

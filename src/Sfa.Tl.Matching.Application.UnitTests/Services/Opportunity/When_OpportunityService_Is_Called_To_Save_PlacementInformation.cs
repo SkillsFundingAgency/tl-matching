@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -18,7 +17,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const string JobTitle = "JobTitle";
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
-        private const string ModifiedBy = "ModifiedBy";
         private const int OpportunityId = 1;
         private const string Postcode = "AA1 1AA";
         private const int Distance = 1;
@@ -28,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
-            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
+            
             _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
@@ -37,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(opportunity);
 
-            var opportunityService = new OpportunityService(mapper, dateTimeProvider, _opportunityRepository, provisionGapRepository, referralRepository);
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, provisionGapRepository, referralRepository);
 
             var dto = new PlacementInformationSaveDto
             {
