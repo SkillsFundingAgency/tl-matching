@@ -13,7 +13,7 @@ var employer = (function () {
         onConfirm: setSelectedEmployerId
     });
 
-    $("#continue").click(function () {
+    $("#tl-continue").click(function () {
         var currentBusinessName = document.querySelector("#CompanyName").value;
         if (currentBusinessName.length < businessNameMinLength) {
             $("#SelectedEmployerId").val("");

@@ -5,7 +5,7 @@
 
 @section backButton{
     <a asp-controller="Employer" asp-action="Details" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
-    <a asp-controller="Provider" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3"> Finish and start again </a>
+    <a asp-controller="Provider" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Finish and start again </a>
 }
 
 <div class="govuk-grid-row">
@@ -33,7 +33,7 @@
                     </div>
                 </fieldset>
             </div>
-            <button type="submit" class="govuk-button">Confirm and send report</button>
+            <button type="submit" class="govuk-button" id="tl-confirm">Confirm and send report</button>
         </form>
     </div>
 </div>
