@@ -202,6 +202,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                         + "Contact name: Provider Contact\r\n"
                                         + "Telephone: 01777757777\r\n"
                                         + "Email: primary.contact@provider.co.uk\r\n"
+                                        + "\r\n"
                                         + "Has students learning: \r\n"
                                         + "* Qualification 1\r\n"
                                         + "* Qualification 2\r\n"
