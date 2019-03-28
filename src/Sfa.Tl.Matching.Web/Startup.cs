@@ -22,7 +22,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Web.Extensions.ApplicationBuilder;
+using Sfa.Tl.Matching.Web.Middleware;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
@@ -90,7 +90,7 @@ namespace Sfa.Tl.Matching.Web
             }
             else
             {
-                app.UseGlobalExceptionHandler(loggerFactory);
+                app.UseMiddleware<MatchingExceptionHandlerMiddleware>();
 
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();

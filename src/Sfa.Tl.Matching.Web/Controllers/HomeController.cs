@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -38,14 +39,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         public IActionResult Error()
         {
-            if (Request.Path.ToString().Contains("404"))
-                return RedirectToRoute("PageNotFound");
+            var requestPath = Request.Path.ToString();
 
-            if (Request.Path.ToString().Contains("403"))
-                return RedirectToRoute("FailedLogin");
+            if (requestPath.Contains(((int)HttpStatusCode.Forbidden).ToString()))
+                return RedirectToRoute(nameof(FailedLogin));
 
-            if (Request.Path.ToString().Contains("500"))
-                return RedirectToRoute("SystemError");
+            if (requestPath.Contains(((int)HttpStatusCode.NotFound).ToString()))
+                return RedirectToRoute(nameof(PageNotFound));
+
+            if (IsErrorStatusCode(requestPath))
+                return RedirectToRoute(nameof(SystemError));
 
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
@@ -58,6 +61,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        private static bool IsErrorStatusCode(string path)
+        {
+            if (path.Contains(((int)HttpStatusCode.InternalServerError).ToString()))
+                return true;
+
+            if (path.Contains(((int)HttpStatusCode.BadGateway).ToString()))
+                return true;
+
+            if (path.Contains(((int)HttpStatusCode.ServiceUnavailable).ToString()))
+                return true;
+
+            if (path.Contains(((int)HttpStatusCode.GatewayTimeout).ToString()))
+                return true;
+
+            return false;
         }
     }
 }
