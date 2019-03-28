@@ -6,13 +6,14 @@
     </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span>
 </h2>
 
-<a asp-route="OpportunityCreate_Get"
-   asp-route-SearchResultProviderCount="@Model.SearchResults.SearchResultProviderCount"
-   asp-route-Postcode="@Model.SearchParameters.Postcode"
-   asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
-   asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
-   class="govuk-link" id="tl-search-nosuitable">No suitable providers? Let us know</a>.
-<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+<p class="govuk-body">
+    <a asp-route="OpportunityCreate_Get"
+       asp-route-SearchResultProviderCount="@Model.SearchResults.SearchResultProviderCount"
+       asp-route-Postcode="@Model.SearchParameters.Postcode"
+       asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
+       asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
+       class="govuk-link" id="tl-search-nosuitable">No suitable providers? Let us know</a>.</p>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <p class="govuk-hint">Choose who the employer wants to hear from</p>
 
 <form asp-controller="Provider" asp-action="ValidateProviderSearchResult">
