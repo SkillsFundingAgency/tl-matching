@@ -30,6 +30,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View();
         }
 
+        [Route("system-error", Name = "SystemError")]
+        public IActionResult SystemError()
+        {
+            return View();
+        }
+
         public IActionResult Error()
         {
             if (Request.Path.ToString().Contains("404"))
@@ -37,6 +43,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (Request.Path.ToString().Contains("403"))
                 return RedirectToRoute("FailedLogin");
+
+            if (Request.Path.ToString().Contains("500"))
+                return RedirectToRoute("SystemError");
 
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
