@@ -71,12 +71,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("provider-results", Name = "ProviderResults_Post")]
         public async Task<IActionResult> RefineSearchResults(SearchParametersViewModel viewModel)
         {
-            if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel.SelectedRouteId, viewModel.Postcode, viewModel.SearchRadius))
+            if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel.SelectedRouteId, viewModel.Postcode,
+                    viewModel.SearchRadius))
             {
                 return View(nameof(Results), new SearchViewModel
                 {
                     SearchParameters = GetSearchParametersViewModelAsync(viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius),
-                    SearchResults = new SearchResultsViewModel()
+                    SearchResults = new SearchResultsViewModel(),
+                    IsValidSearch = false
                 });
             }
 

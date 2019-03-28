@@ -30,8 +30,7 @@
     </div>
 </div>
 
-@if (Model.SearchParameters.SelectedRouteId > 0 &&
-    !string.IsNullOrEmpty(Model.SearchParameters.Postcode))
+@if (Model.IsValidSearch)
 {
     <div class="govuk-grid-row govuk-!-margin-top-5">
         <div class="govuk-grid-column-two-thirds">
