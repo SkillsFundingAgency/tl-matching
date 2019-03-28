@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             using (var dbContext = InMemoryDbContext.Create())
             {
                 dbContext.Add(new ValidOpportunityReferralBuilder().Build());
+                dbContext.AddRange(new ValidOpportunityReferralBuilder().BuildQualificationRoutePathMapping());
                 dbContext.SaveChanges();
 
                 var repository = new OpportunityRepository(logger, dbContext);

@@ -35,10 +35,24 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                 Keywords = "Keywords",
                 Summary = "Summary",
                 CreatedBy = EntityCreationConstants.CreatedByUser,
-                CreatedOn = EntityCreationConstants.CreatedOn
+                CreatedOn = EntityCreationConstants.CreatedOn,
+                Path = new List<Domain.Models.Path>
+                {
+                    new Domain.Models.Path
+                    {
+                        Id = 1,
+                        Name = "Path1"
+                    },
+                    new Domain.Models.Path
+                    {
+                        Id = 2,
+                        Name = "Path2"
+                    }
+                }
             },
             Referral = new List<Referral>
-            { new Referral
+            {
+                new Referral
                 {
                     Id = 1,
                     OpportunityId = 1,
@@ -109,7 +123,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                                     Title = "Title 2",
                                     ShortTitle = "Duplicate Short Title",
                                     CreatedBy = EntityCreationConstants.CreatedByUser,
-                                    CreatedOn = EntityCreationConstants.CreatedOn
+                                    CreatedOn = EntityCreationConstants.CreatedOn,
                                 }
                             },
                             new Domain.Models.ProviderQualification
@@ -132,6 +146,52 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                         }
                     }
                 }
+            }
+        };
+
+        public IList<Domain.Models.QualificationRoutePathMapping> BuildQualificationRoutePathMapping() => new List<Domain.Models.QualificationRoutePathMapping>
+        {
+            new Domain.Models.QualificationRoutePathMapping
+            {
+                Id = 1,
+                PathId = 1,
+                Source = "Test",
+                QualificationId = 1,
+            },
+            new Domain.Models.QualificationRoutePathMapping
+            {
+                Id = 2,
+                PathId = 1,
+                Source = "Test",
+                QualificationId = 2,
+            },
+            new Domain.Models.QualificationRoutePathMapping
+            {
+                Id = 3,
+                PathId = 2,
+                Source = "Test",
+                QualificationId = 1,
+            },
+            new Domain.Models.QualificationRoutePathMapping
+            {
+                Id = 4,
+                PathId = 2,
+                Source = "Test",
+                QualificationId = 2,
+            },
+            new Domain.Models.QualificationRoutePathMapping
+            {
+                Id = 5,
+                PathId = 3,
+                Source = "Test",
+                QualificationId = 3,
+            },
+            new Domain.Models.QualificationRoutePathMapping
+            {
+                Id = 6,
+                PathId = 4,
+                Source = "Test",
+                QualificationId = 3,
             }
         };
     }
