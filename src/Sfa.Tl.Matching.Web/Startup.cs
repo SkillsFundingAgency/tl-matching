@@ -22,7 +22,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Web.Extensions.ApplicationBuilder;
+using Sfa.Tl.Matching.Web.Extensions.Filters;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
@@ -33,14 +33,18 @@ namespace Sfa.Tl.Matching.Web
     public class Startup
     {
         private readonly MatchingConfiguration _configuration;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration,
+            ILoggerFactory loggerFactory)
         {
             _configuration = ConfigurationLoader.Load(
                 configuration[Constants.EnvironmentNameConfigKey],
                 configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
                 configuration[Constants.VersionConfigKey],
                 configuration[Constants.ServiceNameConfigKey]);
+            _loggerFactory = loggerFactory;
+
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -67,6 +71,7 @@ namespace Sfa.Tl.Matching.Web
                     .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
                 config.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                config.Filters.Add(new CustomExceptionFilterAttribute(_loggerFactory));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -90,8 +95,6 @@ namespace Sfa.Tl.Matching.Web
             }
             else
             {
-                app.UseGlobalExceptionHandler(loggerFactory);
-
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
