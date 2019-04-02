@@ -5,11 +5,17 @@
     <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Type of placement</th>
-            <td class="govuk-table__cell">@Model.RouteName</td>
+            <td class="govuk-table__cell">
+                @Model.RouteName
+            </td>
+                <td class="govuk-table__cell"><a class="govuk-link tl-float-right" href="#">Change<span class="govuk-visually-hidden"> the type of placement</span></a></td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Postcode of workplace</th>
-            <td class="govuk-table__cell">@Model.Postcode</td>
+            <td class="govuk-table__cell">
+                @Model.Postcode
+            </td>
+            <td class="govuk-table__cell"><a class="govuk-link tl-float-right" href="#">Change<span class="govuk-visually-hidden"> the postcode of the workplace</span></a></td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Searched for providers within</th>
@@ -17,7 +23,10 @@
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Job role</th>
-            <td class="govuk-table__cell">@Model.JobTitle</td>
+            <td class="govuk-table__cell">
+                @Model.JobTitle
+            </td>
+            <td class="govuk-table__cell"><a class="govuk-link tl-float-right" href="#">Change<span class="govuk-visually-hidden"> the job role</span></a></td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Number of placements</th>
@@ -31,6 +40,7 @@
                     @:at least 1
                 }
             </td>
+            <td class="govuk-table__cell"><a class="govuk-link tl-float-right" href="#">Change<span class="govuk-visually-hidden"> the number of placements</span></a></td>
         </tr>
     </tbody>
 </table>
