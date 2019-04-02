@@ -2,6 +2,7 @@
 {
     public class CheckAnswersPlacementViewModel
     {
+        public int OpportunityId { get; set; }
         public string EmployerName { get; set; }
         public string RouteName { get; set; }
         public string Postcode { get; set; }
