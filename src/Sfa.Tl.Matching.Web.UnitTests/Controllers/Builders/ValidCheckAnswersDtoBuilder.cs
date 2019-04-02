@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
                 PlacementsKnown = true,
                 Placements = 2,
                 Postcode = "AA1 1AA",
-                EmployerName = "CompanyName",
+                EmployerName = "EmployerName",
                 EmployerContact = "EmployerContact",
                 RouteName = "RouteName",
                 ModifiedBy = "ModifiedBy"

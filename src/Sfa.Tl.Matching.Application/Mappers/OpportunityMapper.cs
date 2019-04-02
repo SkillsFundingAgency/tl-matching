@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<EmployerNameDto, Opportunity>()
                 .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.EmployerId))
                 .ForMember(m => m.EmployerCrmId, o => o.MapFrom(s => s.EmployerCrmId))
-                .ForMember(m => m.EmployerName, o => o.MapFrom(s => s.CompanyName))
+                .ForMember(m => m.EmployerName, o => o.MapFrom(s => s.EmployerName))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());

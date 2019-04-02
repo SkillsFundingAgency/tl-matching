@@ -9,6 +9,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int OpportunityId { get; set; }
 
         [Required(ErrorMessage = "You must find and choose an employer")]
-        public string CompanyName { get; set; }
+        public string EmployerName { get; set; }
     }
 }

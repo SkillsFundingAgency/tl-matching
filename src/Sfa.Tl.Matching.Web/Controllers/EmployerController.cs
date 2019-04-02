@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 if (employerDto == null)
                 {
-                    ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
+                    ModelState.AddModelError(nameof(viewModel.EmployerName), "You must find and choose an employer");
                 }
 
                 return View(viewModel);

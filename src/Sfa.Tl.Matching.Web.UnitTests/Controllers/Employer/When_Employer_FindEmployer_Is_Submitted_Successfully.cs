@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
     {
         private readonly IEmployerService _employerService;
         private readonly IOpportunityService _opportunityService;
-        private const string EmployerName = "CompanyName";
+        private const string EmployerName = "EmployerName";
         private const string ModifiedBy = "ModifiedBy";
         private readonly FindEmployerViewModel _viewModel = new FindEmployerViewModel();
 
@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_FindEmployer_Is_Submitted_Successfully()
         {
             _viewModel.OpportunityId = OpportunityId;
-            _viewModel.CompanyName = EmployerName;
+            _viewModel.EmployerName = EmployerName;
             _viewModel.SelectedEmployerId = 2;
 
             _employerService = Substitute.For<IEmployerService>();

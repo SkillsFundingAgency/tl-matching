@@ -3,7 +3,6 @@
     ViewData["Title"] = "Who is the employer?";
 }
 
-
 @section backButton{
     <a asp-route="PlacementInformationSave_Get" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
     <a asp-controller="Provider" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Finish and start again </a>
@@ -19,7 +18,7 @@
                 </h2>
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
-                        <li><a sfa-validation-for="CompanyName"></a></li>
+                        <li><a sfa-validation-for="EmployerName"></a></li>
                     </ul>
                 </div>
             </div>
@@ -27,9 +26,9 @@
         <form asp-action="FindEmployer" id="findEmployer" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
 
-            <div class="govuk-form-group" sfa-validation-for="CompanyName" sfa-validationerror-class="govuk-form-group--error">
+            <div class="govuk-form-group" sfa-validation-for="EmployerName" sfa-validationerror-class="govuk-form-group--error">
                 <h1 class="govuk-label-wrapper">
-                    <label class="govuk-label govuk-label--l" asp-for="CompanyName">
+                    <label class="govuk-label govuk-label--l" asp-for="EmployerName">
                         Who is the employer?
                     </label>
                     <span id="employer-name-hint" class="govuk-hint">
@@ -37,9 +36,9 @@
                     </span>
 
                 </h1>
-                <span class="govuk-error-message" asp-validation-for="CompanyName"></span>
+                <span class="govuk-error-message" asp-validation-for="EmployerName"></span>
 
-                <select id="CompanyName" name="CompanyName" class="govuk-input govuk-input" asp-for="CompanyName"></select>
+                <select id="EmployerName" name="EmployerName" class="govuk-input govuk-input" asp-for="EmployerName"></select>
 
                 <input asp-for="SelectedEmployerId" type="hidden" />
 

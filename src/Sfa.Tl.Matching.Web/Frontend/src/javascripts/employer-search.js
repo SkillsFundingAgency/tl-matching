@@ -6,15 +6,15 @@ var employer = (function () {
     accessibleAutocomplete.enhanceSelectElement({
         defaultValue: "",
         autoSelect: true,
-        selectElement: document.querySelector("#CompanyName"),
+        selectElement: document.querySelector("#EmployerName"),
         minLength: businessNameMinLength,
         source: search,
-        name: "CompanyName",
+        name: "EmployerName",
         onConfirm: setSelectedEmployerId
     });
 
     $("#tl-continue").click(function () {
-        var currentBusinessName = document.querySelector("#CompanyName").value;
+        var currentBusinessName = document.querySelector("#EmployerName").value;
         if (currentBusinessName.length < businessNameMinLength) {
             $("#SelectedEmployerId").val("");
             $("#findEmployer").submit();
