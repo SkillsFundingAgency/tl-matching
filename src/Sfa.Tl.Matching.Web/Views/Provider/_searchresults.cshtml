@@ -1,7 +1,7 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
 
 <h2 class="govuk-body">
-    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount </span>results in <span class="govuk-!-font-weight-bold" id="tl-search-skillarea">
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount </span>results in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">
         @Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text
     </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span>
 </h2>
