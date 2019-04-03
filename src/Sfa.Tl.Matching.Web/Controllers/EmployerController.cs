@@ -52,6 +52,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 await _employerService.GetEmployer(viewModel.SelectedEmployerId) :
                 null;
 
+            if (employerDto != null)
+                viewModel.EmployerName = employerDto.CompanyName;
+
             if (!ModelState.IsValid || employerDto == null)
             {
                 if (employerDto == null)

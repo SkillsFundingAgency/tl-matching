@@ -67,7 +67,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             viewModel.SelectedEmployerId.Should().Be(EmployerId);
         }
 
-
         [Fact]
         public void Then_EmployerName_Is_Populated()
         {

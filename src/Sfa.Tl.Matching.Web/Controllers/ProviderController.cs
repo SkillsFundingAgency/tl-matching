@@ -5,7 +5,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -17,13 +16,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class ProviderController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<ProviderController> _logger;
         private readonly IProviderService _providerService;
         private readonly IRoutePathService _routePathService;
 
-        public ProviderController(ILogger<ProviderController> logger, IMapper mapper, IRoutePathService routePathService, IProviderService providerService)
+        public ProviderController(IMapper mapper, IRoutePathService routePathService, IProviderService providerService)
         {
-            _logger = logger;
             _mapper = mapper;
             _providerService = providerService;
             _routePathService = routePathService;
@@ -116,8 +113,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
         {
-            _logger.LogInformation($"Searching for route id {viewModel.SelectedRouteId}, postcode {viewModel.Postcode}");
-
             var searchResults = await _providerService.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto
             {
                 Postcode = viewModel.Postcode,

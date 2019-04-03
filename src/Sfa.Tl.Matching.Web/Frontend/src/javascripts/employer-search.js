@@ -13,6 +13,8 @@ var employer = (function () {
         onConfirm: setSelectedEmployerId
     });
 
+    $("#EmployerName").val($("#employerNameHidden").val());
+
     $("#tl-continue").click(function () {
         var currentBusinessName = document.querySelector("#EmployerName").value;
         if (currentBusinessName.length < businessNameMinLength) {
@@ -63,10 +65,11 @@ var employer = (function () {
                     });
 
                     $("#employerNamesWithIds").val(employerNamesWithIds.join(","));
-                    $("#SelectedEmployerId").val("");
 
                     var filteredResults = employerNames.filter(e => e.toLowerCase().indexOf(query.toLowerCase()) !== -1);
                     populateResults(filteredResults);
+
+					$("#SelectedEmployerId").val("");
                 },
                 timeout: 5000,
                 error: function () {
