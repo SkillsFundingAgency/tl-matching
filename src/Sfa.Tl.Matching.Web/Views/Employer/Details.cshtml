@@ -41,6 +41,10 @@
                 <a asp-controller="Employer" asp-action="FindEmployer" asp-route-id="@Model.OpportunityId" class="govuk-link" id="tl-find-different">Find a different employer</a>
             </p>
 
+            <div class="govuk-inset-text">
+                Make sure the employer confirms the most accurate and up-to-date contact name, email and telephone number for industry placements.
+            </div>
+
             <div class="govuk-form-group" sfa-validation-for="EmployerContact" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" asp-for="EmployerContact">
                     Contact name for placements
