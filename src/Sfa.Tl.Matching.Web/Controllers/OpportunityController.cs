@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = _mapper.Map<PlacementInformationSaveDto>(viewModel);
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("EmployerFind_Get", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("LoadWhoIsEmployer", new { id = viewModel.OpportunityId });
         }
 
         [HttpGet]
