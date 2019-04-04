@@ -32,6 +32,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Services\FileImportService\DuplicateRows\Employer-DuplicateRows.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Services\FileImportService\DuplicateRows\Provider-DuplicateRows.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Services\FileImportService\DuplicateRows\ProviderQualification-DuplicateRows.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Services\FileImportService\DuplicateRows\ProviderVenue-DuplicateRows.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Services\FileImportService\DuplicateRows\QualificationRoutePathMapping-DuplicateRows.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="FileReader\ExcelFileReader\Employer-MissingMandatory.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
