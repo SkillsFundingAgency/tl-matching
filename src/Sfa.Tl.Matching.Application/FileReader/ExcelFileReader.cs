@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
 
                         var cellValue = GetCellValue(stringTablePart, cell);
 
-                        prop.SetValue(fileImportDto, cellValue);
+                        prop.SetValue(fileImportDto, cellValue.Trim());
                     }
 
                     var validationResult = await _validator.ValidateAsync(fileImportDto);

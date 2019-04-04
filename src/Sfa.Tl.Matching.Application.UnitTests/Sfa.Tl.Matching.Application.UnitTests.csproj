@@ -35,10 +35,25 @@
     <None Update="FileReader\ExcelFileReader\Employer-MissingMandatory.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="FileReader\ExcelFileReader\Trim\Employer-Trim.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="FileReader\ExcelFileReader\TitleCase\Employer-TitleCase.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="FileReader\ExcelFileReader\Employer-Simple.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FileReader\ExcelFileReader\Trim\Provider-Trim.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FileReader\ExcelFileReader\Trim\ProviderQualification-Trim.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FileReader\ExcelFileReader\Trim\ProviderVenue-Trim.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FileReader\ExcelFileReader\Trim\QualificationRoutePathMapping-Trim.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
