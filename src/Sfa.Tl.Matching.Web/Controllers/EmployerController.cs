@@ -52,9 +52,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 await _employerService.GetEmployer(viewModel.SelectedEmployerId) :
                 null;
 
-            if (employerDto != null)
-                viewModel.EmployerName = employerDto.CompanyName;
-
             if (!ModelState.IsValid || employerDto == null)
             {
                 if (employerDto == null)
@@ -66,8 +63,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             var dto = _mapper.Map<EmployerNameDto>(viewModel);
-            
             dto.EmployerCrmId = employerDto.CrmId;
+            dto.EmployerName = employerDto.CompanyName;
+            dto.EmployerContact = employerDto.PrimaryContact;
+            dto.EmployerContactEmail = employerDto.Email;
+            dto.EmployerContactPhone = employerDto.Phone;
 
             await _opportunityService.UpdateOpportunity(dto);
 

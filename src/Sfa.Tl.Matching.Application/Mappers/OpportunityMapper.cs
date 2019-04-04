@@ -38,6 +38,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.EmployerId))
                 .ForMember(m => m.EmployerCrmId, o => o.MapFrom(s => s.EmployerCrmId))
                 .ForMember(m => m.EmployerName, o => o.MapFrom(s => s.EmployerName))
+                .ForMember(dest => dest.EmployerContact, opt => opt.Condition(src => src.HasChanged))
+                .ForMember(dest => dest.EmployerContactEmail, opt => opt.Condition(src => src.HasChanged))
+                .ForMember(dest => dest.EmployerContactPhone, opt => opt.Condition(src => src.HasChanged))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
@@ -85,8 +88,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
                 .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 .ForMember(m => m.Placements,
-                    opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ? 
-                        src.Placements : 1))
+                    opt => opt.MapFrom(s => s.PlacementsKnown.HasValue && s.PlacementsKnown.Value ? 
+                        s.Placements : 1))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
