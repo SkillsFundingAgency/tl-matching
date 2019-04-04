@@ -8,14 +8,28 @@
             <td class="govuk-table__cell">
                 @Model.RouteName
             </td>
-                <td class="govuk-table__cell"><a class="govuk-link tl-float-right" href="#">Change<span class="govuk-visually-hidden"> the type of placement</span></a></td>
+            <td class="govuk-table__cell">
+                <a asp-controller="Provider" asp-action="Results" 
+                   asp-route-opportunityId="@Model.OpportunityId" 
+                   asp-route-searchRadius="@Model.SearchRadius" 
+                   asp-route-postcode="@Model.Postcode" 
+                   asp-route-selectedRouteId="@Model.RouteId" 
+                   class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the type of placement</span></a>
+            </td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Postcode of workplace</th>
             <td class="govuk-table__cell">
                 @Model.Postcode
             </td>
-            <td class="govuk-table__cell"><a class="govuk-link tl-float-right" href="#">Change<span class="govuk-visually-hidden"> the postcode of the workplace</span></a></td>
+            <td class="govuk-table__cell">
+                <a asp-controller="Provider" asp-action="Results" 
+                   asp-route-opportunityId="@Model.OpportunityId" 
+                   asp-route-searchRadius="@Model.SearchRadius" 
+                   asp-route-postcode="@Model.Postcode" 
+                   asp-route-selectedRouteId="@Model.RouteId" 
+                   class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the postcode of the workplace</span></a>
+            </td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Searched for providers within</th>
