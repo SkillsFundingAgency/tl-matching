@@ -52,7 +52,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 SelectedRouteId = viewModel.SelectedRouteId,
                 Postcode = viewModel.Postcode,
-                SearchRadius = SearchParametersViewModel.DefaultSearchRadius
+                SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
+                OpportunityId = viewModel.OpportunityId
             });
         }
 
@@ -73,7 +74,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 return View(nameof(Results), new SearchViewModel
                 {
-                    SearchParameters = GetSearchParametersViewModelAsync(viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius),
+                    SearchParameters = GetSearchParametersViewModelAsync(viewModel.OpportunityId, viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius),
                     SearchResults = new SearchResultsViewModel(),
                     IsValidSearch = false
                 });
@@ -108,7 +109,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private IActionResult GetIndexViewAsync(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
         {
-            return View(nameof(Index), GetSearchParametersViewModelAsync(selectedRouteId, postCode?.Trim(), searchRadius));
+            return View(nameof(Index), GetSearchParametersViewModelAsync(0, selectedRouteId, postCode?.Trim(), searchRadius));
         }
 
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
@@ -126,13 +127,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 {
                     Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults)
                 },
-                SearchParameters = GetSearchParametersViewModelAsync(viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius)
+                SearchParameters = GetSearchParametersViewModelAsync(viewModel.OpportunityId, viewModel.SelectedRouteId, viewModel.Postcode?.Trim(), viewModel.SearchRadius)
             };
 
             return resultsViewModel;
         }
 
-        private SearchParametersViewModel GetSearchParametersViewModelAsync(int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
+        private SearchParametersViewModel GetSearchParametersViewModelAsync(int opportunityId, int? selectedRouteId = null, string postCode = null, int searchRadius = SearchParametersViewModel.DefaultSearchRadius)
         {
             var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
 
@@ -141,7 +142,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 RoutesSelectList = _mapper.Map<SelectListItem[]>(routes),
                 SelectedRouteId = selectedRouteId,
                 SearchRadius = searchRadius != 0 ? searchRadius : SearchParametersViewModel.DefaultSearchRadius,
-                Postcode = postCode?.Trim()
+                Postcode = postCode?.Trim(),
+                OpportunityId = opportunityId
             };
         }
 

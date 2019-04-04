@@ -13,10 +13,20 @@
 </ul>
 <p class="govuk-body">
     If neither of these work,
+    @if (Model.SearchParameters.OpportunityId > 0)
+    {
+    <a asp-route="PlacementInformationSave_Get"
+       asp-route-id="@Model.SearchParameters.OpportunityId"
+       class="govuk-link">tell us that there are no suitable providers</a>
+    }
+    else
+    {
     <a asp-route="OpportunityCreate_Get"
        asp-route-SearchResultProviderCount="@Model.SearchResults.SearchResultProviderCount"
        asp-route-Postcode="@Model.SearchParameters.Postcode"
        asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
        asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
-       class="govuk-link">tell us that there are no suitable providers</a>.
+       class="govuk-link">tell us that there are no suitable providers</a>
+    }
+    .
 </p>
