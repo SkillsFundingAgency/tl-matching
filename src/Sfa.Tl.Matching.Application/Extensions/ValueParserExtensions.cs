@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Humanizer;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -8,6 +9,27 @@ namespace Sfa.Tl.Matching.Application.Extensions
     {
         private const string Yes = "yes";
         private const string No = "no";
+
+        //public static string FirstLetterToUpperCase(this string value)
+        //{
+        //    if (string.IsNullOrEmpty(value))
+        //        return string.Empty;
+
+        //    var charArray = value.ToCharArray();
+        //    charArray[0] = char.ToUpper(charArray[0]);
+        //    return new string(charArray);
+        //}
+
+        /// <summary>
+        /// The TextInfo.ToTitleCase ignores ALL CAPS as special case because of that ToLowerInvariant is required
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToTitleCase(this string value)
+        {
+            return string.IsNullOrEmpty(value) ? string.Empty : 
+                CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLowerInvariant());
+        }
 
         public static int ToInt(this string value)
         {
@@ -75,7 +97,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
                 return false;
             }
         }
-        
+
         public static bool IsAupaStatus(this string value)
         {
             try
@@ -88,7 +110,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
                 return false;
             }
         }
-        
+
         public static bool IsCompanyType(this string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return true;

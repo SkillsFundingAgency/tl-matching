@@ -5,8 +5,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Builders
     public class ValidEmployerFileImportDtoBuilder
     {
         public const string CrmId = "7FBD4621-CEAF-4DFA-B8D6-E98C0567CD27";
-        public const string CompanyName = "CompanyName";
-        public const string AlsoKnownAs = "AlsoKnownAs";
+        public const string Companyname = "Companyname";
+        public const string Alsoknownas = "Alsoknownas";
         public const string Aupa = "Active";
         public const string CompanyType = "Employer";
         public const string PrimaryContact = "PrimaryContact";
@@ -19,8 +19,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Builders
         public EmployerFileImportDto Build() => new EmployerFileImportDto
         {
             CrmId = CrmId,
-            CompanyName = CompanyName,
-            AlsoKnownAs = AlsoKnownAs,
+            CompanyName = Companyname,
+            AlsoKnownAs = Alsoknownas,
             Aupa = Aupa,
             CompanyType = CompanyType,
             PrimaryContact = PrimaryContact,

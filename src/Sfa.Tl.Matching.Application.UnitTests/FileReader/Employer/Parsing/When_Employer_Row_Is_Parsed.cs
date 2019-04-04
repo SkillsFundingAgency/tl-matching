@@ -28,11 +28,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Parsing
 
         [Fact]
         public void Then_First_ParseResult_CompanyName_Matches_Input() =>
-            _firstEmployerDto.CompanyName.Should().Be(ValidEmployerFileImportDtoBuilder.CompanyName);
+            _firstEmployerDto.CompanyName.Should().Be(ValidEmployerFileImportDtoBuilder.Companyname);
 
         [Fact]
         public void Then_First_ParseResult_AlsoKnownAs_Matches_Input() =>
-            _firstEmployerDto.AlsoKnownAs.Should().Be(ValidEmployerFileImportDtoBuilder.AlsoKnownAs);
+            _firstEmployerDto.AlsoKnownAs.Should().Be(ValidEmployerFileImportDtoBuilder.Alsoknownas);
 
         [Fact]
         public void Then_First_ParseResult_Aupa_Matches_Input() =>
