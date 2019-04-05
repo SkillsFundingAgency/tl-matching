@@ -10,12 +10,12 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
         public IEnumerable<EmployerDto> Parse(FileImportDto fileImportDto)
         {
             if (!(fileImportDto is EmployerFileImportDto data)) return null;
-
+            
             var employerDto = new EmployerDto
             {
                 CrmId = data.CrmId.ToGuid(),
-                CompanyName = data.CompanyName,
-                AlsoKnownAs = data.AlsoKnownAs,
+                CompanyName =  data.CompanyName.ToTitleCase(),
+                AlsoKnownAs = data.AlsoKnownAs.ToTitleCase(),
                 Aupa = data.Aupa,
                 CompanyType = data.CompanyType,
                 PrimaryContact = data.PrimaryContact,

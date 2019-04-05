@@ -1,6 +1,7 @@
 trigger:
 - master
 - feature/*
+- bugs/*
 
 workspace:
     clean: all

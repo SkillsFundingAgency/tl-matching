@@ -9,14 +9,13 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 {
-    public class When_ProviderVenueService_Is_Called_To_Import_ProviderVenues
+    public class When_Import_Is_Called_To_Import_ProviderVenues
     {
         private readonly ProviderVenueFileImportDto _fileImportDto;
         private readonly IList<ProviderVenueDto> _fileReaderResults;
@@ -25,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         private readonly int _result;
         private readonly IDataProcessor<Domain.Models.ProviderVenue> _dataProcessor;
 
-        public When_ProviderVenueService_Is_Called_To_Import_ProviderVenues()
+        public When_Import_Is_Called_To_Import_ProviderVenues()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
@@ -47,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 FileDataStream = new MemoryStream()
             };
 
-            _fileReaderResults = new ValidProviderVenueDtoListBuilder(2).Build();
+            _fileReaderResults = Build(2);
 
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(Task.FromResult(_fileReaderResults));
@@ -92,6 +91,24 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         public void Then_The_Expected_Number_Of_Created_Records_Is_Returned()
         {
             _fileReaderResults.Count.Should().Be(_result);
+        }
+
+        public IList<ProviderVenueDto> Build(int numberOfItems)
+        {
+            var providerVenueDtos = new List<ProviderVenueDto>();
+
+            for (var i = 0; i < numberOfItems; i++)
+            {
+                providerVenueDtos.Add(new ProviderVenueDto
+                {
+                    ProviderId = 10000546 + i,
+                    Postcode = "AA1 1AA",
+                    Source = "PMF_1018",
+                    CreatedBy = "Test"
+                });
+            }
+
+            return providerVenueDtos;
         }
     }
 }
