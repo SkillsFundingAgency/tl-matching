@@ -1,48 +1,16 @@
 "use strict";
-
+var Searchresult = null;
 var employer = (function () {
-    var businessNameMinLength = 2;
+    var queryMinLength = 2;
 
     accessibleAutocomplete.enhanceSelectElement({
         defaultValue: "",
         autoSelect: true,
         selectElement: document.querySelector("#CompanyName"),
-        minLength: businessNameMinLength,
+        minLength: queryMinLength,
         source: search,
         name: "CompanyName",
         onConfirm: setSelectedEmployerId
-    });
-
-    $("#tl-continue").click(function () {
-        var currentBusinessName = document.querySelector("#CompanyName").value;
-        if (currentBusinessName.length < businessNameMinLength) {
-            $("#SelectedEmployerId").val("");
-            $("#findEmployer").submit();
-            return;
-        }
-
-        var selectedEmployerId = $("#SelectedEmployerId").val();
-        if (selectedEmployerId > 0) {
-            $("#findEmployer").submit();
-            return;
-        }
-
-        var employerNamesWithIds = $("#employerNamesWithIds").val();
-        if (employerNamesWithIds === "") {
-            $("#findEmployer").submit();
-            return;
-        }
-
-        var employerNamesWithIdsCommaSplit = employerNamesWithIds.split(",");
-        $.each(employerNamesWithIdsCommaSplit, function () {
-            var splitValues = this.split(":");
-            $.each(splitValues,
-                function () {
-                    $("#SelectedEmployerId").val(splitValues[1]);
-                    return false;
-                });
-            return false;
-        });
     });
 
     function search(query, populateResults) {
@@ -58,11 +26,8 @@ var employer = (function () {
                         return getEmployerNameWithAka(e);
                     });
 
-                    var employerNamesWithIds = $.map(employers, function (e) {
-                        return getEmployerNameWithAka(e) + ":" + e.id;
-                    });
+                    Searchresult = employers;
 
-                    $("#employerNamesWithIds").val(employerNamesWithIds.join(","));
                     $("#SelectedEmployerId").val("");
 
                     populateResults(employerNames);
@@ -83,15 +48,10 @@ var employer = (function () {
     }
 
     function setSelectedEmployerId(confirmed) {
-        var employerNamesWithIds = $("#employerNamesWithIds").val().split(",");
-        $.each(employerNamesWithIds, function () {
-            var splitValues = this.split(":");
-            $.each(splitValues,
-                function () {
-                    if (splitValues[0] === confirmed) {
-                        $("#SelectedEmployerId").val(splitValues[1]);
-                    }
-                });
+        $.each(Searchresult, function () {
+            if (getEmployerNameWithAka(this) === confirmed) {
+                $("#SelectedEmployerId").val(this.id);
+            }
         });
     }
 })();
