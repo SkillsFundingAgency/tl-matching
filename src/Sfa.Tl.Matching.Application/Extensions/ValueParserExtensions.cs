@@ -32,10 +32,10 @@ namespace Sfa.Tl.Matching.Application.Extensions
                 CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLowerInvariant());
         }
 
-        public static string ToLowerLetterOrDigit(this string value)
+        public static string ToLetterOrDigit(this string value)
         {
             return string.IsNullOrWhiteSpace(value) ? string.Empty : 
-               new string(Array.FindAll(value.ToLowerInvariant().ToCharArray(), char.IsLetterOrDigit));
+               new string(Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
         }
 
         public static int ToInt(this string value)

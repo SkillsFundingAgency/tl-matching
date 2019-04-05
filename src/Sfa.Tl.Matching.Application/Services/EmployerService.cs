@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public IEnumerable<EmployerSearchResultDto> Search(string employerName)
         {
             var searchResults = _repository
-                .GetMany(e => EF.Functions.Like(e.CompanyNameSearch, $"%{employerName.ToLowerLetterOrDigit()}%"))
+                .GetMany(e => EF.Functions.Like(e.CompanyNameSearch, $"%{employerName.ToLetterOrDigit()}%"))
                 .OrderBy(e => e.CompanyName)
                 .Select(e => new EmployerSearchResultDto
                 {

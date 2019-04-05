@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
                 CrmId = data.CrmId.ToGuid(),
                 CompanyName =  data.CompanyName.ToTitleCase(),
                 AlsoKnownAs = data.AlsoKnownAs.ToTitleCase(),
-                CompanyNameSearch = data.CompanyName.ToLowerLetterOrDigit() + data.AlsoKnownAs.ToLowerLetterOrDigit(),
+                CompanyNameSearch = data.CompanyName.ToLetterOrDigit() + data.AlsoKnownAs.ToLetterOrDigit(),
                 Aupa = data.Aupa,
                 CompanyType = data.CompanyType,
                 PrimaryContact = data.PrimaryContact,
