@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Parsing
             _firstEmployerDto.AlsoKnownAs.Should().Be(ValidEmployerFileImportDtoBuilder.Alsoknownas);
 
         [Fact]
-        public void Then_First_ParseResult_CompanyNameSearch_Should_Be_ComanyName_And_AlsoKnownAs_Combined_with_Spaces_removed_And_In_LowerCase() =>
+        public void Then_First_ParseResult_CompanyNameSearch_Should_Be_ComanyName_And_AlsoKnownAs_Combined_Containing_Letters_Or_Digits() =>
             _firstEmployerDto.CompanyNameSearch.Should().Be(ValidEmployerFileImportDtoBuilder.Companyname.ToLetterOrDigit() + ValidEmployerFileImportDtoBuilder.Alsoknownas.ToLetterOrDigit());
 
         [Fact]
