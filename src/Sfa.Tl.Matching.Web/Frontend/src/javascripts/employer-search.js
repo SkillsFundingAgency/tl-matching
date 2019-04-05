@@ -65,8 +65,7 @@ var employer = (function () {
                     $("#employerNamesWithIds").val(employerNamesWithIds.join(","));
                     $("#SelectedEmployerId").val("");
 
-                    var filteredResults = employerNames.filter(e => e.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-                    populateResults(filteredResults);
+                    populateResults(employerNames);
                 },
                 timeout: 5000,
                 error: function () {
@@ -78,9 +77,9 @@ var employer = (function () {
 
     function getEmployerNameWithAka(e) {
         if (!e.alsoKnownAs) {
-            return e.employerName;
+            return e.companyName;
         }
-        return e.employerName + " (" + e.alsoKnownAs + ")";
+        return e.companyName + " (" + e.alsoKnownAs + ")";
     }
 
     function setSelectedEmployerId(confirmed) {
