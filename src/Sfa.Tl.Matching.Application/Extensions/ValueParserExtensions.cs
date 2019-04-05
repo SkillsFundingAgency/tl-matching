@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using Humanizer;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -27,14 +28,14 @@ namespace Sfa.Tl.Matching.Application.Extensions
         /// <returns></returns>
         public static string ToTitleCase(this string value)
         {
-            return string.IsNullOrWhiteSpace(value) ? string.Empty : 
+            return string.IsNullOrWhiteSpace(value) ? string.Empty :
                 CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLowerInvariant());
         }
 
-        public static string ToLowerAlphanumeric(this string value)
+        public static string ToLowerLetterOrDigit(this string value)
         {
             return string.IsNullOrWhiteSpace(value) ? string.Empty : 
-                value.ToLowerInvariant().Replace(" ", string.Empty);
+               new string(Array.FindAll(value.ToLowerInvariant().ToCharArray(), char.IsLetterOrDigit));
         }
 
         public static int ToInt(this string value)

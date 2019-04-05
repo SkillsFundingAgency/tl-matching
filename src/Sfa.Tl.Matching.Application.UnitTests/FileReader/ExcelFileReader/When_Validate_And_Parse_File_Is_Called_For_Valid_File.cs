@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
             dto.CrmId.Should().Be("9082609f-9cf8-e811-80e0-000d3a214f60");
             dto.CompanyName.Should().Be("Employer-Simple");
             dto.AlsoKnownAs.Should().Be("Also Known As");
-            dto.CompanyNameSearch.Should().Be("employer-simplealsoknownas");
+            dto.CompanyNameSearch.Should().Be("employersimplealsoknownas");
             dto.Aupa.Should().Be("Aware");
             dto.CompanyType.Should().Be("Employer");
             dto.PrimaryContact.Should().Be("Primary Contact");

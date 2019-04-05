@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Builders;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
@@ -37,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Parsing
 
         [Fact]
         public void Then_First_ParseResult_CompanyNameSearch_Should_Be_ComanyName_And_AlsoKnownAs_Combined_with_Spaces_removed_And_In_LowerCase() =>
-            _firstEmployerDto.CompanyNameSearch.Should().Be(ValidEmployerFileImportDtoBuilder.Companyname.ToLowerInvariant().Replace(" ", string.Empty) + ValidEmployerFileImportDtoBuilder.Alsoknownas.ToLowerInvariant().Replace(" ", String.Empty));
+            _firstEmployerDto.CompanyNameSearch.Should().Be(ValidEmployerFileImportDtoBuilder.Companyname.ToLowerLetterOrDigit() + ValidEmployerFileImportDtoBuilder.Alsoknownas.ToLowerLetterOrDigit());
 
         [Fact]
         public void Then_First_ParseResult_Aupa_Matches_Input() =>

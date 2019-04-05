@@ -59,14 +59,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         [Fact]
         public void Then_Data_Validator_Validate_Is_called_Exactly_Once()
         {
-            _dataValidator.Received(1).ValidateAsync(Arg.Is<EmployerFileImportDto>(arg => 
+            _dataValidator.Received(1).ValidateAsync(Arg.Is<EmployerFileImportDto>(arg =>
                 arg.CompanyName == "Employer-MissingMandatory"));
         }
 
         [Fact]
         public void Then_FunctionLog_Repository_Create_Many_Is_called_Exactly_Once()
         {
-            _functionLogRepository.Received(1).CreateMany(Arg.Is<List<FunctionLog>>(list => 
+            _functionLogRepository.Received(1).CreateMany(Arg.Is<List<FunctionLog>>(list =>
                 list.Count == 1 &&
                 list[0].FunctionName == "Employer" &&
                 list[0].RowNumber == 1 &&
