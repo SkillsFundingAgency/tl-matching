@@ -24,12 +24,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             {
                 new EmployerSearchResultDto
                 {
-                    EmployerName = "EmployerName1",
+                    CompanyName = "EmployerName1",
                     AlsoKnownAs = "AlsoKnownAs1"
                 },
                 new EmployerSearchResultDto
                 {
-                    EmployerName = "EmployerName2",
+                    CompanyName = "EmployerName2",
                     AlsoKnownAs = "AlsoKnownAs2"
                 }
             });
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_First_Item_EmployerName_Is_Correct()
         {
             var resultList = GetResultList();
-            resultList[0].EmployerName.Should().Be("EmployerName1");
+            resultList[0].CompanyName.Should().Be("EmployerName1");
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_Second_Item_EmployerName_Is_Correct()
         {
             var resultList = GetResultList();
-            resultList[1].EmployerName.Should().Be("EmployerName2");
+            resultList[1].CompanyName.Should().Be("EmployerName2");
         }
 
         [Fact]
