@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
@@ -17,32 +15,32 @@ using Path = System.IO.Path;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
 {
-    public class When_ExcelFileReader_Validate_And_Parse_File_Is_Called_For_Valid_File
+    public class When_Validate_And_Parse_File_Is_Called_For_Valid_File
     {
-        private readonly IValidator<EmployerFileImportDto> _employerDataValidator;
-        private readonly IDataParser<EmployerDto> _employerDataParser;
+        private readonly IValidator<EmployerFileImportDto> _dataValidator;
+        private readonly IDataParser<EmployerDto> _dataParser;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
-        public When_ExcelFileReader_Validate_And_Parse_File_Is_Called_For_Valid_File()
+        public When_Validate_And_Parse_File_Is_Called_For_Valid_File()
         {
-            _employerDataValidator = Substitute.For<IValidator<EmployerFileImportDto>>();
-            _employerDataValidator
+            _dataValidator = Substitute.For<IValidator<EmployerFileImportDto>>();
+            _dataValidator
                 .ValidateAsync(Arg.Any<EmployerFileImportDto>())
                 .Returns(Task.FromResult(new ValidationResult()));
 
-            _employerDataParser = Substitute.For<IDataParser<EmployerDto>>();
+            _dataParser = Substitute.For<IDataParser<EmployerDto>>();
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
             var excelfileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>
             (
                 new NullLogger<ExcelFileReader<EmployerFileImportDto, EmployerDto>>(),
-                _employerDataParser,
-                _employerDataValidator,
+                _dataParser,
+                _dataValidator,
                 _functionLogRepository
             );
 
-            var filePath = Path.Combine(GetTestExecutionDirectory(), @"FileReader\ExcelFileReader\Employer-Simple.xlsx");
+            var filePath = Path.Combine(TestHelper.GetTestExecutionDirectory(), @"FileReader\ExcelFileReader\Employer-Simple.xlsx");
             using (var stream = File.Open(filePath, FileMode.Open))
             {
 
@@ -53,17 +51,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
             }
         }
 
-        public static string GetTestExecutionDirectory()
-        {
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
-            return Path.GetDirectoryName(codeBasePath);
-        }
-
         [Fact]
         public void Then_Data_Validator_Validate_Is_called_Exactly_Once()
         {
-            _employerDataValidator.Received(1).ValidateAsync(Arg.Is<EmployerFileImportDto>(arg =>
+            _dataValidator.Received(1).ValidateAsync(Arg.Is<EmployerFileImportDto>(arg =>
                 arg.CompanyName == "Employer-Simple"));
         }
 
@@ -76,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         [Fact]
         public void Then_Data_Parser_Parse_Is_Called_Exactly_Once()
         {
-            _employerDataParser.Received(1).Parse(Arg.Is<EmployerFileImportDto>(dto =>
+            _dataParser.Received(1).Parse(Arg.Is<EmployerFileImportDto>(dto =>
                 dto.CompanyName == "Employer-Simple"));
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,14 +10,13 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 {
-    public class When_EmployerService_Is_Called_To_Import_Employers
+    public class When_Import_Is_Called_To_Import_Employers
     {
         private readonly EmployerFileImportDto _fileImportDto;
         private readonly IList<EmployerDto> _fileReaderResults;
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         private readonly int _result;
         private readonly IDataProcessor<Domain.Models.Employer> _dataProcessor;
 
-        public When_EmployerService_Is_Called_To_Import_Employers()
+        public When_Import_Is_Called_To_Import_Employers()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
                 FileDataStream = new MemoryStream()
             };
 
-            _fileReaderResults = new ValidEmployerDtoListBuilder(2).Build();
+            _fileReaderResults = Build(2);
 
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(Task.FromResult(_fileReaderResults));
@@ -93,6 +93,31 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         public void Then_The_Expected_Number_Of_Created_Records_Is_Returned()
         {
             _fileReaderResults.Count.Should().Be(_result);
+        }
+
+        public IList<EmployerDto> Build(int numberOfItems)
+        {
+            var employerDtos = new List<EmployerDto>();
+
+            for (var i = 0; i < numberOfItems; i++)
+            {
+                employerDtos.Add(new EmployerDto
+                {
+                    CrmId = new Guid($"{i}F7B99CB-0FAD-4FFC-AF6A-D5537293E04B"),
+                    CompanyName = "Company Name",
+                    AlsoKnownAs = "Also Known As",
+                    Aupa = "Aware",
+                    CompanyType = "CompanyType",
+                    PrimaryContact = "PrimaryContact",
+                    Phone = "01777757777",
+                    Email = "primary@contact.co.uk",
+                    Postcode = "AA1 1AA",
+                    Owner = "Owner",
+                    CreatedBy = "Test"
+                });
+            }
+
+            return employerDtos;
         }
     }
 }

@@ -12,11 +12,12 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 {
-    public class When_ProviderService_Is_Called_To_Import_Providers
+    public class When_Import_Is_Called_To_Import_Providers
     {
         private readonly ProviderFileImportDto _fileImportDto;
         private readonly IList<ProviderDto> _fileReaderResults;
@@ -25,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         private readonly int _result;
         private readonly IDataProcessor<Domain.Models.Provider> _dataProcessor;
 
-        public When_ProviderService_Is_Called_To_Import_Providers()
+        public When_Import_Is_Called_To_Import_Providers()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
@@ -48,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
                 FileDataStream = new MemoryStream()
             };
 
-            _fileReaderResults = new ValidProviderDtoListBuilder(2).Build();
+            _fileReaderResults = Build(2);
 
             _fileReader.ValidateAndParseFile(_fileImportDto).Returns(Task.FromResult(_fileReaderResults));
 
@@ -94,5 +95,33 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         {
             _fileReaderResults.Count.Should().Be(_result);
         }
+
+        public IList<ProviderDto> Build(int numberOfItems)
+        {
+            var providerDtos = new List<ProviderDto>();
+
+            for (var i = 0; i < numberOfItems; i++)
+            {
+                providerDtos.Add(new ProviderDto
+                {
+                    UkPrn = 10000546 + i,
+                    Name = "ProviderName",
+                    OfstedRating = OfstedRating.Good,
+                    Status = true,
+                    StatusReason = "StatusReason",
+                    PrimaryContact = "PrimaryContact",
+                    PrimaryContactEmail = "primary@contact.co.uk",
+                    PrimaryContactPhone = "01777757777",
+                    SecondaryContact = "SecondaryContact",
+                    SecondaryContactEmail = "secondary@contact.co.uk",
+                    SecondaryContactPhone = "01777757777",
+                    Source = "PMF_1018",
+                    CreatedBy = "Test"
+                });
+            }
+
+            return providerDtos;
+        }
+
     }
 }

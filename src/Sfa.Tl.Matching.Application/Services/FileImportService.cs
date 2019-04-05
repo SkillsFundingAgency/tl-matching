@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.EqualityComparer;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 
@@ -48,17 +50,26 @@ namespace Sfa.Tl.Matching.Application.Services
                 return 0;
             }
 
-            var entities = _mapper.Map<IList<TEntity>>(import);
-                
+            var comparer = GetEqualityComparer();
+
+            var entities = _mapper.Map<IList<TEntity>>(import).Distinct(comparer).ToList();
+
             _dataProcessor.PreProcessingHandler(entities);
 
             _logger.LogInformation($"Saving { entities.Count } { nameof(TEntity) }.");
-                
+
             var result = await _repository.CreateMany(entities);
 
             _dataProcessor.PostProcessingHandler(entities);
 
             return result;
+        }
+
+        private static IEqualityComparer<TEntity> GetEqualityComparer()
+        {
+            var comparerType = typeof(EmployerEqualityComparer).Assembly.GetTypes()
+                .Single(comparer => typeof(IEqualityComparer<TEntity>).IsAssignableFrom(comparer));
+            return (IEqualityComparer<TEntity>)Activator.CreateInstance(comparerType);
         }
     }
 }
