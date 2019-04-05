@@ -35,17 +35,16 @@ namespace Sfa.Tl.Matching.Application.Services
         public IEnumerable<EmployerSearchResultDto> Search(string employerName)
         {
             var searchResults = _repository
-                .GetMany(e => 
-                    EF.Functions.Like(e.CompanyName, $"%{employerName}%"));
+                .GetMany(e => EF.Functions.Like(e.CompanyNameSearch, $"%{employerName}%"))
+                .OrderBy(e => e.CompanyName)
+                .Select(e => new EmployerSearchResultDto
+                {
+                    Id = e.Id,
+                    CompanyName = e.CompanyName,
+                    AlsoKnownAs = e.AlsoKnownAs
+                });
 
-            var employers = searchResults.Select(e => new EmployerSearchResultDto
-            {
-                Id = e.Id,
-                EmployerName = e.CompanyName,
-                AlsoKnownAs = e.AlsoKnownAs
-            }).OrderBy(e => e.EmployerName);
-
-            return employers;
+            return searchResults;
         }
     }
 }

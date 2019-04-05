@@ -27,8 +27,14 @@ namespace Sfa.Tl.Matching.Application.Extensions
         /// <returns></returns>
         public static string ToTitleCase(this string value)
         {
-            return string.IsNullOrEmpty(value) ? string.Empty : 
+            return string.IsNullOrWhiteSpace(value) ? string.Empty : 
                 CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLowerInvariant());
+        }
+
+        public static string ToLowerAlphanumeric(this string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty : 
+                value.ToLowerInvariant().Replace(" ", string.Empty);
         }
 
         public static int ToInt(this string value)

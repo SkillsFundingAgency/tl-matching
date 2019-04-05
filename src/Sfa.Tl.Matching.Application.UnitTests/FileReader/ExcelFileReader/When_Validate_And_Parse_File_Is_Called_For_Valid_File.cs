@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.FileReader;
+using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -20,6 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         private readonly IValidator<EmployerFileImportDto> _dataValidator;
         private readonly IDataParser<EmployerDto> _dataParser;
         private readonly IRepository<FunctionLog> _functionLogRepository;
+        private readonly IList<EmployerDto> _result;
 
         public When_Validate_And_Parse_File_Is_Called_For_Valid_File()
         {
@@ -29,6 +33,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
                 .Returns(Task.FromResult(new ValidationResult()));
 
             _dataParser = Substitute.For<IDataParser<EmployerDto>>();
+            _dataParser.Parse(Arg.Any<EmployerFileImportDto>()).Returns(info => new EmployerDataParser().Parse(info.Arg<EmployerFileImportDto>()));
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
@@ -44,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
             using (var stream = File.Open(filePath, FileMode.Open))
             {
 
-                excelfileReader.ValidateAndParseFile(new EmployerFileImportDto
+                _result = excelfileReader.ValidateAndParseFile(new EmployerFileImportDto
                 {
                     FileDataStream = stream
                 }).GetAwaiter().GetResult();
@@ -69,6 +74,28 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         {
             _dataParser.Received(1).Parse(Arg.Is<EmployerFileImportDto>(dto =>
                 dto.CompanyName == "Employer-Simple"));
+        }
+
+        [Fact]
+        public void Then_Result_Contains_Exactly_Once_Item_And_Has_Correct_Data()
+        {
+            _result.Should().NotBeNullOrEmpty();
+            
+            _result.Count.Should().Be(1);
+            
+            var dto = _result.ElementAt(0);
+
+            dto.CrmId.Should().Be("9082609f-9cf8-e811-80e0-000d3a214f60");
+            dto.CompanyName.Should().Be("Employer-Simple");
+            dto.AlsoKnownAs.Should().Be("Also Known As");
+            dto.CompanyNameSearch.Should().Be("employer-simplealsoknownas");
+            dto.Aupa.Should().Be("Aware");
+            dto.CompanyType.Should().Be("Employer");
+            dto.PrimaryContact.Should().Be("Primary Contact");
+            dto.Phone.Should().Be("7777744465");
+            dto.Email.Should().Be("email@address.com");
+            dto.Postcode.Should().Be("S1 1AA");
+            dto.Owner.Should().Be("Owner");
         }
     }
 }
