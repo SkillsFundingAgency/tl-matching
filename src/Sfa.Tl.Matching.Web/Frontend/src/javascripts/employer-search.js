@@ -14,7 +14,7 @@ var employer = (function () {
     });
 
     $("#SelectedEmployerId").val("");
-    $("#CompanyName").val($("#employerNameHidden").val());
+    $("#CompanyName").val($("#companyNameHidden").val());
 
     function search(query, populateResults) {
         var delayInMs = 100;

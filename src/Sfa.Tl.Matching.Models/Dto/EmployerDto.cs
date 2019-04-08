@@ -16,5 +16,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string Postcode { get; set; }
         public string Owner { get; set; }
         public string CreatedBy { get; set; }
+        public string CompanyNameWithAka => $"{CompanyName} ({AlsoKnownAs})";
     }
 }

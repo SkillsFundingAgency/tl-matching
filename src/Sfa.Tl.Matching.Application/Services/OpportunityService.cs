@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -68,8 +70,30 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id);
 
-            var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
+            var dto = _mapper.Map<OpportunityDto>(opportunity);
 
+            return dto;
+        }
+
+        public OpportunityDto GetLatestCompletedOpportunity(Guid crmId)
+        {
+            var opportunities = _opportunityRepository.GetMany(o => o.EmployerCrmId == crmId,
+                o => o.ProvisionGap, 
+                o => o.Referral);
+
+            var latestOpportunity = opportunities
+                .Where(FilterValidOpportunities())
+                .OrderByDescending(o => o.CreatedOn)
+                .Take(1).SingleOrDefault();
+
+            if (latestOpportunity == null)
+                return null;
+
+            latestOpportunity.Referral.Clear();
+            latestOpportunity.ProvisionGap.Clear();
+
+            var dto = _mapper.Map<OpportunityDto>(latestOpportunity);
+            
             return dto;
         }
 
@@ -130,6 +154,12 @@ namespace Sfa.Tl.Matching.Application.Services
                 .ToList();
 
             return providers;
+        }
+
+        private static Expression<Func<Opportunity, bool>> FilterValidOpportunities()
+        {
+            return o => o.ProvisionGap.Count > 0 ||
+                        (o.Referral.Count > 0 && o.ConfirmationSelected.HasValue && o.ConfirmationSelected.Value);
         }
     }
 }

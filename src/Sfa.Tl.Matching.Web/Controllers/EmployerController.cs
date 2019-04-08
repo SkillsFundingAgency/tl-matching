@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var dto = _mapper.Map<EmployerNameDto>(viewModel);
             dto.EmployerCrmId = employerDto.CrmId;
-            dto.CompanyName = $"{employerDto.CompanyName} ({employerDto.AlsoKnownAs})";
+            dto.CompanyName = employerDto.CompanyNameWithAka;
 
             await _opportunityService.UpdateOpportunity(dto);
 
@@ -110,6 +110,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (IsEmployerPopulated(dto))
                 return _mapper.Map<EmployerDetailsViewModel>(dto);
+
+            var latestOpportunity = _opportunityService.GetLatestCompletedOpportunity(dto.EmployerCrmId);
+            if (latestOpportunity != null && IsEmployerPopulated(latestOpportunity))
+            {
+                var viewModel = _mapper.Map<EmployerDetailsViewModel>(latestOpportunity);
+                viewModel.OpportunityId = dto.Id;
+                return viewModel;
+            }
 
             var employerDto = await _employerService.GetEmployer(dto.EmployerId ?? 0);
 

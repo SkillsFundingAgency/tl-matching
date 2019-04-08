@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.EmployerContactEmail, o => o.Ignore())
                 .ForMember(m => m.EmployerContactPhone, o => o.Ignore())
                 .ForMember(m => m.EmployerContactPhone, o => o.Ignore())
-                .ForMember(m => m.HasChanged, o => o.MapFrom(src => src.CompanyName != src.PreviousEmployerName))
+                .ForMember(m => m.HasChanged, o => o.MapFrom(src => src.CompanyName != src.PreviousCompanyName))
                 ;
 
             CreateMap<EmployerDetailsViewModel, EmployerDetailDto>()
@@ -43,9 +43,11 @@ namespace Sfa.Tl.Matching.Web.Mappers
                     o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.SelectedEmployerId,
                     o => o.MapFrom(s => s.EmployerId))
-                .ForMember(m => m.PreviousEmployerName,
-                    o => o.MapFrom(s => s.EmployerName))
+                .ForMember(m => m.SelectedEmployerId,
+                    o => o.MapFrom(s => s.EmployerId))
                 .ForMember(m => m.CompanyName,
+                    o => o.MapFrom(s => s.EmployerName))
+                .ForMember(m => m.PreviousCompanyName,
                     o => o.MapFrom(s => s.EmployerName))
                 ;
         }
