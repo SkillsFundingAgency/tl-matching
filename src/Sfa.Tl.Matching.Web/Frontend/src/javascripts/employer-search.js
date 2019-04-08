@@ -30,8 +30,7 @@ var employer = (function () {
 
                     if (Searchresult !== undefined && Searchresult !== null) {
                         if (Searchresult[0] !== undefined && Searchresult[0] !== null) {
-                            var firstresult = Searchresult[0];
-                            $("#SelectedEmployerId").val(firstresult.id);
+                            $("#SelectedEmployerId").val(Searchresult[0].id);
                         }
                     }
 
