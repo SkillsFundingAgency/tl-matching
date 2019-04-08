@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var viewModel = new FindEmployerViewModel
             {
-                EmployerName = "Invalid Business Name"
+                CompanyName = "Invalid Business Name"
             };
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
@@ -45,14 +45,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _employerController.ViewData.ModelState.Should().ContainSingle();
 
         [Fact]
-        public void Then_Model_State_Has_BusinessName_Key() =>
-            _employerController.ViewData.ModelState.ContainsKey(nameof(FindEmployerViewModel.EmployerName))
+        public void Then_Model_State_Has_CompanyName_Key() =>
+            _employerController.ViewData.ModelState.ContainsKey(nameof(FindEmployerViewModel.CompanyName))
                 .Should().BeTrue();
 
         [Fact]
-        public void Then_Model_State_Has_BusinessName_Error()
+        public void Then_Model_State_Has_CompanyName_Error()
         {
-            var modelStateEntry = _employerController.ViewData.ModelState[nameof(FindEmployerViewModel.EmployerName)];
+            var modelStateEntry = _employerController.ViewData.ModelState[nameof(FindEmployerViewModel.CompanyName)];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must find and choose an employer");
         }
     }

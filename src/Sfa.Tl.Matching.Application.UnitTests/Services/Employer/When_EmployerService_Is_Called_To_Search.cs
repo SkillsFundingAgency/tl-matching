@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         }
 
         [Fact]
-        public void Then_The_First_Employer_Is_In_Correct_Order_With_EmployerName()
+        public void Then_The_First_Employer_Is_In_Correct_Order_With_CompanyName()
         {
             _firstEmployer.CompanyName.Should().Be("Another Company");
         }
@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         }
 
         [Fact]
-        public void Then_The_Second_Employer_Is_In_Correct_Order_With_EmployerName()
+        public void Then_The_Second_Employer_Is_In_Correct_Order_With_CompanyName()
         {
             _secondEmployer.CompanyName.Should().Be("Company");
         }
@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         }
 
         [Fact]
-        public void Then_The_Third_Employer_Is_In_Correct_Order_With_EmployerName()
+        public void Then_The_Third_Employer_Is_In_Correct_Order_With_CompanyName()
         {
             _thirdEmployer.CompanyName.Should().Be("Z Company");
         }

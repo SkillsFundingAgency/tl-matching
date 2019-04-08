@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_FindEmployer_Is_Submitted_Successfully()
         {
             _viewModel.OpportunityId = OpportunityId;
-            _viewModel.EmployerName = EmployerName;
+            _viewModel.CompanyName = EmployerName;
             _viewModel.SelectedEmployerId = 2;
 
             _employerService = Substitute.For<IEmployerService>();

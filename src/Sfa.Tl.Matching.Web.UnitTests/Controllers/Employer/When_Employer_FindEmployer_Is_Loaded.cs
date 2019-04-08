@@ -68,10 +68,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_EmployerName_Is_Populated()
+        public void Then_CompanyName_Is_Populated()
         {
             var viewModel = _result.GetViewModel<FindEmployerViewModel>();
-            viewModel.EmployerName.Should().Be(EmployerName);
+            viewModel.CompanyName.Should().Be(EmployerName);
         }
     }
 }

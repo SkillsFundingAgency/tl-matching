@@ -52,22 +52,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 await _employerService.GetEmployer(viewModel.SelectedEmployerId) :
                 null;
 
-            if (!ModelState.IsValid || employerDto == null)
+            if (employerDto == null)
             {
-                if (employerDto == null)
-                {
-                    ModelState.AddModelError(nameof(viewModel.EmployerName), "You must find and choose an employer");
-                }
-
+                ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
                 return View(viewModel);
             }
 
             var dto = _mapper.Map<EmployerNameDto>(viewModel);
             dto.EmployerCrmId = employerDto.CrmId;
-            dto.EmployerName = employerDto.CompanyName;
-            dto.EmployerContact = employerDto.PrimaryContact;
-            dto.EmployerContactEmail = employerDto.Email;
-            dto.EmployerContactPhone = employerDto.Phone;
+            dto.CompanyName = $"{employerDto.CompanyName} ({employerDto.AlsoKnownAs})";
 
             await _opportunityService.UpdateOpportunity(dto);
 
