@@ -38,12 +38,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("referral-create", Name = "CreateReferral")]
         public async Task<IActionResult> CreateReferral(string viewModel)
         {
-
             var createReferralViewModel = JsonConvert.DeserializeObject<CreateReferralViewModel>(viewModel);
 
             var dto = _mapper.Map<OpportunityDto>(createReferralViewModel);
-
-            var id = await _opportunityService.CreateOpportunity(dto);
+            
+            var id = createReferralViewModel.OpportunityId;
+            if (createReferralViewModel.OpportunityId > 0)
+                await _opportunityService.UpdateReferrals(dto);
+            else
+                id = await _opportunityService.CreateOpportunity(dto);
 
             return RedirectToRoute("PlacementInformationSave_Get", new { id });
         }

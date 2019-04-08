@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.UserEmail, o => o.MapFrom<LoggedInUserEmailResolver<CreateReferralViewModel, OpportunityDto>>())
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
                 .ForMember(m => m.Referral, o => o.MapFrom(s => s.SelectedProvider.Where(p => p.IsSelected)))
-                .ForMember(m => m.Id, o => o.Ignore())
+                .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.DropOffStage, o => o.Ignore())
                 .ForMember(m => m.EmployerId, o => o.Ignore())
                 .ForMember(m => m.EmployerCrmId, o => o.Ignore())

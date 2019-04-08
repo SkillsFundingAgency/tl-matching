@@ -2,6 +2,7 @@
 {
     public class CreateOpportunityViewModel
     {
+        public int OpportunityId { get; set; }
         public string Postcode { get; set; }
 
         public short SearchRadius { get; set; }

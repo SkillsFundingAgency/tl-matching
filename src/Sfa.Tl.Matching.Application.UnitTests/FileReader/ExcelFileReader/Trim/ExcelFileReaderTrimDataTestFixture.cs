@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.FileReader;
-using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;

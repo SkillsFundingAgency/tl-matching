@@ -11,8 +11,11 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<int> Create(T entity);
         Task<int> CreateMany(IList<T> entities);
         IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath);
-
         Task<T> GetSingleOrDefault(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationPropertyPath);
         Task Update(T entity);
+        Task UpdateMany(IList<T> entities);
+        Task<int> Delete(int id);
+        Task Delete(T entity);
+        Task DeleteMany(IList<T> entities);
     }
 }

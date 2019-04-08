@@ -18,12 +18,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IMapper _mapper;
         private readonly IProviderService _providerService;
         private readonly IRoutePathService _routePathService;
+        private readonly IOpportunityService _opportunityService;
 
-        public ProviderController(IMapper mapper, IRoutePathService routePathService, IProviderService providerService)
+        public ProviderController(IMapper mapper, IRoutePathService routePathService, IProviderService providerService,
+            IOpportunityService opportunityService)
         {
             _mapper = mapper;
             _providerService = providerService;
             _routePathService = routePathService;
+            _opportunityService = opportunityService;
         }
 
         [Route("Start", Name = "Start_Get")]
@@ -136,6 +139,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 },
                 SearchParameters = GetSearchParametersViewModelAsync(viewModel)
             };
+
+            if (viewModel.OpportunityId == 0)
+                return resultsViewModel;
+
+            var selectedResultsViewModel = PopulateSelectedSearchResults(viewModel.OpportunityId, resultsViewModel);
+
+            return selectedResultsViewModel;
+        }
+
+        private SearchViewModel PopulateSelectedSearchResults(int opportunityId, SearchViewModel resultsViewModel)
+        {
+            var referrals = _opportunityService.GetReferrals(opportunityId);
+            foreach (var result in resultsViewModel.SearchResults.Results)
+            {
+                if (referrals.Any(r => r.ProviderVenueId == result.ProviderVenueId))
+                    result.IsSelected = true;
+            }
 
             return resultsViewModel;
         }

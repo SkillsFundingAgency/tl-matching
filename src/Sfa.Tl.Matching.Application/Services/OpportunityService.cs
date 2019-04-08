@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.EqualityComparer;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -35,6 +36,32 @@ namespace Sfa.Tl.Matching.Application.Services
             var opportunity = _mapper.Map<Opportunity>(dto);
 
             return await _opportunityRepository.Create(opportunity);
+        }
+
+        public async Task UpdateReferrals(OpportunityDto dto)
+        {
+            var existingReferrals = _referralRepository.GetMany(r => r.OpportunityId == dto.Id)
+                .ToList();
+
+            var newReferrals = _mapper.Map<List<Referral>>(dto.Referral);
+            foreach (var nr in newReferrals)
+                nr.OpportunityId = dto.Id;
+
+            var comparer = new ReferralEqualityComparer();
+
+            var updates = existingReferrals.Intersect(newReferrals, comparer).ToList();
+            var creates = newReferrals.Except(updates, comparer).ToList();
+            var deletes = existingReferrals.Except(updates, comparer).ToList();
+
+            Referral Find(Referral referral) => existingReferrals.First(r => r.Id == referral.Id);
+
+            var deleteReferrals = deletes.Select(Find).ToList();
+            await _referralRepository.DeleteMany(deleteReferrals);
+
+            await _referralRepository.CreateMany(creates);
+
+            var updateReferrals = updates.Select(Find).ToList();
+            await _referralRepository.UpdateMany(updateReferrals);
         }
 
         public async Task<OpportunityDto> GetOpportunity(int id)
@@ -97,7 +124,8 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     Name = r.ProviderVenue.Provider.Name,
                     Postcode = r.ProviderVenue.Postcode,
-                    DistanceFromEmployer = r.DistanceFromEmployer
+                    DistanceFromEmployer = r.DistanceFromEmployer,
+                    ProviderVenueId = r.ProviderVenueId
                 })
                 .ToList();
 
