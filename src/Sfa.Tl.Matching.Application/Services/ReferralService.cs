@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 { "employer_contact_email", employerReferral.EmployerContactEmail },
                 { "employer_postcode", employerReferral.Postcode },
                 { "number_of_placements", numberOfPlacements },
-                { "route", employerReferral.RouteName },
+                { "route", employerReferral.RouteName.ToLowerInvariant() },
                 { "job_role", employerReferral.JobTitle }
             };
 
@@ -110,7 +110,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     { "primary_contact_name", referral.ProviderPrimaryContact },
                     { "provider_name", referral.ProviderName },
-                    { "route", referral.RouteName },
+                    { "route", referral.RouteName.ToLowerInvariant() },
                     { "venue_postcode", referral.ProviderVenuePostcode },
                     { "search_radius", referral.SearchRadius.ToString() },
                     { "job_role", referral.JobTitle },
