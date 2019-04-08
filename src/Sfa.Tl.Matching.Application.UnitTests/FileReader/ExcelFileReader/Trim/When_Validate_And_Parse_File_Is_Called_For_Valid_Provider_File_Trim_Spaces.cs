@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Trim
         [Fact]
         public void Then_Data_Validator_Validate_Is_called_Exactly_Once_And_Leading_And_Trailing_Speaces_are_Trimmed()
         {
-            _fixture._dataValidator.Received(1).ValidateAsync(Arg.Is<ProviderFileImportDto>(arg =>
+            _fixture.DataValidator.Received(1).ValidateAsync(Arg.Is<ProviderFileImportDto>(arg =>
                 arg.UkPrn == "10000001" && 
                 arg.ProviderName == "Provider-Trim" && 
                 arg.OfstedRating == "Good" &&
@@ -40,23 +40,23 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Trim
         [Fact]
         public void Then_FunctionLog_Repository_Create_Many_Is_Called_With_Empty_List()
         {
-            _fixture._functionLogRepository.Received(1).CreateMany(Arg.Is<List<FunctionLog>>(logs => logs.Count == 0));
+            _fixture.FunctionLogRepository.Received(1).CreateMany(Arg.Is<List<FunctionLog>>(logs => logs.Count == 0));
         }
 
         [Fact]
         public void Then_Data_Parser_Parse_Is_Called_Exactly_Once()
         {
-            _fixture._dataParser.Received(1).Parse(Arg.Any<ProviderFileImportDto>());
+            _fixture.DataParser.Received(1).Parse(Arg.Any<ProviderFileImportDto>());
         }
 
         [Fact]
         public void Then_Returned_List_Has_One_Item()
         {
-            _fixture._results.Should().NotBeNullOrEmpty();
+            _fixture.Results.Should().NotBeNullOrEmpty();
 
-            _fixture._results.Count.Should().Be(1);
+            _fixture.Results.Count.Should().Be(1);
 
-            var dto = _fixture._results.ElementAt(0);
+            var dto = _fixture.Results.ElementAt(0);
 
             dto.UkPrn.Should().Be(10000001); 
             dto.Name.Should().Be("Provider-Trim"); 

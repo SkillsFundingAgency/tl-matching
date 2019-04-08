@@ -1,50 +1,16 @@
 "use strict";
-
+var Searchresult = null;
 var employer = (function () {
-    var businessNameMinLength = 2;
+    var queryMinLength = 2;
 
     accessibleAutocomplete.enhanceSelectElement({
         defaultValue: "",
         autoSelect: true,
-        selectElement: document.querySelector("#EmployerName"),
-        minLength: businessNameMinLength,
+        selectElement: document.querySelector("#CompanyName"),
+        minLength: queryMinLength,
         source: search,
-        name: "EmployerName",
+        name: "CompanyName",
         onConfirm: setSelectedEmployerId
-    });
-
-    $("#EmployerName").val($("#employerNameHidden").val());
-
-    $("#tl-continue").click(function () {
-        var currentBusinessName = document.querySelector("#EmployerName").value;
-        if (currentBusinessName.length < businessNameMinLength) {
-            $("#SelectedEmployerId").val("");
-            $("#findEmployer").submit();
-            return;
-        }
-
-        var selectedEmployerId = $("#SelectedEmployerId").val();
-        if (selectedEmployerId > 0) {
-            $("#findEmployer").submit();
-            return;
-        }
-
-        var employerNamesWithIds = $("#employerNamesWithIds").val();
-        if (employerNamesWithIds === "") {
-            $("#findEmployer").submit();
-            return;
-        }
-
-        var employerNamesWithIdsCommaSplit = employerNamesWithIds.split(",");
-        $.each(employerNamesWithIdsCommaSplit, function () {
-            var splitValues = this.split(":");
-            $.each(splitValues,
-                function () {
-                    $("#SelectedEmployerId").val(splitValues[1]);
-                    return false;
-                });
-            return false;
-        });
     });
 
     function search(query, populateResults) {
@@ -56,20 +22,19 @@ var employer = (function () {
                 contentType: "application/json",
                 data: { query: query },
                 success: function (employers) {
-                    var employerNames = $.map(employers, function (e) {
+	                var employerNames = $.map(employers, function (e) {
                         return getEmployerNameWithAka(e);
                     });
 
-                    var employerNamesWithIds = $.map(employers, function (e) {
-                        return getEmployerNameWithAka(e) + ":" + e.id;
-                    });
+	                Searchresult = employers;
 
-                    $("#employerNamesWithIds").val(employerNamesWithIds.join(","));
+                    if (Searchresult !== undefined && Searchresult !== null) {
+                        if (Searchresult[0] !== undefined && Searchresult[0] !== null) {
+                            $("#SelectedEmployerId").val(Searchresult[0].id);
+                        }
+                    }
 
-                    var filteredResults = employerNames.filter(e => e.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-                    populateResults(filteredResults);
-
-					$("#SelectedEmployerId").val("");
+                    populateResults(employerNames);
                 },
                 timeout: 5000,
                 error: function () {
@@ -81,21 +46,16 @@ var employer = (function () {
 
     function getEmployerNameWithAka(e) {
         if (!e.alsoKnownAs) {
-            return e.employerName;
+            return e.companyName;
         }
-        return e.employerName + " (" + e.alsoKnownAs + ")";
+        return e.companyName + " (" + e.alsoKnownAs + ")";
     }
 
     function setSelectedEmployerId(confirmed) {
-        var employerNamesWithIds = $("#employerNamesWithIds").val().split(",");
-        $.each(employerNamesWithIds, function () {
-            var splitValues = this.split(":");
-            $.each(splitValues,
-                function () {
-                    if (splitValues[0] === confirmed) {
-                        $("#SelectedEmployerId").val(splitValues[1]);
-                    }
-                });
+        $.each(Searchresult, function () {
+            if (getEmployerNameWithAka(this) === confirmed) {
+                $("#SelectedEmployerId").val(this.id);
+            }
         });
     }
 })();
