@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -20,24 +21,24 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         private readonly ProviderQualificationFileImportDto _fileImportDto;
         private readonly IList<ProviderQualificationDto> _fileReaderResults;
         private readonly IFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto> _fileReader;
-        private readonly IRepository<Domain.Models.ProviderQualification> _repository;
+        private readonly IRepository<ProviderQualification> _repository;
         private readonly int _result;
-        private readonly IDataProcessor<Domain.Models.ProviderQualification> _dataProcessor;
+        private readonly IDataProcessor<ProviderQualification> _dataProcessor;
 
         public When_Import_Is_Called_To_Import_ProviderQualifications()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
-            var logger = Substitute.For<ILogger<FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>>>();
+            var logger = Substitute.For<ILogger<FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, ProviderQualification>>>();
             _fileReader = Substitute.For<IFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>>();
-            _repository = Substitute.For<IRepository<Domain.Models.ProviderQualification>>();
-            _dataProcessor = Substitute.For<IDataProcessor<Domain.Models.ProviderQualification>>();
+            _repository = Substitute.For<IRepository<ProviderQualification>>();
+            _dataProcessor = Substitute.For<IDataProcessor<ProviderQualification>>();
 
             _repository
-                .CreateMany(Arg.Any<IList<Domain.Models.ProviderQualification>>())
+                .CreateMany(Arg.Any<IList<ProviderQualification>>())
                 .Returns(callinfo =>
                 {
-                    var passedEntities = callinfo.ArgAt<IEnumerable<Domain.Models.ProviderQualification>>(0);
+                    var passedEntities = callinfo.ArgAt<IEnumerable<ProviderQualification>>(0);
                     return passedEntities.Count();
                 });
 
@@ -51,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(Task.FromResult(_fileReaderResults));
 
-            var service = new FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>(logger, mapper, _fileReader, _repository, _dataProcessor);
+            var service = new FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, ProviderQualification>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
             _result = service.Import(_fileImportDto).GetAwaiter().GetResult();
         }
@@ -69,7 +70,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _repository
                 .Received(1)
-                .CreateMany(Arg.Any<IList<Domain.Models.ProviderQualification>>());
+                .CreateMany(Arg.Any<IList<ProviderQualification>>());
         }
 
         [Fact]
@@ -77,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _dataProcessor
                 .Received(1)
-                .PreProcessingHandler(Arg.Any<IList<Domain.Models.ProviderQualification>>());
+                .PreProcessingHandler(Arg.Any<IList<ProviderQualification>>());
         }
 
         [Fact]
@@ -85,7 +86,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _dataProcessor
                 .Received(1)
-                .PostProcessingHandler(Arg.Any<IList<Domain.Models.ProviderQualification>>());
+                .PostProcessingHandler(Arg.Any<IList<ProviderQualification>>());
         }
         [Fact]
         public void Then_The_Expected_Number_Of_Created_Records_Is_Returned()

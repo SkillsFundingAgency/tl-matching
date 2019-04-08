@@ -190,7 +190,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("route")
-                                  && tokens["route"] == "Agriculture, environmental and animal care"),
+                                  && tokens["route"] == "agriculture, environmental and animal care"),
                     Arg.Any<string>());
         }
 

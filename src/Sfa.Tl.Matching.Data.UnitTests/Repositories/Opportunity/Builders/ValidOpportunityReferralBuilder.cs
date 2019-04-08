@@ -123,7 +123,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                                     Title = "Title 2",
                                     ShortTitle = "Duplicate Short Title",
                                     CreatedBy = EntityCreationConstants.CreatedByUser,
-                                    CreatedOn = EntityCreationConstants.CreatedOn,
+                                    CreatedOn = EntityCreationConstants.CreatedOn
                                 }
                             },
                             new Domain.Models.ProviderQualification
@@ -156,42 +156,42 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                 Id = 1,
                 PathId = 1,
                 Source = "Test",
-                QualificationId = 1,
+                QualificationId = 1
             },
             new Domain.Models.QualificationRoutePathMapping
             {
                 Id = 2,
                 PathId = 1,
                 Source = "Test",
-                QualificationId = 2,
+                QualificationId = 2
             },
             new Domain.Models.QualificationRoutePathMapping
             {
                 Id = 3,
                 PathId = 2,
                 Source = "Test",
-                QualificationId = 1,
+                QualificationId = 1
             },
             new Domain.Models.QualificationRoutePathMapping
             {
                 Id = 4,
                 PathId = 2,
                 Source = "Test",
-                QualificationId = 2,
+                QualificationId = 2
             },
             new Domain.Models.QualificationRoutePathMapping
             {
                 Id = 5,
                 PathId = 3,
                 Source = "Test",
-                QualificationId = 3,
+                QualificationId = 3
             },
             new Domain.Models.QualificationRoutePathMapping
             {
                 Id = 6,
                 PathId = 4,
                 Source = "Test",
-                QualificationId = 3,
+                QualificationId = 3
             }
         };
     }

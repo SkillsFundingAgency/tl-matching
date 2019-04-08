@@ -4,6 +4,7 @@
 	[CrmId] uniqueidentifier NOT NULL,
 	[CompanyName] NVARCHAR(160) NOT NULL, 
 	[AlsoKnownAs] NVARCHAR(100) NULL, 
+	[CompanyNameSearch] NVARCHAR(260) NULL,
 	[Aupa] NVARCHAR(10) NULL, 
 	[CompanyType] NVARCHAR(100) NULL, 
 	[PrimaryContact] NVARCHAR(100) NULL, 
