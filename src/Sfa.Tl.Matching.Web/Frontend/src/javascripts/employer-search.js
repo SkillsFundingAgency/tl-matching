@@ -22,13 +22,18 @@ var employer = (function () {
                 contentType: "application/json",
                 data: { query: query },
                 success: function (employers) {
-                    var employerNames = $.map(employers, function (e) {
+	                var employerNames = $.map(employers, function (e) {
                         return getEmployerNameWithAka(e);
                     });
 
-                    Searchresult = employers;
+	                Searchresult = employers;
 
-                    $("#SelectedEmployerId").val("");
+                    if (Searchresult !== undefined && Searchresult !== null) {
+                        if (Searchresult[0] !== undefined && Searchresult[0] !== null) {
+                            var firstresult = Searchresult[0];
+                            $("#SelectedEmployerId").val(firstresult.id);
+                        }
+                    }
 
                     populateResults(employerNames);
                 },
