@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Internal;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -32,9 +33,17 @@ namespace Sfa.Tl.Matching.Application.Services
             return results;
         }
 
-        public async Task<bool> IsValidPostCode(string postCode)
+        public async Task<(bool, string)> IsValidPostCode(string postCode)
         {
-           return await _locationService.IsValidPostCode(postCode);
+            try
+            {
+                var result = await _locationService.GetGeoLocationData(postCode);
+                return (true, result.Postcode);
+            }
+            catch
+            {
+                return (false, postCode);
+            }
         }
     }
 }

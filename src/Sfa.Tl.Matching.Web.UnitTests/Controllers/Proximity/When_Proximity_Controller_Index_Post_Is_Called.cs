@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             IMapper mapper = new Mapper(config);
 
             var providerService = Substitute.For<IProximityService>();
-            providerService.IsValidPostCode(Arg.Any<string>()).Returns(true);
+            providerService.IsValidPostCode(Arg.Any<string>()).Returns((true, "CV1 2WT"));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);

@@ -3,7 +3,6 @@ using System.Linq;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -24,11 +23,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 new Route {Id = 1, Name = "Route 1"}
             }.AsQueryable();
 
-            var logger = Substitute.For<ILogger<ProximityController>>();
+            var logger = Substitute.For<ILogger<ProviderController>>();
             var mapper = Substitute.For<IMapper>();
 
             var providerService = Substitute.For<IProximityService>();
-            providerService.IsValidPostCode(Arg.Any<string>()).Returns(true);
+            providerService.IsValidPostCode(Arg.Any<string>()).Returns((true, "CV1 2WT"));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
