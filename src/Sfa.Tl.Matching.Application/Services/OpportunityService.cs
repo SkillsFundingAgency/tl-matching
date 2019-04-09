@@ -158,8 +158,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static Expression<Func<Opportunity, bool>> FilterValidOpportunities()
         {
-            return o => o.ProvisionGap.Count > 0 ||
-                        (o.Referral.Count > 0 && o.ConfirmationSelected.HasValue && o.ConfirmationSelected.Value);
+            return o => (o.ProvisionGap != null && o.ProvisionGap.Count > 0) ||
+                        (o.Referral != null && o.Referral.Count > 0 && o.ConfirmationSelected.HasValue && o.ConfirmationSelected.Value);
         }
     }
 }
