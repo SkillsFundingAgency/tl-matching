@@ -55,19 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                         {
                             new ProvisionGap
                             {
-                                OpportunityId = 1
-                            }
-                        }
-                    },
-                    new Domain.Models.Opportunity
-                    {
-                        Id = 3,
-                        CreatedOn = new DateTime(2018, 1, 1, 23, 59, 59),
-                        Referral = new List<Domain.Models.Referral>
-                        {
-                            new Domain.Models.Referral
-                            {
-                                OpportunityId = 1
+                                OpportunityId = 2
                             }
                         }
                     }
