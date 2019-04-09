@@ -53,7 +53,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.ConfirmationSelected, o => o.MapFrom(s => s.ConfirmationSelected))
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact))
-                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
                 .ForMember(m => m.EmployerName, o => o.MapFrom(s => s.EmployerName))
                 .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
