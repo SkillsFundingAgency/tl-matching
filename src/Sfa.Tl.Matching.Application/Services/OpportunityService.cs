@@ -89,8 +89,8 @@ namespace Sfa.Tl.Matching.Application.Services
             if (latestOpportunity == null)
                 return null;
 
-            latestOpportunity.Referral.Clear();
-            latestOpportunity.ProvisionGap.Clear();
+            latestOpportunity.Referral?.Clear();
+            latestOpportunity.ProvisionGap?.Clear();
 
             var dto = _mapper.Map<OpportunityDto>(latestOpportunity);
             
