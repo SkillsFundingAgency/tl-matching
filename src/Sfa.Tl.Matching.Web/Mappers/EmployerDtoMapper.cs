@@ -13,10 +13,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<FindEmployerViewModel, EmployerNameDto>>())
                 .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.SelectedEmployerId))
                 .ForMember(m => m.EmployerCrmId, o => o.Ignore())
-                .ForMember(m => m.EmployerContact, o => o.Ignore())
-                .ForMember(m => m.EmployerContactEmail, o => o.Ignore())
-                .ForMember(m => m.EmployerContactPhone, o => o.Ignore())
-                .ForMember(m => m.EmployerContactPhone, o => o.Ignore())
                 .ForMember(m => m.HasChanged, o => o.MapFrom(src => src.CompanyName != src.PreviousCompanyName))
                 ;
 
