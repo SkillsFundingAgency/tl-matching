@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("employer-search", Name = "EmployerSearch_Get")]
+        [Route("employer-search", Name = "SearchEmployer")]
         public IActionResult Search(string query)
         {
             var employers = _employerService.Search(query);
@@ -35,46 +35,40 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("who-is-employer/{id?}", Name = "EmployerFind_Get")]
-        public IActionResult FindEmployer(int id)
+        [Route("who-is-employer/{id?}", Name = "LoadWhoIsEmployer")]
+        public async Task<IActionResult> FindEmployer(int id)
         {
-            var viewModel = new FindEmployerViewModel
-            {
-                OpportunityId = id
-            };
+            var dto = await _opportunityService.GetOpportunity(id);
+            var viewModel = _mapper.Map<FindEmployerViewModel>(dto);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("who-is-employer/{id?}", Name = "EmployerFind_Post")]
+        [Route("who-is-employer/{id?}", Name = "SaveEmployerName")]
         public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
             var employerDto = viewModel.SelectedEmployerId != 0 ?
                 await _employerService.GetEmployer(viewModel.SelectedEmployerId) :
                 null;
 
-            if (!ModelState.IsValid || employerDto == null)
+            if (employerDto == null)
             {
-                if (employerDto == null)
-                {
-                    ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
-                }
-
+                ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
                 return View(viewModel);
             }
 
             var dto = _mapper.Map<EmployerNameDto>(viewModel);
-            
             dto.EmployerCrmId = employerDto.CrmId;
+            dto.CompanyName = employerDto.CompanyNameWithAka;
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("EmployerDetails_Get", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetEmployerDetails", new { id = viewModel.OpportunityId });
         }
 
         [HttpGet]
-        [Route("employer-details/{id?}", Name = "EmployerDetails_Get")]
+        [Route("employer-details/{id?}", Name = "GetEmployerDetails")]
         public async Task<IActionResult> Details(int id)
         {
             var dto = await _opportunityService.GetOpportunity(id);
@@ -84,7 +78,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("employer-details/{id?}", Name = "EmployerDetails_Post")]
+        [Route("employer-details/{id?}", Name = "SaveEmployerDetails")]
         public async Task<IActionResult> Details(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
@@ -116,6 +110,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (IsEmployerPopulated(dto))
                 return _mapper.Map<EmployerDetailsViewModel>(dto);
+
+            var latestOpportunity = _opportunityService.GetLatestCompletedOpportunity(dto.EmployerCrmId);
+            if (latestOpportunity != null && IsEmployerPopulated(latestOpportunity))
+            {
+                var viewModel = _mapper.Map<EmployerDetailsViewModel>(latestOpportunity);
+                viewModel.OpportunityId = dto.Id;
+                return viewModel;
+            }
 
             var employerDto = await _employerService.GetEmployer(dto.EmployerId ?? 0);
 

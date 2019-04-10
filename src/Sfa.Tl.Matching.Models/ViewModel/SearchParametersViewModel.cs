@@ -14,7 +14,8 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int SearchRadius { get; set; }
 
         public int? SelectedRouteId { get; set; }
-
+        public int OpportunityId { get; set; }
+        
         public IList<SelectListItem> RoutesSelectList { get; set; }
     }
 }

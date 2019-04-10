@@ -82,7 +82,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_EmployerName_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
-            viewModel.PlacementInformation.EmployerName.Should().Be("CompanyName");
+            viewModel.PlacementInformation.EmployerName.Should().Be("EmployerName");
         }
 
         [Fact]

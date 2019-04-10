@@ -3,9 +3,10 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -15,17 +16,26 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
     {
         private readonly IActionResult _result;
         private const int OpportunityId = 12;
+        private const int EmployerId = 1;
+
+        private const string EmployerName = "EmployerName";
 
         public When_Employer_FindEmployer_Is_Loaded()
         {
             var employerService = Substitute.For<IEmployerService>();
             var opportunityService = Substitute.For<IOpportunityService>();
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
+            {
+                Id = OpportunityId,
+                EmployerName = EmployerName,
+                EmployerId = EmployerId
+            });
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
             var employerController = new EmployerController(employerService, opportunityService, mapper);
 
-            _result = employerController.FindEmployer(OpportunityId);
+            _result = employerController.FindEmployer(OpportunityId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -48,6 +58,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             var viewModel = _result.GetViewModel<FindEmployerViewModel>();
             viewModel.OpportunityId.Should().Be(OpportunityId);
+        }
+
+        [Fact]
+        public void Then_EmployerId_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<FindEmployerViewModel>();
+            viewModel.SelectedEmployerId.Should().Be(EmployerId);
+        }
+
+        [Fact]
+        public void Then_CompanyName_Is_Populated()
+        {
+            var viewModel = _result.GetViewModel<FindEmployerViewModel>();
+            viewModel.CompanyName.Should().Be(EmployerName);
         }
     }
 }

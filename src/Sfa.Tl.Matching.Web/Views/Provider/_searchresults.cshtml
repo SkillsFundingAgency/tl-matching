@@ -20,7 +20,8 @@
     <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden"/>
     <input asp-for="SearchParameters.SearchRadius" name="SearchRadius" type="hidden"/>
     <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden"/>
-    <input asp-for="@Model.SearchResults.SearchResultProviderCount" name="SearchResultProviderCount" type="hidden"/>
+    <input asp-for="SearchResults.SearchResultProviderCount" name="SearchResultProviderCount" type="hidden"/>
+    <input asp-for="SearchParameters.OpportunityId" name="OpportunityId" type="hidden"/>
     <ol class="tl-search-results">
         @for (var i = 0; i < Model.SearchResults.SearchResultProviderCount; i++)
         {

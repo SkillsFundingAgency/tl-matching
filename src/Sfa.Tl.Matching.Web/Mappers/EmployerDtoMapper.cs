@@ -13,6 +13,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<FindEmployerViewModel, EmployerNameDto>>())
                 .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.SelectedEmployerId))
                 .ForMember(m => m.EmployerCrmId, o => o.Ignore())
+                .ForMember(m => m.HasChanged, o => o.MapFrom(src => src.CompanyName != src.PreviousCompanyName))
                 ;
 
             CreateMap<EmployerDetailsViewModel, EmployerDetailDto>()
@@ -22,16 +23,28 @@ namespace Sfa.Tl.Matching.Web.Mappers
 
             CreateMap<EmployerDto, EmployerDetailsViewModel>()
                 .ForMember(m => m.OpportunityId, o => o.Ignore())
+                .ForMember(m => m.EmployerName, o => o.MapFrom(s => s.CompanyName))
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.PrimaryContact))
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.Email))
                 .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.Phone))
                 ;
 
             CreateMap<OpportunityDto, EmployerDetailsViewModel>()
-                .ForMember(m => m.CompanyName, 
-                    o => o.MapFrom(s => s.EmployerName))
                 .ForMember(m => m.OpportunityId,
                     o => o.MapFrom(s => s.Id))
+                ;
+
+            CreateMap<OpportunityDto, FindEmployerViewModel>()
+                .ForMember(m => m.OpportunityId,
+                    o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.SelectedEmployerId,
+                    o => o.MapFrom(s => s.EmployerId))
+                .ForMember(m => m.SelectedEmployerId,
+                    o => o.MapFrom(s => s.EmployerId))
+                .ForMember(m => m.CompanyName,
+                    o => o.MapFrom(s => s.EmployerName))
+                .ForMember(m => m.PreviousCompanyName,
+                    o => o.MapFrom(s => s.EmployerName))
                 ;
         }
     }

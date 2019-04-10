@@ -71,6 +71,75 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
+        public virtual async Task UpdateMany(IList<T> entities)
+        {
+            _dbContext.UpdateRange(entities);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogError(due.Message, due.InnerException);
+                throw;
+            }
+        }
+
+        public virtual async Task Delete(T entity)
+        {
+            _dbContext.Remove(entity);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogError(due.Message, due.InnerException);
+                throw;
+            }
+        }
+
+        public virtual async Task<int> Delete(int id)
+        {
+            var entity = new T
+            {
+                Id = id
+            };
+
+            _dbContext.Attach(entity);
+            _dbContext.Remove(entity);
+
+            int deletedRecordCount;
+            try
+            {
+                deletedRecordCount = await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogError(due.Message, due.InnerException);
+                throw;
+            }
+
+            return deletedRecordCount;
+        }
+
+        public virtual async Task DeleteMany(IList<T> entities)
+        {
+            _dbContext.RemoveRange(entities);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogError(due.Message, due.InnerException);
+                throw;
+            }
+        }
+
         public IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath)
         {
             var queryable = GetQueryableWithIncludes(navigationPropertyPath);

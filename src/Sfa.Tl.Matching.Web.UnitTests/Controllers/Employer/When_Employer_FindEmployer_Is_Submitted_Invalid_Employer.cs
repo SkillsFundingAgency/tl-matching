@@ -45,12 +45,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _employerController.ViewData.ModelState.Should().ContainSingle();
 
         [Fact]
-        public void Then_Model_State_Has_BusinessName_Key() =>
+        public void Then_Model_State_Has_CompanyName_Key() =>
             _employerController.ViewData.ModelState.ContainsKey(nameof(FindEmployerViewModel.CompanyName))
                 .Should().BeTrue();
 
         [Fact]
-        public void Then_Model_State_Has_BusinessName_Error()
+        public void Then_Model_State_Has_CompanyName_Error()
         {
             var modelStateEntry = _employerController.ViewData.ModelState[nameof(FindEmployerViewModel.CompanyName)];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must find and choose an employer");

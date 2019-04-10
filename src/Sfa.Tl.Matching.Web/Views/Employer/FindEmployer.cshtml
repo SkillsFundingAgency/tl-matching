@@ -3,7 +3,6 @@
     ViewData["Title"] = "Who is the employer?";
 }
 
-
 @section backButton{
     <a asp-route="PlacementInformationSave_Get" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
     <a asp-controller="Provider" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Finish and start again </a>
@@ -13,16 +12,16 @@
     <div class="govuk-grid-column-two-thirds">
         @if (!ViewData.ModelState.IsValid)
         {
-        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-            <h2 class="govuk-error-summary__title" id="error-summary-title">
-                This page has errors
-            </h2>
-            <div class="govuk-error-summary__body">
-                <ul class="govuk-list govuk-error-summary__list">
-                    <li><a sfa-validation-for="CompanyName"></a></li>
-                </ul>
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">
+                    This page has errors
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a sfa-validation-for="CompanyName"></a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
         }
         <form asp-action="FindEmployer" id="findEmployer" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
@@ -39,6 +38,9 @@
                 <span class="govuk-error-message" asp-validation-for="CompanyName"></span>
                 <select id="CompanyName" name="CompanyName" class="govuk-input govuk-input" asp-for="CompanyName"></select>
             </div>
+
+            <input id="companyNameHidden" asp-for="CompanyName" type="hidden" />
+            <input id="previousCompanyNameHidden" asp-for="PreviousCompanyName" type="hidden" />
 
             <button id="tl-continue" class="govuk-button" type="submit">Continue</button>
         </form>

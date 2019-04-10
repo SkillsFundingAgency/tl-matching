@@ -13,6 +13,9 @@ var employer = (function () {
         onConfirm: setSelectedEmployerId
     });
 
+    $("#SelectedEmployerId").val("");
+    $("#CompanyName").val($("#companyNameHidden").val());
+
     function search(query, populateResults) {
         var delayInMs = 100;
 
@@ -22,11 +25,11 @@ var employer = (function () {
                 contentType: "application/json",
                 data: { query: query },
                 success: function (employers) {
-	                var employerNames = $.map(employers, function (e) {
+                    var employerNames = $.map(employers, function (e) {
                         return getEmployerNameWithAka(e);
                     });
 
-	                Searchresult = employers;
+                    Searchresult = employers;
 
                     if (Searchresult !== undefined && Searchresult !== null) {
                         if (Searchresult[0] !== undefined && Searchresult[0] !== null) {

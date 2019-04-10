@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.EqualityComparer;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -37,12 +40,59 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _opportunityRepository.Create(opportunity);
         }
 
+        public async Task UpdateReferrals(OpportunityDto dto)
+        {
+            var existingReferrals = _referralRepository.GetMany(r => r.OpportunityId == dto.Id)
+                .ToList();
+
+            var newReferrals = _mapper.Map<List<Referral>>(dto.Referral);
+            foreach (var nr in newReferrals)
+                nr.OpportunityId = dto.Id;
+
+            var comparer = new ReferralEqualityComparer();
+            var toBeAdded = newReferrals.Except(existingReferrals, comparer).ToList();
+            var same = existingReferrals.Intersect(newReferrals, comparer).ToList();
+            var toBeDeleted = existingReferrals.Except(same).ToList();
+
+            Referral Find(Referral referral) => existingReferrals.First(r => r.Id == referral.Id);
+
+            var deleteReferrals = toBeDeleted.Select(Find).ToList();
+            await _referralRepository.DeleteMany(deleteReferrals);
+
+            await _referralRepository.CreateMany(toBeAdded);
+
+            var updateReferrals = same.Select(Find).ToList();
+            await _referralRepository.UpdateMany(updateReferrals);
+        }
+
         public async Task<OpportunityDto> GetOpportunity(int id)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id);
 
-            var dto = _mapper.Map<Opportunity, OpportunityDto>(opportunity);
+            var dto = _mapper.Map<OpportunityDto>(opportunity);
 
+            return dto;
+        }
+
+        public OpportunityDto GetLatestCompletedOpportunity(Guid crmId)
+        {
+            var opportunities = _opportunityRepository.GetMany(o => o.EmployerCrmId == crmId,
+                o => o.ProvisionGap, 
+                o => o.Referral);
+
+            var latestOpportunity = opportunities
+                .Where(FilterValidOpportunities())
+                .OrderByDescending(o => o.CreatedOn)
+                .Take(1).SingleOrDefault();
+
+            if (latestOpportunity == null)
+                return null;
+
+            latestOpportunity.Referral?.Clear();
+            latestOpportunity.ProvisionGap?.Clear();
+
+            var dto = _mapper.Map<OpportunityDto>(latestOpportunity);
+            
             return dto;
         }
 
@@ -97,11 +147,18 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     Name = r.ProviderVenue.Provider.Name,
                     Postcode = r.ProviderVenue.Postcode,
-                    DistanceFromEmployer = r.DistanceFromEmployer
+                    DistanceFromEmployer = r.DistanceFromEmployer,
+                    ProviderVenueId = r.ProviderVenueId
                 })
                 .ToList();
 
             return providers;
+        }
+
+        private static Expression<Func<Opportunity, bool>> FilterValidOpportunities()
+        {
+            return o => (o.ProvisionGap != null && o.ProvisionGap.Count > 0) ||
+                        (o.Referral != null && o.Referral.Count > 0 && o.ConfirmationSelected.HasValue && o.ConfirmationSelected.Value);
         }
     }
 }

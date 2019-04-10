@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Route, config => config.Ignore())
                 .ForMember(m => m.ProvisionGap, config => config.Ignore())
                 ;
-            
+
             CreateMap<ReferralDto, Referral>()
                 .ForMember(m => m.OpportunityId, o => o.Ignore())
                 .ForMember(m => m.Opportunity, o => o.Ignore())
@@ -38,6 +38,12 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.EmployerId))
                 .ForMember(m => m.EmployerCrmId, o => o.MapFrom(s => s.EmployerCrmId))
                 .ForMember(m => m.EmployerName, o => o.MapFrom(s => s.CompanyName))
+                .ForMember(dest => dest.EmployerContact, opt => opt.MapFrom((src, dest) =>
+                    src.HasChanged ? string.Empty : dest.EmployerContact))
+                .ForMember(dest => dest.EmployerContactEmail, opt => opt.MapFrom((src, dest) =>
+                    src.HasChanged ? string.Empty : dest.EmployerContactEmail))
+                .ForMember(dest => dest.EmployerContactPhone, opt => opt.MapFrom((src, dest) =>
+                    src.HasChanged ? string.Empty : dest.EmployerContactPhone))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
@@ -50,6 +56,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.ConfirmationSelected, o => o.MapFrom(s => s.ConfirmationSelected))
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact))
+                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
                 .ForMember(m => m.EmployerName, o => o.MapFrom(s => s.EmployerName))
                 .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
                 .ForMember(m => m.Placements, o => o.MapFrom(s => s.Placements))
@@ -73,7 +80,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
                 .ForMember(m => m.Placements,
-                    opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ? 
+                    opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ?
                         src.Placements : null))
                 .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
@@ -84,8 +91,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
                 .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 .ForMember(m => m.Placements,
-                    opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ? 
-                        src.Placements : 1))
+                    opt => opt.MapFrom(s => s.PlacementsKnown.HasValue && s.PlacementsKnown.Value ?
+                        s.Placements : 1))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
