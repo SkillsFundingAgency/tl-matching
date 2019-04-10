@@ -11,30 +11,30 @@ using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 {
-    public class When_Provider_Controller_RefineSearchResults_Is_Called
+    public class When_Proximity_Controller_RefineSearchResults_Is_Called
     {
         private readonly IActionResult _result;
 
-        public When_Provider_Controller_RefineSearchResults_Is_Called()
+        public When_Proximity_Controller_RefineSearchResults_Is_Called()
         {
             var routes = new List<Route>
             {
                 new Route {Id = 1, Name = "Route 1"}
             }.AsQueryable();
 
-            var logger = Substitute.For<ILogger<ProviderController>>();
+            var logger = Substitute.For<ILogger<ProximityController>>();
             var mapper = Substitute.For<IMapper>();
 
-            var providerService = Substitute.For<IProviderService>();
+            var providerService = Substitute.For<IProximityService>();
             providerService.IsValidPostCode(Arg.Any<string>()).Returns(true);
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
 
             var opportunityService = Substitute.For<IOpportunityService>();
-            var providerController = new ProviderController(mapper, routePathService, providerService,
+            var providerController = new ProximityController(mapper, routePathService, providerService,
                 opportunityService);
 
             var viewModel = new SearchParametersViewModel

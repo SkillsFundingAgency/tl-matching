@@ -13,18 +13,18 @@ using Sfa.Tl.Matching.Models.ViewModel;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
-    public class ProviderController : Controller
+    public class ProximityController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IProviderService _providerService;
+        private readonly IProximityService _proximityService;
         private readonly IRoutePathService _routePathService;
         private readonly IOpportunityService _opportunityService;
 
-        public ProviderController(IMapper mapper, IRoutePathService routePathService, IProviderService providerService,
+        public ProximityController(IMapper mapper, IRoutePathService routePathService, IProximityService proximityService,
             IOpportunityService opportunityService)
         {
             _mapper = mapper;
-            _providerService = providerService;
+            _proximityService = proximityService;
             _routePathService = routePathService;
             _opportunityService = opportunityService;
         }
@@ -124,7 +124,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
         {
-            var searchResults = await _providerService.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto
+            var searchResults = await _proximityService.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto
             {
                 Postcode = viewModel.Postcode,
                 SelectedRouteId = viewModel.SelectedRouteId,
@@ -185,7 +185,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 result = false;
             }
 
-            var isPostcodeValidation = await _providerService.IsValidPostCode(postCode);
+            var isPostcodeValidation = await _proximityService.IsValidPostCode(postCode);
             if (string.IsNullOrWhiteSpace(postCode) || !isPostcodeValidation)
             {
                 ModelState.AddModelError("Postcode", "You must enter a real postcode");

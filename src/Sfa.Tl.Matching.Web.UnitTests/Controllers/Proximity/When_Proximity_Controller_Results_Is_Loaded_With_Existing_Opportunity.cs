@@ -13,12 +13,12 @@ using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 {
-    public class When_Provider_Controller_Results_Is_Loaded_With_Existing_Opportunity
+    public class When_Proximity_Controller_Results_Is_Loaded_With_Existing_Opportunity
     {
         private readonly IActionResult _result;
-        private readonly IProviderService _providerService;
+        private readonly IProximityService _proximityService;
         private readonly IOpportunityService _opportunityService;
 
         private const int OpportunityId = 1;
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         private const int SearchRadius = 10;
         private readonly int _selectedRouteId;
 
-        public When_Provider_Controller_Results_Is_Loaded_With_Existing_Opportunity()
+        public When_Proximity_Controller_Results_Is_Loaded_With_Existing_Opportunity()
         {
             var routes = new List<Route>
                 {
@@ -52,8 +52,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
-            _providerService = Substitute.For<IProviderService>();
-            _providerService
+            _proximityService = Substitute.For<IProximityService>();
+            _proximityService
                 .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>(a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 }
             });
 
-            var providerController = new ProviderController(mapper, routePathService, _providerService,
+            var providerController = new ProximityController(mapper, routePathService, _proximityService,
                 _opportunityService);
 
             _result = providerController.Results(new SearchParametersViewModel
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_ProviderService_SearchProvidersByPostcodeProximity_Is_Called_Exactly_Once()
         {
-            _providerService
+            _proximityService
                 .Received(1)
                 .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>(a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId));
         }
