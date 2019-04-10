@@ -11,6 +11,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             _dto = new CheckAnswersDto
             {
                 OpportunityId = 1,
+                SearchRadius = 3,
                 JobTitle = "JobTitle",
                 PlacementsKnown = true,
                 Placements = 2,
