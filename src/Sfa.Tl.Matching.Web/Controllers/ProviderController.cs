@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        [Route("provider-results-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}-{OpportunityId}", Name = "ProviderResults_Get")]
+        [Route("provider-results-for-opportunity-{OpportunityId}-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "ProviderResults_Get")]
         public async Task<IActionResult> Results(SearchParametersViewModel searchParametersViewModel)
         {
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
@@ -143,14 +143,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (viewModel.OpportunityId == 0)
                 return resultsViewModel;
 
-            var selectedResultsViewModel = PopulateSelectedSearchResults(viewModel.OpportunityId, resultsViewModel);
+            var selectedResultsViewModel = SetProviderIsSelected(resultsViewModel);
 
             return selectedResultsViewModel;
         }
 
-        private SearchViewModel PopulateSelectedSearchResults(int opportunityId, SearchViewModel resultsViewModel)
+        private SearchViewModel SetProviderIsSelected(SearchViewModel resultsViewModel)
         {
-            var referrals = _opportunityService.GetReferrals(opportunityId);
+            var referrals = _opportunityService.GetReferrals(resultsViewModel.SearchParameters.OpportunityId);
             foreach (var result in resultsViewModel.SearchResults.Results)
             {
                 if (referrals.Any(r => r.ProviderVenueId == result.ProviderVenueId))

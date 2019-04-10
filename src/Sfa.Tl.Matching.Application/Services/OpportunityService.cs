@@ -76,11 +76,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public OpportunityDto GetLatestCompletedOpportunity(Guid crmId)
         {
-            var opportunities = _opportunityRepository.GetMany(o => o.EmployerCrmId == crmId,
-                o => o.ProvisionGap, 
-                o => o.Referral);
-
-            var latestOpportunity = opportunities
+            var latestOpportunity = _opportunityRepository.GetMany(o => o.EmployerCrmId == crmId)
                 .Where(FilterValidOpportunities())
                 .OrderByDescending(o => o.CreatedOn)
                 .Take(1).SingleOrDefault();
@@ -92,7 +88,7 @@ namespace Sfa.Tl.Matching.Application.Services
             latestOpportunity.ProvisionGap?.Clear();
 
             var dto = _mapper.Map<OpportunityDto>(latestOpportunity);
-            
+
             return dto;
         }
 
@@ -125,7 +121,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
             trackedEntity = _mapper.Map(dto, trackedEntity);
-            
+
             await _opportunityRepository.Update(trackedEntity);
         }
 
