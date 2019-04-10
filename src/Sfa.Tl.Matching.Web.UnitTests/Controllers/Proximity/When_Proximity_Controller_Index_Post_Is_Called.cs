@@ -12,13 +12,13 @@ using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 {
-    public class When_Provider_Controller_Index_Post_Is_Called
+    public class When_Proximity_Controller_Index_Post_Is_Called
     {
         private readonly IActionResult _result;
 
-        public When_Provider_Controller_Index_Post_Is_Called()
+        public When_Proximity_Controller_Index_Post_Is_Called()
         {
             var routes = new List<Route>
             {
@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
-            var providerService = Substitute.For<IProviderService>();
+            var providerService = Substitute.For<IProximityService>();
             providerService.IsValidPostCode(Arg.Any<string>()).Returns(true);
 
             var routePathService = Substitute.For<IRoutePathService>();
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            var providerController = new ProviderController(mapper, routePathService, providerService,
+            var proximityController = new ProximityController(mapper, routePathService, providerService,
                 opportunityService);
 
             var selectedRouteId = routes.First().Id;
@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 SelectedRouteId = selectedRouteId,
                 Postcode = postcode
             };
-            _result = providerController.Index(viewModel).GetAwaiter().GetResult();
+            _result = proximityController.Index(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

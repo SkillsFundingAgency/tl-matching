@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return RedirectToAction("FailedLogin", "Home");
             }
 
-            return RedirectToAction("Start", "Provider");
+            return RedirectToAction("Start", "Proximity");
         }
 
         [HttpGet]

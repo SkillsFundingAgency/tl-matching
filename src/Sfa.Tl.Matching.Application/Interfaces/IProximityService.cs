@@ -5,7 +5,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
 {
-    public interface IProviderService
+    public interface IProximityService
     {
         Task<IList<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto);
         Task<bool> IsValidPostCode(string postCode);

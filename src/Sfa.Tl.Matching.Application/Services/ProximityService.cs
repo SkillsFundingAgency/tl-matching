@@ -8,12 +8,12 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
-    public class ProviderService : IProviderService
+    public class ProximityService : IProximityService
     {
         private readonly ISearchProvider _searchProvider;
         private readonly ILocationService _locationService;
 
-        public ProviderService(ISearchProvider searchProvider, ILocationService locationService)
+        public ProximityService(ISearchProvider searchProvider, ILocationService locationService)
         {
             _searchProvider = searchProvider;
             _locationService = locationService;
