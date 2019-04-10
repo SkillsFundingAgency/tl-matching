@@ -31,15 +31,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
-            var providerService = Substitute.For<IProximityService>();
-            providerService.IsValidPostCode(Arg.Any<string>()).Returns((true, "CV1 2WT"));
+            var proximityService = Substitute.For<IProximityService>();
+            proximityService.IsValidPostCode(Arg.Any<string>()).Returns((true, "CV1 2WT"));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
 
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            var proximityController = new ProximityController(mapper, routePathService, providerService,
+            var proximityController = new ProximityController(mapper, routePathService, proximityService,
                 opportunityService);
 
             var selectedRouteId = routes.First().Id;
