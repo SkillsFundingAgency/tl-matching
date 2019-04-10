@@ -5,11 +5,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Comparers.Referral
 {
-    public class When_Two_Referrals_Are_Added_And_One_Deleted
+    public class When_One_Referral_Is_Added_And_One_Deleted
     {
         private readonly ReferralDifference.ReferralDifferenceDto _dto;
 
-        public When_Two_Referrals_Are_Added_And_One_Deleted()
+        public When_One_Referral_Is_Added_And_One_Deleted()
         {
             var viewModelReferrals = new List<Domain.Models.Referral>
             {
@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Comparers.Referral
 
             var databaseReferrals = new List<Domain.Models.Referral>
             {
+                new Domain.Models.Referral { ProviderVenueId = 1, DistanceFromEmployer = 1 },
                 new Domain.Models.Referral { ProviderVenueId = 2, DistanceFromEmployer = 2 }
             };
 
@@ -27,16 +28,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Comparers.Referral
         }
 
         [Fact]
-        public void Then_Adds_Count_Is_2() =>
-            _dto.Adds.Count.Should().Be(2);
+        public void Then_Adds_Count_Is_1() =>
+            _dto.Adds.Count.Should().Be(1);
 
         [Fact]
         public void Then_Adds_Index_0_ProviderVenueId_Is_Correct() =>
-            _dto.Adds[0].ProviderVenueId.Should().Be(1);
-
-        [Fact]
-        public void Then_Adds_Index_1_ProviderVenueId_Is_Correct() =>
-            _dto.Adds[1].ProviderVenueId.Should().Be(3);
+            _dto.Adds[0].ProviderVenueId.Should().Be(3);
 
         [Fact]
         public void Then_Deletes_Count_Is_1() =>
@@ -47,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Comparers.Referral
             _dto.Deletes[0].ProviderVenueId.Should().Be(2);
 
         [Fact]
-        public void Then_Updates_Count_Is_0() =>
-            _dto.Updates.Count.Should().Be(0);
+        public void Then_Updates_Count_Is_1() =>
+            _dto.Updates.Count.Should().Be(1);
     }
 }

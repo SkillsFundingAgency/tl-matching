@@ -50,19 +50,18 @@ namespace Sfa.Tl.Matching.Application.Services
                 nr.OpportunityId = dto.Id;
 
             var comparer = new ReferralEqualityComparer();
-
-            var updates = existingReferrals.Intersect(newReferrals, comparer).ToList();
-            var creates = newReferrals.Except(updates, comparer).ToList();
-            var deletes = existingReferrals.Except(updates, comparer).ToList();
+            var toBeAdded = newReferrals.Except(existingReferrals, comparer).ToList();
+            var same = existingReferrals.Intersect(newReferrals, comparer).ToList();
+            var toBeDeleted = existingReferrals.Except(same).ToList();
 
             Referral Find(Referral referral) => existingReferrals.First(r => r.Id == referral.Id);
 
-            var deleteReferrals = deletes.Select(Find).ToList();
+            var deleteReferrals = toBeDeleted.Select(Find).ToList();
             await _referralRepository.DeleteMany(deleteReferrals);
 
-            await _referralRepository.CreateMany(creates);
+            await _referralRepository.CreateMany(toBeAdded);
 
-            var updateReferrals = updates.Select(Find).ToList();
+            var updateReferrals = same.Select(Find).ToList();
             await _referralRepository.UpdateMany(updateReferrals);
         }
 

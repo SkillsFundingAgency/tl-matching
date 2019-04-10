@@ -28,14 +28,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests
             _comparer = comparer;
         }
 
-        internal ReferralDifferenceDto Get(List<Referral> target, List<Referral> source)
+        internal ReferralDifferenceDto Get(List<Referral> newReferrals, List<Referral> existingReferrals)
         {
-            var toUpdate = source.Intersect(target, _comparer).ToList();
-            var toAdd = target.Except(toUpdate, _comparer).ToList();
-            var toDelete = source.Except(toUpdate, _comparer).ToList();
+            var toBeAdded = newReferrals.Except(existingReferrals, _comparer).ToList();
+            var same = existingReferrals.Intersect(newReferrals, _comparer).ToList();
+            var toBeDeleted = existingReferrals.Except(same).ToList();
 
-            var referralDifferenceDto = new ReferralDifferenceDto(toAdd,
-                toDelete, toUpdate);
+            var referralDifferenceDto = new ReferralDifferenceDto(toBeAdded,
+                toBeDeleted, same);
 
             return referralDifferenceDto;
         }

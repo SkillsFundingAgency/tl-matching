@@ -33,15 +33,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Comparers.Referral
             _dto.Deletes.Count.Should().Be(3);
 
         [Fact]
-        public void Then_Deletes_Index_1_ProviderVenueId_Is_Correct() =>
+        public void Then_Deletes_Index_0_ProviderVenueId_Is_Correct() =>
             _dto.Deletes[0].ProviderVenueId.Should().Be(1);
 
         [Fact]
-        public void Then_Deletes_Index_2_ProviderVenueId_Is_Correct() =>
+        public void Then_Deletes_Index_1_ProviderVenueId_Is_Correct() =>
             _dto.Deletes[1].ProviderVenueId.Should().Be(2);
 
         [Fact]
-        public void Then_Deletes_Index_3_ProviderVenueId_Is_Correct() =>
+        public void Then_Deletes_Index_2_ProviderVenueId_Is_Correct() =>
             _dto.Deletes[2].ProviderVenueId.Should().Be(3);
 
         [Fact]
