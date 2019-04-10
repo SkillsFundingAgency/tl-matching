@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface ILocationService
     {
-        Task<bool> IsValidPostCode(string postCode);
+        Task<(bool, string)> IsValidPostCode(string postCode);
         Task<PostCodeLookupResultDto> GetGeoLocationData(string postCode);
     }
 }

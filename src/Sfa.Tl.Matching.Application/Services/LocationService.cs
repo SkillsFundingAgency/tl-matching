@@ -20,27 +20,29 @@ namespace Sfa.Tl.Matching.Application.Services
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<bool> IsValidPostCode(string postCode)
+        public async Task<(bool, string)> IsValidPostCode(string postCode)
         {
-            var validateUrl = $"{_matchingConfiguration.PostcodeRetrieverBaseUrl}/{postCode}/validate";
-            
-            var response = await _httpClient.GetAsync(validateUrl);
-            
-            var result = await response.Content.ReadAsStringAsync();
-            
-            return !string.IsNullOrWhiteSpace(result) && !result.Contains("false");
+            try
+            {
+                var postCodeLookupResultDto = await GetGeoLocationData(postCode);
+                return (true, postCodeLookupResultDto.Postcode);
+            }
+            catch
+            {
+                return (false, string.Empty);
+            }
         }
 
         public async Task<PostCodeLookupResultDto> GetGeoLocationData(string postCode)
         {
             var lookupUrl = $"{_matchingConfiguration.PostcodeRetrieverBaseUrl}/{postCode}";
-            
+
             var responseMessage = await _httpClient.GetAsync(lookupUrl);
-            
+
             responseMessage.EnsureSuccessStatusCode();
-            
+
             var response = await responseMessage.Content.ReadAsAsync<PostCodeLookupResponse>();
-            
+
             return response.result;
         }
     }
