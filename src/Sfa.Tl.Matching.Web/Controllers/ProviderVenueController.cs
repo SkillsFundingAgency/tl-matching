@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-    public class ProviderController : Controller
+    public class ProviderVenueController : Controller
     {
         
     }

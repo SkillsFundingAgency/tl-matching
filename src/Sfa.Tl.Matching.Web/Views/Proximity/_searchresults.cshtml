@@ -16,7 +16,7 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <p class="govuk-hint">Choose who the employer wants to hear from</p>
 
-<form asp-controller="Provider" asp-action="ValidateProviderSearchResult">
+<form asp-controller="Proximity" asp-action="ValidateProviderSearchResult">
     <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden"/>
     <input asp-for="SearchParameters.SearchRadius" name="SearchRadius" type="hidden"/>
     <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden"/>

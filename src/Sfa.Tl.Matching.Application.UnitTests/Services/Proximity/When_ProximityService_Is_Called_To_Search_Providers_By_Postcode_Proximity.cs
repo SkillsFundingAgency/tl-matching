@@ -10,9 +10,9 @@ using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
 {
-    public class When_ProviderService_Is_Called_To_Search_Providers_By_Postcode_Proximity
+    public class When_ProximityService_Is_Called_To_Search_Providers_By_Postcode_Proximity
     {
         private const string Postcode = "SW1A 2AA";
         private const int SearchRadius = 5;
@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         private readonly ILocationService _locationService;
         private readonly ISearchProvider _searchProvider;
 
-        public When_ProviderService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
+        public When_ProximityService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
         {
             var dto = new ProviderSearchParametersDto { Postcode = Postcode, SearchRadius = SearchRadius, SelectedRouteId = RouteId };
 
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
                 Latitude = "1.2"
             });
 
-            var service = new ProviderService(_searchProvider, _locationService);
+            var service = new ProximityService(_searchProvider, _locationService);
 
             _result = service.SearchProvidersByPostcodeProximity(dto).GetAwaiter().GetResult();
         }

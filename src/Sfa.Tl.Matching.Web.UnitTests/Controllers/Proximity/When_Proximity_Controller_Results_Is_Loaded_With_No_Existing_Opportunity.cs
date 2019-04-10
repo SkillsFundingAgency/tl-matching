@@ -13,23 +13,20 @@ using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 {
-    public class When_Provider_Controller_Results_Is_Loaded_With_Existing_Opportunity
+    public class When_Proximity_Controller_Results_Is_Loaded_With_No_Existing_Opportunity
     {
         private readonly IActionResult _result;
-        private readonly IProviderService _providerService;
+        private readonly IProximityService _proximityService;
         private readonly IOpportunityService _opportunityService;
 
-        private const int OpportunityId = 1;
         private const int RouteId = 1;
-        private const int ProviderVenueId = 11;
-
         private const string Postcode = "SW1A 2AA";
         private const int SearchRadius = 10;
         private readonly int _selectedRouteId;
 
-        public When_Provider_Controller_Results_Is_Loaded_With_Existing_Opportunity()
+        public When_Proximity_Controller_Results_Is_Loaded_With_No_Existing_Opportunity()
         {
             var routes = new List<Route>
                 {
@@ -44,16 +41,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 new ProviderVenueSearchResultDto
                 {
                     Postcode = Postcode,
-                    Distance = 1.5d,
-                    ProviderVenueId = ProviderVenueId
+                    Distance = 1.5d
                 }
             };
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
-            _providerService = Substitute.For<IProviderService>();
-            _providerService
+            _proximityService = Substitute.For<IProximityService>();
+            _proximityService
                 .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>(a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
@@ -61,31 +57,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             routePathService.GetRoutes().Returns(routes);
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetReferrals(OpportunityId).Returns(new List<ReferralDto>
-            {
-                new ReferralDto
-                {
-                    ProviderVenueId = ProviderVenueId,
-                    Name = "Referral"
-                }
-            });
+            var proximityController = new ProximityController(mapper, routePathService, _proximityService, _opportunityService);
 
-            var providerController = new ProviderController(mapper, routePathService, _providerService,
-                _opportunityService);
-
-            _result = providerController.Results(new SearchParametersViewModel
+            _result = proximityController.Results(new SearchParametersViewModel
             {
                 SelectedRouteId = RouteId,
                 Postcode = Postcode,
-                SearchRadius = SearchRadius,
-                OpportunityId = OpportunityId
+                SearchRadius = SearchRadius
             }).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_ProviderService_SearchProvidersByPostcodeProximity_Is_Called_Exactly_Once()
         {
-            _providerService
+            _proximityService
                 .Received(1)
                 .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>(a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId));
         }
@@ -155,16 +140,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_GetReferrals_Is_Called_Exactly_Once()
+        public void Then_GetReferrals_Is_Not_Called()
         {
-            _opportunityService.Received(1).GetReferrals(OpportunityId);
+            _opportunityService.DidNotReceive().GetReferrals(Arg.Any<int>());
         }
 
         [Fact]
-        public void Then_SearchViewModel_Results_Is_Selected()
+        public void Then_SearchViewModel_Results_Is_Not_Selected()
         {
             var viewModel = _result.GetViewModel<SearchViewModel>();
-            viewModel.SearchResults.Results[0].IsSelected.Should().BeTrue();
+            viewModel.SearchResults.Results[0].IsSelected.Should().BeFalse();
         }
     }
 }
