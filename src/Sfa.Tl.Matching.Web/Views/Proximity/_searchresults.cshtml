@@ -1,9 +1,8 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
 
 <h2 class="govuk-body">
-    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount </span>results in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">
-        @Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text
-    </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span>
+   @{ var result = Model.SearchResults.SearchResultProviderCount > 1 ? "results" : "result"; }
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount </span>@result in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text</span> within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Model.SearchParameters.SearchRadius miles </span> of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span>
 </h2>
 
 <p class="govuk-body">
@@ -12,47 +11,48 @@
        asp-route-Postcode="@Model.SearchParameters.Postcode"
        asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
        asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
-       class="govuk-link" id="tl-search-nosuitable">No suitable providers? Let us know</a>.</p>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+       class="govuk-link" id="tl-search-nosuitable">No suitable providers? Let us know</a>.
+</p>
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <p class="govuk-hint">Choose who the employer wants to hear from</p>
 
 <form asp-controller="Proximity" asp-action="ValidateProviderSearchResult">
-    <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden"/>
-    <input asp-for="SearchParameters.SearchRadius" name="SearchRadius" type="hidden"/>
-    <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden"/>
-    <input asp-for="SearchResults.SearchResultProviderCount" name="SearchResultProviderCount" type="hidden"/>
-    <input asp-for="SearchParameters.OpportunityId" name="OpportunityId" type="hidden"/>
+    <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden" />
+    <input asp-for="SearchParameters.SearchRadius" name="SearchRadius" type="hidden" />
+    <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden" />
+    <input asp-for="SearchResults.SearchResultProviderCount" name="SearchResultProviderCount" type="hidden" />
+    <input asp-for="SearchParameters.OpportunityId" name="OpportunityId" type="hidden" />
     <ol class="tl-search-results">
         @for (var i = 0; i < Model.SearchResults.SearchResultProviderCount; i++)
         {
             var searchResult = Model.SearchResults.Results[i];
 
-            <li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
-                <div class="govuk-checkboxes">
-                    <div class="govuk-checkboxes__item">
-                        <input type="hidden" asp-for="@Model.SearchResults.Results[i].Distance" name="SelectedProvider[@i].DistanceFromEmployer" />
-                        <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderVenueId" name="SelectedProvider[@i].ProviderVenueId" />
+        <li class="tl-search-results__list-item tl-search-results__list-item--with-checkbox">
+            <div class="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                    <input type="hidden" asp-for="@Model.SearchResults.Results[i].Distance" name="SelectedProvider[@i].DistanceFromEmployer" />
+                    <input type="hidden" asp-for="@Model.SearchResults.Results[i].ProviderVenueId" name="SelectedProvider[@i].ProviderVenueId" />
 
-                        <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" />
-                        <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" >
-                            @searchResult.ProviderName
-                            <ul class="tl-inline-list tl-inline-list--bar">
-                                <li>@searchResult.Postcode</li>
-                                <li>@($" {searchResult.Distance:#0.0}") miles</li>
-                            </ul>
-                            <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
-                            <ul class="govuk-list govuk-list--bullet">
-                                @foreach (var qualification in searchResult.QualificationShortTitles)
+                    <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" />
+                    <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected">
+                        @searchResult.ProviderName
+                        <ul class="tl-inline-list tl-inline-list--bar">
+                            <li>@searchResult.Postcode</li>
+                            <li>@($" {searchResult.Distance:#0.0}") miles</li>
+                        </ul>
+                        <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
+                        <ul class="govuk-list govuk-list--bullet">
+                            @foreach (var qualification in searchResult.QualificationShortTitles)
                                 {
-                                    <li>
-                                        @qualification
-                                    </li>
+                            <li>
+                                @qualification
+                            </li>
                                 }
-                            </ul>
-                        </label>
-                    </div>
+                        </ul>
+                    </label>
                 </div>
-            </li>
+            </div>
+        </li>
         }
     </ol>
 
