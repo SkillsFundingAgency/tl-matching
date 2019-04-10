@@ -34,8 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             routePathService.GetRoutes().Returns(routes);
 
             var opportunityService = Substitute.For<IOpportunityService>();
-            var providerController = new ProximityController(mapper, routePathService, providerService,
-                opportunityService);
+            var proximityController = new ProximityController(mapper, routePathService, providerService, opportunityService);
 
             var viewModel = new SearchParametersViewModel
             {
@@ -44,7 +43,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 SearchRadius = 10
             };
 
-            _result = providerController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
+            _result = proximityController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

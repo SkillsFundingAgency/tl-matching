@@ -31,10 +31,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             routePathService.GetRoutes().Returns(routes);
 
             var opportunityService = Substitute.For<IOpportunityService>();
-            var providerController = new ProximityController(mapper, routePathService, providerService,
+            var proximityController = new ProximityController(mapper, routePathService, providerService,
                 opportunityService);
 
-            _result = providerController.Index();
+            _result = proximityController.Index();
         }
 
         [Fact]
