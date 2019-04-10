@@ -23,6 +23,8 @@
 <h1 class="govuk-heading-l">Select providers</h1>
 
 <form class="form" asp-route="ProviderResults_Post" novalidate>
+    <input asp-for="OpportunityId" type="hidden" />
+
     <div class="tl-pane tl-pane__inline-form">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-half">
@@ -39,7 +41,7 @@
                         Employer postcode
                     </label>
                     <input class="govuk-input govuk-input--width-5" type="text" asp-for="Postcode"
-                           sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error" />
+                           sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error"/>
                 </div>
             </div>
             <div class="govuk-grid-column-one-quarter">
