@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         {
             _providerVenueRepository
                 .Received(1)
-                .Update(Arg.Is<Domain.Models.ProviderVenue>(s => s.Longitude == 1.2M && s.Latitude == 3.4m));
+                .Update(Arg.Is<Domain.Models.ProviderVenue>(s => s.Longitude == 1.2M && s.Latitude == 3.4m && s.Postcode == "CV12WT"));
         }
     }
 }

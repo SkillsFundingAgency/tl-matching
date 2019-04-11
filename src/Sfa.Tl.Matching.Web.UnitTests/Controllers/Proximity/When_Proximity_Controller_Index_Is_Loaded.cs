@@ -26,12 +26,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
             var mapper = Substitute.For<IMapper>();
 
-            var providerService = Substitute.For<IProximityService>();
+            var proximityService = Substitute.For<IProximityService>();
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
 
             var opportunityService = Substitute.For<IOpportunityService>();
-            var proximityController = new ProximityController(mapper, routePathService, providerService,
+            var proximityController = new ProximityController(mapper, routePathService, proximityService,
                 opportunityService);
 
             _result = proximityController.Index();
