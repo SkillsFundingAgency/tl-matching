@@ -13,7 +13,7 @@
             <li>tell us if there are not enough providers</li>
             @if (Context.User.HasAdminRole())
             {
-            <li> <a asp-action="Index" class="govuk-link" asp-controller="DataImport" id="tl-upload-link">Upload employer and provider data</a></li>
+                <li> <a asp-action="Index" class="govuk-link" asp-controller="DataImport" id="tl-upload-link">Upload employer and provider data</a></li>
             }
         </ul>
         <div class="govuk-inset-text">
@@ -23,7 +23,15 @@
             <a asp-action="Index" asp-controller="Proximity" id="tl-start-now" class="govuk-button govuk-button--start">Start now</a>
         </div>
 
-
+        <h2 class="govuk-heading-m">Service administration</h2>
+        <ul class="govuk-list">
+            <li>
+                <a class="govuk-link" href="#">Upload employer data</a>
+            </li>
+            <li>
+                <a class="govuk-link" href="#">Add or edit provider data</a>
+            </li>
+        </ul>
 
     </div>
 </div>
