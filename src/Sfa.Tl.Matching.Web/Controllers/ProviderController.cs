@@ -17,15 +17,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("provider-data-providerview", Name = "ProviderSearch_Get")]
+        public IActionResult Index()
         {
-            //var viewModel = new SearchParametersViewModel
-            //    {
-            //        SelectedRouteId = null,
-            //        Postcode = null,
-            //        SearchRadius = SearchParametersViewModel.DefaultSearchRadius
-            //    };
-            return View();
-            //    return GetIndexViewAsync(viewModel);
             return View("ProviderSearch");
         }
     }
