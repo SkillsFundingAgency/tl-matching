@@ -4,6 +4,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
 {
     public class ProviderController : Controller
     {
-        
+
+        public IActionResult ProviderSearch()
+        {
+            return View();
+        }
     }
 }
