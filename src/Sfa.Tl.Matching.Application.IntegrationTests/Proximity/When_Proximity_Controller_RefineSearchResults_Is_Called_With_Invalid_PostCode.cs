@@ -14,7 +14,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
+namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
     public class When_Proximity_Controller_RefineSearchResults_Is_Called_With_Invalid_PostCode
     {

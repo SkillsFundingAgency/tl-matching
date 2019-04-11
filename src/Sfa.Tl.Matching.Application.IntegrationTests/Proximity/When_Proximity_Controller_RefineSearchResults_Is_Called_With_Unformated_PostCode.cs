@@ -4,7 +4,6 @@ using System.Net.Http;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -15,7 +14,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
+namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
     public class When_Proximity_Controller_RefineSearchResults_Is_Called_With_Unformated_PostCode
     {
@@ -66,7 +65,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var result = _result as RedirectToRouteResult;
             result.RouteValues.Count.Should().BeGreaterOrEqualTo(3);
         }
-        
+
         [Fact]
         public void Then_Result_PostCode_Is_Correctly_Formated()
         {
