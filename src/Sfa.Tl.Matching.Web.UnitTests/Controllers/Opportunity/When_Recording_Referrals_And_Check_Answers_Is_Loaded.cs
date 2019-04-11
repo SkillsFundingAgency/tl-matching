@@ -100,6 +100,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
+        public void Then_SearchRadius_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
+            viewModel.PlacementInformation.SearchRadius.Should().Be(3);
+        }
+
+        [Fact]
         public void Then_PlacementsKnown_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
