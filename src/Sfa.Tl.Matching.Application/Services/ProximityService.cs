@@ -32,9 +32,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return results;
         }
 
-        public async Task<bool> IsValidPostCode(string postCode)
+        public async Task<(bool, string)> IsValidPostCode(string postCode)
         {
-           return await _locationService.IsValidPostCode(postCode);
+            return await _locationService.IsValidPostCode(postCode);
         }
     }
 }

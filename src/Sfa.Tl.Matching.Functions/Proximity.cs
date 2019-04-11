@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IMapper mapper,
-            [Inject]ILocationService locationService
+            [Inject] ILocationService locationService
         )
         {
             var saveProximityData = new SaveProximityData { Postcode = req.Query["Postcode"].ToString(), ProviderVenueId = req.Query["ProviderVenueId"].ToString().ToLong() };
@@ -40,10 +40,10 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IMapper mapper,
-            [Inject]ILocationService locationService
+            [Inject] ILocationService locationService
         )
         {
-            var saveProximityData = new SaveProximityData { Postcode = getProximityData.Postcode, ProviderVenueId = getProximityData.ProviderVenueId };
+            var saveProximityData = new SaveProximityData { ProviderVenueId = getProximityData.ProviderVenueId };
 
             try
             {
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IMapper mapper,
-            [Inject]IRepository<Domain.Models.ProviderVenue> providerVenueRepository
+            [Inject] IRepository<Domain.Models.ProviderVenue> providerVenueRepository
         )
         {
             if (saveProximityData.ProviderVenueId <= 0 ||
