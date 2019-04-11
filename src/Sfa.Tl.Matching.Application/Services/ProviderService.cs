@@ -1,10 +1,6 @@
 ﻿using Sfa.Tl.Matching.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -22,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _repository = repository;
         }
 
-        public async Task<ProviderSearchResultDto> Search(long ukPrn)
+        public async Task<ProviderSearchResultDto> SearchAsync(long ukPrn)
         {
             var provider = await _repository.GetSingleOrDefault(p => p.UkPrn == ukPrn);
 

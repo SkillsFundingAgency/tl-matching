@@ -1,4 +1,5 @@
-﻿
+﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderSearchParametersViewModel
+
 @{
     ViewData["Title"] = "ProviderSearch";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,38 +10,42 @@
     <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link">Back</a>
 }
 
-<div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-    <h2 class="govuk-error-summary__title" id="error-summary-title">
-        This page has errors
-    </h2>
-    <div class="govuk-error-summary__body">
-        <ul class="govuk-list govuk-error-summary__list">
-            <li><a href="#ukprn-error">You must enter a real UKPRN</a></li>
-        </ul>
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+            This page has errors
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li><a sfa-validation-for="UkPrn"></a></li>
+            </ul>
+        </div>
     </div>
-</div>
+}
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1>Search for the provider’s UKPRN</h1>
-        <p class="govuk-body">You can only add or change details for providers that have a UK Provider Reference Number (UKPRN)</p>
+        <form class="form" asp-controller="Provider" asp-action="Index" novalidate>
+            <p class="govuk-body">You can only add or change details for providers that have a UK Provider Reference Number (UKPRN)</p>
 
-        <div class="govuk-form-group govuk-form-group--error">
-            <label class="govuk-label" for="ukprn">
-                Enter the UKPRN
-            </label>
-            <span id="ukprn-hint" class="govuk-hint">
-                For example, 10001234
-            </span>
-            <span id="ukprn-error" class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span> You must enter a real UKPRN
-            </span>
-            <input class="govuk-input govuk-input--error govuk-input--width-10" id="ukprn" name="ukprn" type="text" aria-describedby="ukprn-hint">
-
-        </div>
-        <button type="submit" class="govuk-button">
-            Search
-        </button>
+            <div class="govuk-form-group" sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-form-group--error">
+                    <label class="govuk-label" asp-for="UkPrn">
+                        Enter the UKPRN
+                    </label>
+                    <span id="ukprn-hint" class="govuk-hint">
+                        For example, 10001234
+                    </span>
+                    <span class="govuk-error-message" asp-validation-for="UkPrn"></span>
+                    <input class="govuk-input govuk-input--width-10" asp-for="UkPrn" type="text"
+                           sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-input--error"
+                           aria-describedby="ukprn-hint">
+                </div>
+                <button type="submit" class="govuk-button">
+                    Search
+                </button>
+</form>
     </div>
 </div>
 

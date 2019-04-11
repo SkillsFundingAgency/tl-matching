@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
             var service = new ProviderService(mapper, _providerRepository);
 
-            _result = service.Search(UkPrn).GetAwaiter().GetResult();
+            _result = service.SearchAsync(UkPrn).GetAwaiter().GetResult();
         }
 
         [Fact]

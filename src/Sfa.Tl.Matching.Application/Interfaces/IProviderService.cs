@@ -5,6 +5,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProviderService
     {
-        Task<ProviderSearchResultDto> Search(long ukPrn);
+        Task<ProviderSearchResultDto> SearchAsync(long ukPrn);
     }
 }
