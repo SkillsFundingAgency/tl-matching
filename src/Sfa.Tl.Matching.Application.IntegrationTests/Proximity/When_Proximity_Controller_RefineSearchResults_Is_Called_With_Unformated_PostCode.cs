@@ -1,34 +1,35 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
+namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
-    public class When_Proximity_Controller_RefineSearchResults_Is_Called
+    public class When_Proximity_Controller_RefineSearchResults_Is_Called_With_Unformated_PostCode
     {
         private readonly IActionResult _result;
 
-        public When_Proximity_Controller_RefineSearchResults_Is_Called()
+        public When_Proximity_Controller_RefineSearchResults_Is_Called_With_Unformated_PostCode()
         {
             var routes = new List<Route>
             {
                 new Route {Id = 1, Name = "Route 1"}
             }.AsQueryable();
 
-            var logger = Substitute.For<ILogger<ProviderController>>();
             var mapper = Substitute.For<IMapper>();
 
-            var proximityService = Substitute.For<IProximityService>();
-            proximityService.IsValidPostCode(Arg.Any<string>()).Returns((true, "CV1 2WT"));
+            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), new LocationService(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
@@ -38,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
             var viewModel = new SearchParametersViewModel
             {
-                Postcode = "CV12WT",
+                Postcode = "Cv 12 Wt",
                 SelectedRouteId = 1,
                 SearchRadius = 10
             };
@@ -47,25 +48,29 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
+        public void Then_Result_Is_Not_Null()
+        {
             _result.Should().NotBeNull();
+        }
 
         [Fact]
-        public void Then_RedirectToRoute_Result_Is_Returned() =>
+        public void Then_RedirectToRoute_Result_Is_Returned()
+        {
             _result.Should().BeAssignableTo<RedirectToRouteResult>();
+        }
 
         [Fact]
         public void Then_Model_Is_Not_Null()
         {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
+            var result = _result as RedirectToRouteResult;
+            result.RouteValues.Count.Should().BeGreaterOrEqualTo(3);
         }
 
         [Fact]
-        public void Then_Model_Is_Of_Type_SearchViewModel()
+        public void Then_Result_PostCode_Is_Correctly_Formated()
         {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().BeOfType<SearchViewModel>();
+            var result = _result as RedirectToRouteResult;
+            result.RouteValues["Postcode"].Should().Be("CV1 2WT");
         }
     }
 }

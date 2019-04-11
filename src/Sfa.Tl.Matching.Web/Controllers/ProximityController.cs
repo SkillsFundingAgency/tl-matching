@@ -53,7 +53,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("find-providers", Name = "Providers_Post")]
         public async Task<IActionResult> Index(SearchParametersViewModel viewModel)
         {
-            if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel.SelectedRouteId, viewModel.Postcode, SearchParametersViewModel.DefaultSearchRadius))
+            viewModel.SearchRadius = SearchParametersViewModel.DefaultSearchRadius;
+            if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
             {
                 return GetIndexViewAsync(viewModel);
             }
@@ -67,7 +68,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        [Route("provider-results-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}-{OpportunityId}", Name = "ProviderResults_Get")]
+        [Route("provider-results-for-opportunity-{OpportunityId}-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "ProviderResults_Get")]
         public async Task<IActionResult> Results(SearchParametersViewModel searchParametersViewModel)
         {
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
@@ -79,8 +80,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("provider-results", Name = "ProviderResults_Post")]
         public async Task<IActionResult> RefineSearchResults(SearchParametersViewModel viewModel)
         {
-            if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel.SelectedRouteId, viewModel.Postcode,
-                    viewModel.SearchRadius))
+            if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
             {
                 return View(nameof(Results), new SearchViewModel
                 {
@@ -143,14 +143,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (viewModel.OpportunityId == 0)
                 return resultsViewModel;
 
-            var selectedResultsViewModel = PopulateSelectedSearchResults(viewModel.OpportunityId, resultsViewModel);
+            var selectedResultsViewModel = SetProviderIsSelected(resultsViewModel);
 
             return selectedResultsViewModel;
         }
 
-        private SearchViewModel PopulateSelectedSearchResults(int opportunityId, SearchViewModel resultsViewModel)
+        private SearchViewModel SetProviderIsSelected(SearchViewModel resultsViewModel)
         {
-            var referrals = _opportunityService.GetReferrals(opportunityId);
+            var referrals = _opportunityService.GetReferrals(resultsViewModel.SearchParameters.OpportunityId);
             foreach (var result in resultsViewModel.SearchResults.Results)
             {
                 if (referrals.Any(r => r.ProviderVenueId == result.ProviderVenueId))
@@ -174,25 +174,29 @@ namespace Sfa.Tl.Matching.Web.Controllers
             };
         }
 
-        private async Task<bool> IsSearchParametersValidAsync(int? selectedRouteId, string postCode, int? searchRadius)
+        private async Task<bool> IsSearchParametersValidAsync(SearchParametersViewModel viewModel)
         {
             var result = true;
 
             var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
-            if (selectedRouteId == null || routes.All(r => r.Id != selectedRouteId))
+            if (viewModel.SelectedRouteId == null || routes.All(r => r.Id != viewModel.SelectedRouteId))
             {
                 ModelState.AddModelError("SelectedRouteId", "You must select a valid skill area");
                 result = false;
             }
 
-            var isPostcodeValidation = await _proximityService.IsValidPostCode(postCode);
-            if (string.IsNullOrWhiteSpace(postCode) || !isPostcodeValidation)
+            var (isValid, formatedPostCode) = await _proximityService.IsValidPostCode(viewModel.Postcode);
+            if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
             {
                 ModelState.AddModelError("Postcode", "You must enter a real postcode");
                 result = false;
             }
+            else
+            {
+                viewModel.Postcode = formatedPostCode;
+            }
 
-            if (searchRadius == null || searchRadius < 5 || searchRadius > 25)
+            if (viewModel.SearchRadius < 5 || viewModel.SearchRadius > 25)
             {
                 ModelState.AddModelError("SearchRadius", "You must select a valid SearchRadius");
                 result = false;

@@ -62,6 +62,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Placements, o => o.MapFrom(s => s.Placements))
                 .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
+                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForPath(m => m.RouteName, o => o.MapFrom(s => s.Route.Name))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))

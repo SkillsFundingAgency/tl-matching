@@ -41,7 +41,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                         return new LoggedInUserNameResolver<CreateReferralViewModel, OpportunityDto>(httpcontextAccesor);
                     if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SelectedProviderViewModel"))
                         return new LoggedInUserNameResolver<SelectedProviderViewModel, ReferralDto>(httpcontextAccesor);
-
                     return null;
                 });
             });
@@ -104,6 +103,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_CreateOpportunity_Is_Not_Called()
         {
             _opportunityService.DidNotReceive().CreateOpportunity(Arg.Any<OpportunityDto>());
+        }
+
+        [Fact]
+        public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
+        {
+            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<ProviderSearchDto>());
         }
 
         [Fact]

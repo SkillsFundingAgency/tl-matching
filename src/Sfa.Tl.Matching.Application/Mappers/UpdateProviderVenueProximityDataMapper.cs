@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public UpdateProviderVenueProximityDataMapper()
         {
             CreateMap<SaveProximityData, ProviderVenue>()
+                .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.Location, o => o.MapFrom(s => GetLocation(s.Longitude, s.Latitude)))
                 .ForMember(m => m.Latitude, o => o.MapFrom(s => s.Latitude.ToDecimal()))
                 .ForMember(m => m.Longitude, o => o.MapFrom(s => s.Longitude.ToDecimal()))
