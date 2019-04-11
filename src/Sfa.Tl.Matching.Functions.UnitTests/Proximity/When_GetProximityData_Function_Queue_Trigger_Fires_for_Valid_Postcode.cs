@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
@@ -17,7 +18,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 
         public When_GetProximityData_Function_Queue_Trigger_Fires_For_Valid_Postcode()
         {
-            var mapper = Substitute.For<IMapper>();
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
+            var mapper = new Mapper(config);
             
             var locationService = new LocationService(
                 new HttpClient(), 
