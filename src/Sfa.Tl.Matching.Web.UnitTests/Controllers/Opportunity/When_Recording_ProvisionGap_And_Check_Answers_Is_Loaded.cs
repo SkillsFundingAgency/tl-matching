@@ -82,6 +82,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
+        public void Then_SearchRadius_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();
+            viewModel.PlacementInformation.SearchRadius.Should().Be(3);
+        }
+
+        [Fact]
         public void Then_JobTitle_Is_Set()
         {
             var viewModel = _result.GetViewModel<CheckAnswersProvisionGapViewModel>();

@@ -41,10 +41,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var createReferralViewModel = JsonConvert.DeserializeObject<CreateReferralViewModel>(viewModel);
 
             var dto = _mapper.Map<OpportunityDto>(createReferralViewModel);
-            
+
             var id = createReferralViewModel.OpportunityId;
-            if (createReferralViewModel.OpportunityId > 0)
+            if (id > 0)
+            {
+                var providerSearchDto = new ProviderSearchDto
+                {
+                    OpportunityId = id,
+                    SearchRadius = createReferralViewModel.SearchRadius,
+                    Postcode = createReferralViewModel.Postcode,
+                    RouteId = createReferralViewModel.SelectedRouteId ?? 0
+                };
+                await _opportunityService.UpdateOpportunity(providerSearchDto);
                 await _opportunityService.UpdateReferrals(dto);
+            }
             else
                 id = await _opportunityService.CreateOpportunity(dto);
 

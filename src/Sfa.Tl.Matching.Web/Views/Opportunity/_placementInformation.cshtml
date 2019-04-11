@@ -11,6 +11,7 @@
             <td class="govuk-table__cell">
                 <a asp-route="ProviderResults_Get" 
                    asp-route-opportunityId="@Model.OpportunityId" 
+                   asp-route-searchRadius="@Model.SearchRadius" 
                    asp-route-postcode="@Model.Postcode" 
                    asp-route-selectedRouteId="@Model.RouteId" 
                    class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the type of placement</span></a>
@@ -24,6 +25,7 @@
             <td class="govuk-table__cell">
                 <a asp-route="ProviderResults_Get" 
                    asp-route-opportunityId="@Model.OpportunityId" 
+                   asp-route-searchRadius="@Model.SearchRadius" 
                    asp-route-postcode="@Model.Postcode" 
                    asp-route-selectedRouteId="@Model.RouteId" 
                    class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the postcode of the workplace</span></a>

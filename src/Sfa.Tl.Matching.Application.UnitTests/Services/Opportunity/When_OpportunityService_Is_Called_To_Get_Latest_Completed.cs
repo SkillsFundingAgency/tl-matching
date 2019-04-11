@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private readonly OpportunityDto _opportunityDto;
         private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
 
-        private Guid _crmId = new Guid("65021261-8C70-4C4F-954F-4E5282250A85");
+        private readonly Guid _crmId = new Guid("65021261-8C70-4C4F-954F-4E5282250A85");
 
         public When_OpportunityService_Is_Called_To_Get_Latest_Completed()
         {
@@ -28,10 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
 
-            _opportunityRepository.GetMany(
-                    Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(),
-            Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>(),
-                Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>())
+            _opportunityRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>())
                 .Returns(new List<Domain.Models.Opportunity>
                 {
                     new Domain.Models.Opportunity
