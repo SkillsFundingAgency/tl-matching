@@ -97,6 +97,13 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
+
+            CreateMap<ProviderSearchDto, Opportunity>()
+                .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
+                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
+                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
+                .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
+                .ForAllOtherMembers(config => config.Ignore());
         }
     }
 }
