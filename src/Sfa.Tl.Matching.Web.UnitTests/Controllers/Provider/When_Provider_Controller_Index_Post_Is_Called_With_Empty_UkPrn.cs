@@ -9,12 +9,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_Index_Post_Is_Called_With_Non_Existent_UkPrn
+    public class When_Provider_Controller_Index_Post_Is_Called_With_Empty_UkPrn
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
 
-        public When_Provider_Controller_Index_Post_Is_Called_With_Non_Existent_UkPrn()
+        public When_Provider_Controller_Index_Post_Is_Called_With_Empty_UkPrn()
         {
             _providerService = Substitute.For<IProviderService>();
             _providerService
@@ -23,15 +23,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             var providerController = new ProviderController(_providerService);
 
-            var viewModel = new ProviderSearchParametersViewModel { UkPrn = 12345467 };
+            var viewModel = new ProviderSearchParametersViewModel();
             _result = providerController.Index(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_ProviderRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_ProviderRepository_GetSingleOrDefault_Is_Not_Called_Exactly_Once()
         {
             _providerService
-                .Received(1)
+                .DidNotReceive()
                 .SearchAsync(Arg.Any<long>());
         }
 

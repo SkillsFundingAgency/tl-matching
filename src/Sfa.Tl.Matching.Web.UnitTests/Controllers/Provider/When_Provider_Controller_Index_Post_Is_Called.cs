@@ -35,7 +35,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_ProviderRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _providerService.Received(1)
+            _providerService
+                .Received(1)
                 .SearchAsync(Arg.Any<long>());
         }
 

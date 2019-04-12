@@ -40,7 +40,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             return RedirectToRoute("GetProviderDetail", 
-                new { providerId = searchResult.Id });
+                new
+                {
+                    providerId = searchResult.Id
+                });
         }
 
         private IActionResult ReturnProviderSearchViewWithInvalidUkPrnError(ProviderSearchParametersViewModel viewModel)
