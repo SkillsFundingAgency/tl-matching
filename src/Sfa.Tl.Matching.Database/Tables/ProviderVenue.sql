@@ -10,6 +10,8 @@
 	[Longitude] [DECIMAL](9, 6) NULL,
 	[Location] GEOGRAPHY NULL,
 	[Source] VARCHAR(50) NOT NULL,
+	[IsEnabledForReferral] BIT NULL,
+	[IsEnabledForSearch] BIT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 

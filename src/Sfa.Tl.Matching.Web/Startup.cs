@@ -182,7 +182,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
             services.AddTransient<IRepository<Provider>, GenericRepository<Provider>>();
-            services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
+            services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
         }
@@ -206,6 +206,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<IReferralService, ReferralService>();
+            services.AddTransient<IProviderVenueService, ProviderVenueService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
