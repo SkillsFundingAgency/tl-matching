@@ -4,6 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -21,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _logger = Substitute.For<ILogger>();
 
             var proximityfunctions = new Functions.Proximity();
-            proximityfunctions.SaveProximityData(new SaveProximityData { Postcode = "CV12WT", ProviderVenueId = 123 }, new ExecutionContext(), _logger, mapper, _providerVenueRepository).GetAwaiter().GetResult();
+            proximityfunctions.SaveProximityData(new SaveProximityData { Postcode = "CV12WT", ProviderVenueId = 123 }, new ExecutionContext(), _logger, mapper, _providerVenueRepository, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
         }
 
         [Fact]
