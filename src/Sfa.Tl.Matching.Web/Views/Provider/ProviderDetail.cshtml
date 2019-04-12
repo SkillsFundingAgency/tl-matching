@@ -8,6 +8,19 @@
     <a asp-controller="Proximity" asp-action="Index" class="govuk-back-link">Back</a>
 }
 
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+            This page has errors
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li>
+                    <a href="#knownas-error">You must enter a provider name that is 400 characters or fewer</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form>
@@ -17,11 +30,15 @@
             </h1>
             <p class="govuk-body"><a class="govuk-link" href="#">Hide provider</a></p>
 
-            <div class="govuk-form-group">
+            <div class="govuk-form-group govuk-form-group--error">
                 <label class="govuk-heading-s" for="knownas">
                     Enter display name (optional)
                 </label>
-                <input class="govuk-input" id="knownas" name="knownas" type="text" value="DT Learning Centre">
+                <span id="knownas-error" class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span> You must enter a provider name that is 400 characters or fewer
+                </span>
+                
+                <input class="govuk-input govuk-input--error" id="knownas" name="knownas" type="text" value="DT Learning Centre">
             </div>
 
             <div class="govuk-form-group">
