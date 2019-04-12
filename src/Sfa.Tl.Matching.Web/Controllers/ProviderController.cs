@@ -58,5 +58,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [Route("hide-provider/{providerId}", Name = "GetConfirmProviderChange")]
+        public IActionResult ConfirmProviderChange(int providerId)
+        {
+            return View();
+        }
     }
 }
