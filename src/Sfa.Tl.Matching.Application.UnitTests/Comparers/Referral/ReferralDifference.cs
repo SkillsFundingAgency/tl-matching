@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sfa.Tl.Matching.Domain.EqualityComparer;
-using Sfa.Tl.Matching.Domain.Models;
 
-namespace Sfa.Tl.Matching.Application.UnitTests
+namespace Sfa.Tl.Matching.Application.UnitTests.Comparers.Referral
 {
     internal class ReferralDifference
     {
         internal class ReferralDifferenceDto
         {
-            public List<Referral> Adds { get; }
-            public List<Referral> Deletes { get; }
-            public List<Referral> Updates { get; }
+            public List<Domain.Models.Referral> Adds { get; }
+            public List<Domain.Models.Referral> Deletes { get; }
+            public List<Domain.Models.Referral> Updates { get; }
 
-            public ReferralDifferenceDto(List<Referral> adds, List<Referral> deletes, List<Referral> updates)
+            public ReferralDifferenceDto(List<Domain.Models.Referral> adds, List<Domain.Models.Referral> deletes, List<Domain.Models.Referral> updates)
             {
                 Adds = adds;
                 Deletes = deletes;
@@ -28,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests
             _comparer = comparer;
         }
 
-        internal ReferralDifferenceDto Get(List<Referral> newReferrals, List<Referral> existingReferrals)
+        internal ReferralDifferenceDto Get(List<Domain.Models.Referral> newReferrals, List<Domain.Models.Referral> existingReferrals)
         {
             var toBeAdded = newReferrals.Except(existingReferrals, _comparer).ToList();
             var same = existingReferrals.Intersect(newReferrals, _comparer).ToList();
