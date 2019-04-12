@@ -63,6 +63,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
         public void Then_Model_Is_Not_Null()
         {
             var result = _result as RedirectToRouteResult;
+            // ReSharper disable once PossibleNullReferenceException
             result.RouteValues.Count.Should().BeGreaterOrEqualTo(3);
         }
 
@@ -70,6 +71,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
         public void Then_Result_PostCode_Is_Correctly_Formated()
         {
             var result = _result as RedirectToRouteResult;
+            // ReSharper disable once PossibleNullReferenceException
             result.RouteValues["Postcode"].Should().Be("CV1 2WT");
         }
     }
