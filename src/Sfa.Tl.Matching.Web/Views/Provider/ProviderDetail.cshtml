@@ -4,5 +4,150 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>ProviderDetail</h1>
+@section backButton{
+    <a asp-controller="Proximity" asp-action="Index" class="govuk-back-link">Back</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form>
+            <h1 class="govuk-heading-l">
+                <span class="govuk-caption-m">UKPRN: </span>
+                Acme College
+            </h1>
+            <p class="govuk-body"><a class="govuk-link" href="#">Hide provider</a></p>
+
+            <div class="govuk-form-group">
+                <label class="govuk-heading-s" for="knownas">
+                    Enter display name (optional)
+                </label>
+                <input class="govuk-input" id="knownas" name="knownas" type="text" value="DT Learning Centre">
+            </div>
+
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        <h2 class="govuk-fieldset__heading">
+                            Should they receive referrals?
+                        </h2>
+                    </legend>
+                    <div class="govuk-radios govuk-radios--inline">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="changed-name-1" name="changed-name" type="radio" value="yes" checked="checked">
+                            <label class="govuk-label govuk-radios__label" for="changed-name-1">
+                                Yes
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="changed-name-2" name="changed-name" type="radio" value="no">
+                            <label class="govuk-label govuk-radios__label" for="changed-name-2">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="govuk-form-group">
+
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h2 class="govuk-fieldset__heading">
+                            Placement contact
+                        </h2>
+                    </legend>
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="data_contact_name">
+                            Contact name for placements
+                        </label>
+                        <input class="govuk-input govuk-input--width-20" id="data_contact_name" name="data_contact_name" type="text">
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="data_contact_email">
+                            Email
+                        </label>
+                        <input class="govuk-input govuk-input--width-20" id="data_contact_email" name="data_contact_email" type="email">
+                    </div>
+
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="data_contact_phone">
+                            Phone number
+                        </label>
+                        <input class="govuk-input govuk-input--width-20" id="data_contact_phone" name="data_contact_phone" type="tel">
+                    </div>
+                </fieldset>
+            </div>
+            <button type="" class="govuk-button tl-button--grey">
+                Save section
+            </button>
+            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+            <h2 class="govuk-heading-m">Venues and qualifications</h2>
+
+            <p class="govuk-body">You need to <a class="govuk-link" href="#">add a venue for this provider</a>.</p>
+
+
+
+            <h2 class="govuk-heading-m">Active venues</h2>
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col">Postcode</th>
+                        <th class="govuk-table__header" scope="col">2018 to 2019</th>
+                        <th class="govuk-table__header" scope="col">2019 to 2020</th>
+                        <th class="govuk-table__header" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__cell">DE4 1DE</th>
+                        <td class="govuk-table__cell">4 qualifications</td>
+                        <td class="govuk-table__cell">No data yet</td>
+                        <td class="govuk-table__cell"><a href="#" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__cell">TF1 2XC</th>
+                        <td class="govuk-table__cell">2 qualifications</td>
+                        <td class="govuk-table__cell">No data yet</td>
+                        <td class="govuk-table__cell"><a href="#" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__cell">HG1 7VG</th>
+                        <td class="govuk-table__cell">5 qualifications</td>
+                        <td class="govuk-table__cell">No data yet</td>
+                        <td class="govuk-table__cell"><a href="#" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="govuk-body"><a class="govuk-link" href="#">Add a venue</a></p>
+            <h2 class="govuk-heading-m">Inactive venues</h2>
+
+            <table class="govuk-table tl-table__inactive">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col">Postcode</th>
+                        <th class="govuk-table__header" scope="col">2018 to 2019</th>
+                        <th class="govuk-table__header" scope="col">2019 to 2020</th>
+                        <th class="govuk-table__header" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__cell">DE4 1DE</th>
+                        <td class="govuk-table__cell">4 qualifications</td>
+                        <td class="govuk-table__cell">No data yet</td>
+                        <td class="govuk-table__cell"><a href="#" class="govuk-link tl-float-right">Unhide<span class="govuk-visually-hidden"> this venue</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="submit" class="govuk-button">
+                Save and finish
+            </button>
+
+        </form>
+    </div>
+</div>
 
