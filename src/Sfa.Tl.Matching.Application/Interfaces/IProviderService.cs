@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProviderService
     {
-        Task<Models.ViewModel.ProviderDetailViewModel> GetById(int providerId);
+        Task<Models.ViewModel.ProviderDetailViewModel> GetByIdAsync(int providerId);
         Task<ProviderSearchResultDto> SearchAsync(long ukPrn);
         Task<ProviderDto> GetProviderAsync(int providerId);
         Task<ProviderDto> GetProviderByUkPrnAsync(long ukPrn);

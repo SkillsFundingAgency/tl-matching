@@ -1,6 +1,7 @@
 ﻿using Sfa.Tl.Matching.Application.Interfaces;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -41,7 +42,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<ProviderDetailViewModel> GetByIdAsync(int providerId)
         {
-            var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId, p => p.ProviderVenue);
+            var provider = await _repository.GetMany(p => p.Id == providerId)
+                                            .Include(p => p.ProviderVenue)
+                                            .ThenInclude(pv => pv.ProviderQualification)
+                                            .SingleOrDefaultAsync();
 
             var dto = _mapper.Map<Provider, ProviderDetailViewModel>(provider);
 

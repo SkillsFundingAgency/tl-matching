@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
@@ -26,18 +27,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var mapper = new Mapper(config);
             _providerRepository = Substitute.For<IRepository<Domain.Models.Provider>>();
 
-            _providerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>(), Arg.Any<Expression<Func<Domain.Models.Provider, object>>>())
-                .Returns(new ValidProviderBuilder().BuildWithVenueAndQualifications());
+            _providerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
+                .Returns(new List<Domain.Models.Provider>
+                {
+                    new ValidProviderBuilder().BuildWithVenueAndQualifications()
+                }.AsQueryable());
 
             var service = new ProviderService(mapper, _providerRepository);
 
-            _result = service.GetById(UkPrn).GetAwaiter().GetResult();
+            _result = service.GetByIdAsync(UkPrn).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_ProviderRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _providerRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>(), Arg.Any<Expression<Func<Domain.Models.Provider, object>>>());
+            _providerRepository.Received(1).GetMany(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>());
         }
         
         [Fact]
