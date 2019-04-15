@@ -112,4 +112,25 @@ SET
 	,[SecondaryContact]	  = 'Jette Burford'	
 	,[SecondaryContactEmail] = 'jburford@sthelens.ac.uk'
 	,[SecondaryContactPhone] = '01744 623351'
-WHERE [UkPrn] = '10006174'			
+WHERE [UkPrn] = '10006174'		
+
+
+
+--(1 row affected)
+
+--(1 row affected)
+
+--(1 row affected)
+
+--(1 row affected)
+
+--(1 row affected)
+
+--(1 row affected)
+
+--(1 row affected)
+
+--(1 row affected)
+
+--(1 row affected)
+	
