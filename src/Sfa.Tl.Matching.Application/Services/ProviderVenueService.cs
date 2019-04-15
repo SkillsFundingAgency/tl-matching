@@ -44,17 +44,17 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _providerVenueRepository.Create(providerVenue);
         }
 
-        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(string postcode)
+        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(long ukprn, string postcode)
         {
-            var viewModel = await _providerVenueRepository.GetVenueWithQualifications(postcode);
+            var viewModel = await _providerVenueRepository.GetVenueWithQualifications(ukprn, postcode);
 
             return viewModel;
         }
 
-        public async Task UpdateVenue(ProviderVenueDetailViewModel viewModel)
+        public async Task UpdateVenue(UpdateProviderVenueDto dto)
         {
-            var trackedEntity = await _providerVenueRepository.GetSingleOrDefault(v => v.Id == viewModel.Id);
-            trackedEntity = _mapper.Map(viewModel, trackedEntity);
+            var trackedEntity = await _providerVenueRepository.GetSingleOrDefault(v => v.Id == dto.Id);
+            trackedEntity = _mapper.Map(dto, trackedEntity);
 
             await _providerVenueRepository.Update(trackedEntity);
         }

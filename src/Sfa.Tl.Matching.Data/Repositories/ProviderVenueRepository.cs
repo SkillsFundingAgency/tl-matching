@@ -17,19 +17,20 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(string postcode)
+        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(long ukprn, string postcode)
         {
             var venueWithQualifications = await (from pv in _dbContext.ProviderVenue
-                             where pv.Postcode == postcode
+                             where pv.Postcode == postcode && pv.Provider.UkPrn == ukprn
                              select new ProviderVenueDetailViewModel
                              {
                                  Id = pv.Id,
                                  ProviderId = pv.ProviderId,
+                                 UkPrn = pv.Provider.UkPrn,
                                  VenueName = pv.Name,
                                  Qualifications = (from q in _dbContext.Qualification
                                                    join pq in _dbContext.ProviderQualification on q.Id equals pq.QualificationId
                                                    join pv1 in _dbContext.ProviderVenue on pq.ProviderVenueId equals pv1.Id
-                                                   where pv1.Postcode == postcode
+                                                   where pv1.Postcode == postcode && pv1.Provider.UkPrn == ukprn
                                                    select new QualificationDetailViewModel
                                                    {
                                                        LarsId = q.LarsId

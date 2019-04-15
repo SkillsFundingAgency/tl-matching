@@ -26,5 +26,16 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return dto;
         }
+
+        public async Task<ProviderDto> GetProviderByUkPrnAsync(long ukPrn)
+        {
+            var provider = await _repository.GetSingleOrDefault(p => p.UkPrn == ukPrn);
+
+            var dto = provider != null
+                ? _mapper.Map<Provider, ProviderDto>(provider)
+                : null;
+
+            return dto;
+        }
     }
 }
