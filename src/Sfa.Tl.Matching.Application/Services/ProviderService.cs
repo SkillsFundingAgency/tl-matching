@@ -4,6 +4,7 @@ using AutoMapper;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -34,6 +35,15 @@ namespace Sfa.Tl.Matching.Application.Services
             var dto = provider != null
                 ? _mapper.Map<Provider, ProviderDto>(provider)
                 : null;
+
+            return dto;
+        }
+
+        public async Task<ProviderDetailViewModel> GetByIdAsync(int providerId)
+        {
+            var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId, p => p.ProviderVenue);
+
+            var dto = _mapper.Map<Provider, ProviderDetailViewModel>(provider);
 
             return dto;
         }
