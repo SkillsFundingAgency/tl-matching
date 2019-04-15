@@ -25,40 +25,46 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _mapper = mapper;
         }
 
-        [Route("{SearchResultProviderCount}-provisiongap-opportunities-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "OpportunityCreate_Get")]
-        public async Task<IActionResult> CreateProvisionGap(CreateProvisionGapViewModel viewModel)
+        [Route("{SearchResultProviderCount}-provisiongap-opportunities-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "SaveProvisionGap")]
+        public async Task<IActionResult> SaveProvisionGap(SaveProvisionGapViewModel viewModel)
         {
             var dto = _mapper.Map<OpportunityDto>(viewModel);
 
-            var id = await _opportunityService.CreateOpportunity(dto);
+            if (await _opportunityService.IsNewProvisionGap(viewModel.OpportunityId))
+                return await CreateOpportunity(dto);
 
-            return RedirectToRoute("PlacementInformationSave_Get", new { id });
+            var providerSearchDto = new ProviderSearchDto
+            {
+                OpportunityId = dto.Id,
+                SearchRadius = viewModel.SearchRadius,
+                Postcode = viewModel.Postcode,
+                RouteId = viewModel.SelectedRouteId ?? 0
+            };
+            await _opportunityService.UpdateOpportunity(providerSearchDto);
+
+            return RedirectToRoute("PlacementInformationSave_Get", new { id = dto.Id });
         }
 
-        [Route("referral-create", Name = "CreateReferral")]
-        public async Task<IActionResult> CreateReferral(string viewModel)
+        [Route("referral-create", Name = "SaveReferral")]
+        public async Task<IActionResult> SaveReferral(string viewModel)
         {
-            var createReferralViewModel = JsonConvert.DeserializeObject<CreateReferralViewModel>(viewModel);
+            var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(viewModel);
 
-            var dto = _mapper.Map<OpportunityDto>(createReferralViewModel);
+            var dto = _mapper.Map<OpportunityDto>(saveReferralViewModel);
+            if (await _opportunityService.IsNewReferral(saveReferralViewModel.OpportunityId))
+                return await CreateOpportunity(dto);
 
-            var id = createReferralViewModel.OpportunityId;
-            if (id > 0)
+            var providerSearchDto = new ProviderSearchDto
             {
-                var providerSearchDto = new ProviderSearchDto
-                {
-                    OpportunityId = id,
-                    SearchRadius = createReferralViewModel.SearchRadius,
-                    Postcode = createReferralViewModel.Postcode,
-                    RouteId = createReferralViewModel.SelectedRouteId ?? 0
-                };
-                await _opportunityService.UpdateOpportunity(providerSearchDto);
-                await _opportunityService.UpdateReferrals(dto);
-            }
-            else
-                id = await _opportunityService.CreateOpportunity(dto);
+                OpportunityId = saveReferralViewModel.OpportunityId,
+                SearchRadius = saveReferralViewModel.SearchRadius,
+                Postcode = saveReferralViewModel.Postcode,
+                RouteId = saveReferralViewModel.SelectedRouteId ?? 0
+            };
+            await _opportunityService.UpdateOpportunity(providerSearchDto);
+            await _opportunityService.UpdateReferrals(dto);
 
-            return RedirectToRoute("PlacementInformationSave_Get", new { id });
+            return RedirectToRoute("PlacementInformationSave_Get", new { id = saveReferralViewModel.OpportunityId });
         }
 
         [HttpGet]
@@ -162,6 +168,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 EmployerContactName = opportunity.EmployerContact,
                 EmployerBusinessName = opportunity.EmployerName
             });
+        }
+
+        private async Task<IActionResult> CreateOpportunity(OpportunityDto dto)
+        {
+            var id = await _opportunityService.CreateOpportunity(dto);
+            return RedirectToRoute("PlacementInformationSave_Get", new { id });
         }
 
         private async Task Validate(PlacementInformationSaveViewModel viewModel)

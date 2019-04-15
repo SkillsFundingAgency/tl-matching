@@ -9,11 +9,11 @@ namespace Sfa.Tl.Matching.Web.Mappers
     {
         public CreateOpportunityViewModelMapper()
         {
-            CreateMap<CreateProvisionGapViewModel, OpportunityDto>()
-                .ForMember(m => m.CreatedBy, o => o.MapFrom<LoggedInUserNameResolver<CreateProvisionGapViewModel, OpportunityDto>>())
-                .ForMember(m => m.UserEmail, o => o.MapFrom<LoggedInUserEmailResolver<CreateProvisionGapViewModel, OpportunityDto>>())
+            CreateMap<SaveProvisionGapViewModel, OpportunityDto>()
+                .ForMember(m => m.CreatedBy, o => o.MapFrom<LoggedInUserNameResolver<SaveProvisionGapViewModel, OpportunityDto>>())
+                .ForMember(m => m.UserEmail, o => o.MapFrom<LoggedInUserEmailResolver<SaveProvisionGapViewModel, OpportunityDto>>())
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
-                .ForMember(m => m.Id, o => o.Ignore())
+                .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.DropOffStage, o => o.Ignore())
                 .ForMember(m => m.EmployerId, o => o.Ignore())
                 .ForMember(m => m.EmployerCrmId, o => o.Ignore())
@@ -33,9 +33,9 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.RouteName, o => o.Ignore())
                 ;
 
-            CreateMap<CreateReferralViewModel, OpportunityDto>()
-                .ForMember(m => m.CreatedBy, o => o.MapFrom<LoggedInUserNameResolver<CreateReferralViewModel, OpportunityDto>>())
-                .ForMember(m => m.UserEmail, o => o.MapFrom<LoggedInUserEmailResolver<CreateReferralViewModel, OpportunityDto>>())
+            CreateMap<SaveReferralViewModel, OpportunityDto>()
+                .ForMember(m => m.CreatedBy, o => o.MapFrom<LoggedInUserNameResolver<SaveReferralViewModel, OpportunityDto>>())
+                .ForMember(m => m.UserEmail, o => o.MapFrom<LoggedInUserEmailResolver<SaveReferralViewModel, OpportunityDto>>())
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
                 .ForMember(m => m.Referral, o => o.MapFrom(s => s.SelectedProvider.Where(p => p.IsSelected)))
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
