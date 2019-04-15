@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,18 +14,21 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Controller_Update_Referral_Is_Called
+    public class When_Opportunity_Controller_Save_Referral_New_Opportunity
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly IActionResult _result;
         private const string UserName = "username";
         private const string Email = "email@address.com";
 
-        public When_Opportunity_Controller_Update_Referral_Is_Called()
+        private readonly IActionResult _result;
+
+        public When_Opportunity_Controller_Save_Referral_New_Opportunity()
         {
             const int opportunityId = 1;
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.CreateOpportunity(Arg.Any<OpportunityDto>()).Returns(opportunityId);
+            _opportunityService.IsNewReferral(opportunityId).Returns(true);
+
+            var referralService = Substitute.For<IReferralService>();
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
@@ -36,18 +38,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 c.ConstructServicesUsing(type =>
                 {
                     if (type.FullName.Contains("LoggedInUserEmailResolver"))
-                        return new LoggedInUserEmailResolver<CreateReferralViewModel, OpportunityDto>(httpcontextAccesor);
-                    if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("CreateReferralViewModel"))
-                        return new LoggedInUserNameResolver<CreateReferralViewModel, OpportunityDto>(httpcontextAccesor);
+                        return new LoggedInUserEmailResolver<SaveReferralViewModel, OpportunityDto>(httpcontextAccesor);
+                    if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SaveReferralViewModel"))
+                        return new LoggedInUserNameResolver<SaveReferralViewModel, OpportunityDto>(httpcontextAccesor);
                     if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SelectedProviderViewModel"))
                         return new LoggedInUserNameResolver<SelectedProviderViewModel, ReferralDto>(httpcontextAccesor);
+
                     return null;
                 });
             });
             var mapper = new Mapper(config);
 
-            var referralService = Substitute.For<IReferralService>();
-            
             var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(UserName)
@@ -56,7 +57,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            var viewModel = new CreateReferralViewModel
+            var viewModel = new SaveReferralViewModel
             {
                 SearchResultProviderCount = 2,
                 SelectedRouteId = 1,
@@ -82,40 +83,25 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var serializeObject = JsonConvert.SerializeObject(viewModel);
 
-            _result = controllerWithClaims.CreateReferral(serializeObject).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveReferral(serializeObject).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_UpdateReferrals_Is_Called_Exactly_Once()
+        public void Then_UpdateOpportunity_Is_Not_Called()
         {
-            _opportunityService.Received(1).UpdateReferrals(Arg.Is<OpportunityDto>(arg =>
-                arg.SearchResultProviderCount == 2 &&
-                arg.RouteId == 1 &&
-                arg.Postcode == "cv12wt" &&
-                arg.SearchRadius == 10 &&
-                arg.Referral.Count == 1 &&
-                arg.Referral.ElementAt(0).ProviderVenueId == 2 &&
-                arg.Referral.ElementAt(0).DistanceFromEmployer == 3.4m
-                ));
+            _opportunityService.DidNotReceive().UpdateOpportunity(Arg.Any<ProviderSearchDto>());
         }
 
         [Fact]
-        public void Then_CreateOpportunity_Is_Not_Called()
+        public void Then_CreateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.DidNotReceive().CreateOpportunity(Arg.Any<OpportunityDto>());
+            _opportunityService.Received(1).CreateOpportunity(Arg.Any<OpportunityDto>());
         }
 
         [Fact]
-        public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
-        {
-            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<ProviderSearchDto>());
-        }
-
-        [Fact]
-        public void Then_Result_Is_RedirectToRoute()
+        public void Then_Result_Is_Redirect_to_PlacementInformationSave_Get()
         {
             var result = _result as RedirectToRouteResult;
-
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("PlacementInformationSave_Get");

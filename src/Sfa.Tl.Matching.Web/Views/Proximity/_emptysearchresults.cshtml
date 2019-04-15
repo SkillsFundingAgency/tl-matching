@@ -21,11 +21,12 @@
     }
     else
     {
-    <a asp-route="OpportunityCreate_Get"
+    <a asp-route="SaveProvisionGap"
        asp-route-SearchResultProviderCount="@Model.SearchResults.SearchResultProviderCount"
        asp-route-Postcode="@Model.SearchParameters.Postcode"
        asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
        asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
+       asp-route-OpportunityId="@Model.SearchParameters.OpportunityId"
        class="govuk-link" id="tl-search-noresults">tell us that there are no suitable providers</a>
     }
     .

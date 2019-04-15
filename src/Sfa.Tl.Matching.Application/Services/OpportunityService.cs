@@ -35,6 +35,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> CreateOpportunity(OpportunityDto dto)
         {
+            dto.Id = 0;
             var opportunity = _mapper.Map<Opportunity>(dto);
 
             return await _opportunityRepository.Create(opportunity);
@@ -149,6 +150,24 @@ namespace Sfa.Tl.Matching.Application.Services
                 .ToList();
 
             return providers;
+        }
+
+        public async Task<bool> IsNewReferral(int opportunityId)
+        {
+            if (opportunityId == 0)
+                return true;
+
+            var isReferral = await IsReferralOpportunity(opportunityId);
+            return !isReferral;
+        }
+
+        public async Task<bool> IsNewProvisionGap(int opportunityId)
+        {
+            if (opportunityId == 0)
+                return true;
+
+            var isReferral = await IsReferralOpportunity(opportunityId);
+            return isReferral;
         }
 
         private static Expression<Func<Opportunity, bool>> FilterValidOpportunities()
