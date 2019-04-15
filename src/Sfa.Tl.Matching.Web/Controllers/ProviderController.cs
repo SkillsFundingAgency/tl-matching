@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var searchResult = viewModel.UkPrn.HasValue
                 ? await _providerService.SearchAsync(viewModel.UkPrn.Value)
                 : null;
-            
+
             if (searchResult == null || searchResult.Id == 0)
             {
                 return ReturnProviderSearchViewWithInvalidUkPrnError(viewModel);
@@ -56,8 +56,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("provider-overview/{ukPrn}", Name = "GetProviderDetail")]
         public async Task<IActionResult> ProviderDetail(long ukPrn)
         {
-            //TODO: Use correct view model when merged
-            var provider = await _providerService.GetProviderByUkPrnAsync(ukPrn);
+            var provider = new ProviderDetailViewModel();
+
+            if (providerId > 0)
+            {
+                provider = await _providerService.GetByIdAsync(providerId);
+            }
+
             return View(provider);
         }
 
