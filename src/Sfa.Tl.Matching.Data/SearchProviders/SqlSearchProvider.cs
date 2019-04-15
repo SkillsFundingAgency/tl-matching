@@ -43,7 +43,10 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                 join qualificationRoutePathMapping in _matchingDbContext.QualificationRoutePathMapping on providerQualification.QualificationId equals qualificationRoutePathMapping.QualificationId
                                 join path in _matchingDbContext.Path on qualificationRoutePathMapping.PathId equals path.Id
                                 orderby providerVenue.Location.Distance(employerLocation)
-                                where path.RouteId == dto.SelectedRouteId && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters && provider.Status
+                                where path.RouteId == dto.SelectedRouteId 
+                                      && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters 
+                                      && provider.IsEnabledForSearch
+                                      && providerVenue.IsEnabledForSearch
                                 select new
                                 {
                                     ProviderVenueId = providerVenue.Id,
