@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using Sfa.Tl.Matching.Models.Dto;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
 {
-    public class ValidProviderBuilder
+    internal class ValidProviderDtoBuilder
     {
-        public Domain.Models.Provider Build() => new Domain.Models.Provider
+        public ProviderDto Build() => new ProviderDto
         {
             Id = 1,
             UkPrn = 10000546,
@@ -20,8 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             IsEnabledForSearch = true,
             IsEnabledForReferral = true,
             Source = "Test",
-            CreatedBy = "CreatedBy",
-            ModifiedBy = "ModifiedBy"
+            CreatedBy = "CreatedBy"
         };
     }
 }

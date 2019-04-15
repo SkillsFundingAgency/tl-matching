@@ -8,6 +8,8 @@ namespace Sfa.Tl.Matching.Models.Dto
         public long UkPrn { get; set; }
         public string Name { get; set; }
         public OfstedRating OfstedRating { get; set; }
+        public bool IsEnabledForSearch { get; set; }
+        public bool IsEnabledForReferral { get; set; }
         public bool Status { get; set; }
         public string StatusReason { get; set; }
         public string PrimaryContact { get; set; }

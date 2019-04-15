@@ -1,8 +1,25 @@
-﻿
+﻿@model Sfa.Tl.Matching.Models.ViewModel.HideProviderViewModel
+
 @{
-    ViewData["Title"] = "ConfirmProviderChange";
+    ViewData["Title"] = (Model.IsActive ? "Hide" : "Unhide") + Model.ProviderName;
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section backButton{
+    <a asp-controller="Provider" asp-action="ProviderDetail" asp-route-ukPrn="@Model.UkPrn" class="govuk-back-link">Back</a>
 }
 
 <h1>ConfirmProviderChange</h1>
 
+<p>Are you sure you want to @(Model.IsActive ? "hide" : "unhide") @Model.ProviderName?</p>
+
+<form asp-controller="Provider" asp-action="ConfirmProviderChange">
+    <input asp-for="ProviderId" type="hidden" />
+    <input asp-for="IsActive" type="hidden" />
+
+    <button type="submit" class="govuk-button">
+        Confirm
+    </button>
+</form>
+
+<a asp-controller="Provider" asp-action="ProviderDetail" asp-route-ukPrn="@Model.UkPrn" class="govuk-link" id="tl-cancel">Cancel and return to provider overview</a>
