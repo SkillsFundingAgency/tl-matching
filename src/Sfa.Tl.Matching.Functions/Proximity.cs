@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
@@ -40,7 +41,8 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IMapper mapper,
-            [Inject] ILocationService locationService
+            [Inject] ILocationService locationService,
+            [Inject] IRepository<FunctionLog> functionlogRepository
         )
         {
             var saveProximityData = new SaveProximityData { ProviderVenueId = getProximityData.ProviderVenueId };
@@ -52,10 +54,18 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                logger.LogError($"Error Getting Geo Location Data for Postcode: { getProximityData.Postcode }, Please Check the Postcode, Internal Error Message {e}");
-            }
+                var errormessage = $"Error Getting Geo Location Data for Postcode: {getProximityData.Postcode}, Please Check the Postcode, Internal Error Message {e}";
 
-            return saveProximityData;
+                logger.LogError(errormessage);
+
+                await functionlogRepository.Create(new FunctionLog
+                {
+                    ErrorMessage = errormessage,
+                    FunctionName = "GetProximityData",
+                    RowNumber = -1
+                });
+                throw;
+            }
         }
 
         [FunctionName("SaveProximityData")]
@@ -64,7 +74,8 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IMapper mapper,
-            [Inject] IRepository<Domain.Models.ProviderVenue> providerVenueRepository
+            [Inject] IRepository<Domain.Models.ProviderVenue> providerVenueRepository,
+            [Inject] IRepository<FunctionLog> functionlogRepository
         )
         {
             if (saveProximityData.ProviderVenueId <= 0 ||
@@ -72,13 +83,32 @@ namespace Sfa.Tl.Matching.Functions
                 string.IsNullOrWhiteSpace(saveProximityData.Longitude) ||
                 string.IsNullOrWhiteSpace(saveProximityData.Latitude))
             {
-                logger.LogError($"Error Saving Geo Location Data for ProviderVenueId: { saveProximityData.ProviderVenueId }, Please Check the Postcode.");
+                var errorMessage = $"Error Saving Geo Location Data for ProviderVenueId: {saveProximityData.ProviderVenueId}, Please Check the Postcode.";
+                logger.LogError(errorMessage);
+                await functionlogRepository.Create(new FunctionLog
+                {
+                    ErrorMessage = errorMessage,
+                    FunctionName = "SaveProximityData",
+                    RowNumber = -1
+                });
                 return;
             }
 
-            var providerVenue = await providerVenueRepository.GetSingleOrDefault(venue => venue.Id == saveProximityData.ProviderVenueId && venue.Postcode == saveProximityData.Postcode);
+            var providerVenue = await providerVenueRepository.GetSingleOrDefault(venue => venue.Id == saveProximityData.ProviderVenueId);
 
-            if (providerVenue == null) return;
+            if (providerVenue == null || providerVenue.Postcode.ToLetterOrDigit() != saveProximityData.Postcode.ToLetterOrDigit())
+            {
+                var errorMessage = $"Error Saving Geo Location Data for ProviderVenueId: {saveProximityData.ProviderVenueId}, ProviderId and Postcode does not match.";
+                logger.LogError(errorMessage);
+                await functionlogRepository.Create(new FunctionLog
+                {
+                    ErrorMessage = errorMessage,
+                    FunctionName = "SaveProximityData",
+                    RowNumber = -1
+                });
+
+                return;
+            }
 
             providerVenue = mapper.Map(saveProximityData, providerVenue);
 
