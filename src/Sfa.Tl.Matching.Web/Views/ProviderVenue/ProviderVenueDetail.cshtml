@@ -5,30 +5,43 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+            This page has errors
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li><a sfa-validation-for="VenueName"></a></li>
+            </ul>
+        </div>
+    </div>
+}
+
 <h1>ProviderVenueDetail</h1>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
+        <span class="govuk-caption-m">DT Learning</span>
+        <h1 class="govuk-heading-l">DE4 1DE</h1>
+        <p class="govuk-body">
+            <a class="govuk-link" href="#">Hide venue</a>
+        </p>
+
+
         <form asp-route="SaveVenue" novalidate>
-            @if (!ViewData.ModelState.IsValid)
-            {
-            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-                <h2 class="govuk-error-summary__title" id="error-summary-title">
-                    This page has errors
-                </h2>
-                <div class="govuk-error-summary__body">
-                    <ul class="govuk-list govuk-error-summary__list">
-                        <li><a sfa-validation-for="VenueName"></a></li>
-                    </ul>
-                </div>
+
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="VenueName">
+                    Enter venue name (optional)
+                </label>
+                <input asp-for="VenueName" class="govuk-input" id="VenueName" name="VenueName" type="text" sfa-validation-for="VenueName" sfa-validationerror-class="govuk-input--error">
             </div>
-            }
 
-            <input asp-for="Id" />
+            <input class="govuk-visually-hidden" asp-for="Id" />
 
-            <input asp-for="VenueName" class="govuk-input govuk-input govuk-input--width-20"
-                   sfa-validation-for="VenueName" sfa-validationerror-class="govuk-input--error" />
 
             <button type="submit" class="govuk-button" id="tl-confirm">Save section</button>
         </form>
@@ -39,9 +52,9 @@
 
             @for (var i = 0; i < Model.Qualifications.Count; i++)
             {
-            <li>
-                <input asp-for="@Model.Qualifications[i].LarsId" />
-            </li>
+                <li>
+                    <input asp-for="@Model.Qualifications[i].LarsId" />
+                </li>
             }
             <button type="submit" class="govuk-button" id="tl-confirm">Save and return to provider overview</button>
         </form>
