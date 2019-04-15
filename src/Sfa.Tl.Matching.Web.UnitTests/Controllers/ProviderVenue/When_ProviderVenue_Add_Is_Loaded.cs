@@ -1,9 +1,11 @@
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -19,7 +21,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var providerVenueService = Substitute.For<IProviderVenueService>();
             var locationService = Substitute.For<ILocationService>();
 
-            var providerVenueController = new ProviderVenueController(providerVenueService, locationService);
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(CheckAnswersDtoMapper).Assembly));
+            var mapper = new Mapper(config);
+
+            var providerVenueController = new ProviderVenueController(mapper, 
+                providerVenueService);
 
             _result = providerVenueController.ProviderVenueAdd(ProviderId);
         }
