@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var providerService = Substitute.For<IProviderService>();
 
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.IsValidPostCode(Postcode).Returns((true, Postcode));
+            _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((true, Postcode));
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly));
             var mapper = new Mapper(config);
@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_GetVenueWithQualifications_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).GetVenueWithQualifications(UkPrn, Postcode);
+            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(UkPrn, Postcode);
         }
     }
 }

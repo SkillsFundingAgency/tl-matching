@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var providerService = Substitute.For<IProviderService>();
 
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.GetVenueWithQualifications(UkPrn, Postcode)
+            _providerVenueService.GetVenueWithQualificationsAsync(UkPrn, Postcode)
                 .Returns(new ProviderVenueDetailViewModel
                 {
                     Id = Id,
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_GetVenueWithQualifications_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).GetVenueWithQualifications(UkPrn, Postcode);
+            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(UkPrn, Postcode);
         }
 
         [Fact]

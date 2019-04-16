@@ -6,11 +6,11 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProviderVenueService
     {
-        Task<(bool, string)> IsValidPostCode(string postCode);
-        Task<int> CreateVenue(ProviderVenueDto dto);
-        Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(long ukprn, string postcode);
-        Task SetIsProviderEnabledForSearchAsync(int providerVenueId, bool isEnabled);
-        Task UpdateVenue(UpdateProviderVenueDto dto);
-        Task<bool> HaveUniqueVenue(long ukPrn, string postCode);
+        Task<(bool, string)> IsValidPostCodeAsync(string postCode);
+        Task<int> CreateVenueAsync(ProviderVenueDto dto);
+        Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(long ukprn, string postcode);
+        Task UpdateVenueAsync(UpdateProviderVenueDto dto);
+        Task<bool> HaveUniqueVenueAsync(long ukPrn, string postCode);
+        Task SetIsProviderVenueEnabledForSearchAsync(int providerVenueId, bool isEnabled);
     }
 }

@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_GetVenueWithQualifications_Is_Not_Called()
         {
-            _providerVenueService.DidNotReceive().GetVenueWithQualifications(UkPrn, Postcode);
+            _providerVenueService.DidNotReceive().GetVenueWithQualificationsAsync(UkPrn, Postcode);
         }
     }
 }

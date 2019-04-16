@@ -26,12 +26,12 @@ namespace Sfa.Tl.Matching.Application.Services
             _providerVenueRepository = (IProviderVenueRepository)providerVenueRepository;
         }
 
-        public async Task<(bool, string)> IsValidPostCode(string postCode)
+        public async Task<(bool, string)> IsValidPostCodeAsync(string postCode)
         {
             return await _locationService.IsValidPostCode(postCode);
         }
 
-        public async Task<bool> HaveUniqueVenue(long ukPrn, string postCode)
+        public async Task<bool> HaveUniqueVenueAsync(long ukPrn, string postCode)
         {
             var venue = await _providerVenueRepository.GetSingleOrDefault(pv => pv.Provider.UkPrn == ukPrn &&
                                                                                    pv.Postcode == postCode);
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return venue == null;
         }
         
-        public async Task<int> CreateVenue(ProviderVenueDto dto)
+        public async Task<int> CreateVenueAsync(ProviderVenueDto dto)
         {
             var providerVenue = _mapper.Map<ProviderVenue>(dto);
 
@@ -52,14 +52,14 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _providerVenueRepository.Create(providerVenue);
         }
 
-        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(long ukprn, string postcode)
+        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(long ukprn, string postcode)
         {
             var viewModel = await _providerVenueRepository.GetVenueWithQualifications(ukprn, postcode);
 
             return viewModel;
         }
 
-        public async Task UpdateVenue(UpdateProviderVenueDto dto)
+        public async Task UpdateVenueAsync(UpdateProviderVenueDto dto)
         {
             var trackedEntity = await _providerVenueRepository.GetSingleOrDefault(v => v.Id == dto.Id);
             trackedEntity = _mapper.Map(dto, trackedEntity);
@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.Services
             await _providerVenueRepository.Update(trackedEntity);
         }
 
-        public async Task SetIsProviderEnabledForSearchAsync(int providerVenueId, bool isEnabled)
+        public async Task SetIsProviderVenueEnabledForSearchAsync(int providerVenueId, bool isEnabled)
         {
             var provider = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == providerVenueId);
             if (provider != null)
@@ -76,6 +76,5 @@ namespace Sfa.Tl.Matching.Application.Services
                 await _providerVenueRepository.Update(provider);
             }
         }
-
     }
 }

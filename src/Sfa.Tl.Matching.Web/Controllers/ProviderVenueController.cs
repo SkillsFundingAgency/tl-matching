@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var (isValid, formatedPostCode) = await _providerVenueService.IsValidPostCode(viewModel.Postcode);
+            var (isValid, formatedPostCode) = await _providerVenueService.IsValidPostCodeAsync(viewModel.Postcode);
             viewModel.Postcode = formatedPostCode;
 
             if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(viewModel);
             }
 
-            var isUniqueVenue = await _providerVenueService.HaveUniqueVenue(viewModel.UkPrn, viewModel.Postcode);
+            var isUniqueVenue = await _providerVenueService.HaveUniqueVenueAsync(viewModel.UkPrn, viewModel.Postcode);
             if (!isUniqueVenue)
             {
                 ModelState.AddModelError("Postcode", "Venue already exists");
@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var dto = _mapper.Map<ProviderVenueDto>(viewModel);
 
-            await _providerVenueService.CreateVenue(dto);
+            await _providerVenueService.CreateVenueAsync(dto);
 
             return RedirectToRoute("GetProviderVenueDetail", new
             {
@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             var dto = _mapper.Map<UpdateProviderVenueDto>(viewModel);
-            await _providerVenueService.UpdateVenue(dto);
+            await _providerVenueService.UpdateVenueAsync(dto);
             viewModel = await Populate(viewModel.UkPrn, viewModel.Postcode);
 
             return View("ProviderVenueDetail", viewModel);
@@ -115,6 +115,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> ConfirmProviderVenueChange(long ukPrn, string postcode)
         {
             var viewModel = await Populate(ukPrn, postcode);
+
             return View(viewModel);
         }
 
@@ -127,7 +128,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("ConfirmProviderVenueChange", viewModel);
             }
 
-            await _providerVenueService.SetIsProviderEnabledForSearchAsync(viewModel.Id, !viewModel.IsEnabledForSearch);
+            await _providerVenueService.SetIsProviderVenueEnabledForSearchAsync(viewModel.Id, !viewModel.IsEnabledForSearch);
 
             return RedirectToRoute("GetProviderVenueDetail",
                 new
@@ -139,7 +140,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<ProviderVenueDetailViewModel> Populate(long ukPrn, string postcode)
         {
-            var viewModel = await _providerVenueService.GetVenueWithQualifications(ukPrn, postcode);
+            var viewModel = await _providerVenueService.GetVenueWithQualificationsAsync(ukPrn, postcode);
 
             return viewModel ?? new ProviderVenueDetailViewModel();
         }

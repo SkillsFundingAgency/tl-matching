@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var providerService = Substitute.For<IProviderService>();
 
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.IsValidPostCode(Postcode).Returns((true, Postcode));
+            _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((true, Postcode));
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
@@ -82,13 +82,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_GetVenueWithQualifications_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).GetVenueWithQualifications(UkPrn, Postcode);
+            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(UkPrn, Postcode);
         }
 
         [Fact]
         public void Then_UpdateVenue_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).UpdateVenue(Arg.Any<UpdateProviderVenueDto>());
+            _providerVenueService.Received(1).UpdateVenueAsync(Arg.Any<UpdateProviderVenueDto>());
         }
     }
 }
