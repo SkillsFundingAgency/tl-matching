@@ -56,14 +56,47 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("provider-overview/{ukPrn}", Name = "GetProviderDetail")]
         public async Task<IActionResult> ProviderDetail(long ukPrn)
         {
-            var provider = new ProviderDetailViewModel();
+            var viewModel = new ProviderDetailViewModel();
 
             if (providerId > 0)
             {
-                provider = await _providerService.GetByIdAsync(providerId);
+                viewModel = await _providerService.GetByIdAsync(providerId);
             }
 
-            return View(provider);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("provider-overview/{providerId}", Name = "SaveProviderDetail")]
+        public async Task<IActionResult> SaveProviderDetail(ProviderDetailViewModel viewModel)
+        {
+            if (!ProviderDetailIsValid(viewModel))
+            {
+                return View("ProviderDetail", viewModel);
+            }
+
+            if (viewModel.Id > 0)
+            {
+                await _providerService.UpdateProvider(viewModel);
+            }
+            else
+            {
+                viewModel.Id = await _providerService.CreateProvider(viewModel);
+            }
+
+            return View("ProviderDetail", viewModel);
+        }
+
+        private bool ProviderDetailIsValid(ProviderDetailViewModel viewModel)
+        {
+            var result = ModelState.IsValid;
+
+            if (string.IsNullOrWhiteSpace(viewModel.PrimaryContactEmail))
+            {
+                result = false;
+            }
+
+            return result;
         }
 
         [HttpGet]
