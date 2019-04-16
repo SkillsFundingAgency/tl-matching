@@ -4,28 +4,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
 {
     internal class ValidOpportunityDtoBuilder
     {
-        private readonly OpportunityDto _dto;
-
-        public ValidOpportunityDtoBuilder()
+        public OpportunityDto Build() => new OpportunityDto
         {
-            _dto = new OpportunityDto
-            {
-                Id = 1,
-                SearchRadius = 3,
-                JobTitle = "JobTitle",
-                PlacementsKnown = true,
-                Placements = 2,
-                Postcode = "AA1 1AA",
-                EmployerName = "EmployerName",
-                EmployerContact = "EmployerContact",
-                EmployerContactEmail = "EmployerContactEmail",
-                EmployerContactPhone = "EmployerContactPhone",
-                RouteName = "RouteName",
-                ModifiedBy = "ModifiedBy"
-            };
-        }
-
-        public OpportunityDto Build() =>
-            _dto;
+            Id = 1,
+            SearchRadius = 3,
+            JobTitle = "JobTitle",
+            PlacementsKnown = true,
+            Placements = 2,
+            Postcode = "AA1 1AA",
+            EmployerName = "EmployerName",
+            EmployerContact = "EmployerContact",
+            EmployerContactEmail = "EmployerContactEmail",
+            EmployerContactPhone = "EmployerContactPhone",
+            RouteName = "RouteName",
+            ModifiedBy = "ModifiedBy"
+        };
     }
 }

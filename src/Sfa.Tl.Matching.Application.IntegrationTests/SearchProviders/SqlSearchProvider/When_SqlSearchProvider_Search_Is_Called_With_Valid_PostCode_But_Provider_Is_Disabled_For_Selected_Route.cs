@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
 
             _dbContext = new TestConfiguration().GetDbContext();
 
-            _providerVenue = new ValidProviderVenueSearchBuilder().Build();
+            _providerVenue = new ValidProviderVenueSearchBuilder().BuildOneVenue();
             _providerVenue.Provider.Status = false;
             _dbContext.Add(_providerVenue);
             _dbContext.SaveChanges();
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Should().NotBeNull();
 
         [Fact]
-        public void Then_No_Provider_is_Found_Within_Search_Radius() =>
+        public void Then_No_Provider_Is_Found_Within_Search_Radius() =>
             _results.Count().Should().Be(0);
 
         public void Dispose()

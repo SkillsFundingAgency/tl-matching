@@ -2,6 +2,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
@@ -33,6 +34,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         {
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Then_Model_Is_Of_Type_ProviderSearchParametersViewModel()
+        {
+            var viewResult = _result as ViewResult;
+            viewResult?.Model.Should().BeOfType<ProviderSearchParametersViewModel>();
         }
     }
 }

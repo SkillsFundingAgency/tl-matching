@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("GetProviderDetail", 
                 new
                 {
-                    providerId = searchResult.Id
+                    ukPrn = searchResult.UkPrn
                 });
         }
 
@@ -53,10 +53,44 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("provider-overview/{providerId}", Name = "GetProviderDetail")]
-        public IActionResult ProviderDetail(int providerId)
+        [Route("provider-overview/{ukPrn}", Name = "GetProviderDetail")]
+        public async Task<IActionResult> ProviderDetail(long ukPrn)
         {
-            return View();
+            //TODO: Use correct view model when merged
+            var provider = await _providerService.GetProviderByUkPrnAsync(ukPrn);
+            return View(provider);
+        }
+
+        [HttpGet]
+        [Route("hide-unhide/{ukPrn}", Name = "GetConfirmProviderChange")]
+        public async Task<IActionResult> ConfirmProviderChange(long ukPrn)
+        {
+            var provider = await _providerService.GetProviderByUkPrnAsync(ukPrn);
+            return View(new HideProviderViewModel
+            {
+                ProviderId = provider.Id,
+                UkPrn = ukPrn,
+                ProviderName = provider.Name,
+                IsActive = provider.IsEnabledForSearch
+            });
+        }
+
+        [HttpPost]
+        [Route("hide-unhide/{ukPrn}", Name = "ConfirmProviderChange")]
+        public async Task<IActionResult> ConfirmProviderChange(HideProviderViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ConfirmProviderChange", viewModel);
+            }
+
+            await _providerService.SetIsProviderEnabledAsync(viewModel.ProviderId, !viewModel.IsActive);
+
+            return RedirectToRoute("GetProviderDetail",
+                new
+                {
+                    ukPrn = viewModel.UkPrn
+                });
         }
     }
 }

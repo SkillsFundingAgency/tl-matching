@@ -12,25 +12,25 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider
 {
-    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_No_Provider_For_Selected_Route : IDisposable
+    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters_With_Provider_Disabled : IDisposable
     {
         private readonly IEnumerable<ProviderVenueSearchResultDto> _results;
         private readonly MatchingDbContext _dbContext;
         private readonly Domain.Models.ProviderVenue _providerVenue;
 
-        public When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_No_Provider_For_Selected_Route()
+        public When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters_With_Provider_Disabled()
         {
             var logger = Substitute.For<ILogger<Data.SearchProviders.SqlSearchProvider>>();
 
             _dbContext = new TestConfiguration().GetDbContext();
 
-            _providerVenue = new ValidProviderVenueSearchBuilder().BuildOneVenue();
+            _providerVenue = new ValidProviderVenueSearchBuilder().BuildOneVenueWithDisabledProvider();
             _dbContext.Add(_providerVenue);
             _dbContext.SaveChanges();
 
             var provider = new Data.SearchProviders.SqlSearchProvider(logger, _dbContext);
 
-            _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "MK1 1AD", SearchRadius = 5, SelectedRouteId = 1, Latitude = "52.010709", Longitude = "-0.736412" }).GetAwaiter().GetResult();
+            _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "CV1 2WT", SearchRadius = 5, SelectedRouteId = 7, Latitude = "52.400997", Longitude = "-1.508122" }).GetAwaiter().GetResult();
         }
 
         [Fact]

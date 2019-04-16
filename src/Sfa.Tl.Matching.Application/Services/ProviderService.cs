@@ -26,5 +26,37 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return dto;
         }
+
+        public async Task<ProviderDto> GetProviderAsync(int providerId)
+        {
+            var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
+
+            var dto = provider != null
+                ? _mapper.Map<Provider, ProviderDto>(provider)
+                : null;
+
+            return dto;
+        }
+        
+        public async Task<ProviderDto> GetProviderByUkPrnAsync(long ukPrn)
+        {
+            var provider = await _repository.GetSingleOrDefault(p => p.UkPrn == ukPrn);
+
+            var dto = provider != null
+                ? _mapper.Map<Provider, ProviderDto>(provider)
+                : null;
+
+            return dto;
+        }
+
+        public async Task SetIsProviderEnabledAsync(int providerId, bool isEnabled)
+        {
+            var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
+            if (provider != null)
+            {
+                provider.IsEnabledForSearch = isEnabled;
+                await _repository.Update(provider);
+            }
+        }
     }
 }
