@@ -1,14 +1,13 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderVenueAddViewModel
 
 @{
-    ViewData["Title"] = "ProviderVenueDetail";
+    ViewData["Title"] = "Add venue";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section backButton{
     <a asp-controller="Proximity" asp-action="Index" class="govuk-back-link">Back</a>
 }
-
 
 @if (!ViewData.ModelState.IsValid)
 {

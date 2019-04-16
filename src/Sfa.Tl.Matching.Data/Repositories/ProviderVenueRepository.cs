@@ -25,6 +25,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              {
                                  Id = pv.Id,
                                  ProviderId = pv.ProviderId,
+                                 ProviderName = pv.Provider.Name,
+                                 Postcode = pv.Postcode,
                                  UkPrn = pv.Provider.UkPrn,
                                  Postcode = pv.Postcode,
                                  VenueName = pv.Name,
