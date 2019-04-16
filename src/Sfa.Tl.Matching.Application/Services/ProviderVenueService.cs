@@ -58,5 +58,16 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await _providerVenueRepository.Update(trackedEntity);
         }
+
+        public async Task SetIsProviderEnabledForSearchAsync(int providerVenueId, bool isEnabled)
+        {
+            var provider = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == providerVenueId);
+            if (provider != null)
+            {
+                provider.IsEnabledForSearch = isEnabled;
+                await _providerVenueRepository.Update(provider);
+            }
+        }
+
     }
 }

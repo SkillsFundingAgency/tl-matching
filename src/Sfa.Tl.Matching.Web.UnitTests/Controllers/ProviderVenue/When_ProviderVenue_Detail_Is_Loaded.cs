@@ -8,8 +8,9 @@ using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
+using Xunit.Sdk;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
     public class When_ProviderVenue_Detail_Is_Loaded
     {
@@ -21,6 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private const int ProviderId = 1;
         private const string Source = "Admin";
         private const string VenueName = "VenueName";
+        private const bool IsEnabledForSearch = true;
 
         public When_ProviderVenue_Detail_Is_Loaded()
         {
@@ -35,6 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                     Postcode = Postcode,
                     ProviderId = ProviderId,
                     Source = Source,
+                    IsEnabledForSearch = IsEnabledForSearch,
                     VenueName = VenueName
                 });
 
@@ -84,6 +87,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
+        public void Then_Postcode_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
+            viewModel.Postcode.Should().Be(Postcode);
+        }
+
+        [Fact]
         public void Then_ProviderId_Is_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
@@ -95,6 +105,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
             viewModel.Source.Should().Be(Source);
+        }
+        
+        [Fact]
+        public void Then_IsEnabledForSearch_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
+            viewModel.IsEnabledForSearch.Should().Be(IsEnabledForSearch);
         }
 
         [Fact]

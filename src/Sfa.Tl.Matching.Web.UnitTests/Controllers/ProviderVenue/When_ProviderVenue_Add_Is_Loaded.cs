@@ -10,7 +10,7 @@ using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
     public class When_ProviderVenue_Add_Is_Loaded
     {

@@ -23,11 +23,10 @@
     <div class="govuk-grid-column-two-thirds">
 
         <span class="govuk-caption-m">DT Learning</span>
-        <h1 class="govuk-heading-l">DE4 1DE</h1>
+        <h1 class="govuk-heading-l">@Model.Postcode</h1>
         <p class="govuk-body">
-            <a class="govuk-link" href="#">Hide venue</a>
+            <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-ukPrn="@Model.UkPrn" asp-route-postcode="@Model.Postcode" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>
         </p>
-
 
         <form asp-route="SaveVenue" novalidate>
 

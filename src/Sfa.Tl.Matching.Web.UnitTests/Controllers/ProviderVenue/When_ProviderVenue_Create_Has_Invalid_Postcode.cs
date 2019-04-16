@@ -9,7 +9,7 @@ using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
     public class When_ProviderVenue_Create_Has_Invalid_Postcode
     {

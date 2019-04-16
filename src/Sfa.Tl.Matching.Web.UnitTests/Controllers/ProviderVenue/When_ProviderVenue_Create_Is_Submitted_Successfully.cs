@@ -12,7 +12,7 @@ using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
     public class When_ProviderVenue_Create_Is_Submitted_Successfully
     {

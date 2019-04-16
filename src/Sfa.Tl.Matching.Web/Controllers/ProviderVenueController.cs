@@ -56,17 +56,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _providerVenueService.CreateVenue(dto);
 
-            return RedirectToRoute("SearchVenue", new
+            return RedirectToRoute("GetProviderVenueDetail", new
             {
                 ukPrn = viewModel.UkPrn,
                 postcode = viewModel.Postcode
             });
         }
         
-        [Route("venue-overview/{ukprn}/{postcode}", Name = "SearchVenue")]
-        public async Task<IActionResult> ProviderVenueDetail(long ukprn, string postcode)
+        [Route("venue-overview/{ukPrn}/{postcode}", Name = "GetProviderVenueDetail")]
+        public async Task<IActionResult> ProviderVenueDetail(long ukPrn, string postcode)
         {
-            var viewModel = await Populate(ukprn, postcode);
+            var viewModel = await Populate(ukPrn, postcode);
 
             return View(viewModel);
         }
@@ -95,6 +95,33 @@ namespace Sfa.Tl.Matching.Web.Controllers
             // TODO Update Academic Years
             
             return RedirectToRoute("GetProviderDetail", new { ukPrn = viewModel.UkPrn });
+        }
+
+        [HttpGet]
+        [Route("hide-unhide/{ukPrn}/{postcode}", Name = "GetConfirmProviderVenueChange")]
+        public async Task<IActionResult> ConfirmProviderVenueChange(long ukPrn, string postcode)
+        {
+            var viewModel = await Populate(ukPrn, postcode);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("hide-unhide/{ukPrn}/{postcode}", Name = "ConfirmProviderVenueChange")]
+        public async Task<IActionResult> ConfirmProviderVenueChange(ProviderVenueDetailViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ConfirmProviderVenueChange", viewModel);
+            }
+
+            await _providerVenueService.SetIsProviderEnabledForSearchAsync(viewModel.Id, !viewModel.IsEnabledForSearch);
+
+            return RedirectToRoute("GetProviderVenueDetail",
+                new
+                {
+                    ukPrn = viewModel.UkPrn,
+                    postcode = viewModel.Postcode
+                });
         }
 
         private async Task<ProviderVenueDetailViewModel> Populate(long ukprn, string postcode)
