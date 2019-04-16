@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
+﻿namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
 {
     public class ValidProviderBuilder
     {
