@@ -63,16 +63,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
         
-        [Route("venue-overview/{ukprn}/{postcode}", Name = "SearchVenue")]
-        public async Task<IActionResult> ProviderVenueDetail(long ukprn, string postcode)
+        [Route("venue-overview/{ukPrn}/{postcode}", Name = "SearchVenue")]
+        public async Task<IActionResult> ProviderVenueDetail(long ukPrn, string postcode)
         {
-            var viewModel = await Populate(ukprn, postcode);
+            var viewModel = await Populate(ukPrn, postcode);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("venue-overview/{ukprn}/{postcode}", Name = "UpdateVenue")]
+        [Route("venue-overview/{ukPrn}/{postcode}", Name = "UpdateVenue")]
         public async Task<IActionResult> SaveVenue(ProviderVenueDetailViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("venue-overvieww/{ukprn}/{postcode}", Name = "SaveAcademicYears")]
+        [Route("venue-overvieww/{ukPrn}/{postcode}", Name = "SaveAcademicYears")]
         public async Task<IActionResult> ProviderVenueDetail(ProviderVenueDetailViewModel viewModel)
         {
             // TODO Update Academic Years
@@ -103,9 +103,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("GetProviderDetail", new { ukPrn = viewModel.UkPrn });
         }
 
-        private async Task<ProviderVenueDetailViewModel> Populate(long ukprn, string postcode)
+        private async Task<ProviderVenueDetailViewModel> Populate(long ukPrn, string postcode)
         {
-            var viewModel = await _providerVenueService.GetVenueWithQualifications(ukprn, postcode);
+            var viewModel = await _providerVenueService.GetVenueWithQualifications(ukPrn, postcode);
 
             return viewModel ?? new ProviderVenueDetailViewModel();
         }
