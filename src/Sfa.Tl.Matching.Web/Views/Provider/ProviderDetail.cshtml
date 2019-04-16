@@ -9,6 +9,6 @@
 <h1>ProviderDetail</h1>
 
 @* TODO: Use correct view model properties*@
-<a asp-controller="Provider" asp-action="ConfirmProviderChange" asp-route-ukPrn="@Model.UkPrn"> @(Model.IsEnabledForSearch ? "Hide" : "Unhide") provider</a>
+<p class="govuk-body"><a asp-controller="Provider" class="govuk-link" asp-action="ConfirmProviderChange" asp-route-ukPrn="@Model.UkPrn"> @(Model.IsEnabledForSearch ? "Hide" : "Unhide") provider</a></p>
 
 
