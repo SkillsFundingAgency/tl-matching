@@ -25,6 +25,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              {
                                  Id = pv.Id,
                                  ProviderId = pv.ProviderId,
+                                 ProviderName = pv.Provider.Name,
                                  UkPrn = pv.Provider.UkPrn,
                                  VenueName = pv.Name,
                                  Qualifications = (from q in _dbContext.Qualification

@@ -7,6 +7,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     {
         public int Id { get; set; }
         public int ProviderId { get; set; }
+        public string ProviderName { get; set; }
         public long UkPrn { get; set; }
         public string Postcode { get; set; }
         [MaxLength(400, ErrorMessage = "You must enter a venue name that is 400 characters or fewer")]

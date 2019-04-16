@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         private const long UkPrn = 123456;
         private const string Postcode = "CV1 2WT";
         private const int ProviderId = 1;
+        private const string ProviderName = "Name";
         private const string Source = "Admin";
         private const string VenueName = "VenueName";
 
@@ -34,6 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                     UkPrn = UkPrn,
                     Postcode = Postcode,
                     ProviderId = ProviderId,
+                    ProviderName = ProviderName,
                     Source = Source,
                     VenueName = VenueName
                 });
@@ -88,6 +90,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
             viewModel.ProviderId.Should().Be(ProviderId);
+        }
+
+        [Fact]
+        public void Then_ProviderName_Is_Set()
+        {
+            var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
+            viewModel.ProviderName.Should().Be(ProviderName);
         }
 
         [Fact]
