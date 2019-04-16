@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
-            result?.RouteName.Should().Be("SearchVenue");
+            result?.RouteName.Should().Be("GetProviderVenueDetail");
         }
 
         [Fact]
