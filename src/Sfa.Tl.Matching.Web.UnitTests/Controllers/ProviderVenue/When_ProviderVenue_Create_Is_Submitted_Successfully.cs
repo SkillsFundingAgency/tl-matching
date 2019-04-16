@@ -34,6 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerVenueService.IsValidPostCode(Postcode).Returns((true, Postcode));
+            _providerVenueService.HaveUniqueVenue(UkPrn, Postcode).Returns(true);
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
@@ -63,6 +64,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             var viewModel = new ProviderVenueAddViewModel
             {
+                UkPrn = UkPrn,
                 Postcode = Postcode
             };
 

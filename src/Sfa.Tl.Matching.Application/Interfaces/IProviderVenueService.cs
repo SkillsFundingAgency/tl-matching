@@ -11,5 +11,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(long ukprn, string postcode);
         Task SetIsProviderEnabledForSearchAsync(int providerVenueId, bool isEnabled);
         Task UpdateVenue(UpdateProviderVenueDto dto);
+        Task<bool> HaveUniqueVenue(long ukPrn, string postCode);
     }
 }

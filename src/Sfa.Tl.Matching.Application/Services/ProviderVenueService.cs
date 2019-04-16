@@ -31,6 +31,14 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _locationService.IsValidPostCode(postCode);
         }
 
+        public async Task<bool> HaveUniqueVenue(long ukPrn, string postCode)
+        {
+            var venue = await _providerVenueRepository.GetSingleOrDefault(pv => pv.Provider.UkPrn == ukPrn &&
+                                                                                   pv.Postcode == postCode);
+
+            return venue == null;
+        }
+        
         public async Task<int> CreateVenue(ProviderVenueDto dto)
         {
             var providerVenue = _mapper.Map<ProviderVenue>(dto);

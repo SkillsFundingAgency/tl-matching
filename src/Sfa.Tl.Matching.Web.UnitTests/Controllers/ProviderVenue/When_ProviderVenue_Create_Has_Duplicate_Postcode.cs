@@ -11,18 +11,20 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
-    public class When_ProviderVenue_Create_Has_Invalid_Postcode
+    public class When_ProviderVenue_Create_Has_Duplicate_Postcode
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
+        private const long UkPrn = 123456;
         private const string Postcode = "CV1 2WT";
 
-        public When_ProviderVenue_Create_Has_Invalid_Postcode()
+        public When_ProviderVenue_Create_Has_Duplicate_Postcode()
         {
             var providerService = Substitute.For<IProviderService>();
 
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.IsValidPostCode(Postcode).Returns((false, Postcode));
+            _providerVenueService.IsValidPostCode(Postcode).Returns((true, Postcode));
+            _providerVenueService.HaveUniqueVenue(UkPrn, Postcode).Returns(false);
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly));
             var mapper = new Mapper(config);
@@ -33,6 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             var viewModel = new ProviderVenueAddViewModel
             {
+                UkPrn = UkPrn,
                 Postcode = Postcode
             };
 
@@ -58,6 +61,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         public void Then_IsValidPostCode_Is_Called_Exactly_Once()
         {
             _providerVenueService.Received(1).IsValidPostCode(Postcode);
+        }
+
+        [Fact]
+        public void Then_HaveUniqueVenue_Is_Called_Exactly_Once()
+        {
+            _providerVenueService.Received(1).HaveUniqueVenue(UkPrn, Postcode);
         }
 
         [Fact]

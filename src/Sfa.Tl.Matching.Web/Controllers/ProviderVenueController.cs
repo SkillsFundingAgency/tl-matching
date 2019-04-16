@@ -44,13 +44,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(viewModel);
 
             var (isValid, formatedPostCode) = await _providerVenueService.IsValidPostCode(viewModel.Postcode);
+            viewModel.Postcode = formatedPostCode;
+
             if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
             {
                 ModelState.AddModelError("Postcode", "You must enter a real postcode");
                 return View(viewModel);
             }
 
-            viewModel.Postcode = formatedPostCode;
+            var isUniqueVenue = await _providerVenueService.HaveUniqueVenue(viewModel.UkPrn, viewModel.Postcode);
+            if (!isUniqueVenue)
+            {
+                ModelState.AddModelError("Postcode", "Venue already exists");
+                return View(viewModel);
+            }
 
             var dto = _mapper.Map<ProviderVenueDto>(viewModel);
 
