@@ -90,5 +90,5 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         {
             _result.ProviderVenues.ElementAt(1).QualificationCount.Should().Be(2);
         }
-   }
+    }
 }

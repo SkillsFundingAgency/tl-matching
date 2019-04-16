@@ -40,16 +40,18 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<ProviderDetailViewModel> GetByIdAsync(int providerId)
+        public async Task<ProviderDetailViewModel> GetByIdAsync(int providerId, bool includeVeuneDetails = true)
         {
-            var provider = await _repository.GetMany(p => p.Id == providerId)
-                                            .Include(p => p.ProviderVenue)
-                                            .ThenInclude(pv => pv.ProviderQualification)
-                                            .SingleOrDefaultAsync();
+            var query = _repository.GetMany(p => p.Id == providerId);
 
-            var dto = _mapper.Map<Provider, ProviderDetailViewModel>(provider);
+            if (includeVeuneDetails)
+            {
+                query.Include(p => p.ProviderVenue).ThenInclude(pv => pv.ProviderQualification);
+            }
 
-            return dto;
+            var provider = await query.SingleOrDefaultAsync();
+
+            return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
         }
         
         public async Task<ProviderDto> GetProviderByUkPrnAsync(long ukPrn)
