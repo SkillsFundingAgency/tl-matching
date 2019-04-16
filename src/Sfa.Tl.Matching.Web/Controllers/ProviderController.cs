@@ -58,9 +58,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var viewModel = new ProviderDetailViewModel();
 
-            if (providerId > 0)
+            if (ukPrn > 0)
             {
-                viewModel = await _providerService.GetByIdAsync(providerId);
+                viewModel = await _providerService.GetProviderDetailByUkprnAsync(ukPrn);
             }
 
             return View(viewModel);

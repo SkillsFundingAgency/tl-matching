@@ -14,14 +14,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 {
-    public class When_ProviderService_Is_Called_To_Get_Provider_Details_By_ProviderId
+    public class When_ProviderService_Is_Called_To_Get_Provider_Details_By_Ukprn
     {
         private const int UkPrn = 1;
 
         private readonly ProviderDetailViewModel _result;
         private readonly IRepository<Domain.Models.Provider> _providerRepository;
 
-        public When_ProviderService_Is_Called_To_Get_Provider_Details_By_ProviderId()
+        public When_ProviderService_Is_Called_To_Get_Provider_Details_By_Ukprn()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
             var service = new ProviderService(mapper, _providerRepository);
 
-            _result = service.GetByIdAsync(UkPrn).GetAwaiter().GetResult();
+            _result = service.GetProviderDetailByUkprnAsync(UkPrn).GetAwaiter().GetResult();
         }
 
         [Fact]

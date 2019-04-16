@@ -29,20 +29,23 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<ProviderDto> GetProviderAsync(int providerId)
+        public Task UpdateProvider(ProviderDetailViewModel viewModel)
         {
-            var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
+            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
 
-            var dto = provider != null
-                ? _mapper.Map<Provider, ProviderDto>(provider)
-                : null;
-
-            return dto;
+            return _repository.Update(provider);
         }
 
-        public async Task<ProviderDetailViewModel> GetByIdAsync(int providerId, bool includeVeuneDetails = true)
+        public Task<int> CreateProvider(ProviderDetailViewModel viewModel)
         {
-            var query = _repository.GetMany(p => p.Id == providerId);
+            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+
+            return _repository.Create(provider);
+        }
+
+        public async Task<ProviderDetailViewModel> GetProviderDetailByUkprnAsync(long ukPrn, bool includeVeuneDetails = false)
+        {
+            var query = _repository.GetMany(p => p.UkPrn == ukPrn);
 
             if (includeVeuneDetails)
             {
