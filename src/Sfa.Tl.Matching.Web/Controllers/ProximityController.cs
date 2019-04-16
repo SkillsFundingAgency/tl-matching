@@ -94,7 +94,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ValidateProviderSearchResult(CreateReferralViewModel viewModel)
+        public async Task<IActionResult> ValidateProviderSearchResult(SaveReferralViewModel viewModel)
         {
             if (viewModel.SelectedProvider.Any(p => p.IsSelected))
             {
@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
                 var selectedProviders = JsonConvert.SerializeObject(viewModel);
 
-                return RedirectToRoute("CreateReferral", new { viewModel = selectedProviders });
+                return RedirectToRoute("SaveReferral", new { viewModel = selectedProviders });
             }
 
             ModelState.AddModelError("SearchResults.Results[0].IsSelected", "You must select at least one provider");
