@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task<(bool, string)> IsValidPostCode(string postCode);
         Task<int> CreateVenue(ProviderVenueDto dto);
-        Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(string postcode);
-        Task UpdateVenue(ProviderVenueDetailViewModel viewModel);
+        Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(long ukprn, string postcode);
+        Task UpdateVenue(UpdateProviderVenueDto dto);
     }
 }

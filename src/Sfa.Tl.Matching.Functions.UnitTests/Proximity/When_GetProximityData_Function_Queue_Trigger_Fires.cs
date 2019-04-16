@@ -3,6 +3,10 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -18,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _locationService = Substitute.For<ILocationService>();
 
             var proximityfunctions = new Functions.Proximity();
-            proximityfunctions.GetProximityData(new GetProximityData { Postcode = "CV12WT" }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, _locationService).GetAwaiter().GetResult();
+            proximityfunctions.GetProximityData(new GetProximityData { Postcode = "CV12WT" }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, _locationService, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -42,13 +42,18 @@
 
             <input class="govuk-visually-hidden" asp-for="Id" />
 
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="ProviderId" type="hidden" />
+            <input asp-for="UkPrn" type="hidden" />
+            <input asp-for="Source" value="Admin" type="hidden" />
+            
 
             <button type="submit" class="govuk-button" id="tl-confirm">Save section</button>
         </form>
 
         <form asp-route="SaveAcademicYears" novalidate>
-            <input asp-for="Id" />
-            <input asp-for="ProviderId" />
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="UkPrn" type="hidden" />
 
             @for (var i = 0; i < Model.Qualifications.Count; i++)
             {

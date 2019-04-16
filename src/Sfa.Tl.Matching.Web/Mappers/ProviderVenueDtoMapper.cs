@@ -12,8 +12,15 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.CreatedBy,
                     o => o.MapFrom<LoggedInUserNameResolver<ProviderVenueAddViewModel, ProviderVenueDto>>())
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
-                .ForMember(m => m.ProviderId, o => o.MapFrom(s => s.ProviderId))
-                ;
+                .ForAllOtherMembers(config => config.Ignore());
+            ;
+
+            CreateMap<ProviderVenueDetailViewModel, UpdateProviderVenueDto>()
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<ProviderVenueDetailViewModel, UpdateProviderVenueDto>>())
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<ProviderVenueDetailViewModel, UpdateProviderVenueDto>>())
+                .ForMember(m => m.Name, o => o.MapFrom(s => s.VenueName))
+                .ForAllOtherMembers(config => config.Ignore());
+            ;
         }
     }
 }

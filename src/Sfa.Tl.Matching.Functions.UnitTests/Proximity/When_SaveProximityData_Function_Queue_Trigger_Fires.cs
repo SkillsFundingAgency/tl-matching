@@ -7,6 +7,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -26,9 +27,9 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 
             var mapper = new Mapper(config);
             _providerVenueRepository = Substitute.For<IRepository<Domain.Models.ProviderVenue>>();
-            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>()).Returns(new Domain.Models.ProviderVenue());
+            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>()).Returns(new Domain.Models.ProviderVenue{Id = 12345678, Postcode = "CV12WT"});
             var proximityfunctions = new Functions.Proximity();
-            proximityfunctions.SaveProximityData(new SaveProximityData { Postcode = "CV12WT", Longitude = "1.2", Latitude = "3.4", ProviderVenueId = 12345678 }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, _providerVenueRepository).GetAwaiter().GetResult();
+            proximityfunctions.SaveProximityData(new SaveProximityData { Postcode = "CV12WT", Longitude = "1.2", Latitude = "3.4", ProviderVenueId = 12345678 }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, _providerVenueRepository, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
         }
 
         [Fact]

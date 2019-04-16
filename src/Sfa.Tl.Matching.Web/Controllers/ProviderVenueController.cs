@@ -13,66 +13,31 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class ProviderVenueController : Controller
     {
         private readonly IMapper _mapper;
+        private readonly IProviderService _providerService;
         private readonly IProviderVenueService _providerVenueService;
 
         public ProviderVenueController(IMapper mapper,
+            IProviderService providerService,
             IProviderVenueService providerVenueService)
         {
             _mapper = mapper;
+            _providerService = providerService;
             _providerVenueService = providerVenueService;
         }
 
-        [Route("venue-overview-{postcode}", Name = "SearchVenue")]
-        public async Task<IActionResult> ProviderVenueDetail(string postcode)
+        [Route("add-venue/{ukPrn}", Name = "AddVenue")]
+        public async Task<IActionResult> ProviderVenueAdd(long ukPrn)
         {
-            var viewModel = await Populate(postcode);
-
-            return View(viewModel);
-        }
-
-        private async Task<ProviderVenueDetailViewModel> Populate(string postcode)
-        {
-            var viewModel = await _providerVenueService.GetVenueWithQualifications(postcode);
-
-            return viewModel;
-        }
-
-        [HttpPost]
-        [Route("venue-overview-{postcode}", Name = "UpdateVenue")]
-        public async Task<IActionResult> SaveVenue(string postcode, ProviderVenueDetailViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                viewModel = await Populate(postcode);
-                return View("ProviderVenueDetail", viewModel);
-            }
-
-            await _providerVenueService.UpdateVenue(viewModel);
-            viewModel = await Populate(postcode);
-
-            return View("ProviderVenueDetail", viewModel);
-        }
-
-        [HttpPost]
-        [Route("venue-overvieww-{postcode}", Name = "SaveAcademicYears")]
-        public IActionResult SaveAcademicYears(string postcode, ProviderVenueDetailViewModel viewModel)
-        {
-            // TODO Update Academic Years
-            
-            return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
-        }
-
-        [Route("add-venue/{providerId}", Name = "AddVenue")]
-        public IActionResult ProviderVenueAdd(int providerId)
-        {
+            var provider = await _providerService.GetProviderByUkPrnAsync(ukPrn);
             return View(new ProviderVenueAddViewModel
             {
-                ProviderId = providerId
+                ProviderId = provider.Id,
+                UkPrn = ukPrn
             });
         }
 
         [HttpPost]
-        [Route("add-venue/{providerId}", Name = "CreateVenue")]
+        [Route("add-venue/{ukPrn}", Name = "CreateVenue")]
         public async Task<IActionResult> ProviderVenueAdd(ProviderVenueAddViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -91,7 +56,52 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _providerVenueService.CreateVenue(dto);
 
-            return RedirectToRoute("SearchVenue", new { postcode = viewModel.Postcode });
+            return RedirectToRoute("SearchVenue", new
+            {
+                ukPrn = viewModel.UkPrn,
+                postcode = viewModel.Postcode
+            });
+        }
+        
+        [Route("venue-overview/{ukprn}/{postcode}", Name = "SearchVenue")]
+        public async Task<IActionResult> ProviderVenueDetail(long ukprn, string postcode)
+        {
+            var viewModel = await Populate(ukprn, postcode);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("venue-overview/{ukprn}/{postcode}", Name = "UpdateVenue")]
+        public async Task<IActionResult> SaveVenue(ProviderVenueDetailViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel = await Populate(viewModel.UkPrn, viewModel.Postcode);
+                return View("ProviderVenueDetail", viewModel);
+            }
+
+            var dto = _mapper.Map<UpdateProviderVenueDto>(viewModel);
+            await _providerVenueService.UpdateVenue(dto);
+            viewModel = await Populate(viewModel.UkPrn, viewModel.Postcode);
+
+            return View("ProviderVenueDetail", viewModel);
+        }
+
+        [HttpPost]
+        [Route("venue-overvieww/{ukprn}/{postcode}", Name = "SaveAcademicYears")]
+        public IActionResult SaveAcademicYears(ProviderVenueDetailViewModel viewModel)
+        {
+            // TODO Update Academic Years
+            
+            return RedirectToRoute("GetProviderDetail", new { ukPrn = viewModel.UkPrn });
+        }
+
+        private async Task<ProviderVenueDetailViewModel> Populate(long ukprn, string postcode)
+        {
+            var viewModel = await _providerVenueService.GetVenueWithQualifications(ukprn, postcode);
+
+            return viewModel ?? new ProviderVenueDetailViewModel();
         }
     }
 }

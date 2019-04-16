@@ -3,22 +3,23 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_ProviderVenue_Add_Is_Loaded
+    public class When_ProviderVenue_Create_Has_Invalid_Postcode
     {
         private readonly IActionResult _result;
+        private readonly IProviderVenueService _providerVenueService;
         private const long UkPrn = 123456;
         private const int ProviderId = 1;
+        private const string Postcode = "CV1 2WT";
 
-        public When_ProviderVenue_Add_Is_Loaded()
+        public When_ProviderVenue_Create_Has_Invalid_Postcode()
         {
             var providerService = Substitute.For<IProviderService>();
             providerService.GetProviderByUkPrnAsync(UkPrn).Returns(new ProviderDto
@@ -26,16 +27,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 Id = ProviderId
             });
 
-            var providerVenueService = Substitute.For<IProviderVenueService>();
+            _providerVenueService = Substitute.For<IProviderVenueService>();
+            _providerVenueService.IsValidPostCode(Postcode).Returns((false, Postcode));
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
             var providerVenueController = new ProviderVenueController(mapper,
                 providerService,
-                providerVenueService);
+                _providerVenueService);
 
-            _result = providerVenueController.ProviderVenueAdd(UkPrn).GetAwaiter().GetResult();
+            var viewModel = new ProviderVenueAddViewModel
+            {
+                Postcode = Postcode
+            };
+
+            _result = providerVenueController.ProviderVenueAdd(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -54,17 +61,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_UkPrn_Is_Set()
+        public void Then_IsValidPostCode_Is_Called_Exactly_Once()
         {
-            var viewModel = _result.GetViewModel<ProviderVenueAddViewModel>();
-            viewModel.UkPrn.Should().Be(UkPrn);
+            _providerVenueService.Received(1).IsValidPostCode(Postcode);
         }
 
         [Fact]
-        public void Then_ProviderId_Is_Set()
+        public void Then_CreateVenue_Is_Not_Called()
         {
-            var viewModel = _result.GetViewModel<ProviderVenueAddViewModel>();
-            viewModel.ProviderId.Should().Be(ProviderId);
+            _providerVenueService.DidNotReceive().CreateVenue(Arg.Any<ProviderVenueDto>());
         }
     }
 }
