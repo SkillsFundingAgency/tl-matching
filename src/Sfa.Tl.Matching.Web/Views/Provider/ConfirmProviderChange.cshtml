@@ -16,13 +16,12 @@
             <input asp-for="IsActive" type="hidden" />
 
             <button type="submit" class="govuk-button">
-                Hide provider
+                @(Model.IsActive ? "Hide" : "Unhide") provider
             </button>
         </form>
         <p class="govuk-body">
             <a asp-controller="Provider" class="govuk-link" asp-action="ProviderDetail" asp-route-ukPrn="@Model.UkPrn" class="govuk-link" id="tl-cancel">Cancel and return to provider overview</a>
         </p>
-
     </div>
 </div>
 
