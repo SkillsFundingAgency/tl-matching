@@ -14,6 +14,7 @@
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 <li><a sfa-validation-for="VenueName"></a></li>
+                <li><a href="#addQual" sfa-validation-for="@Model.Qualifications"></a></li>
             </ul>
         </div>
     </div>
@@ -28,9 +29,7 @@
             <a class="govuk-link" href="#">Hide venue</a>
         </p>
 
-
         <form asp-route="SaveVenue" novalidate>
-
             <div class="govuk-form-group">
                 <label class="govuk-label" for="VenueName">
                     Enter venue name (optional)
@@ -43,7 +42,6 @@
             <input asp-for="UkPrn" type="hidden" />
             <input asp-for="Source" value="Admin" type="hidden" />
 
-
             <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm">Save section</button>
         </form>
 
@@ -55,66 +53,51 @@
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
         <h2 class="govuk-heading-m">Qualifications</h2>
 
-
-
-
-
-
         <form asp-route="SaveAcademicYears" novalidate>
             <input asp-for="Id" type="hidden" />
             <input asp-for="UkPrn" type="hidden" />
 
-
-
-                <table class="govuk-table">
-                    <thead class="govuk-table__head">
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col">LAR ID</th>
+                        <th class="govuk-table__header" scope="col">Qualification title</th>
+                        <th class="govuk-table__header" scope="col">18/19</th>
+                        <th class="govuk-table__header" scope="col">19/20</th>
+                        <th class="govuk-table__header" scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @for (var i = 0; i < Model.Qualifications.Count; i++)
+                    {
                         <tr class="govuk-table__row">
-                            <th class="govuk-table__header" scope="col">LAR ID</th>
-                            <th class="govuk-table__header" scope="col">Qualification title</th>
-                            <th class="govuk-table__header" scope="col">18/19</th>
-                            <th class="govuk-table__header" scope="col">19/20</th>
-                            <th class="govuk-table__header" scope="col"></th>
+                            <td class="govuk-table__cell">@Model.Qualifications[i].LarsId</td>
+                            <td class="govuk-table__cell">NVQ Level 2 in Lawn Mowering</td>
+                            <td class="govuk-table__cell">
+                                <div class="govuk-checkboxes">
+                                    <div class="govuk-checkboxes__item">
+                                        <input class="govuk-checkboxes__input" id="1a" name="1a" type="checkbox" value="yes" checked="">
+                                        <label class="govuk-label govuk-checkboxes__label" for="1a"></label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="govuk-table__cell">
+                                <div class="govuk-checkboxes">
+                                    <div class="govuk-checkboxes__item">
+                                        <input class="govuk-checkboxes__input" id="1b" name="1b" type="checkbox" value="yes">
+                                        <label class="govuk-label govuk-checkboxes__label" for="1b"></label>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody class="govuk-table__body">
-                        @for (var i = 0; i < Model.Qualifications.Count; i++)
-                        {
-                            <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">@Model.Qualifications[i].LarsId</td>
-                                <td class="govuk-table__cell">NVQ Level 2 in Lawn Mowering</td>
-                                <td class="govuk-table__cell">
-                                    <div class="govuk-checkboxes">
-                                        <div class="govuk-checkboxes__item">
-                                            <input class="govuk-checkboxes__input" id="1a" name="1a" type="checkbox" value="yes" checked="">
-                                            <label class="govuk-label govuk-checkboxes__label" for="1a"></label>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="govuk-table__cell">
-                                    <div class="govuk-checkboxes">
-                                        <div class="govuk-checkboxes__item">
-                                            <input class="govuk-checkboxes__input" id="1b" name="1b" type="checkbox" value="yes">
-                                            <label class="govuk-label govuk-checkboxes__label" for="1b"></label>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <input asp-for="@Model.Qualifications[i].LarsId" type="hidden" />
-                        }
+                        <input asp-for="@Model.Qualifications[i].LarsId" type="hidden" />
+                    }
 
-                    </tbody>
-                </table>
-
-
-
-
-
-
-
-
+                </tbody>
+            </table>
 
             <p class="govuk-body">
-                <a class="govuk-link" href="#">Add a qualification</a>
+                <a class="govuk-link" id="addQual" href="#">Add a qualification</a>
             </p>
             <button type="submit" class="govuk-button" id="tl-confirm">Save and return to provider overview</button>
         </form>

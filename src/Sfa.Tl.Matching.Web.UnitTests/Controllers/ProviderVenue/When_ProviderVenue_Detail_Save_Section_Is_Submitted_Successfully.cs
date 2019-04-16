@@ -12,19 +12,18 @@ using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
-    public class When_ProviderVenue_Detail_Is_Submitted_Successfully
+    public class When_ProviderVenue_Detail_Save_Section_Is_Submitted_Successfully
     {
         private readonly IActionResult _result;
-        private const long UkPrn = 123456;
-        private const int ProviderId = 1;
         private readonly IProviderVenueService _providerVenueService;
+        private const long UkPrn = 123456;
         private const string Postcode = "CV1 2WT";
         private const string UserName = "username";
         private const string Email = "email@address.com";
         
-        public When_ProviderVenue_Detail_Is_Submitted_Successfully()
+        public When_ProviderVenue_Detail_Save_Section_Is_Submitted_Successfully()
         {
             var providerService = Substitute.For<IProviderService>();
 

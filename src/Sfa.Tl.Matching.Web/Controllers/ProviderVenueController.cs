@@ -90,10 +90,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("venue-overvieww/{ukprn}/{postcode}", Name = "SaveAcademicYears")]
-        public IActionResult SaveAcademicYears(ProviderVenueDetailViewModel viewModel)
+        public async Task<IActionResult> ProviderVenueDetail(ProviderVenueDetailViewModel viewModel)
         {
             // TODO Update Academic Years
-            
+            if (viewModel.Qualifications == null || viewModel.Qualifications.Count == 0)
+            {
+                ModelState.AddModelError("Qualifications", "You must add a qualification for this venue");
+                viewModel = await Populate(viewModel.UkPrn, viewModel.Postcode);
+                return View(viewModel);
+            }
+
             return RedirectToRoute("GetProviderDetail", new { ukPrn = viewModel.UkPrn });
         }
 
