@@ -53,15 +53,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             var isUniqueVenue = await _providerVenueService.HaveUniqueVenueAsync(viewModel.UkPrn, viewModel.Postcode);
-            if (!isUniqueVenue)
+            if (isUniqueVenue)
             {
-                ModelState.AddModelError("Postcode", "Venue already exists");
-                return View(viewModel);
+                var dto = _mapper.Map<ProviderVenueDto>(viewModel);
+                await _providerVenueService.CreateVenueAsync(dto);
             }
-
-            var dto = _mapper.Map<ProviderVenueDto>(viewModel);
-
-            await _providerVenueService.CreateVenueAsync(dto);
 
             return RedirectToRoute("GetProviderVenueDetail", new
             {

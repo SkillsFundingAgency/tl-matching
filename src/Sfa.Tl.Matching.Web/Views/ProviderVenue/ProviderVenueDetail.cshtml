@@ -74,8 +74,12 @@
                     @for (var i = 0; i < Model.Qualifications.Count; i++)
                     {
                         <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Model.Qualifications[i].LarsId</td>
-                            <td class="govuk-table__cell">NVQ Level 2 in Lawn Mowering</td>
+                            <td class="govuk-table__cell">
+                                <input asp-for="@Model.Qualifications[i].LarsId" type="hidden" />
+                                <input asp-for="@Model.Qualifications[i].Title" type="hidden" />
+                                @Model.Qualifications[i].LarsId
+                            </td>
+                            <td class="govuk-table__cell">@Model.Qualifications[i].Title</td>
                             <td class="govuk-table__cell">
                                 <div class="govuk-checkboxes">
                                     <div class="govuk-checkboxes__item">
@@ -93,9 +97,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <input asp-for="@Model.Qualifications[i].LarsId" type="hidden" />
                     }
-
                 </tbody>
             </table>
 

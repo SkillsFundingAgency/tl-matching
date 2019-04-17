@@ -36,7 +36,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                    where pv1.Postcode == postcode && pv1.Provider.UkPrn == ukprn
                                                    select new QualificationDetailViewModel
                                                    {
-                                                       LarsId = q.LarsId
+                                                       LarsId = q.LarsId,
+                                                       Title = q.Title,
+                                                       ShortTitle = q.ShortTitle
                                                    }).Distinct().ToList()
                              }).SingleOrDefaultAsync();
 

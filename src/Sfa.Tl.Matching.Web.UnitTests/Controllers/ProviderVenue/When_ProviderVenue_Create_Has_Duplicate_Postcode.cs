@@ -11,14 +11,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
-    public class When_ProviderVenue_Create_Has_Duplicate_Postcode
+    public class When_ProviderVenue_Create_Postcode_Exists
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
         private const long UkPrn = 123456;
         private const string Postcode = "CV1 2WT";
 
-        public When_ProviderVenue_Create_Has_Duplicate_Postcode()
+        public When_ProviderVenue_Create_Postcode_Exists()
         {
             var providerService = Substitute.For<IProviderService>();
 
@@ -47,14 +47,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _result.Should().NotBeNull();
 
         [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
+        public void Then_RedirectToRoute_Result_Is_Returned() =>
+            _result.Should().BeAssignableTo<RedirectToRouteResult>();
 
         [Fact]
-        public void Then_Model_Is_Not_Null()
+        public void Then_Result_Is_RedirectToRoute()
         {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
+            var result = _result as RedirectToRouteResult;
+            result.Should().NotBeNull();
+            result?.RouteName.Should().Be("GetProviderVenueDetail");
         }
 
         [Fact]
