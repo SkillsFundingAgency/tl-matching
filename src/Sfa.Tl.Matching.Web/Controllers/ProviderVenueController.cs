@@ -92,7 +92,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("venue-overvieww/{ukPrn}/{postcode}", Name = "SaveAcademicYears")]
+        [Route("venue-overview-save/{ukPrn}/{postcode}", Name = "SaveAcademicYears")]
         public async Task<IActionResult> ProviderVenueDetail(ProviderVenueDetailViewModel viewModel)
         {
             // TODO Update Academic Years
