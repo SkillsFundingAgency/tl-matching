@@ -14,7 +14,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public decimal? Longitude { get; set; }
         public bool IsEnabledForSearch { get; set; }
         public string Source { get; set; }
-        public bool IsEnabledForSearch { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
