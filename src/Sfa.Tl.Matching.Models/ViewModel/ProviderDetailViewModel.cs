@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Sfa.Tl.Matching.Web.Extensions;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
@@ -27,7 +28,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         [RegularExpression(@"^[a-zA-Z0-9\u0080-\uFFA7?$#()""'!,+\-=_:;.&€£*%\s\/]+@[a-zA-Z0-9\u0080-\uFFA7?$#()""'!,+\-=_:;.&€£*%\s\/]+\.([a-zA-Z0-9\u0080-\uFFA7]{2,10})$", ErrorMessage = "Enter an email address in the correct format, like name@example.com")]
         public string PrimaryContactEmail { get; set; }
         
-        [Required(ErrorMessage = "You must enter a telephone number for the primary contact number")]
+        [PhoneNumber(FieldName = "primary contact", IsRequired = true)]
         public string PrimaryContactPhone { get; set; }
 
         [RegularExpression(@"^[a-zA-Z0-9'\s-]*$", ErrorMessage = "You must enter a contact name using letters")]
@@ -37,7 +38,8 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         [RegularExpression(@"^[a-zA-Z0-9\u0080-\uFFA7?$#()""'!,+\-=_:;.&€£*%\s\/]+@[a-zA-Z0-9\u0080-\uFFA7?$#()""'!,+\-=_:;.&€£*%\s\/]+\.([a-zA-Z0-9\u0080-\uFFA7]{2,10})$", ErrorMessage = "Enter an email address in the correct format, like name@example.com")]
         public string SecondaryContactEmail { get; set; }
-        
+
+        [PhoneNumber(FieldName = "primary contact", IsRequired = false)]
         public string SecondaryContactPhone { get; set; }
 
         [Required(ErrorMessage = "You must tell us whether the provider should receive referrals")]

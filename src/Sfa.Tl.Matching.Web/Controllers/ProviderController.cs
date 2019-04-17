@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("provider-overview/{providerId}", Name = "SaveProviderDetail")]
         public async Task<IActionResult> SaveProviderDetail(ProviderDetailViewModel viewModel)
         {
-            if (!ProviderDetailIsValid(viewModel))
+            if (!ModelState.IsValid)
             {
                 return View("ProviderDetail", viewModel);
             }
@@ -85,18 +85,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             return View("ProviderDetail", viewModel);
-        }
-
-        private bool ProviderDetailIsValid(ProviderDetailViewModel viewModel)
-        {
-            var result = ModelState.IsValid;
-
-            if (string.IsNullOrWhiteSpace(viewModel.PrimaryContactEmail))
-            {
-                result = false;
-            }
-
-            return result;
         }
 
         [HttpGet]
