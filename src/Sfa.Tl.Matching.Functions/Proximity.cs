@@ -96,9 +96,9 @@ namespace Sfa.Tl.Matching.Functions
 
             var providerVenue = await providerVenueRepository.GetSingleOrDefault(venue => venue.Id == saveProximityData.ProviderVenueId);
 
-            if (providerVenue == null || providerVenue.Postcode.ToLetterOrDigit() != saveProximityData.Postcode.ToLetterOrDigit())
+            if (providerVenue == null || string.Compare(providerVenue.Postcode.ToLetterOrDigit(),  saveProximityData.Postcode.ToLetterOrDigit(), StringComparison.InvariantCultureIgnoreCase) != 0)
             {
-                var errorMessage = $"Error Saving Geo Location Data for ProviderVenueId: {saveProximityData.ProviderVenueId}, ProviderId and Postcode does not match.";
+                var errorMessage = $"Error Saving Geo Location Data for ProviderVenueId: {saveProximityData.ProviderVenueId}, ProviderVenueId and Postcode does not match.";
                 logger.LogError(errorMessage);
                 await functionlogRepository.Create(new FunctionLog
                 {
