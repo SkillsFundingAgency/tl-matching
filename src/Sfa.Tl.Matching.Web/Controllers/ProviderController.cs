@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("search-ukprn", Name = "GetProviderSearch")]
         public IActionResult Index()
         {
-            return View("ProviderSearch", new ProviderSearchParametersViewModel());
+            return View("SearchProvider", new ProviderSearchParametersViewModel());
         }
 
         [HttpPost]
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("ProviderSearch", viewModel);
+                return View("SearchProvider", viewModel);
             }
 
             var searchResult = viewModel.UkPrn.HasValue
@@ -36,20 +36,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (searchResult == null || searchResult.Id == 0)
             {
-                return ReturnProviderSearchViewWithInvalidUkPrnError(viewModel);
+                ModelState.AddModelError("UkPrn", "You must enter a real UKPRN");
+                return View("SearchProvider", viewModel);
             }
 
-            return RedirectToRoute("GetProviderDetail", 
-                new
-                {
-                    id = searchResult.Id
-                });
-        }
-
-        private IActionResult ReturnProviderSearchViewWithInvalidUkPrnError(ProviderSearchParametersViewModel viewModel)
-        {
-            ModelState.AddModelError("UkPrn", "You must enter a real UKPRN");
-            return View("ProviderSearch", viewModel);
+            return RedirectToRoute("GetProviderDetail", new { ukPrn = searchResult.UkPrn });
+                    ukPrn = searchResult.UkPrn
         }
 
         [HttpGet]
