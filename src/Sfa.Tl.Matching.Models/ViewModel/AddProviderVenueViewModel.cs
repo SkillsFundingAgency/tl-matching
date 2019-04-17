@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
-    public class ProviderVenueAddViewModel
+    public class AddProviderVenueViewModel
     {
         public int ProviderId { get; set; }
         public long UkPrn { get; set; }

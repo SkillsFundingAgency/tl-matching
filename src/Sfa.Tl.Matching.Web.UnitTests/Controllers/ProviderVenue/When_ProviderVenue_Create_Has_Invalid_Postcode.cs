@@ -31,12 +31,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 providerService,
                 _providerVenueService);
 
-            var viewModel = new ProviderVenueAddViewModel
+            var viewModel = new AddProviderVenueViewModel
             {
                 Postcode = Postcode
             };
 
-            _result = providerVenueController.ProviderVenueAdd(viewModel).GetAwaiter().GetResult();
+            _result = providerVenueController.AddProviderVenue(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

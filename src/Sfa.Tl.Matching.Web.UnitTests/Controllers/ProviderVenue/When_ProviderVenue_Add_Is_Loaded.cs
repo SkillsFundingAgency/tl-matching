@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 providerService,
                 providerVenueService);
 
-            _result = providerVenueController.ProviderVenueAdd(UkPrn).GetAwaiter().GetResult();
+            _result = providerVenueController.AddProviderVenue(UkPrn).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -56,14 +56,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_UkPrn_Is_Set()
         {
-            var viewModel = _result.GetViewModel<ProviderVenueAddViewModel>();
+            var viewModel = _result.GetViewModel<AddProviderVenueViewModel>();
             viewModel.UkPrn.Should().Be(UkPrn);
         }
 
         [Fact]
         public void Then_ProviderId_Is_Set()
         {
-            var viewModel = _result.GetViewModel<ProviderVenueAddViewModel>();
+            var viewModel = _result.GetViewModel<AddProviderVenueViewModel>();
             viewModel.ProviderId.Should().Be(ProviderId);
         }
     }

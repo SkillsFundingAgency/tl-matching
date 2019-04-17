@@ -43,11 +43,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<ProviderVenueAddViewModel, ProviderVenueDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<AddProviderVenueViewModel, ProviderVenueDto>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<ProviderVenueAddViewModel, ProviderVenueDto>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenueDto>(httpcontextAccesor) :
                             type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<ProviderVenueAddViewModel, ProviderVenueDto>(new DateTimeProvider()) :
+                                new UtcNowResolver<AddProviderVenueViewModel, ProviderVenueDto>(new DateTimeProvider()) :
                                 null);
             });
             var mapper = new Mapper(config);
@@ -62,13 +62,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             httpcontextAccesor.HttpContext.Returns(providerVenueController.HttpContext);
 
-            var viewModel = new ProviderVenueAddViewModel
+            var viewModel = new AddProviderVenueViewModel
             {
                 UkPrn = UkPrn,
                 Postcode = Postcode
             };
 
-            _result = controllerWithClaims.ProviderVenueAdd(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.AddProviderVenue(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -26,10 +26,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("add-venue/{ukPrn}", Name = "AddVenue")]
-        public async Task<IActionResult> ProviderVenueAdd(long ukPrn)
+        public async Task<IActionResult> AddProviderVenue(long ukPrn)
         {
             var provider = await _providerService.GetProviderByUkPrnAsync(ukPrn);
-            return View(new ProviderVenueAddViewModel
+            return View(new AddProviderVenueViewModel
             {
                 ProviderId = provider.Id,
                 UkPrn = ukPrn
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("add-venue/{ukPrn}", Name = "CreateVenue")]
-        public async Task<IActionResult> ProviderVenueAdd(ProviderVenueAddViewModel viewModel)
+        public async Task<IActionResult> AddProviderVenue(AddProviderVenueViewModel viewModel)
         {
             if (!ModelState.IsValid)
                 return View(viewModel);
