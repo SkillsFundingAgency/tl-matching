@@ -10,8 +10,8 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="ProviderDetail" asp-controller="Provider">
-
+        <form asp-route="SaveProviderDetail">
+            <input type="hidden" asp-for="Id" />
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
@@ -24,6 +24,9 @@
                             <li><a sfa-validation-for="PrimaryContact"></a></li>
                             <li><a sfa-validation-for="PrimaryContactEmail"></a></li>
                             <li><a sfa-validation-for="PrimaryContactPhone"></a></li>
+                           <li><a sfa-validation-for="SecondaryContact"></a></li>
+                            <li><a sfa-validation-for="SecondaryContactEmail"></a></li>
+                            <li><a sfa-validation-for="SecondaryContactPhone"></a></li>
                         </ul>
                     </div>
                 </div>
@@ -32,7 +35,7 @@
                 <span class="govuk-caption-m">UKPRN: @Model.UkPrn</span>
                 @Model.Name
             </h1>
-	    <p class="govuk-body"><a asp-controller="Provider" class="govuk-link" asp-action="ConfirmProviderChange" asp-route-ukPrn="@Model.UkPrn"> @(Model.IsEnabledForSearch ? "Hide" : "Unhide") provider</a></p>
+            <p class="govuk-body"><a asp-controller="Provider" class="govuk-link" asp-action="ConfirmProviderChange" asp-route-ukPrn="@Model.UkPrn"> @(Model.IsEnabledForSearch ? "Hide" : "Unhide") provider</a></p>
 
             <div class="govuk-form-group">
                 <label class="govuk-heading-s" asp-for="DisplayName">
@@ -51,13 +54,13 @@
                     <span class="govuk-error-message" asp-validation-for="IsEnabledForReferral"></span>
                     <div class="govuk-radios govuk-radios--inline">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="IsEnabledForReferral-yes" asp-for="IsEnabledForReferral" type="radio" value="yes"> @*checked="checked"*@
+                            <input class="govuk-radios__input" id="IsEnabledForReferral-yes" asp-for="IsEnabledForReferral" type="radio" value="true"> @*checked="checked"*@
                             <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
                                 Yes
                             </label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" asp-for="IsEnabledForReferral" type="radio" value="no">
+                            <input class="govuk-radios__input" asp-for="IsEnabledForReferral" type="radio" value="false">
                             <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
                                 No
                             </label>
