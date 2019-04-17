@@ -8,10 +8,10 @@ USING (VALUES
 	(N'EmployerReferral', N'6a65bb26-d4f6-482e-8ece-807c4aaf910b')
   )
   AS Source ([TemplateName], [TemplateId]) 
-ON Target.[TemplateId] = Source.[TemplateId] 
--- Update from Source when Id is Matched
+ON Target.[TemplateName] = Source.[TemplateName] 
+-- Update from Source when TemplateName is Matched
 WHEN MATCHED 
-	 AND (Target.[TemplateName] <> Source.[TemplateName]) 
+	 AND (Target.[TemplateId] <> Source.[TemplateId]) 
 THEN 
 UPDATE SET 
 	[TemplateName] = Source.[TemplateName],
