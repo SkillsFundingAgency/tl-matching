@@ -12,6 +12,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-route="SaveProviderDetail">
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Name" />
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">

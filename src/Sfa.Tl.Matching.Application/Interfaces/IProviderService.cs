@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task SetIsProviderEnabledAsync(int providerId, bool status);
         Task<ProviderDetailViewModel> GetProviderDetailByUkprnAsync(long ukPrn, bool includeVeuneDetails = true);
         Task<ProviderSearchResultDto> SearchAsync(long ukPrn);
-        Task UpdateProvider(ProviderDetailViewModel viewModel);
+        Task UpdateProviderDetail(ProviderDetailViewModel viewModel);
         Task<int> CreateProvider(ProviderDetailViewModel viewModel);
     }
 }

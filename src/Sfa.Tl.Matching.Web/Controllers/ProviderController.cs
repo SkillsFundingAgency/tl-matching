@@ -77,7 +77,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (viewModel.Id > 0)
             {
-                await _providerService.UpdateProvider(viewModel);
+                await _providerService.UpdateProviderDetail(viewModel);
             }
             else
             {

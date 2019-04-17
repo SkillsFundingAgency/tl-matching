@@ -29,20 +29,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public Task UpdateProvider(ProviderDetailViewModel viewModel)
-        {
-            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
-
-            return _repository.Update(provider);
-        }
-
-        public Task<int> CreateProvider(ProviderDetailViewModel viewModel)
-        {
-            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
-
-            return _repository.Create(provider);
-        }
-
         public async Task<ProviderDetailViewModel> GetProviderDetailByUkprnAsync(long ukPrn, bool includeVeuneDetails = false)
         {
             var query = _repository.GetMany(p => p.UkPrn == ukPrn);
@@ -66,6 +52,20 @@ namespace Sfa.Tl.Matching.Application.Services
                 : null;
 
             return dto;
+        }
+
+        public Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
+        {
+            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+
+            return _repository.Update(provider);
+        }
+
+        public Task<int> CreateProvider(ProviderDetailViewModel viewModel)
+        {
+            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+
+            return _repository.Create(provider);
         }
 
         public async Task SetIsProviderEnabledAsync(int providerId, bool isEnabled)
