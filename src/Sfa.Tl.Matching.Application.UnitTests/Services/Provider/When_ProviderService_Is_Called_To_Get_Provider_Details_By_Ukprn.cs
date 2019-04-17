@@ -27,11 +27,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var mapper = new Mapper(config);
             _providerRepository = Substitute.For<IRepository<Domain.Models.Provider>>();
 
-            _providerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
-                .Returns(new List<Domain.Models.Provider>
-                {
-                    new ValidProviderBuilder().BuildWithVenueAndQualifications()
-                }.AsQueryable());
+            var providers = new FakeAsyncEnumerable<Domain.Models.Provider>(new List<Domain.Models.Provider> { new ValidProviderBuilder().BuildWithVenueAndQualifications() });
+
+            _providerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>()).Returns(providers);
 
             var service = new ProviderService(mapper, _providerRepository);
 
@@ -43,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         {
             _providerRepository.Received(1).GetMany(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>());
         }
-        
+
         [Fact]
         public void Then_The_Provider_Data_Is_As_Expected()
         {
