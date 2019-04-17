@@ -94,7 +94,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("check-answers/{id?}", Name = "CheckAnswersReferrals_Get")]
+        [Route("check-answers/{id?}", Name = "GetCheckAnswersReferrals")]
         public async Task<IActionResult> CheckAnswersReferrals(int id)
         {
             var viewModel = await GetCheckAnswersReferralViewModel(id);
@@ -103,7 +103,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("check-answers/{id?}", Name = "CheckAnswersReferrals_Post")]
+        [Route("check-answers/{id?}", Name = "SaveCheckAnswersReferrals")]
         public async Task<IActionResult> CheckAnswersReferrals(CheckAnswersReferralViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -119,7 +119,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("check-answers-gap/{id?}", Name = "CheckAnswersProvisionGap_Get")]
+        [Route("check-answers-gap/{id?}", Name = "GetCheckAnswersProvisionGap")]
         public async Task<IActionResult> CheckAnswersProvisionGap(int id)
         {
             var dto = await _opportunityService.GetCheckAnswers(id);
@@ -130,7 +130,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("check-answers-gap/{id?}", Name = "CheckAnswersProvisionGap_Post")]
+        [Route("check-answers-gap/{id?}", Name = "SaveCheckAnswersProvisionGap")]
         public async Task<IActionResult> CheckAnswersProvisionGap(CheckAnswersProvisionGapViewModel viewModel)
         {
             var dto = _mapper.Map<CheckAnswersDto>(viewModel);
