@@ -12,20 +12,20 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider
 {
-    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters : IDisposable
+    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters_With_Two_Venues_Enabled : IDisposable
     {
         private readonly IEnumerable<ProviderVenueSearchResultDto> _results;
         private readonly MatchingDbContext _dbContext;
-        private readonly Domain.Models.ProviderVenue _providerVenue;
+        private readonly IList<Domain.Models.ProviderVenue> _providerVenues;
 
-        public When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters()
+        public When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters_With_Two_Venues_Enabled()
         {
             var logger = Substitute.For<ILogger<Data.SearchProviders.SqlSearchProvider>>();
 
             _dbContext = new TestConfiguration().GetDbContext();
 
-            _providerVenue = new ValidProviderVenueSearchBuilder().BuildOneVenue();
-            _dbContext.Add(_providerVenue);
+            _providerVenues = new ValidProviderVenueSearchBuilder().BuildWithTwoVenuesEnabled();
+            _dbContext.AddRange(_providerVenues);
             _dbContext.SaveChanges();
 
             var provider = new Data.SearchProviders.SqlSearchProvider(logger, _dbContext);
@@ -39,16 +39,22 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
 
         [Fact]
         public void Then_Exactly_One_Provider_Is_Found_Within_Search_Radius() =>
-            _results.Count().Should().Be(1);
+            _results.Select(p => p.ProviderName).Distinct().Count().Should().Be(1);
+
+        [Fact]
+        public void Then_Exactly_Two_Provider_Venue_Are_Found_Within_Search_Radius() =>
+            _results.Count().Should().Be(2);
 
         public void Dispose()
         {
-            var qualificationMappings = _providerVenue.ProviderQualification.SelectMany(q => q.Qualification.QualificationRoutePathMapping).ToList();
-            var qualifications = _providerVenue.ProviderQualification.Select(q => q.Qualification).ToList();
+            var providerQualifications = _providerVenues.SelectMany(p => p.ProviderQualification).ToList();
 
-            _dbContext.RemoveRange(_providerVenue.ProviderQualification);
-            _dbContext.RemoveRange(_providerVenue);
-            _dbContext.RemoveRange(_providerVenue.Provider);
+            var qualificationMappings = providerQualifications.SelectMany(q => q.Qualification.QualificationRoutePathMapping).ToList();
+            var qualifications = providerQualifications.Select(p => p.Qualification).ToList();
+
+            _dbContext.RemoveRange(providerQualifications);
+            _dbContext.RemoveRange(_providerVenues);
+            _dbContext.RemoveRange(_providerVenues.Select(p => p.Provider));
             _dbContext.RemoveRange(qualificationMappings);
             _dbContext.RemoveRange(qualifications);
 

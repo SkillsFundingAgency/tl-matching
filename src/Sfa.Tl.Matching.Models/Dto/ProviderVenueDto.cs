@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string Postcode { get; set; }
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
+        public bool IsEnabledForSearch { get; set; }
         public string Source { get; set; }
         public bool IsEnabledForSearch { get; set; }
         public string CreatedBy { get; set; }

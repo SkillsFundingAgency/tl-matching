@@ -1,10 +1,9 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderSearchParametersViewModel
 
 @{
-    ViewData["Title"] = "ProviderSearch";
+    ViewData["Title"] = "Search for a provider";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 
 @section backButton{
     <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link">Back</a>
@@ -31,21 +30,21 @@
             <p class="govuk-body">You can only add or change details for providers that have a UK Provider Reference Number (UKPRN)</p>
 
             <div class="govuk-form-group" sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-form-group--error">
-                    <label class="govuk-label" asp-for="UkPrn">
-                        Enter the UKPRN
-                    </label>
-                    <span id="ukprn-hint" class="govuk-hint">
-                        For example, 10001234
-                    </span>
-                    <span class="govuk-error-message" asp-validation-for="UkPrn"></span>
-                    <input class="govuk-input govuk-input--width-10" asp-for="UkPrn" type="text"
-                           sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-input--error"
-                           aria-describedby="ukprn-hint">
-                </div>
-                <button type="submit" class="govuk-button">
-                    Search
-                </button>
-</form>
+                <label class="govuk-label" asp-for="UkPrn">
+                    Enter the UKPRN
+                </label>
+                <span id="ukprn-hint" class="govuk-hint">
+                    For example, 10001234
+                </span>
+                <span class="govuk-error-message" asp-validation-for="UkPrn"></span>
+                <input class="govuk-input govuk-input--width-10" asp-for="UkPrn" type="text"
+                       sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-input--error"
+                       aria-describedby="ukprn-hint">
+            </div>
+            <button type="submit" class="govuk-button">
+                Search
+            </button>
+        </form>
     </div>
 </div>
 
