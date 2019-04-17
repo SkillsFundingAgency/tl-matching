@@ -2,6 +2,7 @@
 using GeoAPI.Geometries;
 using NetTopologySuite;
 using Sfa.Tl.Matching.Application.Extensions;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 
@@ -16,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Location, o => o.MapFrom(s => GetLocation(s.Longitude, s.Latitude)))
                 .ForMember(m => m.Latitude, o => o.MapFrom(s => s.Latitude.ToDecimal()))
                 .ForMember(m => m.Longitude, o => o.MapFrom(s => s.Longitude.ToDecimal()))
-                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver>())
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<SaveProximityData, ProviderVenue>>())
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => "System"))
                 .ForAllOtherMembers(o => o.Ignore())
                 ;
