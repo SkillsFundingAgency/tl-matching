@@ -40,8 +40,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("SearchProvider", viewModel);
             }
 
-            return RedirectToRoute("GetProviderDetail", new { ukPrn = searchResult.UkPrn });
-                    ukPrn = searchResult.UkPrn
+            return RedirectToRoute("GetProviderDetail", new { id = searchResult.Id });
         }
 
         [HttpGet]
