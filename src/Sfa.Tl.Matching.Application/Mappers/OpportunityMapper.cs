@@ -103,6 +103,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
+                .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
                 .ForAllOtherMembers(config => config.Ignore());
         }
     }

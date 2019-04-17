@@ -59,7 +59,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 OpportunityId = saveReferralViewModel.OpportunityId,
                 SearchRadius = saveReferralViewModel.SearchRadius,
                 Postcode = saveReferralViewModel.Postcode,
-                RouteId = saveReferralViewModel.SelectedRouteId ?? 0
+                RouteId = saveReferralViewModel.SelectedRouteId ?? 0,
+                SearchResultProviderCount = saveReferralViewModel.SearchResultProviderCount
             };
             await _opportunityService.UpdateOpportunity(providerSearchDto);
             await _opportunityService.UpdateReferrals(dto);
