@@ -7,7 +7,6 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
