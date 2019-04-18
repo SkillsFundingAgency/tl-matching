@@ -30,11 +30,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 c.AddProfiles(typeof(ProviderVenueMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<AddProviderVenueViewModel, ProviderVenue>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenue>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
                             type.Name.Contains("UtcNowCreatedResolver") ?
-                                new UtcNowCreatedResolver<AddProviderVenueViewModel, ProviderVenue>(new DateTimeProvider()) :
+                                new UtcNowCreatedResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
                                 null);
             });
             var mapper = new Mapper(config);
