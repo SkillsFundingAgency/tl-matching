@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (includeVenueDetails)
             {
-                query.Include(p => p.ProviderVenue).ThenInclude(pv => pv.ProviderQualification);
+                query = query.Include(p => p.ProviderVenue).ThenInclude(pv => pv.ProviderQualification);
             }
 
             var provider = await query.SingleOrDefaultAsync();
