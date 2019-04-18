@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -11,12 +10,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
     [Authorize(Roles = RolesExtensions.AdminUser)]
     public class ProviderVenueController : Controller
     {
-        private readonly IMapper _mapper;
         private readonly IProviderVenueService _providerVenueService;
 
-        public ProviderVenueController(IMapper mapper, IProviderVenueService providerVenueService)
+        public ProviderVenueController(IProviderVenueService providerVenueService)
         {
-            _mapper = mapper;
             _providerVenueService = providerVenueService;
         }
 

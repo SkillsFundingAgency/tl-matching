@@ -41,8 +41,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var providerVenueController = new ProviderVenueController(mapper,
-                _providerVenueService);
+            var providerVenueController = new ProviderVenueController(_providerVenueService);
 
             _result = providerVenueController.ProviderVenueDetail(Id).GetAwaiter().GetResult();
         }
