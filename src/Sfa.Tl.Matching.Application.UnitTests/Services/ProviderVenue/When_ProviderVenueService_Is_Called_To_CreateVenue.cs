@@ -8,11 +8,12 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 {
     public class When_ProviderVenueService_Is_Called_To_CreateVenue
     {
@@ -30,18 +31,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 c.AddProfiles(typeof(ProviderVenueMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<AddProviderVenueViewModel, ProviderVenue>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
-                            type.Name.Contains("UtcNowCreatedResolver") ?
-                                new UtcNowCreatedResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
+                            (object)new LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenue>(httpcontextAccesor) :
+                            type.Name.Contains("UtcNowResolver") ?
+                                new UtcNowResolver<AddProviderVenueViewModel, ProviderVenue>(new DateTimeProvider()) :
                                 null);
             });
             var mapper = new Mapper(config);
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
 
-            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
-                .Returns(new Domain.Models.ProviderVenue());
+            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
+                .Returns(new ProviderVenue());
 
             _locationService = Substitute.For<ILocationService>();
             _locationService.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
@@ -70,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         [Fact]
         public void Then_ProviderVenueRepository_Create_Is_Called_Exactly_Once()
         {
-            _providerVenueRepository.Received(1).Create(Arg.Any<Domain.Models.ProviderVenue>());
+            _providerVenueRepository.Received(1).Create(Arg.Any<ProviderVenue>());
         }
     }
 }
