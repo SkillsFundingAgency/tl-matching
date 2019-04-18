@@ -92,7 +92,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var isReferralOpportunity = await _opportunityService.IsReferralOpportunity(viewModel.OpportunityId);
 
-            return RedirectToRoute(isReferralOpportunity ? "CheckAnswersReferrals_Get" : "CheckAnswersProvisionGap_Get");
+            return RedirectToRoute(isReferralOpportunity ? "GetCheckAnswersReferrals" : "GetCheckAnswersProvisionGap");
         }
 
         private void Validate(EmployerDetailsViewModel viewModel)

@@ -8,9 +8,9 @@ namespace Sfa.Tl.Matching.Web.Mappers
     {
         public ProviderVenueDtoMapper()
         {
-            CreateMap<ProviderVenueAddViewModel, ProviderVenueDto>()
+            CreateMap<AddProviderVenueViewModel, ProviderVenueDto>()
                 .ForMember(m => m.CreatedBy,
-                    o => o.MapFrom<LoggedInUserNameResolver<ProviderVenueAddViewModel, ProviderVenueDto>>())
+                    o => o.MapFrom<LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenueDto>>())
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.Source, o => o.MapFrom(s => s.Source))
                 .ForMember(m => m.ProviderId, o => o.MapFrom(s => s.ProviderId))

@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("provider-overview/{providerId}", Name = "SaveProviderDetail")]
+        [Route("provider-overview", Name = "SaveProviderDetail")]
         public async Task<IActionResult> SaveProviderDetail(ProviderDetailViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -77,7 +77,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (viewModel.Id > 0)
             {
-                await _providerService.UpdateProvider(viewModel);
+                await _providerService.UpdateProviderDetail(viewModel);
             }
             else
             {
