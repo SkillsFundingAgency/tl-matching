@@ -29,11 +29,11 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<ProviderDetailViewModel> GetProviderDetailByUkprnAsync(long ukPrn, bool includeVeuneDetails = false)
+        public async Task<ProviderDetailViewModel> GetProviderDetailByUkprnAsync(long ukPrn, bool includeVenueDetails = false)
         {
             var query = _repository.GetMany(p => p.UkPrn == ukPrn);
 
-            if (includeVeuneDetails)
+            if (includeVenueDetails)
             {
                 query.Include(p => p.ProviderVenue).ThenInclude(pv => pv.ProviderQualification);
             }
