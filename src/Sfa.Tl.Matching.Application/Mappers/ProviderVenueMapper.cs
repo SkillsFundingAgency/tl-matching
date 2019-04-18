@@ -56,6 +56,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ProviderQualification, config => config.Ignore())
                 .ForMember(m => m.Referral, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenue>>())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 ;
         }
     }
