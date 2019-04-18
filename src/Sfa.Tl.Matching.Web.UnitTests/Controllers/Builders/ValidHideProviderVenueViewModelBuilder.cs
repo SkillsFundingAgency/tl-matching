@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
         {
             ProviderVenueId = 1,
             Postcode = "CV1 2WT",
-            ProviderName = "Test Provider",
+            ProviderVenueName = "Test Provider",
             IsEnabledForSearch = true
         };
     }

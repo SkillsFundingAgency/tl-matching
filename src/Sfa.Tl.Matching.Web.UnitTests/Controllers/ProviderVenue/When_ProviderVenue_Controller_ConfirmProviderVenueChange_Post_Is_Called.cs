@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var viewModel = new HideProviderVenueViewModel
             {
                 ProviderVenueId = 1,
-                ProviderName = "Test Provider"
+                ProviderVenueName = "Test Provider"
             };
             _result = providerVenueController.ConfirmProviderVenueChange(viewModel).GetAwaiter().GetResult();
         }

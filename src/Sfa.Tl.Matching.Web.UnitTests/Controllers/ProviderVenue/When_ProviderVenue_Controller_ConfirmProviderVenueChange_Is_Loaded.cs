@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var viewResult = _result as ViewResult;
             var model = viewResult?.Model as HideProviderVenueViewModel;
             // ReSharper disable once PossibleNullReferenceException
-            model.ProviderName.Should().Be("Test Provider");
+            model.ProviderVenueName.Should().Be("Test Provider");
         }
 
         [Fact]
