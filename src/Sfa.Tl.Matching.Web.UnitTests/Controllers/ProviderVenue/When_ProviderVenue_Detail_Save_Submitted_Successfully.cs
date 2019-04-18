@@ -17,18 +17,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
         private const string Postcode = "CV1 2WT";
-        private const long UkPrn = 123456;
+        private const int Id = 1;
 
         public When_ProviderVenue_Detail_Save_Submitted_Successfully()
         {
-            var providerService = Substitute.For<IProviderService>();
             _providerVenueService = Substitute.For<IProviderVenueService>();
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
             var providerVenueController = new ProviderVenueController(mapper,
-                providerService,
                 _providerVenueService);
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
@@ -36,8 +34,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             var viewModel = new ProviderVenueDetailViewModel
             {
+                Id = Id,
                 Postcode = Postcode,
-                UkPrn = UkPrn,
                 Qualifications = new List<QualificationDetailViewModel>
                 {
                     new QualificationDetailViewModel
@@ -75,7 +73,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_GetVenueWithQualifications_Is_Not_Called()
         {
-            _providerVenueService.DidNotReceive().GetVenueWithQualificationsAsync(UkPrn, Postcode);
+            _providerVenueService.DidNotReceive().GetVenueWithQualificationsAsync(Id);
         }
     }
 }

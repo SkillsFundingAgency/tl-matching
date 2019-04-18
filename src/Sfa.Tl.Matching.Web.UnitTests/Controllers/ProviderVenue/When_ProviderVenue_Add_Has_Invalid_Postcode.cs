@@ -11,16 +11,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
-    public class When_ProviderVenue_Create_Has_Invalid_Postcode
+    public class When_ProviderVenue_Add_Has_Invalid_Postcode
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
         private const string Postcode = "CV1 2WT";
 
-        public When_ProviderVenue_Create_Has_Invalid_Postcode()
+        public When_ProviderVenue_Add_Has_Invalid_Postcode()
         {
-            var providerService = Substitute.For<IProviderService>();
-
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((false, Postcode));
 
@@ -28,7 +26,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var mapper = new Mapper(config);
 
             var providerVenueController = new ProviderVenueController(mapper,
-                providerService,
                 _providerVenueService);
 
             var viewModel = new AddProviderVenueViewModel

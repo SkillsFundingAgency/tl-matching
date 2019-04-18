@@ -12,9 +12,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
     {
         private readonly ProviderVenueDetailViewModel _result;
 
+        private const int Id = 1;
         private const int ProviderId = 1;
-        private const int ProviderVenueId = 1;
-        private const int UkPrn = 10000546;
         private const string Postcode = "AA1 1AA";
         private const string ProviderName = "ProviderName";
         private const string VenueName = "VenueName";
@@ -32,14 +31,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
             {
                 dbContext.Add(new Domain.Models.ProviderVenue
                 {
-                    Id = ProviderVenueId,
+                    Id = Id,
                     Name = VenueName,
                     Postcode = Postcode,
                     IsEnabledForSearch = IsEnabledForSearchProviderVenue,
                     Provider = new Domain.Models.Provider
                     {
                         Id = ProviderId,
-                        UkPrn = UkPrn,
                         Name = ProviderName,
                         IsEnabledForSearch = IsEnabledForSearchProvider
                     },
@@ -59,14 +57,14 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
                 dbContext.SaveChanges();
 
                 var repository = new ProviderVenueRepository(logger, dbContext);
-                _result = repository.GetVenueWithQualifications(UkPrn, Postcode)
+                _result = repository.GetVenueWithQualifications(Id)
                     .GetAwaiter().GetResult();
             }
         }
 
         [Fact]
         public void Then_Id_Is_Returned() =>
-            _result.Id.Should().Be(ProviderVenueId);
+            _result.Id.Should().Be(Id);
 
         [Fact]
         public void Then_ProviderId_Is_Returned() =>
@@ -77,16 +75,12 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
             _result.ProviderName.Should().Be(ProviderName);
 
         [Fact]
-        public void Then_UkPrn_Is_Returned() =>
-            _result.UkPrn.Should().Be(UkPrn);
-
-        [Fact]
         public void Then_Postcode_Is_Returned() =>
             _result.Postcode.Should().BeEquivalentTo(Postcode);
 
         [Fact]
         public void Then_VenueName_Is_Returned() =>
-            _result.VenueName.Should().Be(VenueName);
+            _result.Name.Should().Be(VenueName);
 
         [Fact]
         public void Then_IsEnabledForSearchProviderVenue_Is_Returned() =>

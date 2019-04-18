@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
     public class When_ProviderVenue_Detail_Save_Has_No_Qualifications
     {
         private readonly IActionResult _result;
-        private const long UkPrn = 123456;
+        private const int Id = 1;
         private readonly IProviderVenueService _providerVenueService;
         private const string Postcode = "CV1 2WT";
         private const string UserName = "username";
@@ -23,8 +23,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         
         public When_ProviderVenue_Detail_Save_Has_No_Qualifications()
         {
-            var providerService = Substitute.For<IProviderService>();
-
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((true, Postcode));
 
@@ -32,7 +30,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var mapper = new Mapper(config);
 
             var providerVenueController = new ProviderVenueController(mapper,
-                providerService,
                 _providerVenueService);
             var controllerWithClaims = new ClaimsBuilder<ProviderVenueController>(providerVenueController)
                 .AddUserName(UserName)
@@ -44,8 +41,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             var viewModel = new ProviderVenueDetailViewModel
             {
-                Postcode = Postcode,
-                UkPrn = UkPrn
+                Id = Id,
+                Postcode = Postcode
             };
 
             _result = controllerWithClaims.ProviderVenueDetail(viewModel).GetAwaiter().GetResult();
@@ -68,7 +65,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_GetVenueWithQualifications_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(UkPrn, Postcode);
+            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(Id);
         }
     }
 }

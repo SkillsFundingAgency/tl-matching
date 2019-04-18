@@ -14,19 +14,24 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
-    public class When_ProviderVenue_Detail_Save_Section_Is_Submitted_Successfully
+    public class When_ProviderVenue_Add_Venue_Already_Exists
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
         private const int Id = 1;
+        private const int ProviderId = 1;
         private const string Postcode = "CV1 2WT";
         private const string UserName = "username";
         private const string Email = "email@address.com";
-        
-        public When_ProviderVenue_Detail_Save_Section_Is_Submitted_Successfully()
+
+        public When_ProviderVenue_Add_Venue_Already_Exists()
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((true, Postcode));
+            _providerVenueService.GetVenue(ProviderId, Postcode).Returns(new ProviderVenueDetailViewModel
+            {
+                Id = Id
+            });
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
@@ -35,11 +40,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<ProviderVenueDetailViewModel, UpdateProviderVenueDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<AddProviderVenueViewModel, ProviderVenueDto>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<ProviderVenueDetailViewModel, UpdateProviderVenueDto>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenueDto>(httpcontextAccesor) :
                             type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<ProviderVenueDetailViewModel, UpdateProviderVenueDto>(new DateTimeProvider()) :
+                                new UtcNowResolver<AddProviderVenueViewModel, ProviderVenueDto>(new DateTimeProvider()) :
                                 null);
             });
             var mapper = new Mapper(config);
@@ -53,13 +58,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             httpcontextAccesor.HttpContext.Returns(providerVenueController.HttpContext);
 
-            var viewModel = new ProviderVenueDetailViewModel
+            var viewModel = new AddProviderVenueViewModel
             {
-                Id = Id,
+                ProviderId = ProviderId,
                 Postcode = Postcode
             };
 
-            _result = controllerWithClaims.SaveVenue(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.AddProviderVenue(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -67,8 +72,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _result.Should().NotBeNull();
 
         [Fact]
-        public void Then_Result_Is_ViewResult() =>
-            _result.Should().BeAssignableTo<ViewResult>();
+        public void Then_Redirect_Result_Is_Returned() =>
+            _result.Should().BeAssignableTo<RedirectToRouteResult>();
 
         [Fact]
         public void Then_Model_Is_Not_Null()
@@ -76,16 +81,32 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
         }
+
         [Fact]
-        public void Then_GetVenueWithQualifications_Is_Called_Exactly_Once()
+        public void Then_Result_Is_RedirectToRoute()
         {
-            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(Id);
+            var result = _result as RedirectToRouteResult;
+            result.Should().NotBeNull();
+            result?.RouteName.Should().Be("GetProviderVenueDetail");
         }
 
         [Fact]
-        public void Then_UpdateVenue_Is_Called_Exactly_Once()
+        public void Then_RouteValues_Has_VenueId()
         {
-            _providerVenueService.Received(1).UpdateVenueAsync(Arg.Any<UpdateProviderVenueDto>());
+            var result = _result as RedirectToRouteResult;
+            result?.RouteValues["id"].Should().Be(Id);
+        }
+
+        [Fact]
+        public void Then_IsValidPostCode_Is_Called_Exactly_Once()
+        {
+            _providerVenueService.Received(1).IsValidPostCodeAsync(Postcode);
+        }
+
+        [Fact]
+        public void Then_CreateVenue_Is_Not_Called()
+        {
+            _providerVenueService.Received(0).CreateVenueAsync(Arg.Any<ProviderVenueDto>());
         }
     }
 }
