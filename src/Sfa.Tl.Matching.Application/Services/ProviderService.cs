@@ -60,13 +60,14 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<HideProviderViewModel> GetHideProviderViewModelAsync(int providerId)
         {
             var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
+
             return _mapper.Map<Provider, HideProviderViewModel>(provider);
         }
 
         public async Task SetIsProviderEnabledForSearchAsync(int providerId, bool isEnabled)
         {
-            //TODO: Use specific map with resolver. Use HideProviderViewModel viewModel for parameter
             var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
+
             if (provider != null)
             {
                 provider.IsEnabledForSearch = isEnabled;
