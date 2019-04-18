@@ -40,18 +40,18 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("SearchProvider", viewModel);
             }
 
-            return RedirectToRoute("GetProviderDetail", new { id = searchResult.Id });
+            return RedirectToRoute("GetProviderDetail", new { providerId = searchResult.Id });
         }
 
         [HttpGet]
-        [Route("provider-overview/{id}", Name = "GetProviderDetail")]
-        public async Task<IActionResult> ProviderDetail(int id)
+        [Route("provider-overview/{providerId}", Name = "GetProviderDetail")]
+        public async Task<IActionResult> ProviderDetail(int providerId)
         {
             var viewModel = new ProviderDetailViewModel();
 
-            if (id > 0)
+            if (providerId > 0)
             {
-                viewModel = await _providerService.GetProviderDetailByIdAsync(id, false);
+                viewModel = await _providerService.GetProviderDetailByIdAsync(providerId, true);
             }
 
             return View(viewModel);
@@ -79,15 +79,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("hide-unhide-provider/{id}", Name = "GetConfirmProviderChange")]
-        public async Task<IActionResult> ConfirmProviderChange(int id)
+        [Route("hide-unhide-provider/{providerId}", Name = "GetConfirmProviderChange")]
+        public async Task<IActionResult> ConfirmProviderChange(int providerId)
         {
-            var viewModel = await _providerService.GetHideProviderViewModelAsync(id);
+            var viewModel = await _providerService.GetHideProviderViewModelAsync(providerId);
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("hide-unhide-provider/{id}", Name = "ConfirmProviderChange")]
+        [Route("hide-unhide-provider/{providerId}", Name = "ConfirmProviderChange")]
         public async Task<IActionResult> ConfirmProviderChange(HideProviderViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -97,11 +97,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _providerService.SetIsProviderEnabledForSearchAsync(viewModel.ProviderId, !viewModel.IsEnabledForSearch);
 
-            return RedirectToRoute("GetProviderDetail",
-                new
-                {
-                    id = viewModel.ProviderId
-                });
+            return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
     }
 }

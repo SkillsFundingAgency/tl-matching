@@ -37,7 +37,7 @@
                 <span class="govuk-caption-m">UKPRN: @Model.UkPrn</span>
                 @Model.Name
             </h1>
-            <p class="govuk-body"><a asp-controller="Provider" class="govuk-link" asp-action="ConfirmProviderChange" asp-route-id="@Model.Id"> @(Model.IsEnabledForSearch ? "Hide" : "Unhide") provider</a></p>
+            <p class="govuk-body"><a asp-controller="Provider" class="govuk-link" asp-action="ConfirmProviderChange" asp-route-providerId="@Model.Id"> @(Model.IsEnabledForSearch ? "Hide" : "Unhide") provider</a></p>
 
             <div class="govuk-form-group">
                 <label class="govuk-heading-s" asp-for="DisplayName">
@@ -56,7 +56,7 @@
                     <span class="govuk-error-message" asp-validation-for="IsEnabledForReferral"></span>
                     <div class="govuk-radios govuk-radios--inline">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="IsEnabledForReferral-yes" asp-for="IsEnabledForReferral" type="radio" value="true"> @*checked="checked"*@
+                            <input class="govuk-radios__input" id="IsEnabledForReferral-yes" asp-for="IsEnabledForReferral" type="radio" value="true">
                             <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
                                 Yes
                             </label>
@@ -168,7 +168,7 @@
                                     <th class="govuk-table__cell">@venue.Postcode</th>
                                     <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
                                     <td class="govuk-table__cell">No data yet</td>
-                                    <td class="govuk-table__cell"><a asp-route="GetProviderVenueDetail" asp-route-VenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>
+                                    <td class="govuk-table__cell"><a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>
                                 </tr>
                             }
                         </tbody>
@@ -196,7 +196,7 @@
                                     <th class="govuk-table__cell">@venue.Postcode</th>
                                     <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
                                     <td class="govuk-table__cell">No data yet</td>
-                                    <td class="govuk-table__cell"><a asp-route="ConfirmProviderVenueChange" asp-route-VenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Unhide<span class="govuk-visually-hidden"> this venue</span></a></td>
+                                    <td class="govuk-table__cell"><a asp-route="ConfirmProviderVenueChange" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Unhide<span class="govuk-visually-hidden"> this venue</span></a></td>
                                 </tr>
                             }
                         </tbody>

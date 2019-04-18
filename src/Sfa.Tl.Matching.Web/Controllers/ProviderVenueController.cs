@@ -14,8 +14,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IMapper _mapper;
         private readonly IProviderVenueService _providerVenueService;
 
-        public ProviderVenueController(IMapper mapper,
-            IProviderVenueService providerVenueService)
+        public ProviderVenueController(IMapper mapper, IProviderVenueService providerVenueService)
         {
             _mapper = mapper;
             _providerVenueService = providerVenueService;
@@ -24,10 +23,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("add-venue/{providerId}", Name = "AddVenue")]
         public IActionResult AddProviderVenue(int providerId)
         {
-            return View(new AddProviderVenueViewModel
-            {
-                ProviderId = providerId
-            });
+            return View(new AddProviderVenueViewModel { ProviderId = providerId });
         }
 
         [HttpPost]
@@ -54,22 +50,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
             else
                 venueId = await _providerVenueService.CreateVenueAsync(viewModel);
 
-            return RedirectToRoute("GetProviderVenueDetail", new
-            {
-                id = venueId
-            });
+            return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = venueId });
         }
         
-        [Route("venue-overview/{id}", Name = "GetProviderVenueDetail")]
-        public async Task<IActionResult> ProviderVenueDetail(int id)
+        [Route("venue-overview/{providerVenueId}", Name = "GetProviderVenueDetail")]
+        public async Task<IActionResult> ProviderVenueDetail(int providerVenueId)
         {
-            var viewModel = await Populate(id);
+            var viewModel = await Populate(providerVenueId);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("venue-overview/{id}", Name = "UpdateVenue")]
+        [Route("venue-overview/{providerVenueId}", Name = "UpdateVenue")]
         public async Task<IActionResult> SaveVenue(ProviderVenueDetailViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -96,20 +89,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(viewModel);
             }
 
-            return RedirectToRoute("GetProviderDetail", new { id = viewModel.ProviderId });
+            return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
 
         [HttpGet]
-        [Route("hide-unhide-venue/{id}", Name = "GetConfirmProviderVenueChange")]
-        public async Task<IActionResult> ConfirmProviderVenueChange(int id)
+        [Route("hide-unhide-venue/{providerVenueId}", Name = "GetConfirmProviderVenueChange")]
+        public async Task<IActionResult> ConfirmProviderVenueChange(int providerVenueId)
         {
-            var viewModel = await _providerVenueService.GetHideProviderVenueViewModelAsync(id);
+            var viewModel = await _providerVenueService.GetHideProviderVenueViewModelAsync(providerVenueId);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("hide-unhide-venue/{id}", Name = "ConfirmProviderVenueChange")]
+        [Route("hide-unhide-venue/{providerVenueId}", Name = "ConfirmProviderVenueChange")]
         public async Task<IActionResult> ConfirmProviderVenueChange(HideProviderVenueViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -119,16 +112,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _providerVenueService.SetIsProviderVenueEnabledForSearchAsync(viewModel.ProviderVenueId, !viewModel.IsEnabledForSearch);
 
-            return RedirectToRoute("GetProviderVenueDetail",
-                new
-                {
-                    id = viewModel.ProviderVenueId
-                });
+            return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.ProviderVenueId });
         }
 
-        private async Task<ProviderVenueDetailViewModel> Populate(int id)
+        private async Task<ProviderVenueDetailViewModel> Populate(int providerVenueId)
         {
-            var viewModel = await _providerVenueService.GetVenueWithQualificationsAsync(id);
+            var viewModel = await _providerVenueService.GetVenueWithQualificationsAsync(providerVenueId);
 
             return viewModel ?? new ProviderVenueDetailViewModel();
         }

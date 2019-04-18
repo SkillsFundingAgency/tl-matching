@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task<(bool, string)> IsValidPostCodeAsync(string postCode);
         Task<int> CreateVenueAsync(AddProviderVenueViewModel viewModel);
-        Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int id);
+        Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int providerVenueId);
         Task UpdateVenueAsync(ProviderVenueDetailViewModel viewModel);
         Task SetIsProviderVenueEnabledForSearchAsync(int providerVenueId, bool isEnabled);
         Task<ProviderVenueDetailViewModel> GetVenue(int providerId, string postCode);

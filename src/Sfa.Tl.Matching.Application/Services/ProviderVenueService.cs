@@ -55,9 +55,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _providerVenueRepository.Create(providerVenue);
         }
 
-        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int id)
+        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int providerVenueId)
         {
-            var viewModel = await _providerVenueRepository.GetVenueWithQualifications(id);
+            var viewModel = await _providerVenueRepository.GetVenueWithQualifications(providerVenueId);
 
             return viewModel;
         }
@@ -70,9 +70,9 @@ namespace Sfa.Tl.Matching.Application.Services
             await _providerVenueRepository.Update(trackedEntity);
         }
 
-        public async Task<HideProviderVenueViewModel> GetHideProviderVenueViewModelAsync(int providerVenueId)
+        public async Task<HideProviderVenueViewModel> GetHideProviderVenueViewModelAsync(int venueId)
         {
-            var providerVenue = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == providerVenueId);
+            var providerVenue = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == venueId);
             return _mapper.Map<ProviderVenue, HideProviderVenueViewModel>(providerVenue);
         }
 

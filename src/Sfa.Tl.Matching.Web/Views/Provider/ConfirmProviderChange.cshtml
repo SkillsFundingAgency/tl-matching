@@ -6,7 +6,7 @@
 }
 
 @section backButton{
-    <a asp-controller="Provider" asp-action="ProviderDetail" asp-route-id="@Model.ProviderId" class="govuk-back-link">Back</a>
+    <a asp-controller="Provider" asp-action="ProviderDetail" asp-route-providerId="@Model.ProviderId" class="govuk-back-link">Back</a>
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -20,7 +20,7 @@
             </button>
         </form>
         <p class="govuk-body">
-            <a asp-controller="Provider" asp-action="ProviderDetail" asp-route-id="@Model.ProviderId" class="govuk-link" id="tl-cancel">Cancel and return to provider overview</a>
+            <a asp-controller="Provider" asp-action="ProviderDetail" asp-route-providerId="@Model.ProviderId" class="govuk-link" id="tl-cancel">Cancel and return to provider overview</a>
         </p>
     </div>
 </div>

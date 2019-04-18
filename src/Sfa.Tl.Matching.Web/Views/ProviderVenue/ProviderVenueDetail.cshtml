@@ -6,7 +6,7 @@
 }
 
 @section backButton{
-    <a asp-route="AddVenue" asp-route-id="@Model.ProviderId" class="govuk-back-link">Back</a>
+    <a asp-route="AddVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link">Back</a>
 }
 
 @if (!ViewData.ModelState.IsValid)
@@ -30,7 +30,7 @@
         <span class="govuk-caption-m">@Model.ProviderName</span>
         <h1 class="govuk-heading-l">@Model.Postcode</h1>
         <p class="govuk-body">
-            <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-id="@Model.Id" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>
+            <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-providerVenueId="@Model.Id" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>
         </p>
         <form asp-route="SaveVenue" novalidate>
             <div class="govuk-form-group">
