@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         private const string Postcode = "CV1 2WT";
         private const string UserName = "username";
         private const string Email = "email@address.com";
-        
+
         public When_ProviderVenue_Detail_Save_Section_Is_Submitted_Successfully()
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
@@ -32,14 +32,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly);
+                c.AddProfiles(typeof(ProviderVenueMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<ProviderVenueDetailViewModel, UpdateProviderVenueDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<ProviderVenueDetailViewModel, UpdateProviderVenueDto>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
                             type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<ProviderVenueDetailViewModel, UpdateProviderVenueDto>(new DateTimeProvider()) :
+                                new UtcNowResolver<ProviderVenueDetailViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
                                 null);
             });
             var mapper = new Mapper(config);
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_UpdateVenue_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).UpdateVenueAsync(Arg.Any<UpdateProviderVenueDto>());
+            _providerVenueService.Received(1).UpdateVenueAsync(Arg.Any<ProviderVenueDetailViewModel>());
         }
     }
 }

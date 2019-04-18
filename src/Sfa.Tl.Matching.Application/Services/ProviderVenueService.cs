@@ -6,7 +6,6 @@ using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -43,11 +42,11 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<int> CreateVenueAsync(ProviderVenueDto dto)
+        public async Task<int> CreateVenueAsync(AddProviderVenueViewModel viewModel)
         {
-            var providerVenue = _mapper.Map<ProviderVenue>(dto);
+            var providerVenue = _mapper.Map<ProviderVenue>(viewModel);
 
-            var geoLocationData = await _locationService.GetGeoLocationData(dto.Postcode);
+            var geoLocationData = await _locationService.GetGeoLocationData(viewModel.Postcode);
             providerVenue.Latitude = geoLocationData.Latitude.ToDecimal();
             providerVenue.Longitude = geoLocationData.Longitude.ToDecimal();
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
@@ -63,10 +62,10 @@ namespace Sfa.Tl.Matching.Application.Services
             return viewModel;
         }
 
-        public async Task UpdateVenueAsync(UpdateProviderVenueDto dto)
+        public async Task UpdateVenueAsync(ProviderVenueDetailViewModel viewModel)
         {
-            var trackedEntity = await _providerVenueRepository.GetSingleOrDefault(v => v.Id == dto.Id);
-            trackedEntity = _mapper.Map(dto, trackedEntity);
+            var trackedEntity = await _providerVenueRepository.GetSingleOrDefault(v => v.Id == viewModel.Id);
+            trackedEntity = _mapper.Map(viewModel, trackedEntity);
 
             await _providerVenueRepository.Update(trackedEntity);
         }

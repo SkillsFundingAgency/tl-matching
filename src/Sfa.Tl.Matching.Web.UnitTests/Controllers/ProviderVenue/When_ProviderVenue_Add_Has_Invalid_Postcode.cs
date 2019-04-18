@@ -3,10 +3,10 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((false, Postcode));
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderVenueMapper).Assembly));
             var mapper = new Mapper(config);
 
             var providerVenueController = new ProviderVenueController(mapper,
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_CreateVenue_Is_Not_Called()
         {
-            _providerVenueService.DidNotReceive().CreateVenueAsync(Arg.Any<ProviderVenueDto>());
+            _providerVenueService.DidNotReceive().CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>());
         }
     }
 }
