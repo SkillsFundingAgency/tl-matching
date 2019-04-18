@@ -143,13 +143,13 @@
 
             <h2 class="govuk-heading-m">Venues and qualifications</h2>
 
-            @if (Model.ProviderVenues.Count <= 0)
+            @if (Model.ProviderVenue.Count <= 0)
             {
                 <p class="govuk-body">You need to <a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">add a venue for this provider</a>.</p>
             }
             else
             {
-                if (Model.ProviderVenues.Any(v => v.IsEnabledForSearch))
+                if (Model.ProviderVenue.Any(v => v.IsEnabledForSearch))
                 {
                     <h2 class="govuk-heading-m">Active venues</h2>
                     <table class="govuk-table">
@@ -162,7 +162,7 @@
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
-                            @foreach (var venue in Model.ProviderVenues.Where(v => v.IsEnabledForSearch))
+                            @foreach (var venue in Model.ProviderVenue.Where(v => v.IsEnabledForSearch))
                             {
                                 <tr class="govuk-table__row">
                                     <th class="govuk-table__cell">@venue.Postcode</th>
@@ -176,7 +176,7 @@
                     <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">add a venue</a></p>
                 }
                 <p class="govuk-body"><a class="govuk-link" href="#">Add a venue</a></p>
-                if (Model.ProviderVenues.Any(v => !v.IsEnabledForSearch))
+                if (Model.ProviderVenue.Any(v => !v.IsEnabledForSearch))
                 {
                     <h2 class="govuk-heading-m">Inactive venues</h2>
 
@@ -190,7 +190,7 @@
                             </tr>
                         </thead>
                         <tbody class="govuk-table__body">
-                            @foreach (var venue in Model.ProviderVenues.Where(v => !v.IsEnabledForSearch))
+                            @foreach (var venue in Model.ProviderVenue.Where(v => !v.IsEnabledForSearch))
                             {
                                 <tr class="govuk-table__row">
                                     <th class="govuk-table__cell">@venue.Postcode</th>

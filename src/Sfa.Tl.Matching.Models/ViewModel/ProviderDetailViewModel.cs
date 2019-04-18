@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     {
         public ProviderDetailViewModel()
         {
-            ProviderVenues = new List<ProviderVenueViewModel>();
+            ProviderVenue = new List<ProviderVenueViewModel>();
         }
 
         public int Id { get; set; }
@@ -46,6 +46,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public bool? IsEnabledForReferral { get; set; }
         public bool IsEnabledForSearch { get; set; }
 
-        public List<ProviderVenueViewModel> ProviderVenues { get; set; }
+        public List<ProviderVenueViewModel> ProviderVenue { get; set; }
     }
 }
