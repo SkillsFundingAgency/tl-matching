@@ -34,8 +34,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
                         new LoggedInUserEmailResolver<AddProviderVenueViewModel, ProviderVenue>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
                             (object)new LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenue>(httpcontextAccesor) :
-                            type.Name.Contains("UtcNowCreatedResolver") ?
-                                new UtcNowCreatedResolver<AddProviderVenueViewModel, ProviderVenue>(new DateTimeProvider()) :
+                            type.Name.Contains("UtcNowResolver") ?
+                                new UtcNowResolver<AddProviderVenueViewModel, ProviderVenue>(new DateTimeProvider()) :
                                 null);
             });
             var mapper = new Mapper(config);
