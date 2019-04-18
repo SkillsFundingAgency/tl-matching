@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteValues
                 .Should()
-                .Contain(new KeyValuePair<string, object>("id", 1));
+                .Contain(new KeyValuePair<string, object>("providerId", 1));
         }
     }
 }

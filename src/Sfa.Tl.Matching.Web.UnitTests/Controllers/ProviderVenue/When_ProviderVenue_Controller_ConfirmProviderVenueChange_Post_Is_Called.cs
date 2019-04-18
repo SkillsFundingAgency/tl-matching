@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteValues
                 .Should()
-                .Contain(new KeyValuePair<string, object>("id", 1));
+                .Contain(new KeyValuePair<string, object>("providerVenueId", 1));
         }
     }
 }

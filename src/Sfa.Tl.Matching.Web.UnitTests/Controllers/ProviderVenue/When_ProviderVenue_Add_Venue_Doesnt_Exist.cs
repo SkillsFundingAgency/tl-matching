@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         public void Then_RouteValues_Has_VenueId()
         {
             var result = _result as RedirectToRouteResult;
-            result?.RouteValues["id"].Should().Be(Id);
+            result?.RouteValues["providerVenueId"].Should().Be(Id);
         }
 
         [Fact]
