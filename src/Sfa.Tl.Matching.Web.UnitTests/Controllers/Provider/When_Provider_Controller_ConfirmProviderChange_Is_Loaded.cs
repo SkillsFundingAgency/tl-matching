@@ -18,8 +18,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         {
             _providerService = Substitute.For<IProviderService>();
             _providerService
-                .GetProviderByUkPrnAsync(Arg.Any<long>())
-                .Returns(new ValidProviderDtoBuilder().Build());
+                .GetHideProviderViewModel(Arg.Any<int>())
+                .Returns(new ValidHideProviderViewModelBuilder().Build());
 
             var providerController = new ProviderController(_providerService);
 
@@ -27,11 +27,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_ProviderService_GetProviderByUkPrnAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderService_GetHideProviderViewModel_Is_Called_Exactly_Once()
         {
             _providerService
                 .Received(1)
-                .GetProviderByUkPrnAsync(Arg.Any<long>());
+                .GetHideProviderViewModel(Arg.Any<int>());
         }
 
         [Fact]

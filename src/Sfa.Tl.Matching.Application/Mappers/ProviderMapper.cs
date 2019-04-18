@@ -33,6 +33,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<Provider, ProviderSearchResultDto>();
+
+            CreateMap<Provider, HideProviderViewModel>()
+                .ForMember(m => m.ProviderId, config => config.MapFrom(s => s.Id))
+                .ForMember(m => m.ProviderName, config => config.MapFrom(s => s.Name))
+                ;
         }
     }
 }

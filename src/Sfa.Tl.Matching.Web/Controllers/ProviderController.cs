@@ -88,21 +88,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("hide-unhide/{ukPrn}", Name = "GetConfirmProviderChange")]
-        public async Task<IActionResult> ConfirmProviderChange(long ukPrn)
+        [Route("hide-unhide/{providerId}", Name = "GetConfirmProviderChange")]
+        public async Task<IActionResult> ConfirmProviderChange(int providerId)
         {
-            var provider = await _providerService.GetProviderByUkPrnAsync(ukPrn);
-            return View(new HideProviderViewModel
-            {
-                ProviderId = provider.Id,
-                UkPrn = ukPrn,
-                ProviderName = provider.Name,
-                IsEnabledForSearch = provider.IsEnabledForSearch
-            });
+            var viewModel = await _providerService.GetHideProviderViewModel(providerId);
+            return View(viewModel);
+            //TODO: Remove GetProviderByUkPrnAsync?
+            //return View(new HideProviderViewModel
+            //{
+            //    ProviderId = provider.Id,
+            //    UkPrn = ukPrn,
+            //    ProviderName = provider.Name,
+            //    IsEnabledForSearch = provider.IsEnabledForSearch
+            //});
         }
 
         [HttpPost]
-        [Route("hide-unhide/{ukPrn}", Name = "ConfirmProviderChange")]
+        [Route("hide-unhide/{providerId}", Name = "ConfirmProviderChange")]
         public async Task<IActionResult> ConfirmProviderChange(HideProviderViewModel viewModel)
         {
             if (!ModelState.IsValid)
