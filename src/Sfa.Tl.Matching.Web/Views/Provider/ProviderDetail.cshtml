@@ -173,9 +173,7 @@
                             }
                         </tbody>
                     </table>
-                    <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">add a venue</a></p>
                 }
-                <p class="govuk-body"><a class="govuk-link" href="#">Add a venue</a></p>
                 if (Model.ProviderVenue.Any(v => !v.IsEnabledForSearch))
                 {
                     <h2 class="govuk-heading-m">Inactive venues</h2>
@@ -202,6 +200,7 @@
                         </tbody>
                     </table>
                 }
+                <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
             }
 
             <button type="submit" class="govuk-button">Save and finish</button>
