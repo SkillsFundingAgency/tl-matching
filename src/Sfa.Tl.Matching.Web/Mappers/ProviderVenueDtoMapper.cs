@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
             CreateMap<ProviderVenueDetailViewModel, UpdateProviderVenueDto>()
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<ProviderVenueDetailViewModel, UpdateProviderVenueDto>>())
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<ProviderVenueDetailViewModel, UpdateProviderVenueDto>>())
-                .ForMember(m => m.Name, o => o.MapFrom(s => s.VenueName))
+                .ForMember(m => m.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.ProviderId, o => o.MapFrom(s => s.ProviderId))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))

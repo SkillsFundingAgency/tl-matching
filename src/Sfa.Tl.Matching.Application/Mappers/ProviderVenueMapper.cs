@@ -20,8 +20,13 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<ProviderVenue, ProviderVenueViewModel>()
                 .ForMember(m => m.ProviderVenueId, config => config.MapFrom(s => s.Id))
-                .ForMember(m => m.QualificationCount, config => config.MapFrom(s => s.ProviderQualification.Count));
-				
+                .ForMember(m => m.QualificationCount, config => config.MapFrom(s => s.ProviderQualification.Count))
+                ;
+
+            CreateMap<ProviderVenue, ProviderVenueDetailViewModel>()
+                .ForMember(m => m.Qualifications, config => config.Ignore())
+                ;
+
             CreateMap<UpdateProviderVenueDto, ProviderVenue>()
                 .ForMember(m => m.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))

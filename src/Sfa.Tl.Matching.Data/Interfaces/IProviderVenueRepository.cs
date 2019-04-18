@@ -6,6 +6,6 @@ namespace Sfa.Tl.Matching.Data.Interfaces
 {
     public interface IProviderVenueRepository : IRepository<ProviderVenue>
     {
-        Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(long ukprn, string postcode);
+        Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(int id);
     }
 }

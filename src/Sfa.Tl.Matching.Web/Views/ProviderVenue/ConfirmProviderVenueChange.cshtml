@@ -6,7 +6,7 @@
 }
 
 @section backButton{
-    <a asp-controller="ProviderVenue" asp-action="ProviderVenueDetail" asp-route-ukPrn="@Model.UkPrn" asp-route-postcode="@Model.Postcode" class="govuk-back-link">Back</a>
+    <a asp-controller="ProviderVenue" asp-action="ProviderVenueDetail" asp-route-id="@Model.Id" asp-route-postcode="@Model.Postcode" class="govuk-back-link">Back</a>
 }
 
 <div class="govuk-grid-row">
@@ -21,10 +21,7 @@
             </button>
         </form>
         <p class="govuk-body">
-            <a asp-controller="ProviderVenue" asp-action="ProviderVenueDetail" asp-route-ukPrn="@Model.UkPrn" asp-route-postcode="@Model.Postcode" class="govuk-link" id="tl-cancel">Cancel and return to venue overview</a>
+            <a asp-controller="ProviderVenue" asp-action="ProviderVenueDetail" asp-route-id="@Model.Id" asp-route-postcode="@Model.Postcode" class="govuk-link" id="tl-cancel">Cancel and return to venue overview</a>
         </p>
     </div>
 </div>
-
-
-

@@ -8,6 +8,7 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
@@ -15,8 +16,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
     public class When_ProviderVenueService_Is_Called_To_HaveUniqueVenue_Exists
     {
         private readonly IRepository<ProviderVenue> _providerVenueRepository;
-        private readonly bool _isUniqueVenue;
-        private const long UkPrn = 123;
+        private readonly ProviderVenueDetailViewModel _result;
+        private const int ProviderId = 1;
+        private const string Name = "Name";
         private const string Postcode = "CV1 2WT";
 
         public When_ProviderVenueService_Is_Called_To_HaveUniqueVenue_Exists()
@@ -26,13 +28,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
 
             _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
-                .Returns(new ProviderVenue());
+                .Returns(new ProviderVenue
+                {
+                    ProviderId = ProviderId,
+                    Name = Name,
+                    Postcode = Postcode,
+                });
 
             var locationService = Substitute.For<ILocationService>();
             var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository,
                 locationService);
 
-            _isUniqueVenue = providerVenueService.HaveUniqueVenueAsync(UkPrn, Postcode).GetAwaiter().GetResult();
+            _result = providerVenueService.GetVenue(ProviderId, Postcode).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -42,9 +49,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         }
 
         [Fact]
-        public void Then_IsUniqueVenue_Is_False()
+        public void Then_The_ProviderId_Is_Correct()
         {
-            _isUniqueVenue.Should().BeFalse();
+            _result.ProviderId.Should().Be(ProviderId);
+        }
+
+        [Fact]
+        public void Then_The_Name_Is_Correct()
+        {
+            _result.Name.Should().Be(Name);
         }
     }
 }

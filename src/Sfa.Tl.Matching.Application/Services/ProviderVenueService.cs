@@ -31,14 +31,18 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _locationService.IsValidPostCode(postCode);
         }
 
-        public async Task<bool> HaveUniqueVenueAsync(long ukPrn, string postCode)
+        public async Task<ProviderVenueDetailViewModel> GetVenue(int providerId, string postCode)
         {
-            var venue = await _providerVenueRepository.GetSingleOrDefault(pv => pv.Provider.UkPrn == ukPrn &&
-                                                                                   pv.Postcode == postCode);
+            var venue = await _providerVenueRepository.GetSingleOrDefault(pv => pv.ProviderId == providerId &&
+                                                                                pv.Postcode == postCode);
 
-            return venue == null;
+            var dto = venue != null
+                ? _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue)
+                : null;
+
+            return dto;
         }
-        
+
         public async Task<int> CreateVenueAsync(ProviderVenueDto dto)
         {
             var providerVenue = _mapper.Map<ProviderVenue>(dto);
@@ -52,9 +56,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _providerVenueRepository.Create(providerVenue);
         }
 
-        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(long ukprn, string postcode)
+        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int id)
         {
-            var viewModel = await _providerVenueRepository.GetVenueWithQualifications(ukprn, postcode);
+            var viewModel = await _providerVenueRepository.GetVenueWithQualifications(id);
 
             return viewModel;
         }

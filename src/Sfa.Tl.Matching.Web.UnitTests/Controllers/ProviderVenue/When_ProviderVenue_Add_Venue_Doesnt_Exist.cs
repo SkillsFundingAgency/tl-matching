@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
@@ -14,27 +15,22 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
-    public class When_ProviderVenue_Create_Is_Submitted_Successfully
+    public class When_ProviderVenue_Add_Venue_Doesnt_Exist
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
-        private const long UkPrn = 123456;
+        private const int Id = 1;
         private const int ProviderId = 1;
         private const string Postcode = "CV1 2WT";
         private const string UserName = "username";
         private const string Email = "email@address.com";
 
-        public When_ProviderVenue_Create_Is_Submitted_Successfully()
+        public When_ProviderVenue_Add_Venue_Doesnt_Exist()
         {
-            var providerService = Substitute.For<IProviderService>();
-            providerService.GetProviderByUkPrnAsync(UkPrn).Returns(new ProviderDto
-            {
-                Id = ProviderId
-            });
-
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((true, Postcode));
-            _providerVenueService.HaveUniqueVenueAsync(UkPrn, Postcode).Returns(true);
+            _providerVenueService.GetVenue(ProviderId, Postcode).ReturnsNull();
+            _providerVenueService.CreateVenueAsync(Arg.Any<ProviderVenueDto>()).Returns(Id);
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
@@ -53,7 +49,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var mapper = new Mapper(config);
 
             var providerVenueController = new ProviderVenueController(mapper,
-                providerService,
                 _providerVenueService);
             var controllerWithClaims = new ClaimsBuilder<ProviderVenueController>(providerVenueController)
                 .AddUserName(UserName)
@@ -64,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             var viewModel = new AddProviderVenueViewModel
             {
-                UkPrn = UkPrn,
+                ProviderId = ProviderId,
                 Postcode = Postcode
             };
 
@@ -92,6 +87,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
             result?.RouteName.Should().Be("GetProviderVenueDetail");
+        }
+
+        [Fact]
+        public void Then_RouteValues_Has_VenueId()
+        {
+            var result = _result as RedirectToRouteResult;
+            result?.RouteValues["id"].Should().Be(Id);
         }
 
         [Fact]

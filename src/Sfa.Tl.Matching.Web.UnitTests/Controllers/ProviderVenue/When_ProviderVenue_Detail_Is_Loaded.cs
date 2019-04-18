@@ -17,7 +17,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
         private const int Id = 1;
-        private const long UkPrn = 123456;
         private const string Postcode = "CV1 2WT";
         private const int ProviderId = 1;
         private const string ProviderName = "Name";
@@ -27,30 +26,26 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
         public When_ProviderVenue_Detail_Is_Loaded()
         {
-            var providerService = Substitute.For<IProviderService>();
-
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.GetVenueWithQualificationsAsync(UkPrn, Postcode)
+            _providerVenueService.GetVenueWithQualificationsAsync(Id)
                 .Returns(new ProviderVenueDetailViewModel
                 {
                     Id = Id,
-                    UkPrn = UkPrn,
                     Postcode = Postcode,
                     ProviderId = ProviderId,
                     ProviderName = ProviderName,
                     Source = Source,
                     IsEnabledForSearch = IsEnabledForSearch,
-                    VenueName = VenueName
+                    Name = VenueName
                 });
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
 
             var providerVenueController = new ProviderVenueController(mapper,
-                providerService,
                 _providerVenueService);
 
-            _result = providerVenueController.ProviderVenueDetail(UkPrn, Postcode).GetAwaiter().GetResult();
+            _result = providerVenueController.ProviderVenueDetail(Id).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -71,7 +66,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_GetVenueWithQualifications_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(UkPrn, Postcode);
+            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(Id);
         }
 
         [Fact]
@@ -79,13 +74,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
             viewModel.Id.Should().Be(Id);
-        }
-
-        [Fact]
-        public void Then_UkPrn_Is_Set()
-        {
-            var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.UkPrn.Should().Be(UkPrn);
         }
 
         [Fact]
@@ -127,7 +115,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         public void Then_VenueName_Is_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.VenueName.Should().Be(VenueName);
+            viewModel.Name.Should().Be(VenueName);
         }
     }
 }
