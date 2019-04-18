@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task SetIsProviderEnabledAsync(int providerId, bool isEnabled)
+        public async Task SetIsProviderEnabledForSearchAsync(int providerId, bool isEnabled)
         {
             var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
             if (provider != null)

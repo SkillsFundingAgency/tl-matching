@@ -30,31 +30,31 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_ProviderRepository_SetIsProviderEnabledAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderService_SetIsProviderEnabledAsync_Is_Called_Exactly_Once()
         {
             _providerService
                 .Received(1)
-                .SetIsProviderEnabledAsync(Arg.Any<int>(), Arg.Any<bool>());
+                .SetIsProviderEnabledForSearchAsync(Arg.Any<int>(), Arg.Any<bool>());
         }
 
         [Fact]
-        public void Then_ProviderRepository_SetIsProviderEnabledAsync_Is_Called_With_Expected_ProviderId()
+        public void Then_ProviderService_SetIsProviderEnabledAsync_Is_Called_With_Expected_ProviderId()
         {
             _providerService
                 .Received(1)
-                .SetIsProviderEnabledAsync(
+                .SetIsProviderEnabledForSearchAsync(
                     Arg.Is<int>(p => p == 1),
                     Arg.Any<bool>());
         }
 
         [Fact]
-        public void Then_ProviderRepository_SetIsProviderEnabledAsync_Is_Called_With_Expected_Status()
+        public void Then_ProviderService_SetIsProviderEnabledAsync_Is_Called_With_Expected_IsEnabled()
         {
             _providerService
                 .Received(1)
-                .SetIsProviderEnabledAsync(
+                .SetIsProviderEnabledForSearchAsync(
                     Arg.Any<int>(),
-                    Arg.Is<bool>(s => s == true));
+                    Arg.Is<bool>(s => s));
         }
 
         [Fact]

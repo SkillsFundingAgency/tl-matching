@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_ProviderRepository_GetProviderByUkPrnAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderService_GetProviderByUkPrnAsync_Is_Called_Exactly_Once()
         {
             _providerService
                 .Received(1)
@@ -66,6 +66,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
+        public void Then_Model_UkPrn_Has_Expected_Value()
+        {
+            var viewResult = _result as ViewResult;
+            var model = viewResult?.Model as HideProviderViewModel;
+            // ReSharper disable once PossibleNullReferenceException
+            model.UkPrn.Should().Be(10000546);
+        }
+
+        [Fact]
         public void Then_Model_ProviderName_Has_Expected_Value()
         {
             var viewResult = _result as ViewResult;
@@ -75,12 +84,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Model_IsActive_Has_Expected_Value()
+        public void Then_Model_IsEnabledForSearch_Has_Expected_Value()
         {
             var viewResult = _result as ViewResult;
             var model = viewResult?.Model as HideProviderViewModel;
             // ReSharper disable once PossibleNullReferenceException
-            model.IsActive.Should().Be(true);
+            model.IsEnabledForSearch.Should().Be(true);
         }
     }
 }

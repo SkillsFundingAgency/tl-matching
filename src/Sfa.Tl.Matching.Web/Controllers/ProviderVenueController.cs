@@ -110,21 +110,30 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("hide-unhide/{ukPrn}/{postcode}", Name = "GetConfirmProviderVenueChange")]
         public async Task<IActionResult> ConfirmProviderVenueChange(long ukPrn, string postcode)
         {
-            var viewModel = await Populate(ukPrn, postcode);
+            var providerVenueViewModel = await Populate(ukPrn, postcode);
+            //TODO: Move view model creation to repository
+            var viewModel = new HideProviderVenueViewModel
+            {
+                ProviderVenueId = providerVenueViewModel.Id,
+                UkPrn = ukPrn,
+                Postcode = providerVenueViewModel.Postcode,
+                ProviderName = providerVenueViewModel.ProviderName,
+                IsEnabledForSearch = providerVenueViewModel.IsEnabledForSearch
+            };
 
             return View(viewModel);
         }
 
         [HttpPost]
         [Route("hide-unhide/{ukPrn}/{postcode}", Name = "ConfirmProviderVenueChange")]
-        public async Task<IActionResult> ConfirmProviderVenueChange(ProviderVenueDetailViewModel viewModel)
+        public async Task<IActionResult> ConfirmProviderVenueChange(HideProviderVenueViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return View("ConfirmProviderVenueChange", viewModel);
             }
 
-            await _providerVenueService.SetIsProviderVenueEnabledForSearchAsync(viewModel.Id, !viewModel.IsEnabledForSearch);
+            await _providerVenueService.SetIsProviderVenueEnabledForSearchAsync(viewModel.ProviderVenueId, !viewModel.IsEnabledForSearch);
 
             return RedirectToRoute("GetProviderVenueDetail",
                 new

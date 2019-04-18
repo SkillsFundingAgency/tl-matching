@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_ProviderRepository_GetSingleOrDefault_Is_Not_Called_Exactly_Once()
+        public void Then_ProviderService_GetSingleOrDefault_Is_Not_Called_Exactly_Once()
         {
             _providerService
                 .DidNotReceive()

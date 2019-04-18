@@ -97,7 +97,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ProviderId = provider.Id,
                 UkPrn = ukPrn,
                 ProviderName = provider.Name,
-                IsActive = provider.IsEnabledForSearch
+                IsEnabledForSearch = provider.IsEnabledForSearch
             });
         }
 
@@ -110,7 +110,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("ConfirmProviderChange", viewModel);
             }
 
-            await _providerService.SetIsProviderEnabledAsync(viewModel.ProviderId, !viewModel.IsActive);
+            await _providerService.SetIsProviderEnabledForSearchAsync(viewModel.ProviderId, !viewModel.IsEnabledForSearch);
 
             return RedirectToRoute("GetProviderDetail",
                 new

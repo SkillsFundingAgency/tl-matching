@@ -1,4 +1,4 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderVenueDetailViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.HideProviderVenueViewModel
 
 @{
     ViewData["Title"] = (Model.IsEnabledForSearch ? "Hide" : "Unhide") + Model.Postcode;
@@ -13,7 +13,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">Are you sure you want to @(Model.IsEnabledForSearch ? "hide" : "unhide") @Model.Postcode?</h1>
         <form asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange">
-            <input asp-for="Id" type="hidden" />
+            <input asp-for="ProviderVenueId" type="hidden" />
             <input asp-for="IsEnabledForSearch" type="hidden" />
 
             <button type="submit" class="govuk-button">
