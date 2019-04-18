@@ -90,10 +90,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("hide-unhide-venue/{providerVenueId}", Name = "GetConfirmProviderVenueChange")]
-        public async Task<IActionResult> ConfirmProviderVenueChange(int providerVenueId)
+        [Route("hide-unhide-venue/{providerVenueId}/{providerId?}", Name = "GetConfirmProviderVenueChange")]
+        public async Task<IActionResult> ConfirmProviderVenueChange(int providerVenueId, int providerId = 0)
         {
             var viewModel = await _providerVenueService.GetHideProviderVenueViewModelAsync(providerVenueId);
+
+            viewModel.ProviderId = providerId;
 
             return View(viewModel);
         }
@@ -108,8 +110,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             await _providerVenueService.SetIsProviderVenueEnabledForSearchAsync(viewModel.ProviderVenueId, !viewModel.IsEnabledForSearch);
-
-            return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.ProviderVenueId });
+            
+            return  viewModel.ProviderId == 0 
+                ? RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.ProviderVenueId })
+                : RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
 
         private async Task<ProviderVenueDetailViewModel> Populate(int providerVenueId)

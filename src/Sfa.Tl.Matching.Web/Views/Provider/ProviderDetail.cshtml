@@ -15,6 +15,7 @@
             <input type="hidden" asp-for="Name" />
             <input type="hidden" asp-for="UkPrn" />
             <input type="hidden" asp-for="IsEnabledForSearch" />
+
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
@@ -195,7 +196,7 @@
                                     <th class="govuk-table__cell">@venue.Postcode</th>
                                     <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
                                     <td class="govuk-table__cell">No data yet</td>
-                                    <td class="govuk-table__cell"><a asp-route="ConfirmProviderVenueChange" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Unhide<span class="govuk-visually-hidden"> this venue</span></a></td>
+                                    <td class="govuk-table__cell"><a asp-route="ConfirmProviderVenueChange" asp-route-providerId="@Model.Id" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Unhide<span class="govuk-visually-hidden"> this venue</span></a></td>
                                 </tr>
                             }
                         </tbody>

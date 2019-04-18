@@ -2,6 +2,7 @@
 {
     public class HideProviderVenueViewModel
     {
+        public int ProviderId { get; set; }
         public int ProviderVenueId { get; set; }
         public string Postcode { get; set; }
         public string ProviderVenueName { get; set; }
