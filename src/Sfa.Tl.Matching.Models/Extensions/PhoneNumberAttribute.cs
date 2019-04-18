@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Sfa.Tl.Matching.Web.Extensions
+namespace Sfa.Tl.Matching.Models.Extensions
 {
     public class PhoneNumberAttribute : ValidationAttribute
     {

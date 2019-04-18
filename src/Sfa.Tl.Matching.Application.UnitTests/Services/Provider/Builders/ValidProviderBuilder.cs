@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Domain.Models;
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
 {
@@ -43,9 +42,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             ModifiedBy = "ModifiedBy",
             IsEnabledForReferral = true,
             IsEnabledForSearch = true,
-            ProviderVenue = new List<ProviderVenue>
+            ProviderVenue = new List<Domain.Models.ProviderVenue>
             {
-                new ProviderVenue
+                new Domain.Models.ProviderVenue
                 {
                     IsEnabledForSearch = true,
                     Postcode = "CV1 1WT",
@@ -60,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                         }
                     }
                 },
-                new ProviderVenue
+                new Domain.Models.ProviderVenue
                 {
                     IsEnabledForSearch = true,
                     Postcode = "CV1 2WT",

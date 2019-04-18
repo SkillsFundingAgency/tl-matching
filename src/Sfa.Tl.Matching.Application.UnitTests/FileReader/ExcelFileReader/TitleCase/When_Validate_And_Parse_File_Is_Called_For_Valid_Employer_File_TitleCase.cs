@@ -10,6 +10,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.UnitTests.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;

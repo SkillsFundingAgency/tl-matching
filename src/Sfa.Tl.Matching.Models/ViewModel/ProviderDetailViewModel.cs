@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Sfa.Tl.Matching.Web.Extensions;
+using Sfa.Tl.Matching.Models.Extensions;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {

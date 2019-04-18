@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
+namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
 {
     public class FakeAsyncEnumerator<T> : IAsyncEnumerator<T>
     {

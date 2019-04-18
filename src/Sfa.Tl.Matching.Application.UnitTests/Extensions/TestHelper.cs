@@ -7,7 +7,7 @@ using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 
-namespace Sfa.Tl.Matching.Application.UnitTests
+namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
 {
     public static class TestHelper
     {

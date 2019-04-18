@@ -6,11 +6,10 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
     public class When_ProviderVenueService_Is_Called_To_CreateVenue
     {
@@ -25,8 +24,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var mapper = new Mapper(config);
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
 
-            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
-                .Returns(new ProviderVenue());
+            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
+                .Returns(new Domain.Models.ProviderVenue());
 
             _locationService = Substitute.For<ILocationService>();
             _locationService.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
@@ -55,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         [Fact]
         public void Then_ProviderVenueRepository_Create_Is_Called_Exactly_Once()
         {
-            _providerVenueRepository.Received(1).Create(Arg.Any<ProviderVenue>());
+            _providerVenueRepository.Received(1).Create(Arg.Any<Domain.Models.ProviderVenue>());
         }
     }
 }

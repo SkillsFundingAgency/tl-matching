@@ -10,7 +10,6 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -21,24 +20,24 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         private readonly ProviderVenueFileImportDto _fileImportDto;
         private readonly IList<ProviderVenueDto> _fileReaderResults;
         private readonly IFileReader<ProviderVenueFileImportDto, ProviderVenueDto> _fileReader;
-        private readonly IRepository<ProviderVenue> _repository;
+        private readonly IRepository<Domain.Models.ProviderVenue> _repository;
         private readonly int _result;
-        private readonly IDataProcessor<ProviderVenue> _dataProcessor;
+        private readonly IDataProcessor<Domain.Models.ProviderVenue> _dataProcessor;
 
         public When_Import_Is_Called_To_Import_ProviderVenues()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
-            var logger = Substitute.For<ILogger<FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, ProviderVenue>>>();
+            var logger = Substitute.For<ILogger<FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>>>();
             _fileReader = Substitute.For<IFileReader<ProviderVenueFileImportDto, ProviderVenueDto>>();
-            _repository = Substitute.For<IRepository<ProviderVenue>>();
-            _dataProcessor = Substitute.For<IDataProcessor<ProviderVenue>>();
+            _repository = Substitute.For<IRepository<Domain.Models.ProviderVenue>>();
+            _dataProcessor = Substitute.For<IDataProcessor<Domain.Models.ProviderVenue>>();
 
             _repository
-                .CreateMany(Arg.Any<IList<ProviderVenue>>())
+                .CreateMany(Arg.Any<IList<Domain.Models.ProviderVenue>>())
                 .Returns(callinfo =>
                 {
-                    var passedEntities = callinfo.ArgAt<IEnumerable<ProviderVenue>>(0);
+                    var passedEntities = callinfo.ArgAt<IEnumerable<Domain.Models.ProviderVenue>>(0);
                     return passedEntities.Count();
                 });
 
@@ -52,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
             _fileReader.ValidateAndParseFile(_fileImportDto)
                 .Returns(Task.FromResult(_fileReaderResults));
 
-            var service = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, ProviderVenue>(logger, mapper, _fileReader, _repository, _dataProcessor);
+            var service = new FileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
             _result = service.Import(_fileImportDto).GetAwaiter().GetResult();
         }
@@ -70,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _repository
                 .Received(1)
-                .CreateMany(Arg.Any<IList<ProviderVenue>>());
+                .CreateMany(Arg.Any<IList<Domain.Models.ProviderVenue>>());
         }
 
         [Fact]
@@ -78,7 +77,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _dataProcessor
                 .Received(1)
-                .PreProcessingHandler(Arg.Any<IList<ProviderVenue>>());
+                .PreProcessingHandler(Arg.Any<IList<Domain.Models.ProviderVenue>>());
         }
 
         [Fact]
@@ -86,7 +85,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _dataProcessor
                 .Received(1)
-                .PostProcessingHandler(Arg.Any<IList<ProviderVenue>>());
+                .PostProcessingHandler(Arg.Any<IList<Domain.Models.ProviderVenue>>());
         }
         [Fact]
         public void Then_The_Expected_Number_Of_Created_Records_Is_Returned()

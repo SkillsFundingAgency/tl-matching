@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 {
                     new Domain.Models.Referral
                     {
-                        ProviderVenue = new ProviderVenue
+                        ProviderVenue = new Domain.Models.ProviderVenue
                         {
                             Postcode = "AA1 1AA",
                             Provider = new Domain.Models.Provider

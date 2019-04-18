@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
+namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
 {
     public class FakeAsyncQueryProvider<TEntity> : IAsyncQueryProvider
     {
