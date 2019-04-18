@@ -32,6 +32,10 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
+
+            CreateMap<ProviderVenue, HideProviderVenueViewModel>()
+                .ForMember(m => m.ProviderVenueId, config => config.MapFrom(s => s.Id))
+                .ForMember(m => m.ProviderName, config => config.MapFrom(s => s.Name));
         }
     }
 }

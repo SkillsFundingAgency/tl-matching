@@ -14,44 +14,25 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
     public class When_ProviderVenue_Controller_ConfirmProviderVenueChange_Is_Loaded
     {
         private readonly IActionResult _result;
-        private readonly IProviderService _providerService;
         private readonly IProviderVenueService _providerVenueService;
-
-        private const long UkPrn = 10000546;
-        private const string Postcode = "CV1 2WT";
 
         public When_ProviderVenue_Controller_ConfirmProviderVenueChange_Is_Loaded()
         {
-            _providerService = Substitute.For<IProviderService>();
-            _providerService
-                .GetProviderByUkPrnAsync(Arg.Any<long>())
-                .Returns(new ValidProviderDtoBuilder().Build());
-
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.GetVenueWithQualificationsAsync(Arg.Any<long>(), Arg.Any<string>())
-                .Returns(new ProviderVenueDetailViewModel
-                {
-                    Id = 1,
-                    UkPrn = 10000546,
-                    Postcode = "CV1 2WT",
-                    ProviderId = 1,
-                    ProviderName = "Test Provider",
-                    Source = "Admin",
-                    IsEnabledForSearch = true,
-                    VenueName = "VenueName"
-                });
-
+            _providerVenueService.GetHideProviderVenueViewModelAsync(Arg.Any<int>())
+                .Returns(new ValidHideProviderVenueViewModelBuilder().Build());
+            
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly));
             var mapper = new Mapper(config);
-            var providerController = new ProviderVenueController(mapper, _providerService, _providerVenueService);
+            var providerVenueController = new ProviderVenueController(mapper, _providerVenueService);
 
-            _result = providerController.ConfirmProviderVenueChange(10000546, "CV1 2WT").GetAwaiter().GetResult();
+            _result = providerVenueController.ConfirmProviderVenueChange(1).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_ProviderVenueService_GetVenueWithQualifications_Is_Called_Exactly_Once()
+        public void Then_ProviderVenueService_GetHideProviderVenueViewModelAsync_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(UkPrn, Postcode);
+            _providerVenueService.Received(1).GetHideProviderVenueViewModelAsync(1);
         }
 
         [Fact]
@@ -84,16 +65,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             // ReSharper disable once PossibleNullReferenceException
             model.ProviderVenueId.Should().Be(1);
         }
-
-        [Fact]
-        public void Then_Model_UkPrn_Has_Expected_Value()
-        {
-            var viewResult = _result as ViewResult;
-            var model = viewResult?.Model as HideProviderVenueViewModel;
-            // ReSharper disable once PossibleNullReferenceException
-            model.UkPrn.Should().Be(10000546);
-        }
-
+        
         [Fact]
         public void Then_Model_Postcode_Has_Expected_Value()
         {

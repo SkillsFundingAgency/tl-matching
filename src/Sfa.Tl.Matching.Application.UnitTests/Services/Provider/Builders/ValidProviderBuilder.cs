@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             Id = 1,
             UkPrn = 10000546,
             Name = "Test Provider",
+            DisplayName = "Test Provider Display Name",
             Status = true,
             PrimaryContact = "Test",
             PrimaryContactEmail = "Test@test.com",

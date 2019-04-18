@@ -12,5 +12,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task UpdateVenueAsync(UpdateProviderVenueDto dto);
         Task SetIsProviderVenueEnabledForSearchAsync(int providerVenueId, bool isEnabled);
         Task<ProviderVenueDetailViewModel> GetVenue(int providerId, string postCode);
+        Task<HideProviderVenueViewModel> GetHideProviderVenueViewModelAsync(int providerVenueId);
     }
 }

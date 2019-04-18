@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
             var service = new ProviderService(mapper, _providerRepository);
 
-            _result = service.GetHideProviderViewModel(1).GetAwaiter().GetResult();
+            _result = service.GetHideProviderViewModelAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -14,23 +14,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
     public class When_ProviderVenue_Controller_ConfirmProviderVenueChange_Post_Is_Called
     {
         private readonly IActionResult _result;
-        private readonly IProviderService _providerService;
         private readonly IProviderVenueService _providerVenueService;
 
         public When_ProviderVenue_Controller_ConfirmProviderVenueChange_Post_Is_Called()
         {
-            _providerService = Substitute.For<IProviderService>();
             _providerVenueService = Substitute.For<IProviderVenueService>();
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var providerVenueController = new ProviderVenueController(mapper, _providerService, _providerVenueService);
+            var providerVenueController = new ProviderVenueController(mapper, _providerVenueService);
 
             var viewModel = new HideProviderVenueViewModel
             {
                 ProviderVenueId = 1,
-                UkPrn = 10000546,
                 ProviderName = "Test Provider"
             };
             _result = providerVenueController.ConfirmProviderVenueChange(viewModel).GetAwaiter().GetResult();
@@ -45,7 +42,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         }
 
         [Fact]
-        public void Then_ProviderVenueService_SetIsProviderVenueEnabledForSearchAsync_Is_Called_With_Expected_ProviderVenueId()
+        public void
+            Then_ProviderVenueService_SetIsProviderVenueEnabledForSearchAsync_Is_Called_With_Expected_ProviderVenueId()
         {
             _providerVenueService
                 .Received(1)
@@ -55,7 +53,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         }
 
         [Fact]
-        public void Then_ProviderVenueService_SetIsProviderVenueEnabledForSearchAsync_Is_Called_With_Expected_IsEnabled()
+        public void
+            Then_ProviderVenueService_SetIsProviderVenueEnabledForSearchAsync_Is_Called_With_Expected_IsEnabled()
         {
             _providerVenueService
                 .Received(1)
@@ -80,12 +79,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_With_UkPrn()
+        public void Then_Result_Is_Redirect_With_Id()
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteValues
                 .Should()
-                .Contain(new KeyValuePair<string, object>("ukPrn", 10000546));
+                .Contain(new KeyValuePair<string, object>("id", 1));
         }
     }
 }

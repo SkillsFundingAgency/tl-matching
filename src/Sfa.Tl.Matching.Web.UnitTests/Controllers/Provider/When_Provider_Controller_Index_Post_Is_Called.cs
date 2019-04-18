@@ -64,12 +64,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
         
         [Fact]
-        public void Then_Result_Is_Redirect_With_UkPrn()
+        public void Then_Result_Is_Redirect_With_Id()
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteValues
                 .Should()
-                .Contain(new KeyValuePair<string, object>("ukPrn", 10000546));
+                .Contain(new KeyValuePair<string, object>("id", 1));
         }
     }
 }

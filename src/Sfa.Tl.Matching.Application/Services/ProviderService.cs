@@ -29,9 +29,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<ProviderDetailViewModel> GetProviderDetailByUkprnAsync(long ukPrn, bool includeVenueDetails = false)
+        public async Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId, bool includeVenueDetails = false)
         {
-            var query = _repository.GetMany(p => p.UkPrn == ukPrn);
+            var query = _repository.GetMany(p => p.Id == providerId);
 
             if (includeVenueDetails)
             {
@@ -41,17 +41,6 @@ namespace Sfa.Tl.Matching.Application.Services
             var provider = await query.SingleOrDefaultAsync();
 
             return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
-        }
-        
-        public async Task<ProviderDto> GetProviderByUkPrnAsync(long ukPrn)
-        {
-            var provider = await _repository.GetSingleOrDefault(p => p.UkPrn == ukPrn);
-
-            var dto = provider != null
-                ? _mapper.Map<Provider, ProviderDto>(provider)
-                : null;
-
-            return dto;
         }
 
         public Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
@@ -68,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return _repository.Create(provider);
         }
 
-        public async Task<HideProviderViewModel> GetHideProviderViewModel(int providerId)
+        public async Task<HideProviderViewModel> GetHideProviderViewModelAsync(int providerId)
         {
             var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
             return _mapper.Map<Provider, HideProviderViewModel>(provider);

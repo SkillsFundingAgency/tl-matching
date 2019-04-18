@@ -107,25 +107,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("hide-unhide/{id}", Name = "GetConfirmProviderVenueChange")]
+        [Route("hide-unhide-venue/{id}", Name = "GetConfirmProviderVenueChange")]
         public async Task<IActionResult> ConfirmProviderVenueChange(int id)
         {
-            var viewModel = await Populate(id);
-            //TODO: Move view model creation to repository
-            var viewModel = new HideProviderVenueViewModel
-            {
-                ProviderVenueId = providerVenueViewModel.Id,
-                UkPrn = ukPrn,
-                Postcode = providerVenueViewModel.Postcode,
-                ProviderName = providerVenueViewModel.ProviderName,
-                IsEnabledForSearch = providerVenueViewModel.IsEnabledForSearch
-            };
+            var viewModel = await _providerVenueService.GetHideProviderVenueViewModelAsync(id);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("hide-unhide/{ukPrn}/{postcode}", Name = "ConfirmProviderVenueChange")]
+        [Route("hide-unhide-venue/{id}", Name = "ConfirmProviderVenueChange")]
         public async Task<IActionResult> ConfirmProviderVenueChange(HideProviderVenueViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -138,7 +129,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("GetProviderVenueDetail",
                 new
                 {
-                    id = viewModel.Id
+                    id = viewModel.ProviderVenueId
                 });
         }
 

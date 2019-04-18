@@ -14,14 +14,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 {
-    public class When_ProviderService_Is_Called_To_Get_Provider_Details_By_Ukprn
+    public class When_ProviderService_Is_Called_To_Get_Provider_Detail_By_Id_With_Venues
     {
-        private const int UkPrn = 1;
-
         private readonly ProviderDetailViewModel _result;
         private readonly IRepository<Domain.Models.Provider> _providerRepository;
 
-        public When_ProviderService_Is_Called_To_Get_Provider_Details_By_Ukprn()
+        public When_ProviderService_Is_Called_To_Get_Provider_Detail_By_Id_With_Venues()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
@@ -33,11 +31,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
             var service = new ProviderService(mapper, _providerRepository);
 
-            _result = service.GetProviderDetailByUkprnAsync(UkPrn).GetAwaiter().GetResult();
+            _result = service.GetProviderDetailByIdAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_ProviderRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_ProviderRepository_GetMany_Is_Called_Exactly_Once()
         {
             _providerRepository.Received(1).GetMany(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>());
         }

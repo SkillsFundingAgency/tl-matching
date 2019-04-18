@@ -36,7 +36,7 @@
                 <span class="govuk-caption-m">UKPRN: @Model.UkPrn</span>
                 @Model.Name
             </h1>
-            <p class="govuk-body"><a asp-controller="Provider" class="govuk-link" asp-action="ConfirmProviderChange" asp-route-ukPrn="@Model.UkPrn"> @(Model.IsEnabledForSearch ? "Hide" : "Unhide") provider</a></p>
+            <p class="govuk-body"><a asp-controller="Provider" class="govuk-link" asp-action="ConfirmProviderChange" asp-route-id="@Model.Id"> @(Model.IsEnabledForSearch ? "Hide" : "Unhide") provider</a></p>
 
             <div class="govuk-form-group">
                 <label class="govuk-heading-s" asp-for="DisplayName">
