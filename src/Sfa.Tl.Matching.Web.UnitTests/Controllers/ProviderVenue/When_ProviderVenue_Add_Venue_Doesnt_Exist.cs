@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -30,13 +31,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((true, Postcode));
             _providerVenueService.GetVenue(ProviderId, Postcode).ReturnsNull();
-            _providerVenueService.CreateVenueAsync(Arg.Any<ProviderVenueDto>()).Returns(Id);
+            _providerVenueService.CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>()).Returns(Id);
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly);
+                c.AddProfiles(typeof(ProviderVenueMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<AddProviderVenueViewModel, ProviderVenueDto>(httpcontextAccesor) :
@@ -105,7 +106,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_CreateVenue_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).CreateVenueAsync(Arg.Any<ProviderVenueDto>());
+            _providerVenueService.Received(1).CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>());
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Domain.Models;
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
 {

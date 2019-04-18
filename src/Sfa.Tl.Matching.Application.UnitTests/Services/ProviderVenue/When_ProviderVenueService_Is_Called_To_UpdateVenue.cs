@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq.Expressions;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
@@ -18,7 +20,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
         public When_ProviderVenueService_Is_Called_To_UpdateVenue()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
+            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddProfiles(typeof(ProviderVenueMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver") ?
+                        new LoggedInUserEmailResolver<ProviderVenueDetailViewModel, ProviderVenue>(httpcontextAccesor) :
+                        type.Name.Contains("LoggedInUserNameResolver") ?
+                            (object)new LoggedInUserNameResolver<ProviderVenueDetailViewModel, ProviderVenue>(httpcontextAccesor) :
+                            type.Name.Contains("UtcNowResolver") ?
+                                new UtcNowResolver<ProviderVenueDetailViewModel, ProviderVenue>(new DateTimeProvider()) :
+                                null);
+            });
             var mapper = new Mapper(config);
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
 
@@ -29,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository,
                 locationService);
 
-            providerVenueService.UpdateVenueAsync(new UpdateProviderVenueDto()).GetAwaiter().GetResult();
+            providerVenueService.UpdateVenueAsync(new ProviderVenueDetailViewModel()).GetAwaiter().GetResult();
         }
 
         [Fact]

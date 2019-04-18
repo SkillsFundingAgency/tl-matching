@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -37,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(ProviderVenueDtoMapper).Assembly);
+                c.AddProfiles(typeof(ProviderVenueMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<AddProviderVenueViewModel, ProviderVenueDto>(httpcontextAccesor) :
@@ -106,7 +107,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_CreateVenue_Is_Not_Called()
         {
-            _providerVenueService.Received(0).CreateVenueAsync(Arg.Any<ProviderVenueDto>());
+            _providerVenueService.Received(0).CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>());
         }
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -51,14 +50,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             int venueId;
             if (venue != null)
-            {
                 venueId = venue.Id;
-            }
             else
-            {
-                var dto = _mapper.Map<ProviderVenueDto>(viewModel);
-                venueId = await _providerVenueService.CreateVenueAsync(dto);
-            }
+                venueId = await _providerVenueService.CreateVenueAsync(viewModel);
 
             return RedirectToRoute("GetProviderVenueDetail", new
             {
@@ -84,8 +78,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("ProviderVenueDetail", viewModel);
             }
 
-            var dto = _mapper.Map<UpdateProviderVenueDto>(viewModel);
-            await _providerVenueService.UpdateVenueAsync(dto);
+            await _providerVenueService.UpdateVenueAsync(viewModel);
             viewModel = await Populate(viewModel.Id);
 
             return View("ProviderVenueDetail", viewModel);

@@ -8,7 +8,6 @@ using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
-using Xunit.Sdk;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
