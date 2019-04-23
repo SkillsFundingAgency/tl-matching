@@ -1,16 +1,11 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
-using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
@@ -34,20 +29,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _providerVenueService.CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>()).Returns(Id);
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-
-            var config = new MapperConfiguration(c =>
-            {
-                c.AddProfiles(typeof(ProviderVenueMapper).Assembly);
-                c.ConstructServicesUsing(type =>
-                    type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<AddProviderVenueViewModel, ProviderVenueDto>(httpcontextAccesor) :
-                        type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenueDto>(httpcontextAccesor) :
-                            type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<AddProviderVenueViewModel, ProviderVenueDto>(new DateTimeProvider()) :
-                                null);
-            });
-            var mapper = new Mapper(config);
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
             var controllerWithClaims = new ClaimsBuilder<ProviderVenueController>(providerVenueController)

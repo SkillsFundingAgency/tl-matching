@@ -1,9 +1,7 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
@@ -37,9 +35,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                     IsEnabledForSearch = IsEnabledForSearch,
                     Name = VenueName
                 });
-
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
-            var mapper = new Mapper(config);
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
 

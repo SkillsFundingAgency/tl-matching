@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -22,9 +20,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         public When_ProviderVenue_Detail_Save_Submitted_Successfully()
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
-
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderVenueMapper).Assembly));
-            var mapper = new Mapper(config);
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
 
