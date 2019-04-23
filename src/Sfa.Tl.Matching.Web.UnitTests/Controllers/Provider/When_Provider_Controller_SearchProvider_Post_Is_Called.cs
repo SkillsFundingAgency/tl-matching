@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -9,22 +10,27 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_Index_Post_Is_Called_With_Non_Existent_UkPrn
+    public class When_Provider_Controller_SearchProvider_Post_Is_Called
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
 
-        public When_Provider_Controller_Index_Post_Is_Called_With_Non_Existent_UkPrn()
+        public When_Provider_Controller_SearchProvider_Post_Is_Called()
         {
             _providerService = Substitute.For<IProviderService>();
             _providerService
                 .SearchAsync(Arg.Any<long>())
-                .Returns((ProviderSearchResultDto)null);
+                .Returns(new ProviderSearchResultDto
+                    {
+                        Id = 1,
+                        UkPrn = 10000546,
+                        Name = "Test Provider"
+                    });
 
             var providerController = new ProviderController(_providerService);
 
-            var viewModel = new ProviderSearchParametersViewModel { UkPrn = 12345467 };
-            _result = providerController.Index(viewModel).GetAwaiter().GetResult();
+            var viewModel = new ProviderSearchParametersViewModel { UkPrn = 10000546 };
+            _result = providerController.SearchProvider(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -47,18 +53,23 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Model_Contains_Postcode_Error()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();
-            viewResult?.ViewData.ModelState["UkPrn"]
-                .Errors
-                .Should()
-                .ContainSingle(error => error.ErrorMessage == "You must enter a real UKPRN");
-        }
+        public void Then_Result_Is_RedirectResult() =>
+            _result.Should().BeOfType<RedirectToRouteResult>();
 
         [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
+        public void Then_Result_Is_Redirect_To_Provider_Detail()
+        {
+            var redirect = _result as RedirectToRouteResult;
+            redirect?.RouteName.Should().BeEquivalentTo("GetProviderDetail");
+        }
+        
+        [Fact]
+        public void Then_Result_Is_Redirect_With_Id()
+        {
+            var redirect = _result as RedirectToRouteResult;
+            redirect?.RouteValues
+                .Should()
+                .Contain(new KeyValuePair<string, object>("providerId", 1));
+        }
     }
 }

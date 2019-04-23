@@ -15,19 +15,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("search-ukprn", Name = "GetProviderSearch")]
-        public IActionResult Index()
+        [Route("search-ukprn", Name = "SearchProvider")]
+        public IActionResult SearchProvider()
         {
-            return View("SearchProvider", new ProviderSearchParametersViewModel());
+            return View(new ProviderSearchParametersViewModel());
         }
 
         [HttpPost]
         [Route("search-ukprn", Name = "SearchProviderByUkPrn")]
-        public async Task<IActionResult> Index(ProviderSearchParametersViewModel viewModel)
+        public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View("SearchProvider", viewModel);
+                return View(viewModel);
             }
 
             var searchResult = viewModel.UkPrn.HasValue
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (searchResult == null || searchResult.Id == 0)
             {
                 ModelState.AddModelError("UkPrn", "You must enter a real UKPRN");
-                return View("SearchProvider", viewModel);
+                return View(viewModel);
             }
 
             return RedirectToRoute("GetProviderDetail", new { providerId = searchResult.Id });
@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("ProviderDetail", viewModel);
+                return View(nameof(ProviderDetail), viewModel);
             }
 
             if (viewModel.Id > 0)
@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 viewModel.Id = await _providerService.CreateProvider(viewModel);
             }
 
-            return View("ProviderDetail", viewModel);
+            return View(nameof(SearchProvider));
         }
 
         [HttpGet]

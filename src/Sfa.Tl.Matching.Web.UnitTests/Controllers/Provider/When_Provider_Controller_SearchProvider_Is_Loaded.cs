@@ -8,17 +8,17 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_Index_Is_Loaded
+    public class When_Provider_Controller_SearchProvider_Is_Loaded
     {
         private readonly IActionResult _result;
 
-        public When_Provider_Controller_Index_Is_Loaded()
+        public When_Provider_Controller_SearchProvider_Is_Loaded()
         {
             var providerService = Substitute.For<IProviderService>();
 
             var providerController = new ProviderController(providerService);
 
-            _result = providerController.Index();
+            _result = providerController.SearchProvider();
         }
 
         [Fact]

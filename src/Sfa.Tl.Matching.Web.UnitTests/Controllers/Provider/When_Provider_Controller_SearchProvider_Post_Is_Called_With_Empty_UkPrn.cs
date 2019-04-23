@@ -9,12 +9,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_Index_Post_Is_Called_With_Empty_UkPrn
+    public class When_Provider_Controller_SearchProvider_Post_Is_Called_With_Empty_UkPrn
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
 
-        public When_Provider_Controller_Index_Post_Is_Called_With_Empty_UkPrn()
+        public When_Provider_Controller_SearchProvider_Post_Is_Called_With_Empty_UkPrn()
         {
             _providerService = Substitute.For<IProviderService>();
             _providerService
@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var providerController = new ProviderController(_providerService);
 
             var viewModel = new ProviderSearchParametersViewModel();
-            _result = providerController.Index(viewModel).GetAwaiter().GetResult();
+            _result = providerController.SearchProvider(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
