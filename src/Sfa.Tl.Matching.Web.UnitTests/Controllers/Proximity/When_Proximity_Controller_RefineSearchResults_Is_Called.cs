@@ -24,7 +24,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 new Route {Id = 1, Name = "Route 1"}
             }.AsQueryable();
 
-            var logger = Substitute.For<ILogger<ProviderController>>();
             var mapper = Substitute.For<IMapper>();
 
             var proximityService = Substitute.For<IProximityService>();
