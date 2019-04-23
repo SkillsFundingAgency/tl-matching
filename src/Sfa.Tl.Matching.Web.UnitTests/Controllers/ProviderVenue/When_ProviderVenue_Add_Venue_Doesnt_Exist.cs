@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
@@ -28,15 +27,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _providerVenueService.GetVenue(ProviderId, Postcode).ReturnsNull();
             _providerVenueService.CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>()).Returns(Id);
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-
             var providerVenueController = new ProviderVenueController(_providerVenueService);
             var controllerWithClaims = new ClaimsBuilder<ProviderVenueController>(providerVenueController)
                 .AddUserName(UserName)
                 .AddEmail(Email)
                 .Build();
-
-            httpcontextAccesor.HttpContext.Returns(providerVenueController.HttpContext);
 
             var viewModel = new AddProviderVenueViewModel
             {

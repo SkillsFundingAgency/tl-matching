@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -22,9 +21,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _providerVenueService = Substitute.For<IProviderVenueService>();
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
-
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            httpcontextAccesor.HttpContext.Returns(providerVenueController.HttpContext);
 
             var viewModel = new ProviderVenueDetailViewModel
             {

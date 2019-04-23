@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -29,9 +28,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 .AddUserName(UserName)
                 .AddEmail(Email)
                 .Build();
-
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            httpcontextAccesor.HttpContext.Returns(providerVenueController.HttpContext);
 
             var viewModel = new ProviderVenueDetailViewModel
             {
