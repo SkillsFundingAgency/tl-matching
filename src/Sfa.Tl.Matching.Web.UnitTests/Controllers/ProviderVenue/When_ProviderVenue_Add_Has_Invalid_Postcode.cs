@@ -12,18 +12,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
-        private const string Postcode = "CV1 2WT";
-
+        
         public When_ProviderVenue_Add_Has_Invalid_Postcode()
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((false, Postcode));
+            _providerVenueService.IsValidPostCodeAsync("CV1 2WT").Returns((false, "CV1 2WT"));
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
 
             var viewModel = new AddProviderVenueViewModel
             {
-                Postcode = Postcode
+                Postcode = "CV1 2WT"
             };
 
             _result = providerVenueController.AddProviderVenue(viewModel).GetAwaiter().GetResult();
@@ -47,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_IsValidPostCode_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).IsValidPostCodeAsync(Postcode);
+            _providerVenueService.Received(1).IsValidPostCodeAsync("CV1 2WT");
         }
 
         [Fact]

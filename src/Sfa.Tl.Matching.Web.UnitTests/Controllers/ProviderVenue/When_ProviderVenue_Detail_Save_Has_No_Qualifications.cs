@@ -12,27 +12,23 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
     public class When_ProviderVenue_Detail_Save_Has_No_Qualifications
     {
         private readonly IActionResult _result;
-        private const int Id = 1;
         private readonly IProviderVenueService _providerVenueService;
-        private const string Postcode = "CV1 2WT";
-        private const string UserName = "username";
-        private const string Email = "email@address.com";
         
         public When_ProviderVenue_Detail_Save_Has_No_Qualifications()
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((true, Postcode));
+            _providerVenueService.IsValidPostCodeAsync("CV1 2WT").Returns((true, "CV1 2WT"));
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
             var controllerWithClaims = new ClaimsBuilder<ProviderVenueController>(providerVenueController)
-                .AddUserName(UserName)
-                .AddEmail(Email)
+                .AddUserName("username")
+                .AddEmail("email@address.com")
                 .Build();
 
             var viewModel = new ProviderVenueDetailViewModel
             {
-                Id = Id,
-                Postcode = Postcode
+                Id = 1,
+                Postcode = "CV1 2WT"
             };
 
             _result = controllerWithClaims.ProviderVenueDetail(viewModel).GetAwaiter().GetResult();
@@ -55,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_GetVenueWithQualifications_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(Id);
+            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(1);
         }
     }
 }

@@ -13,31 +13,26 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
-        private const int Id = 1;
-        private const int ProviderId = 1;
-        private const string Postcode = "CV1 2WT";
-        private const string UserName = "username";
-        private const string Email = "email@address.com";
 
         public When_ProviderVenue_Add_Venue_Already_Exists()
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.IsValidPostCodeAsync(Postcode).Returns((true, Postcode));
-            _providerVenueService.GetVenue(ProviderId, Postcode).Returns(new ProviderVenueDetailViewModel
+            _providerVenueService.IsValidPostCodeAsync("CV1 2WT").Returns((true, "CV1 2WT"));
+            _providerVenueService.GetVenue(1, "CV1 2WT").Returns(new ProviderVenueDetailViewModel
             {
-                Id = Id
+                Id = 1
             });
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
             var controllerWithClaims = new ClaimsBuilder<ProviderVenueController>(providerVenueController)
-                .AddUserName(UserName)
-                .AddEmail(Email)
+                .AddUserName("username")
+                .AddEmail("email@address.com")
                 .Build();
 
             var viewModel = new AddProviderVenueViewModel
             {
-                ProviderId = ProviderId,
-                Postcode = Postcode
+                ProviderId = 1,
+                Postcode = "CV1 2WT"
             };
 
             _result = controllerWithClaims.AddProviderVenue(viewModel).GetAwaiter().GetResult();
@@ -70,13 +65,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         public void Then_RouteValues_Has_VenueId()
         {
             var result = _result as RedirectToRouteResult;
-            result?.RouteValues["providerVenueId"].Should().Be(Id);
+            result?.RouteValues["providerVenueId"].Should().Be(1);
         }
 
         [Fact]
         public void Then_IsValidPostCode_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).IsValidPostCodeAsync(Postcode);
+            _providerVenueService.Received(1).IsValidPostCodeAsync("CV1 2WT");
         }
 
         [Fact]

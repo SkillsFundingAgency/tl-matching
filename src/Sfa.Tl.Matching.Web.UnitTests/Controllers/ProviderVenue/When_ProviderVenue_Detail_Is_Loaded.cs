@@ -13,32 +13,25 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
-        private const int Id = 1;
-        private const string Postcode = "CV1 2WT";
-        private const int ProviderId = 1;
-        private const string ProviderName = "Name";
-        private const string Source = "Admin";
-        private const string VenueName = "VenueName";
-        private const bool IsEnabledForSearch = true;
 
         public When_ProviderVenue_Detail_Is_Loaded()
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.GetVenueWithQualificationsAsync(Id)
+            _providerVenueService.GetVenueWithQualificationsAsync(1)
                 .Returns(new ProviderVenueDetailViewModel
                 {
-                    Id = Id,
-                    Postcode = Postcode,
-                    ProviderId = ProviderId,
-                    ProviderName = ProviderName,
-                    Source = Source,
-                    IsEnabledForSearch = IsEnabledForSearch,
-                    Name = VenueName
+                    Id = 1,
+                    Postcode = "CV1 2WT",
+                    ProviderId = 1,
+                    ProviderName = "ProviderName",
+                    Source = "Admin",
+                    IsEnabledForSearch = true,
+                    Name = "VenueName"
                 });
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
 
-            _result = providerVenueController.ProviderVenueDetail(Id).GetAwaiter().GetResult();
+            _result = providerVenueController.ProviderVenueDetail(1).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -59,56 +52,56 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_GetVenueWithQualifications_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(Id);
+            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(1);
         }
 
         [Fact]
         public void Then_Id_Is_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.Id.Should().Be(Id);
+            viewModel.Id.Should().Be(1);
         }
 
         [Fact]
         public void Then_Postcode_Is_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.Postcode.Should().Be(Postcode);
+            viewModel.Postcode.Should().Be("CV1 2WT");
         }
 
         [Fact]
         public void Then_ProviderId_Is_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.ProviderId.Should().Be(ProviderId);
+            viewModel.ProviderId.Should().Be(1);
         }
 
         [Fact]
         public void Then_ProviderName_Is_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.ProviderName.Should().Be(ProviderName);
+            viewModel.ProviderName.Should().Be("ProviderName");
         }
 
         [Fact]
         public void Then_Source_Is_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.Source.Should().Be(Source);
+            viewModel.Source.Should().Be("Admin");
         }
         
         [Fact]
         public void Then_IsEnabledForSearch_Is_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.IsEnabledForSearch.Should().Be(IsEnabledForSearch);
+            viewModel.IsEnabledForSearch.Should().Be(true);
         }
 
         [Fact]
         public void Then_VenueName_Is_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.Name.Should().Be(VenueName);
+            viewModel.Name.Should().Be("VenueName");
         }
     }
 }

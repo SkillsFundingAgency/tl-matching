@@ -12,7 +12,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
     public class When_ProviderVenue_Add_Is_Loaded
     {
         private readonly IActionResult _result;
-        private const int ProviderId = 1;
 
         public When_ProviderVenue_Add_Is_Loaded()
         {
@@ -20,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             var providerVenueController = new ProviderVenueController(providerVenueService);
 
-            _result = providerVenueController.AddProviderVenue(ProviderId);
+            _result = providerVenueController.AddProviderVenue(1);
         }
 
         [Fact]
@@ -42,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         public void Then_ProviderId_Is_Set()
         {
             var viewModel = _result.GetViewModel<AddProviderVenueViewModel>();
-            viewModel.ProviderId.Should().Be(ProviderId);
+            viewModel.ProviderId.Should().Be(1);
         }
     }
 }
