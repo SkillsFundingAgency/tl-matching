@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.QualificationRoutePathMap
     public class QualificationRoutePathMappingServiceTestFixture : IDisposable
     {
         public MatchingDbContext MatchingDbContext;
-        public IFileImportService<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto, Domain.Models.QualificationRoutePathMapping> FileImportService;
+        public IFileImportService<QualificationRoutePathMappingFileImportDto> FileImportService;
 
         public QualificationRoutePathMappingServiceTestFixture()
         {

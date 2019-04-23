@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
 {
     public class When_ImportQualificationRoutePathMapping_Function_Blob_Trigger_Fires
     {
-        private readonly IFileImportService<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto, Domain.Models.QualificationRoutePathMapping> _qualificationRoutePathMappingService;
+        private readonly IFileImportService<QualificationRoutePathMappingFileImportDto> _qualificationRoutePathMappingService;
 
         public When_ImportQualificationRoutePathMapping_Function_Blob_Trigger_Fires()
         {
@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.QualificationRoutePathMapping
             blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
-            _qualificationRoutePathMappingService = Substitute.For<IFileImportService<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto, Domain.Models.QualificationRoutePathMapping>>();
+            _qualificationRoutePathMappingService = Substitute.For<IFileImportService<QualificationRoutePathMappingFileImportDto>>();
             Functions.QualificationRoutePathMapping.ImportQualificationRoutePathMapping(
                 blobStream,
                 "test",

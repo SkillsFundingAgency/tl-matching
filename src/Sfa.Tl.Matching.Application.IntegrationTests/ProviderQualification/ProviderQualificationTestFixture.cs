@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
 {
     public class ProviderQualificationTestFixture : IDisposable
     {
-        public readonly IFileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification> FileImportService;
+        public readonly IFileImportService<ProviderQualificationFileImportDto> FileImportService;
         public MatchingDbContext MatchingDbContext;
 
         public const string CreatedByUser = "TestUser";

@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
 {
     public class EmployerTestFixture : IDisposable
     {
-        public IFileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer> FileImportService;
+        public IFileImportService<EmployerFileImportDto> FileImportService;
         public MatchingDbContext MatchingDbContext;
 
         public EmployerTestFixture()

@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Functions
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IFileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification> fileImportService
+            [Inject] IFileImportService<ProviderQualificationFileImportDto> fileImportService
         )
         {
             var stream = await blockBlob.OpenReadAsync(null, null, null);

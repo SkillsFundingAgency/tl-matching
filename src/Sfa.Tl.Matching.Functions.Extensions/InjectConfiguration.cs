@@ -106,7 +106,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     provider.GetService<IRepository<FunctionLog>>()
                     ));
 
-            services.AddTransient<IFileImportService<TImportDto, TDto, TEntity>, FileImportService<TImportDto, TDto, TEntity>>();
+            services.AddTransient<IFileImportService<TImportDto>, FileImportService<TImportDto, TDto, TEntity>>();
         }
 
         private static void RegisterRepositories(IServiceCollection services)

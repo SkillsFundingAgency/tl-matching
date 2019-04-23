@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
 {
     public class ProviderTestFixture : IDisposable
     {
-        public readonly IFileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider> FileImportService;
+        public readonly IFileImportService<ProviderFileImportDto> FileImportService;
         public MatchingDbContext MatchingDbContext;
 
         public ProviderTestFixture()

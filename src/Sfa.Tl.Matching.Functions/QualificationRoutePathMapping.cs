@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Functions
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IFileImportService<QualificationRoutePathMappingFileImportDto, QualificationRoutePathMappingDto, Domain.Models.QualificationRoutePathMapping> fileImportService
+            [Inject] IFileImportService<QualificationRoutePathMappingFileImportDto> fileImportService
         )
         {          
             var stream = await blockBlob.OpenReadAsync(null, null, null);
