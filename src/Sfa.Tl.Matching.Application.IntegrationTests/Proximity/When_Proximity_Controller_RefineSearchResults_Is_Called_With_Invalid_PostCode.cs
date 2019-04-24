@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             _result.Should().NotBeNull();
 
         [Fact]
-        public void Then_RResult_Is_ViewResult() =>
+        public void Then_Result_Is_ViewResult() =>
             _result.Should().BeAssignableTo<ViewResult>();
 
         [Fact]

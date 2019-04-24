@@ -15,68 +15,79 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("search-ukprn", Name = "GetProviderSearch")]
-        public IActionResult Index()
+        [Route("search-ukprn", Name = "SearchProvider")]
+        public IActionResult SearchProvider()
         {
-            return View("ProviderSearch", new ProviderSearchParametersViewModel());
+            return View(new ProviderSearchParametersViewModel());
         }
 
         [HttpPost]
         [Route("search-ukprn", Name = "SearchProviderByUkPrn")]
-        public async Task<IActionResult> Index(ProviderSearchParametersViewModel viewModel)
+        public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View("ProviderSearch", viewModel);
+                return View(viewModel);
             }
 
             var searchResult = viewModel.UkPrn.HasValue
                 ? await _providerService.SearchAsync(viewModel.UkPrn.Value)
                 : null;
-            
+
             if (searchResult == null || searchResult.Id == 0)
             {
-                return ReturnProviderSearchViewWithInvalidUkPrnError(viewModel);
+                ModelState.AddModelError("UkPrn", "You must enter a real UKPRN");
+                return View(viewModel);
             }
 
-            return RedirectToRoute("GetProviderDetail", 
-                new
-                {
-                    ukPrn = searchResult.UkPrn
-                });
-        }
-
-        private IActionResult ReturnProviderSearchViewWithInvalidUkPrnError(ProviderSearchParametersViewModel viewModel)
-        {
-            ModelState.AddModelError("UkPrn", "You must enter a real UKPRN");
-            return View("ProviderSearch", viewModel);
+            return RedirectToRoute("GetProviderDetail", new { providerId = searchResult.Id });
         }
 
         [HttpGet]
-        [Route("provider-overview/{ukPrn}", Name = "GetProviderDetail")]
-        public async Task<IActionResult> ProviderDetail(long ukPrn)
+        [Route("provider-overview/{providerId}", Name = "GetProviderDetail")]
+        public async Task<IActionResult> ProviderDetail(int providerId)
         {
-            //TODO: Use correct view model when merged
-            var provider = await _providerService.GetProviderByUkPrnAsync(ukPrn);
-            return View(provider);
-        }
+            var viewModel = new ProviderDetailViewModel();
 
-        [HttpGet]
-        [Route("hide-unhide/{ukPrn}", Name = "GetConfirmProviderChange")]
-        public async Task<IActionResult> ConfirmProviderChange(long ukPrn)
-        {
-            var provider = await _providerService.GetProviderByUkPrnAsync(ukPrn);
-            return View(new HideProviderViewModel
+            if (providerId > 0)
             {
-                ProviderId = provider.Id,
-                UkPrn = ukPrn,
-                ProviderName = provider.Name,
-                IsActive = provider.IsEnabledForSearch
-            });
+                viewModel = await _providerService.GetProviderDetailByIdAsync(providerId, true);
+            }
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        [Route("hide-unhide/{ukPrn}", Name = "ConfirmProviderChange")]
+        [Route("provider-overview", Name = "SaveProviderDetail")]
+        public async Task<IActionResult> SaveProviderDetail(ProviderDetailViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(nameof(ProviderDetail), viewModel);
+            }
+
+            if (viewModel.Id > 0)
+            {
+                await _providerService.UpdateProviderDetail(viewModel);
+            }
+            else
+            {
+                viewModel.Id = await _providerService.CreateProvider(viewModel);
+            }
+
+            return View(nameof(SearchProvider));
+        }
+
+        [HttpGet]
+        [Route("hide-unhide-provider/{providerId}", Name = "GetConfirmProviderChange")]
+        public async Task<IActionResult> ConfirmProviderChange(int providerId)
+        {
+            var viewModel = await _providerService.GetHideProviderViewModelAsync(providerId);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("hide-unhide-provider/{providerId}", Name = "ConfirmProviderChange")]
         public async Task<IActionResult> ConfirmProviderChange(HideProviderViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -84,13 +95,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("ConfirmProviderChange", viewModel);
             }
 
-            await _providerService.SetIsProviderEnabledAsync(viewModel.ProviderId, !viewModel.IsActive);
+            await _providerService.SetIsProviderEnabledForSearchAsync(viewModel.ProviderId, !viewModel.IsEnabledForSearch);
 
-            return RedirectToRoute("GetProviderDetail",
-                new
-                {
-                    ukPrn = viewModel.UkPrn
-                });
+            return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
     }
 }

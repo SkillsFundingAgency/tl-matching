@@ -1,9 +1,11 @@
 ﻿using Sfa.Tl.Matching.Application.Interfaces;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -27,31 +29,45 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<ProviderDto> GetProviderAsync(int providerId)
+        public async Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId, bool includeVenueDetails = false)
+        {
+            var query = _repository.GetMany(p => p.Id == providerId);
+
+            if (includeVenueDetails)
+            {
+                query = query.Include(p => p.ProviderVenue).ThenInclude(pv => pv.ProviderQualification);
+            }
+
+            var provider = await query.SingleOrDefaultAsync();
+
+            return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
+        }
+
+        public Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
+        {
+            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+
+            return _repository.Update(provider);
+        }
+
+        public Task<int> CreateProvider(ProviderDetailViewModel viewModel)
+        {
+            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+
+            return _repository.Create(provider);
+        }
+
+        public async Task<HideProviderViewModel> GetHideProviderViewModelAsync(int providerId)
         {
             var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
 
-            var dto = provider != null
-                ? _mapper.Map<Provider, ProviderDto>(provider)
-                : null;
-
-            return dto;
-        }
-        
-        public async Task<ProviderDto> GetProviderByUkPrnAsync(long ukPrn)
-        {
-            var provider = await _repository.GetSingleOrDefault(p => p.UkPrn == ukPrn);
-
-            var dto = provider != null
-                ? _mapper.Map<Provider, ProviderDto>(provider)
-                : null;
-
-            return dto;
+            return _mapper.Map<Provider, HideProviderViewModel>(provider);
         }
 
-        public async Task SetIsProviderEnabledAsync(int providerId, bool isEnabled)
+        public async Task SetIsProviderEnabledForSearchAsync(int providerId, bool isEnabled)
         {
             var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
+
             if (provider != null)
             {
                 provider.IsEnabledForSearch = isEnabled;

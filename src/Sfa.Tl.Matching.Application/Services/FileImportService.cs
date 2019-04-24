@@ -12,7 +12,7 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
-    public class FileImportService<TImportDto, TDto, TEntity> : IFileImportService<TImportDto, TDto, TEntity>
+    public class FileImportService<TImportDto, TDto, TEntity> : IFileImportService<TImportDto>
         where TImportDto : FileImportDto
         where TDto : class, new()
         where TEntity : BaseEntity, new()

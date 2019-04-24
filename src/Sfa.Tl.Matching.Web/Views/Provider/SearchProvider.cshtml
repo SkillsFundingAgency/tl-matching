@@ -26,25 +26,25 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1>Search for the provider’s UKPRN</h1>
-        <form class="form" asp-controller="Provider" asp-action="Index" novalidate>
+        <form class="form" asp-controller="Provider" asp-action="SearchProvider" novalidate>
             <p class="govuk-body">You can only add or change details for providers that have a UK Provider Reference Number (UKPRN)</p>
 
             <div class="govuk-form-group" sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-form-group--error">
-                    <label class="govuk-label" asp-for="UkPrn">
-                        Enter the UKPRN
-                    </label>
-                    <span id="ukprn-hint" class="govuk-hint">
-                        For example, 10001234
-                    </span>
-                    <span class="govuk-error-message" asp-validation-for="UkPrn"></span>
-                    <input class="govuk-input govuk-input--width-10" asp-for="UkPrn" type="text"
-                           sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-input--error"
-                           aria-describedby="ukprn-hint">
-                </div>
-                <button type="submit" class="govuk-button">
-                    Search
-                </button>
-</form>
+                <label class="govuk-label" asp-for="UkPrn">
+                    Enter the UKPRN
+                </label>
+                <span id="ukprn-hint" class="govuk-hint">
+                    For example, 10001234
+                </span>
+                <span class="govuk-error-message" asp-validation-for="UkPrn"></span>
+                <input class="govuk-input govuk-input--width-10" asp-for="UkPrn" type="text"
+                       sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-input--error"
+                       aria-describedby="ukprn-hint">
+            </div>
+            <button type="submit" class="govuk-button">
+                Search
+            </button>
+        </form>
     </div>
 </div>
 

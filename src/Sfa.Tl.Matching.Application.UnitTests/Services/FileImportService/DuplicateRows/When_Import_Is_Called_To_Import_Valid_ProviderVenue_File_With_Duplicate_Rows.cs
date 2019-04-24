@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.DuplicateRows
 {
-    public class When_Import_Is_Called_To_Import_Valid_ProviderVenue_File_With_Duplicate_Rows : IClassFixture<FileImportServiceDuplicateRowsTestFixture<ProviderVenueFileImportDto, ProviderVenueDto, ProviderVenue>>
+    public class When_Import_Is_Called_To_Import_Valid_ProviderVenue_File_With_Duplicate_Rows : IClassFixture<FileImportServiceDuplicateRowsTestFixture<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>>
     {
-        private readonly FileImportServiceDuplicateRowsTestFixture<ProviderVenueFileImportDto, ProviderVenueDto, ProviderVenue> _fixture;
+        private readonly FileImportServiceDuplicateRowsTestFixture<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue> _fixture;
 
-        public When_Import_Is_Called_To_Import_Valid_ProviderVenue_File_With_Duplicate_Rows(FileImportServiceDuplicateRowsTestFixture<ProviderVenueFileImportDto, ProviderVenueDto, ProviderVenue> fixture)
+        public When_Import_Is_Called_To_Import_Valid_ProviderVenue_File_With_Duplicate_Rows(FileImportServiceDuplicateRowsTestFixture<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue> fixture)
         {
             _fixture = fixture;
         }
@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         [Fact]
         public void Then_Repository_Create_Many_Is_called_With_Only_One_Item()
         {
-            _fixture.Repository.Received(1).CreateMany(Arg.Is<IList<ProviderVenue>>(arg => arg.Count == 1));
+            _fixture.Repository.Received(1).CreateMany(Arg.Is<IList<Domain.Models.ProviderVenue>>(arg => arg.Count == 1));
         }
     }
 }

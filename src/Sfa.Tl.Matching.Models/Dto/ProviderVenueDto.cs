@@ -1,7 +1,10 @@
-﻿namespace Sfa.Tl.Matching.Models.Dto
+﻿using System;
+
+namespace Sfa.Tl.Matching.Models.Dto
 {
     public class ProviderVenueDto
     {
+        public int Id { get; set; }
         public int ProviderId { get; set; }
         public string Name { get; set; }
         public string Town { get; set; }
@@ -12,5 +15,7 @@
         public bool IsEnabledForSearch { get; set; }
         public string Source { get; set; }
         public string CreatedBy { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public string ModifiedBy { get; set; }
     }
 }

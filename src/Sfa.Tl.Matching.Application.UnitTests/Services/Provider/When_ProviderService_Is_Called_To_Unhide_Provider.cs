@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
             var service = new ProviderService(mapper, _providerRepository);
 
-            service.SetIsProviderEnabledAsync(ProviderId, true).GetAwaiter().GetResult();
+            service.SetIsProviderEnabledForSearchAsync(ProviderId, true).GetAwaiter().GetResult();
         }
 
         [Fact]

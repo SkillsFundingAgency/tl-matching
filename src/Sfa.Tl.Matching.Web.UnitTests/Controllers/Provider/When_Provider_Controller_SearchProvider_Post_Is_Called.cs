@@ -10,12 +10,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_Index_Post_Is_Called
+    public class When_Provider_Controller_SearchProvider_Post_Is_Called
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
 
-        public When_Provider_Controller_Index_Post_Is_Called()
+        public When_Provider_Controller_SearchProvider_Post_Is_Called()
         {
             _providerService = Substitute.For<IProviderService>();
             _providerService
@@ -30,11 +30,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var providerController = new ProviderController(_providerService);
 
             var viewModel = new ProviderSearchParametersViewModel { UkPrn = 10000546 };
-            _result = providerController.Index(viewModel).GetAwaiter().GetResult();
+            _result = providerController.SearchProvider(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_ProviderRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_ProviderService_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
             _providerService
                 .Received(1)
@@ -64,12 +64,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
         
         [Fact]
-        public void Then_Result_Is_Redirect_With_UkPrn()
+        public void Then_Result_Is_Redirect_With_Id()
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteValues
                 .Should()
-                .Contain(new KeyValuePair<string, object>("ukPrn", 10000546));
+                .Contain(new KeyValuePair<string, object>("providerId", 1));
         }
     }
 }

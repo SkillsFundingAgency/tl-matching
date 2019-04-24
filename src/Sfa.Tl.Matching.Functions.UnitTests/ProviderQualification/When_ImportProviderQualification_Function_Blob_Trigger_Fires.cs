@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderQualification
 {
     public class When_ImportProviderQualification_Function_Blob_Trigger_Fires
     {
-        private readonly IFileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification> _providerQualificationService;
+        private readonly IFileImportService<ProviderQualificationFileImportDto> _providerQualificationService;
 
         public When_ImportProviderQualification_Function_Blob_Trigger_Fires()
         {
@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderQualification
             blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
-            _providerQualificationService = Substitute.For<IFileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>>();
+            _providerQualificationService = Substitute.For<IFileImportService<ProviderQualificationFileImportDto>>();
             Functions.ProviderQualification.ImportProviderQualification(
                     blobStream,
                     "test",

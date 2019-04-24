@@ -6,6 +6,19 @@
   }
 }
 
+.tl-button--grey {
+    background: govuk-colour("grey-3");
+    color: govuk-colour("black");
+
+    &:hover,
+    &:focus {
+        color: govuk-colour("black");
+        background: darken(govuk-colour("grey-3"), 10%);
+    }
+}
+
+
+
 // Rework button to look like a link
 .tl-button--looks-like-link {
     display: block;

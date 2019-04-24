@@ -17,6 +17,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string Owner { get; set; }
         public string CreatedBy { get; set; }
         public string CompanyNameWithAka => !string.IsNullOrWhiteSpace(AlsoKnownAs) ? 
-            $"{CompanyName} ({AlsoKnownAs})" : $"{CompanyName}";
+            $"{CompanyName} ({AlsoKnownAs})" : CompanyName;
     }
 }

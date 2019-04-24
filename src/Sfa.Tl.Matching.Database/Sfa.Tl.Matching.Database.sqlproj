@@ -65,8 +65,7 @@
   <ItemGroup>
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
     <None Include="PostDeployment\Seed Email Templates.sql" />
-    <None Include="PostDeployment\Deactivate Provider.sql" />
-    <None Include="PostDeployment\Reset Provider Enabled Fields.sql" />
+    <None Include="PostDeployment\ResetProviderEnabledFields.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />

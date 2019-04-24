@@ -1,8 +1,28 @@
-﻿
+﻿@model Sfa.Tl.Matching.Models.ViewModel.HideProviderVenueViewModel
+
 @{
-    ViewData["Title"] = "ConfirmVenueChange";
+    ViewData["Title"] = (Model.IsEnabledForSearch ? "Hide" : "Unhide") + Model.Postcode;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>ConfirmVenueChange</h1>
+@section backButton{
+    <a asp-controller="ProviderVenue" asp-action="ProviderVenueDetail" asp-route-providerVenueId="@Model.ProviderVenueId" class="govuk-back-link">Back</a>
+}
 
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">Are you sure you want to @(Model.IsEnabledForSearch ? "hide" : "unhide") @Model.Postcode?</h1>
+        <form asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange">
+            <input asp-for="ProviderId" type="hidden" />
+            <input asp-for="ProviderVenueId" type="hidden" />
+            <input asp-for="IsEnabledForSearch" type="hidden" />
+
+            <button type="submit" class="govuk-button">
+                @(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue
+            </button>
+        </form>
+        <p class="govuk-body">
+            <a asp-controller="ProviderVenue" asp-action="ProviderVenueDetail" asp-route-providerVenueId="@Model.ProviderVenueId" class="govuk-link" id="tl-cancel">Cancel and return to venue overview</a>
+        </p>
+    </div>
+</div>

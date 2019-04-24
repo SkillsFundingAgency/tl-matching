@@ -2,7 +2,7 @@
 (
 	[Id] int IDENTITY(1,1) NOT NULL, 
 	[ProviderId] INT NOT NULL, 
-	[Name] VARCHAR(400) NULL,
+	[Name] VARCHAR(400) NULL, 
 	[Town] VARCHAR(100) NULL, 
 	[County] NVARCHAR(50) NULL, 
 	[Postcode] VARCHAR(10) NOT NULL,

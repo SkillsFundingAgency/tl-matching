@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenue
 {
     public class When_ImportProviderVenue_Function_Blob_Trigger_Fires
     {
-        private readonly IFileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue> _providerVenueService;
+        private readonly IFileImportService<ProviderVenueFileImportDto> _providerVenueService;
 
         public When_ImportProviderVenue_Function_Blob_Trigger_Fires()
         {
@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderVenue
             blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
-            _providerVenueService = Substitute.For<IFileImportService<ProviderVenueFileImportDto, ProviderVenueDto, Domain.Models.ProviderVenue>>();
+            _providerVenueService = Substitute.For<IFileImportService<ProviderVenueFileImportDto>>();
             Functions.ProviderVenue.ImportProviderVenue(
                 blobStream,
                 "test",

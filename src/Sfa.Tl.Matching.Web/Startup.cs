@@ -22,7 +22,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Web.Extensions.Filters;
+using Sfa.Tl.Matching.Web.Extensions;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
@@ -182,7 +182,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
             services.AddTransient<IRepository<Provider>, GenericRepository<Provider>>();
-            services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
+            services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
         }
@@ -206,6 +206,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<IReferralService, ReferralService>();
+            services.AddTransient<IProviderVenueService, ProviderVenueService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 

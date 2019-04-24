@@ -6,6 +6,7 @@ namespace Sfa.Tl.Matching.Domain.Models
     {
         public long UkPrn { get; set; }
         public string Name { get; set; }
+        public string DisplayName { get; set; }
         public int OfstedRating { get; set; }
         public bool Status { get; set; }
         public string StatusReason { get; set; }
@@ -15,10 +16,9 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string SecondaryContact { get; set; }
         public string SecondaryContactEmail { get; set; }
         public string SecondaryContactPhone { get; set; }
-        public bool IsEnabledForSearch { get; set; }
         public bool IsEnabledForReferral { get; set; }
+        public bool IsEnabledForSearch { get; set; }
         public string Source { get; set; }
-
         public virtual ICollection<ProviderVenue> ProviderVenue { get; set; }
     }
 }
