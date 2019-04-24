@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -22,7 +23,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             var config = new MapperConfiguration(c =>
             {
                 c.AddProfiles(typeof(EmployerMapper).Assembly);
-                c.ConstructServicesUsing(d => new UtcNowResolver(new DateTimeProvider()));
+                c.ConstructServicesUsing(d => new UtcNowResolver<SaveProximityData, Domain.Models.ProviderVenue>(new DateTimeProvider()));
             });
 
             var mapper = new Mapper(config);

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue.Builders
+﻿namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue.Builders
 {
     public class ValidProviderVenueBuilder
     {
