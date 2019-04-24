@@ -99,5 +99,25 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
+
+        [HttpGet]
+        [Route("send-provider-email", Name = "ConfirmSendProviderEmail")]
+        public async Task<IActionResult> ConfirmSendProviderEmail()
+        {
+            var viewModel = new ConfirmSendProviderEmailViewModel();
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("send-provider-email", Name = "SendProviderEmail")]
+        public async Task<IActionResult> ConfirmSendProviderEmail(ConfirmSendProviderEmailViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            // TODO Do the send
+
+            return RedirectToRoute("SearchProvider");
+        }
     }
 }
