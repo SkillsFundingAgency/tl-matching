@@ -26,7 +26,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         {
             var configuration = new MatchingConfiguration
             {
-                SendEmailEnabled = true
+                SendEmailEnabled = true,
+                NotificationsSystemId = "TLevelsIndustryPlacement"
             };
 
             _notificationsApi = Substitute.For<INotificationsApi>();
@@ -36,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             var emailTemplate = new EmailTemplate
             {
                 Id = 1,
-                TemplateId = "TemplateId",
+                TemplateId = "1599768C-7D3D-43AB-8548-82A4E5349468",
                 TemplateName = "TemplateName"
             };
 
@@ -89,9 +90,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         }
 
         [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_With_SystemId_From_EmailService()
+        public void Then_NotificationsApi_SendEmail_Is_Called_With_Template_Id()
         {
-            _notificationsApi.Received(1).SendEmail(Arg.Is<SFA.DAS.Notifications.Api.Types.Email>(e => e.SystemId == EmailService.SystemId));
+            _notificationsApi.Received(1).SendEmail(Arg.Is<SFA.DAS.Notifications.Api.Types.Email>(e => e.TemplateId == "1599768C-7D3D-43AB-8548-82A4E5349468"));
+        }
+
+        [Fact]
+        public void Then_NotificationsApi_SendEmail_Is_Called_With_SystemId_From_Configuration()
+        {
+            _notificationsApi.Received(1).SendEmail(Arg.Is<SFA.DAS.Notifications.Api.Types.Email>(e => e.SystemId == "TLevelsIndustryPlacement"));
         }
 
         [Fact]
