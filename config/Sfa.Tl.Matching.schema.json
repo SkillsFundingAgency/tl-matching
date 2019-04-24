@@ -73,6 +73,10 @@
       ],
       "type": "object"
     },
+    "NotificationsSystemId": {
+      "type": "boolean",
+      "environmentVariable": "NotificationsSystemId"
+    },
     "SendEmailEnabled": {
       "type": "boolean",
       "environmentVariable": "SendEmailEnabled"

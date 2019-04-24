@@ -13,7 +13,6 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class EmailService : IEmailService
     {
-        public const string SystemId = "TLevelsIndustryPlacement";
         public const string DefaultReplyToAddress = "DummyAddressOverriddenByNotificationsService"; //reply address is currently ignored by DAS Notifications
 
         private readonly MatchingConfiguration _configuration;
@@ -63,12 +62,12 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 _logger.LogInformation($"Sending {templateName} email to {recipient}");
 
-                await SendEmailViaNotificationsApi(recipient, subject, templateId, personalisationTokens, replyToAddress);
+                await SendEmailViaNotificationsApi(recipient, subject, templateId, _configuration.NotificationsSystemId, personalisationTokens, replyToAddress);
             }
         }
 
-        private async Task SendEmailViaNotificationsApi(string recipient, string subject, string templateId,
-            IDictionary<string, string> personalisationTokens, string replyToAddress)
+        private async Task SendEmailViaNotificationsApi(string recipient, string subject, string templateId, 
+            string systemId, IDictionary<string, string> personalisationTokens, string replyToAddress)
         {
             var email = new Email
             {
@@ -76,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 TemplateId = templateId,
                 ReplyToAddress = replyToAddress,
                 Subject = subject,
-                SystemId = SystemId,
+                SystemId = systemId,
                 Tokens = (Dictionary<string, string>)personalisationTokens
             };
 

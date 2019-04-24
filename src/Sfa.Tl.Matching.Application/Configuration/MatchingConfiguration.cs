@@ -14,6 +14,8 @@ namespace Sfa.Tl.Matching.Application.Configuration
 
         public NotificationsApiClientConfiguration NotificationsApiClientConfiguration { get; set; }
 
+        public string NotificationsSystemId { get; set; }
+
         public bool SendEmailEnabled { get; set; }
 
         public string PostcodeRetrieverBaseUrl { get; set; }
