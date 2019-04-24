@@ -48,7 +48,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{id?}", Name = "SaveEmployerName")]
         public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
         {
-            var employerDto = viewModel.SelectedEmployerId != 0 ?
+            var employerDto = viewModel.SelectedEmployerId != 0 &&
+                !string.IsNullOrEmpty(viewModel.CompanyName) ?
                 await _employerService.GetEmployer(viewModel.SelectedEmployerId) :
                 null;
 
