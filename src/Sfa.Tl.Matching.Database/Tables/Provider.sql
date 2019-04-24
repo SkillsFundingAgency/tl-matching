@@ -15,6 +15,7 @@
 	[SecondaryContactPhone] VARCHAR(150) NULL,
 	[IsEnabledForSearch] BIT NULL,
 	[IsEnabledForReferral] BIT NULL,
+	[IsFundedForNextYear] BIT NULL,
 	[Source] VARCHAR(50) NOT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 

@@ -11,6 +11,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public OfstedRating OfstedRating { get; set; }
         public bool IsEnabledForSearch { get; set; }
         public bool IsEnabledForReferral { get; set; }
+        public bool IsFundedForNextYear { get; set; }
         public bool Status { get; set; }
         public string StatusReason { get; set; }
         public string PrimaryContact { get; set; }

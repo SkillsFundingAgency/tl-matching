@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             SecondaryContactPhone = "0123456789",
             IsEnabledForSearch = true,
             IsEnabledForReferral = true,
+            IsFundedForNextYear = true,
             Source = "Test",
             CreatedBy = "CreatedBy"
         };

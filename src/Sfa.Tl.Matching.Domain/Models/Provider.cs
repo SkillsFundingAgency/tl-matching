@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string SecondaryContactPhone { get; set; }
         public bool IsEnabledForReferral { get; set; }
         public bool IsEnabledForSearch { get; set; }
+        public bool IsFundedForNextYear { get; set; }
         public string Source { get; set; }
         public virtual ICollection<ProviderVenue> ProviderVenue { get; set; }
     }

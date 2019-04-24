@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             SecondaryContactPhone = "0123456789",
             IsEnabledForSearch = true,
             IsEnabledForReferral = true,
+            IsFundedForNextYear = true,
             Source = "Test",
             CreatedBy = "CreatedBy",
             ModifiedBy = "ModifiedBy"
@@ -42,6 +43,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             ModifiedBy = "ModifiedBy",
             IsEnabledForReferral = true,
             IsEnabledForSearch = true,
+            IsFundedForNextYear = true,
             ProviderVenue = new List<Domain.Models.ProviderVenue>
             {
                 new Domain.Models.ProviderVenue

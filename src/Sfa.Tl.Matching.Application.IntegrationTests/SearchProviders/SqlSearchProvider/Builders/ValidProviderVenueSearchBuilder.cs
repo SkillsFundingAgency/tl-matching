@@ -127,6 +127,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 SecondaryContactPhone = "0123456789",
                 IsEnabledForSearch = isEnabledForSearch,
                 IsEnabledForReferral = true,
+                IsFundedForNextYear = true,
                 Source = "Test"
             };
         }
