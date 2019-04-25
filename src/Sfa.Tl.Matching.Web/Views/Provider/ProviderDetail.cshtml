@@ -170,7 +170,7 @@
                                     <th class="govuk-table__cell">@venue.Postcode</th>
                                     <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
                                     <td class="govuk-table__cell">No data yet</td>
-                                    <td class="govuk-table__cell"><a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>
+                                    @*<td class="govuk-table__cell"><a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>*@
                                 </tr>
                             }
                         </tbody>
@@ -196,13 +196,13 @@
                                     <th class="govuk-table__cell">@venue.Postcode</th>
                                     <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
                                     <td class="govuk-table__cell">No data yet</td>
-                                    <td class="govuk-table__cell"><a asp-route="ConfirmProviderVenueChange" asp-route-providerId="@Model.Id" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Unhide<span class="govuk-visually-hidden"> this venue</span></a></td>
+                                    @*<td class="govuk-table__cell"><a asp-route="ConfirmProviderVenueChange" asp-route-providerId="@Model.Id" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Unhide<span class="govuk-visually-hidden"> this venue</span></a></td>*@
                                 </tr>
                             }
                         </tbody>
                     </table>
                 }
-                <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
+                @*<p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>*@
             }
 
             <button type="submit" class="govuk-button">Save and finish</button>
