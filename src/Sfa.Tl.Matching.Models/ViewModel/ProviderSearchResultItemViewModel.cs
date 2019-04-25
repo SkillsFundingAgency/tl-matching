@@ -1,4 +1,5 @@
-﻿namespace Sfa.Tl.Matching.Models.ViewModel
+﻿
+namespace Sfa.Tl.Matching.Models.ViewModel
 {
     public class ProviderSearchResultItemViewModel
     {

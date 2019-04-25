@@ -1,4 +1,7 @@
-﻿using Sfa.Tl.Matching.Application.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Sfa.Tl.Matching.Application.Interfaces;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +21,37 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _mapper = mapper;
             _repository = repository;
+        }
+
+        public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync()
+        {
+            var query = _repository.GetMany().OrderBy(p => p.Name);
+
+            var providers = await query.ToListAsync();
+            return _mapper.Map<IList<Provider>, IList<ProviderSearchResultItemViewModel>>(providers);
+
+            //return await query.ProjectTo<ProviderSearchResultItemViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+        }
+
+        public async Task<IList<ProviderWithFundingDto>> GetProvidersWithFundingAsync()
+        {
+            var query = _repository
+                .GetMany(p => p.IsFundedForNextYear)
+                .OrderBy(p => p.Name);
+
+            var providers = await query.ToListAsync();
+            return _mapper.Map<IList<Provider>, IList<ProviderWithFundingDto>>(providers);
+
+            //return await query.ProjectTo<ProviderWithFundingDto>(_mapper.ConfigurationProvider).ToListAsync();
+        }
+
+        public async Task<int> GetProvidersWithFundingCountAsync()
+        {
+            var query = _repository
+                .GetMany(p => p.IsFundedForNextYear)
+                .CountAsync();
+
+            return await query;
         }
 
         public async Task<ProviderSearchResultDto> SearchAsync(long ukPrn)
