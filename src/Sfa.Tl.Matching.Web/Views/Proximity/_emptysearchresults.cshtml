@@ -4,7 +4,9 @@
     ViewData["Title"] = "Select Providers";
 }
 @{ var result = Model.SearchResults.SearchResultProviderCount > 1 ? "results" : "result"; }
-<h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold">0 </span>@result in <span class="govuk-!-font-weight-bold tl-lowercase">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text </span>within <span class="govuk-!-font-weight-bold">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold">@Model.SearchParameters.Postcode</span></h2>
+<h2 class="govuk-body">
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">0 </span>@result in <span class="govuk-!-font-weight-bold tl-lowercase"  id="tl-search-skillarea">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Model.SearchParameters.SearchRadius miles </span>of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span>
+</h2>
 
 <p class="govuk-body govuk-!-margin-top-5">You can:</p>
 <ul class="govuk-list govuk-list--bullet">
