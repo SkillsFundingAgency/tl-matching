@@ -47,10 +47,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Model_Is_Of_Type_ProviderSearchParametersViewModel()
+        public void Then_Model_Is_Of_Type_ProviderSearchViewModel()
         {
             var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().BeOfType<ProviderSearchParametersViewModel>();
+            viewResult?.Model.Should().BeOfType<ProviderSearchViewModel>();
         }
 
         [Fact]

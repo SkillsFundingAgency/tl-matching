@@ -53,8 +53,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToRouteResult>();
+        public void Then_Result_Is_ViewResult() =>
+            _result.Should().BeOfType<ViewResult>();
 
         [Fact]
         public void Then_Result_Is_Redirect_To_Provider_Detail()
