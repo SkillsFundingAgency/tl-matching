@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
                 var service = new ProviderService(mapper, providerRepository);
 
-                _result = service.SearchProvidersWithFundingAsync().GetAwaiter().GetResult();
+                _result = service.SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()).GetAwaiter().GetResult();
             }
         }
 

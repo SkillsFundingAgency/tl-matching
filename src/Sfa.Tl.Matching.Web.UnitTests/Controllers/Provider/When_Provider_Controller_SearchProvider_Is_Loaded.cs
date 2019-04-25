@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             var providerController = new ProviderController(providerService);
 
-            _result = providerController.SearchProvider();
+            _result = providerController.SearchProvider().GetAwaiter().GetResult();
         }
 
         [Fact]
