@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -20,12 +19,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("search-ukprn", Name = "SearchProvider")]
-        public IActionResult SearchProvider()
+        public async Task<IActionResult> SearchProvider()
         {
-            return View(new ProviderSearchViewModel(new ProviderSearchParametersViewModel())
-            {
-                IsAuthorisedUser = GetIsAuthorisedUser()
-            });
+            return View(await GetProviderSearchResults(new ProviderSearchParametersViewModel()));
         }
 
         [HttpPost]
@@ -50,25 +46,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(nameof(SearchProvider), new ProviderSearchViewModel(viewModel));
             }
 
-            // TODO AU Do the search
-
-            var resultsViewModel = new ProviderSearchViewModel(viewModel)
-            {
-                SearchResults = new ProviderSearchResultsViewModel
-                {
-                    Results = new List<ProviderSearchResultItemViewModel>
-                    {
-                        new ProviderSearchResultItemViewModel
-                        {
-                            UkPrn = 123,
-                            ProviderId = 1,
-                            ProviderName = "ProviderName",
-                            IsFundedForNextYear = false
-                        }
-                    }
-                    //Results 
-                },
-            };
+            var resultsViewModel = await GetProviderSearchResults(viewModel);
 
             return View(resultsViewModel);
         }
@@ -135,6 +113,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _providerService.SetIsProviderEnabledForSearchAsync(viewModel.ProviderId, !viewModel.IsEnabledForSearch);
 
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
+        }
+
+        private async Task<ProviderSearchViewModel> GetProviderSearchResults(ProviderSearchParametersViewModel viewModel)
+        {
+            var resultsViewModel = new ProviderSearchViewModel(viewModel)
+            {
+                SearchResults = new ProviderSearchResultsViewModel
+                {
+                    Results = await _providerService.SearchProvidersWithFundingAsync(viewModel)
+                },
+                IsAuthorisedUser = GetIsAuthorisedUser()
+            };
+
+            return resultsViewModel;
         }
 
         private bool GetIsAuthorisedUser()

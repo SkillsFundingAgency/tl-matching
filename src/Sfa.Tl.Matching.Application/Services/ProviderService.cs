@@ -23,9 +23,14 @@ namespace Sfa.Tl.Matching.Application.Services
             _repository = repository;
         }
 
-        public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync()
+        public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters)
         {
-            var query = _repository.GetMany().OrderBy(p => p.Name);
+            var query = _repository.GetMany();
+
+            if (searchParameters.UkPrn.HasValue)
+                query = query.Where(p => p.UkPrn == searchParameters.UkPrn.Value);
+                
+            query = query.OrderBy(p => p.Name);
 
             var providers = await query.ToListAsync();
             return _mapper.Map<IList<Provider>, IList<ProviderSearchResultItemViewModel>>(providers);
