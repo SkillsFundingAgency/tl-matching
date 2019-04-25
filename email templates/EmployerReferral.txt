@@ -1,0 +1,27 @@
+Dear ((employer_contact_name)),
+ 
+Following our recent conversation, here’s the information we have about ((employer_business_name))’s industry placement requirements.
+
+* Contact name for placements: ((employer_contact_name))
+* Telephone: ((employer_contact_number))
+* E-mail: ((employer_contact_email))
+* Location for industry placement: ((employer_postcode))
+* Number of potential placements: ((number_of_placements))
+* Skill area for placement: ((route))
+* Job role for placement: ((job_role))
+
+# If any of this is wrong
+Please email [support.industryplacementmatching@education.gov.uk](mailto:support.industryplacementmatching@education.gov.uk?subject=Update+from+employer) so we can update our records.
+
+# Local education providers will now contact you 
+As agreed, the following education providers will contact you within the next 2 to 3 days to discuss your industry placement requirements. You may also contact them to start discussions.
+
+((providers_list))
+
+Industry Placements – Employer Support Team
+National Apprenticeships Service
+
+---
+
+The National Apprenticeship Service is part of the Education and Skills Funding Agency (ESFA), an executive agency of the Department for Education (DfE). For further details of how our data is processed and your rights, please view the full ESFA privacy policy here:
+https://www.gov.uk/government/publications/esfa-privacy-notice
