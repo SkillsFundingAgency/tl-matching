@@ -14,23 +14,46 @@
     </div>
 }
 
-<h1>Search for the provider’s UKPRN</h1>
-<form class="form" asp-route="SearchProviderByUkPrn" novalidate>
-    <p class="govuk-body">You can only add or change details for providers that have a UK Provider Reference Number (UKPRN)</p>
+    <h1>Find a provider</h1>
+    <form class="form" asp-route="SearchProviderByUkPrn" novalidate>
+        @*<p class="govuk-body">You can only add or change details for providers that have a UK Provider Reference Number (UKPRN)</p>*@
 
-    <div class="govuk-form-group" sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-form-group--error">
-        <label class="govuk-label" asp-for="UkPrn">
-            Enter the UKPRN
-        </label>
-        <span id="ukprn-hint" class="govuk-hint">
-            For example, 10001234
-        </span>
-        <span class="govuk-error-message" asp-validation-for="UkPrn"></span>
-        <input class="govuk-input govuk-input--width-10" asp-for="UkPrn" type="text"
-               sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-input--error"
-               aria-describedby="ukprn-hint">
-    </div>
-    <button type="submit" class="govuk-button">
-        Search
-    </button>
-</form>
+        @*<div class="govuk-form-group" sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-form-group--error">
+            <label class="govuk-label" asp-for="UkPrn">
+                Enter the provider’s UKPRN
+            </label>
+
+            <input class="govuk-input govuk-input--width-10" asp-for="UkPrn" type="text"
+                   sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-input--error"
+                   aria-describedby="ukprn-hint">
+        </div>
+        <button type="submit" class="govuk-button">
+            Search
+        </button>*@
+
+        <div class="govuk-form-group" sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-form-group--error">
+            <div class="tl-search-header">
+                <div class="tl-searchfield">
+                    <div class="tl-search-input">
+                        <label asp-for="UkPrn" class="govuk-label">
+                            Enter the provider's UKPRN
+                        </label>
+                        <span id="ukprn-hint" class="govuk-hint">
+                            For example, 10001234
+                        </span>
+                        <span class="govuk-error-message" asp-validation-for="UkPrn"></span>
+
+                        <input class="govuk-input tl-search-input" asp-for="UkPrn" type="text"
+                               sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-input--error"
+                               aria-describedby="ukprn-hint">
+                    </div>
+                    <div class="tl-search-submit"><button class="button" type="submit">Search</button></div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </form>
