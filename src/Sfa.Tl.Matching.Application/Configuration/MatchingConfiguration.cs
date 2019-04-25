@@ -6,6 +6,8 @@ namespace Sfa.Tl.Matching.Application.Configuration
     {
         public AuthenticationConfig Authentication { get; set; }
 
+        public string AuthorisedAdminUserEmail { get; set; }
+
         public AzureSearchConfiguration AzureSearchConfiguration { get; set; }
 
         public string BlobStorageConnectionString { get; set; }

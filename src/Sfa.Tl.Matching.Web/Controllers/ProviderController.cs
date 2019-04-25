@@ -1,14 +1,17 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
+    [Authorize(Roles = RolesExtensions.AdminUser)]
     public class ProviderController : Controller
     {
         private readonly IProviderService _providerService;
-
+        
         public ProviderController(IProviderService providerService)
         {
             _providerService = providerService;
@@ -18,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("search-ukprn", Name = "SearchProvider")]
         public IActionResult SearchProvider()
         {
-            return View(new ProviderSearchParametersViewModel());
+            return View(new ProviderSearchParametersViewModel { IsAuthorisedUser = GetIsAuthorisedUser() });
         }
 
         [HttpPost]
@@ -27,6 +30,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                viewModel.IsAuthorisedUser = GetIsAuthorisedUser();
                 return View(viewModel);
             }
 
@@ -100,24 +104,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
 
-        [HttpGet]
-        [Route("send-provider-email", Name = "ConfirmSendProviderEmail")]
-        public async Task<IActionResult> ConfirmSendProviderEmail()
+        private bool GetIsAuthorisedUser()
         {
-            var viewModel = new ConfirmSendProviderEmailViewModel();
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [Route("send-provider-email", Name = "SendProviderEmail")]
-        public async Task<IActionResult> ConfirmSendProviderEmail(ConfirmSendProviderEmailViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-                return View(viewModel);
-
-            // TODO Do the send
-
-            return RedirectToRoute("SearchProvider");
+            return true;
         }
     }
 }

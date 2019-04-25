@@ -1,4 +1,7 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderSearchParametersViewModel
+﻿@using Microsoft.AspNetCore.Http
+@using Sfa.Tl.Matching.Application.Extensions
+
+@model Sfa.Tl.Matching.Models.ViewModel.ProviderSearchParametersViewModel
 
 @{
     ViewData["Title"] = "Search for a provider";
@@ -45,6 +48,16 @@
                 Search
             </button>
         </form>
+        @if (Model.IsAuthorisedUser)
+        {
+            <div >
+                <form class="form" method="get" asp-controller="ProviderFeedback" asp-action="ConfirmSendProviderEmail" novalidate>
+                    <button type="submit" class="govuk-button">
+                        Send email
+                    </button>
+                </form>
+            </div>
+        }
     </div>
 </div>
 
