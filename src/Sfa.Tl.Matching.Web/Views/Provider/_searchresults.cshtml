@@ -1,0 +1,42 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderSearchViewModel
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+<p class="govuk-hint">Choose who the employer wants to hear from</p>
+
+<form asp-route="SaveProviderFeedback">
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="col">UKPRN</th>
+                <th class="govuk-table__header" scope="col">Provider name</th>
+                <th class="govuk-table__header" scope="col">Send email?</th>
+                <th class="govuk-table__header" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            @for (var i = 0; i < Model.SearchResults.SearchResultProviderCount; i++)
+            {
+                var provider = Model.SearchResults.Results[i];
+
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@provider.UkPrn</td>
+                    <td class="govuk-table__cell">@provider.ProviderName</td>
+                    <td class="govuk-table__cell">
+                        <div class="govuk-checkboxes">
+                            <div class="govuk-checkboxes__item">
+                                <input type="checkbox" class="govuk-checkboxes__input" asp-for="@provider.IsFundedForNextYear"
+                                       value="@provider.IsFundedForNextYear" name="Providers[@i].IsFundedForNextYear" />
+                            </div>
+                        </div>
+                    </td>
+                    <td class="govuk-table__cell">
+                        <a asp-route="GetProviderDetail" asp-route-providerId="@provider.ProviderId" class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden"> details</span></a>
+                        <input type="hidden" asp-for="@provider.ProviderId" name="Providers[@i].ProviderId" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button id="tl-continue" type="submit" class="govuk-button">Save All</button>
+</form>

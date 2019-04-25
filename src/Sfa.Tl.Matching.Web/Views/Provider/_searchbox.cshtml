@@ -1,0 +1,36 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderSearchParametersViewModel
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+            This page has errors
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li><a sfa-validation-for="UkPrn"></a></li>
+            </ul>
+        </div>
+    </div>
+}
+
+<h1>Search for the provider’s UKPRN</h1>
+<form class="form" asp-route="SearchProviderByUkPrn" novalidate>
+    <p class="govuk-body">You can only add or change details for providers that have a UK Provider Reference Number (UKPRN)</p>
+
+    <div class="govuk-form-group" sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-form-group--error">
+        <label class="govuk-label" asp-for="UkPrn">
+            Enter the UKPRN
+        </label>
+        <span id="ukprn-hint" class="govuk-hint">
+            For example, 10001234
+        </span>
+        <span class="govuk-error-message" asp-validation-for="UkPrn"></span>
+        <input class="govuk-input govuk-input--width-10" asp-for="UkPrn" type="text"
+               sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-input--error"
+               aria-describedby="ukprn-hint">
+    </div>
+    <button type="submit" class="govuk-button">
+        Search
+    </button>
+</form>

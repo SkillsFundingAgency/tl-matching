@@ -6,7 +6,5 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     {
         [Required(ErrorMessage = "You must enter a UKPRN")]
         public long? UkPrn { get; set; }
-
-        public bool IsAuthorisedUser { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -21,7 +22,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("search-ukprn", Name = "SearchProvider")]
         public IActionResult SearchProvider()
         {
-            return View(new ProviderSearchParametersViewModel { IsAuthorisedUser = GetIsAuthorisedUser() });
+            return View(new ProviderSearchViewModel(new ProviderSearchParametersViewModel())
+            {
+                IsAuthorisedUser = GetIsAuthorisedUser()
+            });
         }
 
         [HttpPost]
@@ -30,8 +34,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                viewModel.IsAuthorisedUser = GetIsAuthorisedUser();
-                return View(viewModel);
+                return View(nameof(SearchProvider), new ProviderSearchViewModel(viewModel)
+                {
+                    IsAuthorisedUser = GetIsAuthorisedUser()
+                });
             }
 
             var searchResult = viewModel.UkPrn.HasValue
@@ -40,11 +46,38 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (searchResult == null || searchResult.Id == 0)
             {
-                ModelState.AddModelError("UkPrn", "You must enter a real UKPRN");
-                return View(viewModel);
+                ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn), "You must enter a real UKPRN");
+                return View(nameof(SearchProvider), new ProviderSearchViewModel(viewModel));
             }
 
-            return RedirectToRoute("GetProviderDetail", new { providerId = searchResult.Id });
+            // TODO AU Do the search
+
+            var resultsViewModel = new ProviderSearchViewModel(viewModel)
+            {
+                SearchResults = new ProviderSearchResultsViewModel
+                {
+                    Results = new List<ProviderSearchResultItemViewModel>
+                    {
+                        new ProviderSearchResultItemViewModel
+                        {
+                            UkPrn = 123,
+                            ProviderId = 1,
+                            ProviderName = "ProviderName",
+                            IsFundedForNextYear = false
+                        }
+                    }
+                    //Results 
+                },
+            };
+
+            return View(resultsViewModel);
+        }
+
+        [HttpPost]
+        [Route("save-provider-feedback", Name = "SaveProviderFeedback")]
+        public async Task<IActionResult> SaveProviderFeedback(SaveProviderFeedbackViewModel viewModel)
+        {
+            return null;
         }
 
         [HttpGet]
