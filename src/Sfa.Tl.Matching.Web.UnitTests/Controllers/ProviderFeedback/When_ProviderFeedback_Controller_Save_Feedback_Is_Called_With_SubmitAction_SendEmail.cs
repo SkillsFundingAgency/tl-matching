@@ -10,18 +10,19 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_ProviderFeedback_Controller_Save_Feedback_Is_Called
+    public class When_ProviderFeedback_Controller_Save_Feedback_Is_Called_With_SubmitAction_SendEmail
     {
         private readonly IProviderFeedbackService _providerFeedbackService;
 
         private readonly IActionResult _result;
         private readonly SaveProviderFeedbackViewModel _viewModel;
 
-        public When_ProviderFeedback_Controller_Save_Feedback_Is_Called()
+        public When_ProviderFeedback_Controller_Save_Feedback_Is_Called_With_SubmitAction_SendEmail()
         {
             _viewModel = new SaveProviderFeedbackViewModel
             {
-                Providers = new List<ProviderSearchResultItemViewModel>()
+                Providers = new List<ProviderSearchResultItemViewModel>(),
+                SubmitAction = "SendEmail"
             };
             _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
             var matchingConfiguration = Substitute.For<MatchingConfiguration>();
@@ -43,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("SearchProvider");
+            result?.RouteName.Should().Be("ConfirmSendProviderEmail");
         }
     }
 }

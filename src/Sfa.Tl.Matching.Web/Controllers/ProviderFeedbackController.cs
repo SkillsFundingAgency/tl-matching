@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -46,6 +47,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> SaveProviderFeedback(SaveProviderFeedbackViewModel viewModel)
         {
             await _providerFeedbackService.UpdateProviderFeedback(viewModel);
+
+            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) &&
+                string.Equals(viewModel.SubmitAction, "SendEmail", StringComparison.InvariantCultureIgnoreCase))
+                return RedirectToRoute("ConfirmSendProviderEmail");
 
             return RedirectToRoute("SearchProvider");
         }

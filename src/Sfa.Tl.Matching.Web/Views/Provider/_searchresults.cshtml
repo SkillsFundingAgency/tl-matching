@@ -41,9 +41,9 @@
     </table>
 
     @if (Model.IsAuthorisedUser) {
-    <button type="submit" class="tl-button--grey govuk-button govuk-!-margin-right-1">Send email</button>
+        <button type="submit" class="tl-button--grey govuk-button govuk-!-margin-right-1" name="SubmitAction" value="SendEmail">Send email</button>
     }
 
-    <button id="tl-continue" class="govuk-button" type="submit">Save changes</button>
+    <button id="tl-continue" class="govuk-button" type="submit" name="SubmitAction" value="SaveChanges">Save changes</button>
 
 </form>
