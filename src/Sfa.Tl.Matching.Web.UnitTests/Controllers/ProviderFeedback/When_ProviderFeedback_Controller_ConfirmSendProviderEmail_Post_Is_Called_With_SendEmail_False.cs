@@ -1,7 +1,11 @@
+using System.Collections.Generic;
+using System.Security.Claims;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -19,7 +23,28 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
             var providerService = Substitute.For<IProviderService>();
             _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
 
-            var providerFeedbackController = new ProviderFeedbackController(_providerFeedbackService, providerService, new MatchingConfiguration());
+            const string adminEmail = "admin@admin.com";
+            var configuration = new MatchingConfiguration
+            {
+                AuthorisedAdminUserEmail = adminEmail
+            };
+
+            var providerFeedbackController = new ProviderFeedbackController(_providerFeedbackService, providerService, configuration)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        User = new ClaimsPrincipal(
+                            new ClaimsIdentity(
+                                new List<Claim>
+                                {
+                                    new Claim(ClaimTypes.Role, RolesExtensions.AdminUser),
+                                    new Claim(ClaimTypes.Upn, adminEmail)
+                                }))
+                    }
+                }
+            };
 
             var viewModel = new ConfirmSendProviderEmailViewModel
             {

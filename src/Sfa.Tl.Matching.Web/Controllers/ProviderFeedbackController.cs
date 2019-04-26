@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -26,6 +27,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("send-provider-email", Name = "ConfirmSendProviderEmail")]
         public async Task<IActionResult> ConfirmSendProviderEmail()
         {
+            if (!HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail))
+            {
+                throw new SecurityException("User is not authorised to use this page");
+            }
+
             var viewModel = await GetConfirmSendProviderEmailViewModel();
             return View(viewModel);
         }
@@ -34,12 +40,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("send-provider-email", Name = "SendProviderEmail")]
         public async Task<IActionResult> ConfirmSendProviderEmail(ConfirmSendProviderEmailViewModel viewModel)
         {
+            if (!HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail))
+            {
+                throw new SecurityException("User is not authorised to use this page");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(await GetConfirmSendProviderEmailViewModel(viewModel));
             }
 
-            //TODO: Test both yes and no options for controller
             if (viewModel.SendEmail.GetValueOrDefault())
             {
                 await _providerFeedbackService.SendProviderQuarterlyUpdateEmailAsync();

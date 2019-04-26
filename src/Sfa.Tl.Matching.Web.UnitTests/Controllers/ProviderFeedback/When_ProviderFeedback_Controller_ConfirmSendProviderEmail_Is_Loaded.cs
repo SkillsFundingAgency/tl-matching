@@ -1,7 +1,11 @@
+using System.Collections.Generic;
+using System.Security.Claims;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -13,18 +17,38 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
-        private readonly IProviderFeedbackService _providerFeedbackService;
 
         public When_ProviderFeedback_Controller_ConfirmSendProviderEmail_Is_Loaded()
         {
             _providerService = Substitute.For<IProviderService>();
-            _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
+            var providerFeedbackService = Substitute.For<IProviderFeedbackService>();
 
             _providerService
                 .GetProvidersWithFundingCountAsync()
                 .Returns(42);
 
-            var providerFeedbackController = new ProviderFeedbackController(_providerFeedbackService, _providerService, new MatchingConfiguration());
+            const string adminEmail = "admin@admin.com";
+            var configuration = new MatchingConfiguration
+            {
+                AuthorisedAdminUserEmail = adminEmail
+            };
+
+            var providerFeedbackController = new ProviderFeedbackController(providerFeedbackService, _providerService, configuration)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        User = new ClaimsPrincipal(
+                            new ClaimsIdentity(
+                                new List<Claim>
+                                {
+                                    new Claim(ClaimTypes.Role, RolesExtensions.AdminUser),
+                                    new Claim(ClaimTypes.Upn, adminEmail)
+                                }))
+                    }
+                }
+            };
 
             _result = providerFeedbackController.ConfirmSendProviderEmail().GetAwaiter().GetResult();
         }

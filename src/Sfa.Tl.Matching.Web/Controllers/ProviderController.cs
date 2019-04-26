@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -11,33 +12,29 @@ namespace Sfa.Tl.Matching.Web.Controllers
     [Authorize(Roles = RolesExtensions.AdminUser)]
     public class ProviderController : Controller
     {
+        private readonly MatchingConfiguration _configuration;
         private readonly IProviderService _providerService;
         
-        public ProviderController(IProviderService providerService)
+        public ProviderController(IProviderService providerService, MatchingConfiguration configuration)
         {
             _providerService = providerService;
+            _configuration = configuration;
         }
 
         [HttpGet]
         [Route("search-ukprn", Name = "SearchProvider")]
         public IActionResult SearchProvider()
         {
-            return View(new ProviderSearchViewModel(new ProviderSearchParametersViewModel())
-            {
-                IsAuthorisedUser = GetIsAuthorisedUser()
-            });
+            return View(GetProviderSearchViewModel(new ProviderSearchParametersViewModel()));
         }
-
+        
         [HttpPost]
         [Route("search-ukprn", Name = "SearchProviderByUkPrn")]
         public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(nameof(SearchProvider), new ProviderSearchViewModel(viewModel)
-                {
-                    IsAuthorisedUser = GetIsAuthorisedUser()
-                });
+                return View(nameof(SearchProvider), GetProviderSearchViewModel(viewModel));
             }
 
             var searchResult = viewModel.UkPrn.HasValue
@@ -137,9 +134,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
 
-        private bool GetIsAuthorisedUser()
+        private ProviderSearchViewModel GetProviderSearchViewModel(ProviderSearchParametersViewModel searchParametersViewModel)
         {
-            return true;
+            return new ProviderSearchViewModel(searchParametersViewModel)
+            {
+                IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
+            };
         }
     }
 }

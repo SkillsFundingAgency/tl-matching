@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -21,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 .GetHideProviderViewModelAsync(Arg.Any<int>())
                 .Returns(new ValidHideProviderViewModelBuilder().Build());
 
-            var providerController = new ProviderController(_providerService);
+            var providerController = new ProviderController(_providerService, new MatchingConfiguration());
 
             _result = providerController.ConfirmProviderChange(10000546).GetAwaiter().GetResult();
         }

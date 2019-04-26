@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -18,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         {
             _providerService = Substitute.For<IProviderService>();
 
-            _providerController = new ProviderController(_providerService);
+            _providerController = new ProviderController(_providerService, new MatchingConfiguration());
 
             _result = _providerController.SaveProviderDetail(new ProviderDetailViewModel()).GetAwaiter().GetResult();
         }

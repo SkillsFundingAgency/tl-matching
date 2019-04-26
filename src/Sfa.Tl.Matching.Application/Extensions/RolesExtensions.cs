@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 
 namespace Sfa.Tl.Matching.Application.Extensions
@@ -24,12 +25,20 @@ namespace Sfa.Tl.Matching.Application.Extensions
         {
             return user.IsInRole(StandardUser);
         }
+
+        public static bool IsAuthorisedAdminUser(this ClaimsPrincipal user, string authorisedUserEmail)
+        {
+            return HasAdminRole(user) 
+                && GetUserEmail(user) == authorisedUserEmail;
+        }
+
         public static string GetUserName(this ClaimsPrincipal user)
         {
             var userNames = user.Claims.Where(c => c.Type == ClaimTypes.GivenName || c.Type == ClaimTypes.Surname)
                     .Select(c => c.Value);
             return string.Join(" ", userNames);
         }
+
         public static string GetUserEmail(this ClaimsPrincipal user)
         {
             return user.Claims.Single(c => c.Type == ClaimTypes.Upn).Value;
