@@ -83,7 +83,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             tokens.Add("providers_list", sb.ToString());
 
-            await _emailService.SendEmail(emailTemplate.TemplateName,
+            await _emailService.SendEmail(EmailTemplateName.EmployerReferral.ToString(),
                 toAddress,
                 "Industry Placement Matching Referral",
                 tokens,
@@ -120,7 +120,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     { "number_of_placements", numberOfPlacements }
                 };
 
-                await _emailService.SendEmail(emailTemplate.TemplateName,
+                await _emailService.SendEmail(EmailTemplateName.ProviderReferral.ToString(),
                     toAddress,
                     "Industry Placement Matching Referral",
                     tokens,

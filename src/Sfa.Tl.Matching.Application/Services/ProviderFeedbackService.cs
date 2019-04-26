@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -70,8 +69,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("secondary_contact_details", secondaryDetailsBuilder.ToString());
 
-                //TODO: Move more code into emailservice, call with template name enum.
-                //       this should look up template, send, and update history
                 await _emailService.SendEmail(EmailTemplateName.ProviderQuarterlyUpdate.ToString(),
                     toAddress,
                     "Industry Placement Matching Provider Update",
