@@ -9,16 +9,29 @@
                 Report sent to the industry placement team
             </h1>
         </div>
-        
+
         <div class="govuk-inset-text">
             Remember to <a href="@Model.EmployerCrmRecord" target="_blank" class="govuk-link" id="tl-crm-link">update the employer’s CRM record (opens in a new window or tab)</a> with any new information.
         </div>
 
         <h2 class="govuk-heading-m">What happens next</h2>
 
-        <p class="govuk-body">We will try to find providers with students studying @Model.RouteName near @Model.Postcode.</p>
-        <p class="govuk-body">If @Model.EmployerContactName has agreed that we can share their contact details, we will contact them when we find suitable providers.</p>
+        <p class="govuk-body">We will try to find providers with students studying near @Model.Postcode.</p>
+        <p class="govuk-body">If @Model.EmployerContact has agreed that we can share their contact details, we will contact them when we find suitable providers.</p>
 
         <a asp-controller="Proximity" asp-action="Start" class="govuk-button" id="tl-finish">Finish</a>
+
+        <input asp-for="EmployerCrmRecord" type="hidden" />
+        <input asp-for="EmployerContact" type="hidden" />
+        <input asp-for="RouteId" type="hidden" />
+        <input asp-for="SearchRadius" type="hidden" />
+        <input asp-for="Postcode" type="hidden" />
+        <input asp-for="UserEmail" type="hidden" />
+        <input asp-for="JobTitle" type="hidden" />
+        <input asp-for="Placements" type="hidden" />
+        <input asp-for="EmployerName" type="hidden" />
+        <input asp-for="WithResults" type="hidden" />
+        <input asp-for="NoResults" type="hidden" />
+
     </div>
 </div>
