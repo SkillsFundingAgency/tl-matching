@@ -22,10 +22,12 @@
                     <td class="govuk-table__cell">
                         <div class="govuk-checkboxes">
                             <div class="govuk-checkboxes__item">
-                                <input type="checkbox" class="govuk-checkboxes__input" asp-for="@provider.IsFundedForNextYear"
-                                       value="@provider.IsFundedForNextYear" name="Providers[@i].IsFundedForNextYear" checked />
-                                <label class="govuk-label govuk-checkboxes__label" for="@provider.IsFundedForNextYear"></label>
-
+                                <input type="checkbox" class="govuk-checkboxes__input"
+                                       asp-for="@provider.IsFundedForNextYear"
+                                       name="Providers[@i].IsFundedForNextYear" />
+                                <label class="govuk-heading-m govuk-checkboxes__label"
+                                       asp-for="@provider.IsFundedForNextYear"
+                                       name="Providers[@i].IsFundedForNextYear" />
                             </div>
                         </div>
                     </td>

@@ -39,5 +39,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return RedirectToRoute("SearchProvider");
         }
+
+        [HttpPost]
+        [RequestFormLimits(ValueCountLimit = 5000)]
+        [Route("save-provider-feedback", Name = "SaveProviderFeedback")]
+        public async Task<IActionResult> SaveProviderFeedback(SaveProviderFeedbackViewModel viewModel)
+        {
+            await _providerFeedbackService.UpdateProviderFeedback(viewModel);
+
+            return RedirectToRoute("SearchProvider");
+        }
     }
 }

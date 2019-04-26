@@ -43,19 +43,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (searchResult == null || searchResult.Id == 0)
             {
                 ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn), "You must enter a real UKPRN");
-                return View(nameof(SearchProvider), new ProviderSearchViewModel(viewModel));
+                return View(nameof(SearchProvider), new ProviderSearchViewModel(viewModel)
+                {
+                    IsAuthorisedUser = GetIsAuthorisedUser()
+                });
             }
 
             var resultsViewModel = await GetProviderSearchResults(viewModel);
 
             return View(resultsViewModel);
-        }
-
-        [HttpPost]
-        [Route("save-provider-feedback", Name = "SaveProviderFeedback")]
-        public async Task<IActionResult> SaveProviderFeedback(SaveProviderFeedbackViewModel viewModel)
-        {
-            return null;
         }
 
         [HttpGet]
