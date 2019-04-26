@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Sfa.Tl.Matching.Application.Interfaces;
 using System.Threading.Tasks;
@@ -32,19 +31,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             //return await query.ProjectTo<ProviderSearchResultItemViewModel>(_mapper.ConfigurationProvider).ToListAsync();
         }
-
-        public async Task<IList<ProviderWithFundingDto>> GetProvidersWithFundingAsync()
-        {
-            var query = _repository
-                .GetMany(p => p.IsFundedForNextYear)
-                .OrderBy(p => p.Name);
-
-            var providers = await query.ToListAsync();
-            return _mapper.Map<IList<Provider>, IList<ProviderWithFundingDto>>(providers);
-
-            //return await query.ProjectTo<ProviderWithFundingDto>(_mapper.ConfigurationProvider).ToListAsync();
-        }
-
+        
         public async Task<int> GetProvidersWithFundingCountAsync()
         {
             var query = _repository

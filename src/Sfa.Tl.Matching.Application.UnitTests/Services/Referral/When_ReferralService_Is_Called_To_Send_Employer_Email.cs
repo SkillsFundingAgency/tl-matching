@@ -51,6 +51,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
+        public void Then_OpportunityRepository_GetEmployerReferrals_Is_Called_Exactly_Once()
+        {
+            _opportunityRepository
+                .Received(1)
+                .GetEmployerReferrals(Arg.Any<int>());
+        }
+
+        [Fact]
         public void Then_EmailService_SendEmail_Is_Called_Exactly_Once()
         {
             _emailService
@@ -64,7 +72,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailService
                 .Received(1)
                 .SendEmail(Arg.Is<string>(
-                        
                         templateName => templateName == "TestTemplate"),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -294,14 +301,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .Received(1)
                 .Create(Arg.Is<EmailHistory>(email =>
                     email.CreatedBy == "CreatedBy"));
-        }
-
-        [Fact]
-        public void Then_OpportunityRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
-        {
-            _opportunityRepository
-                .Received(1)
-                .GetEmployerReferrals(Arg.Any<int>());
         }
     }
 }

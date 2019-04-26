@@ -12,10 +12,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class ProviderFeedbackController : Controller
     {
         private readonly MatchingConfiguration _configuration;
+        private readonly IProviderService _providerService;
         private readonly IProviderFeedbackService _providerFeedbackService;
 
-        public ProviderFeedbackController(IProviderFeedbackService providerFeedbackService, MatchingConfiguration configuration)
+        public ProviderFeedbackController(IProviderFeedbackService providerFeedbackService, IProviderService providerService, MatchingConfiguration configuration)
         {
+            _providerService = providerService;
             _providerFeedbackService = providerFeedbackService;
             _configuration = configuration;
         }
@@ -24,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("send-provider-email", Name = "ConfirmSendProviderEmail")]
         public async Task<IActionResult> ConfirmSendProviderEmail()
         {
-            var viewModel = new ConfirmSendProviderEmailViewModel();
+            var viewModel = await GetConfirmSendProviderEmailViewModel();
             return View(viewModel);
         }
 
@@ -33,11 +35,27 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> ConfirmSendProviderEmail(ConfirmSendProviderEmailViewModel viewModel)
         {
             if (!ModelState.IsValid)
-                return View(viewModel);
+            {
+                return View(await GetConfirmSendProviderEmailViewModel(viewModel));
+            }
 
-            // TODO Do the send
+            //TODO: Test both yes and no options for controller
+            if (viewModel.SendEmail.GetValueOrDefault())
+            {
+                await _providerFeedbackService.SendProviderQuarterlyUpdateEmailAsync();
+            }
 
             return RedirectToRoute("SearchProvider");
+        }
+
+        private async Task<ConfirmSendProviderEmailViewModel> GetConfirmSendProviderEmailViewModel(ConfirmSendProviderEmailViewModel viewModel = null)
+        {
+            var count = await _providerService.GetProvidersWithFundingCountAsync();
+            return new ConfirmSendProviderEmailViewModel
+            {
+                ProviderCount = count,
+                SendEmail = viewModel?.SendEmail
+            };
         }
     }
 }

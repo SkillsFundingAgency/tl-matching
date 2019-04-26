@@ -7,20 +7,18 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class ReferralService : IReferralService
     {
-        public const string EmployerReferralEmailTemplateName = "EmployerReferral";
-        public const string ProviderReferralEmailTemplateName = "ProviderReferral";
-
         private readonly ILogger<ReferralService> _logger;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         private readonly IRepository<EmailHistory> _emailHistoryRepository;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
-        private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IRepository<Opportunity> _opportunityRepository;
 
         public ReferralService(IEmailService emailService,
             IRepository<EmailHistory> emailHistoryRepository,
@@ -32,14 +30,14 @@ namespace Sfa.Tl.Matching.Application.Services
             _emailService = emailService;
             _emailTemplateRepository = emailTemplateRepository;
             _emailHistoryRepository = emailHistoryRepository;
-            _opportunityRepository = (IOpportunityRepository)opportunityRepository;
+            _opportunityRepository = opportunityRepository;
             _mapper = mapper;
             _logger = logger;
         }
 
         public async Task SendEmployerReferralEmail(int opportunityId)
         {
-            var emailTemplate = await GetEmailTemplate(EmployerReferralEmailTemplateName);
+            var emailTemplate = await GetEmailTemplate(EmailTemplateName.EmployerReferral.ToString());
 
             var employerReferral = await GetEmployerReferrals(opportunityId);
 
@@ -96,7 +94,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SendProviderReferralEmail(int opportunityId)
         {
-            var emailTemplate = await GetEmailTemplate(ProviderReferralEmailTemplateName);
+            var emailTemplate = await GetEmailTemplate(EmailTemplateName.ProviderReferral.ToString());
 
             var referrals = await GetOpportunityReferrals(opportunityId);
 
@@ -139,12 +137,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
         {
-            return await _opportunityRepository.GetEmployerReferrals(opportunityId);
+            return await ((IOpportunityRepository)_opportunityRepository).GetEmployerReferrals(opportunityId);
         }
 
         private async Task<IList<OpportunityReferralDto>> GetOpportunityReferrals(int opportunityId)
         {
-            return await _opportunityRepository.GetProviderOpportunities(opportunityId);
+            return await ((IOpportunityRepository)_opportunityRepository).GetProviderOpportunities(opportunityId);
         }
 
         private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)

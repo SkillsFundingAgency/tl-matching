@@ -1,6 +1,6 @@
 Dear ((primary_contact_name)),
  
-You are receiving this email because [provider name] is getting capacity and delivery funding (CDF) from the Education and Skills Funding Agency (ESFA).
+You are receiving this email because ((provider_name)) is getting capacity and delivery funding (CDF) from the Education and Skills Funding Agency (ESFA).
 
 Our records show that you would like our help finding industry placements for your students.
 
@@ -24,10 +24,6 @@ We believe you are the main contact for industry placements and that employers s
 * Telephone: ((primary_contact_phone))
 
 ((secondary_contact_details))
-We also have the following secondary contact for ((provider_name)):
-* Name: ((secondary_contact_name))
-* Email: ((secondary_contact_email))
-* Telephone: ((secondary_contact_telephone)))
 
 Industry Placements – Employer Support Team
 National Apprenticeships Service

@@ -11,5 +11,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string SecondaryContact { get; set; }
         public string SecondaryContactEmail { get; set; }
         public string SecondaryContactPhone { get; set; }
+        public string CreatedBy { get; set; }
     }
 }
