@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         [Required(ErrorMessage = "You must tell us whether the provider should receive referrals")]
         public bool? IsEnabledForReferral { get; set; }
         public bool IsEnabledForSearch { get; set; }
-
+        public string SubmitAction { get; set; }
         public List<ProviderVenueViewModel> ProviderVenue { get; set; }
     }
 }

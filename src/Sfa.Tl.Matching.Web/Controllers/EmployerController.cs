@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 await _employerService.GetEmployer(viewModel.SelectedEmployerId) :
                 null;
 
-            if (employerDto == null)
+            if (employerDto == null || viewModel.CompanyName != employerDto.CompanyNameWithAka)
             {
                 ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
                 return View(viewModel);

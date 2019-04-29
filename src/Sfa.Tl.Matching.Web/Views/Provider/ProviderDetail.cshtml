@@ -24,6 +24,7 @@
                     </h2>
                     <div class="govuk-error-summary__body">
                         <ul class="govuk-list govuk-error-summary__list">
+                            <li><a sfa-validation-for="DisplayName"></a></li>
                             <li><a href="#IsEnabledForReferral-yes" sfa-validation-for="IsEnabledForReferral"></a></li>
                             <li><a sfa-validation-for="PrimaryContact"></a></li>
                             <li><a sfa-validation-for="PrimaryContactEmail"></a></li>
@@ -137,7 +138,7 @@
                 </fieldset>
             </div>
 
-            <button type="submit`" class="govuk-button tl-button--grey">
+            <button type="submit" class="govuk-button tl-button--grey" name="SubmitAction" value="SaveSection">
                 Save section
             </button>
 
@@ -205,7 +206,7 @@
                 <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
             }
 
-            <button type="submit" class="govuk-button">Save and finish</button>
+            <button type="submit" class="govuk-button" name="SubmitAction" value="SaveAndFinish">Save and finish</button>
 
         </form>
     </div>
