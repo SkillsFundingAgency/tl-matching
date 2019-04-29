@@ -31,7 +31,6 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task SendProviderQuarterlyUpdateEmailAsync()
         {
             var providers = await ((IProviderRepository)_providerRepository).GetProvidersWithFundingAsync();
-            //foreach create tokens and send email
 
             foreach (var provider in providers)
             {
@@ -46,15 +45,17 @@ namespace Sfa.Tl.Matching.Application.Services
                 };
 
                 var venuesListBuilder = new StringBuilder();
-
-                /*venues_and_qualifications_list - foreach
+                foreach (var providerVenue in provider.ProviderVenues)
                 {
-                    sb.AppendLine("[provider venue postcode 1]:");
-                    sb.AppendLine("* [LAR ID]: [qualification title 1]");
-                    sb.AppendLine("* [LAR ID]: [qualification title 2]");
-                    sb.AppendLine("");
+                    venuesListBuilder.AppendLine($"{providerVenue.Postcode}:");
+                    foreach (var qualification in providerVenue.Qualifications)
+                    {
+                        venuesListBuilder.AppendLine($"* {qualification.LarsId}: {qualification.ShortTitle}");
+                    }
+
+                    venuesListBuilder.AppendLine("");
                 }
-                */
+
                 tokens.Add("venues_and_qualifications_list", venuesListBuilder.ToString());
 
                 var secondaryDetailsBuilder = new StringBuilder();

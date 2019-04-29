@@ -183,10 +183,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Venues_and_Qualifications_List_Token()
         {
-            //const string expectedProviderVenuesList = "AA1 1AA:\r\n"
-            //                                     + "* 10042982 Qualification 1\r\n"
-            //                                     + "* 60165522 Qualification 2\r\n"
-            //                                     + "\r\n";
+            const string expectedProviderVenueQualificationsList = "AA1 1AA:\r\n"
+                                                 + "* 10042982: Qualification 1\r\n"
+                                                 + "* 60165522: Qualification 2\r\n"
+                                                 + "\r\n";
 
             _emailService
                 .Received(1)
@@ -195,7 +195,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("venues_and_qualifications_list")
-                                  && tokens["venues_and_qualifications_list"] == ""),
+                                  && tokens["venues_and_qualifications_list"] == expectedProviderVenueQualificationsList),
                     Arg.Any<string>());
         }
     }
