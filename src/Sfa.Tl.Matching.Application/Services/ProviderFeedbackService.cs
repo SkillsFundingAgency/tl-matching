@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 
@@ -37,8 +38,19 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task RequestProviderQuarterlyUpdateAsync(string userName)
         {
-            //TODO: Save feedback with status = Pending
-            //TODO: Refactor this to queue message to function
+            var providerFeedbackRequestHistory = await _providerFeedbackRequestHistoryRepository.Create(
+                new ProviderFeedbackRequestHistory
+                {
+                    Status = (int)ProviderFeedbackRequestStatus.Pending,
+                    CreatedBy = userName
+                });
+
+            await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new ProviderRequestData
+            {
+                ProviderRequestId = providerFeedbackRequestHistory
+            });
+
+            //TODO: Refactor this call out to a Function
             await SendProviderQuarterlyUpdateEmailsAsync();
         }
 

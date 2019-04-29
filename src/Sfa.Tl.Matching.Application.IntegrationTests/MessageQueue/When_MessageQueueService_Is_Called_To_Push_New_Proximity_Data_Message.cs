@@ -10,12 +10,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
 {
-    public class When_MessageQueueService_Is_Called_To_Push_New_Message
+    public class When_MessageQueueService_Is_Called_To_Push_New_Proximity_Data_Message
     {
         private readonly MessageQueueService _messageQueueService;
         private readonly CloudQueue _queue;
 
-        public When_MessageQueueService_Is_Called_To_Push_New_Message()
+        public When_MessageQueueService_Is_Called_To_Push_New_Proximity_Data_Message()
         {
             var storageAccount = CloudStorageAccount.Parse(TestConfiguration.MatchingConfiguration.BlobStorageConnectionString);
             var queueClient = storageAccount.CreateCloudQueueClient();
@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
         [Fact]
         public async Task Then_Message_Is_Queued()
         {
-           await _messageQueueService.Push(new GetProximityData {Postcode = "CV12WT", ProviderVenueId = 123});
+           await _messageQueueService.PushProximityDataAsync(new GetProximityData {Postcode = "CV12WT", ProviderVenueId = 123});
            var retrievedMessage = await _queue.GetMessageAsync();
            retrievedMessage.Should().NotBeNull();
            retrievedMessage.AsString.Should().Contain("CV12WT");

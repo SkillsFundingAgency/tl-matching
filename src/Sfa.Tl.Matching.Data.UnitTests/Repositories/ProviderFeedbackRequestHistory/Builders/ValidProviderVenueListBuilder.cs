@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHistory.Builders
 {
@@ -11,7 +12,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHis
             {
                 Id = 1,
                 ProviderCount = 5,
-                Status = 0,
+                Status = (int)ProviderFeedbackRequestStatus.Pending,
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
@@ -21,7 +22,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHis
             {
                 Id = 2,
                 ProviderCount = 10,
-                Status = 1,
+                Status = (int)ProviderFeedbackRequestStatus.Sent,
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,

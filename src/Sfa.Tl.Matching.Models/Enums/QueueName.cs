@@ -5,5 +5,7 @@
         public const string GetProximityQueue = "get-proximity-queue";
 
         public const string SaveProximityQueue = "save-proximity-queue";
+
+        public const string ProviderQuarterlyRequestQueue = "provider-quarterly-request-queue";
     }
 }
