@@ -100,5 +100,12 @@ namespace Sfa.Tl.Matching.Application.Services
                 await _repository.Update(provider);
             }
         }
+
+        public Task UpdateProvider(SaveProviderFeedbackViewModel viewModel)
+        {
+            var providers = _mapper.Map<IList<Provider>>(viewModel.Providers);
+
+            return _repository.UpdateManyWithSpecifedColumnsOnly(providers, x => x.IsFundedForNextYear);
+        }
     }
 }

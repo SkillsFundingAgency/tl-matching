@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -105,6 +106,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _providerService.SetIsProviderEnabledForSearchAsync(viewModel.ProviderId, !viewModel.IsEnabledForSearch);
 
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
+        }
+
+        [HttpPost]
+        [RequestFormLimits(ValueCountLimit = 5000)]
+        [Route("save-provider-feedback", Name = "SaveProviderFeedback")]
+        public async Task<IActionResult> SaveProviderFeedback(SaveProviderFeedbackViewModel viewModel)
+        {
+            await _providerService.UpdateProvider(viewModel);
+
+            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) &&
+                string.Equals(viewModel.SubmitAction, "SendEmail", StringComparison.InvariantCultureIgnoreCase))
+                return RedirectToRoute("ConfirmSendProviderEmail");
+
+            return RedirectToRoute("SearchProvider");
         }
 
         private async Task<ProviderSearchViewModel> GetProviderSearchResults(ProviderSearchParametersViewModel viewModel)

@@ -29,16 +29,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _providerRepository = Substitute.For<IProviderRepository>();
             var providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
 
-            var service = new ProviderFeedbackService(emailService, 
-                _providerRepository, providerFeedbackRequestHistoryRepository,
-                messageQueueService, mapper, logger);
+            var service = new ProviderService(mapper, _providerRepository);
 
             var viewModel = new SaveProviderFeedbackViewModel
             {
                 Providers = new List<ProviderSearchResultItemViewModel>()
             };
 
-            service.UpdateProviderFeedback(viewModel).GetAwaiter().GetResult();
+            service.UpdateProvider(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

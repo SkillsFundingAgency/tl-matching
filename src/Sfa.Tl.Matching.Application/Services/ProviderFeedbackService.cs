@@ -8,7 +8,6 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
-using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -102,13 +101,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     tokens,
                     "");
             }
-        }
-
-        public Task UpdateProviderFeedback(SaveProviderFeedbackViewModel viewModel)
-        {
-            var providers = _mapper.Map<IList<Provider>>(viewModel.Providers);
-
-            return _providerRepository.UpdateManyWithSpecifedColumnsOnly(providers, x => x.IsFundedForNextYear);
         }
     }
 }

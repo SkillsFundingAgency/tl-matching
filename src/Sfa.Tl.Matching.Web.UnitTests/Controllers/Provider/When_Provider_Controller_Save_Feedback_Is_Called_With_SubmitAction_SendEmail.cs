@@ -10,34 +10,33 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_ProviderFeedback_Controller_Save_Feedback_Is_Called_With_SubmitAction_SaveChanges
+    public class When_Provider_Controller_Save_Feedback_Is_Called_With_SubmitAction_SendEmail
     {
-        private readonly IProviderFeedbackService _providerFeedbackService;
+        private readonly IProviderService _providerService;
 
         private readonly IActionResult _result;
         private readonly SaveProviderFeedbackViewModel _viewModel;
 
-        public When_ProviderFeedback_Controller_Save_Feedback_Is_Called_With_SubmitAction_SaveChanges()
+        public When_Provider_Controller_Save_Feedback_Is_Called_With_SubmitAction_SendEmail()
         {
             _viewModel = new SaveProviderFeedbackViewModel
             {
                 Providers = new List<ProviderSearchResultItemViewModel>(),
-                SubmitAction = "SaveChanges"
+                SubmitAction = "SendEmail"
             };
 
-            var providerService = Substitute.For<IProviderService>();
-            _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
+            _providerService = Substitute.For<IProviderService>();
             var matchingConfiguration = Substitute.For<MatchingConfiguration>();
 
-            var providerFeedbackController = new ProviderFeedbackController(_providerFeedbackService, providerService, matchingConfiguration);
+            var providerController = new ProviderController(_providerService, matchingConfiguration);
 
-            _result = providerFeedbackController.SaveProviderFeedback(_viewModel).GetAwaiter().GetResult();
+            _result = providerController.SaveProviderFeedback(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_UpdateProviderFeedback_Is_Called_Exactly_Once()
         {
-            _providerFeedbackService.Received(1).UpdateProviderFeedback(_viewModel);
+            _providerService.Received(1).UpdateProvider(_viewModel);
         }
 
         [Fact]
@@ -46,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("SearchProvider");
+            result?.RouteName.Should().Be("ConfirmSendProviderEmail");
         }
     }
 }
