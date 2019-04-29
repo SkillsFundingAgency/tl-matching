@@ -8,6 +8,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
@@ -23,10 +24,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             var mapper = new Mapper(config);
             var emailService = Substitute.For<IEmailService>();
             var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
+            var messageQueueService = Substitute.For<IMessageQueueService>();
 
             _providerRepository = Substitute.For<IProviderRepository>();
+            var providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
 
-            var service = new ProviderFeedbackService(emailService, _providerRepository, mapper, logger);
+            var service = new ProviderFeedbackService(emailService, 
+                _providerRepository, providerFeedbackRequestHistoryRepository,
+                messageQueueService, mapper, logger);
 
             var viewModel = new SaveProviderFeedbackViewModel
             {

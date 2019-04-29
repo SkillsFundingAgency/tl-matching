@@ -5,7 +5,8 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProviderFeedbackService
     {
-        Task SendProviderQuarterlyUpdateEmailAsync();
+        Task RequestProviderQuarterlyUpdateAsync(string userName);
+        Task SendProviderQuarterlyUpdateEmailsAsync();
         Task UpdateProviderFeedback(SaveProviderFeedbackViewModel viewModel);
     }
 }

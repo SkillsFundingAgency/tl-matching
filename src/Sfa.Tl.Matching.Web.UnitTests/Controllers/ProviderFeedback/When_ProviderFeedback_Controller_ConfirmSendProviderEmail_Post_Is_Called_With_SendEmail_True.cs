@@ -55,11 +55,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
         }
 
         [Fact]
-        public void Then_ProviderFeedbackService_SendProviderQuarterlyUpdateEmailAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderFeedbackService_RequestProviderQuarterlyUpdateAsync_Is_Called_Exactly_Once()
         {
             _providerFeedbackService
                 .Received(1)
-                .SendProviderQuarterlyUpdateEmailAsync();
+                .RequestProviderQuarterlyUpdateAsync(Arg.Any<string>());
         }
 
         [Fact]

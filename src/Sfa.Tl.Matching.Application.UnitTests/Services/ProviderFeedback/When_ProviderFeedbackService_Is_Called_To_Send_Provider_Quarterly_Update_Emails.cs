@@ -7,34 +7,36 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
-    public class When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Email
+    public class When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails
     {
         private readonly IEmailService _emailService;
         private readonly IProviderRepository _providerRepository;
 
-        public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Email()
+        public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails()
         {
-            _emailService = Substitute.For<IEmailService>();
-
-            var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
-
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmailHistoryMapper).Assembly));
             var mapper = new Mapper(config);
+            _emailService = Substitute.For<IEmailService>();
+            var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
+            var messageQueueService = Substitute.For<IMessageQueueService>();
 
             _providerRepository = Substitute.For<IProviderRepository>();
+            var providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
 
             _providerRepository
                 .GetProvidersWithFundingAsync()
                 .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
 
             var providerFeedbackService = new ProviderFeedbackService(_emailService,
-                _providerRepository, mapper, logger);
+                _providerRepository, providerFeedbackRequestHistoryRepository,
+                messageQueueService, mapper, logger);
 
-            providerFeedbackService.SendProviderQuarterlyUpdateEmailAsync().GetAwaiter().GetResult();
+            providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync().GetAwaiter().GetResult();
         }
 
         [Fact]

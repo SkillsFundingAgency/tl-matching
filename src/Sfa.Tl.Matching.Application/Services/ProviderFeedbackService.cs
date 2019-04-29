@@ -17,19 +17,32 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         private readonly IRepository<Provider> _providerRepository;
+        private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
+        private readonly IMessageQueueService _messageQueueService;
 
         public ProviderFeedbackService(IEmailService emailService,
             IRepository<Provider> providerRepository,
+            IRepository<ProviderFeedbackRequestHistory> providerFeedbackRequestHistoryRepository,
+            IMessageQueueService messageQueueService,
             IMapper mapper,
             ILogger<ProviderFeedbackService> logger)
         {
             _emailService = emailService;
             _providerRepository = providerRepository;
+            _providerFeedbackRequestHistoryRepository = providerFeedbackRequestHistoryRepository;
+            _messageQueueService = messageQueueService;
             _mapper = mapper;
             _logger = logger;
         }
 
-        public async Task SendProviderQuarterlyUpdateEmailAsync()
+        public async Task RequestProviderQuarterlyUpdateAsync(string userName)
+        {
+            //TODO: Save feedback with status = Pending
+            //TODO: Refactor this to queue message to function
+            await SendProviderQuarterlyUpdateEmailsAsync();
+        }
+
+        public async Task SendProviderQuarterlyUpdateEmailsAsync()
         {
             var providers = await ((IProviderRepository)_providerRepository).GetProvidersWithFundingAsync();
 

@@ -17,7 +17,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IProviderService _providerService;
         private readonly IProviderFeedbackService _providerFeedbackService;
 
-        public ProviderFeedbackController(IProviderFeedbackService providerFeedbackService, IProviderService providerService, MatchingConfiguration configuration)
+        public ProviderFeedbackController(IProviderFeedbackService providerFeedbackService, 
+            IProviderService providerService, 
+            MatchingConfiguration configuration)
         {
             _providerService = providerService;
             _providerFeedbackService = providerFeedbackService;
@@ -53,7 +55,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (viewModel.SendEmail.GetValueOrDefault())
             {
-                await _providerFeedbackService.SendProviderQuarterlyUpdateEmailAsync();
+                var user = HttpContext.User.GetUserName();
+                await _providerFeedbackService.RequestProviderQuarterlyUpdateAsync(user);
             }
 
             return RedirectToRoute("SearchProvider");
