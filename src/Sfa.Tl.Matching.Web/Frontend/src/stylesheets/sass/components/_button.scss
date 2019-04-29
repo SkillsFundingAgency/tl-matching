@@ -8,11 +8,11 @@
 
 .tl-button--grey {
     background: govuk-colour("grey-3");
-    color: govuk-colour("black");
+    color: govuk-colour("black") !important;
 
     &:hover,
     &:focus {
-        color: govuk-colour("black");
+        color: govuk-colour("black") !important;
         background: darken(govuk-colour("grey-3"), 10%);
     }
 }

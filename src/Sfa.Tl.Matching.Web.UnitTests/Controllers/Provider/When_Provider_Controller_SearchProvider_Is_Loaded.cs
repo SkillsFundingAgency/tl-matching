@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 }
             };
 
-            _result = providerController.SearchProvider();
+            _result = providerController.SearchProvider().GetAwaiter().GetResult();
         }
 
         [Fact]

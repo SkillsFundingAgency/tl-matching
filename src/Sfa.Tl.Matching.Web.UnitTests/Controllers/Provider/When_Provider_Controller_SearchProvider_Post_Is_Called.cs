@@ -35,11 +35,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_ProviderService_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_ProviderService_SearchAsync_Is_Called_Exactly_Once()
         {
             _providerService
                 .Received(1)
                 .SearchAsync(Arg.Any<long>());
+        }
+
+        [Fact]
+        public void Then_ProviderService_SearchProvidersWithFundingAsync_Is_Called_Exactly_Once()
+        {
+            _providerService
+                .Received(1)
+                .SearchProvidersWithFundingAsync(Arg.Any<ProviderSearchParametersViewModel>());
         }
 
         [Fact]

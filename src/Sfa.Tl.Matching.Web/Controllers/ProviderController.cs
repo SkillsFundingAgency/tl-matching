@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -23,9 +22,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("search-ukprn", Name = "SearchProvider")]
-        public IActionResult SearchProvider()
+        public async Task<IActionResult> SearchProvider()
         {
-            return View(GetProviderSearchViewModel(new ProviderSearchParametersViewModel()));
+            return View(await GetProviderSearchResults(new ProviderSearchParametersViewModel()));
         }
         
         [HttpPost]
@@ -44,37 +43,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (searchResult == null || searchResult.Id == 0)
             {
                 ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn), "You must enter a real UKPRN");
-                return View(nameof(SearchProvider), new ProviderSearchViewModel(viewModel));
+                return View(nameof(SearchProvider), new ProviderSearchViewModel(viewModel)
+                {
+                    IsAuthorisedUser = GetIsAuthorisedUser()
+                });
             }
 
-            // TODO AU Do the search
-
-            var resultsViewModel = new ProviderSearchViewModel(viewModel)
-            {
-                SearchResults = new ProviderSearchResultsViewModel
-                {
-                    Results = new List<ProviderSearchResultItemViewModel>
-                    {
-                        new ProviderSearchResultItemViewModel
-                        {
-                            UkPrn = 123,
-                            ProviderId = 1,
-                            ProviderName = "ProviderName",
-                            IsFundedForNextYear = false
-                        }
-                    }
-                    //Results 
-                },
-            };
+            var resultsViewModel = await GetProviderSearchResults(viewModel);
 
             return View(resultsViewModel);
-        }
-
-        [HttpPost]
-        [Route("save-provider-feedback", Name = "SaveProviderFeedback")]
-        public async Task<IActionResult> SaveProviderFeedback(SaveProviderFeedbackViewModel viewModel)
-        {
-            return null;
         }
 
         [HttpGet]
@@ -132,6 +109,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _providerService.SetIsProviderEnabledForSearchAsync(viewModel.ProviderId, !viewModel.IsEnabledForSearch);
 
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
+        }
+
+        private async Task<ProviderSearchViewModel> GetProviderSearchResults(ProviderSearchParametersViewModel viewModel)
+        {
+            var resultsViewModel = new ProviderSearchViewModel(viewModel)
+            {
+                SearchResults = new ProviderSearchResultsViewModel
+                {
+                    Results = await _providerService.SearchProvidersWithFundingAsync(viewModel)
+                },
+                IsAuthorisedUser = GetIsAuthorisedUser()
+            };
+
+            return resultsViewModel;
         }
 
         private ProviderSearchViewModel GetProviderSearchViewModel(ProviderSearchParametersViewModel searchParametersViewModel)

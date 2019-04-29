@@ -12,21 +12,15 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <partial name="_searchbox" model="Model.SearchParameters" />
-
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
         @if (Model.SearchResults?.Results != null && Model.SearchResults.Results.Any())
         {
             <partial name="_searchresults" model="Model" />
         }
 
-        @if (Model.IsAuthorisedUser)
-        {
-            <div>
-                <form class="form" method="get" asp-controller="ProviderFeedback" asp-action="ConfirmSendProviderEmail" novalidate>
-                    <button type="submit" class="govuk-button">
-                        Send email
-                    </button>
-                </form>
-            </div>
-        }
+
     </div>
 </div>
