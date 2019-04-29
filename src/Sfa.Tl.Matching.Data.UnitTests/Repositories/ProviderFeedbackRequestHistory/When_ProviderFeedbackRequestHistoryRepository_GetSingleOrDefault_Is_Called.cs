@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHis
 
         [Fact]
         public void Then_ProviderFeedbackRequestHistory_Status_Is_Returned() =>
-            _result.Status.Should().Be(0);
+            _result.Status.Should().Be(1);
         
         [Fact]
         public void Then_ProviderFeedbackRequestHistory_CreatedBy_Is_Returned() =>

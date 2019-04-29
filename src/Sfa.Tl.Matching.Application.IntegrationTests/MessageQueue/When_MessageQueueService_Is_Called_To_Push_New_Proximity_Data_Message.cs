@@ -26,11 +26,21 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
         [Fact]
         public async Task Then_Message_Is_Queued()
         {
-           await _messageQueueService.PushProximityDataAsync(new GetProximityData {Postcode = "CV12WT", ProviderVenueId = 123});
-           var retrievedMessage = await _queue.GetMessageAsync();
-           retrievedMessage.Should().NotBeNull();
-           retrievedMessage.AsString.Should().Contain("CV12WT");
-           await _queue.DeleteMessageAsync(retrievedMessage);
+            CloudQueueMessage retrievedMessage = null;
+            try
+            {
+                await _messageQueueService.PushProximityDataAsync(new GetProximityData { Postcode = "CV12WT", ProviderVenueId = 123 });
+                retrievedMessage = await _queue.GetMessageAsync();
+                retrievedMessage.Should().NotBeNull();
+                retrievedMessage.AsString.Should().Contain("CV12WT");
+            }
+            finally
+            {
+                if (retrievedMessage != null)
+                {
+                    await _queue.DeleteMessageAsync(retrievedMessage);
+                }
+            }
         }
     }
 }
