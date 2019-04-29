@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.WindowsAzure.Storage;
@@ -26,11 +27,22 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
         [Fact]
         public async Task Then_Message_Is_Queued()
         {
-            await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new ProviderRequestData { ProviderRequestId = 1001 });
-            var retrievedMessage = await _queue.GetMessageAsync();
-            retrievedMessage.Should().NotBeNull();
-            retrievedMessage.AsString.Should().Contain("1001");
-            await _queue.DeleteMessageAsync(retrievedMessage);
+            CloudQueueMessage retrievedMessage = null;
+            try
+            {
+                await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new ProviderRequestData
+                    {ProviderRequestId = 1001});
+                retrievedMessage = await _queue.GetMessageAsync();
+                retrievedMessage.Should().NotBeNull();
+                retrievedMessage.AsString.Should().Contain("1001");
+            }
+            finally
+            {
+                if (retrievedMessage != null)
+                {
+                    await _queue.DeleteMessageAsync(retrievedMessage);
+                }
+            }
         }
     }
 }

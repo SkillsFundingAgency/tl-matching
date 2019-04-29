@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 _providerRepository, providerFeedbackRequestHistoryRepository,
                 messageQueueService, mapper, logger);
 
-            providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync().GetAwaiter().GetResult();
+            providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]
