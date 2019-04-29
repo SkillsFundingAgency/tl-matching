@@ -86,6 +86,7 @@
     <Build Include="Tables\EmailHistory.sql" />
     <Build Include="Tables\FunctionLog.sql" />
     <None Include="PostDeployment\Reset Data.sql" />
+    <Build Include="Tables\ProviderFeedbackRequestHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
