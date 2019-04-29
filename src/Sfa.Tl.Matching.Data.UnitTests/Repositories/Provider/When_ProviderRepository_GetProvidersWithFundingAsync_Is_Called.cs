@@ -35,39 +35,57 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider
             _result.Count.Should().Be(1);
 
         [Fact]
-        public void Then_Id_Is_Returned() =>
-            _result.First().Id.Should().Be(1);
+        public void Then_Provider_Fields_Are_As_Expected()
+        {
+            var provider = _result.First();
+            provider.Id.Should().Be(1);
+            provider.Name.Should().Be("ProviderName");
+            provider.PrimaryContact.Should().BeEquivalentTo("PrimaryContact");
+            provider.PrimaryContactEmail.Should().BeEquivalentTo("primary@contact.co.uk");
+            provider.PrimaryContactPhone.Should().BeEquivalentTo("01777757777");
+            provider.SecondaryContact.Should().BeEquivalentTo("SecondaryContact");
+            provider.SecondaryContactEmail.Should().BeEquivalentTo("secondary@contact.co.uk");
+            provider.SecondaryContactPhone.Should().BeEquivalentTo("01888801234");
+            provider.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
+        }
 
         [Fact]
-        public void Then_Name_Is_Returned() =>
-            _result.First().Name.Should().Be("ProviderName");
+        public void Then_One_ProviderVenue_Fields_Are_As_Expected() =>
+            _result.First().ProviderVenues.Count().Should().Be(1);
 
         [Fact]
-        public void Then_PrimaryContact_Is_Returned() =>
-            _result.First().PrimaryContact.Should().BeEquivalentTo("PrimaryContact");
+        public void Then_ProviderVenue_Fields_Are_As_Expected()
+        {
+            var providerVenue = _result.First().ProviderVenues.First();
+            providerVenue.Postcode.Should().BeEquivalentTo("AA1 1AA");
+        }
 
         [Fact]
-        public void Then_PrimaryContactEmail_Is_Returned() =>
-            _result.First().PrimaryContactEmail.Should().BeEquivalentTo("primary@contact.co.uk");
+        public void Then_Two_Qualifications_Are_Returned() =>
+            _result.First().ProviderVenues.First().Qualifications.Count().Should().Be(3);
 
         [Fact]
-        public void Then_PrimaryContactPhone_Is_Returned() =>
-            _result.First().PrimaryContactPhone.Should().BeEquivalentTo("01777757777");
+        public void Then_First_Qualification_Fields_Are_As_Expected()
+        {
+            var qualification = _result.First().ProviderVenues.First().Qualifications.First();
+            qualification.LarsId.Should().Be("1002");
+            qualification.ShortTitle.Should().Be("Duplicate Short Title");
+        }
 
         [Fact]
-        public void Then_SecondContact_Is_Returned() =>
-            _result.First().SecondaryContact.Should().BeEquivalentTo("SecondaryContact");
+        public void Then_Second_Qualification_Fields_Are_As_Expected()
+        {
+            var qualification = _result.First().ProviderVenues.First().Qualifications.Skip(1).First();
+            qualification.LarsId.Should().Be("1003");
+            qualification.ShortTitle.Should().Be("Duplicate Short Title");
+        }
 
         [Fact]
-        public void Then_SecondaryContactEmail_Is_Returned() =>
-            _result.First().SecondaryContactEmail.Should().BeEquivalentTo("secondary@contact.co.uk");
-
-        [Fact]
-        public void Then_SecondaryContactPhone_Is_Returned() =>
-            _result.First().SecondaryContactPhone.Should().BeEquivalentTo("01888801234");
-
-        [Fact]
-        public void Then_CreatedBy_Is_Returned() =>
-            _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
+        public void Then_Third_Qualification_Fields_Are_As_Expected()
+        {
+            var qualification = _result.First().ProviderVenues.First().Qualifications.Skip(2).First();
+            qualification.LarsId.Should().Be("1001");
+            qualification.ShortTitle.Should().Be("Short Title");
+        }
     }
 }

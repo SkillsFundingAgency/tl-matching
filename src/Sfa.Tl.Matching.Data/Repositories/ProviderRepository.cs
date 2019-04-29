@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                            (from pq in _dbContext.ProviderQualification
                                             join q in _dbContext.Qualification on pq.QualificationId equals q.Id
                                             where pv.Id == pq.ProviderVenueId
-                                            orderby q.ShortTitle
+                                            orderby q.ShortTitle, q.LarsId
                                             select new QualificationInfoDto
                                             {
                                                 LarsId = q.LarsId,
