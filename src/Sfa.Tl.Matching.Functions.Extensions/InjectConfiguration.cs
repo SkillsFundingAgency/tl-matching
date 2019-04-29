@@ -22,6 +22,10 @@ using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using SFA.DAS.Http;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
@@ -75,6 +79,8 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             RegisterRepositories(services);
 
             RegisterApplicationServices(services);
+
+            RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
         }
 
         private static void RegisterFileReaders(IServiceCollection services)
@@ -111,12 +117,16 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterRepositories(IServiceCollection services)
         {
+            services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
+            services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
+            services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
             services.AddTransient<IRepository<Employer>, EmployerRepository>();
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
             services.AddTransient<IRepository<Qualification>, GenericRepository<Qualification>>();
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Provider>, GenericRepository<Provider>>();
+            services.AddTransient<IRepository<ProviderFeedbackRequestHistory>, GenericRepository<ProviderFeedbackRequestHistory>>();
             services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
             services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
@@ -126,10 +136,22 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         {
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        }
+
+        private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
+        {
+            var httpClient = string.IsNullOrWhiteSpace(apiConfiguration.ClientId)
+                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(apiConfiguration)).Build()
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(apiConfiguration)).Build();
+
+            services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
+                new NotificationsApi(httpClient, apiConfiguration));
         }
     }
 }

@@ -51,11 +51,13 @@ namespace Sfa.Tl.Matching.Application.Services
             });
 
             //TODO: Refactor this call out to a Function
-            await SendProviderQuarterlyUpdateEmailsAsync();
+            await SendProviderQuarterlyUpdateEmailsAsync(providerFeedbackRequestHistory);
         }
 
-        public async Task SendProviderQuarterlyUpdateEmailsAsync()
+        public async Task SendProviderQuarterlyUpdateEmailsAsync(long providerFeedbackRequestHistoryId)
         {
+            //TODO: Retrieve record for providerFeedbackRequestHistoryId and update it with count and Sent status
+
             var providers = await ((IProviderRepository)_providerRepository).GetProvidersWithFundingAsync();
 
             foreach (var provider in providers)
