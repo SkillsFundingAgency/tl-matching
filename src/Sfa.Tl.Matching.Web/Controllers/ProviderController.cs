@@ -43,17 +43,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (searchResult == null || searchResult.Id == 0)
             {
                 ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn), "You must enter a real UKPRN");
-                return View(nameof(SearchProvider), new ProviderSearchViewModel(viewModel)
-                {
-                    IsAuthorisedUser = GetIsAuthorisedUser()
-                });
+                return View(nameof(SearchProvider), GetProviderSearchViewModel(viewModel));
             }
 
             var resultsViewModel = await GetProviderSearchResults(viewModel);
 
             return View(resultsViewModel);
         }
-
         [HttpGet]
         [Route("provider-overview/{providerId}", Name = "GetProviderDetail")]
         public async Task<IActionResult> ProviderDetail(int providerId)
@@ -113,13 +109,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<ProviderSearchViewModel> GetProviderSearchResults(ProviderSearchParametersViewModel viewModel)
         {
-            var resultsViewModel = new ProviderSearchViewModel(viewModel)
+            var resultsViewModel = GetProviderSearchViewModel(viewModel);
+            resultsViewModel.SearchResults = new ProviderSearchResultsViewModel
             {
-                SearchResults = new ProviderSearchResultsViewModel
-                {
-                    Results = await _providerService.SearchProvidersWithFundingAsync(viewModel)
-                },
-                IsAuthorisedUser = GetIsAuthorisedUser()
+                Results = await _providerService.SearchProvidersWithFundingAsync(viewModel)
             };
 
             return resultsViewModel;

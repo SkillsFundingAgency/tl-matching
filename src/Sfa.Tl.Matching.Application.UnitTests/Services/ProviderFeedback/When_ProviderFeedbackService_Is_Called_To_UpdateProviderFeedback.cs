@@ -4,15 +4,14 @@ using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
     public class When_ProviderFeedbackService_Is_Called_To_UpdateProviderFeedback
     {
@@ -22,10 +21,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
+            var emailService = Substitute.For<IEmailService>();
+            var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
 
             _providerRepository = Substitute.For<IProviderRepository>();
 
-            var service = new ProviderFeedbackService(mapper, _providerRepository);
+            var service = new ProviderFeedbackService(emailService, _providerRepository, mapper, logger);
+
             var viewModel = new SaveProviderFeedbackViewModel
             {
                 Providers = new List<ProviderSearchResultItemViewModel>()

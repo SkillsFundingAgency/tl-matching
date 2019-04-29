@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System;
+using System.Security;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 await _providerFeedbackService.SendProviderQuarterlyUpdateEmailAsync();
             }
+
+            return RedirectToRoute("SearchProvider");
+        }
+
+        [HttpPost]
+        [RequestFormLimits(ValueCountLimit = 5000)]
+        [Route("save-provider-feedback", Name = "SaveProviderFeedback")]
+        public async Task<IActionResult> SaveProviderFeedback(SaveProviderFeedbackViewModel viewModel)
+        {
+            await _providerFeedbackService.UpdateProviderFeedback(viewModel);
+
+            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) &&
+                string.Equals(viewModel.SubmitAction, "SendEmail", StringComparison.InvariantCultureIgnoreCase))
+                return RedirectToRoute("ConfirmSendProviderEmail");
 
             return RedirectToRoute("SearchProvider");
         }

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Security.Claims;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -28,7 +30,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                         Name = "Test Provider"
                     });
 
-            var providerController = new ProviderController(_providerService, new MatchingConfiguration());
+            var providerController = new ProviderController(_providerService, new MatchingConfiguration())
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()))
+                    }
+                }
+            };
 
             var viewModel = new ProviderSearchParametersViewModel { UkPrn = 10000546 };
             _result = providerController.SearchProvider(viewModel).GetAwaiter().GetResult();

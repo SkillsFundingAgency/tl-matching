@@ -24,10 +24,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 Providers = new List<ProviderSearchResultItemViewModel>(),
                 SubmitAction = "SaveChanges"
             };
+
+            var providerService = Substitute.For<IProviderService>();
             _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
             var matchingConfiguration = Substitute.For<MatchingConfiguration>();
 
-            var providerFeedbackController = new ProviderFeedbackController(_providerFeedbackService, matchingConfiguration);
+            var providerFeedbackController = new ProviderFeedbackController(_providerFeedbackService, providerService, matchingConfiguration);
 
             _result = providerFeedbackController.SaveProviderFeedback(_viewModel).GetAwaiter().GetResult();
         }
