@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -64,6 +65,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
+
                 return View(nameof(ProviderDetail), viewModel);
             }
 
@@ -81,9 +84,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<IActionResult> ReturnView(ProviderDetailViewModel viewModel)
         {
+            viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
+
             if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) && string.Equals(viewModel.SubmitAction, "SaveAndFinish", StringComparison.InvariantCultureIgnoreCase))
             {
-                if (!await _providerService.ProviderHasAnyVenueAsync(viewModel.Id))
+                if (!viewModel.ProviderVenue.Any())
                 {
                     ModelState.AddModelError("ProviderVenue", "You must add a venue for this provider");
                     return View(nameof(ProviderDetail), viewModel);

@@ -32,7 +32,7 @@
             <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-providerVenueId="@Model.Id" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>
         </p>
         <form asp-route="SaveVenue" novalidate>
-            <div class="govuk-form-group">
+            <div class="govuk-form-group" sfa-validation-for="Name" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" for="Name">
                     Enter venue name (optional)
                 </label>

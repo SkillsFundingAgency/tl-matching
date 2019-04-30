@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Sfa.Tl.Matching.Application.Interfaces;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -43,12 +44,18 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
         }
-        
-        public async Task<bool> ProviderHasAnyVenueAsync(int providerId)
+
+        public async Task<IList<ProviderVenueViewModel>> GetProviderVenueSummaryByProviderIdAsync(int providerId, bool includeVenueDetails = false)
         {
-            return await _repository
-                .GetMany(p => p.Id == providerId, p => p.ProviderVenue)
-                .Select(p => p.ProviderVenue.Any()).SingleOrDefaultAsync();
+            return await _repository.GetMany(p => p.Id == providerId)
+                .SelectMany(p => p.ProviderVenue)
+                .Select(pv => new ProviderVenueViewModel
+                {
+                    ProviderVenueId = pv.Id,
+                    Postcode = pv.Postcode,
+                    IsEnabledForSearch = pv.IsEnabledForSearch,
+                    QualificationCount = pv.ProviderQualification.Count,
+                }).ToListAsync();
         }
 
         public Task UpdateProviderDetail(ProviderDetailViewModel viewModel)

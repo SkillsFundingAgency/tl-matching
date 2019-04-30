@@ -47,6 +47,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public bool? IsEnabledForReferral { get; set; }
         public bool IsEnabledForSearch { get; set; }
         public string SubmitAction { get; set; }
-        public List<ProviderVenueViewModel> ProviderVenue { get; set; }
+        public IList<ProviderVenueViewModel> ProviderVenue { get; set; }
     }
 }
