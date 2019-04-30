@@ -202,8 +202,8 @@
                 </table>
             }
 
-            @{ var addVenueText = Model.ProviderVenue.Count <= 0 ? "add a venue for this provider." : "Add a venue"; }
-                <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
+            @*@{ var addVenueText = Model.ProviderVenue.Count <= 0 ? "add a venue for this provider." : "Add a venue"; }
+                <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>*@
 
             <button type="submit" class="govuk-button" name="SubmitAction" value="SaveAndFinish">Save and finish</button>
 
