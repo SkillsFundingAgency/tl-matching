@@ -67,6 +67,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
+        public void Then_CreateProvisionGap_Is_Called_Exactly_Once()
+        {
+            _opportunityService.Received(1).CreateProvisionGap(Arg.Is<CheckAnswersProvisionGapViewModel>(a =>
+                a.ConfirmationSelected == ConfirmationSelected));
+        }
+
+        [Fact]
         public void Then_Result_Is_Redirected_to_Provision_Gap_Sent()
         {
             var result = _result as RedirectToRouteResult;

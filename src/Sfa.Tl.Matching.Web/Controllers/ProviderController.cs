@@ -76,10 +76,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 viewModel.Id = await _providerService.CreateProvider(viewModel);
             }
 
-            return (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) &&
-             string.Equals(viewModel.SubmitAction, "SaveSection", StringComparison.InvariantCultureIgnoreCase)) ?
-                View(nameof(ProviderDetail), viewModel) :
-                View(nameof(SearchProvider));
+            return await ReturnView(viewModel);
+        }
+
+        private async Task<IActionResult> ReturnView(ProviderDetailViewModel viewModel)
+        {
+            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) && string.Equals(viewModel.SubmitAction, "SaveAndFinish", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (!await _providerService.ProviderHasAnyVenueAsync(viewModel.Id))
+                {
+                    ModelState.AddModelError("ProviderVenue", "You must add a venue for this provider");
+                    return View(nameof(ProviderDetail), viewModel);
+                }
+
+                return View(nameof(SearchProvider));
+            }
+
+            return View(nameof(ProviderDetail), viewModel);
         }
 
         [HttpGet]

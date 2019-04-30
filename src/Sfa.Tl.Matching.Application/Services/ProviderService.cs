@@ -1,4 +1,5 @@
-﻿using Sfa.Tl.Matching.Application.Interfaces;
+﻿using System.Linq;
+using Sfa.Tl.Matching.Application.Interfaces;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,13 @@ namespace Sfa.Tl.Matching.Application.Services
             var provider = await query.SingleOrDefaultAsync();
 
             return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
+        }
+        
+        public async Task<bool> ProviderHasAnyVenueAsync(int providerId)
+        {
+            return await _repository
+                .GetMany(p => p.Id == providerId, p => p.ProviderVenue)
+                .Select(p => p.ProviderVenue.Any()).SingleOrDefaultAsync();
         }
 
         public Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
