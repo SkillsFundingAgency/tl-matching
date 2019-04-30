@@ -1,8 +1,6 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderSearchViewModel
-
 @{
     ViewData["Title"] = "Search for a provider";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section backButton{
@@ -16,11 +14,10 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+        <h1>Search for the provider’s UKPRN</h1>
         @if (Model.SearchResults?.Results != null && Model.SearchResults.Results.Any())
         {
             <partial name="_searchresults" model="Model" />
         }
-
-
     </div>
 </div>

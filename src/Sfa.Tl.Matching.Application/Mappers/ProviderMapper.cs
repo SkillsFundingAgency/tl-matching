@@ -22,7 +22,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<Provider, ProviderDetailViewModel>()
-                .ForMember(m => m.ProviderVenue, config => config.MapFrom(s => s.ProviderVenue));
+                .ForMember(m => m.SubmitAction, config => config.Ignore())
+                .ForMember(m => m.ProviderVenue, config => config.MapFrom(s => s.ProviderVenue))
+                ;
 
             CreateMap<ProviderDetailViewModel, Provider>()
                 .ForMember(m => m.OfstedRating, config => config.Ignore())

@@ -135,8 +135,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public List<ReferralDto> GetReferrals(int opportunityId)
         {
-            var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId,
-                r => r.ProviderVenue, r => r.ProviderVenue.Provider);
+            var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId);
 
             var providers = referrals
                 .OrderBy(r => r.DistanceFromEmployer)

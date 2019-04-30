@@ -30,9 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            _referralRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>(),
-                Arg.Any<Expression<Func<Domain.Models.Referral, object>>>(),
-                Arg.Any<Expression<Func<Domain.Models.Referral, object>>>()).Returns(
+            _referralRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(
                 new List<Domain.Models.Referral>
                 {
                     new Domain.Models.Referral

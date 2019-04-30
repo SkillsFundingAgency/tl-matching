@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Data Import";
 }
+
 @section backButton{
     <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link">Back</a>
 }
@@ -13,7 +14,7 @@
                     <p class="tl-notification__body">File uploaded successfully</p>
                 </div>
             }
-            <h1 class="govuk-heading-xl">Data Import</h1>
+            <h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
         </div>
     </div>
     <div class="govuk-grid-row">

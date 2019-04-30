@@ -69,6 +69,19 @@ namespace Sfa.Tl.Matching.Application.Services
             return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
         }
 
+        public async Task<IList<ProviderVenueViewModel>> GetProviderVenueSummaryByProviderIdAsync(int providerId, bool includeVenueDetails = false)
+        {
+            return await _repository.GetMany(p => p.Id == providerId)
+                .SelectMany(p => p.ProviderVenue)
+                .Select(pv => new ProviderVenueViewModel
+                {
+                    ProviderVenueId = pv.Id,
+                    Postcode = pv.Postcode,
+                    IsEnabledForSearch = pv.IsEnabledForSearch,
+                    QualificationCount = pv.ProviderQualification.Count,
+                }).ToListAsync();
+        }
+
         public Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
         {
             var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);

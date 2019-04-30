@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -71,6 +72,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
+
                 return View(nameof(ProviderDetail), viewModel);
             }
 
@@ -83,7 +86,25 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 viewModel.Id = await _providerService.CreateProvider(viewModel);
             }
 
-            return View(nameof(SearchProvider));
+            return await ReturnView(viewModel);
+        }
+
+        private async Task<IActionResult> ReturnView(ProviderDetailViewModel viewModel)
+        {
+            viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
+
+            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) && string.Equals(viewModel.SubmitAction, "SaveAndFinish", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (!viewModel.ProviderVenue.Any())
+                {
+                    ModelState.AddModelError("ProviderVenue", "You must add a venue for this provider");
+                    return View(nameof(ProviderDetail), viewModel);
+                }
+
+                return View(nameof(SearchProvider));
+            }
+
+            return View(nameof(ProviderDetail), viewModel);
         }
 
         [HttpGet]
