@@ -31,6 +31,7 @@
                             <li><a sfa-validation-for="SecondaryContact"></a></li>
                             <li><a sfa-validation-for="SecondaryContactEmail"></a></li>
                             <li><a sfa-validation-for="SecondaryContactPhone"></a></li>
+                            <li><a href="#AddVenue" sfa-validation-for="@Model.ProviderVenue"></a></li>
                         </ul>
                     </div>
                 </div>
@@ -149,56 +150,56 @@
 
             <h2 class="govuk-heading-m">Venues and qualifications</h2>
 
-            if (Model.ProviderVenue.Any(v => v.IsEnabledForSearch))
+            @if (Model.ProviderVenue.Any(v => v.IsEnabledForSearch))
             {
-            <h2 class="govuk-heading-m">Active venues</h2>
-            <table class="govuk-table">
-                <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="col">Postcode</th>
-                        <th class="govuk-table__header" scope="col">2018 to 2019</th>
-                        <th class="govuk-table__header" scope="col">2019 to 2020</th>
-                        <th class="govuk-table__header" scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                    @foreach (var venue in Model.ProviderVenue.Where(v => v.IsEnabledForSearch))
-                    {
+                <h2 class="govuk-heading-m">Active venues</h2>
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
-                            <th class="govuk-table__cell">@venue.Postcode</th>
-                            <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
-                            <td class="govuk-table__cell">No data yet</td>
-                            <td class="govuk-table__cell"><a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>
+                            <th class="govuk-table__header" scope="col">Postcode</th>
+                            <th class="govuk-table__header" scope="col">2018 to 2019</th>
+                            <th class="govuk-table__header" scope="col">2019 to 2020</th>
+                            <th class="govuk-table__header" scope="col"></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @foreach (var venue in Model.ProviderVenue.Where(v => v.IsEnabledForSearch))
+                        {
+                            <tr class="govuk-table__row">
+                                <th class="govuk-table__cell">@venue.Postcode</th>
+                                <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
+                                <td class="govuk-table__cell">No data yet</td>
+                                <td class="govuk-table__cell"><a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
-            if (Model.ProviderVenue.Any(v => !v.IsEnabledForSearch))
+            @if (Model.ProviderVenue.Any(v => !v.IsEnabledForSearch))
             {
-            <h2 class="govuk-heading-m">Inactive venues</h2>
+                <h2 class="govuk-heading-m">Inactive venues</h2>
 
-            <table class="govuk-table tl-table__inactive">
-                <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="col">Postcode</th>
-                        <th class="govuk-table__header" scope="col">2018 to 2019</th>
-                        <th class="govuk-table__header" scope="col">2019 to 2020</th>
-                        <th class="govuk-table__header" scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                    @foreach (var venue in Model.ProviderVenue.Where(v => !v.IsEnabledForSearch))
-                    {
+                <table class="govuk-table tl-table__inactive">
+                    <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
-                            <th class="govuk-table__cell">@venue.Postcode</th>
-                            <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
-                            <td class="govuk-table__cell">No data yet</td>
-                            <td class="govuk-table__cell"><a asp-route="ConfirmProviderVenueChange" asp-route-providerId="@Model.Id" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Unhide<span class="govuk-visually-hidden"> this venue</span></a></td>
+                            <th class="govuk-table__header" scope="col">Postcode</th>
+                            <th class="govuk-table__header" scope="col">2018 to 2019</th>
+                            <th class="govuk-table__header" scope="col">2019 to 2020</th>
+                            <th class="govuk-table__header" scope="col"></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                        @foreach (var venue in Model.ProviderVenue.Where(v => !v.IsEnabledForSearch))
+                        {
+                            <tr class="govuk-table__row">
+                                <th class="govuk-table__cell">@venue.Postcode</th>
+                                <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
+                                <td class="govuk-table__cell">No data yet</td>
+                                <td class="govuk-table__cell"><a asp-route="ConfirmProviderVenueChange" asp-route-providerId="@Model.Id" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Unhide<span class="govuk-visually-hidden"> this venue</span></a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
 
             @{ var addVenueText = Model.ProviderVenue.Count <= 0 ? "add a venue for this provider." : "Add a venue"; }

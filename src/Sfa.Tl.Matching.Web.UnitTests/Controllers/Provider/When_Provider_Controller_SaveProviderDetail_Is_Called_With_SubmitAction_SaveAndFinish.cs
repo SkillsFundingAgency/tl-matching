@@ -16,10 +16,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         public When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveAndFinish()
         {
             _providerService = Substitute.For<IProviderService>();
-
+            _providerService.ProviderHasAnyVenueAsync(1).Returns(true);
             var providerController = new ProviderController(_providerService);
 
-            _result = providerController.SaveProviderDetail(new ProviderDetailViewModel { Id = 1, SubmitAction = "SaveAndFinish" }).GetAwaiter().GetResult();
+            _result = providerController.SaveProviderDetail(new ProviderDetailViewModel { Id = 1, SubmitAction = "SaveAndFinish", }).GetAwaiter().GetResult();
         }
 
         [Fact]

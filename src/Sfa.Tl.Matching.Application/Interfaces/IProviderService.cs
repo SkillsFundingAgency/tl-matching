@@ -12,5 +12,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<ProviderSearchResultDto> SearchAsync(long ukPrn);
         Task UpdateProviderDetail(ProviderDetailViewModel viewModel);
         Task<int> CreateProvider(ProviderDetailViewModel viewModel);
+        Task<bool> ProviderHasAnyVenueAsync(int providerId);
     }
 }
