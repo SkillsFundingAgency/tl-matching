@@ -125,7 +125,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
             services.AddTransient<IRepository<Qualification>, GenericRepository<Qualification>>();
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
-            services.AddTransient<IRepository<Provider>, GenericRepository<Provider>>();
+            services.AddTransient<IRepository<Provider>, ProviderRepository>();
             services.AddTransient<IRepository<ProviderFeedbackRequestHistory>, GenericRepository<ProviderFeedbackRequestHistory>>();
             services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
