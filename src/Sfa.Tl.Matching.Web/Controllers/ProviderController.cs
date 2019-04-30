@@ -52,6 +52,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return View(resultsViewModel);
         }
+
         [HttpGet]
         [Route("provider-overview/{providerId}", Name = "GetProviderDetail")]
         public async Task<IActionResult> ProviderDetail(int providerId)
@@ -101,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     return View(nameof(ProviderDetail), viewModel);
                 }
 
-                return View(nameof(SearchProvider));
+                return View(nameof(SearchProvider), await GetProviderSearchResults(new ProviderSearchParametersViewModel()));
             }
 
             return View(nameof(ProviderDetail), viewModel);
