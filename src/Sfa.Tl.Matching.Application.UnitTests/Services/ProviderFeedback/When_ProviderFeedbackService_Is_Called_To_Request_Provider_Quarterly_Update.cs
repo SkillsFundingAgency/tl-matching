@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -21,10 +18,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
         public When_ProviderFeedbackService_Is_Called_To_Request_Provider_Quarterly_Update()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmailHistoryMapper).Assembly));
-            var mapper = new Mapper(config);
             _emailService = Substitute.For<IEmailService>();
-            var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
+            var emailHistoryService = Substitute.For<IEmailHistoryService>();
+
             _messageQueueService = Substitute.For<IMessageQueueService>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
@@ -39,9 +35,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .GetProvidersWithFundingAsync()
                 .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
 
-            var providerFeedbackService = new ProviderFeedbackService(_emailService,
+            var providerFeedbackService = new ProviderFeedbackService(
+                _emailService, emailHistoryService,
                 providerRepository, _providerFeedbackRequestHistoryRepository,
-                _messageQueueService, dateTimeProvider, mapper, logger);
+                _messageQueueService, dateTimeProvider);
 
             providerFeedbackService
                 .RequestProviderQuarterlyUpdateAsync("TestUser")

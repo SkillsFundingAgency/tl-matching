@@ -137,6 +137,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IEmailHistoryService, EmailHistoryService>();
             services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<ISearchProvider, SqlSearchProvider>();

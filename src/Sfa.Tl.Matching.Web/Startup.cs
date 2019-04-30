@@ -201,6 +201,7 @@ namespace Sfa.Tl.Matching.Web
         private static void RegisterApplicationServices(IServiceCollection services)
         {
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IEmailHistoryService, EmailHistoryService>();
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IOpportunityService, OpportunityService>();

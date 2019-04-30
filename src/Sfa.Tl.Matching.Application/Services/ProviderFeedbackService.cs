@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -13,29 +12,26 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class ProviderFeedbackService : IProviderFeedbackService
     {
-        private readonly ILogger<ProviderFeedbackService> _logger;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
-        private readonly IMapper _mapper;
+        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IRepository<Provider> _providerRepository;
         private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
         private readonly IMessageQueueService _messageQueueService;
 
         public ProviderFeedbackService(IEmailService emailService,
+            IEmailHistoryService emailHistoryService,
             IRepository<Provider> providerRepository,
             IRepository<ProviderFeedbackRequestHistory> providerFeedbackRequestHistoryRepository,
             IMessageQueueService messageQueueService,
-            IDateTimeProvider dateTimeProvider,
-            IMapper mapper,
-            ILogger<ProviderFeedbackService> logger)
+            IDateTimeProvider dateTimeProvider)
         {
             _emailService = emailService;
-            _providerRepository = providerRepository;
+            _emailHistoryService = emailHistoryService;
+                _providerRepository = providerRepository;
             _providerFeedbackRequestHistoryRepository = providerFeedbackRequestHistoryRepository;
             _messageQueueService = messageQueueService;
             _dateTimeProvider = dateTimeProvider;
-            _mapper = mapper;
-            _logger = logger;
         }
 
         public async Task RequestProviderQuarterlyUpdateAsync(string userName)
@@ -58,6 +54,8 @@ namespace Sfa.Tl.Matching.Application.Services
             var providerFeedbackRequestHistory = 
                 await _providerFeedbackRequestHistoryRepository
                     .GetSingleOrDefault(p => p.Id == providerFeedbackRequestHistoryId);
+
+            var emailTemplateName = EmailTemplateName.ProviderQuarterlyUpdate.ToString();
 
             var providers = await ((IProviderRepository)_providerRepository).GetProvidersWithFundingAsync();
 
@@ -99,11 +97,17 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("secondary_contact_details", secondaryDetailsBuilder.ToString());
 
-                await _emailService.SendEmail(EmailTemplateName.ProviderQuarterlyUpdate.ToString(),
+                await _emailService.SendEmail(emailTemplateName,
                     toAddress,
                     "Industry Placement Matching Provider Update",
                     tokens,
                     "");
+
+                await _emailHistoryService.SaveEmailHistory(emailTemplateName, 
+                    tokens, 
+                    null, 
+                    toAddress, 
+                    userName);
             }
 
             providerFeedbackRequestHistory.ProviderCount = providers.Count;

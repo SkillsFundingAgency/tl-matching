@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -18,15 +15,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
     public class When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails
     {
         private readonly IEmailService _emailService;
+        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IProviderRepository _providerRepository;
         private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
 
         public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmailHistoryMapper).Assembly));
-            var mapper = new Mapper(config);
             _emailService = Substitute.For<IEmailService>();
-            var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
+            _emailHistoryService = Substitute.For<IEmailHistoryService>();
+
             var messageQueueService = Substitute.For<IMessageQueueService>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
@@ -40,9 +37,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .GetSingleOrDefault(Arg.Any<Expression<Func<ProviderFeedbackRequestHistory, bool>>>())
                 .Returns(new ProviderFeedbackRequestHistoryBuilder().Build());
 
-            var providerFeedbackService = new ProviderFeedbackService(_emailService,
+            var providerFeedbackService = new ProviderFeedbackService(
+                _emailService, _emailHistoryService,
                 _providerRepository, _providerFeedbackRequestHistoryRepository,
-                messageQueueService, dateTimeProvider, mapper, logger);
+                messageQueueService, dateTimeProvider);
 
             providerFeedbackService
                 .SendProviderQuarterlyUpdateEmailsAsync(1, "TestUser")
@@ -230,6 +228,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                         tokens => tokens.ContainsKey("venues_and_qualifications_list")
                                   && tokens["venues_and_qualifications_list"] == expectedProviderVenueQualificationsList),
                     Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
+        {
+            _emailHistoryService
+                .Received(1)
+                .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
         }
     }
 }
