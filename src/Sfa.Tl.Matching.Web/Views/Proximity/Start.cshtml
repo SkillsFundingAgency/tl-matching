@@ -5,7 +5,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">Match employers with providers for industry placements</h1>
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
         <p class="govuk-body">Use this service to help employers:</p>
         <ul class="govuk-list govuk-list--bullet">
             <li>find local providers with suitable students</li>
@@ -21,15 +21,15 @@
 
         @if (Context.User.HasAdminRole())
         {
-            <h2 class="govuk-heading-m">Service administration</h2>
-            <ul class="govuk-list">
-                <li>
-                    <a asp-action="Index" class="govuk-link" asp-controller="DataImport" id="tl-upload-link">Upload employer and provider data</a>
-                </li>
-                <li>
-                    <a asp-action="SearchProvider" class="govuk-link" asp-controller="Provider" id="tl-upload-link">Add or edit provider data</a>
-                </li>
-            </ul>
+        <h2 class="govuk-heading-m">Service administration</h2>
+        <ul class="govuk-list">
+            <li>
+                <a asp-action="Index" class="govuk-link" asp-controller="DataImport" id="tl-upload-link">Upload employer and provider data</a>
+            </li>
+            <li>
+                <a asp-action="SearchProvider" class="govuk-link" asp-controller="Provider" id="tl-Add-edit-provider-link">Add or edit provider data</a>
+            </li>
+        </ul>
         }
     </div>
 </div>

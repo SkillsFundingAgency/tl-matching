@@ -8,12 +8,19 @@ namespace Sfa.Tl.Matching.Models.Extensions
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (IsRequired && value == null)
+                return new ValidationResult($"You must enter a telephone number for the {FieldName} number");
+
+            if (!IsRequired && value == null)
+                return ValidationResult.Success;
+
             var phoneNumber = value.ToString();
+
             if (IsRequired && string.IsNullOrWhiteSpace(phoneNumber))
                 return new ValidationResult($"You must enter a telephone number for the {FieldName} number");
-            if (IsRequired && !phoneNumber.Any(char.IsDigit))
-                return new ValidationResult("You must enter a number");
-            if (IsRequired && !Regex.IsMatch(phoneNumber, @"^(?:.*\d.*){7,}$"))
+            if (!phoneNumber.Any(char.IsDigit))
+                return new ValidationResult("You must enter a telephone number using numbers");
+            if (!Regex.IsMatch(phoneNumber, @"^(?:.*\d.*){7,}$"))
                 return new ValidationResult("You must enter a telephone number that has 7 or more numbers");
             return ValidationResult.Success;
         }

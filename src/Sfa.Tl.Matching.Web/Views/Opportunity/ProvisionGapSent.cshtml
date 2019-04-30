@@ -5,9 +5,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-8">
-            <h1 class="govuk-panel__title">
-                Report sent to the industry placement team
-            </h1>
+            <h1 class="govuk-panel__title">@ViewData["Title"]</h1>
         </div>
 
         <div class="govuk-inset-text">
@@ -15,8 +13,12 @@
         </div>
 
         <h2 class="govuk-heading-m">What happens next</h2>
-        <p class="govuk-body">We will try to find providers with students studying @Model.RouteName near @Model.Postcode.</p>
-        <p class="govuk-body">If @Model.EmployerContactName has agreed that we can share their contact details, we will contact them when we find suitable providers.</p>
+        <p class="govuk-body">
+            We are mainly using this information to spot trends in employer demand for placements and providers’ ability to respond. This data helps us improve how industry placements work at a national level.
+        </p>
+        <p class="govuk-body">
+            In rare situations we may be able to find suitable providers for the employer. If this happens we will contact the employer to see how they want to proceed.
+        </p>
         <a asp-controller="Proximity" asp-action="Start" class="govuk-button" id="tl-finish">Finish</a>
         <p class="govuk-body js-visible"><a class="govuk-link" href="/feedback">Give us feedback</a></p>
     </div>

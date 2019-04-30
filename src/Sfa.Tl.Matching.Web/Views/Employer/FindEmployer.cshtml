@@ -29,7 +29,7 @@
             <div class="govuk-form-group" sfa-validation-for="CompanyName" sfa-validationerror-class="govuk-form-group--error">
                 <h1 class="govuk-label-wrapper">
                     <label class="govuk-label govuk-label--l" asp-for="CompanyName">
-                        Who is the employer?
+                        @ViewData["Title"]
                     </label>
                     <span id="employer-name-hint" class="govuk-hint">
                         Start typing their business name

@@ -38,7 +38,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 OpportunityId = dto.Id,
                 SearchRadius = viewModel.SearchRadius,
                 Postcode = viewModel.Postcode,
-                RouteId = viewModel.SelectedRouteId ?? 0
+                RouteId = viewModel.SelectedRouteId ?? 0,
+                SearchResultProviderCount = viewModel.SearchResultProviderCount
             };
             await _opportunityService.UpdateOpportunity(providerSearchDto);
 

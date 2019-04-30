@@ -3,13 +3,13 @@
 @model Sfa.Tl.Matching.Models.ViewModel.ErrorViewModel
 @inject HostingEnvironment HostingEnvironment
 @{
-    ViewBag.Title = "Service unavailable because of a technical problem";
+    ViewData["Title"] = "Service unavailable because of a technical problem";
     var ex = ViewData["Exception"] as Exception;
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">@ViewBag.Title</h1>
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
         @if (HostingEnvironment.IsDevelopment())
         {
             <h2 class="govuk-heading-l">An error occurred while processing your request.</h2>

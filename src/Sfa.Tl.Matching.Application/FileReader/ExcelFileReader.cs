@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
         private readonly IDataParser<TDto> _dataParser;
         private readonly IValidator<TImportDto> _validator;
         private readonly IRepository<FunctionLog> _functionLogRepository;
-        
+
         public ExcelFileReader(
             ILogger<ExcelFileReader<TImportDto, TDto>> logger,
             IDataParser<TDto> dataParser,
@@ -65,8 +65,16 @@ namespace Sfa.Tl.Matching.Application.FileReader
                         prop.SetValue(fileImportDto, cellValue.Trim());
                     }
 
-                    var validationResult = await _validator.ValidateAsync(fileImportDto);
-                    
+                    ValidationResult validationResult;
+                    try
+                    {
+                        validationResult = await _validator.ValidateAsync(fileImportDto);
+                    }
+                    catch (Exception exception)
+                    {
+                        validationResult = new ValidationResult { Errors = { new ValidationFailure(nameof(TDto), exception.ToString()) } };
+                    }
+
                     if (!validationResult.IsValid)
                     {
                         LogErrorsAndWarnings(startIndex, validationResult, validationErrors);
@@ -77,7 +85,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     }
 
                     var dto = _dataParser.Parse(fileImportDto);
-                    
+
                     dtos.AddRange(dto);
 
                     startIndex++;

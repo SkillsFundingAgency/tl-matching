@@ -37,6 +37,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string SecondaryContact { get; set; }
 
         [RegularExpression(@"^[a-zA-Z0-9\u0080-\uFFA7?$#()""'!,+\-=_:;.&€£*%\s\/]+@[a-zA-Z0-9\u0080-\uFFA7?$#()""'!,+\-=_:;.&€£*%\s\/]+\.([a-zA-Z0-9\u0080-\uFFA7]{2,10})$", ErrorMessage = "Enter an email address in the correct format, like name@example.com")]
+        [Required(ErrorMessage = "You must enter an email for the secondary contact")]
         public string SecondaryContactEmail { get; set; }
 
         [PhoneNumber(FieldName = "primary contact", IsRequired = false)]
@@ -45,7 +46,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         [Required(ErrorMessage = "You must tell us whether the provider should receive referrals")]
         public bool? IsEnabledForReferral { get; set; }
         public bool IsEnabledForSearch { get; set; }
-
+        public string SubmitAction { get; set; }
         public List<ProviderVenueViewModel> ProviderVenue { get; set; }
     }
 }
