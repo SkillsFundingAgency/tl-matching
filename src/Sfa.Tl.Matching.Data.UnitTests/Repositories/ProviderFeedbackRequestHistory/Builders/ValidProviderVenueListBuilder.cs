@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHis
             {
                 Id = 1,
                 ProviderCount = 5,
-                Status = (int)ProviderFeedbackRequestStatus.Pending,
+                Status = (short)ProviderFeedbackRequestStatus.Pending,
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHis
             {
                 Id = 2,
                 ProviderCount = 10,
-                Status = (int)ProviderFeedbackRequestStatus.Sent,
+                Status = (short)ProviderFeedbackRequestStatus.Sent,
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,

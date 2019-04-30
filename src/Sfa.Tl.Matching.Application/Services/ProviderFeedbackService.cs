@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var providerFeedbackRequestHistoryId = await _providerFeedbackRequestHistoryRepository.Create(
                 new ProviderFeedbackRequestHistory
                 {
-                    Status = (int)ProviderFeedbackRequestStatus.Pending,
+                    Status = (short)ProviderFeedbackRequestStatus.Pending,
                     CreatedBy = userName
                 });
 
@@ -107,7 +107,7 @@ namespace Sfa.Tl.Matching.Application.Services
             }
 
             providerFeedbackRequestHistory.ProviderCount = providers.Count;
-            providerFeedbackRequestHistory.Status = (int)ProviderFeedbackRequestStatus.Sent;
+            providerFeedbackRequestHistory.Status = (short)ProviderFeedbackRequestStatus.Sent;
             providerFeedbackRequestHistory.ModifiedBy = userName;
             providerFeedbackRequestHistory.ModifiedOn = _dateTimeProvider.UtcNow();
             await _providerFeedbackRequestHistoryRepository.Update(providerFeedbackRequestHistory);

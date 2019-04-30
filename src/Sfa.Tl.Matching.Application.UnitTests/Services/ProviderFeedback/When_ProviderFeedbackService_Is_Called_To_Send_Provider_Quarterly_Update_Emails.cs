@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Received(1)
                 .Update(Arg.Is<ProviderFeedbackRequestHistory>(
                     p => p.Id == 1
-                         && p.Status == (int)ProviderFeedbackRequestStatus.Sent
+                         && p.Status == (short)ProviderFeedbackRequestStatus.Sent
                          && p.ProviderCount == 1
                          && p.ModifiedBy == "TestUser"
                          ));
