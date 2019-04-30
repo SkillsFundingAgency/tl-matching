@@ -36,7 +36,8 @@
                 <label class="govuk-label" for="Name">
                     Enter venue name (optional)
                 </label>
-                <input asp-for="Name" class="govuk-input govuk-!-width-two-thirds" id="Name" name="Name" type="text" sfa-validation-for="Name" sfa-validationerror-class="govuk-input--error">
+                <span class="govuk-error-message" asp-validation-for="Name"></span>
+                <input asp-for="Name" class="govuk-input" type="text" sfa-validation-for="Name" sfa-validationerror-class="govuk-input--error">
             </div>
 
             <input asp-for="Id" type="hidden" />
