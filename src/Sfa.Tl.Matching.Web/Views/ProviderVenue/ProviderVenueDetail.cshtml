@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = Model.Postcode;
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section backButton{
@@ -28,7 +27,7 @@
     <div class="govuk-grid-column-two-thirds">
 
         <span class="govuk-caption-m">@Model.ProviderName</span>
-        <h1 class="govuk-heading-l">@Model.Postcode</h1>
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
         <p class="govuk-body">
             <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-providerVenueId="@Model.Id" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>
         </p>

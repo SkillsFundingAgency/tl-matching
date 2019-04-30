@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Search for a provider";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section backButton{
@@ -25,7 +24,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1>Search for the provider’s UKPRN</h1>
+        <h1 class="govuk-heading-l">Search for the provider’s UKPRN</h1>
         <form class="form" asp-controller="Provider" asp-action="SearchProvider" novalidate>
             <p class="govuk-body">You can only add or change details for providers that have a UK Provider Reference Number (UKPRN)</p>
 

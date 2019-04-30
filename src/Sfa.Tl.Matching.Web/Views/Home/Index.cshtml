@@ -1,21 +1,19 @@
 ﻿@{
-    ViewData["Title"] = "Match employers with providers for industry placements";
+    ViewData["Title"] = "How to sign in";
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">How to sign in</h1>
-
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
         <h2 class="govuk-heading-s govuk-!-margin-bottom-0">If you do not have an account to sign in</h2>
         <p class="govuk-body">Speak to your line manager or team lead and they can request one for you.</p>
 
-        <h2 class="govuk-heading-s govuk-!-margin-bottom-0" ">If you sign in to ESFA services with an &#64;sfa.bis.gov.uk account</h2>
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-0">If you sign in to ESFA services with an &#64;sfa.bis.gov.uk account</h2>
         <p class="govuk-body">Use the same details to sign in to this service.</p>
 
-        <h2 class="govuk-heading-s govuk-!-margin-bottom-0" ">If you sign in to ESFA services with a different account</h2>
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-0">If you sign in to ESFA services with a different account</h2>
         <p class="govuk-body">Use the details that your team lead should have given you for this service.</p>
-
 
         <details class="govuk-details">
             <summary class="govuk-details__summary">
@@ -29,8 +27,6 @@
 
             </div>
         </details>
-        
-
 
         <div class="govuk-form-group">
             <a asp-action="SignIn" asp-controller="Account" id="tl-login" class="govuk-button" id="tl-login">Continue</a>
