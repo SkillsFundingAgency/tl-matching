@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var emailHistory = new EmailHistory
             {
-                OpportunityId = opportunityId.Value,
+                OpportunityId = opportunityId,
                 EmailTemplateId = emailTemplate.Id,
                 EmailPlaceholder = emailPlaceholders,
                 SentTo = emailAddress,
