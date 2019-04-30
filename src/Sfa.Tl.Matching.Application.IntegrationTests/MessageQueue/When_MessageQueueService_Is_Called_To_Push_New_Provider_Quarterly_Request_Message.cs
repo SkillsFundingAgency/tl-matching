@@ -30,8 +30,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
             CloudQueueMessage retrievedMessage = null;
             try
             {
-                await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new ProviderRequestData
-                    {ProviderRequestId = 1001});
+                await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderFeedbackEmail
+                    {ProviderFeedbackRequestHistoryId = 1001});
                 retrievedMessage = await _queue.GetMessageAsync();
                 retrievedMessage.Should().NotBeNull();
                 retrievedMessage.AsString.Should().Contain("1001");

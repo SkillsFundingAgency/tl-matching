@@ -37,20 +37,20 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task RequestProviderQuarterlyUpdateAsync(string userName)
         {
-            var providerFeedbackRequestHistory = await _providerFeedbackRequestHistoryRepository.Create(
+            var providerFeedbackRequestHistoryId = await _providerFeedbackRequestHistoryRepository.Create(
                 new ProviderFeedbackRequestHistory
                 {
                     Status = (int)ProviderFeedbackRequestStatus.Pending,
                     CreatedBy = userName
                 });
 
-            await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new ProviderRequestData
+            await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderFeedbackEmail
             {
-                ProviderRequestId = providerFeedbackRequestHistory
+                ProviderFeedbackRequestHistoryId = providerFeedbackRequestHistoryId
             });
 
             //TODO: Refactor this call out to a Function
-            await SendProviderQuarterlyUpdateEmailsAsync(providerFeedbackRequestHistory);
+            await SendProviderQuarterlyUpdateEmailsAsync(providerFeedbackRequestHistoryId);
         }
 
         public async Task SendProviderQuarterlyUpdateEmailsAsync(long providerFeedbackRequestHistoryId)

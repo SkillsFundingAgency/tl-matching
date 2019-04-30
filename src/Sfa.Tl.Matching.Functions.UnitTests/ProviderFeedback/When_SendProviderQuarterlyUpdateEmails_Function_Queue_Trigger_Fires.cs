@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderFeedback
 
             var providerFeedbackFunctions = new Functions.ProviderFeedback();
             providerFeedbackFunctions.SendProviderQuarterlyUpdateEmails(
-                new ProviderRequestData { ProviderRequestId = 1 }, 
+                new SendProviderFeedbackEmail { ProviderFeedbackRequestHistoryId = 1 }, 
                 new ExecutionContext(), 
                 new NullLogger<Functions.Proximity>(), 
                 _providerFeedbackService, 

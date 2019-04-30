@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Functions
     public class ProviderFeedback
     {
         [FunctionName("SendProviderQuarterlyUpdateEmails")]
-        public async Task SendProviderQuarterlyUpdateEmails([QueueTrigger(QueueName.ProviderQuarterlyRequestQueue, Connection = "BlobStorageConnectionString")]ProviderRequestData providerRequestData, 
+        public async Task SendProviderQuarterlyUpdateEmails([QueueTrigger(QueueName.ProviderQuarterlyRequestQueue, Connection = "BlobStorageConnectionString")]SendProviderFeedbackEmail providerRequestData, 
             ExecutionContext context,
             ILogger logger,
             [Inject] IProviderFeedbackService providerFeedbackService,
@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Functions
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var providerFeedbackRequestHistoryId = providerRequestData.ProviderRequestId;
+            var providerFeedbackRequestHistoryId = providerRequestData.ProviderFeedbackRequestHistoryId;
 
             try
             {

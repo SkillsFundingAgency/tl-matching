@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 QueueName.GetProximityQueue);
         }
 
-        public async Task PushProviderQuarterlyRequestMessageAsync(ProviderRequestData providerRequest)
+        public async Task PushProviderQuarterlyRequestMessageAsync(SendProviderFeedbackEmail providerRequest)
         {
             await PushMessageAsync(
                 JsonConvert.SerializeObject(providerRequest),

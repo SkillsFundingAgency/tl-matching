@@ -62,8 +62,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         {
             _messageQueueService
                 .Received(1)
-                .PushProviderQuarterlyRequestMessageAsync(Arg.Is<ProviderRequestData>(message =>
-                    message.ProviderRequestId == 1));
+                .PushProviderQuarterlyRequestMessageAsync(Arg.Is<SendProviderFeedbackEmail>(message =>
+                    message.ProviderFeedbackRequestHistoryId == 1));
         }
 
         [Fact]
