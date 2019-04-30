@@ -14,6 +14,7 @@ namespace Sfa.Tl.Matching.Application.Services
     public class ProviderFeedbackService : IProviderFeedbackService
     {
         private readonly ILogger<ProviderFeedbackService> _logger;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         private readonly IRepository<Provider> _providerRepository;
@@ -24,6 +25,7 @@ namespace Sfa.Tl.Matching.Application.Services
             IRepository<Provider> providerRepository,
             IRepository<ProviderFeedbackRequestHistory> providerFeedbackRequestHistoryRepository,
             IMessageQueueService messageQueueService,
+            IDateTimeProvider dateTimeProvider,
             IMapper mapper,
             ILogger<ProviderFeedbackService> logger)
         {
@@ -31,6 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _providerRepository = providerRepository;
             _providerFeedbackRequestHistoryRepository = providerFeedbackRequestHistoryRepository;
             _messageQueueService = messageQueueService;
+            _dateTimeProvider = dateTimeProvider;
             _mapper = mapper;
             _logger = logger;
         }
@@ -48,14 +51,13 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 ProviderFeedbackRequestHistoryId = providerFeedbackRequestHistoryId
             });
-
-            //TODO: Refactor this call out to a Function
-            await SendProviderQuarterlyUpdateEmailsAsync(providerFeedbackRequestHistoryId);
         }
 
-        public async Task SendProviderQuarterlyUpdateEmailsAsync(long providerFeedbackRequestHistoryId)
+        public async Task SendProviderQuarterlyUpdateEmailsAsync(int providerFeedbackRequestHistoryId, string userName)
         {
-            //TODO: Retrieve record for providerFeedbackRequestHistoryId and update it with count and Sent status
+            var providerFeedbackRequestHistory = 
+                await _providerFeedbackRequestHistoryRepository
+                    .GetSingleOrDefault(p => p.Id == providerFeedbackRequestHistoryId);
 
             var providers = await ((IProviderRepository)_providerRepository).GetProvidersWithFundingAsync();
 
@@ -103,6 +105,12 @@ namespace Sfa.Tl.Matching.Application.Services
                     tokens,
                     "");
             }
+
+            providerFeedbackRequestHistory.ProviderCount = providers.Count;
+            providerFeedbackRequestHistory.Status = (int)ProviderFeedbackRequestStatus.Sent;
+            providerFeedbackRequestHistory.ModifiedBy = userName;
+            providerFeedbackRequestHistory.ModifiedOn = _dateTimeProvider.UtcNow();
+            await _providerFeedbackRequestHistoryRepository.Update(providerFeedbackRequestHistory);
         }
     }
 }

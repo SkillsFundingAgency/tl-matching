@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -8,6 +10,7 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
@@ -16,6 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
     {
         private readonly IEmailService _emailService;
         private readonly IProviderRepository _providerRepository;
+        private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
 
         public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails()
         {
@@ -24,19 +28,25 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _emailService = Substitute.For<IEmailService>();
             var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
             var messageQueueService = Substitute.For<IMessageQueueService>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             _providerRepository = Substitute.For<IProviderRepository>();
-            var providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
-
             _providerRepository
                 .GetProvidersWithFundingAsync()
                 .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
 
-            var providerFeedbackService = new ProviderFeedbackService(_emailService,
-                _providerRepository, providerFeedbackRequestHistoryRepository,
-                messageQueueService, mapper, logger);
+            _providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
+            _providerFeedbackRequestHistoryRepository
+                .GetSingleOrDefault(Arg.Any<Expression<Func<ProviderFeedbackRequestHistory, bool>>>())
+                .Returns(new ProviderFeedbackRequestHistoryBuilder().Build());
 
-            providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(1).GetAwaiter().GetResult();
+            var providerFeedbackService = new ProviderFeedbackService(_emailService,
+                _providerRepository, _providerFeedbackRequestHistoryRepository,
+                messageQueueService, dateTimeProvider, mapper, logger);
+
+            providerFeedbackService
+                .SendProviderQuarterlyUpdateEmailsAsync(1, "TestUser")
+                .GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -47,6 +57,27 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .GetProvidersWithFundingAsync();
         }
 
+        [Fact]
+        public void Then_ProviderFeedbackRequestHistoryRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
+        {
+            _providerFeedbackRequestHistoryRepository
+                .Received(1)
+                .GetSingleOrDefault(Arg.Any<Expression<Func<ProviderFeedbackRequestHistory, bool>>>());
+        }
+
+        [Fact]
+        public void Then_ProviderFeedbackRequestHistoryRepository_Update_Is_Called_Exactly_Once()
+        {
+            _providerFeedbackRequestHistoryRepository
+                .Received(1)
+                .Update(Arg.Is<ProviderFeedbackRequestHistory>(
+                    p => p.Id == 1
+                         && p.Status == (int)ProviderFeedbackRequestStatus.Sent
+                         && p.ProviderCount == 1
+                         && p.ModifiedBy == "TestUser"
+                         ));
+        }
+        
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_Exactly_Once()
         {

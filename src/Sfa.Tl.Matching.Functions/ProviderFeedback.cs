@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Functions
 
             try
             {
-                await providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(providerFeedbackRequestHistoryId);
+                await providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(providerFeedbackRequestHistoryId, "System");
             }
             catch (Exception e)
             {

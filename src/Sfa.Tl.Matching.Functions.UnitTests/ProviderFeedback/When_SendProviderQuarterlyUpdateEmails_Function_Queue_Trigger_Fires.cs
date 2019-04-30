@@ -31,7 +31,9 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderFeedback
         {
             _providerFeedbackService
                 .Received(1)
-                .SendProviderQuarterlyUpdateEmailsAsync(Arg.Is<long>(id => id == 1));
+                .SendProviderQuarterlyUpdateEmailsAsync(
+                    Arg.Is<int>(id => id == 1), 
+                    Arg.Is<string>(u => u == "System"));
         }
     }
 }

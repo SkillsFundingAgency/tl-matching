@@ -18,7 +18,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         private readonly IEmailService _emailService;
         private readonly IMessageQueueService _messageQueueService;
         private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
-        private readonly IProviderRepository _providerRepository;
 
         public When_ProviderFeedbackService_Is_Called_To_Request_Provider_Quarterly_Update()
         {
@@ -27,23 +26,26 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _emailService = Substitute.For<IEmailService>();
             var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
             _messageQueueService = Substitute.For<IMessageQueueService>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
-            _providerRepository = Substitute.For<IProviderRepository>();
+            var providerRepository = Substitute.For<IProviderRepository>();
             _providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
 
             _providerFeedbackRequestHistoryRepository
                 .Create(Arg.Any<ProviderFeedbackRequestHistory>())
                 .Returns(1);
 
-            _providerRepository
+            providerRepository
                 .GetProvidersWithFundingAsync()
                 .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
 
             var providerFeedbackService = new ProviderFeedbackService(_emailService,
-                _providerRepository, _providerFeedbackRequestHistoryRepository,
-                _messageQueueService, mapper, logger);
+                providerRepository, _providerFeedbackRequestHistoryRepository,
+                _messageQueueService, dateTimeProvider, mapper, logger);
 
-            providerFeedbackService.RequestProviderQuarterlyUpdateAsync("TestUser").GetAwaiter().GetResult();
+            providerFeedbackService
+                .RequestProviderQuarterlyUpdateAsync("TestUser")
+                .GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -70,8 +72,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         public void Then_EmailService_SendEmail_Is_Not_Called()
         {
             _emailService
-                .Received(1) //TODO: After refactoring the method should NOT be called
-                //.DidNotReceive()
+                .DidNotReceive()
                 .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
     }
