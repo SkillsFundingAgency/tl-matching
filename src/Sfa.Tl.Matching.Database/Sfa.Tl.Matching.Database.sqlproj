@@ -66,7 +66,6 @@
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
     <None Include="PostDeployment\Seed Email Templates.sql" />
     <None Include="PostDeployment\ResetProviderEnabledFields.sql" />
-    <None Include="PostDeployment\VenuePostCodesToUpperCase.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />

@@ -9,7 +9,7 @@
 	[Latitude] [DECIMAL](9, 6) NULL,
 	[Longitude] [DECIMAL](9, 6) NULL,
 	[Location] GEOGRAPHY NULL,
-	[IsEnabledForSearch] BIT NULL,
+	[IsEnabledForSearch] BIT NOT NULL,
 	[Source] VARCHAR(50) NOT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
