@@ -2,7 +2,7 @@
 --      set the column in the table to NOT NULL and remove this file
 
 UPDATE [dbo].[Provider]
-SET [IsFundedForNextYear] = 1
+SET [IsFundedForNextYear] = [Status]
 WHERE [IsFundedForNextYear] IS NULL
 
 ALTER TABLE [dbo].[Provider] ALTER COLUMN [IsFundedForNextYear] BIT NOT NULL;
