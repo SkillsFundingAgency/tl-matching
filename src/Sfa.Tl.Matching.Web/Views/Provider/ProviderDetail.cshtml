@@ -169,7 +169,9 @@
                                 <th class="govuk-table__cell">@venue.Postcode</th>
                                 <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
                                 <td class="govuk-table__cell">No data yet</td>
-                                    @*<td class="govuk-table__cell"><a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@venue.ProviderVenueId" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>*@
+                                <td class="govuk-table__cell"><a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@venue.ProviderVenueId"
+                                                                 asp-route-providerId="@Model.Id"
+                                                                 class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>
                             </tr>
                         }
                     </tbody>
