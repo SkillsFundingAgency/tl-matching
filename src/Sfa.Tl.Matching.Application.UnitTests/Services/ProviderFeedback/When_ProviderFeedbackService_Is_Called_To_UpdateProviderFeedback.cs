@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using AutoMapper;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
@@ -22,12 +19,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
-            var emailService = Substitute.For<IEmailService>();
-            var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
-            var messageQueueService = Substitute.For<IMessageQueueService>();
 
             _providerRepository = Substitute.For<IProviderRepository>();
-            var providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
 
             var service = new ProviderService(mapper, _providerRepository);
 
@@ -44,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         {
             _providerRepository.Received(1).UpdateManyWithSpecifedColumnsOnly(
                 Arg.Any<List<Domain.Models.Provider>>(),
-                Arg.Any<Expression<Func<Domain.Models.Provider, object>>>());
+                Arg.Any<Expression<Func<Domain.Models.Provider, object>>[]>());
         }
     }
 }

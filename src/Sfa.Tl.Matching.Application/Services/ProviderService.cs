@@ -118,7 +118,8 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var providers = _mapper.Map<IList<Provider>>(viewModel.Providers);
 
-            return _repository.UpdateManyWithSpecifedColumnsOnly(providers, x => x.IsFundedForNextYear);
+            return _repository.UpdateManyWithSpecifedColumnsOnly(providers, 
+                x => x.IsFundedForNextYear);//,
         }
     }
 }
