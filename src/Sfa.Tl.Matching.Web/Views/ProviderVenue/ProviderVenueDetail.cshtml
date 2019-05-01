@@ -5,7 +5,14 @@
 }
 
 @section backButton{
-    <a asp-route="AddVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link">Back</a>
+    @if (Model.IsFromAddVenue)
+    {
+        <a asp-route="AddVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link">Back</a>
+    }
+    else
+    {
+        <a asp-controller="Provider" asp-action="ProviderDetail" asp-route-providerId="@Model.ProviderId" class="govuk-back-link">Back</a>
+    }
 }
 
 @if (!ViewData.ModelState.IsValid)
@@ -42,6 +49,7 @@
 
             <input asp-for="Id" type="hidden" />
             <input asp-for="ProviderId" type="hidden" />
+            <input asp-for="IsFromAddVenue" type="hidden" />
             <input asp-for="IsEnabledForSearch" type="hidden" />
             <input asp-for="Postcode" type="hidden" />
             <input asp-for="Source" value="Admin" type="hidden" />

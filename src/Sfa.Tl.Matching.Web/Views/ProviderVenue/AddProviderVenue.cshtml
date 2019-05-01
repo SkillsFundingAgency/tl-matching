@@ -26,13 +26,14 @@
         <form asp-route="AddVenue" novalidate>
             <input asp-for="ProviderId" type="hidden" />
             <input asp-for="Source" value="Admin" type="hidden" />
-            <div class="govuk-form-group">
-                <div class="govuk-form-group">
-                    <label class="govuk-label" for="venuepostcode">
-                        <h1>Enter the venue’s postcode</h1>
-                    </label>
-                    <input asp-for="Postcode" class="govuk-input govuk-input--width-5" id="venuepostcode" sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error" type="text">
-                </div>
+            <div class="govuk-form-group" sfa-validation-for="Postcode" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label" asp-for="Postcode">
+                    <h1>Enter the venue’s postcode</h1>
+                </label>
+                <span class="govuk-error-message" asp-validation-for="Postcode"></span>
+                <input asp-for="Postcode" class="govuk-input govuk-input--width-5"
+                       sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error"
+                       type="text">
             </div>
 
             <button type="submit" class="govuk-button">

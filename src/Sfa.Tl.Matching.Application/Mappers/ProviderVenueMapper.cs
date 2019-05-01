@@ -31,6 +31,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<ProviderVenue, ProviderVenueDetailViewModel>()
                 .ForMember(m => m.Qualifications, config => config.Ignore())
+                .ForMember(m => m.IsFromAddVenue, config => config.Ignore())
                 ;
 
             CreateMap<ProviderVenueDetailViewModel, ProviderVenue>()

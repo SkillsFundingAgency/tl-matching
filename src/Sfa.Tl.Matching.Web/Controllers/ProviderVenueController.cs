@@ -51,9 +51,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
         
         [Route("venue-overview/{providerVenueId}", Name = "GetProviderVenueDetail")]
-        public async Task<IActionResult> ProviderVenueDetail(int providerVenueId)
+        public async Task<IActionResult> ProviderVenueDetail(int providerVenueId, int providerId = 0)
         {
+            var isFromAddVenue = providerId == 0;
             var viewModel = await Populate(providerVenueId);
+            viewModel.IsFromAddVenue = isFromAddVenue;
 
             return View(viewModel);
         }
