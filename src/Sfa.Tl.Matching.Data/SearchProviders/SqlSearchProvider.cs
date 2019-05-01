@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using NetTopologySuite;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Data.SearchProviders
 {
