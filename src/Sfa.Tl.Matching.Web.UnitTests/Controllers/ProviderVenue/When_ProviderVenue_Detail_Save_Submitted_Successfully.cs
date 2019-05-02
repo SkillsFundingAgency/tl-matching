@@ -63,5 +63,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         {
             _providerVenueService.DidNotReceive().GetVenueWithQualificationsAsync(1);
         }
+
+        [Fact]
+        public void Then_UpdateVenue_Is_Called_Exactly_Once()
+        {
+            _providerVenueService.Received(1).UpdateVenueAsync(Arg.Any<ProviderVenueDetailViewModel>());
+        }
     }
 }

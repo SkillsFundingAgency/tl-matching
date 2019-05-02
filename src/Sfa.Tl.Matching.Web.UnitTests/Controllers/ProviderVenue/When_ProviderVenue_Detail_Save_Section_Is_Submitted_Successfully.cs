@@ -28,10 +28,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var viewModel = new ProviderVenueDetailViewModel
             {
                 Id = 1,
-                Postcode = "CV1 2WT"
+                Postcode = "CV1 2WT",
+                SubmitAction = "SaveSection"
             };
 
-            _result = controllerWithClaims.SaveVenue(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.ProviderVenueDetail(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -51,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         [Fact]
         public void Then_GetVenueWithQualifications_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).GetVenueWithQualificationsAsync(1);
+            _providerVenueService.DidNotReceive().GetVenueWithQualificationsAsync(1);
         }
 
         [Fact]
