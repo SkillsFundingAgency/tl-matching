@@ -44,6 +44,29 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ProviderId, config => config.MapFrom(s => s.Id))
                 .ForMember(m => m.ProviderName, config => config.MapFrom(s => s.Name));
 
+            /*
+            Message: AutoMapper.AutoMapperMappingException : Error mapping types.
+
+Mapping types:
+HideProviderViewModel -> Provider
+Sfa.Tl.Matching.Models.ViewModel.HideProviderViewModel -> Sfa.Tl.Matching.Domain.Models.Provider
+
+Type Map configuration:
+HideProviderViewModel -> Provider
+Sfa.Tl.Matching.Models.ViewModel.HideProviderViewModel -> Sfa.Tl.Matching.Domain.Models.Provider
+
+Destination Member:
+ModifiedBy
+
+---- System.MissingMethodException : No parameterless constructor defined for this object.
+             */
+            CreateMap<HideProviderViewModel, Provider>()
+                .ForMember(m => m.Id, config => config.MapFrom(s => s.ProviderId))
+                .ForMember(m => m.IsEnabledForSearch, config => config.MapFrom(s => s.IsEnabledForSearch))
+                .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<HideProviderViewModel, Provider>>())
+                .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<HideProviderViewModel, Provider>>())
+                .ForAllOtherMembers(config => config.Ignore());
+
             CreateMap<Provider, ProviderSearchResultItemViewModel>()
                 .ForMember(m => m.ProviderId, config => config.MapFrom(s => s.Id))
                 .ForMember(m => m.ProviderName, config => config.MapFrom(s => s.Name));

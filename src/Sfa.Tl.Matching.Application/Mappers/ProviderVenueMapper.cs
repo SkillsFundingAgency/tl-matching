@@ -21,8 +21,14 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<ProviderVenue, HideProviderVenueViewModel>()
                 .ForMember(m => m.ProviderVenueId, config => config.MapFrom(s => s.Id))
-                .ForMember(m => m.ProviderVenueName, config => config.MapFrom(s => s.Name))
-                ;
+                .ForMember(m => m.ProviderVenueName, config => config.MapFrom(s => s.Name));
+
+            CreateMap<HideProviderVenueViewModel, ProviderVenue>()
+                .ForMember(m => m.Id, config => config.MapFrom(s => s.ProviderVenueId))
+                .ForMember(m => m.IsEnabledForSearch, config => config.MapFrom(s => s.IsEnabledForSearch))
+                .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<HideProviderVenueViewModel, ProviderVenue>>())
+                .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<HideProviderVenueViewModel, ProviderVenue>>())
+                .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<ProviderVenue, ProviderVenueViewModel>()
                 .ForMember(m => m.ProviderVenueId, config => config.MapFrom(s => s.Id))

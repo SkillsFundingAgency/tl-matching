@@ -82,18 +82,18 @@ namespace Sfa.Tl.Matching.Application.Services
                 }).ToListAsync();
         }
 
-        public Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
+        public async Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
         {
             var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
 
-            return _repository.Update(provider);
+            await _repository.Update(provider);
         }
 
-        public Task<int> CreateProvider(ProviderDetailViewModel viewModel)
+        public async Task<int> CreateProvider(ProviderDetailViewModel viewModel)
         {
             var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
 
-            return _repository.Create(provider);
+            return await _repository.Create(provider);
         }
 
         public async Task<HideProviderViewModel> GetHideProviderViewModelAsync(int providerId)
@@ -103,23 +103,24 @@ namespace Sfa.Tl.Matching.Application.Services
             return _mapper.Map<Provider, HideProviderViewModel>(provider);
         }
 
-        public async Task SetIsProviderEnabledForSearchAsync(int providerId, bool isEnabled)
+        public async Task UpdateProviderAsync(HideProviderViewModel viewModel)
         {
-            var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
+            var provider = _mapper.Map<HideProviderViewModel, Provider>(viewModel);
 
-            if (provider != null)
-            {
-                provider.IsEnabledForSearch = isEnabled;
-                await _repository.Update(provider);
-            }
+            await _repository.UpdateWithSpecifedColumnsOnly(provider,
+                x => x.IsEnabledForSearch,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
         }
 
-        public Task UpdateProvider(SaveProviderFeedbackViewModel viewModel)
+        public async Task UpdateProvider(SaveProviderFeedbackViewModel viewModel)
         {
             var providers = _mapper.Map<IList<Provider>>(viewModel.Providers);
 
-            return _repository.UpdateManyWithSpecifedColumnsOnly(providers, 
+            await _repository.UpdateManyWithSpecifedColumnsOnly(providers, 
                 x => x.IsFundedForNextYear);//,
+                //x => x.ModifiedOn,
+                //x => x.ModifiedBy);
         }
     }
 }

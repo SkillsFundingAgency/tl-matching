@@ -111,7 +111,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("ConfirmProviderVenueChange", viewModel);
             }
 
-            await _providerVenueService.SetIsProviderVenueEnabledForSearchAsync(viewModel.ProviderVenueId, !viewModel.IsEnabledForSearch);
+            viewModel.IsEnabledForSearch = !viewModel.IsEnabledForSearch;
+            await _providerVenueService.UpdateVenueAsync(viewModel);
             
             return  viewModel.ProviderId == 0 
                 ? RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.ProviderVenueId })

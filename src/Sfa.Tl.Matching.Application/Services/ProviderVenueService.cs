@@ -70,21 +70,20 @@ namespace Sfa.Tl.Matching.Application.Services
             await _providerVenueRepository.Update(trackedEntity);
         }
 
+        public async Task UpdateVenueAsync(HideProviderVenueViewModel viewModel)
+        {
+            var providerVenue = _mapper.Map<HideProviderVenueViewModel, ProviderVenue>(viewModel);
+
+            await _providerVenueRepository.UpdateWithSpecifedColumnsOnly(providerVenue,
+                x => x.IsEnabledForSearch,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
+        }
+
         public async Task<HideProviderVenueViewModel> GetHideProviderVenueViewModelAsync(int venueId)
         {
             var providerVenue = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == venueId);
             return _mapper.Map<ProviderVenue, HideProviderVenueViewModel>(providerVenue);
-        }
-
-        public async Task SetIsProviderVenueEnabledForSearchAsync(int providerVenueId, bool isEnabled)
-        {
-            //TODO: Use specific map with resolver. Use HideProviderViewModel viewModel for parameter
-            var providerVenue = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == providerVenueId);
-            if (providerVenue != null)
-            {
-                providerVenue.IsEnabledForSearch = isEnabled;
-                await _providerVenueRepository.Update(providerVenue);
-            }
         }
     }
 }
