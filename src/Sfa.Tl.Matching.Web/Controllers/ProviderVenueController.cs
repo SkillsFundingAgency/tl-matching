@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -61,8 +62,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("venue-overview/{providerVenueId}", Name = "UpdateVenue")]
-        public async Task<IActionResult> SaveVenue(ProviderVenueDetailViewModel viewModel)
+        [Route("venue-overview/{providerVenueId}", Name = "SaveProviderVenueDetail")]
+        public async Task<IActionResult> ProviderVenueDetail(ProviderVenueDetailViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -71,16 +72,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             await _providerVenueService.UpdateVenueAsync(viewModel);
-            viewModel = await Populate(viewModel.Id);
 
-            return View("ProviderVenueDetail", viewModel);
-        }
+            var isSaveSection = IsSaveSection(viewModel.SubmitAction);
+            if (isSaveSection)
+                return View("ProviderVenueDetail", viewModel);
 
-        [HttpPost]
-        [Route("venue-overview", Name = "SaveProviderVenueDetail")]
-        public async Task<IActionResult> ProviderVenueDetail(ProviderVenueDetailViewModel viewModel)
-        {
-            // TODO Update Academic Years
             if (viewModel.Qualifications == null || viewModel.Qualifications.Count == 0)
             {
                 ModelState.AddModelError("Qualifications", "You must add a qualification for this venue");
@@ -123,6 +119,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var viewModel = await _providerVenueService.GetVenueWithQualificationsAsync(providerVenueId);
 
             return viewModel ?? new ProviderVenueDetailViewModel();
+        }
+
+        private static bool IsSaveSection(string submitAction)
+        {
+            return !string.IsNullOrWhiteSpace(submitAction) && string.Equals(submitAction,
+                       "SaveSection", StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

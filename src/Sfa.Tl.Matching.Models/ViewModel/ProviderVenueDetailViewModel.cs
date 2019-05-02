@@ -14,6 +14,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public bool IsEnabledForSearch { get; set; }
         public string Source { get; set; }
         public bool IsFromAddVenue { get; set; }
+        public string SubmitAction { get; set; }
         public List<QualificationDetailViewModel> Qualifications { get; set; }
     }
 }
