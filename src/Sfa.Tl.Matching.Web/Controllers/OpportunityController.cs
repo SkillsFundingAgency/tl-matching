@@ -147,29 +147,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("placement-gap/{id?}", Name = "ProvisionGapSent_Get")]
         public async Task<IActionResult> ProvisionGapSent(int id)
         {
-            var opportunity = await _opportunityService.GetOpportunity(id);
+            var dto = await _opportunityService.GetOpportunity(id);
+            var viewModel = _mapper.Map<ProvisionGapSentViewModel>(dto);
+            viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
 
-            return View(new ProvisionGapSentViewModel
-            {
-                EmployerCrmRecord = opportunity.EmployerCrmId.ToString(),
-                EmployerContactName = opportunity.EmployerContact,
-                Postcode = opportunity.Postcode,
-                RouteName = opportunity.RouteName
-            });
+            return View(viewModel);
         }
 
         [HttpGet]
         [Route("emails-sent/{id?}", Name = "EmailSentReferrals_Get")]
         public async Task<IActionResult> ReferralEmailSent(int id)
         {
-            var opportunity = await _opportunityService.GetOpportunity(id);
-
-            return View(new EmailsSentViewModel
-            {
-                EmployerCrmRecord = opportunity.EmployerCrmId.ToString(),
-                EmployerContactName = opportunity.EmployerContact,
-                EmployerBusinessName = opportunity.EmployerName
-            });
+            var dto = await _opportunityService.GetOpportunity(id);
+            var viewModel = _mapper.Map<EmailsSentViewModel>(dto);
+            viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
+            
+            return View(viewModel);
         }
 
         private async Task<IActionResult> CreateOpportunity(OpportunityDto dto)
