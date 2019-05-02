@@ -5,7 +5,14 @@
 }
 
 @section backButton{
-    <a asp-route="AddVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link">Back</a>
+    @if (Model.IsFromAddVenue)
+    {
+        <a asp-route="AddVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link">Back</a>
+    }
+    else
+    {
+        <a asp-controller="Provider" asp-action="ProviderDetail" asp-route-providerId="@Model.ProviderId" class="govuk-back-link">Back</a>
+    }
 }
 
 @if (!ViewData.ModelState.IsValid)
@@ -32,7 +39,7 @@
             <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-providerVenueId="@Model.Id" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>
         </p>
         <form asp-route="SaveVenue" novalidate>
-            <div class="govuk-form-group">
+            <div class="govuk-form-group" sfa-validation-for="Name" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" for="Name">
                     Enter venue name (optional)
                 </label>
@@ -42,6 +49,7 @@
 
             <input asp-for="Id" type="hidden" />
             <input asp-for="ProviderId" type="hidden" />
+            <input asp-for="IsFromAddVenue" type="hidden" />
             <input asp-for="IsEnabledForSearch" type="hidden" />
             <input asp-for="Postcode" type="hidden" />
             <input asp-for="Source" value="Admin" type="hidden" />

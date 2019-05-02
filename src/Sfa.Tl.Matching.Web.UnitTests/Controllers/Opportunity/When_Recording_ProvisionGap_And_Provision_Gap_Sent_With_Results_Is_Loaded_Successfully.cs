@@ -12,19 +12,19 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Recording_Referrals_And_Emails_Sent_Is_Loaded
+    public class When_Recording_ProvisionGap_And_Provision_Gap_Sent_With_Results_Is_Loaded_Successfully
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
 
-        public When_Recording_Referrals_And_Emails_Sent_Is_Loaded()
+        public When_Recording_ProvisionGap_And_Provision_Gap_Sent_With_Results_Is_Loaded_Successfully()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(SentViewModelMapper).Assembly));
-
             var mapper = new Mapper(config);
 
-            var dto = new ValidOpportunityDtoBuilder().Build();
             _opportunityService = Substitute.For<IOpportunityService>();
+
+            var dto = new ValidOpportunityDtoBuilder().Build();
             _opportunityService.GetOpportunity(1).Returns(dto);
 
             var referralService = Substitute.For<IReferralService>();
@@ -34,34 +34,31 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("CreatedBy")
                 .Build();
 
-            _result = controllerWithClaims.ReferralEmailSent(1).GetAwaiter().GetResult();
+            _result = controllerWithClaims.ProvisionGapSent(1).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_GetOpportunity_Is_Called_Exactly_Once()
+        public void Then_CreateProvisionGap_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetOpportunity(1);
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
+        public void Then_Result_Is_ViewResult()
         {
             var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
+
+            viewResult.Should().NotBeNull();
+
+            viewResult?.Model.Should().BeOfType<ProvisionGapSentViewModel>();
+
+            ((ProvisionGapSentViewModel)viewResult?.Model)?.EmployerContact.Should().Be("EmployerContact");
         }
 
         [Fact]
         public void Then_ViewModel_Properties_Are_Set()
         {
-            var viewModel = _result.GetViewModel<EmailsSentViewModel>();
+            var viewModel = _result.GetViewModel<ProvisionGapSentViewModel>();
             viewModel.EmployerContact.Should().Be("EmployerContact");
             viewModel.RouteId.Should().Be(1);
             viewModel.SearchRadius.Should().Be(3);
@@ -71,6 +68,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewModel.Placements.Should().Be(2);
             viewModel.EmployerName.Should().Be("EmployerName");
             viewModel.EmployerCrmRecord.Should().Be("https://crm.employer.imservices.org.uk/EmployerCRM/main.aspx?etc=1&extraqs=formid%3d53e2f137-d7f8-4556-a260-bd320fa7e62c&id=%7b65021261-8c70-4c4f-954f-4e5282250a85%7d&pagetype=entityrecord");
+            viewModel.WithResults.Should().BeTrue();
+            viewModel.NoResults.Should().BeFalse();
         }
     }
 }

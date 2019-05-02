@@ -16,11 +16,21 @@
 
         <h2 class="govuk-heading-m">What happens next</h2>
 
-        <p class="govuk-body">We expect the provider will contact @Model.EmployerContactName within 2 to 3 working days. The provider will work with @Model.EmployerBusinessName to arrange the terms and details of each placement.</p>
+        <p class="govuk-body">We expect the provider will contact @Model.EmployerContact within 2 to 3 working days. The provider will work with @Model.EmployerName to arrange the terms and details of each placement.</p>
 
         <a asp-controller="Proximity" asp-action="Start" class="govuk-button" id="tl-finish">Finish</a>
         <p class="govuk-body js-visible"><a class="govuk-link" href="/feedback">Give us feedback</a></p>
 
+
+        <input asp-for="EmployerCrmRecord" type="hidden" />
+        <input asp-for="EmployerContact" type="hidden" />
+        <input asp-for="RouteId" type="hidden" />
+        <input asp-for="SearchRadius" type="hidden" />
+        <input asp-for="Postcode" type="hidden" />
+        <input asp-for="UserEmail" type="hidden" />
+        <input asp-for="JobTitle" type="hidden" />
+        <input asp-for="Placements" type="hidden" />
+        <input asp-for="EmployerName" type="hidden" />
 
     </div>
 </div>
