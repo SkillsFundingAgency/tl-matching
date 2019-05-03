@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _emailService = emailService;
             _emailHistoryService = emailHistoryService;
-                _providerRepository = providerRepository;
+            _providerRepository = providerRepository;
             _providerFeedbackRequestHistoryRepository = providerFeedbackRequestHistoryRepository;
             _messageQueueService = messageQueueService;
             _dateTimeProvider = dateTimeProvider;
@@ -50,13 +50,18 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SendProviderQuarterlyUpdateEmailsAsync(int providerFeedbackRequestHistoryId, string userName)
         {
-            var providerFeedbackRequestHistory = 
+            var providerFeedbackRequestHistory =
                 await _providerFeedbackRequestHistoryRepository
                     .GetSingleOrDefault(p => p.Id == providerFeedbackRequestHistoryId);
 
             var emailTemplateName = EmailTemplateName.ProviderQuarterlyUpdate.ToString();
 
             var providers = await ((IProviderRepository)_providerRepository).GetProvidersWithFundingAsync();
+
+            await UpdateProviderFeedbackRequestHistory(providerFeedbackRequestHistory, 
+                providers.Count, 
+                ProviderFeedbackRequestStatus.Processing, 
+                userName);
 
             foreach (var provider in providers)
             {
@@ -102,15 +107,26 @@ namespace Sfa.Tl.Matching.Application.Services
                     tokens,
                     "");
 
-                await _emailHistoryService.SaveEmailHistory(emailTemplateName, 
-                    tokens, 
-                    null, 
-                    toAddress, 
+                await _emailHistoryService.SaveEmailHistory(emailTemplateName,
+                    tokens,
+                    null,
+                    toAddress,
                     userName);
             }
 
-            providerFeedbackRequestHistory.ProviderCount = providers.Count;
-            providerFeedbackRequestHistory.Status = (short)ProviderFeedbackRequestStatus.Sent;
+            await UpdateProviderFeedbackRequestHistory(providerFeedbackRequestHistory, 
+                providers.Count, 
+                ProviderFeedbackRequestStatus.Complete, 
+                userName);
+        }
+
+        private async Task UpdateProviderFeedbackRequestHistory(
+            ProviderFeedbackRequestHistory providerFeedbackRequestHistory,
+            int providerCount, ProviderFeedbackRequestStatus status,
+            string userName)
+        {
+            providerFeedbackRequestHistory.ProviderCount = providerCount;
+            providerFeedbackRequestHistory.Status = (short)status;
             providerFeedbackRequestHistory.ModifiedBy = userName;
             providerFeedbackRequestHistory.ModifiedOn = _dateTimeProvider.UtcNow();
             await _providerFeedbackRequestHistoryRepository.Update(providerFeedbackRequestHistory);

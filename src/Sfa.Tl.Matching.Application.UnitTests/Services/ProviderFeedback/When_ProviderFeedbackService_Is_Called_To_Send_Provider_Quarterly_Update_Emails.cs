@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
@@ -18,6 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IProviderRepository _providerRepository;
         private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
+        private readonly IList<ProviderFeedbackRequestHistory> _recievedProviderFeedbackRequestHistories;
 
         public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails()
         {
@@ -36,11 +39,25 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _providerFeedbackRequestHistoryRepository
                 .GetSingleOrDefault(Arg.Any<Expression<Func<ProviderFeedbackRequestHistory, bool>>>())
                 .Returns(new ProviderFeedbackRequestHistoryBuilder().Build());
+            
+            _recievedProviderFeedbackRequestHistories = new List<ProviderFeedbackRequestHistory>();
+            _providerFeedbackRequestHistoryRepository
+                .Update(Arg.Do<ProviderFeedbackRequestHistory>
+                (x => _recievedProviderFeedbackRequestHistories.Add(
+                    new ProviderFeedbackRequestHistory
+                    {
+                        Id = x.Id,
+                        ProviderCount = x.ProviderCount,
+                        Status = x.Status,
+                        ModifiedOn = x.ModifiedOn,
+                        ModifiedBy = x.ModifiedBy
+                    }
+                )));
 
             var providerFeedbackService = new ProviderFeedbackService(
-                _emailService, _emailHistoryService,
-                _providerRepository, _providerFeedbackRequestHistoryRepository,
-                messageQueueService, dateTimeProvider);
+                    _emailService, _emailHistoryService,
+                    _providerRepository, _providerFeedbackRequestHistoryRepository,
+                    messageQueueService, dateTimeProvider);
 
             providerFeedbackService
                 .SendProviderQuarterlyUpdateEmailsAsync(1, "TestUser")
@@ -63,19 +80,48 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .GetSingleOrDefault(Arg.Any<Expression<Func<ProviderFeedbackRequestHistory, bool>>>());
         }
 
+
         [Fact]
-        public void Then_ProviderFeedbackRequestHistoryRepository_Update_Is_Called_Exactly_Once()
+        public void Then_ProviderFeedbackRequestHistoryRepository_Update_Is_Called_Exactly_Twice()
         {
             _providerFeedbackRequestHistoryRepository
-                .Received(1)
+                .ReceivedWithAnyArgs(2)
+                .Update(Arg.Any<ProviderFeedbackRequestHistory>());
+        }
+
+        [Fact]
+        public void Then_ProviderFeedbackRequestHistoryRepository_Update_Is_Called_With_Expected_Values()
+        {
+            //Can't check Status here because NSubstitute only remembers the last one
+            _providerFeedbackRequestHistoryRepository
+                .Received()
                 .Update(Arg.Is<ProviderFeedbackRequestHistory>(
                     p => p.Id == 1
-                         && p.Status == (short)ProviderFeedbackRequestStatus.Sent
                          && p.ProviderCount == 1
                          && p.ModifiedBy == "TestUser"
-                         ));
+                ));
         }
         
+        [Fact]
+        public void Then_ProviderFeedbackRequestHistoryRepository_Update_Sets_Expected_Values_In_First_Call()
+        {
+            var history = _recievedProviderFeedbackRequestHistories.First();
+            history.Id.Should().Be(1);
+            history.Status.Should().Be((short)ProviderFeedbackRequestStatus.Processing);
+            history.ProviderCount.Should().Be(1);
+            history.ModifiedBy.Should().Be("TestUser");
+        }
+        
+        [Fact]
+        public void Then_ProviderFeedbackRequestHistoryRepository_Update_Sets_Expected_Values_In_Second_Call()
+        {
+            var history = _recievedProviderFeedbackRequestHistories.Skip(1).First();
+            history.Id.Should().Be(1);
+            history.Status.Should().Be((short)ProviderFeedbackRequestStatus.Complete);
+            history.ProviderCount.Should().Be(1);
+            history.ModifiedBy.Should().Be("TestUser");
+        }
+
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_Exactly_Once()
         {
@@ -135,7 +181,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     Arg.Is<string>(
                         replyToAddress => replyToAddress == ""));
         }
-        
+
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_ProviderName_Token()
         {
@@ -149,7 +195,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                         && tokens["provider_name"] == "Provider Name"),
                     Arg.Any<string>());
         }
-        
+
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Primary_Contact_Name_Token()
         {
@@ -191,7 +237,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                                   && tokens["primary_contact_phone"] == "01777757777"),
                     Arg.Any<string>());
         }
-        
+
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Secondary_Contact_Details_Token()
         {

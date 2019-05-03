@@ -3,6 +3,7 @@
     public enum ProviderFeedbackRequestStatus
     {
         Pending = 1,
-        Sent
+        Processing,
+        Complete
     }
 }
