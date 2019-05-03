@@ -96,11 +96,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) && string.Equals(viewModel.SubmitAction, "SaveAndFinish", StringComparison.InvariantCultureIgnoreCase))
             {
-                //if (!viewModel.ProviderVenue.Any())
-                //{
-                //    ModelState.AddModelError("ProviderVenue", "You must add a venue for this provider");
-                //    return View(nameof(ProviderDetail), viewModel);
-                //}
+                if (!viewModel.ProviderVenue.Any())
+                {
+                    ModelState.AddModelError("ProviderVenue", "You must add a venue for this provider");
+                    return View(nameof(ProviderDetail), viewModel);
+                }
 
                 return View(nameof(SearchProvider), await GetProviderSearchResults(new ProviderSearchParametersViewModel()));
             }

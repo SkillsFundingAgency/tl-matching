@@ -24,7 +24,7 @@
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 <li><a sfa-validation-for="Name"></a></li>
-                <li><a href="#addQual" sfa-validation-for="@Model.Qualifications"></a></li>
+               @* <li><a href="#addQual" sfa-validation-for="@Model.Qualifications"></a></li>*@
             </ul>
         </div>
     </div>
@@ -106,9 +106,9 @@
                 </tbody>
             </table>
 
-            <p class="govuk-body">
+            @*<p class="govuk-body">
                 <a class="govuk-link" id="addQual" href="#">Add a qualification</a>
-            </p>
+            </p>*@
             <button type="submit" class="govuk-button" id="tl-confirm"
                     name="SubmitAction" value="SaveAndFinish">Save and return to provider overview</button>
         </div>
