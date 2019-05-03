@@ -1,4 +1,5 @@
-﻿using Sfa.Tl.Matching.Models.Dto;
+﻿using System;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
 {
@@ -8,6 +9,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
         {
             Id = 1,
             SearchRadius = 3,
+            RouteId = 1,
+            RouteName = "RouteName",
             JobTitle = "JobTitle",
             PlacementsKnown = true,
             Placements = 2,
@@ -16,8 +19,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             EmployerContact = "EmployerContact",
             EmployerContactEmail = "EmployerContactEmail",
             EmployerContactPhone = "EmployerContactPhone",
-            RouteName = "RouteName",
-            ModifiedBy = "ModifiedBy"
+            EmployerCrmId = new Guid("65021261-8C70-4C4F-954F-4E5282250A85"),
+            UserEmail = "email@address.com",
+            ModifiedBy = "ModifiedBy",
+            SearchResultProviderCount = 20
         };
     }
 }

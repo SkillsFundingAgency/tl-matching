@@ -29,16 +29,23 @@
         </div>
     </div>
 }
+<form asp-route="SaveProviderVenueDetail" novalidate>
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="ProviderId" type="hidden" />
+    <input asp-for="IsFromAddVenue" type="hidden" />
+    <input asp-for="IsEnabledForSearch" type="hidden" />
+    <input asp-for="Postcode" type="hidden" />
+    <input asp-for="Source" value="Admin" type="hidden" />
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
-        <span class="govuk-caption-m">@Model.ProviderName</span>
-        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        <p class="govuk-body">
-            <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-providerVenueId="@Model.Id" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>
-        </p>
-        <form asp-route="SaveVenue" novalidate>
+            <span class="govuk-caption-m">@Model.ProviderName</span>
+            <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+            <p class="govuk-body">
+                <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-providerVenueId="@Model.Id" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>
+            </p>
+
             <div class="govuk-form-group" sfa-validation-for="Name" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" for="Name">
                     Enter venue name (optional)
@@ -47,27 +54,16 @@
                 <input asp-for="Name" class="govuk-input" type="text" sfa-validation-for="Name" sfa-validationerror-class="govuk-input--error">
             </div>
 
-            <input asp-for="Id" type="hidden" />
-            <input asp-for="ProviderId" type="hidden" />
-            <input asp-for="IsFromAddVenue" type="hidden" />
-            <input asp-for="IsEnabledForSearch" type="hidden" />
-            <input asp-for="Postcode" type="hidden" />
-            <input asp-for="Source" value="Admin" type="hidden" />
+            <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm"
+                    name="SubmitAction" value="SaveSection">Save section</button>
 
-            <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm">Save section</button>
-        </form>
-
+        </div>
     </div>
-</div>
 
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-        <h2 class="govuk-heading-m">Qualifications</h2>
-
-        <form asp-route="SaveProviderVenueDetail" novalidate>
-            <input asp-for="Id" type="hidden" />
-            <input asp-for="ProviderId" type="hidden" />
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+            <h2 class="govuk-heading-m">Qualifications</h2>
 
             <table class="govuk-table">
                 <thead class="govuk-table__head">
@@ -113,7 +109,8 @@
             <p class="govuk-body">
                 <a class="govuk-link" id="addQual" href="#">Add a qualification</a>
             </p>
-            <button type="submit" class="govuk-button" id="tl-confirm">Save and return to provider overview</button>
-        </form>
+            <button type="submit" class="govuk-button" id="tl-confirm"
+                    name="SubmitAction" value="SaveAndFinish">Save and return to provider overview</button>
+        </div>
     </div>
-</div>
+</form>

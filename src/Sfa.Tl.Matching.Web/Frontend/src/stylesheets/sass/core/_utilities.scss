@@ -13,7 +13,7 @@
 }
 
 
-/*Change case */
+/* Change case */
 
 .tl-lowercase {
     text-transform: lowercase;
@@ -21,4 +21,17 @@
 
 .tl-uppercase {
     text-transform: uppercase;
+}
+
+
+/* JS show hide */
+
+.js-visible {
+    display: none;
+}
+
+.js-enabled {
+    .js-visible {
+        display: inline-block;
+    }
 }
