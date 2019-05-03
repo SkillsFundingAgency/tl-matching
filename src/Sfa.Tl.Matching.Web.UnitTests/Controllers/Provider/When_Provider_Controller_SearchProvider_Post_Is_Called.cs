@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.Security.Claims;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -27,18 +30,35 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                         Name = "Test Provider"
                     });
 
-            var providerController = new ProviderController(_providerService);
+            var providerController = new ProviderController(_providerService, new MatchingConfiguration())
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        User = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>()))
+                    }
+                }
+            };
 
             var viewModel = new ProviderSearchParametersViewModel { UkPrn = 10000546 };
             _result = providerController.SearchProvider(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_ProviderService_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_ProviderService_SearchAsync_Is_Called_Exactly_Once()
         {
             _providerService
                 .Received(1)
                 .SearchAsync(Arg.Any<long>());
+        }
+
+        [Fact]
+        public void Then_ProviderService_SearchProvidersWithFundingAsync_Is_Called_Exactly_Once()
+        {
+            _providerService
+                .Received(1)
+                .SearchProvidersWithFundingAsync(Arg.Any<ProviderSearchParametersViewModel>());
         }
 
         [Fact]
@@ -53,8 +73,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToRouteResult>();
+        public void Then_Result_Is_ViewResult() =>
+            _result.Should().BeOfType<ViewResult>();
 
         [Fact]
         public void Then_Result_Is_Redirect_To_Provider_Detail()

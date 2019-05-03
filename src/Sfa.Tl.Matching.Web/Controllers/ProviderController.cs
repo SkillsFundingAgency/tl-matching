@@ -1,35 +1,41 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
+    [Authorize(Roles = RolesExtensions.AdminUser)]
     public class ProviderController : Controller
     {
+        private readonly MatchingConfiguration _configuration;
         private readonly IProviderService _providerService;
-
-        public ProviderController(IProviderService providerService)
+        
+        public ProviderController(IProviderService providerService, MatchingConfiguration configuration)
         {
             _providerService = providerService;
+            _configuration = configuration;
         }
 
         [HttpGet]
         [Route("search-ukprn", Name = "SearchProvider")]
-        public IActionResult SearchProvider()
+        public async Task<IActionResult> SearchProvider()
         {
-            return View(new ProviderSearchParametersViewModel());
+            return View(await GetProviderSearchResults(new ProviderSearchParametersViewModel()));
         }
-
+        
         [HttpPost]
         [Route("search-ukprn", Name = "SearchProviderByUkPrn")]
         public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View(viewModel);
+                return View(nameof(SearchProvider), GetProviderSearchViewModel(viewModel));
             }
 
             var searchResult = viewModel.UkPrn.HasValue
@@ -38,11 +44,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (searchResult == null || searchResult.Id == 0)
             {
-                ModelState.AddModelError("UkPrn", "You must enter a real UKPRN");
-                return View(viewModel);
+                ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn), "You must enter a real UKPRN");
+                return View(nameof(SearchProvider), GetProviderSearchViewModel(viewModel));
             }
 
-            return RedirectToRoute("GetProviderDetail", new { providerId = searchResult.Id });
+            var resultsViewModel = await GetProviderSearchResults(viewModel);
+
+            return View(resultsViewModel);
         }
 
         [HttpGet]
@@ -94,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     return View(nameof(ProviderDetail), viewModel);
                 }
 
-                return View(nameof(SearchProvider));
+                return View(nameof(SearchProvider), await GetProviderSearchResults(new ProviderSearchParametersViewModel()));
             }
 
             return View(nameof(ProviderDetail), viewModel);
@@ -117,9 +125,43 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("ConfirmProviderChange", viewModel);
             }
 
-            await _providerService.SetIsProviderEnabledForSearchAsync(viewModel.ProviderId, !viewModel.IsEnabledForSearch);
+            viewModel.IsEnabledForSearch = !viewModel.IsEnabledForSearch;
+            await _providerService.UpdateProviderAsync(viewModel);
 
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
+        }
+
+        [HttpPost]
+        [RequestFormLimits(ValueCountLimit = 5000)]
+        [Route("save-provider-feedback", Name = "SaveProviderFeedback")]
+        public async Task<IActionResult> SaveProviderFeedback(SaveProviderFeedbackViewModel viewModel)
+        {
+            await _providerService.UpdateProvider(viewModel);
+
+            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) &&
+                string.Equals(viewModel.SubmitAction, "SendEmail", StringComparison.InvariantCultureIgnoreCase))
+                return RedirectToRoute("ConfirmSendProviderEmail");
+
+            return RedirectToRoute("SearchProvider");
+        }
+
+        private async Task<ProviderSearchViewModel> GetProviderSearchResults(ProviderSearchParametersViewModel viewModel)
+        {
+            var resultsViewModel = GetProviderSearchViewModel(viewModel);
+            resultsViewModel.SearchResults = new ProviderSearchResultsViewModel
+            {
+                Results = await _providerService.SearchProvidersWithFundingAsync(viewModel)
+            };
+
+            return resultsViewModel;
+        }
+
+        private ProviderSearchViewModel GetProviderSearchViewModel(ProviderSearchParametersViewModel searchParametersViewModel)
+        {
+            return new ProviderSearchViewModel(searchParametersViewModel)
+            {
+                IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
+            };
         }
     }
 }

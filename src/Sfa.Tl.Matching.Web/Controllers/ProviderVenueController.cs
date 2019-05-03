@@ -77,12 +77,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (isSaveSection)
                 return View("ProviderVenueDetail", viewModel);
 
-            if (viewModel.Qualifications == null || viewModel.Qualifications.Count == 0)
-            {
-                ModelState.AddModelError("Qualifications", "You must add a qualification for this venue");
-                viewModel = await Populate(viewModel.Id);
-                return View(viewModel);
-            }
+            //if (viewModel.Qualifications == null || viewModel.Qualifications.Count == 0)
+            //{
+            //    ModelState.AddModelError("Qualifications", "You must add a qualification for this venue");
+            //    viewModel = await Populate(viewModel.Id);
+            //    return View(viewModel);
+            //}
 
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
@@ -107,7 +107,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("ConfirmProviderVenueChange", viewModel);
             }
 
-            await _providerVenueService.SetIsProviderVenueEnabledForSearchAsync(viewModel.ProviderVenueId, !viewModel.IsEnabledForSearch);
+            viewModel.IsEnabledForSearch = !viewModel.IsEnabledForSearch;
+            await _providerVenueService.UpdateVenueAsync(viewModel);
             
             return  viewModel.ProviderId == 0 
                 ? RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.ProviderVenueId })

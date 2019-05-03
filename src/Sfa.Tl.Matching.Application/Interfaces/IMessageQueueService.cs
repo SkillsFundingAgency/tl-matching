@@ -5,6 +5,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IMessageQueueService
     {
-        Task Push(GetProximityData getProximityData);
+        Task PushProximityDataAsync(GetProximityData getProximityData);
+        Task PushProviderQuarterlyRequestMessageAsync(SendProviderFeedbackEmail providerRequest);
     }
 }

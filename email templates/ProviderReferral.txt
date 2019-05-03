@@ -1,0 +1,30 @@
+Dear ((primary_contact_name)),
+
+You are receiving this email because ((provider_name)) has received capacity and delivery funding (CDF) from the Education and Skills Funding Agency (ESFA). 
+
+Our records show that you are the main contact for industry placements and that ((provider_name)) currently has students doing ((route)) courses in ((venue_postcode)) who are looking for industry placements.
+
+# If this is wrong
+Please email [support.industryplacementmatching@education.gov.uk](mailto:support.industryplacementmatching@education.gov.uk?subject=Update+from+provider) so that we can update our records.
+
+# If this is right
+We have found an employer:
+
+* in ((employer_postcode)), which is within ((search_radius)) miles of you 
+* who is looking for this job role: ((job_role))
+
+Please contact them within the next 2 to 3 working days, even if you do not have suitable students for them at present. Doing so makes it more likely you’ll receive placement opportunities in the future.
+ 
+* Employer name: ((employer_business_name))
+* Contact name: ((employer_contact_name))
+* Telephone: ((employer_contact_number))
+* E-mail: ((employer_contact_email))
+* Number of potential placements: ((number_of_placements))
+
+Industry Placements – Employer Support Team
+National Apprenticeships Service
+
+---
+
+The National Apprenticeship Service is part of the Education and Skills Funding Agency (ESFA), an executive agency of the Department for Education (DfE). For further details of how our data is processed and your rights, please view the full ESFA privacy policy here:
+https://www.gov.uk/government/publications/esfa-privacy-notice

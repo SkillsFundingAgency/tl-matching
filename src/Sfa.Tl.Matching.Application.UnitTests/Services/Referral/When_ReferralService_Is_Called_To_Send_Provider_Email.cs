@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
+﻿using System.Collections.Generic;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
@@ -17,37 +11,34 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
     public class When_ReferralService_Is_Called_To_Send_Provider_Email
     {
         private readonly IEmailService _emailService;
-        private readonly IRepository<EmailHistory> _emailHistoryRepository;
-        private readonly IRepository<EmailTemplate> _emailTemplateRepository;
+        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
 
         public When_ReferralService_Is_Called_To_Send_Provider_Email()
         {
             _emailService = Substitute.For<IEmailService>();
+            _emailHistoryService = Substitute.For<IEmailHistoryService>();
 
-            var logger = Substitute.For<ILogger<ReferralService>>();
-
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmailHistoryMapper).Assembly));
-            var mapper = new Mapper(config);
-
-            _emailHistoryRepository = Substitute.For<IRepository<EmailHistory>>();
-            _emailTemplateRepository = Substitute.For<IRepository<EmailTemplate>>();
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-
-            _emailTemplateRepository
-                .GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>())
-                .Returns(new ValidEmailTemplateBuilder().Build());
 
             _opportunityRepository
                 .GetProviderOpportunities(
                     Arg.Any<int>())
                 .Returns(new ValidOpportunityReferralDtoListBuilder().Build());
 
-            var referralService = new ReferralService(_emailService,
-                _emailHistoryRepository, _emailTemplateRepository, _opportunityRepository,
-                mapper, logger);
+            var referralService = new ReferralService(
+                _emailService, _emailHistoryService,
+                _opportunityRepository);
 
             referralService.SendProviderReferralEmail(1).GetAwaiter().GetResult();
+        }
+
+        [Fact]
+        public void Then_OpportunityRepository_GetProviderOpportunities_Is_Called_Exactly_Once()
+        {
+            _opportunityRepository
+                .Received(1)
+                .GetProviderOpportunities(Arg.Any<int>());
         }
 
         [Fact]
@@ -64,8 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailService
                 .Received(1)
                 .SendEmail(Arg.Is<string>(
-                        
-                        templateName => templateName == "TestTemplate"),
+                        templateName => templateName == "ProviderReferral"),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
@@ -152,7 +142,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                   && tokens["route"] == "agriculture, environmental and animal care"),
                     Arg.Any<string>());
         }
-        
+
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
         {
@@ -166,7 +156,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                   && tokens["venue_postcode"] == "AA2 2AA"),
                     Arg.Any<string>());
         }
-        
+
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Search_Radius_Token()
         {
@@ -278,63 +268,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                   && tokens["number_of_placements"] == "at least one"),
                     Arg.Any<string>());
         }
-
+        
         [Fact]
-        public void Then_EmailTemplateRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
         {
-            _emailTemplateRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
-        }
-
-        [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_Called_Exactly_Once()
-        {
-            _emailHistoryRepository
+            _emailHistoryService
                 .Received(1)
-                .Create(Arg.Any<EmailHistory>());
-        }
-
-        [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_Called_With_OpportunityId()
-        {
-            _emailHistoryRepository
-                .Received(1)
-                .Create(Arg.Is<EmailHistory>(email =>
-                    email.OpportunityId == 1));
-        }
-
-        [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_Called_With_EmailTemplateId()
-        {
-            _emailHistoryRepository
-                .Received(1)
-                .Create(Arg.Is<EmailHistory>(email =>
-                    email.EmailTemplateId == 1));
-        }
-
-        [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_Called_With_SentTo()
-        {
-            _emailHistoryRepository
-                .Received(1)
-                .Create(Arg.Is<EmailHistory>(email =>
-                    email.SentTo == "primary.contact@provider.co.uk"));
-        }
-
-        [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_Called_With_CreatedBy()
-        {
-            _emailHistoryRepository
-                .Received(1)
-                .Create(Arg.Is<EmailHistory>(email =>
-                    email.CreatedBy == "CreatedBy"));
-        }
-
-        [Fact]
-        public void Then_OpportunityRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
-        {
-            _opportunityRepository
-                .Received(1)
-                .GetProviderOpportunities(Arg.Any<int>());
+                .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
         }
     }
 }

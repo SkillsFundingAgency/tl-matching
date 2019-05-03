@@ -1,4 +1,4 @@
-﻿namespace Sfa.Tl.Matching.Models.ViewModel
+﻿namespace Sfa.Tl.Matching.Models.Dto
 {
     public class ProviderSearchParametersDto
     {

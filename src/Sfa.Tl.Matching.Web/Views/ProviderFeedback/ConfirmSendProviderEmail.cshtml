@@ -1,0 +1,50 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.ConfirmSendProviderEmailViewModel
+
+@{
+    ViewData["Title"] = "Are you sure you want to send an email to these providers?";
+}
+
+@section backButton{
+    <a asp-route="SearchProvider" class="govuk-back-link">Back</a>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a href="#send-email-yes" sfa-validation-for="SendEmail"></a></li>
+                    </ul>
+                </div>
+            </div>
+        }
+
+    <h1 class="govuk-heading-l">Are you sure you want to send an email to @Model.ProviderCount @(Model.ProviderCount == 1 ? "provider" : "providers")?</h1>
+        <form asp-controller="ProviderFeedback" asp-action="ConfirmSendProviderEmail">
+
+            <div class="govuk-form-group" sfa-validation-for="SendEmail" sfa-validationerror-class="govuk-form-group--error">
+                <span class="govuk-error-message" asp-validation-for="SendEmail"></span>
+                <div class="govuk-radios">
+                    <div class="govuk-radios__item">
+                        <input asp-for="SendEmail" class="govuk-radios__input" id="send-email-yes" type="radio" value="true" />
+                        <label class="govuk-label govuk-radios__label" for="send-email-yes">
+                            Yes
+                        </label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input asp-for="SendEmail" class="govuk-radios__input" id="send-email-no" type="radio" value="false" />
+                        <label class="govuk-label govuk-radios__label" for="send-email-no">
+                            No
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button id="tl-continue" class="govuk-button" type="submit">Continue</button>
+        </form>
+    </div>
+</div>

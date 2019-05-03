@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -29,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _opportunityService = opportunityService;
         }
 
-        [Route("Start", Name = "Start_Get")]
+        [Route("Start", Name = "Start")]
         public IActionResult Start()
         {
             return View();

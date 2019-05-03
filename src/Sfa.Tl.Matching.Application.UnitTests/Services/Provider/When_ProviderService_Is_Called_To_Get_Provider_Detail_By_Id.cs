@@ -73,6 +73,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         }
 
         [Fact]
+        public void Then_The_Provider_IsFundedForNextYear_Is_As_Expected()
+        {
+            _result.IsFundedForNextYear.Should().Be(true);
+        }
+
+        [Fact]
         public void Then_The_Provider_IsEnabledForSearch_Is_As_Expected()
         {
             _result.IsEnabledForSearch.Should().Be(true);

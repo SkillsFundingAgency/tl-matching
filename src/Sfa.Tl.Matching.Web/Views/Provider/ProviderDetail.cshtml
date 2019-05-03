@@ -169,9 +169,11 @@
                                 <th class="govuk-table__cell">@venue.Postcode</th>
                                 <td class="govuk-table__cell">@venue.QualificationCount qualifications</td>
                                 <td class="govuk-table__cell">No data yet</td>
-                                <td class="govuk-table__cell"><a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@venue.ProviderVenueId"
-                                                                 asp-route-providerId="@Model.Id"
-                                                                 class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a></td>
+                                <td class="govuk-table__cell">
+                                    <a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@venue.ProviderVenueId"
+                                       asp-route-providerId="@Model.Id"
+                                       class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the information for this venue</span></a>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -205,7 +207,7 @@
             }
 
             @{ var addVenueText = Model.ProviderVenue.Count <= 0 ? "add a venue for this provider." : "Add a venue"; }
-            <p class="govuk-body"><a class="govuk-link" Id="AddVenue" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">@addVenueText</a></p>
+            <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
 
             <button type="submit" class="govuk-button" name="SubmitAction" value="SaveAndFinish">Save and finish</button>
 

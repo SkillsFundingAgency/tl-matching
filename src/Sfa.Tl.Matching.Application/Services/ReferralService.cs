@@ -1,45 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class ReferralService : IReferralService
     {
-        public const string EmployerReferralEmailTemplateName = "EmployerReferral";
-        public const string ProviderReferralEmailTemplateName = "ProviderReferral";
-
-        private readonly ILogger<ReferralService> _logger;
         private readonly IEmailService _emailService;
-        private readonly IMapper _mapper;
-        private readonly IRepository<EmailHistory> _emailHistoryRepository;
-        private readonly IRepository<EmailTemplate> _emailTemplateRepository;
-        private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IEmailHistoryService _emailHistoryService;
+        private readonly IRepository<Opportunity> _opportunityRepository;
 
         public ReferralService(IEmailService emailService,
-            IRepository<EmailHistory> emailHistoryRepository,
-            IRepository<EmailTemplate> emailTemplateRepository,
-            IRepository<Opportunity> opportunityRepository,
-            IMapper mapper,
-            ILogger<ReferralService> logger)
+            IEmailHistoryService emailHistoryService,
+            IRepository<Opportunity> opportunityRepository)
         {
             _emailService = emailService;
-            _emailTemplateRepository = emailTemplateRepository;
-            _emailHistoryRepository = emailHistoryRepository;
-            _opportunityRepository = (IOpportunityRepository)opportunityRepository;
-            _mapper = mapper;
-            _logger = logger;
+            _emailHistoryService = emailHistoryService;
+            _opportunityRepository = opportunityRepository;
         }
 
         public async Task SendEmployerReferralEmail(int opportunityId)
         {
-            var emailTemplate = await GetEmailTemplate(EmployerReferralEmailTemplateName);
+            var emailTemplateName = EmailTemplateName.EmployerReferral.ToString();
 
             var employerReferral = await GetEmployerReferrals(opportunityId);
 
@@ -85,18 +72,22 @@ namespace Sfa.Tl.Matching.Application.Services
 
             tokens.Add("providers_list", sb.ToString());
 
-            await _emailService.SendEmail(emailTemplate.TemplateName,
+            await _emailService.SendEmail(EmailTemplateName.EmployerReferral.ToString(),
                 toAddress,
                 "Industry Placement Matching Referral",
                 tokens,
                 "");
 
-            await SaveEmailHistory(emailTemplate, tokens, opportunityId, toAddress, employerReferral.CreatedBy);
+            await _emailHistoryService.SaveEmailHistory(emailTemplateName,
+                tokens,
+                opportunityId,
+                toAddress,
+                employerReferral.CreatedBy);
         }
 
         public async Task SendProviderReferralEmail(int opportunityId)
         {
-            var emailTemplate = await GetEmailTemplate(ProviderReferralEmailTemplateName);
+            var emailTemplateName = EmailTemplateName.ProviderReferral.ToString();
 
             var referrals = await GetOpportunityReferrals(opportunityId);
 
@@ -122,29 +113,28 @@ namespace Sfa.Tl.Matching.Application.Services
                     { "number_of_placements", numberOfPlacements }
                 };
 
-                await _emailService.SendEmail(emailTemplate.TemplateName,
+                await _emailService.SendEmail(EmailTemplateName.ProviderReferral.ToString(),
                     toAddress,
                     "Industry Placement Matching Referral",
                     tokens,
                     "");
 
-                await SaveEmailHistory(emailTemplate, tokens, opportunityId, toAddress, referral.CreatedBy);
+                await _emailHistoryService.SaveEmailHistory(emailTemplateName,
+                    tokens,
+                    opportunityId,
+                    toAddress,
+                    referral.CreatedBy);
             }
-        }
-
-        private async Task<EmailTemplate> GetEmailTemplate(string templateName)
-        {
-            return await _emailTemplateRepository.GetSingleOrDefault(t => t.TemplateName == templateName);
         }
 
         private async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
         {
-            return await _opportunityRepository.GetEmployerReferrals(opportunityId);
+            return await ((IOpportunityRepository)_opportunityRepository).GetEmployerReferrals(opportunityId);
         }
 
         private async Task<IList<OpportunityReferralDto>> GetOpportunityReferrals(int opportunityId)
         {
-            return await _opportunityRepository.GetProviderOpportunities(opportunityId);
+            return await ((IOpportunityRepository)_opportunityRepository).GetProviderOpportunities(opportunityId);
         }
 
         private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
@@ -152,42 +142,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return placementsKnown.GetValueOrDefault()
                 ? placements.ToString()
                 : "at least one";
-        }
-
-        private IEnumerable<EmailPlaceholderDto> ConvertTokensToEmailPlaceholderDtos(IDictionary<string, string> tokens, string createdBy)
-        {
-            var placeholders = new List<EmailPlaceholderDto>();
-
-            foreach (var (key, value) in tokens)
-            {
-                placeholders.Add(
-                    new EmailPlaceholderDto
-                    {
-                        Key = key,
-                        Value = value,
-                        CreatedBy = createdBy
-                    });
-            }
-
-            return placeholders;
-        }
-
-        private async Task SaveEmailHistory(EmailTemplate emailTemplate, IDictionary<string, string> tokens, int opportunityId, string emailAddress, string createdBy)
-        {
-            var placeholders = ConvertTokensToEmailPlaceholderDtos(tokens, createdBy);
-
-            var emailPlaceholders = _mapper.Map<IList<EmailPlaceholder>>(placeholders);
-            _logger.LogInformation($"Saving {emailPlaceholders.Count} {nameof(EmailPlaceholder)} items.");
-
-            var emailHistory = new EmailHistory
-            {
-                OpportunityId = opportunityId,
-                EmailTemplateId = emailTemplate.Id,
-                EmailPlaceholder = emailPlaceholders,
-                SentTo = emailAddress,
-                CreatedBy = createdBy
-            };
-            await _emailHistoryRepository.Create(emailHistory);
         }
     }
 }

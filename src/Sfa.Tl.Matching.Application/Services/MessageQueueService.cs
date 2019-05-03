@@ -21,20 +21,33 @@ namespace Sfa.Tl.Matching.Application.Services
             _configuration = configuration;
         }
 
-        public async Task Push(GetProximityData getProximityData)
+        public async Task PushProximityDataAsync(GetProximityData getProximityData)
         {
-            var message = JsonConvert.SerializeObject(getProximityData);
-            var queue = await GetProximityQueue();
-            await queue.AddMessageAsync(new CloudQueueMessage(message));
-            _logger.LogInformation($"Added Message to Message Queue => {message}");
+            await PushMessageAsync(
+                JsonConvert.SerializeObject(getProximityData), 
+                QueueName.GetProximityQueue);
         }
 
-        private async Task<CloudQueue> GetProximityQueue()
+        public async Task PushProviderQuarterlyRequestMessageAsync(SendProviderFeedbackEmail providerRequest)
+        {
+            await PushMessageAsync(
+                JsonConvert.SerializeObject(providerRequest),
+                QueueName.ProviderQuarterlyRequestQueue);
+        }
+
+        private async Task PushMessageAsync(string message, string queueName)
+        {
+            var queue = await GetQueue(queueName);
+            await queue.AddMessageAsync(new CloudQueueMessage(message));
+            _logger.LogInformation($"Added Message to Message Queue {queueName} => {message}");
+        }
+
+        private async Task<CloudQueue> GetQueue(string queueName)
         {
             var storageAccount = CloudStorageAccount.Parse(_configuration.BlobStorageConnectionString);
             var client = storageAccount.CreateCloudQueueClient();
 
-            var queueReference = client.GetQueueReference(QueueName.GetProximityQueue);
+            var queueReference = client.GetQueueReference(queueName);
             await queueReference.CreateIfNotExistsAsync();
 
             return queueReference;

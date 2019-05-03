@@ -29,33 +29,23 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         }
 
         [Fact]
-        public void Then_ProviderVenueService_SetIsProviderVenueEnabledForSearchAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Called_Exactly_Once()
         {
             _providerVenueService
                 .Received(1)
-                .SetIsProviderVenueEnabledForSearchAsync(Arg.Any<int>(), Arg.Any<bool>());
+                .UpdateVenueAsync(Arg.Any<HideProviderVenueViewModel>());
         }
-
+        
         [Fact]
         public void
-            Then_ProviderVenueService_SetIsProviderVenueEnabledForSearchAsync_Is_Called_With_Expected_ProviderVenueId()
+            Then_ProviderVenueService_UpdateVenueAsync_Is_Called_With_Expected_Values()
         {
             _providerVenueService
                 .Received(1)
-                .SetIsProviderVenueEnabledForSearchAsync(
-                    Arg.Is<int>(p => p == 1),
-                    Arg.Any<bool>());
-        }
-
-        [Fact]
-        public void
-            Then_ProviderVenueService_SetIsProviderVenueEnabledForSearchAsync_Is_Called_With_Expected_IsEnabled()
-        {
-            _providerVenueService
-                .Received(1)
-                .SetIsProviderVenueEnabledForSearchAsync(
-                    Arg.Any<int>(),
-                    Arg.Is<bool>(s => s));
+                .UpdateVenueAsync(
+                    Arg.Is<HideProviderVenueViewModel>(
+                        vm => vm.ProviderVenueId == 1 &&
+                              vm.IsEnabledForSearch));
         }
 
         [Fact]

@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
         {
             foreach (var providerVenue in entities)
             {
-                _messageQueueService.Push(new GetProximityData { Postcode = providerVenue.Postcode, ProviderVenueId = providerVenue.Id });
+                _messageQueueService.PushProximityDataAsync(new GetProximityData { Postcode = providerVenue.Postcode, ProviderVenueId = providerVenue.Id });
             }
         }
     }

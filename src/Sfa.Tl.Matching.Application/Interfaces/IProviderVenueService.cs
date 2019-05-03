@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<int> CreateVenueAsync(AddProviderVenueViewModel viewModel);
         Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int providerVenueId);
         Task UpdateVenueAsync(ProviderVenueDetailViewModel viewModel);
-        Task SetIsProviderVenueEnabledForSearchAsync(int providerVenueId, bool isEnabled);
+        Task UpdateVenueAsync(HideProviderVenueViewModel viewModel);
         Task<ProviderVenueDetailViewModel> GetVenue(int providerId, string postCode);
         Task<HideProviderVenueViewModel> GetHideProviderVenueViewModelAsync(int providerVenueId);
     }

@@ -181,7 +181,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
-            services.AddTransient<IRepository<Provider>, GenericRepository<Provider>>();
+            services.AddTransient<IRepository<Provider>, ProviderRepository>();
+            services.AddTransient<IRepository<ProviderFeedbackRequestHistory>, GenericRepository<ProviderFeedbackRequestHistory>>();
             services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
@@ -200,10 +201,12 @@ namespace Sfa.Tl.Matching.Web
         private static void RegisterApplicationServices(IServiceCollection services)
         {
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IEmailHistoryService, EmailHistoryService>();
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IOpportunityService, OpportunityService>();
             services.AddTransient<IProviderService, ProviderService>();
+            services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<IReferralService, ReferralService>();
             services.AddTransient<IProviderVenueService, ProviderVenueService>();

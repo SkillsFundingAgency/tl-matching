@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -18,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         {
             _providerService = Substitute.For<IProviderService>();
 
-            var providerController = new ProviderController(_providerService);
+            var providerController = new ProviderController(_providerService, new MatchingConfiguration());
 
             var viewModel = new HideProviderViewModel
             {
@@ -30,31 +31,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_ProviderService_SetIsProviderEnabledAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderService_UpdateProviderAsync_Is_Called_Exactly_Once()
         {
             _providerService
                 .Received(1)
-                .SetIsProviderEnabledForSearchAsync(Arg.Any<int>(), Arg.Any<bool>());
+                .UpdateProviderAsync(Arg.Any<HideProviderViewModel>());
         }
 
         [Fact]
-        public void Then_ProviderService_SetIsProviderEnabledAsync_Is_Called_With_Expected_ProviderId()
+        public void Then_ProviderService_UpdateProviderAsync_Is_Called_With_Expected_Values()
         {
             _providerService
                 .Received(1)
-                .SetIsProviderEnabledForSearchAsync(
-                    Arg.Is<int>(p => p == 1),
-                    Arg.Any<bool>());
-        }
-
-        [Fact]
-        public void Then_ProviderService_SetIsProviderEnabledAsync_Is_Called_With_Expected_IsEnabled()
-        {
-            _providerService
-                .Received(1)
-                .SetIsProviderEnabledForSearchAsync(
-                    Arg.Any<int>(),
-                    Arg.Is<bool>(s => s));
+                .UpdateProviderAsync(
+                    Arg.Is<HideProviderViewModel>(
+                        vm => vm.ProviderId == 1 &&
+                                vm.IsEnabledForSearch));
         }
 
         [Fact]

@@ -14,6 +14,8 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<T> GetSingleOrDefault(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationPropertyPath);
         Task Update(T entity);
         Task UpdateMany(IList<T> entities);
+        Task UpdateWithSpecifedColumnsOnly(T entity, params Expression<Func<T, object>>[] properties);
+        Task UpdateManyWithSpecifedColumnsOnly(IList<T> entities, params Expression<Func<T, object>>[] properties);
         Task<int> Delete(int id);
         Task Delete(T entity);
         Task DeleteMany(IList<T> entities);
