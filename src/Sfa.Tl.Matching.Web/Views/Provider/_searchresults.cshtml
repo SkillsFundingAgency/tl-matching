@@ -7,7 +7,7 @@
             <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="col">UKPRN</th>
                 <th class="govuk-table__header" scope="col">Provider name</th>
-                <th class="govuk-table__header" scope="col">Send email?</th>
+                <th class="govuk-table__header" scope="col">CDF Provider</th>
                 <th class="govuk-table__header" scope="col"></th>
             </tr>
         </thead>
@@ -19,18 +19,7 @@
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell">@provider.UkPrn</td>
                     <td class="govuk-table__cell">@provider.ProviderName</td>
-                    <td class="govuk-table__cell">
-                        <div class="govuk-checkboxes">
-                            <div class="govuk-checkboxes__item">
-                                <input type="checkbox" class="govuk-checkboxes__input"
-                                       asp-for="@provider.IsCdfProvider"
-                                       name="Providers[@i].IsCDFProvider" />
-                                <label class="govuk-heading-m govuk-checkboxes__label"
-                                       asp-for="@provider.IsCdfProvider"
-                                       name="Providers[@i].IsCDFProvider" />
-                            </div>
-                        </div>
-                    </td>
+                    <td class="govuk-table__cell">@provider.IsCdfProvider</td>
                     <td class="govuk-table__cell">
                         <a asp-route="GetProviderDetail" asp-route-providerId="@provider.ProviderId" class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden">@provider.ProviderName's details</span></a>
                         <input type="hidden" asp-for="@provider.ProviderId" name="Providers[@i].ProviderId" />
@@ -41,9 +30,7 @@
     </table>
 
     @if (Model.IsAuthorisedUser) {
-        <button type="submit" class="tl-button--grey govuk-button govuk-!-margin-right-1" name="SubmitAction" value="SendEmail">Send email</button>
+        <button type="submit" class="tl-button--red govuk-button govuk-!-margin-right-1" name="SubmitAction" value="SendEmail">Send email to all CDF providers</button>
     }
-
-    <button id="tl-continue" class="govuk-button" type="submit" name="SubmitAction" value="SaveChanges">Save changes</button>
 
 </form>

@@ -18,6 +18,15 @@
 }
 
 
+.tl-button--red {
+    background: govuk-colour("red");
+
+    &:hover,
+    &:focus {
+        background: darken(govuk-colour("red"), 10%);
+    }
+}
+
 
 // Rework button to look like a link
 .tl-button--looks-like-link {
