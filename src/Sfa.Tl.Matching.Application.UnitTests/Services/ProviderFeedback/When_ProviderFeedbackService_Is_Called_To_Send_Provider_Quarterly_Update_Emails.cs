@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
@@ -29,6 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
             var messageQueueService = Substitute.For<IMessageQueueService>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
+            var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
 
             _providerRepository = Substitute.For<IProviderRepository>();
             _providerRepository
@@ -55,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 )));
 
             var providerFeedbackService = new ProviderFeedbackService(
-                    _emailService, _emailHistoryService,
+                    logger, _emailService, _emailHistoryService,
                     _providerRepository, _providerFeedbackRequestHistoryRepository,
                     messageQueueService, dateTimeProvider);
 
@@ -79,8 +81,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Received(1)
                 .GetSingleOrDefault(Arg.Any<Expression<Func<ProviderFeedbackRequestHistory, bool>>>());
         }
-
-
+        
         [Fact]
         public void Then_ProviderFeedbackRequestHistoryRepository_Update_Is_Called_Exactly_Twice()
         {

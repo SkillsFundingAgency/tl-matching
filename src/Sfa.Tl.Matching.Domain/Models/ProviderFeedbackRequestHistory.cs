@@ -5,5 +5,6 @@ namespace Sfa.Tl.Matching.Domain.Models
     {
         public int ProviderCount { get; set; }
         public short Status { get; set; }
+        public string StatusMessage { get; set; }
     }
 }

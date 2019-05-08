@@ -9,6 +9,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builde
                 Id = 1,
                 ProviderCount = 0,
                 Status = 1,
+                StatusMessage = null,
                 CreatedBy = "CreatedBy"
         };
     }

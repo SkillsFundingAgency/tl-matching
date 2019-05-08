@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
@@ -23,6 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
             _messageQueueService = Substitute.For<IMessageQueueService>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
+            var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
 
             var providerRepository = Substitute.For<IProviderRepository>();
             _providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
@@ -36,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
 
             var providerFeedbackService = new ProviderFeedbackService(
-                _emailService, emailHistoryService,
+                logger, _emailService, emailHistoryService,
                 providerRepository, _providerFeedbackRequestHistoryRepository,
                 _messageQueueService, dateTimeProvider);
 
