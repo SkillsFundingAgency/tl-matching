@@ -24,10 +24,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters)
         {
-            var query = _repository.GetMany();
-
-            if (searchParameters.UkPrn.HasValue)
-                query = query.Where(p => p.UkPrn == searchParameters.UkPrn.Value);
+            var query = _repository.GetMany(p => searchParameters.UkPrn == null
+                                                 || p.UkPrn == searchParameters.UkPrn.Value);
 
             query = query.OrderBy(p => p.Name);
 
@@ -137,18 +135,18 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        private static List<ProviderSearchResultItemViewModel> GetProvidersToUpdate(IEnumerable<ProviderSearchResultItemViewModel> providersFromVm, 
+        private static List<ProviderSearchResultItemViewModel> GetProvidersToUpdate(IEnumerable<ProviderSearchResultItemViewModel> providersFromVm,
             IEnumerable<ProviderSearchResultItemViewModel> providersFromDb)
         {
             var providersToUpdate = (from pDb in providersFromDb
-                join pVm in providersFromVm on pDb.ProviderId equals pVm.ProviderId
-                where pDb.ProviderId == pVm.ProviderId
-                      && pDb.IsFundedForNextYear != pVm.IsFundedForNextYear
-                select new ProviderSearchResultItemViewModel
-                {
-                    IsFundedForNextYear = pVm.IsFundedForNextYear,
-                    ProviderId = pVm.ProviderId
-                }).ToList();
+                                     join pVm in providersFromVm on pDb.ProviderId equals pVm.ProviderId
+                                     where pDb.ProviderId == pVm.ProviderId
+                                           && pDb.IsFundedForNextYear != pVm.IsFundedForNextYear
+                                     select new ProviderSearchResultItemViewModel
+                                     {
+                                         IsFundedForNextYear = pVm.IsFundedForNextYear,
+                                         ProviderId = pVm.ProviderId
+                                     }).ToList();
 
             return providersToUpdate;
         }
