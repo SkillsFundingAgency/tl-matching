@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("search-ukprn", Name = "SearchProvider")]
         public async Task<IActionResult> SearchProvider()
         {
-            return View(await GetProviderSearchResults(new ProviderSearchParametersViewModel()));
+            return View(await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
         }
         
         [HttpPost]
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(GetProviderSearchViewModel(viewModel));
             }
 
-            var resultsViewModel = await GetProviderSearchResults(viewModel);
+            var resultsViewModel = await SearchProvidersWithFundingAsync(viewModel);
 
             return View(resultsViewModel);
         }
@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     return View(nameof(ProviderDetail), viewModel);
                 }
 
-                return View(nameof(SearchProvider), await GetProviderSearchResults(new ProviderSearchParametersViewModel()));
+                return View(nameof(SearchProvider), await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
             }
 
             return View(nameof(ProviderDetail), viewModel);
@@ -145,7 +145,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("SearchProvider");
         }
 
-        private async Task<ProviderSearchViewModel> GetProviderSearchResults(ProviderSearchParametersViewModel viewModel)
+        private async Task<ProviderSearchViewModel> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel viewModel)
         {
             var resultsViewModel = GetProviderSearchViewModel(viewModel);
             resultsViewModel.SearchResults = new ProviderSearchResultsViewModel
