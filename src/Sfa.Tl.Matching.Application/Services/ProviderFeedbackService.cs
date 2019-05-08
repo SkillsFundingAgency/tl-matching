@@ -60,6 +60,12 @@ namespace Sfa.Tl.Matching.Application.Services
                 await _providerFeedbackRequestHistoryRepository
                     .GetSingleOrDefault(p => p.Id == providerFeedbackRequestHistoryId);
 
+            if (providerFeedbackRequestHistory == null ||
+                providerFeedbackRequestHistory.Status != (int)ProviderFeedbackRequestStatus.Pending)
+            {
+                return;
+            }
+
             var emailTemplateName = EmailTemplateName.ProviderQuarterlyUpdate.ToString();
             var numberOfProviderEmailsSent = 0;
 
@@ -133,18 +139,15 @@ namespace Sfa.Tl.Matching.Application.Services
             catch (Exception ex)
             {
                 var errorMessage = $"Error sending provider quarterly update emails. {ex.Message} " + 
-                                   $"Provider feedback id {(providerFeedbackRequestHistory != null ? providerFeedbackRequestHistory.Id.ToString() : "unknown")}";
+                                   $"Provider feedback id {providerFeedbackRequestHistory.Id}";
 
                 _logger.LogError(ex, errorMessage);
 
-                if (providerFeedbackRequestHistory != null)
-                {
-                    await UpdateProviderFeedbackRequestHistory(providerFeedbackRequestHistory,
-                        numberOfProviderEmailsSent,
-                        ProviderFeedbackRequestStatus.Error,
-                        userName,
-                        errorMessage);
-                }
+                await UpdateProviderFeedbackRequestHistory(providerFeedbackRequestHistory,
+                    numberOfProviderEmailsSent,
+                    ProviderFeedbackRequestStatus.Error,
+                    userName,
+                    errorMessage);
             }
         }
 
