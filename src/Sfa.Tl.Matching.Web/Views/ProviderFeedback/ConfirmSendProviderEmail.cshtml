@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Are you sure you want to send an email to these providers?";
+    // Are you sure you want to send an email to @Model.ProviderCount @(Model.ProviderCount == 1 ? "provider" : "providers")?
 }
 
 @section backButton{
@@ -23,7 +24,7 @@
             </div>
         }
 
-    <h1 class="govuk-heading-l">Are you sure you want to send an email to @Model.ProviderCount @(Model.ProviderCount == 1 ? "provider" : "providers")?</h1>
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
         <form asp-controller="ProviderFeedback" asp-action="ConfirmSendProviderEmail">
 
             <div class="govuk-form-group" sfa-validation-for="SendEmail" sfa-validationerror-class="govuk-form-group--error">
