@@ -65,7 +65,7 @@
   <ItemGroup>
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
     <None Include="PostDeployment\Seed Email Templates.sql" />
-    <None Include="PostDeployment\ResetProviderEnabledFields.sql" />
+    <None Include="PreDeployment\Spreint 8 Predeployment Script.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
