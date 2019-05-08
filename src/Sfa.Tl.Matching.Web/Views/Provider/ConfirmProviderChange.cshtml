@@ -1,8 +1,8 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.HideProviderViewModel
 
 @{
-    ViewData["Title"] = (Model.IsEnabledForSearch ? "Hide " : "Unhide ") + Model.ProviderName;
-    // Are you sure you want to @(Model.IsEnabledForSearch ? "hide" : "unhide") @Model.ProviderName?
+    var hideText = Model.IsEnabledForSearch ? "hide" : "unhide ";
+    ViewData["Title"] = $"Are you sure you want to {hideText} {Model.ProviderName}?";
 }
 
 @section backButton{
@@ -24,5 +24,3 @@
         </p>
     </div>
 </div>
-
-

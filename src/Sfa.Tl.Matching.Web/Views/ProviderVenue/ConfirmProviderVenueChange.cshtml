@@ -1,8 +1,8 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.HideProviderVenueViewModel
 
 @{
-    ViewData["Title"] = (Model.IsEnabledForSearch ? "Hide " : "Unhide ") + Model.Postcode;
-    // Are you sure you want to @(Model.IsEnabledForSearch ? "hide" : "unhide") @Model.Postcode?
+    var hideText = Model.IsEnabledForSearch ? "hide" : "unhide ";
+    ViewData["Title"] = $"Are you sure you want to {hideText} {Model.Postcode}?";
 }
 
 @section backButton{
