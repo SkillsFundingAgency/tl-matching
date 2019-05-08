@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Security.Claims;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -9,6 +7,7 @@ using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
@@ -33,24 +32,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
                 AuthorisedAdminUserEmail = adminEmail
             };
 
-            var providerFeedbackController = new ProviderFeedbackController(providerFeedbackService, _providerService, configuration)
-            {
-                ControllerContext = new ControllerContext
-                {
-                    HttpContext = new DefaultHttpContext
-                    {
-                        User = new ClaimsPrincipal(
-                            new ClaimsIdentity(
-                                new List<Claim>
-                                {
-                                    new Claim(ClaimTypes.Role, RolesExtensions.AdminUser),
-                                    new Claim(ClaimTypes.Upn, adminEmail)
-                                }))
-                    }
-                }
-            };
+            var providerFeedbackController =
+                new ProviderFeedbackController(providerFeedbackService, _providerService, configuration);
+            var controllerWithClaims = new ClaimsBuilder<ProviderFeedbackController>(providerFeedbackController)
+                .Add(ClaimTypes.Role, RolesExtensions.AdminUser)
+                .AddEmail(adminEmail)
+                .Build();
 
-            _result = providerFeedbackController.ConfirmSendProviderEmail().GetAwaiter().GetResult();
+            _result = controllerWithClaims.ConfirmSendProviderEmail().GetAwaiter().GetResult();
         }
 
         [Fact]
