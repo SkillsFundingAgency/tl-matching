@@ -1,8 +1,8 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.ConfirmSendProviderEmailViewModel
 
 @{
-    ViewData["Title"] = "Are you sure you want to send an email to these providers?";
-    // Are you sure you want to send an email to @Model.ProviderCount @(Model.ProviderCount == 1 ? "provider" : "providers")?
+    var providerText = Model.ProviderCount == 1 ? "provider" : "providers";
+    ViewData["Title"] = $"Are you sure you want to send an email to {Model.ProviderCount} {providerText}?";
 }
 
 @section backButton{
