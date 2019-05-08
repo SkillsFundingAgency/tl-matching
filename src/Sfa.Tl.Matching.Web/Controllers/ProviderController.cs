@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(nameof(SearchProvider), GetProviderSearchViewModel(viewModel));
+                return View(GetProviderSearchViewModel(viewModel));
             }
 
             var searchResult = viewModel.UkPrn.HasValue
@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (searchResult == null || searchResult.Id == 0)
             {
                 ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn), "You must enter a real UKPRN");
-                return View(nameof(SearchProvider), GetProviderSearchViewModel(viewModel));
+                return View(GetProviderSearchViewModel(viewModel));
             }
 
             var resultsViewModel = await GetProviderSearchResults(viewModel);
