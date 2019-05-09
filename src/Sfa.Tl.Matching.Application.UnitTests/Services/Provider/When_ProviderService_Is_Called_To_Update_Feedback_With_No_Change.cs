@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
                     new ProviderSearchResultItemViewModel
                     {
                         ProviderId = 1,
-                        IsFundedForNextYear = true
+                        //IsFundedForNextYear = true
                     }
                 }
             };

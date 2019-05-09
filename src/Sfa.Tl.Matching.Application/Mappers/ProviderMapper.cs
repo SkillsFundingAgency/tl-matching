@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<ProviderSearchResultItemViewModel, Provider>()
                 .ForMember(m => m.Id, config => config.MapFrom(s => s.ProviderId))
-                .ForMember(m => m.IsCdfProvider, config => config.MapFrom(s => s.IsFundedForNextYear ? "Yes" : "No"))
+                .ForMember(m => m.IsCdfProvider, config => config.MapFrom(s => s.IsCdfProvider == "Yes"))
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<ProviderSearchResultItemViewModel, Provider>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<ProviderSearchResultItemViewModel, Provider>>())
                 .ForAllOtherMembers(config => config.Ignore());

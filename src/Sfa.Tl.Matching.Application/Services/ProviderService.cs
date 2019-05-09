@@ -121,7 +121,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 .Select(p => new ProviderSearchResultItemViewModel
                 {
                     ProviderId = p.Id,
-                    IsFundedForNextYear = p.IsCdfProvider
+                    IsCdfProvider = p.IsCdfProvider ? "Yes" : "No"
                 }).ToList();
 
             var providersToUpdate = GetProvidersToUpdate(viewModel.Providers, providersFromDb);
@@ -143,10 +143,10 @@ namespace Sfa.Tl.Matching.Application.Services
             var providersToUpdate = (from pDb in providersFromDb
                 join pVm in providersFromVm on pDb.ProviderId equals pVm.ProviderId
                 where pDb.ProviderId == pVm.ProviderId
-                      && pDb.IsFundedForNextYear != pVm.IsFundedForNextYear
+                      && pDb.IsCdfProvider != pVm.IsCdfProvider
                 select new ProviderSearchResultItemViewModel
                 {
-                    IsFundedForNextYear = pVm.IsFundedForNextYear,
+                    IsCdfProvider = pVm.IsCdfProvider,
                     ProviderId = pVm.ProviderId
                 }).ToList();
 
