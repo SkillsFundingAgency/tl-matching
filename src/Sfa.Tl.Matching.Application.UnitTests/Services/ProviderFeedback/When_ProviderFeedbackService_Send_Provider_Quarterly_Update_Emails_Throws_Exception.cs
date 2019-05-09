@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
@@ -27,6 +28,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
         public When_ProviderFeedbackService_Send_Provider_Quarterly_Update_Emails_Throws_Exception()
         {
+            var configuration = new MatchingConfiguration
+            {
+                SendEmailEnabled = true,
+                NotificationsSystemId = "TLevelsIndustryPlacement"
+            };
+
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
 
@@ -64,7 +71,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Throws(new Exception());
 
             var providerFeedbackService = new ProviderFeedbackService(
-                    _logger, _emailService, _emailHistoryService,
+                    configuration, _logger, 
+                    _emailService, _emailHistoryService,
                     _providerRepository, _providerFeedbackRequestHistoryRepository,
                     messageQueueService, dateTimeProvider);
 

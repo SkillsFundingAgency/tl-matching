@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
@@ -22,6 +23,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
         public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_And_Status_Is_Processing()
         {
+            var configuration = new MatchingConfiguration
+            {
+                SendEmailEnabled = true,
+                NotificationsSystemId = "TLevelsIndustryPlacement"
+            };
+
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
 
@@ -43,7 +50,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Returns(providerFeedbackRequestHistory);
 
             var providerFeedbackService = new ProviderFeedbackService(
-                    logger, _emailService, _emailHistoryService,
+                    configuration, logger, 
+                    _emailService, _emailHistoryService,
                     _providerRepository, _providerFeedbackRequestHistoryRepository,
                     messageQueueService, dateTimeProvider);
 

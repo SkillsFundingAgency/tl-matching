@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
@@ -25,6 +26,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
         public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails()
         {
+            var configuration = new MatchingConfiguration
+            {
+                SendEmailEnabled = true,
+                NotificationsSystemId = "TLevelsIndustryPlacement"
+            };
+
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
 
@@ -41,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _providerFeedbackRequestHistoryRepository
                 .GetSingleOrDefault(Arg.Any<Expression<Func<ProviderFeedbackRequestHistory, bool>>>())
                 .Returns(new ProviderFeedbackRequestHistoryBuilder().Build());
-            
+
             _recievedProviderFeedbackRequestHistories = new List<ProviderFeedbackRequestHistory>();
             _providerFeedbackRequestHistoryRepository
                 .Update(Arg.Do<ProviderFeedbackRequestHistory>
@@ -57,7 +64,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 )));
 
             var providerFeedbackService = new ProviderFeedbackService(
-                    logger, _emailService, _emailHistoryService,
+                    configuration, logger,
+                    _emailService, _emailHistoryService,
                     _providerRepository, _providerFeedbackRequestHistoryRepository,
                     messageQueueService, dateTimeProvider);
 
@@ -81,7 +89,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Received(1)
                 .GetSingleOrDefault(Arg.Any<Expression<Func<ProviderFeedbackRequestHistory, bool>>>());
         }
-        
+
         [Fact]
         public void Then_ProviderFeedbackRequestHistoryRepository_Update_Is_Called_Exactly_Twice()
         {
@@ -102,7 +110,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                          && p.ModifiedBy == "TestUser"
                 ));
         }
-        
+
         [Fact]
         public void Then_ProviderFeedbackRequestHistoryRepository_Update_Sets_Expected_Values_In_First_Call()
         {
@@ -112,7 +120,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             history.ProviderCount.Should().Be(1);
             history.ModifiedBy.Should().Be("TestUser");
         }
-        
+
         [Fact]
         public void Then_ProviderFeedbackRequestHistoryRepository_Update_Sets_Expected_Values_In_Second_Call()
         {

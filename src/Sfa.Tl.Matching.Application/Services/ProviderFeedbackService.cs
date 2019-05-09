@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -13,6 +14,7 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class ProviderFeedbackService : IProviderFeedbackService
     {
+        private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
@@ -22,6 +24,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly ILogger<ProviderFeedbackService> _logger;
 
         public ProviderFeedbackService(
+            MatchingConfiguration configuration,
             ILogger<ProviderFeedbackService> logger,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
@@ -30,6 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
             IMessageQueueService messageQueueService,
             IDateTimeProvider dateTimeProvider)
         {
+            _configuration = configuration;
             _logger = logger;
             _emailService = emailService;
             _emailHistoryService = emailHistoryService;
@@ -66,7 +70,6 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            var emailTemplateName = EmailTemplateName.ProviderQuarterlyUpdate.ToString();
             var numberOfProviderEmailsSent = 0;
 
             try
@@ -116,17 +119,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     tokens.Add("secondary_contact_details", secondaryDetailsBuilder.ToString());
 
-                    await _emailService.SendEmail(emailTemplateName,
-                        toAddress,
-                        "Industry Placement Matching Provider Update",
-                        tokens,
-                        "");
-
-                    await _emailHistoryService.SaveEmailHistory(emailTemplateName,
-                        tokens,
-                        null,
-                        toAddress,
-                        userName);
+                    await SendEmail(EmailTemplateName.ProviderQuarterlyUpdate, null, toAddress,
+                        "Industry Placement Matching Provider Update", tokens, userName);
 
                     numberOfProviderEmailsSent++;
                 }
@@ -138,7 +132,7 @@ namespace Sfa.Tl.Matching.Application.Services
             }
             catch (Exception ex)
             {
-                var errorMessage = $"Error sending provider quarterly update emails. {ex.Message} " + 
+                var errorMessage = $"Error sending provider quarterly update emails. {ex.Message} " +
                                    $"Provider feedback id {providerFeedbackRequestHistory.Id}";
 
                 _logger.LogError(ex, errorMessage);
@@ -149,6 +143,28 @@ namespace Sfa.Tl.Matching.Application.Services
                     userName,
                     errorMessage);
             }
+        }
+
+        private async Task SendEmail(EmailTemplateName template, int? opportunityId, 
+            string toAddress, string subject, 
+            IDictionary<string, string> tokens, string createdBy)
+        {
+            if (!_configuration.SendEmailEnabled)
+            {
+                return;
+            }
+
+            await _emailService.SendEmail(template.ToString(),
+                    toAddress,
+                    subject,
+                    tokens,
+                    "");
+
+            await _emailHistoryService.SaveEmailHistory(template.ToString(),
+                tokens,
+                opportunityId,
+                toAddress,
+                createdBy);
         }
 
         private async Task UpdateProviderFeedbackRequestHistory(

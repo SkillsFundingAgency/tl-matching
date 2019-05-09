@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -11,14 +12,18 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class ReferralService : IReferralService
     {
+        private readonly MatchingConfiguration _configuration;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IRepository<Opportunity> _opportunityRepository;
 
-        public ReferralService(IEmailService emailService,
+        public ReferralService(
+            MatchingConfiguration configuration,
+            IEmailService emailService,
             IEmailHistoryService emailHistoryService,
             IRepository<Opportunity> opportunityRepository)
         {
+            _configuration = configuration;
             _emailService = emailService;
             _emailHistoryService = emailHistoryService;
             _opportunityRepository = opportunityRepository;
@@ -26,8 +31,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SendEmployerReferralEmail(int opportunityId)
         {
-            var emailTemplateName = EmailTemplateName.EmployerReferral.ToString();
-
             var employerReferral = await GetEmployerReferrals(opportunityId);
 
             if (employerReferral == null)
@@ -72,23 +75,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
             tokens.Add("providers_list", sb.ToString());
 
-            await _emailService.SendEmail(EmailTemplateName.EmployerReferral.ToString(),
-                toAddress,
-                "Industry Placement Matching Referral",
-                tokens,
-                "");
-
-            await _emailHistoryService.SaveEmailHistory(emailTemplateName,
-                tokens,
-                opportunityId,
-                toAddress,
-                employerReferral.CreatedBy);
+            await SendEmail(EmailTemplateName.EmployerReferral, opportunityId, toAddress,
+                "Industry Placement Matching Referral", tokens, employerReferral.CreatedBy);
         }
 
         public async Task SendProviderReferralEmail(int opportunityId)
         {
-            var emailTemplateName = EmailTemplateName.ProviderReferral.ToString();
-
             var referrals = await GetOpportunityReferrals(opportunityId);
 
             foreach (var referral in referrals)
@@ -96,7 +88,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 var toAddress = referral.ProviderPrimaryContactEmail;
 
                 var numberOfPlacements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
-                
+
                 var tokens = new Dictionary<string, string>
                 {
                     { "primary_contact_name", referral.ProviderPrimaryContact },
@@ -113,17 +105,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     { "number_of_placements", numberOfPlacements }
                 };
 
-                await _emailService.SendEmail(EmailTemplateName.ProviderReferral.ToString(),
-                    toAddress,
-                    "Industry Placement Matching Referral",
-                    tokens,
-                    "");
-
-                await _emailHistoryService.SaveEmailHistory(emailTemplateName,
-                    tokens,
-                    opportunityId,
-                    toAddress,
-                    referral.CreatedBy);
+                await SendEmail(EmailTemplateName.ProviderReferral, opportunityId, toAddress,
+                    "Industry Placement Matching Referral", tokens, referral.CreatedBy);
             }
         }
 
@@ -142,6 +125,28 @@ namespace Sfa.Tl.Matching.Application.Services
             return placementsKnown.GetValueOrDefault()
                 ? placements.ToString()
                 : "at least one";
+        }
+
+        private async Task SendEmail(EmailTemplateName template, int? opportunityId, 
+            string toAddress, string subject, 
+            IDictionary<string, string> tokens, string createdBy)
+        {
+            if (!_configuration.SendEmailEnabled)
+            {
+                return;
+            }
+
+            await _emailService.SendEmail(template.ToString(),
+                    toAddress,
+                    subject,
+                    tokens,
+                    "");
+
+            await _emailHistoryService.SaveEmailHistory(template.ToString(),
+                tokens,
+                opportunityId,
+                toAddress,
+                createdBy);
         }
     }
 }
