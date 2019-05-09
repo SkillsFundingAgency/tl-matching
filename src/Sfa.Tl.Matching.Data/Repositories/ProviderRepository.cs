@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                             {
                                 LarsId = qualification.Qualification.LarsId,
                                 Title = qualification.Qualification.Title
-                            }).ToList()
+                            }).Distinct().ToList()
                     }).OrderBy(v => v.Postcode).ToList()
                 })
                 .OrderBy(p => p.Id)
