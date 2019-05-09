@@ -108,45 +108,5 @@ namespace Sfa.Tl.Matching.Application.Services
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
-
-        public async Task UpdateProvider(SaveProviderFeedbackViewModel viewModel)
-        {
-            //var providerIds = viewModel.Providers.Select(p => p.ProviderId);
-
-            //var providersFromDb = _repository.GetMany(p => providerIds.Contains(p.Id))
-            //    .Select(p => new ProviderSearchResultItemViewModel
-            //    {
-            //        ProviderId = p.Id,
-            //        IsCdfProvider = p.IsCdfProvider
-            //    }).ToList();
-
-            //var providerSearchResultItems = GetProviderSearchResultItemToUpdate(viewModel.Providers, providersFromDb);
-
-            //if (providerSearchResultItems.Count > 0)
-            //{
-            //    var providers = _mapper.Map<IList<Provider>>(providerSearchResultItems);
-
-            //    await _repository.UpdateManyWithSpecifedColumnsOnly(providers,
-            //        x => x.IsCdfProvider,
-            //        x => x.ModifiedOn,
-            //        x => x.ModifiedBy);
-            //}
-        }
-
-        private static List<ProviderSearchResultItemViewModel> GetProviderSearchResultItemToUpdate(IEnumerable<ProviderSearchResultItemViewModel> providersFromVm, 
-            IEnumerable<ProviderSearchResultItemViewModel> providersFromDb)
-        {
-            var providersToUpdate = (from pDb in providersFromDb
-                join pVm in providersFromVm on pDb.ProviderId equals pVm.ProviderId
-                where pDb.ProviderId == pVm.ProviderId
-                      && pDb.IsCdfProvider != pVm.IsCdfProvider
-                select new ProviderSearchResultItemViewModel
-                {
-                    IsCdfProvider = pVm.IsCdfProvider,
-                    ProviderId = pVm.ProviderId
-                }).ToList();
-
-            return providersToUpdate;
-        }
     }
 }

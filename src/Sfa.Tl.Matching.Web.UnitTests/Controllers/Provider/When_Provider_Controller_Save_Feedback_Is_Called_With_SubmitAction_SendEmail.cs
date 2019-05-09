@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             var providerController = new ProviderController(_providerService, matchingConfiguration);
 
-            _result = providerController.SaveProviderFeedback(_viewModel).GetAwaiter().GetResult();
+            _result = providerController.ConfirmSendProviderEmail(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

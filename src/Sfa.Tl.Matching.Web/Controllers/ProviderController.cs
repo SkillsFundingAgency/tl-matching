@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IProviderService _providerService;
-        
+
         public ProviderController(IProviderService providerService, MatchingConfiguration configuration)
         {
             _providerService = providerService;

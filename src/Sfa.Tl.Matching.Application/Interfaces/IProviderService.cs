@@ -10,13 +10,11 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<HideProviderViewModel> GetHideProviderViewModelAsync(int providerId);
         Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId, bool includeVenueDetails = false);
 		Task<IList<ProviderVenueViewModel>> GetProviderVenueSummaryByProviderIdAsync(int providerId, bool includeVenueDetails = false);
-        Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(
-            ProviderSearchParametersViewModel searchParameters);
+        Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters);
         Task<int> GetProvidersWithFundingCountAsync();
         Task<ProviderSearchResultDto> SearchAsync(long ukPrn);
         Task UpdateProviderAsync(HideProviderViewModel viewModel);
         Task UpdateProviderDetail(ProviderDetailViewModel viewModel);
-        Task UpdateProvider(SaveProviderFeedbackViewModel viewModel);
         Task<int> CreateProvider(ProviderDetailViewModel viewModel);
     }
 }
