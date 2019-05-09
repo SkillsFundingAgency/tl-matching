@@ -24,12 +24,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters)
         {
-            var query = _repository.GetMany(p => searchParameters.UkPrn == null
-                                                 || p.UkPrn == searchParameters.UkPrn.Value);
+            var providers = await _repository.GetMany(p => searchParameters.UkPrn == null || p.UkPrn == searchParameters.UkPrn.Value)
+                                    .OrderBy(p => p.Name)
+                                    .ToListAsync();
 
-            query = query.OrderBy(p => p.Name);
-
-            var providers = await query.ToListAsync();
             return _mapper.Map<IList<Provider>, IList<ProviderSearchResultItemViewModel>>(providers);
 
             //return await query.ProjectTo<ProviderSearchResultItemViewModel>(_mapper.ConfigurationProvider).ToListAsync();
