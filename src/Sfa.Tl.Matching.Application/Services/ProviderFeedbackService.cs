@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -97,9 +98,18 @@ namespace Sfa.Tl.Matching.Application.Services
                     foreach (var providerVenue in provider.ProviderVenues)
                     {
                         venuesListBuilder.AppendLine($"{providerVenue.Postcode}:");
-                        foreach (var qualification in providerVenue.Qualifications)
+                        if (!providerVenue.Qualifications.Any())
                         {
-                            venuesListBuilder.AppendLine($"* {qualification.LarsId}: {qualification.ShortTitle}");
+                            venuesListBuilder.AppendLine("* no qualifications with an industry placement option");
+                        }
+                        else
+                        {
+                            foreach (var qualification in providerVenue
+                                                        .Qualifications
+                                                        .OrderBy(q => q.LarsId))
+                            {
+                                venuesListBuilder.AppendLine($"* {qualification.LarsId}: {qualification.Title}");
+                            }
                         }
 
                         venuesListBuilder.AppendLine("");
@@ -145,8 +155,8 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        private async Task SendEmail(EmailTemplateName template, int? opportunityId, 
-            string toAddress, string subject, 
+        private async Task SendEmail(EmailTemplateName template, int? opportunityId,
+            string toAddress, string subject,
             IDictionary<string, string> tokens, string createdBy)
         {
             if (!_configuration.SendEmailEnabled)

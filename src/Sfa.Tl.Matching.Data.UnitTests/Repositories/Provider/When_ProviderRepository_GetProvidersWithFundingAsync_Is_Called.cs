@@ -68,24 +68,24 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider
         public void Then_First_Qualification_Fields_Are_As_Expected()
         {
             var qualification = _result.First().ProviderVenues.First().Qualifications.First();
-            qualification.LarsId.Should().Be("1002");
-            qualification.ShortTitle.Should().Be("Duplicate Short Title");
+            qualification.LarsId.Should().Be("1001");
+            qualification.Title.Should().Be("Title 1");
         }
 
         [Fact]
         public void Then_Second_Qualification_Fields_Are_As_Expected()
         {
             var qualification = _result.First().ProviderVenues.First().Qualifications.Skip(1).First();
-            qualification.LarsId.Should().Be("1003");
-            qualification.ShortTitle.Should().Be("Duplicate Short Title");
+            qualification.LarsId.Should().Be("1002");
+            qualification.Title.Should().Be("Title 2");
         }
 
         [Fact]
         public void Then_Third_Qualification_Fields_Are_As_Expected()
         {
             var qualification = _result.First().ProviderVenues.First().Qualifications.Skip(2).First();
-            qualification.LarsId.Should().Be("1001");
-            qualification.ShortTitle.Should().Be("Short Title");
+            qualification.LarsId.Should().Be("1003");
+            qualification.Title.Should().Be("Title 3");
         }
     }
 }
