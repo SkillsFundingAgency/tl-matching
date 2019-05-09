@@ -40,3 +40,10 @@ GO
 ALTER TABLE [dbo].[ProviderVenue] ALTER COLUMN [IsEnabledForReferral] BIT NOT NULL
 GO
 
+ALTER TABLE Provider
+ALTER COLUMN SecondaryContact nvarchar(100) NULL
+GO
+
+ALTER TABLE Provider
+ALTER COLUMN SecondaryContactEmail varchar(320) NULL
+GO
