@@ -12,16 +12,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
     public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_Model_Errors
     {
         private readonly IActionResult _result;
-        private readonly ProviderController _providerController;
         private readonly IProviderService _providerService;
 
         public When_Provider_Controller_SaveProviderDetail_Is_Called_With_Model_Errors()
         {
             _providerService = Substitute.For<IProviderService>();
 
-            _providerController = new ProviderController(_providerService, new MatchingConfiguration());
+            var providerController = new ProviderController(_providerService, new MatchingConfiguration());
 
-            _result = _providerController.SaveProviderDetail(new ProviderDetailViewModel()).GetAwaiter().GetResult();
+            _result = providerController.SaveProviderDetail(new ProviderDetailViewModel()).GetAwaiter().GetResult();
         }
 
         [Fact]

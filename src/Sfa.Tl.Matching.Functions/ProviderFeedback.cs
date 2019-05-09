@@ -41,7 +41,6 @@ namespace Sfa.Tl.Matching.Functions
                     FunctionName = context.FunctionName,
                     RowNumber = -1
                 });
-                throw;
             }
 
             stopwatch.Stop();

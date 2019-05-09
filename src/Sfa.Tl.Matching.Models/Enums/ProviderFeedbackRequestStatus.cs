@@ -4,6 +4,7 @@
     {
         Pending = 1,
         Processing,
-        Complete
+        Complete,
+        Error,
     }
 }

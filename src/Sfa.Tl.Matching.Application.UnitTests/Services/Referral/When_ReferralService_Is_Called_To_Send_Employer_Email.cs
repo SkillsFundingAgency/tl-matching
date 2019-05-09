@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
@@ -16,6 +17,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
         public When_ReferralService_Is_Called_To_Send_Employer_Email()
         {
+            var configuration = new MatchingConfiguration
+            {
+                SendEmailEnabled = true,
+                NotificationsSystemId = "TLevelsIndustryPlacement"
+            };
+
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
 
@@ -27,6 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .Returns(new ValidEmployerReferralDtoBuilder().Build());
 
             var referralService = new ReferralService(
+                configuration, 
                 _emailService, _emailHistoryService,
                 _opportunityRepository);
 

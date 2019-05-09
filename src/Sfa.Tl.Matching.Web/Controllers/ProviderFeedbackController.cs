@@ -16,8 +16,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IProviderService _providerService;
         private readonly IProviderFeedbackService _providerFeedbackService;
 
-        public ProviderFeedbackController(IProviderFeedbackService providerFeedbackService, 
-            IProviderService providerService, 
+        public ProviderFeedbackController(IProviderFeedbackService providerFeedbackService,
+            IProviderService providerService,
             MatchingConfiguration configuration)
         {
             _providerService = providerService;
@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail))
             {
-                throw new SecurityException("User is not authorised to use this page");
+                return RedirectToRoute("FailedLogin");
             }
 
             var viewModel = await GetConfirmSendProviderEmailViewModel();
