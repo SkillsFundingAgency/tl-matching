@@ -1,7 +1,8 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.HideProviderViewModel
 
 @{
-    ViewData["Title"] = (Model.IsCdfProvider ? "Hide " : "Unhide ") + Model.ProviderName;
+    var hideText = Model.IsCdfProvider ? "hide" : "unhide ";
+    ViewData["Title"] = $"Are you sure you want to {hideText} {Model.ProviderName}?";
 }
 
 @section backButton{
@@ -9,7 +10,7 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">Are you sure you want to @(Model.IsCdfProvider ? "hide" : "unhide") @Model.ProviderName?</h1>
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
         <form asp-controller="Provider" asp-action="ConfirmProviderChange">
             <input asp-for="ProviderId" type="hidden" />
             <input asp-for="IsCdfProvider" type="hidden" />
@@ -23,5 +24,3 @@
         </p>
     </div>
 </div>
-
-

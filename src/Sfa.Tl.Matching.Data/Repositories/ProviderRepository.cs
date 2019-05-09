@@ -11,48 +11,38 @@ namespace Sfa.Tl.Matching.Data.Repositories
 {
     public class ProviderRepository : GenericRepository<Provider>, IProviderRepository
     {
-        private readonly MatchingDbContext _dbContext;
-
         public ProviderRepository(ILogger<ProviderRepository> logger, MatchingDbContext dbContext) : base(logger, dbContext)
         {
-            _dbContext = dbContext;
         }
 
         public async Task<IList<ProviderWithFundingDto>> GetProvidersWithFundingAsync()
         {
-            return await (from p in _dbContext.Provider
-                          orderby p.Id
-                          where p.IsCdfProvider
-                          select new ProviderWithFundingDto
-                          {
-                              Id = p.Id,
-                              Name = p.Name,
-                              PrimaryContact = p.PrimaryContact,
-                              PrimaryContactEmail = p.PrimaryContactEmail,
-                              PrimaryContactPhone = p.PrimaryContactPhone,
-                              SecondaryContact = p.SecondaryContact,
-                              SecondaryContactEmail = p.SecondaryContactEmail,
-                              SecondaryContactPhone = p.SecondaryContactPhone,
-                              CreatedBy = p.CreatedBy,
-                              ProviderVenues =
-                                  (from pv in _dbContext.ProviderVenue
-                                   where pv.ProviderId == p.Id
-                                   orderby pv.Postcode
-                                   select new ProviderVenueQualificationsInfoDto
-                                   {
-                                       Postcode = pv.Postcode,
-                                       Qualifications =
-                                           (from pq in _dbContext.ProviderQualification
-                                            join q in _dbContext.Qualification on pq.QualificationId equals q.Id
-                                            where pv.Id == pq.ProviderVenueId
-                                            orderby q.ShortTitle, q.LarsId
-                                            select new QualificationInfoDto
-                                            {
-                                                LarsId = q.LarsId,
-                                                ShortTitle = q.ShortTitle
-                                            }).Distinct().ToList()
-                                   }).ToList()
-                          }).ToListAsync();
+            return await GetMany(p => p.IsCdfProvider)
+                .Select(provider => new ProviderWithFundingDto
+                {
+                    Id = provider.Id,
+                    Name = provider.Name,
+                    PrimaryContact = provider.PrimaryContact,
+                    PrimaryContactPhone = provider.PrimaryContactPhone,
+                    PrimaryContactEmail = provider.PrimaryContactEmail,
+                    SecondaryContact = provider.SecondaryContact,
+                    SecondaryContactPhone = provider.SecondaryContactPhone,
+                    SecondaryContactEmail = provider.SecondaryContactEmail,
+                    CreatedBy = provider.CreatedBy,
+                    ProviderVenues = provider.ProviderVenue.Select(venue => new ProviderVenueQualificationsInfoDto
+                    {
+                        Postcode = venue.Postcode,
+                        Qualifications = venue.ProviderQualification
+                            //.OrderBy(q => new { q.Qualification.Title, q.Qualification.LarsId })
+                            .Select(qualification => new QualificationInfoDto
+                            {
+                                LarsId = qualification.Qualification.LarsId,
+                                Title = qualification.Qualification.Title
+                            }).ToList()
+                    }).OrderBy(v => v.Postcode).ToList()
+                })
+                .OrderBy(p => p.Id)
+                .ToListAsync();
         }
     }
 }

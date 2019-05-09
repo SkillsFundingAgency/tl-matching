@@ -38,7 +38,11 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHis
         [Fact]
         public void Then_ProviderFeedbackRequestHistory_Status_Is_Returned() =>
             _result.Status.Should().Be(1);
-        
+
+        [Fact]
+        public void Then_ProviderFeedbackRequestHistory_StatusMessage_Is_Returned() =>
+            _result.StatusMessage.Should().Be("Status Message");
+
         [Fact]
         public void Then_ProviderFeedbackRequestHistory_CreatedBy_Is_Returned() =>
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);

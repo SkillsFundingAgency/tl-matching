@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                             {
                                 Id = 1,
                                 LarsId = "1001",
-                                Title = "Title",
+                                Title = "Title 1",
                                 ShortTitle = "Short Title",
                                 CreatedBy = EntityCreationConstants.CreatedByUser,
                                 CreatedOn = EntityCreationConstants.CreatedOn

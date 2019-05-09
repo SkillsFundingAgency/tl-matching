@@ -16,7 +16,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
-    public class When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails
+    public class When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_With_No_Qualifications
     {
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
         private readonly IList<ProviderFeedbackRequestHistory> _recievedProviderFeedbackRequestHistories;
 
-        public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails()
+        public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_With_No_Qualifications()
         {
             var configuration = new MatchingConfiguration
             {
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _providerRepository = Substitute.For<IProviderRepository>();
             _providerRepository
                 .GetProvidersWithFundingAsync()
-                .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
+                .Returns(new ValidProviderWithFundingDtoListBuilder().BuildWithNoQualifications());
 
             _providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
             _providerFeedbackRequestHistoryRepository
@@ -269,10 +269,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Venues_and_Qualifications_List_Token()
         {
-            const string expectedProviderVenueQualificationsList = "AA1 1AA:\r\n"
-                                                 + "* 10042982: Qualification 1\r\n"
-                                                 + "* 60165522: Qualification 2\r\n"
-                                                 + "\r\n";
+            const string expectedProviderVenueQualificationsList = 
+                "AA1 1AA:\r\n"
+                + "* no qualifications with an industry placement option\r\n"
+                + "\r\n";
 
             _emailService
                 .Received(1)

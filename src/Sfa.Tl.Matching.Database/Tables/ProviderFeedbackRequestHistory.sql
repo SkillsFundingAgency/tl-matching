@@ -3,6 +3,7 @@
 	[Id] INT IDENTITY(1,1) NOT NULL, 
 	[ProviderCount] INT NOT NULL,
 	[Status] SMALLINT NOT NULL,
+	[StatusMessage] VARCHAR(4000) NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 
