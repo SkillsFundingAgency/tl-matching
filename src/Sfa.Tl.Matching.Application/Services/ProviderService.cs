@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<int> GetProvidersWithFundingCountAsync()
         {
             var query = _repository
-                .GetMany(p => p.IsFundedForNextYear)
+                .GetMany(p => p.IsCdfProvider)
                 .CountAsync();
 
             return await query;
@@ -108,7 +108,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var provider = _mapper.Map<HideProviderViewModel, Provider>(viewModel);
 
             await _repository.UpdateWithSpecifedColumnsOnly(provider,
-                x => x.IsEnabledForSearch,
+                x => x.IsCdfProvider,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
@@ -121,7 +121,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 .Select(p => new ProviderSearchResultItemViewModel
                 {
                     ProviderId = p.Id,
-                    IsFundedForNextYear = p.IsFundedForNextYear
+                    IsFundedForNextYear = p.IsCdfProvider
                 }).ToList();
 
             var providersToUpdate = GetProvidersToUpdate(viewModel.Providers, providersFromDb);
@@ -131,7 +131,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 var providers = _mapper.Map<IList<Provider>>(providersToUpdate);
 
                 await _repository.UpdateManyWithSpecifedColumnsOnly(providers,
-                    x => x.IsFundedForNextYear,
+                    x => x.IsCdfProvider,
                     x => x.ModifiedOn,
                     x => x.ModifiedBy);
             }

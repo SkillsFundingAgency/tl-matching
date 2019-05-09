@@ -13,7 +13,7 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Name" />
             <input type="hidden" asp-for="UkPrn" />
-            <input type="hidden" asp-for="IsEnabledForSearch" />
+            <input type="hidden" asp-for="IsCdfProvider" />
 
             @if (!ViewData.ModelState.IsValid)
             {
@@ -40,7 +40,7 @@
                 <span class="govuk-caption-m">UKPRN: @Model.UkPrn</span>
                 @ViewData["Title"]
             </h1>
-            <p class="govuk-body"><a asp-controller="Provider" class="govuk-link" asp-action="ConfirmProviderChange" asp-route-providerId="@Model.Id"> @(Model.IsEnabledForSearch ? "Hide" : "Unhide") provider</a></p>
+            <p class="govuk-body"><a asp-controller="Provider" class="govuk-link" asp-action="ConfirmProviderChange" asp-route-providerId="@Model.Id"> @(Model.IsCdfProvider ? "Hide" : "Unhide") provider</a></p>
 
             <div class="govuk-form-group" sfa-validation-for="DisplayName" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-heading-s" asp-for="DisplayName">

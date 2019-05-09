@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             ProviderId = 1,
             UkPrn = 10000546,
             ProviderName = "Test Provider",
-            IsEnabledForSearch = true
+            IsCdfProvider = true
         };
     }
 }

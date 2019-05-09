@@ -16,9 +16,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             SecondaryContact = "Test 2",
             SecondaryContactEmail = "Test2@test.com",
             SecondaryContactPhone = "0123456789",
-            IsEnabledForSearch = true,
+            IsCdfProvider = true,
             IsEnabledForReferral = true,
-            IsFundedForNextYear = true,
             Source = "Test",
             CreatedBy = "CreatedBy"
         };

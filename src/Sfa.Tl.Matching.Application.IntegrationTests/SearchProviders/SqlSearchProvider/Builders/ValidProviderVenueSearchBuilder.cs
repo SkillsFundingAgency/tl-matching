@@ -112,7 +112,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             return geometryFactory.CreatePoint(new Coordinate(longitude, latitude));
         }
 
-        private static Domain.Models.Provider BuildProvider(bool isEnabledForSearch)
+        private static Domain.Models.Provider BuildProvider(bool isCdfProvider)
         {
             return new Domain.Models.Provider
             {
@@ -125,9 +125,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 SecondaryContact = "Test 2",
                 SecondaryContactEmail = "Test2@test.com",
                 SecondaryContactPhone = "0123456789",
-                IsEnabledForSearch = isEnabledForSearch,
+                IsCdfProvider = isCdfProvider,
                 IsEnabledForReferral = true,
-                IsFundedForNextYear = true,
                 Source = "Test"
             };
         }

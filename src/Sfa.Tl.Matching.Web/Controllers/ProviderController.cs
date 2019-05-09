@@ -125,7 +125,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("ConfirmProviderChange", viewModel);
             }
 
-            viewModel.IsEnabledForSearch = !viewModel.IsEnabledForSearch;
+            viewModel.IsCdfProvider = !viewModel.IsCdfProvider;
             await _providerService.UpdateProviderAsync(viewModel);
 
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });

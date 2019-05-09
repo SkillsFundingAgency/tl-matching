@@ -85,12 +85,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Model_IsEnabledForSearch_Has_Expected_Value()
+        public void Then_Model_IsCdfProvider_Has_Expected_Value()
         {
             var viewResult = _result as ViewResult;
             var model = viewResult?.Model as HideProviderViewModel;
             // ReSharper disable once PossibleNullReferenceException
-            model.IsEnabledForSearch.Should().Be(true);
+            model.IsCdfProvider.Should().Be(true);
         }
     }
 }

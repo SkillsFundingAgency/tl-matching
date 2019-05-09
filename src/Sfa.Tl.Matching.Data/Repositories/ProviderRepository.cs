@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             return await (from p in _dbContext.Provider
                           orderby p.Id
-                          where p.IsFundedForNextYear
+                          where p.IsCdfProvider
                           select new ProviderWithFundingDto
                           {
                               Id = p.Id,

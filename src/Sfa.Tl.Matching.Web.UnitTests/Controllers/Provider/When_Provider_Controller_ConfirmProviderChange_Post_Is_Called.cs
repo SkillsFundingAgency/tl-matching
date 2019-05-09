@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 .UpdateProviderAsync(
                     Arg.Is<HideProviderViewModel>(
                         vm => vm.ProviderId == 1 &&
-                                vm.IsEnabledForSearch));
+                                vm.IsCdfProvider));
         }
 
         [Fact]

@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
                     {
                         Id = ProviderId,
                         Name = ProviderName,
-                        IsEnabledForSearch = IsEnabledForSearchProvider
+                        IsCdfProvider = IsEnabledForSearchProvider
                     },
                     ProviderQualification = new List<Domain.Models.ProviderQualification>
                     {

@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var viewModel = new HideProviderViewModel
             {
                 ProviderId = 1,
-                IsEnabledForSearch = false
+                IsCdfProvider = false
             };
             service.UpdateProviderAsync(viewModel).GetAwaiter().GetResult();
         }
@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
                 .UpdateWithSpecifedColumnsOnly(Arg.Is<Domain.Models.Provider>(
                     p =>
                         p.Id == 1 &&
-                        !p.IsEnabledForSearch
+                        !p.IsCdfProvider
                         ),
                     Arg.Any<Expression<Func<Domain.Models.Provider, object>>[]>());
         }

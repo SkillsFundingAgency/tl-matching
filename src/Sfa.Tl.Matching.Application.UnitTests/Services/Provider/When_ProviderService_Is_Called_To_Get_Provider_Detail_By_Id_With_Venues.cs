@@ -55,8 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             _result.SecondaryContactEmail.Should().Be("Test2@test.com");
             _result.SecondaryContactPhone.Should().Be("0123456789");
             _result.IsEnabledForReferral.Should().Be(true);
-            _result.IsEnabledForSearch.Should().Be(true);
-            _result.IsFundedForNextYear.Should().Be(true);
+            _result.IsCdfProvider.Should().Be(true);
         }
 
         [Fact]

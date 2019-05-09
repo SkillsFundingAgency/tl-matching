@@ -5,6 +5,6 @@
         public int ProviderId { get; set; }
         public long UkPrn { get; set; }
         public string ProviderName { get; set; }
-        public bool IsEnabledForSearch { get; set; }
+        public bool IsCdfProvider { get; set; }
     }
 }
