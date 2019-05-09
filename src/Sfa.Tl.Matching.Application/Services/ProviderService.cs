@@ -35,11 +35,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> GetProvidersWithFundingCountAsync()
         {
-            var query = _repository
+            return await _repository
                 .GetMany(p => p.IsCdfProvider)
                 .CountAsync();
-
-            return await query;
         }
 
         public async Task<ProviderSearchResultDto> SearchAsync(long ukPrn)
@@ -51,17 +49,13 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId, bool includeVenueDetails = false)
+        public async Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId)
         {
-            var query = _repository.GetMany(p => p.Id == providerId);
-
-            if (includeVenueDetails)
-            {
-                query = query.Include(p => p.ProviderVenue).ThenInclude(pv => pv.ProviderQualification);
-            }
-
-            var provider = await query.SingleOrDefaultAsync();
-
+            var provider = await _repository
+                .GetMany(p => p.Id == providerId)
+                .Include(p => p.ProviderVenue).ThenInclude(pv => pv.ProviderQualification)
+                .SingleOrDefaultAsync();
+            
             return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
         }
 

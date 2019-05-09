@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         public When_Provider_Controller_GetProviderDetail_Is_Loaded()
         {
             _providerService = Substitute.For<IProviderService>();
-            _providerService.GetProviderDetailByIdAsync(1, true).Returns(new ProviderDetailViewModel());
+            _providerService.GetProviderDetailByIdAsync(1).Returns(new ProviderDetailViewModel());
 
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
 
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_ProviderService_GetProviderDetailByIdAsync_Is_Called_Exactly_Once()
         {
-            _providerService.Received(1).GetProviderDetailByIdAsync(1, true);
+            _providerService.Received(1).GetProviderDetailByIdAsync(1);
         }
     }
 }

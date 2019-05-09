@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (providerId > 0)
             {
-                viewModel = await _providerService.GetProviderDetailByIdAsync(providerId, true);
+                viewModel = await _providerService.GetProviderDetailByIdAsync(providerId);
             }
 
             return View(viewModel);
@@ -129,20 +129,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _providerService.UpdateProviderAsync(viewModel);
 
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
-        }
-
-        [HttpPost]
-        [RequestFormLimits(ValueCountLimit = 5000)]
-        [Route("save-provider-feedback", Name = "SaveProviderFeedback")]
-        public async Task<IActionResult> SaveProviderFeedback(SaveProviderFeedbackViewModel viewModel)
-        {
-            await _providerService.UpdateProvider(viewModel);
-
-            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) &&
-                string.Equals(viewModel.SubmitAction, "SendEmail", StringComparison.InvariantCultureIgnoreCase))
-                return RedirectToRoute("ConfirmSendProviderEmail");
-
-            return RedirectToRoute("SearchProvider");
         }
 
         private async Task<ProviderSearchViewModel> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel viewModel)

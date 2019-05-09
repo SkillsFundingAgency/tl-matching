@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_ProviderService_GetProviderDetailByIdAsync_Is_NOT_Called()
         {
-            _providerService.DidNotReceive().GetProviderDetailByIdAsync(Arg.Any<int>(), Arg.Any<bool>());
+            _providerService.DidNotReceive().GetProviderDetailByIdAsync(Arg.Any<int>());
         }
     }
 }

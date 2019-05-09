@@ -16,21 +16,6 @@
 
     <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
     <form class="form" asp-route="SearchProviderByUkPrn" novalidate>
-        @*<p class="govuk-body">You can only add or change details for providers that have a UK Provider Reference Number (UKPRN)</p>*@
-
-        @*<div class="govuk-form-group" sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-form-group--error">
-            <label class="govuk-label" asp-for="UkPrn">
-                Enter the provider’s UKPRN
-            </label>
-
-            <input class="govuk-input govuk-input--width-10" asp-for="UkPrn" type="text"
-                   sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-input--error"
-                   aria-describedby="ukprn-hint">
-        </div>
-        <button type="submit" class="govuk-button">
-            Search
-        </button>*@
-
         <div class="govuk-form-group" sfa-validation-for="UkPrn" sfa-validationerror-class="govuk-form-group--error">
             <div class="tl-search-header">
                 <div class="tl-searchfield">
@@ -51,9 +36,4 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
     </form>
