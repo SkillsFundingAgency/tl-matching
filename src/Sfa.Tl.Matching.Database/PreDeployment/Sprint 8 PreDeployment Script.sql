@@ -35,6 +35,10 @@ GO
 UPDATE [dbo].[ProviderVenue]
 SET [IsEnabledForReferral] = [IsRemoved]
 WHERE [IsEnabledForReferral] IS NULL
+GO
+
+UPDATE [dbo].[ProviderVenue]
+SET [IsRemoved] = 0
 
 GO
 ALTER TABLE [dbo].[ProviderVenue] ALTER COLUMN [IsEnabledForReferral] BIT NOT NULL
