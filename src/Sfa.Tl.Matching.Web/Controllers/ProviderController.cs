@@ -87,10 +87,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 viewModel.Id = await _providerService.CreateProvider(viewModel);
             }
 
-            return await ReturnView(viewModel);
+            return await PerformSaveAndFinish(viewModel);
         }
 
-        private async Task<IActionResult> ReturnView(ProviderDetailViewModel viewModel)
+        private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)
         {
             viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
 

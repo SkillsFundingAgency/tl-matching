@@ -3,6 +3,7 @@ using System.Linq;
 using Sfa.Tl.Matching.Application.Interfaces;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -24,13 +25,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters)
         {
-            var providers = await _repository.GetMany(p => searchParameters.UkPrn == null || p.UkPrn == searchParameters.UkPrn.Value)
+            return await _repository.GetMany(p => searchParameters.UkPrn == null || p.UkPrn == searchParameters.UkPrn.Value)
                                     .OrderBy(p => p.Name)
+                                    .ProjectTo<ProviderSearchResultItemViewModel>(_mapper.ConfigurationProvider)
                                     .ToListAsync();
-
-            return _mapper.Map<IList<Provider>, IList<ProviderSearchResultItemViewModel>>(providers);
-
-            //return await query.ProjectTo<ProviderSearchResultItemViewModel>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
         public async Task<int> GetProvidersWithFundingCountAsync()
@@ -51,12 +49,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId)
         {
-            var provider = await _repository
+            return await _repository
                 .GetMany(p => p.Id == providerId)
                 .Include(p => p.ProviderVenue).ThenInclude(pv => pv.ProviderQualification)
+                .ProjectTo<ProviderDetailViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
             
-            return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
+            //return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
         }
 
         public async Task<IList<ProviderVenueViewModel>> GetProviderVenueSummaryByProviderIdAsync(int providerId, bool includeVenueDetails = false)
