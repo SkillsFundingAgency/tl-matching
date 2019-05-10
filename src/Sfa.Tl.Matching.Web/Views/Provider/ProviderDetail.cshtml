@@ -13,7 +13,7 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="Name" />
             <input type="hidden" asp-for="UkPrn" />
-            <input type="hidden" asp-for="IsCdfProvider" />
+            <input type="hidden" asp-for="IsEnabledForSearch" />
 
             @if (!ViewData.ModelState.IsValid)
             {
@@ -40,51 +40,107 @@
                 <span class="govuk-caption-m">UKPRN: @Model.UkPrn</span>
                 @ViewData["Title"]
             </h1>
-            <p class="govuk-body"><a asp-controller="Provider" class="govuk-link" asp-action="ConfirmProviderChange" asp-route-providerId="@Model.Id"> @(Model.IsCdfProvider ? "Hide" : "Unhide") provider</a></p>
-
-            <div class="govuk-form-group" sfa-validation-for="DisplayName" sfa-validationerror-class="govuk-form-group--error">
-                <label class="govuk-heading-s" asp-for="DisplayName">
-                    Enter display name (optional)
-                </label>
-                <span class="govuk-error-message" asp-validation-for="DisplayName"></span>
-                <input class="govuk-input" asp-for="DisplayName" sfa-validation-for="DisplayName" sfa-validationerror-class="govuk-input--error" type="text">
-            </div>
 
             <div class="govuk-form-group">
-                <fieldset class="govuk-fieldset">
+                <fieldset class="govuk-fieldset" aria-describedby="changed-name-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                        <h2 class="govuk-fieldset__heading">
-                            Should they receive referrals?
-                        </h2>
+                        <h1 class="govuk-fieldset__heading">
+                            Is @Model.Name receiving capacity and delivery funding (CDF)?
+                        </h1>
                     </legend>
-                    <span class="govuk-error-message" asp-validation-for="IsEnabledForReferral"></span>
                     <div class="govuk-radios govuk-radios--inline">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="IsEnabledForReferral-yes" asp-for="IsEnabledForReferral" type="radio" value="true">
-                            <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
+                            <input class="govuk-radios__input" id="cdf-yes" name="cdf-yes" type="radio" value="yes" checked>
+                            <label class="govuk-label govuk-radios__label" for="cdf-yes">
                                 Yes
                             </label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" asp-for="IsEnabledForReferral" type="radio" value="false">
-                            <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
+                            <input class="govuk-radios__input" id="cdf-no" name="cdf-no" type="radio" value="no">
+                            <label class="govuk-label govuk-radios__label" for="cdf-no">
                                 No
                             </label>
                         </div>
                     </div>
                 </fieldset>
             </div>
+            <button type="submit" class="govuk-button tl-button--grey" name="SubmitAction" value="SaveSection">
+                Save
+            </button>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0">
+
+
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset" aria-describedby="changed-name-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        <h1 class="govuk-fieldset__heading">
+                            Does @Model.Name want our help finding placements for students?
+                        </h1>
+                    </legend>
+                    <div class="govuk-radios govuk-radios--inline">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="placements-yes" name="placements-yes" type="radio" value="yes">
+                            <label class="govuk-label govuk-radios__label" for="placements-yes">
+                                Yes
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="placements-no" name="placements-no" type="radio" value="no" checked>
+                            <label class="govuk-label govuk-radios__label" for="placements-no">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+
+            <div class="govuk-form-group" sfa-validation-for="DisplayName" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-heading-s" asp-for="DisplayName">
+                    How should @Model.Name show in search results?
+                </label>
+                <span class="govuk-error-message" asp-validation-for="DisplayName"></span>
+                <input class="govuk-input" asp-for="DisplayName" sfa-validation-for="DisplayName" sfa-validationerror-class="govuk-input--error" type="text">
+            </div>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+            @*<div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                    <h2 class="govuk-fieldset__heading">
+                        Should they receive referrals?
+                    </h2>
+                </legend>
+                <span class="govuk-error-message" asp-validation-for="IsEnabledForReferral"></span>
+                <div class="govuk-radios govuk-radios--inline">
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="IsEnabledForReferral-yes" asp-for="IsEnabledForReferral" type="radio" value="true">
+                        <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
+                            Yes
+                        </label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" asp-for="IsEnabledForReferral" type="radio" value="false">
+                        <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
+                            No
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+        </div>*@
+
+            <h2>Contact information</h2>
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                         <h2 class="govuk-fieldset__heading">
-                            Placement contact
+                            Primary contact for placements
                         </h2>
                     </legend>
 
                     <div class="govuk-form-group" sfa-validation-for="PrimaryContact" sfa-validationerror-class="govuk-form-group--error">
                         <label class="govuk-label" asp-for="PrimaryContact">
-                            Contact name for placements
+                            Primary contact name
                         </label>
                         <span class="govuk-error-message" asp-validation-for="PrimaryContact"></span>
                         <input class="govuk-input govuk-input--width-20" asp-for="PrimaryContact" sfa-validation-for="PrimaryContact" sfa-validationerror-class="govuk-input--error" type="text">
@@ -92,7 +148,7 @@
 
                     <div class="govuk-form-group" sfa-validation-for="PrimaryContactEmail" sfa-validationerror-class="govuk-form-group--error">
                         <label class="govuk-label" asp-for="PrimaryContactEmail">
-                            Email
+                            Primary email
                         </label>
                         <span class="govuk-error-message" asp-validation-for="PrimaryContactEmail"></span>
                         <input class="govuk-input govuk-input--width-20" asp-for="PrimaryContactEmail" sfa-validation-for="PrimaryContactEmail" sfa-validationerror-class="govuk-input--error" type="email">
@@ -100,7 +156,7 @@
 
                     <div class="govuk-form-group" sfa-validation-for="PrimaryContactPhone" sfa-validationerror-class="govuk-form-group--error">
                         <label class="govuk-label" asp-for="PrimaryContactPhone">
-                            Phone number
+                            Primary phone number
                         </label>
                         <span class="govuk-error-message" asp-validation-for="PrimaryContactPhone"></span>
                         <input class="govuk-input govuk-input--width-20" asp-for="PrimaryContactPhone" sfa-validation-for="PrimaryContactPhone" sfa-validationerror-class="govuk-input--error" type="tel">
@@ -110,15 +166,15 @@
             <div class="govuk-form-group">
 
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                         <h2 class="govuk-fieldset__heading">
-                            Placement secondary contact
+                            Secondary contact for placements
                         </h2>
                     </legend>
 
                     <div class="govuk-form-group" sfa-validation-for="SecondaryContact" sfa-validationerror-class="govuk-form-group--error">
                         <label class="govuk-label" asp-for="SecondaryContact">
-                            Contact name for placements
+                            Secondary contact name (optional)
                         </label>
                         <span class="govuk-error-message" asp-validation-for="SecondaryContact"></span>
                         <input class="govuk-input govuk-input--width-20" asp-for="SecondaryContact" sfa-validation-for="SecondaryContact" sfa-validationerror-class="govuk-input--error" type="text">
@@ -126,7 +182,7 @@
 
                     <div class="govuk-form-group" sfa-validation-for="SecondaryContactEmail" sfa-validationerror-class="govuk-form-group--error">
                         <label class="govuk-label" asp-for="SecondaryContactEmail">
-                            Email
+                            Secondary email (optional)
                         </label>
                         <span class="govuk-error-message" asp-validation-for="SecondaryContactEmail"></span>
                         <input class="govuk-input govuk-input--width-20" asp-for="SecondaryContactEmail" sfa-validation-for="SecondaryContactEmail" sfa-validationerror-class="govuk-input--error" type="email">
@@ -134,7 +190,7 @@
 
                     <div class="govuk-form-group" sfa-validation-for="SecondaryContactPhone" sfa-validationerror-class="govuk-form-group--error">
                         <label class="govuk-label" asp-for="SecondaryContactPhone">
-                            Phone number
+                            Secondary phone number (optional)
                         </label>
                         <span class="govuk-error-message" asp-validation-for="SecondaryContactPhone"></span>
                         <input class="govuk-input govuk-input--width-20" asp-for="SecondaryContactPhone" sfa-validation-for="SecondaryContactPhone" sfa-validationerror-class="govuk-input--error" type="tel">
@@ -142,9 +198,7 @@
                 </fieldset>
             </div>
 
-            <button type="submit" class="govuk-button tl-button--grey" name="SubmitAction" value="SaveSection">
-                Save section
-            </button>
+
 
             <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
