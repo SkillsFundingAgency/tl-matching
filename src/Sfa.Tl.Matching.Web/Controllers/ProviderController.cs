@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View(await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
         }
-
+        
         [HttpPost]
         [Route("search-ukprn", Name = "SearchProviderByUkPrn")]
         public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
@@ -104,10 +104,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return RedirectToRoute("AddVenue", new { providerId = viewModel.Id });
             }
 
-            return await SaveAndFinish(viewModel);
+            return await PerformSaveAndFinish(viewModel);
         }
 
-        private async Task<IActionResult> SaveAndFinish(ProviderDetailViewModel viewModel)
+        private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)
         {
             if (!viewModel.ProviderVenue.Any())
             {
