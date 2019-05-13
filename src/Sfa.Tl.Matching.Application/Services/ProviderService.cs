@@ -24,10 +24,14 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters)
         {
-            var providers = await _repository.GetMany(p => searchParameters.UkPrn == null || p.UkPrn == searchParameters.UkPrn.Value)
-                                    .OrderBy(p => p.Name)
-                                    .ToListAsync();
+            var query = _repository.GetMany();
 
+            if (searchParameters.UkPrn.HasValue)
+                query = query.Where(p => p.UkPrn == searchParameters.UkPrn.Value);
+
+            query = query.OrderBy(p => p.Name);
+
+            var providers = await query.ToListAsync();
             return _mapper.Map<IList<Provider>, IList<ProviderSearchResultItemViewModel>>(providers);
 
             //return await query.ProjectTo<ProviderSearchResultItemViewModel>(_mapper.ConfigurationProvider).ToListAsync();
@@ -35,9 +39,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> GetProvidersWithFundingCountAsync()
         {
-            return await _repository
+            var query = _repository
                 .GetMany(p => p.IsCdfProvider)
                 .CountAsync();
+
+            return await query;
         }
 
         public async Task<ProviderSearchResultDto> SearchAsync(long ukPrn)
@@ -53,9 +59,10 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var provider = await _repository
                 .GetMany(p => p.Id == providerId)
-                .Include(p => p.ProviderVenue).ThenInclude(pv => pv.ProviderQualification)
+                .Include(p => p.ProviderVenue)
+                .ThenInclude(pv => pv.ProviderQualification)
                 .SingleOrDefaultAsync();
-            
+
             return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
         }
 
@@ -67,9 +74,24 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     ProviderVenueId = pv.Id,
                     Postcode = pv.Postcode,
-                    IsEnabledForSearch = pv.IsEnabledForSearch,
+                    IsRemoved = pv.IsRemoved,
                     QualificationCount = pv.ProviderQualification.Count,
                 }).ToListAsync();
+        }
+
+        public async Task DeleteProviderAsync(int id)
+        {
+            await _repository.Delete(id);
+        }
+
+        public async Task UpdateProviderDetailSectionAsync(ProviderDetailViewModel viewModel)
+        {
+            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+
+            await _repository.UpdateWithSpecifedColumnsOnly(provider,
+                x => x.IsCdfProvider,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
         }
 
         public async Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
@@ -101,6 +123,22 @@ namespace Sfa.Tl.Matching.Application.Services
                 x => x.IsCdfProvider,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
+        }
+
+        private static List<ProviderSearchResultItemViewModel> GetProvidersToUpdate(IEnumerable<ProviderSearchResultItemViewModel> providersFromVm,
+            IEnumerable<ProviderSearchResultItemViewModel> providersFromDb)
+        {
+            var providersToUpdate = (from pDb in providersFromDb
+                                     join pVm in providersFromVm on pDb.ProviderId equals pVm.ProviderId
+                                     where pDb.ProviderId == pVm.ProviderId
+                                           && pDb.IsCdfProvider != pVm.IsCdfProvider
+                                     select new ProviderSearchResultItemViewModel
+                                     {
+                                         IsCdfProvider = pVm.IsCdfProvider,
+                                         ProviderId = pVm.ProviderId
+                                     }).ToList();
+
+            return providersToUpdate;
         }
     }
 }

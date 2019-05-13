@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 .UpdateVenueAsync(
                     Arg.Is<HideProviderVenueViewModel>(
                         vm => vm.ProviderVenueId == 1 &&
-                              vm.IsEnabledForSearch));
+                              vm.IsRemoved));
         }
 
         [Fact]

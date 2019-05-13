@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -28,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View(await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
         }
-        
+
         [HttpPost]
         [Route("search-ukprn", Name = "SearchProviderByUkPrn")]
         public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
@@ -68,9 +69,28 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("provider-overview", Name = "SaveProviderDetail")]
+        [Route("provider-overview/{providerId}", Name = "SaveProviderDetail")]
         public async Task<IActionResult> SaveProviderDetail(ProviderDetailViewModel viewModel)
         {
+            if (viewModel.IsSaveSection)
+            {
+                if (viewModel.IsCdfProvider)
+                {
+                    await _providerService.UpdateProviderDetailSectionAsync(viewModel);
+                    return View(nameof(ProviderDetail), viewModel);
+                }
+
+                var isNew = IsNewProvider(viewModel);
+
+                if (isNew)
+                    await _providerService.DeleteProviderAsync(viewModel.Id);
+                else
+                    await _providerService.UpdateProviderDetailSectionAsync(viewModel);
+
+                return View(nameof(SearchProvider),
+                    await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
+            }
+
             if (!ModelState.IsValid)
             {
                 viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
@@ -78,34 +98,27 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(nameof(ProviderDetail), viewModel);
             }
 
-            if (viewModel.Id > 0)
+            if (viewModel.IsSaveAndAddVenue)
             {
                 await _providerService.UpdateProviderDetail(viewModel);
-            }
-            else
-            {
-                viewModel.Id = await _providerService.CreateProvider(viewModel);
+                return RedirectToRoute("AddVenue", new { providerId = viewModel.Id });
             }
 
-            return await ReturnView(viewModel);
+            return await SaveAndFinish(viewModel);
         }
 
-        private async Task<IActionResult> ReturnView(ProviderDetailViewModel viewModel)
+        private async Task<IActionResult> SaveAndFinish(ProviderDetailViewModel viewModel)
         {
-            viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
-
-            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) && string.Equals(viewModel.SubmitAction, "SaveAndFinish", StringComparison.InvariantCultureIgnoreCase))
+            if (!viewModel.ProviderVenue.Any())
             {
-                if (!viewModel.ProviderVenue.Any())
-                {
-                    ModelState.AddModelError("ProviderVenue", "You must add a venue for this provider");
-                    return View(nameof(ProviderDetail), viewModel);
-                }
-
-                return View(nameof(SearchProvider), await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
+                ModelState.AddModelError(nameof(ProviderVenue), "You must add a venue for this provider");
+                return View(nameof(ProviderDetail), viewModel);
             }
 
-            return View(nameof(ProviderDetail), viewModel);
+            await _providerService.UpdateProviderDetail(viewModel);
+
+            return View(nameof(SearchProvider),
+                await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
         }
 
         [HttpGet]
@@ -148,6 +161,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
             };
+        }
+
+        private static bool IsNewProvider(ProviderDetailViewModel viewModel)
+        {
+            if (string.IsNullOrEmpty(viewModel.Source))
+                return true;
+
+            return false;
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         [Fact]
         public void Then_The_Provider_IsEnabledForSearch_Is_As_Expected()
         {
-            _result.IsEnabledForSearch.Should().Be(true);
+            _result.IsRemoved.Should().Be(true);
         }
     }
 }

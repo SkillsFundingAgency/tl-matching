@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Sfa.Tl.Matching.Models.Extensions;
 
@@ -37,7 +38,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string SecondaryContact { get; set; }
 
         [RegularExpression(@"^[a-zA-Z0-9\u0080-\uFFA7?$#()""'!,+\-=_:;.&€£*%\s\/]+@[a-zA-Z0-9\u0080-\uFFA7?$#()""'!,+\-=_:;.&€£*%\s\/]+\.([a-zA-Z0-9\u0080-\uFFA7]{2,10})$", ErrorMessage = "Enter an email address in the correct format, like name@example.com")]
-        [Required(ErrorMessage = "You must enter an email for the secondary contact")]
         public string SecondaryContactEmail { get; set; }
 
         [PhoneNumber(FieldName = "primary contact", IsRequired = false)]
@@ -47,9 +47,20 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public bool? IsEnabledForReferral { get; set; }
 
         public string SubmitAction { get; set; }
-
+        public string Source { get; set; }
         public bool IsCdfProvider { get; set; }
 
         public IList<ProviderVenueViewModel> ProviderVenue { get; set; }
+
+        public bool IsSaveSection=>
+            !string.IsNullOrWhiteSpace(SubmitAction)
+            && string.Equals(SubmitAction, "SaveSection", StringComparison.InvariantCultureIgnoreCase);
+        public bool IsSaveAndFinish =>
+            !string.IsNullOrWhiteSpace(SubmitAction)
+            && string.Equals(SubmitAction, "SaveAndFinish", StringComparison.InvariantCultureIgnoreCase);
+
+        public bool IsSaveAndAddVenue =>
+            !string.IsNullOrWhiteSpace(SubmitAction)
+            && string.Equals(SubmitAction, "SaveAndAddVenue", StringComparison.InvariantCultureIgnoreCase);
     }
 }

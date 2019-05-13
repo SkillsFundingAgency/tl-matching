@@ -7,7 +7,7 @@
             Id = 1,
             Postcode = "CV1 2WT",
             Name = "Test Provider Venue",
-            IsEnabledForSearch = true,
+            IsRemoved = true,
             Source = "Test",
             CreatedBy = "CreatedBy",
             ModifiedBy = "ModifiedBy"

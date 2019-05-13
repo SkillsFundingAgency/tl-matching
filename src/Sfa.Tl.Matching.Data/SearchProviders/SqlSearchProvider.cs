@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                 where path.RouteId == dto.SelectedRouteId 
                                       && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters 
                                       && provider.IsCdfProvider
-                                      && providerVenue.IsEnabledForSearch
+                                      && providerVenue.IsRemoved
                                 select new
                                 {
                                     ProviderVenueId = providerVenue.Id,

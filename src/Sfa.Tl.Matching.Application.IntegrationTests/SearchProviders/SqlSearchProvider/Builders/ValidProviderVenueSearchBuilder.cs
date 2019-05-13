@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 Latitude = Latitude,
                 Longitude = Longitude,
                 Location = location,
-                IsEnabledForSearch = true,
+                IsRemoved = true,
                 Source = "Test",
                 ProviderQualification = BuildProviderQualifications()
             };
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 Latitude = Latitude,
                 Longitude = Longitude,
                 Location = location,
-                IsEnabledForSearch = true,
+                IsRemoved = true,
                 Source = "Test",
                 ProviderQualification = BuildProviderQualifications()
             };
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
-                    IsEnabledForSearch = true,
+                    IsRemoved = true,
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 },
@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
-                    IsEnabledForSearch = false,
+                    IsRemoved = false,
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 }
@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
-                    IsEnabledForSearch = true,
+                    IsRemoved = true,
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 },
@@ -99,7 +99,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
-                    IsEnabledForSearch = true,
+                    IsRemoved = true,
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 }

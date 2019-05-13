@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             _result.ProviderVenue.Count.Should().Be(2);
             _result.ProviderVenue.ElementAt(0).Postcode.Should().Be("CV1 1WT");
             _result.ProviderVenue.ElementAt(0).ProviderVenueId.Should().Be(10);
-            _result.ProviderVenue.ElementAt(0).IsEnabledForSearch.Should().Be(true);
+            _result.ProviderVenue.ElementAt(0).IsRemoved.Should().Be(true);
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             _result.ProviderVenue.Count.Should().Be(2);
             _result.ProviderVenue.ElementAt(1).Postcode.Should().Be("CV1 2WT");
             _result.ProviderVenue.ElementAt(1).ProviderVenueId.Should().Be(20);
-            _result.ProviderVenue.ElementAt(1).IsEnabledForSearch.Should().Be(true);
+            _result.ProviderVenue.ElementAt(1).IsRemoved.Should().Be(true);
         }
 
         [Fact]
