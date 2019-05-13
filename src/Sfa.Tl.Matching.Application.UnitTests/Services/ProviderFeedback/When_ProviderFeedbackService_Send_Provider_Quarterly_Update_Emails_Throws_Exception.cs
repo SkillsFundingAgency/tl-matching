@@ -123,7 +123,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         {
             var history = _receivedProviderFeedbackRequestHistories.First();
             history.Id.Should().Be(1);
-            history.Status.Should().Be((short)ProviderFeedbackRequestStatus.Processing);
+            history.Status.Should().Be(ProviderFeedbackRequestStatus.Processing.ToString());
             history.StatusMessage.Should().BeNullOrEmpty();
             history.ProviderCount.Should().Be(1);
             history.ModifiedBy.Should().Be("TestUser");
@@ -134,7 +134,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         {
             var history = _receivedProviderFeedbackRequestHistories.Skip(1).First();
             history.Id.Should().Be(1);
-            history.Status.Should().Be((short)ProviderFeedbackRequestStatus.Error);
+            history.Status.Should().Be(ProviderFeedbackRequestStatus.Error.ToString());
             history.StatusMessage.Should().NotBeNullOrEmpty();
             history.ProviderCount.Should().Be(0);
             history.ModifiedBy.Should().Be("TestUser");

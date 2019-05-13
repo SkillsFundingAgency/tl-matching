@@ -4,6 +4,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHistory.Builders;
+using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHistory
@@ -37,7 +38,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHis
 
         [Fact]
         public void Then_ProviderFeedbackRequestHistory_Status_Is_Returned() =>
-            _result.Status.Should().Be(1);
+            _result.Status.Should().Be(ProviderFeedbackRequestStatus.Pending.ToString());
 
         [Fact]
         public void Then_ProviderFeedbackRequestHistory_StatusMessage_Is_Returned() =>

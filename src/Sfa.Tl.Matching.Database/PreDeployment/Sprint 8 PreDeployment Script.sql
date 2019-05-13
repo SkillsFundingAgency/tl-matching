@@ -39,8 +39,8 @@ GO
 
 UPDATE [dbo].[ProviderVenue]
 SET [IsRemoved] = 0
-
 GO
+
 ALTER TABLE [dbo].[ProviderVenue] ALTER COLUMN [IsEnabledForReferral] BIT NOT NULL
 GO
 
@@ -50,4 +50,39 @@ GO
 
 ALTER TABLE Provider
 ALTER COLUMN SecondaryContactEmail varchar(320) NULL
+GO
+
+--Change Status column in ProviderFeedbackRequestHistory to string
+if exists (select 1 from sys.columns where name = 'Status' and system_type_id = 52 and object_name(object_id) = 'ProviderFeedbackRequestHistory') AND
+   not exists (select 1 from sys.columns where name = 'Status_String' and object_name(object_id) = 'ProviderFeedbackRequestHistory')
+	ALTER TABLE [ProviderFeedbackRequestHistory]
+	ADD	[Status_String] VARCHAR(10) NULL
+GO
+
+if exists (select 1 from sys.columns where name = 'Status' and system_type_id = 52 and object_name(object_id) = 'ProviderFeedbackRequestHistory') AND
+   exists (select 1 from sys.columns where name = 'Status_String' and object_name(object_id) = 'ProviderFeedbackRequestHistory')
+   
+	EXEC('UPDATE [dbo].[ProviderFeedbackRequestHistory]
+	SET [Status_String] = 
+		CASE
+			WHEN [Status] = 1 THEN ''Pending''
+			WHEN [Status] = 2 THEN ''Processing''
+			WHEN [Status] = 3 THEN ''Complete''
+			WHEN [Status] = 4 THEN ''Error''
+		END')
+GO
+
+if exists (select 1 from sys.columns where name = 'Status_String' and object_name(object_id) = 'ProviderFeedbackRequestHistory')
+	ALTER TABLE [ProviderFeedbackRequestHistory]
+	ALTER COLUMN [Status_String] VARCHAR(10) NOT NULL
+GO
+
+if exists (select 1 from sys.columns where name = 'Status' and system_type_id = 52 and object_name(object_id) = 'ProviderFeedbackRequestHistory') AND
+   exists (select 1 from sys.columns where name = 'Status_String' and object_name(object_id) = 'ProviderFeedbackRequestHistory')ALTER TABLE [ProviderFeedbackRequestHistory]
+DROP COLUMN [Status]
+GO
+
+if not exists (select 1 from sys.columns where name = 'Status' and object_name(object_id) = 'ProviderFeedbackRequestHistory') AND
+   exists (select 1 from sys.columns where name = 'Status_String' and object_name(object_id) = 'ProviderFeedbackRequestHistory')
+	EXEC sp_rename 'ProviderFeedbackRequestHistory.Status_String', 'Status', 'COLUMN';	
 GO

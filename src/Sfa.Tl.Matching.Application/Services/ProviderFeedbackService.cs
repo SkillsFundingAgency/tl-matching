@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var providerFeedbackRequestHistoryId = await _providerFeedbackRequestHistoryRepository.Create(
                 new ProviderFeedbackRequestHistory
                 {
-                    Status = (short)ProviderFeedbackRequestStatus.Pending,
+                    Status = ProviderFeedbackRequestStatus.Pending.ToString(),
                     CreatedBy = userName
                 });
 
@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     .GetSingleOrDefault(p => p.Id == providerFeedbackRequestHistoryId);
 
             if (providerFeedbackRequestHistory == null ||
-                providerFeedbackRequestHistory.Status != (int)ProviderFeedbackRequestStatus.Pending)
+                providerFeedbackRequestHistory.Status != ProviderFeedbackRequestStatus.Pending.ToString())
             {
                 return;
             }
@@ -183,7 +183,7 @@ namespace Sfa.Tl.Matching.Application.Services
             string userName, string errorMessage = null)
         {
             providerFeedbackRequestHistory.ProviderCount = providerCount;
-            providerFeedbackRequestHistory.Status = (short)status;
+            providerFeedbackRequestHistory.Status = status.ToString();
             providerFeedbackRequestHistory.StatusMessage = errorMessage;
             providerFeedbackRequestHistory.ModifiedBy = userName;
             providerFeedbackRequestHistory.ModifiedOn = _dateTimeProvider.UtcNow();
