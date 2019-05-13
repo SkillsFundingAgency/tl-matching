@@ -27,6 +27,10 @@ namespace Sfa.Tl.Matching.Data.Repositories
                           join r in _dbContext.Route on op.RouteId equals r.Id
                           orderby re.DistanceFromEmployer
                           where op.Id == opportunityId
+                                && p.IsCdfProvider
+                                && p.IsEnabledForReferral
+                                && pv.IsEnabledForReferral
+                                && !pv.IsRemoved
                           select new OpportunityReferralDto
                           {
                               OpportunityId = op.Id,
@@ -72,6 +76,10 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                                   join p in _dbContext.Provider on pv.ProviderId equals p.Id
                                   where re.OpportunityId == opportunityId
+                                        && p.IsCdfProvider
+                                        && p.IsEnabledForReferral
+                                        && pv.IsEnabledForReferral
+                                        && !pv.IsRemoved
                                   select new ProviderReferralInfoDto
                                   {
                                       ReferralId = re.Id,

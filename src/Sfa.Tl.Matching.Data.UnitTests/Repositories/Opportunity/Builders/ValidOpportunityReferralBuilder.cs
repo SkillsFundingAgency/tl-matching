@@ -69,6 +69,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                         County = "County",
                         Latitude = 52.648869M,
                         Longitude = 2.095574M,
+                        IsEnabledForReferral = true,
+                        IsRemoved = false,
                         Source = "Test",
                         CreatedBy = EntityCreationConstants.CreatedByUser,
                         CreatedOn = EntityCreationConstants.CreatedOn,
@@ -86,6 +88,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                             SecondaryContact = "SecondaryContact",
                             SecondaryContactEmail = "secondary@contact.co.uk",
                             SecondaryContactPhone = "01777757777",
+                            IsCdfProvider = true,
+                            IsEnabledForReferral = true,
                             Source = "PMF_1018",
                             CreatedBy = EntityCreationConstants.CreatedByUser,
                             CreatedOn = EntityCreationConstants.CreatedOn

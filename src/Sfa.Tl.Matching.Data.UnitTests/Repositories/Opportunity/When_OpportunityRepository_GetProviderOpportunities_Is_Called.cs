@@ -35,75 +35,27 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _result.Count.Should().Be(1);
 
         [Fact]
-        public void Then_OpportunityId_Is_Returned() =>
-            _result.First().OpportunityId.Should().Be(1);
-
-        [Fact]
-        public void Then_ReferralId_Is_Returned() =>
-            _result.First().ReferralId.Should().Be(1);
-
-        [Fact]
-        public void Then_ProviderName_Is_Returned() =>
-            _result.First().ProviderName.Should().BeEquivalentTo("ProviderName");
-
-        [Fact]
-        public void Then_ProviderPrimaryContact_Is_Returned() =>
-            _result.First().ProviderPrimaryContact.Should().BeEquivalentTo("PrimaryContact");
-
-        [Fact]
-        public void Then_ProviderPrimaryContactEmail_Is_Returned() =>
-            _result.First().ProviderPrimaryContactEmail.Should().BeEquivalentTo("primary@contact.co.uk");
-
-        [Fact]
-        public void Then_ProviderSecondaryContactEmail_Is_Returned() =>
-            _result.First().ProviderSecondaryContactEmail.Should().BeEquivalentTo("secondary@contact.co.uk");
-
-        [Fact]
-        public void Then_ProviderVenuePostcode_Is_Returned() =>
-            _result.First().ProviderVenuePostcode.Should().BeEquivalentTo("AA1 1AA");
-
-        [Fact]
-        public void Then_RouteName_Is_Returned() =>
-            _result.First().RouteName.Should().BeEquivalentTo("Test Route");
-
-        [Fact]
-        public void Then_SearchRadius_Is_Returned()
-            => _result.First().SearchRadius.Should().Be(10);
-
-        [Fact]
-        public void Then_Postcode_Is_Returned() =>
-            _result.First().Postcode.Should().BeEquivalentTo("AA1 1AA");
-
-        [Fact]
-        public void Then_JobTitle_Is_Returned() =>
-            _result.First().JobTitle.Should().BeEquivalentTo("Testing Job Title");
-
-        [Fact]
-        public void Then_EmployerName_Is_Returned()
-            => _result.First().EmployerName.Should().BeEquivalentTo("Employer");
-
-        [Fact]
-        public void Then_EmployerContact_Is_Returned()
-            => _result.First().EmployerContact.Should().BeEquivalentTo("Employer Contact");
-
-        [Fact]
-        public void Then_EmployerContactPhone_Is_Returned()
-            => _result.First().EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
-
-        [Fact]
-        public void Then_EmployerContactEmail_Is_Returned()
-            => _result.First().EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
-
-        [Fact]
-        public void Then_PlacementsKnown_Is_Returned()
-            => _result.First().PlacementsKnown.Should().BeTrue();
-
-        [Fact]
-        public void Then_Placements_Is_Returned()
-            => _result.First().Placements.Should().Be(3);
-
-        [Fact]
-        public void Then_CreatedBy_Is_Returned() =>
-            _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
+        public void TThen_OpportunityReferralDto_Fields_Are_As_Expected()
+        {
+            var dto = _result.First();
+            dto.OpportunityId.Should().Be(1);
+            dto.ReferralId.Should().Be(1);
+            dto.ProviderName.Should().BeEquivalentTo("ProviderName");
+            dto.ProviderPrimaryContact.Should().BeEquivalentTo("PrimaryContact");
+            dto.ProviderPrimaryContactEmail.Should().BeEquivalentTo("primary@contact.co.uk");
+            dto.ProviderSecondaryContactEmail.Should().BeEquivalentTo("secondary@contact.co.uk");
+            dto.ProviderVenuePostcode.Should().BeEquivalentTo("AA1 1AA");
+            dto.RouteName.Should().BeEquivalentTo("Test Route");
+            dto.SearchRadius.Should().Be(10);
+            dto.Postcode.Should().BeEquivalentTo("AA1 1AA");
+            dto.JobTitle.Should().BeEquivalentTo("Testing Job Title");
+            dto.EmployerName.Should().BeEquivalentTo("Employer");
+            dto.EmployerContact.Should().BeEquivalentTo("Employer Contact");
+            dto.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
+            dto.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
+            dto.PlacementsKnown.Should().BeTrue();
+            dto.Placements.Should().Be(3);
+            dto.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
+        }
     }
 }

@@ -18,6 +18,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
             SecondaryContact = "SecondaryContact",
             SecondaryContactEmail = "secondary@contact.co.uk",
             SecondaryContactPhone = "01777757777",
+            IsCdfProvider = true,
+            IsEnabledForReferral = true,
             Source = "PMF_1018",
             CreatedBy = EntityCreationConstants.CreatedByUser,
             CreatedOn = EntityCreationConstants.CreatedOn,

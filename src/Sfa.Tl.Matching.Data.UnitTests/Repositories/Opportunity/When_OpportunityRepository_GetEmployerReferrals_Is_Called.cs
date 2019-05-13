@@ -31,76 +31,28 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
         }
 
         [Fact]
-        public void Then_OpportunityId_Is_Returned() =>
+        public void Then_EmployerReferralDto_Fields_Are_As_Expected()
+        {
             _result.OpportunityId.Should().Be(1);
-        
-        [Fact]
-        public void Then_ReferralId_Is_Returned() =>
             _result.ProviderReferralInfo.First().ReferralId.Should().Be(1);
-   
-        [Fact]
-        public void Then_EmployerName_Is_Returned()
-            => _result.EmployerName.Should().BeEquivalentTo("Employer");
-
-        [Fact]
-        public void Then_EmployerContact_Is_Returned()
-            => _result.EmployerContact.Should().BeEquivalentTo("Employer Contact");
-
-        [Fact]
-        public void Then_EmployerContactPhone_Is_Returned()
-            => _result.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
-
-        [Fact]
-        public void Then_EmployerContactEmail_Is_Returned()
-            => _result.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
-
-        [Fact]
-        public void Then_JobTitle_Is_Returned() =>
+            _result.EmployerName.Should().BeEquivalentTo("Employer");
+            _result.EmployerContact.Should().BeEquivalentTo("Employer Contact");
+            _result.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
+            _result.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
             _result.JobTitle.Should().BeEquivalentTo("Testing Job Title");
-
-        [Fact]
-        public void Then_Postcode_Is_Returned() =>
             _result.Postcode.Should().BeEquivalentTo("AA1 1AA");
-
-        [Fact]
-        public void Then_PlacementsKnown_Is_Returned()
-            => _result.PlacementsKnown.Should().BeTrue();
-
-        [Fact]
-        public void Then_Placements_Is_Returned()
-            => _result.Placements.Should().Be(3);
-
-        [Fact]
-        public void Then_RouteName_Is_Returned() =>
+            _result.PlacementsKnown.Should().BeTrue();
+            _result.Placements.Should().Be(3);
             _result.RouteName.Should().BeEquivalentTo("Test Route");
-
-        [Fact]
-        public void Then_CreatedBy_Is_Returned() =>
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-        [Fact]
-        public void Then_One_ProviderReferralInfo_Item_Is_Returned() =>
             _result.ProviderReferralInfo.Count().Should().Be(1);
-        
-        [Fact]
-        public void Then_ProviderName_Is_Returned() =>
             _result.ProviderReferralInfo.First().ProviderName.Should().BeEquivalentTo("ProviderName");
-
-        [Fact]
-        public void Then_ProviderPrimaryContact_Is_Returned() =>
             _result.ProviderReferralInfo.First().ProviderPrimaryContact.Should().BeEquivalentTo("PrimaryContact");
-
-        [Fact]
-        public void Then_ProviderPrimaryContactEmail_Is_Returned() =>
-            _result.ProviderReferralInfo.First().ProviderPrimaryContactEmail.Should().BeEquivalentTo("primary@contact.co.uk");
-        
-        [Fact]
-        public void Then_ProviderPrimaryContactPhone_Is_Returned() =>
+            _result.ProviderReferralInfo.First().ProviderPrimaryContactEmail.Should()
+                .BeEquivalentTo("primary@contact.co.uk");
             _result.ProviderReferralInfo.First().ProviderPrimaryContactPhone.Should().BeEquivalentTo("01777757777");
-
-        [Fact]
-        public void Then_ProviderVenuePostcode_Is_Returned() =>
             _result.ProviderReferralInfo.First().ProviderVenuePostcode.Should().BeEquivalentTo("AA1 1AA");
+        }
 
         [Fact]
         public void Then_One_QualificationShortTitles_Item_Is_Returned() =>
@@ -109,7 +61,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
                 .Count()
                 .Should().Be(2);
 
-        [Fact] public void Then_QualificationShortTitles_Includes_First_ShortTitle() =>
+        [Fact]
+        public void Then_QualificationShortTitles_Includes_First_ShortTitle() =>
             _result.ProviderReferralInfo.First()
                 .QualificationShortTitles
                 .Should()
