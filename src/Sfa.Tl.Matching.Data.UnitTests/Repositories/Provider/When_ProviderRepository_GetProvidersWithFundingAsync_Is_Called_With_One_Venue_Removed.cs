@@ -11,17 +11,17 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider
 {
-    public class When_ProviderRepository_GetProvidersWithFundingAsync_Is_Called
+    public class When_ProviderRepository_GetProvidersWithFundingAsync_Is_Called_With_One_Venue_Removed
     {
         private readonly IList<ProviderWithFundingDto> _result;
 
-        public When_ProviderRepository_GetProvidersWithFundingAsync_Is_Called()
+        public When_ProviderRepository_GetProvidersWithFundingAsync_Is_Called_With_One_Venue_Removed()
         {
             var logger = Substitute.For<ILogger<ProviderRepository>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
-                dbContext.Add(new ValidProviderWithFundingBuilder().Build());
+                dbContext.Add(new ValidProviderWithFundingBuilder().BuildWithRemovedProviderVenue());
                 dbContext.SaveChanges();
 
                 var repository = new ProviderRepository(logger, dbContext);
@@ -57,35 +57,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider
         public void Then_ProviderVenue_Fields_Are_As_Expected()
         {
             var providerVenue = _result.First().ProviderVenues.First();
-            providerVenue.Postcode.Should().BeEquivalentTo("AA1 1AA");
-        }
-
-        [Fact]
-        public void Then_Two_Qualifications_Are_Returned() =>
-            _result.First().ProviderVenues.First().Qualifications.Count().Should().Be(3);
-
-        [Fact]
-        public void Then_First_Qualification_Fields_Are_As_Expected()
-        {
-            var qualification = _result.First().ProviderVenues.First().Qualifications.First();
-            qualification.LarsId.Should().Be("1001");
-            qualification.Title.Should().Be("Title 1");
-        }
-
-        [Fact]
-        public void Then_Second_Qualification_Fields_Are_As_Expected()
-        {
-            var qualification = _result.First().ProviderVenues.First().Qualifications.Skip(1).First();
-            qualification.LarsId.Should().Be("1002");
-            qualification.Title.Should().Be("Title 2");
-        }
-
-        [Fact]
-        public void Then_Third_Qualification_Fields_Are_As_Expected()
-        {
-            var qualification = _result.First().ProviderVenues.First().Qualifications.Skip(2).First();
-            qualification.LarsId.Should().Be("1003");
-            qualification.Title.Should().Be("Title 3");
+            providerVenue.Postcode.Should().BeEquivalentTo("AA2 2AA");
         }
     }
 }
