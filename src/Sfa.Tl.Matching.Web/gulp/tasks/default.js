@@ -13,14 +13,15 @@ gulp.task('govuk-js', () => {
     gulp.src([
         'node_modules/govuk-frontend/*.js',
         'node_modules/govuk-frontend/vendor/**.js',
-        'node_modules/govuk-frontend/components/**/*.js'
+        'node_modules/govuk-frontend/components/**/*.js',
     ])
         .pipe(gulp.dest('wwwroot/govuk/javascripts'));
 });
 
 gulp.task('copy-js', function () {
     return gulp.src([
-            'node_modules/jquery/dist/jquery.min.js'
+        'node_modules/jquery/dist/jquery.min.js',
+        'Frontend/src/javascripts/cookie-banner.js'
         ])
         .pipe(concat('all.js'))
         .pipe(minify({
@@ -31,6 +32,7 @@ gulp.task('copy-js', function () {
         }))
         .pipe(gulp.dest(paths.dist.defaultJs));
 });
+
 
 
 gulp.task('copy-employer-js', function () {
