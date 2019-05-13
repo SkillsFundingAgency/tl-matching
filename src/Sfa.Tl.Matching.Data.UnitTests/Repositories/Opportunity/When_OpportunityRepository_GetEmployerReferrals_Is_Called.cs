@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 
         [Fact]
         public void Then_PlacementsKnown_Is_Returned()
-            => _result.PlacementsKnown.Should().Be(true);
+            => _result.PlacementsKnown.Should().BeTrue();
 
         [Fact]
         public void Then_Placements_Is_Returned()

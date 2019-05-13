@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 
         [Fact]
         public void Then_Opportunity_PlacementsKnown_Is_Returned()
-            => _result.PlacementsKnown.Should().Be(true);
+            => _result.PlacementsKnown.Should().BeTrue();
 
         [Fact]
         public void Then_Opportunity_SearchResultProviderCount_Is_Returned()
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 
         [Fact]
         public void Then_Opportunity_ConfirmationSelected_Is_Returned()
-            => _result.ConfirmationSelected.Should().Be(true);
+            => _result.ConfirmationSelected.Should().BeTrue();
                 
         [Fact]
         public void Then_Opportunity_CreatedBy_Is_Returned() =>

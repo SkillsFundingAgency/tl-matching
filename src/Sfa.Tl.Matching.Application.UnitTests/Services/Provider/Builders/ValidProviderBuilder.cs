@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                 new Domain.Models.ProviderVenue
                 {
                     IsEnabledForReferral = true,
-                    IsRemoved = true,
+                    IsRemoved = false,
                     Postcode = "CV1 1WT",
                     Id = 10,
                     ProviderQualification = new List<ProviderQualification>
@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                 new Domain.Models.ProviderVenue
                 {
                     IsEnabledForReferral = true,
-                    IsRemoved = true,
+                    IsRemoved = false,
                     Postcode = "CV1 2WT",
                     Id = 20,
                     ProviderQualification = new List<ProviderQualification>

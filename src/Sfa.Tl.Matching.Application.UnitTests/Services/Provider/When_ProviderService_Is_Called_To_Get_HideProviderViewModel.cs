@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         [Fact]
         public void Then_The_Provider_IsCdfProvider_Is_As_Expected()
         {
-            _result.IsCdfProvider.Should().Be(true);
+            _result.IsCdfProvider.Should().BeTrue();
         }
     }
 }
