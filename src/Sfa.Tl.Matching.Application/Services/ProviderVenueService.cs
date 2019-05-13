@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var providerVenue = _mapper.Map<HideProviderVenueViewModel, ProviderVenue>(viewModel);
 
             await _providerVenueRepository.UpdateWithSpecifedColumnsOnly(providerVenue,
-                x => x.IsEnabledForSearch,
+                x => x.IsEnabledForReferral,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }

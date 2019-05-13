@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
                     Id = Id,
                     Name = VenueName,
                     Postcode = Postcode,
-                    IsEnabledForSearch = IsEnabledForSearchProviderVenue,
+                    IsEnabledForReferral = IsEnabledForSearchProviderVenue,
                     Provider = new Domain.Models.Provider
                     {
                         Id = ProviderId,

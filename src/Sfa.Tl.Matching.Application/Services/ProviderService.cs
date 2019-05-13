@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     ProviderVenueId = pv.Id,
                     Postcode = pv.Postcode,
-                    IsEnabledForSearch = pv.IsEnabledForSearch,
+                    IsEnabledForSearch = pv.IsEnabledForReferral,
                     QualificationCount = pv.ProviderQualification.Count,
                 }).ToListAsync();
         }

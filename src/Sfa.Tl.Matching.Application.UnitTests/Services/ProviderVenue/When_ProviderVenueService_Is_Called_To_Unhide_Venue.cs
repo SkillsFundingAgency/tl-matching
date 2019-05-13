@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 .UpdateWithSpecifedColumnsOnly(Arg.Is<Domain.Models.ProviderVenue>(
                         p =>
                             p.Id == 1 &&
-                            p.IsEnabledForSearch
+                            p.IsEnabledForReferral
                     ),
                     Arg.Any<Expression<Func<Domain.Models.ProviderVenue, object>>[]>());
         }
