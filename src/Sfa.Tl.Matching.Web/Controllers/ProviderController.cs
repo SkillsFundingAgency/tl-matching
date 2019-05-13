@@ -121,29 +121,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
         }
 
-        [HttpGet]
-        [Route("hide-unhide-provider/{providerId}", Name = "GetConfirmProviderChange")]
-        public async Task<IActionResult> ConfirmProviderChange(int providerId)
-        {
-            var viewModel = await _providerService.GetHideProviderViewModelAsync(providerId);
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [Route("hide-unhide-provider/{providerId}", Name = "ConfirmProviderChange")]
-        public async Task<IActionResult> ConfirmProviderChange(HideProviderViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("ConfirmProviderChange", viewModel);
-            }
-
-            viewModel.IsCdfProvider = !viewModel.IsCdfProvider;
-            await _providerService.UpdateProviderAsync(viewModel);
-
-            return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
-        }
-
         private async Task<ProviderSearchViewModel> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel viewModel)
         {
             var resultsViewModel = GetProviderSearchViewModel(viewModel);
