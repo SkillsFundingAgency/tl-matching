@@ -6,6 +6,6 @@
         public int ProviderVenueId { get; set; }
         public string Postcode { get; set; }
         public string ProviderVenueName { get; set; }
-        public bool IsEnabledForSearch { get; set; }
+        public bool IsRemoved { get; set; }
     }
 }

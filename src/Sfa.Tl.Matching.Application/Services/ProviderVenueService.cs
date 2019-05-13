@@ -76,6 +76,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await _providerVenueRepository.UpdateWithSpecifedColumnsOnly(providerVenue,
                 x => x.IsEnabledForReferral,
+                x => x.IsRemoved,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }

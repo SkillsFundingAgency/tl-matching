@@ -33,7 +33,7 @@
     <input asp-for="Id" type="hidden" />
     <input asp-for="ProviderId" type="hidden" />
     <input asp-for="IsFromAddVenue" type="hidden" />
-    <input asp-for="IsEnabledForSearch" type="hidden" />
+    <input asp-for="IsRemoved" type="hidden" />
     <input asp-for="Postcode" type="hidden" />
     <input asp-for="Source" value="Admin" type="hidden" />
 
@@ -43,7 +43,7 @@
             <span class="govuk-caption-m">@Model.ProviderName</span>
             <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
             <p class="govuk-body">
-                <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-providerVenueId="@Model.Id" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>
+                <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-providerVenueId="@Model.Id" class="govuk-link">@(Model.IsRemoved ? "Hide" : "Unhide") venue</a>
             </p>
 
             <div class="govuk-form-group" sfa-validation-for="Name" sfa-validationerror-class="govuk-form-group--error">

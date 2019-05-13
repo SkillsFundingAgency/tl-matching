@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -68,67 +69,61 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("provider-overview", Name = "SaveProviderDetail")]
+        [Route("provider-overview/{providerId}", Name = "SaveProviderDetail")]
         public async Task<IActionResult> SaveProviderDetail(ProviderDetailViewModel viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
+            if (viewModel.IsSaveSection)
+                return await PerformSaveSection(viewModel);
 
+            if (!ModelState.IsValid)
+                return View(nameof(ProviderDetail), viewModel);
+
+            if (viewModel.IsSaveAndAddVenue)
+                return await PerformSaveAndAddVenue(viewModel);
+
+            return await PerformSaveAndFinish(viewModel);
+        }
+
+        private async Task<IActionResult> PerformSaveSection(ProviderDetailViewModel viewModel)
+        {
+            if (viewModel.IsCdfProvider)
+            {
+                await _providerService.UpdateProviderDetailSectionAsync(viewModel);
                 return View(nameof(ProviderDetail), viewModel);
             }
 
-            if (viewModel.Id > 0)
-            {
-                await _providerService.UpdateProviderDetail(viewModel);
-            }
+            var isNew = IsNewProvider(viewModel);
+
+            if (isNew)
+                await _providerService.DeleteProviderAsync(viewModel.Id);
             else
-            {
-                viewModel.Id = await _providerService.CreateProvider(viewModel);
-            }
+                await _providerService.UpdateProviderDetailSectionAsync(viewModel);
 
-            return await ReturnView(viewModel);
+            return View(nameof(SearchProvider),
+                await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
         }
 
-        private async Task<IActionResult> ReturnView(ProviderDetailViewModel viewModel)
+        private async Task<IActionResult> PerformSaveAndAddVenue(ProviderDetailViewModel viewModel)
         {
-            viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
-
-            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) && string.Equals(viewModel.SubmitAction, "SaveAndFinish", StringComparison.InvariantCultureIgnoreCase))
+            await _providerService.UpdateProviderDetail(viewModel);
+            return RedirectToRoute("AddVenue", new
             {
-                if (!viewModel.ProviderVenue.Any())
-                {
-                    ModelState.AddModelError("ProviderVenue", "You must add a venue for this provider");
-                    return View(nameof(ProviderDetail), viewModel);
-                }
-
-                return View(nameof(SearchProvider), await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
-            }
-
-            return View(nameof(ProviderDetail), viewModel);
+                providerId = viewModel.Id
+            });
         }
 
-        [HttpGet]
-        [Route("hide-unhide-provider/{providerId}", Name = "GetConfirmProviderChange")]
-        public async Task<IActionResult> ConfirmProviderChange(int providerId)
+        private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)
         {
-            var viewModel = await _providerService.GetHideProviderViewModelAsync(providerId);
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [Route("hide-unhide-provider/{providerId}", Name = "ConfirmProviderChange")]
-        public async Task<IActionResult> ConfirmProviderChange(HideProviderViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
+            if (!viewModel.ProviderVenue.Any())
             {
-                return View("ConfirmProviderChange", viewModel);
+                ModelState.AddModelError(nameof(ProviderVenue), "You must add a venue for this provider");
+                return View(nameof(ProviderDetail), viewModel);
             }
 
-            viewModel.IsCdfProvider = !viewModel.IsCdfProvider;
-            await _providerService.UpdateProviderAsync(viewModel);
+            await _providerService.UpdateProviderDetail(viewModel);
 
-            return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
+            return View(nameof(SearchProvider),
+                await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
         }
 
         private async Task<ProviderSearchViewModel> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel viewModel)
@@ -148,6 +143,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
             };
+        }
+
+        private static bool IsNewProvider(ProviderDetailViewModel viewModel)
+        {
+            if (string.IsNullOrEmpty(viewModel.Source))
+                return true;
+
+            return false;
         }
     }
 }

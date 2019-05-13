@@ -107,7 +107,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("ConfirmProviderVenueChange", viewModel);
             }
 
-            viewModel.IsEnabledForSearch = !viewModel.IsEnabledForSearch;
+            viewModel.IsRemoved = !viewModel.IsRemoved;
             await _providerVenueService.UpdateVenueAsync(viewModel);
             
             return  viewModel.ProviderId == 0 

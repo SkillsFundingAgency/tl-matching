@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             provider.ProviderId.Should().Be(1);
             provider.UkPrn.Should().Be(10000546);
             provider.ProviderName.Should().Be("ProviderName");
-           // provider.IsCdfProvider.Should().Be(true);
+            provider.IsCdfProvider.Should().Be(true);
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             provider.ProviderId.Should().Be(2);
             provider.UkPrn.Should().Be(10000123);
             provider.ProviderName.Should().Be("ProviderName2");
-           // provider.IsCdfProvider.Should().Be(false);
+            provider.IsCdfProvider.Should().Be(false);
         }
     }
 }

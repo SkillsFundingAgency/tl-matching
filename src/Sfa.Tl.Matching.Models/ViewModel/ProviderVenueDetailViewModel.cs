@@ -11,7 +11,8 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string Postcode { get; set; }
         [MaxLength(400, ErrorMessage = "You must enter a venue name that is 400 characters or fewer")]
         public string Name { get; set; }
-        public bool IsEnabledForSearch { get; set; }
+        public bool IsRemoved { get; set; }
+        public bool IsEnabledForReferral { get; set; }
         public string Source { get; set; }
         public bool IsFromAddVenue { get; set; }
         public string SubmitAction { get; set; }

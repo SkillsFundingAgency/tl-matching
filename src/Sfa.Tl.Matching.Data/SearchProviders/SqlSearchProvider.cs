@@ -46,8 +46,8 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                       && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters 
                                       && provider.IsCdfProvider
                                       && provider.IsEnabledForReferral
-                                      && !providerVenue.IsRemoved
                                       && providerVenue.IsEnabledForReferral
+									  && !providerVenue.IsRemoved                                      
                                 select new
                                 {
                                     ProviderVenueId = providerVenue.Id,

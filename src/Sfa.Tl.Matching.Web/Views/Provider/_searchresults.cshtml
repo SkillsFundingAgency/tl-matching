@@ -1,35 +1,34 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderSearchViewModel
 
-<form asp-route="ConfirmSendProviderEmail">
-    <table class="govuk-table">
-        <thead class="govuk-table__head">
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">UKPRN</th>
+            <th class="govuk-table__header" scope="col">Provider name</th>
+            <th class="govuk-table__header" scope="col">CDF Provider</th>
+            <th class="govuk-table__header" scope="col"></th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @for (var i = 0; i < Model.SearchResults.SearchResultProviderCount; i++)
+        {
+            var provider = Model.SearchResults.Results[i];
+
             <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="col">UKPRN</th>
-                <th class="govuk-table__header" scope="col">Provider name</th>
-                <th class="govuk-table__header" scope="col">CDF Provider</th>
-                <th class="govuk-table__header" scope="col"></th>
+                <td class="govuk-table__cell">@provider.UkPrn</td>
+                <td class="govuk-table__cell">@provider.ProviderName</td>
+                <td class="govuk-table__cell">@provider.IsCdfProvider</td>
+                <td class="govuk-table__cell">
+                    <a asp-route="GetProviderDetail" asp-route-providerId="@provider.ProviderId" class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden">@provider.ProviderName's details</span></a>
+                    <input type="hidden" asp-for="@provider.ProviderId" name="Providers[@i].ProviderId" />
+                </td>
             </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-            @for (var i = 0; i < Model.SearchResults.SearchResultProviderCount; i++)
-            {
-                var provider = Model.SearchResults.Results[i];
+        }
+    </tbody>
+</table>
 
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">@provider.UkPrn</td>
-                    <td class="govuk-table__cell">@provider.ProviderName</td>
-                    <td class="govuk-table__cell">@provider.IsCdfProvider</td>
-                    <td class="govuk-table__cell">
-                        <a asp-route="GetProviderDetail" asp-route-providerId="@provider.ProviderId" class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden">@provider.ProviderName's details</span></a>
-                        <input type="hidden" asp-for="@provider.ProviderId" name="Providers[@i].ProviderId" />
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
 
-    @if (Model.IsAuthorisedUser) {
-        <button type="submit" class="tl-button--red govuk-button govuk-!-margin-right-1" name="SubmitAction" value="SendEmail">Send email to all CDF providers</button>
-    }
-
-</form>
+@if (Model.IsAuthorisedUser)
+{
+    <p class="govuk-body"><a class="tl-button--red govuk-button govuk-!-margin-right-1" asp-route="ConfirmSendProviderEmail">Send email to all CDF providers</a></p>
+}

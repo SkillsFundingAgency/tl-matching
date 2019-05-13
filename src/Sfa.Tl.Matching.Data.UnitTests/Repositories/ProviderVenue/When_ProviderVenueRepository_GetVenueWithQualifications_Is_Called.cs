@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
         private const string VenueName = "VenueName";
         private const bool IsEnabledForSearchProvider = true;
         private const bool IsEnabledForSearchProviderVenue = false;
+        private const bool IsRemoved = false;
         private const string LarsId = "1234";
         private const string Title = "Title";
         private const string ShortTitle = "ShortTitle";
@@ -35,6 +36,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
                     Name = VenueName,
                     Postcode = Postcode,
                     IsEnabledForReferral = IsEnabledForSearchProviderVenue,
+                    IsRemoved = IsRemoved,
                     Provider = new Domain.Models.Provider
                     {
                         Id = ProviderId,
@@ -84,7 +86,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
 
         [Fact]
         public void Then_IsEnabledForSearchProviderVenue_Is_Returned() =>
-            _result.IsEnabledForSearch.Should().Be(IsEnabledForSearchProviderVenue);
+            _result.IsRemoved.Should().Be(IsRemoved);
 
         [Fact]
         public void Then_First_Qualification_LarsId_Is_Returned() =>

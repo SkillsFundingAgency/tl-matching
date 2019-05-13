@@ -1,5 +1,4 @@
-﻿using System.Security;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Configuration;
@@ -44,7 +43,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail))
             {
-                throw new SecurityException("User is not authorised to use this page");
+                return RedirectToRoute("FailedLogin");
             }
 
             if (!ModelState.IsValid)

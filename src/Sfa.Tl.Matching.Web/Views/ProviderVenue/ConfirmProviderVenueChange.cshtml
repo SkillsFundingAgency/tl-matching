@@ -1,7 +1,7 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.HideProviderVenueViewModel
 
 @{
-    var hideText = Model.IsEnabledForSearch ? "hide" : "unhide ";
+    var hideText = Model.IsRemoved ? "hide" : "unhide ";
     ViewData["Title"] = $"Are you sure you want to {hideText} {Model.Postcode}?";
 }
 
@@ -15,10 +15,10 @@
         <form asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange">
             <input asp-for="ProviderId" type="hidden" />
             <input asp-for="ProviderVenueId" type="hidden" />
-            <input asp-for="IsEnabledForSearch" type="hidden" />
+            <input asp-for="IsRemoved" type="hidden" />
 
             <button type="submit" class="govuk-button">
-                @(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue
+                @(Model.IsRemoved ? "Hide" : "Unhide") venue
             </button>
         </form>
         <p class="govuk-body">

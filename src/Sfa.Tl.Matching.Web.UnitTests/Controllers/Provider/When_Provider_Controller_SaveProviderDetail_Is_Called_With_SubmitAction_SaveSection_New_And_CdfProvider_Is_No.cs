@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -11,15 +10,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveAndFinish
+    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_New_And_CdfProvider_Is_No
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
 
-        public When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveAndFinish()
+        public When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_New_And_CdfProvider_Is_No()
         {
             _providerService = Substitute.For<IProviderService>();
-            _providerService.GetProviderVenueSummaryByProviderIdAsync(1).Returns(new List<ProviderVenueViewModel> { new ProviderVenueViewModel() });
 
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
@@ -27,14 +25,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             _result = controllerWithClaims.SaveProviderDetail(new ProviderDetailViewModel
             {
                 Id = 1,
-                SubmitAction = "SaveAndFinish",
-                ProviderVenue = new List<ProviderVenueViewModel>
-                {
-                    new ProviderVenueViewModel
-                    {
-                        Postcode = "CV1 2WT"
-                    }
-                }
+                SubmitAction = "SaveSection",
+                IsCdfProvider = false
             }).GetAwaiter().GetResult();
         }
 
@@ -45,16 +37,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_View_Result_Is_Returned_For_SearchProvider()
+        public void Then_View_Result_Is_Returned_For_ProviderDetail()
         {
             _result.Should().BeAssignableTo<ViewResult>();
             ((ViewResult)_result).ViewName.Should().Be("SearchProvider");
         }
 
         [Fact]
-        public void Then_ProviderService_UpdateProviderDetail_Called()
+        public void Then_ProviderService_DeleteProviderAsync_Called()
         {
-            _providerService.Received(1).UpdateProviderDetail(Arg.Any<ProviderDetailViewModel>());
+            _providerService.Received(1).DeleteProviderAsync(Arg.Is(1));
         }
     }
 }

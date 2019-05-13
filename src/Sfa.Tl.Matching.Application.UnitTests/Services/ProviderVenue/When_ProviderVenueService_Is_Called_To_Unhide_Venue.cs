@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             {
                 ProviderId = 10,
                 ProviderVenueId = 1,
-                IsEnabledForSearch = true
+                IsRemoved = true
             };
             service.UpdateVenueAsync(viewModel).GetAwaiter().GetResult();
         }
@@ -68,6 +68,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                         p =>
                             p.Id == 1 &&
                             p.IsEnabledForReferral
+                            p.IsRemoved
                     ),
                     Arg.Any<Expression<Func<Domain.Models.ProviderVenue, object>>[]>());
         }
