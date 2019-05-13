@@ -219,14 +219,13 @@
                 </table>
             }
 
-            <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
-
             @if (Model.ProviderVenue.Count <= 0)
             {
                 <button type="submit" class="govuk-button" name="SubmitAction" value="SaveAndAddVenue">Save and add venue</button>
             }
             else
             {
+                <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
                 <button type="submit" class="govuk-button" name="SubmitAction" value="SaveAndFinish">Save and finish</button>
             }
         </form>
