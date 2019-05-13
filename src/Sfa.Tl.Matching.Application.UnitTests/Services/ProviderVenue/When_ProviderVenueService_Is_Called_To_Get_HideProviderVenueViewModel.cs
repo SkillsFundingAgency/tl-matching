@@ -58,10 +58,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             _result.ProviderVenueName.Should().Be("Test Provider Venue");
         }
 
-        [Fact]
-        public void Then_The_Provider_IsEnabledForSearch_Is_As_Expected()
-        {
-            _result.IsRemoved.Should().Be(true);
-        }
+        //[Fact]
+        //public void Then_The_Provider_IsRemoved_Is_As_Expected()
+        //{
+        //    _result.IsRemoved.Should().Be(false);
+        //}
     }
 }
