@@ -69,7 +69,6 @@
             </button>
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0">
 
-
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset" aria-describedby="changed-name-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
@@ -102,31 +101,6 @@
                 <input class="govuk-input" asp-for="DisplayName" sfa-validation-for="DisplayName" sfa-validationerror-class="govuk-input--error" type="text">
             </div>
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-            @*<div class="govuk-form-group">
-                    <fieldset class="govuk-fieldset">
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                            <h2 class="govuk-fieldset__heading">
-                                Should they receive referrals?
-                            </h2>
-                        </legend>
-                        <span class="govuk-error-message" asp-validation-for="IsEnabledForReferral"></span>
-                        <div class="govuk-radios govuk-radios--inline">
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="IsEnabledForReferral-yes" asp-for="IsEnabledForReferral" type="radio" value="true">
-                                <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
-                                    Yes
-                                </label>
-                            </div>
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" asp-for="IsEnabledForReferral" type="radio" value="false">
-                                <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
-                                    No
-                                </label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>*@
 
             <h2>Contact information</h2>
             <div class="govuk-form-group">
@@ -162,8 +136,8 @@
                     </div>
                 </fieldset>
             </div>
-            <div class="govuk-form-group">
 
+            <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                         <h2 class="govuk-fieldset__heading">
@@ -199,8 +173,6 @@
 
             <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-            @*@if (Model.ProviderVenue.Count > 0)
-                {*@
             <h2 class="govuk-heading-m">Venues</h2>
 
             @if (Model.ProviderVenue.Count <= 0)
@@ -243,31 +215,10 @@
                                 </td>
                             </tr>
                         }
-
-                        @*@foreach (var venue in Model.ProviderVenue.Where(v => !v.IsRemoved))
-                            {
-                                <tr class="govuk-table__row">
-                                    <th class="govuk-table__cell">@venue.Postcode</th>
-                                    <td class="govuk-table__cell">@venue.QualificationCount</td>
-                                    <td class="govuk-table__cell">
-                                        @{
-                                            var isEnabledForReferralText = venue.IsEnabledForReferral ? "Yes" : "No";
-                                            @isEnabledForReferralText
-                                        }
-                                    </td>
-                                    <td class="govuk-table__cell">
-                                        <a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@venue.ProviderVenueId"
-                                           asp-route-providerId="@Model.Id"
-                                           class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden"> the information for this venue</span></a>
-                                    </td>
-                                </tr>
-                            }*@
                     </tbody>
                 </table>
             }
-            @*}*@
 
-            @{ var addVenueText = Model.ProviderVenue.Count <= 0 ? "add a venue for this provider." : "Add a venue"; }
             <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
 
             @if (Model.ProviderVenue.Count <= 0)

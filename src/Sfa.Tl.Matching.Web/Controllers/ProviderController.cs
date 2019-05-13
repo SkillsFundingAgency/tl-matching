@@ -73,38 +73,43 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> SaveProviderDetail(ProviderDetailViewModel viewModel)
         {
             if (viewModel.IsSaveSection)
-            {
-                if (viewModel.IsCdfProvider)
-                {
-                    await _providerService.UpdateProviderDetailSectionAsync(viewModel);
-                    return View(nameof(ProviderDetail), viewModel);
-                }
-
-                var isNew = IsNewProvider(viewModel);
-
-                if (isNew)
-                    await _providerService.DeleteProviderAsync(viewModel.Id);
-                else
-                    await _providerService.UpdateProviderDetailSectionAsync(viewModel);
-
-                return View(nameof(SearchProvider),
-                    await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
-            }
+                return await PerformSaveSection(viewModel);
 
             if (!ModelState.IsValid)
-            {
-                viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
+                return View(nameof(ProviderDetail), viewModel);
 
+            if (viewModel.IsSaveAndAddVenue)
+                return await PerformSaveAndAddVenue(viewModel);
+
+            return await PerformSaveAndFinish(viewModel);
+        }
+
+        private async Task<IActionResult> PerformSaveSection(ProviderDetailViewModel viewModel)
+        {
+            if (viewModel.IsCdfProvider)
+            {
+                await _providerService.UpdateProviderDetailSectionAsync(viewModel);
                 return View(nameof(ProviderDetail), viewModel);
             }
 
-            if (viewModel.IsSaveAndAddVenue)
-            {
-                await _providerService.UpdateProviderDetail(viewModel);
-                return RedirectToRoute("AddVenue", new { providerId = viewModel.Id });
-            }
+            var isNew = IsNewProvider(viewModel);
 
-            return await PerformSaveAndFinish(viewModel);
+            if (isNew)
+                await _providerService.DeleteProviderAsync(viewModel.Id);
+            else
+                await _providerService.UpdateProviderDetailSectionAsync(viewModel);
+
+            return View(nameof(SearchProvider),
+                await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
+        }
+
+        private async Task<IActionResult> PerformSaveAndAddVenue(ProviderDetailViewModel viewModel)
+        {
+            await _providerService.UpdateProviderDetail(viewModel);
+            return RedirectToRoute("AddVenue", new
+            {
+                providerId = viewModel.Id
+            });
         }
 
         private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)
