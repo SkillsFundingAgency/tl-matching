@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -20,7 +19,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         public When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveAndFinish_And_No_Venues()
         {
             _providerService = Substitute.For<IProviderService>();
-            _providerService.GetProviderVenueSummaryByProviderIdAsync(1).Returns(new List<ProviderVenueViewModel> { new ProviderVenueViewModel() });
 
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
             _controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();

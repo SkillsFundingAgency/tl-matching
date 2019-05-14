@@ -55,9 +55,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public bool IsSaveSection=>
             !string.IsNullOrWhiteSpace(SubmitAction)
             && string.Equals(SubmitAction, "SaveSection", StringComparison.InvariantCultureIgnoreCase);
-        public bool IsSaveAndFinish =>
-            !string.IsNullOrWhiteSpace(SubmitAction)
-            && string.Equals(SubmitAction, "SaveAndFinish", StringComparison.InvariantCultureIgnoreCase);
 
         public bool IsSaveAndAddVenue =>
             !string.IsNullOrWhiteSpace(SubmitAction)

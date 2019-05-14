@@ -8,7 +8,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     public interface IProviderService
     {
         Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId);
-		Task<IList<ProviderVenueViewModel>> GetProviderVenueSummaryByProviderIdAsync(int providerId, bool includeVenueDetails = false);
         Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters);
         Task<int> GetProvidersWithFundingCountAsync();
         Task<ProviderSearchResultDto> SearchAsync(long ukPrn);

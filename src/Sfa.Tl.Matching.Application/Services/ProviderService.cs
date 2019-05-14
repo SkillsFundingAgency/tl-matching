@@ -82,21 +82,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return provider;
         }
-
-        public async Task<IList<ProviderVenueViewModel>> GetProviderVenueSummaryByProviderIdAsync(int providerId, bool includeVenueDetails = false)
-        {
-            return await _repository.GetMany(p => p.Id == providerId)
-                .SelectMany(p => p.ProviderVenue)
-                .Select(pv => new ProviderVenueViewModel
-                {
-                    ProviderVenueId = pv.Id,
-                    Postcode = pv.Postcode,
-                    IsEnabledForReferral = pv.IsEnabledForReferral,
-                    IsRemoved = pv.IsRemoved,
-                    QualificationCount = pv.ProviderQualification.Count,
-                }).ToListAsync();
-        }
-
+        
         public async Task DeleteProviderAsync(int id)
         {
             await _repository.Delete(id);
