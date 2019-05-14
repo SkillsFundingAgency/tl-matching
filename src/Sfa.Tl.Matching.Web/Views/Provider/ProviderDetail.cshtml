@@ -208,10 +208,10 @@
                                     <a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@Model.ProviderVenues[i].ProviderVenueId"
                                        asp-route-providerId="@Model.Id"
                                        class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden"> this venue</span></a>
-                                    <input type="hidden" asp-for="@providerVenue.ProviderVenueId" name="ProviderVenue[@i].ProviderVenueId" />
-                                    <input type="hidden" asp-for="@providerVenue.Postcode" name="ProviderVenue[@i].Postcode" />
-                                    <input type="hidden" asp-for="@providerVenue.QualificationCount" name="ProviderVenue[@i].QualificationCount" />
-                                    <input type="hidden" asp-for="@providerVenue.IsEnabledForReferral" name="ProviderVenue[@i].IsEnabledForReferral" />
+                                    <input type="hidden" asp-for="@providerVenue.ProviderVenueId" name="ProviderVenues[@i].ProviderVenueId" />
+                                    <input type="hidden" asp-for="@providerVenue.Postcode" name="ProviderVenues[@i].Postcode" />
+                                    <input type="hidden" asp-for="@providerVenue.QualificationCount" name="ProviderVenues[@i].QualificationCount" />
+                                    <input type="hidden" asp-for="@providerVenue.IsEnabledForReferral" name="ProviderVenues[@i].IsEnabledForReferral" />
                                 </td>
                             </tr>
                         }
