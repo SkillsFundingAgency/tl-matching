@@ -175,7 +175,7 @@
 
             <h2 class="govuk-heading-m">Venues</h2>
 
-            @if (Model.ProviderVenues.Count <= 0)
+            @if (Model.ProviderVenues.Count == 0)
             {
                 <p class="govuk-body">You need to add a venue for this provider.</p>
             }
@@ -219,7 +219,7 @@
                 </table>
             }
 
-            @if (Model.ProviderVenues.Count <= 0)
+            @if (Model.ProviderVenues.Count == 0)
             {
                 <button type="submit" class="govuk-button" name="SubmitAction" value="SaveAndAddVenue">Save and add venue</button>
             }
