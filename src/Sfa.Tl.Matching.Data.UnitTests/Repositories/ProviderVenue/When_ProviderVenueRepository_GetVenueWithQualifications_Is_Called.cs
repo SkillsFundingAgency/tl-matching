@@ -17,8 +17,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
         private const string Postcode = "AA1 1AA";
         private const string ProviderName = "ProviderName";
         private const string VenueName = "VenueName";
-        private const bool IsEnabledForSearchProvider = true;
-        private const bool IsEnabledForSearchProviderVenue = false;
+        private const bool IsCdfProvider = true;
+        private const bool IsEnabledForReferral = false;
         private const bool IsRemoved = false;
         private const string LarsId = "1234";
         private const string Title = "Title";
@@ -35,13 +35,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
                     Id = Id,
                     Name = VenueName,
                     Postcode = Postcode,
-                    IsEnabledForReferral = IsEnabledForSearchProviderVenue,
+                    IsEnabledForReferral = IsEnabledForReferral,
                     IsRemoved = IsRemoved,
                     Provider = new Domain.Models.Provider
                     {
                         Id = ProviderId,
                         Name = ProviderName,
-                        IsCdfProvider = IsEnabledForSearchProvider
+                        IsCdfProvider = IsCdfProvider
                     },
                     ProviderQualification = new List<Domain.Models.ProviderQualification>
                     {
