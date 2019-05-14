@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     {
         public ProviderDetailViewModel()
         {
-            ProviderVenue = new List<ProviderVenueViewModel>();
+            ProviderVenues = new List<ProviderVenueViewModel>();
         }
 
         public int Id { get; set; }
@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string Source { get; set; }
         public bool IsCdfProvider { get; set; }
 
-        public IList<ProviderVenueViewModel> ProviderVenue { get; set; }
+        public IList<ProviderVenueViewModel> ProviderVenues { get; set; }
 
         public bool IsSaveSection=>
             !string.IsNullOrWhiteSpace(SubmitAction)

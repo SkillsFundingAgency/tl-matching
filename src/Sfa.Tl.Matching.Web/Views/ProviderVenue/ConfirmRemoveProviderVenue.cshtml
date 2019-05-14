@@ -1,8 +1,7 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.HideProviderVenueViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.RemoveProviderVenueViewModel
 
 @{
-    var hideText = Model.IsRemoved ? "hide" : "unhide ";
-    ViewData["Title"] = $"Are you sure you want to {hideText} {Model.Postcode}?";
+    ViewData["Title"] = $"Remove {Model.Postcode}?";
 }
 
 @section backButton{
@@ -11,15 +10,15 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        <form asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange">
+        <h1 class="govuk-heading-l">Are you sure you want to remove @Model.Postcode?</h1>
+        <form asp-controller="ProviderVenue" asp-action="ConfirmRemoveProviderVenue">
             <input asp-for="ProviderId" type="hidden" />
             <input asp-for="ProviderVenueId" type="hidden" />
-            <input asp-for="IsRemoved" type="hidden" />
 
-            <button type="submit" class="govuk-button">
-                @(Model.IsRemoved ? "Hide" : "Unhide") venue
-            </button>
+            <p class="govuk-body">The venue will no longer show in search results.</p>
+            <p class="govuk-body">This action cannot be undone.</p>
+
+            <button type="submit" class="govuk-button">Remove venue</button>
         </form>
         <p class="govuk-body">
             <a asp-controller="ProviderVenue" asp-action="ProviderVenueDetail" asp-route-providerVenueId="@Model.ProviderVenueId" class="govuk-link" id="tl-cancel">Cancel and return to venue overview</a>

@@ -27,9 +27,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 c.AddProfiles(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver") ?
-                        (object)new LoggedInUserNameResolver<HideProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
+                        (object)new LoggedInUserNameResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
                         type.Name.Contains("UtcNowResolver") ?
-                            new UtcNowResolver<HideProviderVenueViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
+                            new UtcNowResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
                                 null);
             });
             var mapper = new Mapper(config);
@@ -43,11 +43,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
             var service = new ProviderVenueService(mapper, _providerVenueRepository, locationService);
 
-            var viewModel = new HideProviderVenueViewModel
+            var viewModel = new RemoveProviderVenueViewModel
             {
-                ProviderId = 10,
-                ProviderVenueId = 1,
-                IsRemoved = false
+                ProviderId = 1,
+                ProviderVenueId = 1
             };
             service.UpdateVenueAsync(viewModel).GetAwaiter().GetResult();
         }
@@ -65,10 +64,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         {
             _providerVenueRepository.Received(1)
                 .UpdateWithSpecifedColumnsOnly(Arg.Is<Domain.Models.ProviderVenue>(
-                    p =>
-                        p.Id == 1 &&
-                        !p.IsEnabledForReferral &&
-                        !p.IsRemoved
+                    pv =>
+                        pv.Id == 1 &&
+                        pv.IsRemoved
                         ),
                     Arg.Any<Expression<Func<Domain.Models.ProviderVenue, object>>[]>());
         }

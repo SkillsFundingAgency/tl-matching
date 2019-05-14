@@ -43,8 +43,7 @@
             <span class="govuk-caption-m">@Model.ProviderName</span>
             <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
             <p class="govuk-body">
-                @*<a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-providerVenueId="@Model.Id" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>*@
-                <a class="govuk-link" href="#">Remove venue</a>
+                <a asp-controller="ProviderVenue" asp-action="ConfirmRemoveProviderVenue" asp-route-providerVenueId="@Model.Id" class="govuk-link">Remove venue</a>
             </p>
 
             <div class="govuk-form-group">

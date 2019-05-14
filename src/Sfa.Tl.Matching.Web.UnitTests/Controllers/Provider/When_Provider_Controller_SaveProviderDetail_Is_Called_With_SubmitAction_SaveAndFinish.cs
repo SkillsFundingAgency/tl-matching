@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             {
                 Id = 1,
                 SubmitAction = "SaveAndFinish",
-                ProviderVenue = new List<ProviderVenueViewModel>
+                ProviderVenues = new List<ProviderVenueViewModel>
                 {
                     new ProviderVenueViewModel
                     {

@@ -88,31 +88,26 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("hide-unhide-venue/{providerVenueId}/{providerId?}", Name = "GetConfirmProviderVenueChange")]
-        public async Task<IActionResult> ConfirmProviderVenueChange(int providerVenueId, int providerId = 0)
+        [Route("remove-venue/{providerVenueId}", Name = "GetConfirmRemoveProviderVenue")]
+        public async Task<IActionResult> ConfirmRemoveProviderVenue(int providerVenueId)
         {
-            var viewModel = await _providerVenueService.GetHideProviderVenueViewModelAsync(providerVenueId);
-
-            viewModel.ProviderId = providerId;
+            var viewModel = await _providerVenueService.GetRemoveProviderVenueViewModelAsync(providerVenueId);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("hide-unhide-venue/{providerVenueId}", Name = "ConfirmProviderVenueChange")]
-        public async Task<IActionResult> ConfirmProviderVenueChange(HideProviderVenueViewModel viewModel)
+        [Route("remove-venue/{providerVenueId}", Name = "ConfirmRemoveProviderVenue")]
+        public async Task<IActionResult> ConfirmRemoveProviderVenue(RemoveProviderVenueViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View("ConfirmProviderVenueChange", viewModel);
+                return View("ConfirmRemoveProviderVenue", viewModel);
             }
 
-            viewModel.IsRemoved = !viewModel.IsRemoved;
             await _providerVenueService.UpdateVenueAsync(viewModel);
-            
-            return  viewModel.ProviderId == 0 
-                ? RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.ProviderVenueId })
-                : RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
+
+            return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
 
         private async Task<ProviderVenueDetailViewModel> Populate(int providerVenueId)

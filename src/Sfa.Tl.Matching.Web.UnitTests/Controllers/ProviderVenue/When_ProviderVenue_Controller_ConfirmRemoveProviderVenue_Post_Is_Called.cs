@@ -9,23 +9,23 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
-    public class When_ProviderVenue_Controller_ConfirmProviderVenueChange_Post_Is_Called
+    public class When_ProviderVenue_Controller_ConfirmRemoveProviderVenue_Post_Is_Called
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
 
-        public When_ProviderVenue_Controller_ConfirmProviderVenueChange_Post_Is_Called()
+        public When_ProviderVenue_Controller_ConfirmRemoveProviderVenue_Post_Is_Called()
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
 
-            var viewModel = new HideProviderVenueViewModel
+            var viewModel = new RemoveProviderVenueViewModel
             {
-                ProviderVenueId = 1,
-                ProviderVenueName = "Test Provider"
+                ProviderId = 1,
+                ProviderVenueId = 1
             };
-            _result = providerVenueController.ConfirmProviderVenueChange(viewModel).GetAwaiter().GetResult();
+            _result = providerVenueController.ConfirmRemoveProviderVenue(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         {
             _providerVenueService
                 .Received(1)
-                .UpdateVenueAsync(Arg.Any<HideProviderVenueViewModel>());
+                .UpdateVenueAsync(Arg.Any<RemoveProviderVenueViewModel>());
         }
         
         [Fact]
@@ -43,9 +43,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _providerVenueService
                 .Received(1)
                 .UpdateVenueAsync(
-                    Arg.Is<HideProviderVenueViewModel>(
+                    Arg.Is<RemoveProviderVenueViewModel>(
                         vm => vm.ProviderVenueId == 1 &&
-                              vm.IsRemoved));
+                              true));
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         public void Then_Result_Is_Redirect_To_Provider_Detail()
         {
             var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("GetProviderVenueDetail");
+            redirect?.RouteName.Should().BeEquivalentTo("GetProviderDetail");
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteValues
                 .Should()
-                .Contain(new KeyValuePair<string, object>("providerVenueId", 1));
+                .Contain(new KeyValuePair<string, object>("providerId", 1));
         }
     }
 }

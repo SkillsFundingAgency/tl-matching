@@ -31,7 +31,7 @@
                             <li><a sfa-validation-for="SecondaryContact"></a></li>
                             <li><a sfa-validation-for="SecondaryContactEmail"></a></li>
                             <li><a sfa-validation-for="SecondaryContactPhone"></a></li>
-                            <li><a href="#AddVenue" sfa-validation-for="@Model.ProviderVenue"></a></li>
+                            <li><a href="#AddVenue" sfa-validation-for="@Model.ProviderVenues"></a></li>
                         </ul>
                     </div>
                 </div>
@@ -175,7 +175,7 @@
 
             <h2 class="govuk-heading-m">Venues</h2>
 
-            @if (Model.ProviderVenue.Count <= 0)
+            @if (Model.ProviderVenues.Count <= 0)
             {
                 <p class="govuk-body">You need to add a venue for this provider.</p>
             }
@@ -191,21 +191,21 @@
                         </tr>
                     </thead>
                     <tbody class="govuk-table__body">
-                        @for (var i = 0; i < Model.ProviderVenue.Count(); i++)
+                        @for (var i = 0; i < Model.ProviderVenues.Count(); i++)
                         {
-                            var providerVenue = Model.ProviderVenue[i];
+                            var providerVenue = Model.ProviderVenues[i];
 
                             <tr class="govuk-table__row">
-                                <th class="govuk-table__cell">@Model.ProviderVenue[i].Postcode</th>
-                                <td class="govuk-table__cell">@Model.ProviderVenue[i].QualificationCount</td>
+                                <th class="govuk-table__cell">@Model.ProviderVenues[i].Postcode</th>
+                                <td class="govuk-table__cell">@Model.ProviderVenues[i].QualificationCount</td>
                                 <td class="govuk-table__cell">
                                     @{
-                                        var isEnabledForReferralText = Model.ProviderVenue[i].IsEnabledForReferral ? "Yes" : "No";
+                                        var isEnabledForReferralText = Model.ProviderVenues[i].IsEnabledForReferral ? "Yes" : "No";
                                         @isEnabledForReferralText
                                     }
                                 </td>
                                 <td class="govuk-table__cell">
-                                    <a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@Model.ProviderVenue[i].ProviderVenueId"
+                                    <a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@Model.ProviderVenues[i].ProviderVenueId"
                                        asp-route-providerId="@Model.Id"
                                        class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden"> this venue</span></a>
                                     <input type="hidden" asp-for="@providerVenue.ProviderVenueId" name="ProviderVenue[@i].ProviderVenueId" />
@@ -219,7 +219,7 @@
                 </table>
             }
 
-            @if (Model.ProviderVenue.Count <= 0)
+            @if (Model.ProviderVenues.Count <= 0)
             {
                 <button type="submit" class="govuk-button" name="SubmitAction" value="SaveAndAddVenue">Save and add venue</button>
             }

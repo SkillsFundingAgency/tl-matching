@@ -114,7 +114,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)
         {
-            if (!viewModel.ProviderVenue.Any())
+            if (!viewModel.ProviderVenues.Any())
             {
                 ModelState.AddModelError(nameof(ProviderVenue), "You must add a venue for this provider");
                 return View(nameof(ProviderDetail), viewModel);
