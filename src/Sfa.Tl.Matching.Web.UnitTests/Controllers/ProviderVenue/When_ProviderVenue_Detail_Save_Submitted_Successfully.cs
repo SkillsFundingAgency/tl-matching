@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _result.Should().BeOfType<RedirectToRouteResult>();
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_Results()
+        public void Then_Result_Is_Redirect_To_Get_Provider_Detail()
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteName.Should().BeEquivalentTo("GetProviderDetail");

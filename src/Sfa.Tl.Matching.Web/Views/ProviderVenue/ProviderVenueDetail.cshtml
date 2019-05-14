@@ -119,7 +119,7 @@
             <a class="govuk-link" id="addQual" href="#">Add a qualification</a>
         </p>*@
             
-        @if (Model.Qualifications?.Count == 0)
+        @if (Model.Qualifications == null || Model.Qualifications.Count == 0)
         {
             <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm"
                     name="SubmitAction" value="SaveAndAdd">
