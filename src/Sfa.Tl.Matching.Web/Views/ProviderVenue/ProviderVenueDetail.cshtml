@@ -33,7 +33,6 @@
     <input asp-for="Id" type="hidden" />
     <input asp-for="ProviderId" type="hidden" />
     <input asp-for="IsFromAddVenue" type="hidden" />
-    <input asp-for="IsEnabledForReferral" type="hidden" />
     <input asp-for="Postcode" type="hidden" />
     <input asp-for="Source" value="Admin" type="hidden" />
 
@@ -55,24 +54,20 @@
                     </legend>
                     <div class="govuk-radios govuk-radios--inline">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="search-visible-yes" name="search-visible" type="radio" value="yes">
-                            <label class="govuk-label govuk-radios__label" for="search-visible-yes">
+                            <input class="govuk-radios__input" id="search-visible-yes" asp-for="IsEnabledForReferral" type="radio" value="true">
+                            <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
                                 Yes
                             </label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="search-visible-no" name="search-visible" type="radio" value="no">
-                            <label class="govuk-label govuk-radios__label" for="search-visible-no">
+                            <input class="govuk-radios__input" id="search-visible-no" asp-for="IsEnabledForReferral" type="radio" value="false">
+                            <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
                                 No
                             </label>
                         </div>
                     </div>
                 </fieldset>
             </div>
-
-
-
-
 
             <div class="govuk-form-group" sfa-validation-for="Name" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label govuk-label--s" for="Name">
