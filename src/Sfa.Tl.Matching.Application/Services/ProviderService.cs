@@ -100,38 +100,5 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return await _repository.Create(provider);
         }
-
-        public async Task<HideProviderViewModel> GetHideProviderViewModelAsync(int providerId)
-        {
-            var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
-
-            return _mapper.Map<Provider, HideProviderViewModel>(provider);
-        }
-
-        public async Task UpdateProviderAsync(HideProviderViewModel viewModel)
-        {
-            var provider = _mapper.Map<HideProviderViewModel, Provider>(viewModel);
-
-            await _repository.UpdateWithSpecifedColumnsOnly(provider,
-                x => x.IsCdfProvider,
-                x => x.ModifiedOn,
-                x => x.ModifiedBy);
-        }
-
-        private static List<ProviderSearchResultItemViewModel> GetProvidersToUpdate(IEnumerable<ProviderSearchResultItemViewModel> providersFromVm,
-            IEnumerable<ProviderSearchResultItemViewModel> providersFromDb)
-        {
-            var providersToUpdate = (from pDb in providersFromDb
-                                     join pVm in providersFromVm on pDb.ProviderId equals pVm.ProviderId
-                                     where pDb.ProviderId == pVm.ProviderId
-                                           && pDb.IsCdfProvider != pVm.IsCdfProvider
-                                     select new ProviderSearchResultItemViewModel
-                                     {
-                                         IsCdfProvider = pVm.IsCdfProvider,
-                                         ProviderId = pVm.ProviderId
-                                     }).ToList();
-
-            return providersToUpdate;
-        }
     }
 }
