@@ -14,8 +14,20 @@ not exists (select 1 from sys.columns where name = 'IsCDFProvider' and object_na
 	EXEC sp_rename 'Provider.IsEnabledForSearch', 'IsCDFProvider', 'COLUMN';
 GO
 
+--Copy IsFundedForNextYear to IsCDFProvider
+if exists (select 1 from sys.columns where name = 'IsFundedForNextYear' and object_name(object_id) = 'Provider')
+	EXEC('UPDATE [dbo].[Provider]
+		 SET [IsCDFProvider] = [IsFundedForNextYear]')
+GO
+
 if exists (select 1 from sys.columns where name = 'IsFundedForNextYear' and object_name(object_id) = 'Provider')
 	ALTER TABLE [dbo].[Provider] DROP COLUMN [IsFundedForNextYear]
+GO
+if exists (select 1 from sys.columns where name = 'Status' and object_name(object_id) = 'Provider')
+	ALTER TABLE [dbo].[Provider] DROP COLUMN [Status]
+GO
+if exists (select 1 from sys.columns where name = 'StatusReason' and object_name(object_id) = 'Provider')
+	ALTER TABLE [dbo].[Provider] DROP COLUMN [StatusReason]
 GO
 
 --Venue Table Changes
@@ -37,8 +49,9 @@ SET [IsEnabledForReferral] = [IsRemoved]
 WHERE [IsEnabledForReferral] IS NULL
 GO
 
+--Reverse IsRemoved - make sure this is only run once!
 UPDATE [dbo].[ProviderVenue]
-SET [IsRemoved] = 0
+SET [IsRemoved] = CASE WHEN [IsRemoved] = 0 THEN 1 ELSE 0 END
 GO
 
 ALTER TABLE [dbo].[ProviderVenue] ALTER COLUMN [IsEnabledForReferral] BIT NOT NULL

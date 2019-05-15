@@ -24,7 +24,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _dbContext = new TestConfiguration().GetDbContext();
 
             _providerVenue = new ValidProviderVenueSearchBuilder().BuildOneVenue();
-            _providerVenue.Provider.Status = false;
             _dbContext.Add(_providerVenue);
             _dbContext.SaveChanges();
 

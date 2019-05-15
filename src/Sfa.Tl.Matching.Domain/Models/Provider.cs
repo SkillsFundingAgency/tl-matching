@@ -8,8 +8,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public int OfstedRating { get; set; }
-        public bool Status { get; set; }
-        public string StatusReason { get; set; }
         public string PrimaryContact { get; set; }
         public string PrimaryContactEmail { get; set; }
         public string PrimaryContactPhone { get; set; }

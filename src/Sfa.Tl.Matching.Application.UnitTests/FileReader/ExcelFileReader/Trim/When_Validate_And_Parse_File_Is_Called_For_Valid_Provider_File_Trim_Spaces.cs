@@ -61,8 +61,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Trim
             dto.UkPrn.Should().Be(10000001); 
             dto.Name.Should().Be("Provider-Trim"); 
             dto.OfstedRating.Should().Be(OfstedRating.Good);
-            dto.Status.Should().BeTrue();
-            dto.StatusReason.Should().Be("Active Reason");
             dto.PrimaryContact.Should().Be("PrimaryContact");
             dto.PrimaryContactEmail.Should().Be("primary@contact.co.uk");
             dto.PrimaryContactPhone.Should().Be("01777757777");

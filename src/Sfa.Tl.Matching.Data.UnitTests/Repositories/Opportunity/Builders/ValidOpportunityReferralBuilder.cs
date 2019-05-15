@@ -80,8 +80,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                             UkPrn = 10000546,
                             Name = "ProviderName",
                             OfstedRating = 1,
-                            Status = true,
-                            StatusReason = "StatusReason",
                             PrimaryContact = "PrimaryContact",
                             PrimaryContactEmail = "primary@contact.co.uk",
                             PrimaryContactPhone = "01777757777",

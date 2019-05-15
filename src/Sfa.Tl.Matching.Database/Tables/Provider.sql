@@ -5,8 +5,6 @@
 	[Name] NVARCHAR(400) NOT NULL,
 	[DisplayName] NVARCHAR(400) NULL,
 	[OfstedRating] INT NOT NULL,
-	[Status] bit NOT NULL,
-	[StatusReason] NVARCHAR(100) NULL,
 	[PrimaryContact] NVARCHAR(100) NOT NULL,
 	[PrimaryContactEmail] VARCHAR(320) NOT NULL,
 	[PrimaryContactPhone] VARCHAR(150) NULL,

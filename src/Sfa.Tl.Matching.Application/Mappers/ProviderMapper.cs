@@ -28,8 +28,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<ProviderDetailViewModel, Provider>()
                 .ForMember(m => m.OfstedRating, config => config.Ignore())
-                .ForMember(m => m.Status, config => config.Ignore())
-                .ForMember(m => m.StatusReason, config => config.Ignore())
                 .ForMember(m => m.Source, config => config.MapFrom<LoggedInUserEmailResolver<ProviderDetailViewModel, Provider>>())
                 .ForMember(m => m.ProviderVenue, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.Ignore())

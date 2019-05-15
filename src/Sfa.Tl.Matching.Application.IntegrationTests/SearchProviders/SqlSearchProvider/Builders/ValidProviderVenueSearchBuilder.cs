@@ -124,7 +124,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             {
                 UkPrn = 10203040,
                 Name = "SQL Search Provider",
-                Status = true,
                 PrimaryContact = "Test",
                 PrimaryContactEmail = "Test@test.com",
                 PrimaryContactPhone = "0123456789",
