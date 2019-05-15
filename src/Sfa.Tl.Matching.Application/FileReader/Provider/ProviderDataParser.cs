@@ -16,6 +16,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.Provider
                 UkPrn = data.UkPrn.ToLong(),
                 Name = data.ProviderName.Trim(),
                 OfstedRating = data.OfstedRating.ToOfstedRating(),
+                IsCdfProvider = data.Status.ToBool(),
+                IsEnabledForReferral = data.Status.ToBool(),
                 PrimaryContact = data.PrimaryContactName,
                 PrimaryContactEmail = data.PrimaryContactEmail,
                 PrimaryContactPhone = data.PrimaryContactTelephone,

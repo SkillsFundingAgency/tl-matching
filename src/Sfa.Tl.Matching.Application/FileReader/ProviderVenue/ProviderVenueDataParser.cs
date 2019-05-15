@@ -15,6 +15,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.ProviderVenue
                 ProviderId = data.ProviderId,
                 Postcode = data.Postcode,
                 Source = data.Source,
+                IsEnabledForReferral = true,
+                IsRemoved = false,
                 CreatedBy = data.CreatedBy
             };
 
