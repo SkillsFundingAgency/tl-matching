@@ -44,16 +44,16 @@ if not exists (select 1 from sys.columns where name = 'IsEnabledForReferral' and
 	ALTER TABLE [dbo].[ProviderVenue] ADD [IsEnabledForReferral] BIT NULL
 GO
 
-UPDATE [dbo].[ProviderVenue]
-SET [IsEnabledForReferral] = [IsRemoved]
-WHERE [IsEnabledForReferral] IS NULL
-GO
-
 --Reverse IsRemoved - make sure this is only run once!
-if exists (select 1 from sys.columns where name = 'Status' and object_name(object_id) = 'ProviderFeedbackRequestHistory') 
+if exists (select 1 from [dbo].[ProviderVenue] where [IsEnabledForReferral] IS NULL) 
+BEGIN
 	UPDATE [dbo].[ProviderVenue]
 	SET [IsRemoved] = CASE WHEN [IsRemoved] = 0 THEN 1 ELSE 0 END
-GO
+
+	UPDATE [dbo].[ProviderVenue]
+	SET [IsEnabledForReferral] = CASE WHEN [IsRemoved] = 0 THEN 1 ELSE 0 END
+	WHERE [IsEnabledForReferral] IS NULL
+END
 
 ALTER TABLE [dbo].[ProviderVenue] ALTER COLUMN [IsEnabledForReferral] BIT NOT NULL
 GO
