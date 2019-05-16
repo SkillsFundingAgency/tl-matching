@@ -86,7 +86,6 @@
     <Build Include="Tables\FunctionLog.sql" />
     <None Include="PostDeployment\Reset Data.sql" />
     <Build Include="Tables\ProviderFeedbackRequestHistory.sql" />
-    <None Include="PreDeployment\Sprint 8 PreDeployment Script.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
