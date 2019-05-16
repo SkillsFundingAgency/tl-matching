@@ -62,5 +62,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builde
                 }
             }
         };
+
+        public IList<ProviderWithFundingDto> BuildWithNoVenues() => new List<ProviderWithFundingDto>
+        {
+            new ProviderWithFundingDto
+            {
+                Id = 1,
+                Name = "Provider Name",
+                PrimaryContact = "Provider Contact",
+                PrimaryContactEmail = "primary.contact@provider.co.uk",
+                PrimaryContactPhone = "01777757777",
+                SecondaryContact = "SecondaryContact",
+                SecondaryContactEmail = "secondary@contact.co.uk",
+                SecondaryContactPhone = "01234559999",
+                ProviderVenues = new List<ProviderVenueQualificationsInfoDto>()
+            }
+        };
     }
 }

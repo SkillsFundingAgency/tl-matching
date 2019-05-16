@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Sfa.Tl.Matching.Application.IntegrationTests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Test"
+      }
+    }
+  }
+}
