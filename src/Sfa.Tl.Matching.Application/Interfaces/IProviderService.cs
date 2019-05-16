@@ -14,6 +14,5 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task UpdateProviderDetail(ProviderDetailViewModel viewModel);
         Task UpdateProviderDetailSectionAsync(ProviderDetailViewModel viewModel);
         Task<int> CreateProvider(ProviderDetailViewModel viewModel);
-        Task DeleteProviderAsync(int id);
     }
 }

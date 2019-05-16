@@ -52,7 +52,6 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                 {
                                     ProviderVenueId = providerVenue.Id,
                                     ProviderName = provider.Name,
-                                    provider.DisplayName,
                                     Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
                                     providerVenue.Postcode
                                 }).Distinct().ToListAsync();
@@ -74,7 +73,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             {
                 Postcode = r.Postcode,
                 ProviderVenueId = r.ProviderVenueId,
-                ProviderName = !string.IsNullOrEmpty(r.DisplayName) ? r.DisplayName : r.ProviderName,
+                ProviderName = r.ProviderName,
                 Distance = r.Distance,
                 QualificationShortTitles = qualificationShortTitles.Where(q => q.ProviderVenueId == r.ProviderVenueId).Select(q => q.QualificationShortTitle)
             }).OrderBy(r => r.Distance).ToList();

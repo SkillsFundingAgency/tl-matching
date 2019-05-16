@@ -95,12 +95,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(nameof(ProviderDetail), viewModel);
             }
 
-            var isNew = IsNewProvider(viewModel);
-
-            if (isNew)
-                await _providerService.DeleteProviderAsync(viewModel.Id);
-            else
-                await _providerService.UpdateProviderDetailSectionAsync(viewModel);
+            await _providerService.UpdateProviderDetailSectionAsync(viewModel);
 
             return View(nameof(SearchProvider),
                 await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
@@ -148,14 +143,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
             };
-        }
-
-        private static bool IsNewProvider(ProviderDetailViewModel viewModel)
-        {
-            if (string.IsNullOrEmpty(viewModel.Source))
-                return true;
-
-            return false;
         }
     }
 }

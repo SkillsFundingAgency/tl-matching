@@ -83,11 +83,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return provider;
         }
         
-        public async Task DeleteProviderAsync(int id)
-        {
-            await _repository.Delete(id);
-        }
-
         public async Task UpdateProviderDetailSectionAsync(ProviderDetailViewModel viewModel)
         {
             var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);

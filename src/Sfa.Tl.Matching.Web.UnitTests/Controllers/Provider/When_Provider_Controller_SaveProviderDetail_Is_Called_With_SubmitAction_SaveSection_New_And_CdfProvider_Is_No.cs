@@ -13,13 +13,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
     public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_New_And_CdfProvider_Is_No
     {
         private readonly IActionResult _result;
-        private readonly IProviderService _providerService;
 
         public When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_New_And_CdfProvider_Is_No()
         {
-            _providerService = Substitute.For<IProviderService>();
+            var providerService = Substitute.For<IProviderService>();
 
-            var providerController = new ProviderController(_providerService, new MatchingConfiguration());
+            var providerController = new ProviderController(providerService, new MatchingConfiguration());
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
 
             _result = controllerWithClaims.SaveProviderDetail(new ProviderDetailViewModel
@@ -41,12 +40,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         {
             _result.Should().BeAssignableTo<ViewResult>();
             ((ViewResult)_result).ViewName.Should().Be("SearchProvider");
-        }
-
-        [Fact]
-        public void Then_ProviderService_DeleteProviderAsync_Called()
-        {
-            _providerService.Received(1).DeleteProviderAsync(Arg.Is(1));
         }
     }
 }
