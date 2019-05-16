@@ -106,8 +106,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
                     UkPrn = 10000546 + i,
                     Name = "ProviderName",
                     OfstedRating = OfstedRating.Good,
-                    Status = true,
-                    StatusReason = "StatusReason",
                     PrimaryContact = "PrimaryContact",
                     PrimaryContactEmail = "primary@contact.co.uk",
                     PrimaryContactPhone = "01777757777",

@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
 
             var providerFeedbackRequestHistory = new ProviderFeedbackRequestHistoryBuilder().Build();
-            providerFeedbackRequestHistory.Status = (int) ProviderFeedbackRequestStatus.Processing;
+            providerFeedbackRequestHistory.Status = ProviderFeedbackRequestStatus.Processing.ToString();
 
             _providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
             _providerFeedbackRequestHistoryRepository

@@ -8,6 +8,7 @@ using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
@@ -62,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Received(1)
                 .Create(Arg.Is<ProviderFeedbackRequestHistory>(request =>
                     request.ProviderCount == 0 &&
-                    request.Status == 1 && 
+                    request.Status == ProviderFeedbackRequestStatus.Pending.ToString() && 
                     request.CreatedBy == "TestUser"));
         }
         

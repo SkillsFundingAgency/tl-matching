@@ -5,6 +5,6 @@
         Pending = 1,
         Processing,
         Complete,
-        Error,
+        Error
     }
 }

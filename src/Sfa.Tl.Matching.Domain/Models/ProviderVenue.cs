@@ -12,7 +12,8 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string Postcode { get; set; }
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
-        public bool IsEnabledForSearch { get; set; }
+        public bool IsRemoved { get; set; }
+        public bool IsEnabledForReferral { get; set; }
         public string Source { get; set; }
         public virtual Provider Provider { get; set; }
         public virtual ICollection<ProviderQualification> ProviderQualification { get; set; }

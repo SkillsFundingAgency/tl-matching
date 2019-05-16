@@ -79,7 +79,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
                 UkPrn = ukPrn,
                 Name = "Name",
                 OfstedRating = 3,
-                Status = true,
                 PrimaryContact = "PrimaryContact",
                 PrimaryContactEmail = "primary@contact.com",
                 SecondaryContact = "SecondaryContact",

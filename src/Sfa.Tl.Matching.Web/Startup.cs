@@ -35,8 +35,7 @@ namespace Sfa.Tl.Matching.Web
         private readonly MatchingConfiguration _configuration;
         private readonly ILoggerFactory _loggerFactory;
 
-        public Startup(IConfiguration configuration,
-            ILoggerFactory loggerFactory)
+        public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             _configuration = ConfigurationLoader.Load(
                 configuration[Constants.EnvironmentNameConfigKey],
@@ -81,8 +80,7 @@ namespace Sfa.Tl.Matching.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-            ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             var cultureInfo = new CultureInfo("en-GB");
 

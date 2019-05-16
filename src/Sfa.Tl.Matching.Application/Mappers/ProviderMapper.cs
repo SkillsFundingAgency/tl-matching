@@ -23,13 +23,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<Provider, ProviderDetailViewModel>()
                 .ForMember(m => m.SubmitAction, config => config.Ignore())
-                .ForMember(m => m.ProviderVenue, config => config.MapFrom(s => s.ProviderVenue))
+                .ForMember(m => m.ProviderVenues, config => config.MapFrom(s => s.ProviderVenue))
                 ;
 
             CreateMap<ProviderDetailViewModel, Provider>()
                 .ForMember(m => m.OfstedRating, config => config.Ignore())
-                .ForMember(m => m.Status, config => config.Ignore())
-                .ForMember(m => m.StatusReason, config => config.Ignore())
                 .ForMember(m => m.Source, config => config.MapFrom<LoggedInUserEmailResolver<ProviderDetailViewModel, Provider>>())
                 .ForMember(m => m.ProviderVenue, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.Ignore())
@@ -40,27 +38,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<Provider, ProviderSearchResultDto>();
 
-            CreateMap<Provider, HideProviderViewModel>()
-                .ForMember(m => m.ProviderId, config => config.MapFrom(s => s.Id))
-                .ForMember(m => m.ProviderName, config => config.MapFrom(s => s.Name));
-
-            CreateMap<HideProviderViewModel, Provider>()
-                .ForMember(m => m.Id, config => config.MapFrom(s => s.ProviderId))
-                .ForMember(m => m.IsEnabledForSearch, config => config.MapFrom(s => s.IsEnabledForSearch))
-                .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<HideProviderViewModel, Provider>>())
-                .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<HideProviderViewModel, Provider>>())
-                .ForAllOtherMembers(config => config.Ignore());
-
             CreateMap<Provider, ProviderSearchResultItemViewModel>()
                 .ForMember(m => m.ProviderId, config => config.MapFrom(s => s.Id))
-                .ForMember(m => m.ProviderName, config => config.MapFrom(s => s.Name));
-
-            CreateMap<ProviderSearchResultItemViewModel, Provider>()
-                .ForMember(m => m.Id, config => config.MapFrom(s => s.ProviderId))
-                .ForMember(m => m.IsFundedForNextYear, config => config.MapFrom(s => s.IsFundedForNextYear))
-                .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<ProviderSearchResultItemViewModel, Provider>>())
-                .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<ProviderSearchResultItemViewModel, Provider>>())
-                .ForAllOtherMembers(config => config.Ignore());
+                .ForMember(m => m.ProviderName, config => config.MapFrom(s => s.Name))
+                .ForMember(m => m.IsCdfProvider, config => config.MapFrom(s => s.IsCdfProvider ? "Yes" : "No"))
+                ;
         }
     }
 }

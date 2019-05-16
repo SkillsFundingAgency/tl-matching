@@ -9,18 +9,22 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection
+    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveAndAddVenue
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
 
-        public When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection()
+        public When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveAndAddVenue()
         {
             _providerService = Substitute.For<IProviderService>();
 
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
 
-            _result = providerController.SaveProviderDetail(new ProviderDetailViewModel { Id = 1, SubmitAction = "SaveSection" }).GetAwaiter().GetResult();
+            _result = providerController.SaveProviderDetail(new ProviderDetailViewModel
+            {
+                Id = 1,
+                SubmitAction = "SaveAndAddVenue"
+            }).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -30,10 +34,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_View_Result_Is_Returned_For_ProviderDetail()
+        public void Then_Result_Is_Redirect_To_AddVenue()
         {
-            _result.Should().BeAssignableTo<ViewResult>();
-            ((ViewResult)_result).ViewName.Should().Be("ProviderDetail");
+            var result = _result as RedirectToRouteResult;
+            result.Should().NotBeNull();
+
+            result?.RouteName.Should().Be("AddVenue");
         }
 
         [Fact]

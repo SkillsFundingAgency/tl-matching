@@ -3,6 +3,7 @@ using System.Linq;
 using Sfa.Tl.Matching.Application.Interfaces;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -24,22 +25,17 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters)
         {
-            var providers = await _repository.GetMany(p => searchParameters.UkPrn == null || p.UkPrn == searchParameters.UkPrn.Value)
+            return await _repository.GetMany(p => searchParameters.UkPrn == null || p.UkPrn == searchParameters.UkPrn.Value)
                                     .OrderBy(p => p.Name)
+                                    .ProjectTo<ProviderSearchResultItemViewModel>(_mapper.ConfigurationProvider)
                                     .ToListAsync();
-
-            return _mapper.Map<IList<Provider>, IList<ProviderSearchResultItemViewModel>>(providers);
-
-            //return await query.ProjectTo<ProviderSearchResultItemViewModel>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
         public async Task<int> GetProvidersWithFundingCountAsync()
         {
-            var query = _repository
-                .GetMany(p => p.IsFundedForNextYear)
+            return await _repository
+                .GetMany(p => p.IsCdfProvider)
                 .CountAsync();
-
-            return await query;
         }
 
         public async Task<ProviderSearchResultDto> SearchAsync(long ukPrn)
@@ -51,31 +47,50 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId, bool includeVenueDetails = false)
+        public async Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId)
         {
-            var query = _repository.GetMany(p => p.Id == providerId);
-
-            if (includeVenueDetails)
-            {
-                query = query.Include(p => p.ProviderVenue).ThenInclude(pv => pv.ProviderQualification);
-            }
-
-            var provider = await query.SingleOrDefaultAsync();
-
-            return _mapper.Map<Provider, ProviderDetailViewModel>(provider);
-        }
-
-        public async Task<IList<ProviderVenueViewModel>> GetProviderVenueSummaryByProviderIdAsync(int providerId, bool includeVenueDetails = false)
-        {
-            return await _repository.GetMany(p => p.Id == providerId)
-                .SelectMany(p => p.ProviderVenue)
-                .Select(pv => new ProviderVenueViewModel
+            var provider = await _repository
+                .GetMany(p => p.Id == providerId)
+                .Select(p => new ProviderDetailViewModel
                 {
-                    ProviderVenueId = pv.Id,
-                    Postcode = pv.Postcode,
-                    IsEnabledForSearch = pv.IsEnabledForSearch,
-                    QualificationCount = pv.ProviderQualification.Count,
-                }).ToListAsync();
+                    Id = p.Id,
+                    Name = p.Name,
+                    UkPrn = p.UkPrn,
+                    DisplayName = p.DisplayName,
+                    PrimaryContact = p.PrimaryContact,
+                    PrimaryContactPhone = p.PrimaryContactPhone,
+                    PrimaryContactEmail = p.PrimaryContactEmail,
+                    SecondaryContact = p.SecondaryContact,
+                    SecondaryContactPhone = p.SecondaryContactPhone,
+                    SecondaryContactEmail = p.SecondaryContactEmail,
+                    IsCdfProvider = p.IsCdfProvider,
+                    IsEnabledForReferral = p.IsEnabledForReferral,
+                    Source = p.Source,
+                    ProviderVenues = p.ProviderVenue
+                    .Where(venue => !venue.IsRemoved)
+                    .Select(venue => new ProviderVenueViewModel
+                    {
+                        ProviderVenueId = venue.Id,
+                        Postcode = venue.Postcode,
+                        IsRemoved = venue.IsRemoved,
+                        IsEnabledForReferral = venue.IsEnabledForReferral,
+                        QualificationCount = venue.ProviderQualification.Count
+                    })
+                    .OrderBy(v => v.Postcode).ToList()
+                })
+                .SingleOrDefaultAsync();
+
+            return provider;
+        }
+        
+        public async Task UpdateProviderDetailSectionAsync(ProviderDetailViewModel viewModel)
+        {
+            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+
+            await _repository.UpdateWithSpecifedColumnsOnly(provider,
+                x => x.IsCdfProvider,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
         }
 
         public async Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
@@ -90,63 +105,6 @@ namespace Sfa.Tl.Matching.Application.Services
             var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
 
             return await _repository.Create(provider);
-        }
-
-        public async Task<HideProviderViewModel> GetHideProviderViewModelAsync(int providerId)
-        {
-            var provider = await _repository.GetSingleOrDefault(p => p.Id == providerId);
-
-            return _mapper.Map<Provider, HideProviderViewModel>(provider);
-        }
-
-        public async Task UpdateProviderAsync(HideProviderViewModel viewModel)
-        {
-            var provider = _mapper.Map<HideProviderViewModel, Provider>(viewModel);
-
-            await _repository.UpdateWithSpecifedColumnsOnly(provider,
-                x => x.IsEnabledForSearch,
-                x => x.ModifiedOn,
-                x => x.ModifiedBy);
-        }
-
-        public async Task UpdateProvider(SaveProviderFeedbackViewModel viewModel)
-        {
-            var providerIds = viewModel.Providers.Select(p => p.ProviderId);
-
-            var providersFromDb = _repository.GetMany(p => providerIds.Contains(p.Id))
-                .Select(p => new ProviderSearchResultItemViewModel
-                {
-                    ProviderId = p.Id,
-                    IsFundedForNextYear = p.IsFundedForNextYear
-                }).ToList();
-
-            var providersToUpdate = GetProvidersToUpdate(viewModel.Providers, providersFromDb);
-
-            if (providersToUpdate.Count > 0)
-            {
-                var providers = _mapper.Map<IList<Provider>>(providersToUpdate);
-
-                await _repository.UpdateManyWithSpecifedColumnsOnly(providers,
-                    x => x.IsFundedForNextYear,
-                    x => x.ModifiedOn,
-                    x => x.ModifiedBy);
-            }
-        }
-
-        private static List<ProviderSearchResultItemViewModel> GetProvidersToUpdate(IEnumerable<ProviderSearchResultItemViewModel> providersFromVm,
-            IEnumerable<ProviderSearchResultItemViewModel> providersFromDb)
-        {
-            var providersToUpdate = (from pDb in providersFromDb
-                                     join pVm in providersFromVm on pDb.ProviderId equals pVm.ProviderId
-                                     where pDb.ProviderId == pVm.ProviderId
-                                           && pDb.IsFundedForNextYear != pVm.IsFundedForNextYear
-                                     select new ProviderSearchResultItemViewModel
-                                     {
-                                         IsFundedForNextYear = pVm.IsFundedForNextYear,
-                                         ProviderId = pVm.ProviderId
-                                     }).ToList();
-
-            return providersToUpdate;
         }
     }
 }

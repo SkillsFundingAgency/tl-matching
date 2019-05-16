@@ -64,7 +64,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
                 UkPrn = ukprn,
                 Name = "Name",
                 OfstedRating = 3,
-                Status = true,
                 PrimaryContact = "PrimaryContact",
                 PrimaryContactEmail = "primary@contact.com",
                 SecondaryContact = "SecondaryContact",

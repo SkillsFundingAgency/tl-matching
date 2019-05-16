@@ -24,7 +24,8 @@
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 <li><a sfa-validation-for="Name"></a></li>
-               @* <li><a href="#addQual" sfa-validation-for="@Model.Qualifications"></a></li>*@
+                @*
+                    <li><a href="#addQual" sfa-validation-for="@Model.Qualifications"></a></li>*@
             </ul>
         </div>
     </div>
@@ -32,8 +33,8 @@
 <form asp-route="SaveProviderVenueDetail" novalidate>
     <input asp-for="Id" type="hidden" />
     <input asp-for="ProviderId" type="hidden" />
+    <input asp-for="ProviderName" type="hidden" />
     <input asp-for="IsFromAddVenue" type="hidden" />
-    <input asp-for="IsEnabledForSearch" type="hidden" />
     <input asp-for="Postcode" type="hidden" />
     <input asp-for="Source" value="Admin" type="hidden" />
 
@@ -43,19 +44,45 @@
             <span class="govuk-caption-m">@Model.ProviderName</span>
             <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
             <p class="govuk-body">
-                <a asp-controller="ProviderVenue" asp-action="ConfirmProviderVenueChange" asp-route-providerVenueId="@Model.Id" class="govuk-link">@(Model.IsEnabledForSearch ? "Hide" : "Unhide") venue</a>
+                <a asp-controller="ProviderVenue" asp-action="ConfirmRemoveProviderVenue" asp-route-providerVenueId="@Model.Id" class="govuk-link">Remove venue</a>
             </p>
 
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset" aria-describedby="changed-name-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        <h1 class="govuk-fieldset__heading">
+                            Does @Model.ProviderName want our help finding placements for students at this venue?
+                        </h1>
+                    </legend>
+                    <div class="govuk-radios govuk-radios--inline">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="search-visible-yes" asp-for="IsEnabledForReferral" type="radio" value="true">
+                            <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
+                                Yes
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="search-visible-no" asp-for="IsEnabledForReferral" type="radio" value="false">
+                            <label class="govuk-label govuk-radios__label" asp-for="IsEnabledForReferral">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
             <div class="govuk-form-group" sfa-validation-for="Name" sfa-validationerror-class="govuk-form-group--error">
-                <label class="govuk-label" for="Name">
-                    Enter venue name (optional)
+                <label class="govuk-label govuk-label--s" for="Name">
+                    How should @Model.Postcode show in search results?
                 </label>
                 <span class="govuk-error-message" asp-validation-for="Name"></span>
-                <input asp-for="Name" class="govuk-input" type="text" sfa-validation-for="Name" sfa-validationerror-class="govuk-input--error">
+                <input asp-for="Name" class="govuk-input govuk-input--width-20" type="text" sfa-validation-for="Name" sfa-validationerror-class="govuk-input--error">
             </div>
 
             <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm"
-                    name="SubmitAction" value="SaveSection">Save section</button>
+                    name="SubmitAction" value="SaveSection">
+                Save section
+            </button>
 
         </div>
     </div>
@@ -68,49 +95,46 @@
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="col">LAR ID</th>
+                        <th class="govuk-table__header" scope="col">Learning aim reference</th>
                         <th class="govuk-table__header" scope="col">Qualification title</th>
-                        <th class="govuk-table__header" scope="col">18/19</th>
-                        <th class="govuk-table__header" scope="col">19/20</th>
                         <th class="govuk-table__header" scope="col"></th>
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                    @for (var i = 0; i < Model.Qualifications.Count; i++)
+                    @for (var i = 0; i < Model.Qualifications?.Count; i++)
                     {
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">
-                                <input asp-for="@Model.Qualifications[i].LarsId" type="hidden" />
-                                <input asp-for="@Model.Qualifications[i].Title" type="hidden" />
+                                <input type="hidden" asp-for="@Model.Qualifications[i].LarsId" name="Qualifications[@i].LarsId" />
+                                <input type="hidden" asp-for="@Model.Qualifications[i].Title" name="Qualifications[@i].Title" />
                                 @Model.Qualifications[i].LarsId
                             </td>
                             <td class="govuk-table__cell">@Model.Qualifications[i].Title</td>
-                            <td class="govuk-table__cell">
-                                <div class="govuk-checkboxes">
-                                    <div class="govuk-checkboxes__item">
-                                        <input class="govuk-checkboxes__input" id="1a" name="1a" type="checkbox" value="yes" checked="">
-                                        <label class="govuk-label govuk-checkboxes__label" for="1a"></label>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="govuk-table__cell">
-                                <div class="govuk-checkboxes">
-                                    <div class="govuk-checkboxes__item">
-                                        <input class="govuk-checkboxes__input" id="1b" name="1b" type="checkbox" value="yes">
-                                        <label class="govuk-label govuk-checkboxes__label" for="1b"></label>
-                                    </div>
-                                </div>
-                            </td>
+                            <td class="govuk-table__cell"><a href="#" class="govuk-link">Remove qualification</a></td>
+
                         </tr>
                     }
                 </tbody>
             </table>
 
             @*<p class="govuk-body">
-                <a class="govuk-link" id="addQual" href="#">Add a qualification</a>
-            </p>*@
-            <button type="submit" class="govuk-button" id="tl-confirm"
-                    name="SubmitAction" value="SaveAndFinish">Save and return to provider overview</button>
+                    <a class="govuk-link" id="addQual" href="#">Add a qualification</a>
+                </p>*@
+
+            @if (Model.Qualifications == null || Model.Qualifications.Count == 0)
+            {
+                <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm"
+                        name="SubmitAction" value="SaveAndAdd">
+                    Save and add a qualification
+                </button>
+            }
+            else
+            {
+                <button type="submit" class="govuk-button" id="tl-confirm"
+                        name="SubmitAction" value="SaveAndFinish">
+                    Save and return to provider overview
+                </button>
+            }
         </div>
     </div>
 </form>

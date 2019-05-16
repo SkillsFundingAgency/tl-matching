@@ -21,7 +21,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 Latitude = Latitude,
                 Longitude = Longitude,
                 Location = location,
-                IsEnabledForSearch = true,
+                IsEnabledForReferral = true,
+                IsRemoved = false,
                 Source = "Test",
                 ProviderQualification = BuildProviderQualifications()
             };
@@ -38,7 +39,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 Latitude = Latitude,
                 Longitude = Longitude,
                 Location = location,
-                IsEnabledForSearch = true,
+                IsEnabledForReferral = true,
+                IsRemoved = false,
                 Source = "Test",
                 ProviderQualification = BuildProviderQualifications()
             };
@@ -57,7 +59,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
-                    IsEnabledForSearch = true,
+                    IsEnabledForReferral = true,
+                    IsRemoved = false,
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 },
@@ -68,13 +71,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
-                    IsEnabledForSearch = false,
+                    IsEnabledForReferral = false,
+                    IsRemoved = false,
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 }
             };
         }
-        
+
         public IList<Domain.Models.ProviderVenue> BuildWithTwoVenuesEnabled()
         {
             var location = CreatePointLocation((double)Latitude, (double)Longitude);
@@ -88,7 +92,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
-                    IsEnabledForSearch = true,
+                    IsEnabledForReferral = true,
+                    IsRemoved = false,
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 },
@@ -99,7 +104,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
-                    IsEnabledForSearch = true,
+                    IsEnabledForReferral = true,
+                    IsRemoved = false,
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 }
@@ -112,22 +118,20 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             return geometryFactory.CreatePoint(new Coordinate(longitude, latitude));
         }
 
-        private static Domain.Models.Provider BuildProvider(bool isEnabledForSearch)
+        private static Domain.Models.Provider BuildProvider(bool isCdfProvider)
         {
             return new Domain.Models.Provider
             {
                 UkPrn = 10203040,
                 Name = "SQL Search Provider",
-                Status = true,
                 PrimaryContact = "Test",
                 PrimaryContactEmail = "Test@test.com",
                 PrimaryContactPhone = "0123456789",
                 SecondaryContact = "Test 2",
                 SecondaryContactEmail = "Test2@test.com",
                 SecondaryContactPhone = "0123456789",
-                IsEnabledForSearch = isEnabledForSearch,
+                IsCdfProvider = isCdfProvider,
                 IsEnabledForReferral = true,
-                IsFundedForNextYear = true,
                 Source = "Test"
             };
         }

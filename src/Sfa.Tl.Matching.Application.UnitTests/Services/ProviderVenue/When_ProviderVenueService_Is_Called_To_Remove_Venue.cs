@@ -14,11 +14,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
-    public class When_ProviderVenueService_Is_Called_To_Unhide_Venue
+    public class When_ProviderVenueService_Is_Called_To_Hide_Venue
     {
         private readonly IRepository<Domain.Models.ProviderVenue> _providerVenueRepository;
 
-        public When_ProviderVenueService_Is_Called_To_Unhide_Venue()
+        public When_ProviderVenueService_Is_Called_To_Hide_Venue()
         {
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
@@ -27,10 +27,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 c.AddProfiles(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver") ?
-                        (object)new LoggedInUserNameResolver<HideProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
+                        (object)new LoggedInUserNameResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :
                         type.Name.Contains("UtcNowResolver") ?
-                            new UtcNowResolver<HideProviderVenueViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
-                            null);
+                            new UtcNowResolver<RemoveProviderVenueViewModel, Domain.Models.ProviderVenue>(new DateTimeProvider()) :
+                                null);
             });
             var mapper = new Mapper(config);
 
@@ -43,15 +43,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
             var service = new ProviderVenueService(mapper, _providerVenueRepository, locationService);
 
-            var viewModel = new HideProviderVenueViewModel
+            var viewModel = new RemoveProviderVenueViewModel
             {
-                ProviderId = 10,
-                ProviderVenueId = 1,
-                IsEnabledForSearch = true
+                ProviderId = 1,
+                ProviderVenueId = 1
             };
             service.UpdateVenueAsync(viewModel).GetAwaiter().GetResult();
         }
-
+        
         [Fact]
         public void Then_ProviderVenueRepository_UpdateWithSpecifedColumnsOnly_Is_Called_Exactly_Once()
         {
@@ -59,16 +58,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 .UpdateWithSpecifedColumnsOnly(Arg.Any<Domain.Models.ProviderVenue>(),
                     Arg.Any<Expression<Func<Domain.Models.ProviderVenue, object>>[]>());
         }
-        
+
         [Fact]
         public void Then_ProviderVenueRepository_UpdateWithSpecifedColumnsOnly_Is_Called_With_Expected_Values()
         {
             _providerVenueRepository.Received(1)
                 .UpdateWithSpecifedColumnsOnly(Arg.Is<Domain.Models.ProviderVenue>(
-                        p =>
-                            p.Id == 1 &&
-                            p.IsEnabledForSearch
-                    ),
+                    pv =>
+                        pv.Id == 1 &&
+                        pv.IsRemoved
+                        ),
                     Arg.Any<Expression<Func<Domain.Models.ProviderVenue, object>>[]>());
         }
     }

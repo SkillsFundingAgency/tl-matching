@@ -9,16 +9,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             Id = 1,
             UkPrn = 10000546,
             Name = "Test Provider",
-            Status = true,
             PrimaryContact = "Test",
             PrimaryContactEmail = "Test@test.com",
             PrimaryContactPhone = "0123456789",
             SecondaryContact = "Test 2",
             SecondaryContactEmail = "Test2@test.com",
             SecondaryContactPhone = "0123456789",
-            IsEnabledForSearch = true,
+            IsCdfProvider = true,
             IsEnabledForReferral = true,
-            IsFundedForNextYear = true,
             Source = "Test",
             CreatedBy = "CreatedBy"
         };

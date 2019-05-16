@@ -2,51 +2,50 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 {
-    public class When_Provider_Controller_ConfirmProviderChange_Post_Is_Called
+    public class When_ProviderVenue_Controller_ConfirmRemoveProviderVenue_Post_Is_Called
     {
         private readonly IActionResult _result;
-        private readonly IProviderService _providerService;
+        private readonly IProviderVenueService _providerVenueService;
 
-        public When_Provider_Controller_ConfirmProviderChange_Post_Is_Called()
+        public When_ProviderVenue_Controller_ConfirmRemoveProviderVenue_Post_Is_Called()
         {
-            _providerService = Substitute.For<IProviderService>();
+            _providerVenueService = Substitute.For<IProviderVenueService>();
 
-            var providerController = new ProviderController(_providerService, new MatchingConfiguration());
+            var providerVenueController = new ProviderVenueController(_providerVenueService);
 
-            var viewModel = new HideProviderViewModel
+            var viewModel = new RemoveProviderVenueViewModel
             {
                 ProviderId = 1,
-                UkPrn = 10000546,
-                ProviderName = "Test Provider"
+                ProviderVenueId = 1
             };
-            _result = providerController.ConfirmProviderChange(viewModel).GetAwaiter().GetResult();
+            _result = providerVenueController.ConfirmRemoveProviderVenue(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_ProviderService_UpdateProviderAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderVenueService_UpdateVenueAsync_Is_Called_Exactly_Once()
         {
-            _providerService
+            _providerVenueService
                 .Received(1)
-                .UpdateProviderAsync(Arg.Any<HideProviderViewModel>());
+                .UpdateVenueAsync(Arg.Any<RemoveProviderVenueViewModel>());
         }
-
+        
         [Fact]
-        public void Then_ProviderService_UpdateProviderAsync_Is_Called_With_Expected_Values()
+        public void
+            Then_ProviderVenueService_UpdateVenueAsync_Is_Called_With_Expected_Values()
         {
-            _providerService
+            _providerVenueService
                 .Received(1)
-                .UpdateProviderAsync(
-                    Arg.Is<HideProviderViewModel>(
-                        vm => vm.ProviderId == 1 &&
-                                vm.IsEnabledForSearch));
+                .UpdateVenueAsync(
+                    Arg.Is<RemoveProviderVenueViewModel>(
+                        vm => vm.ProviderVenueId == 1 &&
+                              true));
         }
 
         [Fact]

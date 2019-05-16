@@ -37,14 +37,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Provider.Parsing
             _firstProviderDto.OfstedRating.Should().Be(Enum.TryParse(ValidProviderFileImportDtoBuilder.OfstedRating, out OfstedRating _));
 
         [Fact]
-        public void Then_First_ParseResult_Status_Matches_Input() =>
-            _firstProviderDto.Status.Should().BeTrue();
-
-        [Fact]
-        public void Then_First_ParseResult_StatusReason_Matches_Input() =>
-            _firstProviderDto.StatusReason.Should().Be(ValidProviderFileImportDtoBuilder.StatusReason);
-
-        [Fact]
         public void Then_First_ParseResult_PrimaryContact_Matches_Input() =>
             _firstProviderDto.PrimaryContact.Should().Be(ValidProviderFileImportDtoBuilder.PrimaryContactName);
 

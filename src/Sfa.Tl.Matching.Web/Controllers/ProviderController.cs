@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IProviderService _providerService;
-        
+
         public ProviderController(IProviderService providerService, MatchingConfiguration configuration)
         {
             _providerService = providerService;
@@ -26,9 +26,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("search-ukprn", Name = "SearchProvider")]
         public async Task<IActionResult> SearchProvider()
         {
-            return View(await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
+            var model = await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel());
+            
+            model.SearchParameters.ShowAllProvider = false;
+            
+            return View(model);
         }
-        
+
         [HttpPost]
         [Route("search-ukprn", Name = "SearchProviderByUkPrn")]
         public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
@@ -61,88 +65,63 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (providerId > 0)
             {
-                viewModel = await _providerService.GetProviderDetailByIdAsync(providerId, true);
+                viewModel = await _providerService.GetProviderDetailByIdAsync(providerId);
             }
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("provider-overview", Name = "SaveProviderDetail")]
+        [Route("provider-overview/{providerId}", Name = "SaveProviderDetail")]
         public async Task<IActionResult> SaveProviderDetail(ProviderDetailViewModel viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
+            if (viewModel.IsSaveSection)
+                return await PerformSaveSection(viewModel);
 
+            if (!ModelState.IsValid)
+                return View(nameof(ProviderDetail), viewModel);
+
+            if (viewModel.IsSaveAndAddVenue)
+                return await PerformSaveAndAddVenue(viewModel);
+
+            return await PerformSaveAndFinish(viewModel);
+        }
+
+        private async Task<IActionResult> PerformSaveSection(ProviderDetailViewModel viewModel)
+        {
+            if (viewModel.IsCdfProvider)
+            {
+                await _providerService.UpdateProviderDetailSectionAsync(viewModel);
                 return View(nameof(ProviderDetail), viewModel);
             }
 
-            if (viewModel.Id > 0)
-            {
-                await _providerService.UpdateProviderDetail(viewModel);
-            }
-            else
-            {
-                viewModel.Id = await _providerService.CreateProvider(viewModel);
-            }
+            await _providerService.UpdateProviderDetailSectionAsync(viewModel);
 
-            return await ReturnView(viewModel);
+            return View(nameof(SearchProvider),
+                await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
         }
 
-        private async Task<IActionResult> ReturnView(ProviderDetailViewModel viewModel)
+        private async Task<IActionResult> PerformSaveAndAddVenue(ProviderDetailViewModel viewModel)
         {
-            viewModel.ProviderVenue = await _providerService.GetProviderVenueSummaryByProviderIdAsync(viewModel.Id);
-
-            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) && string.Equals(viewModel.SubmitAction, "SaveAndFinish", StringComparison.InvariantCultureIgnoreCase))
+            await _providerService.UpdateProviderDetail(viewModel);
+            return RedirectToRoute("AddVenue", new
             {
-                if (!viewModel.ProviderVenue.Any())
-                {
-                    ModelState.AddModelError("ProviderVenue", "You must add a venue for this provider");
-                    return View(nameof(ProviderDetail), viewModel);
-                }
+                providerId = viewModel.Id
+            });
+        }
 
-                return View(nameof(SearchProvider), await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
+        private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)
+        {
+            if (!viewModel.ProviderVenues.Any())
+            {
+                ModelState.AddModelError(nameof(ProviderVenue), "You must add a venue for this provider");
+                return View(nameof(ProviderDetail), viewModel);
             }
 
-            return View(nameof(ProviderDetail), viewModel);
-        }
+            await _providerService.UpdateProviderDetail(viewModel);
 
-        [HttpGet]
-        [Route("hide-unhide-provider/{providerId}", Name = "GetConfirmProviderChange")]
-        public async Task<IActionResult> ConfirmProviderChange(int providerId)
-        {
-            var viewModel = await _providerService.GetHideProviderViewModelAsync(providerId);
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [Route("hide-unhide-provider/{providerId}", Name = "ConfirmProviderChange")]
-        public async Task<IActionResult> ConfirmProviderChange(HideProviderViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("ConfirmProviderChange", viewModel);
-            }
-
-            viewModel.IsEnabledForSearch = !viewModel.IsEnabledForSearch;
-            await _providerService.UpdateProviderAsync(viewModel);
-
-            return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
-        }
-
-        [HttpPost]
-        [RequestFormLimits(ValueCountLimit = 5000)]
-        [Route("save-provider-feedback", Name = "SaveProviderFeedback")]
-        public async Task<IActionResult> SaveProviderFeedback(SaveProviderFeedbackViewModel viewModel)
-        {
-            await _providerService.UpdateProvider(viewModel);
-
-            if (!string.IsNullOrWhiteSpace(viewModel.SubmitAction) &&
-                string.Equals(viewModel.SubmitAction, "SendEmail", StringComparison.InvariantCultureIgnoreCase))
-                return RedirectToRoute("ConfirmSendProviderEmail");
-
-            return RedirectToRoute("SearchProvider");
+            return View(nameof(SearchProvider),
+                await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
         }
 
         private async Task<ProviderSearchViewModel> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel viewModel)
@@ -158,6 +137,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private ProviderSearchViewModel GetProviderSearchViewModel(ProviderSearchParametersViewModel searchParametersViewModel)
         {
+            searchParametersViewModel.ShowAllProvider = true;
+
             return new ProviderSearchViewModel(searchParametersViewModel)
             {
                 IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)

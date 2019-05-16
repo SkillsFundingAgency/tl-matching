@@ -10,16 +10,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             UkPrn = 10000546,
             Name = "Test Provider",
             DisplayName = "Test Provider Display Name",
-            Status = true,
             PrimaryContact = "Test",
             PrimaryContactEmail = "Test@test.com",
             PrimaryContactPhone = "0123456789",
             SecondaryContact = "Test 2",
             SecondaryContactEmail = "Test2@test.com",
             SecondaryContactPhone = "0123456789",
-            IsEnabledForSearch = true,
+            IsCdfProvider = true,
             IsEnabledForReferral = true,
-            IsFundedForNextYear = true,
             Source = "Test",
             CreatedBy = "CreatedBy",
             ModifiedBy = "ModifiedBy"
@@ -31,7 +29,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             UkPrn = 10000546,
             Name = "Test Name",
             DisplayName = "Test DisplayName",
-            Status = true,
             PrimaryContact = "Test",
             PrimaryContactEmail = "Test@test.com",
             PrimaryContactPhone = "0123456789",
@@ -42,13 +39,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
             CreatedBy = "CreatedBy",
             ModifiedBy = "ModifiedBy",
             IsEnabledForReferral = true,
-            IsEnabledForSearch = true,
-            IsFundedForNextYear = true,
+            IsCdfProvider = true,
             ProviderVenue = new List<Domain.Models.ProviderVenue>
             {
                 new Domain.Models.ProviderVenue
                 {
-                    IsEnabledForSearch = true,
+                    IsEnabledForReferral = true,
+                    IsRemoved = false,
                     Postcode = "CV1 1WT",
                     Id = 10,
                     ProviderQualification = new List<ProviderQualification>
@@ -63,7 +60,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                 },
                 new Domain.Models.ProviderVenue
                 {
-                    IsEnabledForSearch = true,
+                    IsEnabledForReferral = true,
+                    IsRemoved = false,
                     Postcode = "CV1 2WT",
                     Id = 20,
                     ProviderQualification = new List<ProviderQualification>

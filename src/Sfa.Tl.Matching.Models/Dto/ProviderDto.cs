@@ -9,11 +9,8 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public OfstedRating OfstedRating { get; set; }
-        public bool IsEnabledForSearch { get; set; }
         public bool IsEnabledForReferral { get; set; }
-        public bool IsFundedForNextYear { get; set; }
-        public bool Status { get; set; }
-        public string StatusReason { get; set; }
+        public bool IsCdfProvider { get; set; }
         public string PrimaryContact { get; set; }
         public string PrimaryContactEmail { get; set; }
         public string PrimaryContactPhone { get; set; }

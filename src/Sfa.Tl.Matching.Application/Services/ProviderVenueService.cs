@@ -70,20 +70,21 @@ namespace Sfa.Tl.Matching.Application.Services
             await _providerVenueRepository.Update(trackedEntity);
         }
 
-        public async Task UpdateVenueAsync(HideProviderVenueViewModel viewModel)
+        public async Task UpdateVenueAsync(RemoveProviderVenueViewModel viewModel)
         {
-            var providerVenue = _mapper.Map<HideProviderVenueViewModel, ProviderVenue>(viewModel);
+            var providerVenue = _mapper.Map<RemoveProviderVenueViewModel, ProviderVenue>(viewModel);
+            providerVenue.IsRemoved = true;
 
             await _providerVenueRepository.UpdateWithSpecifedColumnsOnly(providerVenue,
-                x => x.IsEnabledForSearch,
+                x => x.IsRemoved,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
 
-        public async Task<HideProviderVenueViewModel> GetHideProviderVenueViewModelAsync(int venueId)
+        public async Task<RemoveProviderVenueViewModel> GetRemoveProviderVenueViewModelAsync(int venueId)
         {
             var providerVenue = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == venueId);
-            return _mapper.Map<ProviderVenue, HideProviderVenueViewModel>(providerVenue);
+            return _mapper.Map<ProviderVenue, RemoveProviderVenueViewModel>(providerVenue);
         }
     }
 }

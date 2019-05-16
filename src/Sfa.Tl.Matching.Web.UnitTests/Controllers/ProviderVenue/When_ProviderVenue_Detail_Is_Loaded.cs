@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                     ProviderId = 1,
                     ProviderName = "ProviderName",
                     Source = "Admin",
-                    IsEnabledForSearch = true,
+                    IsRemoved = false,
                     Name = "VenueName"
                 });
 
@@ -91,10 +91,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         }
         
         [Fact]
-        public void Then_IsEnabledForSearch_Is_Set()
+        public void Then_IsRemoved_Is_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.IsEnabledForSearch.Should().Be(true);
+            viewModel.IsRemoved.Should().BeFalse();
         }
 
         [Fact]

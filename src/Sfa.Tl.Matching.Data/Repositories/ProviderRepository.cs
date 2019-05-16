@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<IList<ProviderWithFundingDto>> GetProvidersWithFundingAsync()
         {
-            return await GetMany(p => p.IsFundedForNextYear)
+            return await GetMany(p => p.IsCdfProvider)
                 .Select(provider => new ProviderWithFundingDto
                 {
                     Id = provider.Id,
@@ -29,11 +29,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     SecondaryContactPhone = provider.SecondaryContactPhone,
                     SecondaryContactEmail = provider.SecondaryContactEmail,
                     CreatedBy = provider.CreatedBy,
-                    ProviderVenues = provider.ProviderVenue.Select(venue => new ProviderVenueQualificationsInfoDto
+                    ProviderVenues = provider.ProviderVenue
+                        .Where(venue => !venue.IsRemoved)
+                        .Select(venue => new ProviderVenueQualificationsInfoDto
                     {
                         Postcode = venue.Postcode,
                         Qualifications = venue.ProviderQualification
-                            //.OrderBy(q => new { q.Qualification.Title, q.Qualification.LarsId })
                             .Select(qualification => new QualificationInfoDto
                             {
                                 LarsId = qualification.Qualification.LarsId,

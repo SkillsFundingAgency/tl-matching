@@ -68,51 +68,46 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
             {
                 viewModel = await Populate(viewModel.Id);
-                return View("ProviderVenueDetail", viewModel);
+                return View(viewModel);
             }
 
             await _providerVenueService.UpdateVenueAsync(viewModel);
 
             var isSaveSection = IsSaveSection(viewModel.SubmitAction);
             if (isSaveSection)
-                return View("ProviderVenueDetail", viewModel);
+                return View(viewModel);
 
-            //if (viewModel.Qualifications == null || viewModel.Qualifications.Count == 0)
-            //{
-            //    ModelState.AddModelError("Qualifications", "You must add a qualification for this venue");
-            //    viewModel = await Populate(viewModel.Id);
-            //    return View(viewModel);
-            //}
+            if (viewModel.Qualifications == null || viewModel.Qualifications.Count == 0)
+            {
+                //TODO: Uncomment when Add Qualification is implemented
+                //    return RedirectToRoute("AddQualification", new { providerVenueId = viewModel.Id });
+                return View(viewModel);
+            }
 
             return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
 
         [HttpGet]
-        [Route("hide-unhide-venue/{providerVenueId}/{providerId?}", Name = "GetConfirmProviderVenueChange")]
-        public async Task<IActionResult> ConfirmProviderVenueChange(int providerVenueId, int providerId = 0)
+        [Route("remove-venue/{providerVenueId}", Name = "GetConfirmRemoveProviderVenue")]
+        public async Task<IActionResult> ConfirmRemoveProviderVenue(int providerVenueId)
         {
-            var viewModel = await _providerVenueService.GetHideProviderVenueViewModelAsync(providerVenueId);
-
-            viewModel.ProviderId = providerId;
+            var viewModel = await _providerVenueService.GetRemoveProviderVenueViewModelAsync(providerVenueId);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("hide-unhide-venue/{providerVenueId}", Name = "ConfirmProviderVenueChange")]
-        public async Task<IActionResult> ConfirmProviderVenueChange(HideProviderVenueViewModel viewModel)
+        [Route("remove-venue/{providerVenueId}", Name = "ConfirmRemoveProviderVenue")]
+        public async Task<IActionResult> ConfirmRemoveProviderVenue(RemoveProviderVenueViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View("ConfirmProviderVenueChange", viewModel);
+                return View("ConfirmRemoveProviderVenue", viewModel);
             }
 
-            viewModel.IsEnabledForSearch = !viewModel.IsEnabledForSearch;
             await _providerVenueService.UpdateVenueAsync(viewModel);
-            
-            return  viewModel.ProviderId == 0 
-                ? RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.ProviderVenueId })
-                : RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
+
+            return RedirectToRoute("GetProviderDetail", new { providerId = viewModel.ProviderId });
         }
 
         private async Task<ProviderVenueDetailViewModel> Populate(int providerVenueId)

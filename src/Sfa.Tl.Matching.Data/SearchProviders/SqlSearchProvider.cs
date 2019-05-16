@@ -44,8 +44,10 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                 orderby providerVenue.Location.Distance(employerLocation)
                                 where path.RouteId == dto.SelectedRouteId 
                                       && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters 
-                                      && provider.IsEnabledForSearch
-                                      && providerVenue.IsEnabledForSearch
+                                      && provider.IsCdfProvider
+                                      && provider.IsEnabledForReferral
+                                      && providerVenue.IsEnabledForReferral
+									  && !providerVenue.IsRemoved                                      
                                 select new
                                 {
                                     ProviderVenueId = providerVenue.Id,
