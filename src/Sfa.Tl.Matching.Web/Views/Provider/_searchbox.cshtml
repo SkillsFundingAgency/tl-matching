@@ -36,4 +36,8 @@
                 </div>
             </div>
         </div>
+        @if (Model.ShowAllProvider)
+        {
+            <p class="govuk-body"><a class="govuk-link" asp-route="SearchProvider">Show all providers</a></p>
+        }
     </form>

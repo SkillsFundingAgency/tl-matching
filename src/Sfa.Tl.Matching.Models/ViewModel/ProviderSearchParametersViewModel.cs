@@ -6,7 +6,9 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     public class ProviderSearchParametersViewModel
     {
         [Required(ErrorMessage = "You must enter a UKPRN")]
-        [DisplayNameAttribute("UKPRN")]
+        [DisplayName("UKPRN")]
         public long? UkPrn { get; set; }
+
+        public bool ShowAllProvider { get; set; }
     }
 }

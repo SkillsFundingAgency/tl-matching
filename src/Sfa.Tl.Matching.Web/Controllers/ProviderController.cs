@@ -26,9 +26,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("search-ukprn", Name = "SearchProvider")]
         public async Task<IActionResult> SearchProvider()
         {
-            return View(await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
+            var model = await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel());
+            
+            model.SearchParameters.ShowAllProvider = false;
+            
+            return View(model);
         }
-        
+
         [HttpPost]
         [Route("search-ukprn", Name = "SearchProviderByUkPrn")]
         public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
@@ -138,6 +142,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private ProviderSearchViewModel GetProviderSearchViewModel(ProviderSearchParametersViewModel searchParametersViewModel)
         {
+            searchParametersViewModel.ShowAllProvider = true;
+
             return new ProviderSearchViewModel(searchParametersViewModel)
             {
                 IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
