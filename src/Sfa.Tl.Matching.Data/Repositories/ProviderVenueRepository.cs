@@ -27,7 +27,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                  ProviderId = pv.ProviderId,
                                  ProviderName = pv.Provider.Name,
                                  Postcode = pv.Postcode,
-                                 Name = pv.Name,
+                                 Name = !string.IsNullOrEmpty(pv.Name) ? pv.Name :
+                                        !string.IsNullOrEmpty(pv.Provider.DisplayName) ? pv.Provider.DisplayName :
+                                        pv.Provider.Name,
                                  IsEnabledForReferral = pv.IsEnabledForReferral,
                                  IsRemoved = pv.IsRemoved,
                                  Qualifications = (from q in _dbContext.Qualification

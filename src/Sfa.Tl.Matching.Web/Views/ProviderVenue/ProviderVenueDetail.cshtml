@@ -24,7 +24,8 @@
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 <li><a sfa-validation-for="Name"></a></li>
-               @* <li><a href="#addQual" sfa-validation-for="@Model.Qualifications"></a></li>*@
+                @*
+                    <li><a href="#addQual" sfa-validation-for="@Model.Qualifications"></a></li>*@
             </ul>
         </div>
     </div>
@@ -32,6 +33,7 @@
 <form asp-route="SaveProviderVenueDetail" novalidate>
     <input asp-for="Id" type="hidden" />
     <input asp-for="ProviderId" type="hidden" />
+    <input asp-for="ProviderName" type="hidden" />
     <input asp-for="IsFromAddVenue" type="hidden" />
     <input asp-for="Postcode" type="hidden" />
     <input asp-for="Source" value="Admin" type="hidden" />
@@ -116,23 +118,23 @@
             </table>
 
             @*<p class="govuk-body">
-            <a class="govuk-link" id="addQual" href="#">Add a qualification</a>
-        </p>*@
-            
-        @if (Model.Qualifications == null || Model.Qualifications.Count == 0)
-        {
-            <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm"
-                    name="SubmitAction" value="SaveAndAdd">
-                Save and add a qualification
-            </button>
-        }
-        else
-        {
-            <button type="submit" class="govuk-button" id="tl-confirm"
-                    name="SubmitAction" value="SaveAndFinish">
-                Save and return to provider overview
-            </button>
-        }
+                    <a class="govuk-link" id="addQual" href="#">Add a qualification</a>
+                </p>*@
+
+            @if (Model.Qualifications == null || Model.Qualifications.Count == 0)
+            {
+                <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm"
+                        name="SubmitAction" value="SaveAndAdd">
+                    Save and add a qualification
+                </button>
+            }
+            else
+            {
+                <button type="submit" class="govuk-button" id="tl-confirm"
+                        name="SubmitAction" value="SaveAndFinish">
+                    Save and return to provider overview
+                </button>
+            }
         </div>
     </div>
 </form>
