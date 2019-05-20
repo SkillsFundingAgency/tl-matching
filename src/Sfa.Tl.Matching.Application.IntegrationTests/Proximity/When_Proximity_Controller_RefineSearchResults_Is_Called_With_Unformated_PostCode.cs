@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +21,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
         public When_Proximity_Controller_RefineSearchResults_Is_Called_With_Unformated_PostCode()
         {
+            const string requestPostcode = "Cv 12 Wt";
+            var httpClient = new PostcodesIoHttpClient().Get(requestPostcode);
+
             var routes = new List<Route>
             {
                 new Route {Id = 1, Name = "Route 1"}
@@ -29,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
             var mapper = Substitute.For<IMapper>();
 
-            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), new LocationService(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }));
+            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), new LocationService(httpClient, new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
@@ -39,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
             var viewModel = new SearchParametersViewModel
             {
-                Postcode = "Cv 12 Wt",
+                Postcode = requestPostcode,
                 SelectedRouteId = 1,
                 SearchRadius = 10
             };

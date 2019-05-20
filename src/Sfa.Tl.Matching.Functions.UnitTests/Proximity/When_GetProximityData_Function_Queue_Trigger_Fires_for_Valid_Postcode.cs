@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 
         public When_GetProximityData_Function_Queue_Trigger_Fires_For_Valid_Postcode()
         {
-            var httpClient = new PostcodesIoHttpClient().Get("CV1 2WT");
+            var httpClient = new PostcodesIoHttpClient().Get();
 
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
