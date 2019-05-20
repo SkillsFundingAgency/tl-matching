@@ -120,8 +120,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _providerService.UpdateProviderDetail(viewModel);
 
-            return View(nameof(SearchProvider),
-                await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
+            return RedirectToAction(nameof(SearchProvider));
         }
 
         private async Task<ProviderSearchViewModel> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel viewModel)
