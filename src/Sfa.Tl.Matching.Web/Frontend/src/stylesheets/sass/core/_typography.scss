@@ -1,3 +1,8 @@
 body {
     @include govuk-typography-common($govuk-font-family);
 }
+
+.tl-wrap {
+    white-space: normal;
+    word-break: break-all;
+}

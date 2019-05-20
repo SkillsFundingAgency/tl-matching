@@ -70,7 +70,12 @@
 
         if (hasCookieMessage) {
             message.style.display = 'block';
-            GOVUK.cookie('seen_cookie_message', 'yes', { days: 28 });
+
+            $('#global-cookie-message-dismiss').click(function (e) {
+                GOVUK.cookie('seen_cookie_message', 'yes', { days: 28 });
+                message.style.display = 'none';
+                e.preventDefault();
+            });
         }
     };
 }).call(this);
