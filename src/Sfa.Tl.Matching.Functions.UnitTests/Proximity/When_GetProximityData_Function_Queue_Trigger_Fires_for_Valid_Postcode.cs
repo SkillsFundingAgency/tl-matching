@@ -1,8 +1,7 @@
-﻿using System.Net.Http;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
-using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Azure.WebJobs;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Mappers;
@@ -20,18 +19,23 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 
         public When_GetProximityData_Function_Queue_Trigger_Fires_For_Valid_Postcode()
         {
+            var httpClient = new PostcodesIoHttpClient().Get();
+
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
             
             var locationService = new LocationService(
-                new HttpClient(), 
+                httpClient, 
                 new MatchingConfiguration
                 {
                     PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes"
                 });
             
             var proximityfunctions = new Functions.Proximity();
-           _result = proximityfunctions.GetProximityData(new GetProximityData { Postcode = "CV12WT" }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, locationService, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
+           _result = proximityfunctions.GetProximityData(new GetProximityData
+           {
+               Postcode = "CV12WT"
+           }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, locationService, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
         }
 
         [Fact]

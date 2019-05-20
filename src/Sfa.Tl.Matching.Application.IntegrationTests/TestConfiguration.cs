@@ -12,6 +12,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests
     {
         public static MatchingConfiguration MatchingConfiguration { get; }
 
+        public static bool IsMockedHttpClient;
+
         static TestConfiguration()
         {
             var configuration = new ConfigurationBuilder()
@@ -23,12 +25,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests
                 configuration["ConfigurationStorageConnectionString"],
                 configuration["Version"],
                 configuration["ServiceName"]);
+
+            IsMockedHttpClient = bool.Parse(configuration["IsMockedHttpClient"]);
         }
 
         public MatchingDbContext GetDbContext()
         {
             var dbOptions = new DbContextOptionsBuilder<MatchingDbContext>()
-                .UseSqlServer(MatchingConfiguration.SqlConnectionString, builder => 
+                .UseSqlServer(MatchingConfiguration.SqlConnectionString, builder =>
                     builder
                         .EnableRetryOnFailure()
                         .UseNetTopologySuite())
