@@ -10,11 +10,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
     public class PostcodesIoHttpClient
     {
-        private const bool IsMockedHttpClient = false;
+        private readonly bool _isMockedHttpClient;
+
+        public PostcodesIoHttpClient()
+        {
+            _isMockedHttpClient = TestConfiguration.IsMockedHttpClient;
+        }
 
         public HttpClient Get(string requestPostcode = "CV1 2WT", string responsePostcode = "CV1 2WT")
         {
-            if (IsMockedHttpClient)
+            if (_isMockedHttpClient)
                 return GetMockedHttpClient(requestPostcode, responsePostcode);
 
             return new HttpClient();
