@@ -275,8 +275,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("hasVenues")
-                                  && tokens["hasVenues"] == "no"),
+                        tokens => tokens.ContainsKey("provider_has_venues")
+                                  && tokens["provider_has_venues"] == "no"),
                     Arg.Any<string>());
         }
 
@@ -289,8 +289,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("noVenues")
-                                  && tokens["noVenues"] == "yes"),
+                        tokens => tokens.ContainsKey("provider_has_no_venues")
+                                  && tokens["provider_has_no_venues"] == "yes"),
                     Arg.Any<string>());
         }
 

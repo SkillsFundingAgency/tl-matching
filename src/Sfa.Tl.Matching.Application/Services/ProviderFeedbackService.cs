@@ -88,12 +88,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     var tokens = new Dictionary<string, string>
                     {
-                        {"provider_name", provider.Name},
-                        {"primary_contact_name", provider.PrimaryContact},
-                        {"primary_contact_email", provider.PrimaryContactEmail},
-                        {"primary_contact_phone", provider.PrimaryContactPhone},
-                        {"hasVenues", provider.ProviderVenues.Any() ? "yes" : "no"},
-                        { "noVenues", provider.ProviderVenues.Any() ? "no" : "yes"}
+                        { "provider_name", provider.Name },
+                        { "primary_contact_name", provider.PrimaryContact },
+                        { "primary_contact_email", provider.PrimaryContactEmail },
+                        { "primary_contact_phone", provider.PrimaryContactPhone },
+                        { "provider_has_venues", provider.ProviderVenues.Any() ? "yes" : "no" },
+                        { "provider_has_no_venues", provider.ProviderVenues.Any() ? "no" : "yes" }
                     };
 
                     var venuesListBuilder = new StringBuilder();
