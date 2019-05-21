@@ -27,9 +27,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> SearchProvider()
         {
             var model = await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel());
-            
+
             model.SearchParameters.ShowAllProvider = false;
-            
+
             return View(model);
         }
 
@@ -89,16 +89,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<IActionResult> PerformSaveSection(ProviderDetailViewModel viewModel)
         {
-            if (viewModel.IsCdfProvider)
-            {
-                await _providerService.UpdateProviderDetailSectionAsync(viewModel);
-                return View(nameof(ProviderDetail), viewModel);
-            }
-
             await _providerService.UpdateProviderDetailSectionAsync(viewModel);
-
-            return View(nameof(SearchProvider),
-                await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()));
+            return RedirectToAction(nameof(ProviderDetail), viewModel.Id);
         }
 
         private async Task<IActionResult> PerformSaveAndAddVenue(ProviderDetailViewModel viewModel)

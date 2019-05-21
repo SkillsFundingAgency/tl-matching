@@ -68,16 +68,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             _result.Should().BeOfType<ViewResult>();
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_Provider_Detail()
+        public void Then_Result_Is_Redirect_To_Provider_Detail_With_Provider_Id()
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteName.Should().BeEquivalentTo("GetProviderDetail");
-        }
-        
-        [Fact]
-        public void Then_Result_Is_Redirect_With_Id()
-        {
-            var redirect = _result as RedirectToRouteResult;
             redirect?.RouteValues
                 .Should()
                 .Contain(new KeyValuePair<string, object>("providerId", 1));
