@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -36,10 +37,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_View_Result_Is_Returned_For_ProviderDetail()
+        public void Then_Result_Is_Redirect_To_Provider_Detail_With_Provider_Id()
         {
-            _result.Should().BeAssignableTo<ViewResult>();
-            ((ViewResult)_result).ViewName.Should().Be("SearchProvider");
+            var redirect = _result as RedirectToRouteResult;
+            redirect?.RouteName.Should().BeEquivalentTo("GetProviderDetail");
+            redirect?.RouteValues
+                .Should()
+                .Contain(new KeyValuePair<string, object>("providerId", 1));
         }
     }
 }

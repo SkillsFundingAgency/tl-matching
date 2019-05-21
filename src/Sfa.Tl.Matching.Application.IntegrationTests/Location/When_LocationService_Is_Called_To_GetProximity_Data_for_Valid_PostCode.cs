@@ -1,6 +1,6 @@
-﻿using System.Net.Http;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Application.IntegrationTests.Proximity;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
@@ -13,7 +13,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
 
         public When_LocationService_Is_Called_To_GetProximity_Data_For_Valid_PostCode()
         {
-            var locationService = new LocationService(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
+            var httpClient = new PostcodesIoHttpClient().Get();
+
+            var locationService = new LocationService(httpClient, new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
             _postCodeLookupResultDto = locationService.GetGeoLocationData("CV1 2WT").GetAwaiter().GetResult();
         }
 

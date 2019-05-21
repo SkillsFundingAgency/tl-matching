@@ -46,8 +46,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_View_Result_Is_Returned_For_SearchProvider()
         {
-            _result.Should().BeAssignableTo<ViewResult>();
-            ((ViewResult)_result).ViewName.Should().Be("SearchProvider");
+            _result.Should().BeAssignableTo<RedirectToActionResult>();
+            ((RedirectToActionResult)_result).ActionName.Should().Be("SearchProvider");
         }
 
         [Fact]

@@ -14,10 +14,14 @@ not exists (select 1 from sys.columns where name = 'IsCDFProvider' and object_na
 	EXEC sp_rename 'Provider.IsEnabledForSearch', 'IsCDFProvider', 'COLUMN';
 GO
 
---Copy IsFundedForNextYear to IsCDFProvider
+--Copy IsFundedForNextYear to IsCDFProvider and IsEnabledForReferral
 if exists (select 1 from sys.columns where name = 'IsFundedForNextYear' and object_name(object_id) = 'Provider')
 	EXEC('UPDATE [dbo].[Provider]
 		 SET [IsCDFProvider] = [IsFundedForNextYear]')
+GO
+
+EXEC('UPDATE [dbo].[Provider]
+      Set [IsEnabledForReferral] = [IsCDFProvider]')
 GO
 
 if exists (select 1 from sys.columns where name = 'IsFundedForNextYear' and object_name(object_id) = 'Provider')
