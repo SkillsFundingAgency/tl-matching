@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
@@ -15,26 +13,19 @@ using Xunit;
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
     public class When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_And_Status_Is_Processing
+        : IClassFixture<ProviderFeedbackFixture>
     {
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IProviderRepository _providerRepository;
         private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
 
-        public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_And_Status_Is_Processing()
+        public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_And_Status_Is_Processing(ProviderFeedbackFixture testFixture)
         {
-            var configuration = new MatchingConfiguration
-            {
-                SendEmailEnabled = true,
-                NotificationsSystemId = "TLevelsIndustryPlacement"
-            };
-
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
 
             var messageQueueService = Substitute.For<IMessageQueueService>();
-            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
-            var logger = Substitute.For<ILogger<ProviderFeedbackService>>();
 
             _providerRepository = Substitute.For<IProviderRepository>();
             _providerRepository
@@ -50,10 +41,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Returns(providerFeedbackRequestHistory);
 
             var providerFeedbackService = new ProviderFeedbackService(
-                    configuration, logger, 
+                testFixture.Configuration, testFixture.Logger,
                     _emailService, _emailHistoryService,
                     _providerRepository, _providerFeedbackRequestHistoryRepository,
-                    messageQueueService, dateTimeProvider);
+                    messageQueueService, testFixture.DateTimeProvider);
 
             providerFeedbackService
                 .SendProviderQuarterlyUpdateEmailsAsync(1, "TestUser")
