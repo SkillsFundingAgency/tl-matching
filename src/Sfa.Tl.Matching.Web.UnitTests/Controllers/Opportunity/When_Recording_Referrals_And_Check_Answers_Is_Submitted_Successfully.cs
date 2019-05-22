@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
         
         [Fact]
-        public void Then_Result_Is_Redirect_to_EmailsSent()
+        public void Then_Result_Is_Redirect_To_EmailsSent()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
