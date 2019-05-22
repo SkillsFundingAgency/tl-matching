@@ -267,6 +267,34 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         }
 
         [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Has_Venues_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("provider_has_venues")
+                                  && tokens["provider_has_venues"] == "yes"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_No_Venues_Token()
+        {
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("provider_has_no_venues")
+                                  && tokens["provider_has_no_venues"] == "no"),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Venues_and_Qualifications_List_Token()
         {
             const string expectedProviderVenueQualificationsList = 

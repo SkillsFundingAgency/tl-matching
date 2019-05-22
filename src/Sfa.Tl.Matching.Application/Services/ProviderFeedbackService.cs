@@ -88,13 +88,16 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     var tokens = new Dictionary<string, string>
                     {
-                        {"provider_name", provider.Name},
-                        {"primary_contact_name", provider.PrimaryContact},
-                        {"primary_contact_email", provider.PrimaryContactEmail},
-                        {"primary_contact_phone", provider.PrimaryContactPhone}
+                        { "provider_name", provider.Name },
+                        { "primary_contact_name", provider.PrimaryContact },
+                        { "primary_contact_email", provider.PrimaryContactEmail },
+                        { "primary_contact_phone", provider.PrimaryContactPhone },
+                        { "provider_has_venues", provider.ProviderVenues.Any() ? "yes" : "no" },
+                        { "provider_has_no_venues", provider.ProviderVenues.Any() ? "no" : "yes" }
                     };
 
                     var venuesListBuilder = new StringBuilder();
+
                     foreach (var providerVenue in provider.ProviderVenues)
                     {
                         venuesListBuilder.AppendLine($"{providerVenue.Postcode}:");
@@ -102,14 +105,11 @@ namespace Sfa.Tl.Matching.Application.Services
                         {
                             venuesListBuilder.AppendLine("* no qualifications with an industry placement option");
                         }
-                        else
+
+                        foreach (var qualification in providerVenue.Qualifications
+                                                                   .OrderBy(q => q.LarsId))
                         {
-                            foreach (var qualification in providerVenue
-                                                        .Qualifications
-                                                        .OrderBy(q => q.LarsId))
-                            {
-                                venuesListBuilder.AppendLine($"* {qualification.LarsId}: {qualification.Title}");
-                            }
+                            venuesListBuilder.AppendLine($"* {qualification.LarsId}: {qualification.Title}");
                         }
 
                         venuesListBuilder.AppendLine("");

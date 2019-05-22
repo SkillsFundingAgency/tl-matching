@@ -13,7 +13,8 @@ So that we can help you, please tell us:
 Email: [support.industryplacementmatching@education.gov.uk](mailto:support.industryplacementmatching@education.gov.uk?subject=Latest+provider+information) 
 
 # Your current industry placement information
-We hold the following information about your venues and courses that have an industry placement option:
+((hasVenues??We hold the following information about your venues and courses that have an industry placement option:))
+((noVenues??We do not hold any information about venues and courses that have an industry placement option.))
 
 ((venues_and_qualifications_list))
 

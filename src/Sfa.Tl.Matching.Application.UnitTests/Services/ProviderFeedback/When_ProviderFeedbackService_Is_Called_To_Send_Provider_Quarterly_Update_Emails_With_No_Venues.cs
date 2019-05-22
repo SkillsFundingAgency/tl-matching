@@ -16,7 +16,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
-    public class When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails
+    public class When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_With_No_Venues
     {
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
         private readonly IList<ProviderFeedbackRequestHistory> _recievedProviderFeedbackRequestHistories;
 
-        public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails()
+        public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_With_No_Venues()
         {
             var configuration = new MatchingConfiguration
             {
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _providerRepository = Substitute.For<IProviderRepository>();
             _providerRepository
                 .GetProvidersWithFundingAsync()
-                .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
+                .Returns(new ValidProviderWithFundingDtoListBuilder().BuildWithNoVenues());
 
             _providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
             _providerFeedbackRequestHistoryRepository
@@ -265,7 +265,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                                   && tokens["secondary_contact_details"] == expectedSecondaryDetailsList),
                     Arg.Any<string>());
         }
-        
+
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Has_Venues_Token()
         {
@@ -276,7 +276,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("provider_has_venues")
-                                  && tokens["provider_has_venues"] == "yes"),
+                                  && tokens["provider_has_venues"] == "no"),
                     Arg.Any<string>());
         }
 
@@ -290,17 +290,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("provider_has_no_venues")
-                                  && tokens["provider_has_no_venues"] == "no"),
+                                  && tokens["provider_has_no_venues"] == "yes"),
                     Arg.Any<string>());
         }
 
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Venues_and_Qualifications_List_Token()
         {
-            const string expectedProviderVenueQualificationsList = "AA1 1AA:\r\n"
-                                                 + "* 10042982: Qualification 1\r\n"
-                                                 + "* 60165522: Qualification 2\r\n"
-                                                 + "\r\n";
+            const string expectedProviderVenueQualificationsList = "";
 
             _emailService
                 .Received(1)
@@ -312,7 +309,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                                   && tokens["venues_and_qualifications_list"] == expectedProviderVenueQualificationsList),
                     Arg.Any<string>());
         }
-
+        
         [Fact]
         public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
         {
