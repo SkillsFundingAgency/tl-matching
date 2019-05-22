@@ -16,6 +16,9 @@ namespace Sfa.Tl.Matching.Models.Enums
         ProviderQualification,
         
         [Description("Route & pathway mapping")]
-        QualificationRoutePathMapping
+        QualificationRoutePathMapping,
+
+        [Description("Learning Aims Reference")]
+        LearningAimsReference
     }
 }
