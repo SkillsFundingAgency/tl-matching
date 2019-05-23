@@ -52,17 +52,18 @@ namespace Sfa.Tl.Matching.Application.FileReader
 
                 var columnProperties = fileImportDto.GetType().GetProperties()
                     .Where(pr => pr.GetCustomAttribute<ColumnAttribute>(false) != null)
+                    .Select(prop => new { ColumnInfo = prop, Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order })
                     .ToList();
 
                 foreach (var row in rows)
                 {
-                    foreach (var prop in columnProperties)
+                    foreach (var column in columnProperties)
                     {
-                        var cell = GetCellByIndex(prop.GetCustomAttribute<ColumnAttribute>(false).Order, startIndex, row);
+                        var cell = GetCellByIndex(column.Index, startIndex, row);
 
                         var cellValue = GetCellValue(stringTablePart, cell);
 
-                        prop.SetValue(fileImportDto, cellValue.Trim());
+                        column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
                     }
 
                     ValidationResult validationResult;
