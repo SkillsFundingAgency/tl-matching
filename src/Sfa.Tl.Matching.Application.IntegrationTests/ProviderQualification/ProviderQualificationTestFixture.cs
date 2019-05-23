@@ -106,11 +106,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
                 ShortTitle = nameof(ProviderQualificationTestFixture),
                 CreatedOn = CreatedOn,
                 CreatedBy = CreatedByUser,
-                QualificationRoutePathMapping = new List<Domain.Models.QualificationRoutePathMapping>
+                QualificationRoutePathMapping = new List<QualificationRoutePathMapping>
                 {
-                    new Domain.Models.QualificationRoutePathMapping
+                    new QualificationRoutePathMapping
                     {
-                        PathId = 10,
+                        RouteId = 5,
                         Source = nameof(ProviderQualificationTestFixture),
                         CreatedOn = CreatedOn,
                         CreatedBy = CreatedByUser                        

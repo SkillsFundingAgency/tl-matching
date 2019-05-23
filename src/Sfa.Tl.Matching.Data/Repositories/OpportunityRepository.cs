@@ -92,8 +92,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                           (from pq in _dbContext.ProviderQualification
                                               join q in _dbContext.Qualification on pq.QualificationId equals q.Id
                                               join qm in _dbContext.QualificationRoutePathMapping on q.Id equals qm.QualificationId
-                                              join path in _dbContext.Path on qm.PathId equals path.Id 
-                                              where pv.Id == pq.ProviderVenueId && path.RouteId == op.RouteId
+                                              where pv.Id == pq.ProviderVenueId && qm.RouteId == op.RouteId
                                               select q.ShortTitle).Distinct().ToList()
                                   }).ToList()
                           }).SingleOrDefaultAsync();

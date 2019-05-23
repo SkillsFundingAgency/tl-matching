@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapp
         public Domain.Models.QualificationRoutePathMapping Build() => new Domain.Models.QualificationRoutePathMapping
         {
             Id = QualificationRoutePathMappingConstants.Id,
-            PathId = QualificationRoutePathMappingConstants.PathId,
+            RouteId = QualificationRoutePathMappingConstants.RouteId,
             Source = QualificationRoutePathMappingConstants.Source,
             CreatedBy = EntityCreationConstants.CreatedByUser,
             CreatedOn = EntityCreationConstants.CreatedOn,

@@ -156,42 +156,21 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
             new Domain.Models.QualificationRoutePathMapping
             {
                 Id = 1,
-                PathId = 1,
+                RouteId = 1,
                 Source = "Test",
                 QualificationId = 1
             },
             new Domain.Models.QualificationRoutePathMapping
             {
                 Id = 2,
-                PathId = 1,
+                RouteId = 1,
                 Source = "Test",
                 QualificationId = 2
             },
             new Domain.Models.QualificationRoutePathMapping
             {
                 Id = 3,
-                PathId = 2,
-                Source = "Test",
-                QualificationId = 1
-            },
-            new Domain.Models.QualificationRoutePathMapping
-            {
-                Id = 4,
-                PathId = 2,
-                Source = "Test",
-                QualificationId = 2
-            },
-            new Domain.Models.QualificationRoutePathMapping
-            {
-                Id = 5,
-                PathId = 3,
-                Source = "Test",
-                QualificationId = 3
-            },
-            new Domain.Models.QualificationRoutePathMapping
-            {
-                Id = 6,
-                PathId = 4,
+                RouteId = 1,
                 Source = "Test",
                 QualificationId = 3
             }
