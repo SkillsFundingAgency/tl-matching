@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -13,18 +14,20 @@ namespace Sfa.Tl.Matching.Models.Extensions
         {
             var memInfo = importFileType.GetType().GetTypeInfo().GetDeclaredField(importFileType.ToString());
 
-            var attribute = memInfo.GetCustomAttributes(true).Single(atype => atype.GetType().FullName == "System.ComponentModel.DataAnnotations.FileExtensionsAttribute");
+            var attribute = memInfo.GetCustomAttributes(true).Single(attributeType => attributeType is FileExtensionsAttribute);
 
-            var extensionsPropInfo = attribute.GetType().GetProperties().Single(prop => prop.Name == "Extensions");
-            var errorMessagePropInfo = attribute.GetType().GetProperties().Single(prop => prop.Name == "ErrorMessage");
+            var fileContentType = typeof(FileExtensionsAttribute)
+                                .GetProperty("Extensions")
+                                .GetValue(attribute)
+                                .ToString();
 
-            var extension = extensionsPropInfo.GetValue(attribute).ToString();
-            var errorType = errorMessagePropInfo.GetValue(attribute).ToString();
-            var fileExtensionType = errorType == Excel ? "XLSX" : "CSV";
+            var isExcel = fileContentType == Excel;
+            var fileExtensionType = isExcel ? "XLSX" : "CSV";
+            var fileType = isExcel ? "Excel" : "CSV";
+            
+            var errorMessage = $"You must upload an { fileType } file with the { fileExtensionType } file extension";
 
-            var errorMessage = $"You must upload an {errorType} file with the {fileExtensionType} file extension";
-
-            return (extension, errorMessage);
+            return (fileContentType, errorMessage);
         }
     }
 }

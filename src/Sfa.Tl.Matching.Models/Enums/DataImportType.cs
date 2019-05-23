@@ -6,22 +6,22 @@ namespace Sfa.Tl.Matching.Models.Enums
 {
     public enum DataImportType
     {
-        [Description("Employer CRM data")]
+        [Description("Employer CRM data"), FileExtensions(Extensions = FileImportTypeExtensions.Excel)]
         Employer = 1,
 
-        [FileExtensions(Extensions = FileImportTypeExtensions.Excel, ErrorMessage = "Excel")]
+        [FileExtensions(Extensions = FileImportTypeExtensions.Excel)]
         Provider,
 
-        [Description("Provider venue"), FileExtensions(Extensions = FileImportTypeExtensions.Excel, ErrorMessage = "Excel")]
+        [Description("Provider venue"), FileExtensions(Extensions = FileImportTypeExtensions.Excel)]
         ProviderVenue,
 
-        [Description("Provider qualification"), FileExtensions(Extensions = FileImportTypeExtensions.Excel, ErrorMessage = "Excel")]
+        [Description("Provider qualification"), FileExtensions(Extensions = FileImportTypeExtensions.Excel)]
         ProviderQualification,
 
-        [Description("Route & pathway mapping"), FileExtensions(Extensions = FileImportTypeExtensions.Excel, ErrorMessage = "Excel")]
+        [Description("Route & pathway mapping"), FileExtensions(Extensions = FileImportTypeExtensions.Excel)]
         QualificationRoutePathMapping,
 
-        [Description("Learning Aims Reference"), FileExtensions(Extensions = FileImportTypeExtensions.Csv, ErrorMessage = "Csv")]
+        [Description("Learning Aims Reference"), FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
         LearningAimsReference
     }
 }
