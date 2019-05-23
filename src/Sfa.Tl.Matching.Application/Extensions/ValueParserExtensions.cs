@@ -37,6 +37,11 @@ namespace Sfa.Tl.Matching.Application.Extensions
                new string(Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
         }
 
+        public static DateTime ToDateTime(this string value)
+        {
+            return DateTime.Parse(value);
+        }
+
         public static int ToInt(this string value)
         {
             return int.Parse(value);
