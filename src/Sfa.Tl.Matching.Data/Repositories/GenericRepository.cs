@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain;
 using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.Repositories
@@ -199,7 +203,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
                     using (var transaction = connection.BeginTransaction())
                     {
-                        var deleteCommand = new SqlCommand($"DELETE FROM {typeof(T).Name}; DBCC CHECKIDENT ('dbo.{typeof(T).Name}',RESEED, 0);", connection, transaction);
+                        //var deleteCommand = new SqlCommand($"DELETE FROM {typeof(T).Name}; DBCC CHECKIDENT ('dbo.{typeof(T).Name}',RESEED, 0);", connection, transaction);
+                        var deleteCommand = new SqlCommand($"DELETE FROM {typeof(T).Name};", connection, transaction);
                         deleteCommand.ExecuteNonQuery();
 
                         using (var bulkCopy = CreateSqlBulkCopy(connection, transaction, dataTable))
@@ -234,7 +239,49 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public Task MergeFromStaging()
         {
-            throw new NotImplementedException();
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            {
+                using (var connection = new SqlConnection(_dbContext.Database.GetDbConnection().ConnectionString))
+                {
+                    connection.Open();
+
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        var mergeCommand = GetMergeCommand();
+                    }
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private string GetMergeCommand()
+        {
+            var sourceType = typeof(T);
+            var source = sourceType.Name;
+
+            var target = source.Replace("Staging", string.Empty);
+            var targetType = sourceType.Assembly.GetTypes().Single(t => t.Name == target);
+
+            var ignoredColumn = new[] { "ModifiedOn", "ModifiedBy" };
+
+            var columnNameList = sourceType.GetProperties()
+                .Where(prop => prop.GetCustomAttribute<KeyAttribute>(false) == null
+                             && prop.GetCustomAttribute<DatabaseGeneratedAttribute>(false) == null
+                             && !ignoredColumn.Contains(prop.Name))
+                .Select(prop => prop.Name)
+                .ToList();
+
+            var targetColumnList = string.Join(", ", columnNameList);
+
+            var sourceColumnList = string.Join(", ", columnNameList.Select(col => $"SOURCE.{col}"));
+
+            var fromSourceToTargetMappingForUpdate = $"{string.Join(", ", columnNameList.Select(col => $"{col} = SOURCE.{col}"))}, ModifiedBy = SOURCE.CreatedBy, ModifiedOn = GETUTCDATE()";
+
+            var sourceCompareColumn = sourceType.GetProperties().Where(prop => prop.GetCustomAttribute<MergeKeyAttribute>(false) != null).Select(prop => prop.Name).Single();
+            var targetCompareColumn = targetType.GetProperties().Where(prop => prop.GetCustomAttribute<MergeKeyAttribute>(false) != null).Select(prop => prop.Name).Single();
+
+            return $"MERGE INTO {target} AS TARGET USING ( SELECT * FROM {source} ) AS SOURCE ON SOURCE.{sourceCompareColumn} = TARGET.{targetCompareColumn} WHEN MATCHED AND ( TARGET.ChecksumCol <> SOURCE.ChecksumCol ) THEN UPDATE SET { fromSourceToTargetMappingForUpdate } WHEN NOT MATCHED BY TARGET THEN INSERT ( {targetColumnList} ) VALUES ( {sourceColumnList} ) WHEN NOT MATCHED BY SOURCE THEN DELETE;";
         }
 
         private SqlBulkCopy CreateSqlBulkCopy(SqlConnection connection, SqlTransaction transaction, DataTable dataTable)
