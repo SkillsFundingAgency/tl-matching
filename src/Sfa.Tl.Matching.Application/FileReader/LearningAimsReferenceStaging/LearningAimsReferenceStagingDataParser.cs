@@ -17,7 +17,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.LearningAimsReferenceStaging
                 LearnAimRefTitle = data.LearnAimRefTitle,
                 AwardOrgAimRef = data.AwardOrgAimRef,
                 SourceCreatedOn = data.SourceCreatedOn.ToDateTime(),
-                SourceModifiedOn = data.SourceModifiedOn.ToDateTime()
+                SourceModifiedOn = data.SourceModifiedOn.ToDateTime(),
+                CreatedBy = data.CreatedBy
             };
 
             return new List<LearningAimsReferenceStagingDto> { learningAimsReferenceDto };

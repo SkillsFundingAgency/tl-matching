@@ -9,5 +9,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string AwardOrgAimRef { get; set; }
         public DateTime SourceCreatedOn { get; set; }
         public DateTime SourceModifiedOn { get; set; }
+        public string CreatedBy { get; set; }
     }
 }
