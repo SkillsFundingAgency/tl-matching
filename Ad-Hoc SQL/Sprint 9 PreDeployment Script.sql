@@ -24,12 +24,12 @@ if not exists (select 1 from sys.columns where name = 'RouteId' and object_name(
 GO
 
 if exists(select 1 from sys.columns where name = 'PathId' and object_name(object_id) = 'QualificationRoutePathMapping')
-	update  [dbo].[QualificationRoutePathMapping] 
-	set [RouteId] = p.[RouteId]
-	from [dbo].[QualificationRoutePathMapping] qrpm
-	inner join [dbo].[Path] p
-	on p.[Id] = qrpm.[PathId]
-
+	EXEC('update  [dbo].[QualificationRoutePathMapping] 
+		  set [RouteId] = p.[RouteId]
+		  from [dbo].[QualificationRoutePathMapping] qrpm
+		  inner join [dbo].[Path] p
+		  on p.[Id] = qrpm.[PathId]')
+GO
 
 --Collapse duplicate records 
 ;
@@ -69,7 +69,7 @@ if exists (select 1 from sys.columns where name = 'RouteId' and is_nullable = 1 
 GO
 
 --Make RouteId a foreign key
-if exists (select 1 from sys.foreign_keys where name = 'FK_QualificationRoutePathMapping_Route' and object_name(parent_object_id) = 'QualificationRoutePathMapping')
+if not exists (select 1 from sys.foreign_keys where name = 'FK_QualificationRoutePathMapping_Route' and object_name(parent_object_id) = 'QualificationRoutePathMapping')
 BEGIN
 	ALTER TABLE [dbo].[QualificationRoutePathMapping] WITH CHECK 
 		ADD  CONSTRAINT [FK_QualificationRoutePathMapping_Route] FOREIGN KEY ([RouteId]) REFERENCES [Route]([Id])
