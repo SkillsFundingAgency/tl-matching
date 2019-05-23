@@ -4,6 +4,7 @@ namespace Sfa.Tl.Matching.Domain.Models
 {
     public class LearningAimsReferenceStaging : BaseEntity
     {
+        [MergeKey]
         public string LarId { get; set; } 
         public string Title { get; set; }
         public string AwardOrgLarId { get; set; }
