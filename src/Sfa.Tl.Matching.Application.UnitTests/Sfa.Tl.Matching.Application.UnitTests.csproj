@@ -44,9 +44,6 @@
     <None Update="Services\FileImportService\DuplicateRows\ProviderVenue-DuplicateRows.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Services\FileImportService\DuplicateRows\QualificationRoutePathMapping-DuplicateRows.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="FileReader\ExcelFileReader\Employer-MissingMandatory.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -66,9 +63,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="FileReader\ExcelFileReader\Trim\ProviderVenue-Trim.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="FileReader\ExcelFileReader\Trim\QualificationRoutePathMapping-Trim.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

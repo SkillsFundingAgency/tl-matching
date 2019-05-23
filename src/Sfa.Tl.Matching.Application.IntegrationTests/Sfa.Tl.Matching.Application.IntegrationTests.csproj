@@ -86,12 +86,6 @@
     <None Update="Provider\Provider-WrongDataType.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="QualificationRoutePathMapping\QualificationRoutePathMapping-RecordsAlreadyExist.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="QualificationRoutePathMapping\QualificationRoutePathMapping-Simple.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Employer\Employer-Simple.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

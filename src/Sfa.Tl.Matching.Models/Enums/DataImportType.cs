@@ -14,8 +14,5 @@ namespace Sfa.Tl.Matching.Models.Enums
 
         [Description("Provider qualification")]
         ProviderQualification,
-        
-        [Description("Route & pathway mapping")]
-        QualificationRoutePathMapping
     }
 }
