@@ -90,3 +90,14 @@ on r.[Id] = qrpm.[RouteId]
 order by qrpm.[Id]
 */
 
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'ProviderFeedbackRequestHistory') 
+	EXEC sp_rename 'ProviderFeedbackRequestHistory', 'BackgroundProcessHistory';
+GO
+
+IF EXISTS (SELECT 1 FROM sys.columns WHERE Name = 'ProviderCount' AND object_name(object_id) = 'BackgroundProcessHistory')
+	EXEC sp_rename 'BackgroundProcessHistory.ProviderCount', 'RecordCount', 'COLUMN';
+GO
+
+IF EXISTS (SELECT 1 FROM sys.columns WHERE Name = 'Status' AND object_name(object_id) = 'BackgroundProcessHistory')
+	EXEC sp_rename 'BackgroundProcessHistory.Status', 'ProcessType', 'COLUMN';
+GO
