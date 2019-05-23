@@ -55,6 +55,7 @@ GO
 --Drop constraint FK_QualificationRoutePathMapping_Path
 if exists (select 1 from sys.foreign_keys where name = 'FK_QualificationRoutePathMapping_Path' and object_name(parent_object_id) = 'QualificationRoutePathMapping')
 	ALTER TABLE [dbo].[QualificationRoutePathMapping] DROP CONSTRAINT [FK_QualificationRoutePathMapping_Path]
+GO
 
 --Drop old PathId
 if exists (select 1 from sys.columns where name = 'PathId' and object_name(object_id) = 'QualificationRoutePathMapping')
