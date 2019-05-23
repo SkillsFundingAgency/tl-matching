@@ -92,6 +92,7 @@ order by qrpm.[Id]
 
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'ProviderFeedbackRequestHistory') 
 	EXEC sp_rename 'ProviderFeedbackRequestHistory', 'BackgroundProcessHistory';
+	EXEC sp_rename @objname = N'PK_ProviderFeedbackRequestHistory', @newname = N'PK_BackgroundProcessHistory'
 GO
 
 IF EXISTS (SELECT 1 FROM sys.columns WHERE Name = 'ProviderCount' AND object_name(object_id) = 'BackgroundProcessHistory')
