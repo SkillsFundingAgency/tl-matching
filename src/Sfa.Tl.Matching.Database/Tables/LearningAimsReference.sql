@@ -11,4 +11,5 @@
 	[ModifiedOn] DATETIME2 NULL, 
 	[ModifiedBy] NVARCHAR(50) NULL,
 	[ChecksumCol] AS BINARY_CHECKSUM([LarId], [Title], [AwardOrgLarId], [SourceCreatedOn], [SourceModifiedOn])
+	CONSTRAINT [PK_LearningAimsReference] PRIMARY KEY ([Id]),
 )

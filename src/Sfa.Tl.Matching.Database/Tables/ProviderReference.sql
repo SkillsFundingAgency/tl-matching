@@ -8,4 +8,5 @@
 	[ModifiedOn] DATETIME2 NULL, 
 	[ModifiedBy] NVARCHAR(50) NULL,
 	ChecksumCol AS BINARY_CHECKSUM([UkPrn], [Name])
+	CONSTRAINT [PK_ProviderReference] PRIMARY KEY ([Id]),
 )
