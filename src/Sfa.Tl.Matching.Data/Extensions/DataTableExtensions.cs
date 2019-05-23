@@ -11,9 +11,9 @@ namespace Sfa.Tl.Matching.Data.Extensions
         {
             var properties = typeof(T).GetProperties();
             var dataTable = new DataTable();
+
             foreach (var info in properties)
-                dataTable.Columns.Add(info.Name, Nullable.GetUnderlyingType(info.PropertyType)
-                                                 ?? info.PropertyType);
+                dataTable.Columns.Add(info.Name, Nullable.GetUnderlyingType(info.PropertyType) ?? info.PropertyType);
 
             foreach (var entity in entities)
                 dataTable.Rows.Add(properties.Select(p => p.GetValue(entity)).ToArray());
