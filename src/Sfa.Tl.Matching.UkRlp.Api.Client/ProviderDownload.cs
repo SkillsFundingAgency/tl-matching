@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Sfa.Tl.Matching.UkRlp.Api.Client
 {
-    public class ProviderDownload
+    public class ProviderDownload : IProviderDownload
     {
         private readonly ILogger<ProviderDownload> _logger;
         private readonly TimeSpan _fiveMinuteTimeSpan = new TimeSpan(0, 5, 0);
