@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions
 
             var stopwatch = Stopwatch.StartNew();
             
-            var createdRecords = await fileImportService.Import(new LearningAimsReferenceStagingFileImportDto
+            var createdRecords = await fileImportService.BulkImport(new LearningAimsReferenceStagingFileImportDto
             {
                 FileDataStream = stream,
                 CreatedBy = blockBlob.GetCreatedByMetadata()
