@@ -65,6 +65,36 @@ namespace Sfa.Tl.Matching.Application.Services
             return result;
         }
 
+        public async Task<int> BulkImport(TImportDto fileImportDto)
+        {
+            _logger.LogInformation($"Processing { nameof(TImportDto) }.");
+
+            var dataDtos = await _fileReader.ValidateAndParseFile(fileImportDto);
+
+            if (dataDtos == null || !dataDtos.Any())
+            {
+                _logger.LogInformation("No Data Imported.");
+
+                return 0;
+            }
+
+            var comparer = GetEqualityComparer();
+
+            var entities = _mapper.Map<IList<TEntity>>(dataDtos).Distinct(comparer).ToList();
+
+            _dataProcessor.PreProcessingHandler(entities);
+
+            _logger.LogInformation($"Saving { entities.Count } { nameof(TEntity) }.");
+
+            await _repository.BulkInsert(entities);
+
+            await _repository.MergeFromStaging();
+
+            _dataProcessor.PostProcessingHandler(entities);
+
+            return 1;
+        }
+
         private static IEqualityComparer<TEntity> GetEqualityComparer()
         {
             var comparerType = typeof(EmployerEqualityComparer).Assembly.GetTypes()

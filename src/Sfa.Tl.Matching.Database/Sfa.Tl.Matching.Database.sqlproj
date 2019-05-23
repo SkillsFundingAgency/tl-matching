@@ -86,6 +86,10 @@
     <Build Include="Tables\FunctionLog.sql" />
     <None Include="PostDeployment\Reset Data.sql" />
     <Build Include="Tables\ProviderFeedbackRequestHistory.sql" />
+    <Build Include="Tables\LearningAimsReference.sql" />
+    <Build Include="Tables\LearningAimsReferenceStaging.sql" />
+    <Build Include="Tables\ProviderReferenceStaging.sql" />
+    <Build Include="Tables\ProviderReference.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
