@@ -9,5 +9,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string Summary { get; set; }
         public virtual ICollection<Opportunity> Opportunity { get; set; }
         public virtual ICollection<Path> Path { get; set; }
+        public virtual ICollection<QualificationRoutePathMapping> QualificationRoutePathMapping { get; set; }
     }
 }
