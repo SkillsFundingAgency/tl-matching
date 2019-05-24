@@ -103,3 +103,12 @@ if not exists (select 1 from sys.columns where name = 'ProcessType' and object_n
 	ALTER TABLE [dbo].[BackgroundProcessHistory]
 		ADD [ProcessType] VARCHAR(50) NULL
 GO
+
+UPDATE BackgroundProcessHistory
+SET ProcessType = 'ProviderFeedbackRequest'
+WHERE ProcessType IS NULL
+
+if exists (select 1 from sys.columns where name = 'ProcessType' and is_nullable = 1 and object_name(object_id) = 'BackgroundProcessHistory')
+	ALTER TABLE [dbo].[BackgroundProcessHistory]
+		ALTER COLUMN [ProcessType] INT NOT NULL
+GO
