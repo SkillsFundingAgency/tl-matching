@@ -13,5 +13,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View(new AddQualificationViewModel { ProviderVenueId = providerVenueId });
         }
+
+        [Route("missing-qualification/{providerVenueId}", Name = "MissingQualification")]
+        public IActionResult MissingQualification(int providerVenueId)
+        {
+            return View(new MissingQualificationViewModel { ProviderVenueId = providerVenueId });
+        }
     }
 }

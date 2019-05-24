@@ -80,7 +80,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (viewModel.Qualifications == null || viewModel.Qualifications.Count == 0)
             {
                 //TODO: Uncomment when Add Qualification is implemented
-                //    return RedirectToRoute("AddQualification", new { providerVenueId = viewModel.Id });
+                return RedirectToRoute("AddQualification", new { providerVenueId = viewModel.Id });
                 return View(viewModel);
             }
 
