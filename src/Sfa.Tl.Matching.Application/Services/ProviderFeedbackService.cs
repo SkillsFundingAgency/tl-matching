@@ -49,6 +49,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var backgroundProcessHistoryId = await _backgroundProcessHistoryRepository.Create(
                 new BackgroundProcessHistory
                 {
+                    ProcessType = BackgroundProcessType.ProviderFeedbackRequest.ToString(),
                     Status = BackgroundProcessHistoryStatus.Pending.ToString(),
                     CreatedBy = userName
                 });
