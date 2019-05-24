@@ -99,6 +99,7 @@ IF EXISTS (SELECT 1 FROM sys.columns WHERE Name = 'ProviderCount' AND object_nam
 	EXEC sp_rename 'BackgroundProcessHistory.ProviderCount', 'RecordCount', 'COLUMN';
 GO
 
-ALTER TABLE BackgroundProcessHistory
-ALTER COLUMN ProcessType VARCHAR(50) NULL
+if not exists (select 1 from sys.columns where name = 'ProcessType' and object_name(object_id) = 'BackgroundProcessHistory')
+	ALTER TABLE [dbo].[BackgroundProcessHistory]
+		ADD [ProcessType] VARCHAR(50) NULL
 GO
