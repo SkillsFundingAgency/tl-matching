@@ -100,5 +100,5 @@ IF EXISTS (SELECT 1 FROM sys.columns WHERE Name = 'ProviderCount' AND object_nam
 GO
 
 ALTER TABLE BackgroundProcessHistory
-ALTER COLUMN ProcessType VARCHAR(50) NOT NULL
+ALTER COLUMN ProcessType VARCHAR(50) NULL
 GO
