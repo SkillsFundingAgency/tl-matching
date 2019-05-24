@@ -12,5 +12,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task UpdateVenueAsync(RemoveProviderVenueViewModel viewModel);
         Task<ProviderVenueDetailViewModel> GetVenue(int providerId, string postCode);
         Task<RemoveProviderVenueViewModel> GetRemoveProviderVenueViewModelAsync(int providerVenueId);
+        Task<string> GetVenuePostcodeAsync(int providerVenueId);
     }
 }

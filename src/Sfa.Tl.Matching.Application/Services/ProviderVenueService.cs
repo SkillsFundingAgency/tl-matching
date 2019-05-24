@@ -81,10 +81,16 @@ namespace Sfa.Tl.Matching.Application.Services
                 x => x.ModifiedBy);
         }
 
-        public async Task<RemoveProviderVenueViewModel> GetRemoveProviderVenueViewModelAsync(int venueId)
+        public async Task<RemoveProviderVenueViewModel> GetRemoveProviderVenueViewModelAsync(int providerVenueId)
         {
-            var providerVenue = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == venueId);
+            var providerVenue = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == providerVenueId);
             return _mapper.Map<ProviderVenue, RemoveProviderVenueViewModel>(providerVenue);
+        }
+
+        public async Task<string> GetVenuePostcodeAsync(int providerVenueId)
+        {
+            var providerVenue = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == providerVenueId);
+            return providerVenue.Postcode;
         }
     }
 }
