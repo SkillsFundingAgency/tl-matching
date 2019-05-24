@@ -2,28 +2,28 @@
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Models.Enums;
 
-namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHistory.Builders
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.backgroundProcessHistory.Builders
 {
-    public class ValidProviderFeedbackRequestHistoryListBuilder
+    public class ValidbackgroundProcessHistoryListBuilder
     {
-        public IList<Domain.Models.ProviderFeedbackRequestHistory> Build() => new List<Domain.Models.ProviderFeedbackRequestHistory>
+        public IList<Domain.Models.BackgroundProcessHistory> Build() => new List<Domain.Models.BackgroundProcessHistory>
         { 
-            new Domain.Models.ProviderFeedbackRequestHistory
+            new Domain.Models.BackgroundProcessHistory
             {
                 Id = 1,
-                ProviderCount = 5,
-                Status = ProviderFeedbackRequestStatus.Pending.ToString(),
+                RecordCount = 5,
+                Status = BackgroundProcessHistoryStatus.Pending.ToString(),
                 StatusMessage = "Status Message",
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.ProviderFeedbackRequestHistory
+            new Domain.Models.BackgroundProcessHistory
             {
                 Id = 2,
-                ProviderCount = 10,
-                Status = ProviderFeedbackRequestStatus.Complete.ToString(),
+                RecordCount = 10,
+                Status = BackgroundProcessHistoryStatus.Complete.ToString(),
                 StatusMessage = "Status Message",
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,

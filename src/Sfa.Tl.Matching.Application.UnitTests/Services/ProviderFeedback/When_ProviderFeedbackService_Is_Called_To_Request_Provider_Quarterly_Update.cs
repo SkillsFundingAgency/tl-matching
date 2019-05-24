@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
     {
         private readonly IEmailService _emailService;
         private readonly IMessageQueueService _messageQueueService;
-        private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
+        private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         public When_ProviderFeedbackService_Is_Called_To_Request_Provider_Quarterly_Update(ProviderFeedbackFixture testFixture)
         {
@@ -26,10 +26,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _messageQueueService = Substitute.For<IMessageQueueService>();
 
             var providerRepository = Substitute.For<IProviderRepository>();
-            _providerFeedbackRequestHistoryRepository = Substitute.For<IRepository<ProviderFeedbackRequestHistory>>();
+            _backgroundProcessHistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
 
-            _providerFeedbackRequestHistoryRepository
-                .Create(Arg.Any<ProviderFeedbackRequestHistory>())
+            _backgroundProcessHistoryRepository
+                .Create(Arg.Any<BackgroundProcessHistory>())
                 .Returns(1);
 
             providerRepository
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             var providerFeedbackService = new ProviderFeedbackService(
                 testFixture.Configuration, testFixture.Logger, 
                 _emailService, emailHistoryService,
-                providerRepository, _providerFeedbackRequestHistoryRepository,
+                providerRepository, _backgroundProcessHistoryRepository,
                 _messageQueueService, testFixture.DateTimeProvider);
 
             providerFeedbackService
@@ -48,13 +48,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         }
 
         [Fact]
-        public void Then_ProviderFeedbackRequestHistoryRepository_Create_Is_Called_Exactly_Once()
+        public void Then_BackgroundProcessHistoryRepository_Create_Is_Called_Exactly_Once()
         {
-            _providerFeedbackRequestHistoryRepository
+            _backgroundProcessHistoryRepository
                 .Received(1)
-                .Create(Arg.Is<ProviderFeedbackRequestHistory>(request =>
-                    request.ProviderCount == 0 &&
-                    request.Status == ProviderFeedbackRequestStatus.Pending.ToString() && 
+                .Create(Arg.Is<BackgroundProcessHistory>(request =>
+                    request.RecordCount == 0 &&
+                    request.Status == BackgroundProcessHistoryStatus.Pending.ToString() && 
                     request.CreatedBy == "TestUser"));
         }
         
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _messageQueueService
                 .Received(1)
                 .PushProviderQuarterlyRequestMessageAsync(Arg.Is<SendProviderFeedbackEmail>(message =>
-                    message.ProviderFeedbackRequestHistoryId == 1));
+                    message.BackgroundProcessHistoryId == 1));
         }
 
         [Fact]

@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Opportunity> Opportunity { get; set; }
         public virtual DbSet<Path> Path { get; set; }
         public virtual DbSet<Provider> Provider { get; set; }
-        public virtual DbSet<ProviderFeedbackRequestHistory> ProviderFeedbackRequestHistory { get; set; }
+        public virtual DbSet<BackgroundProcessHistory> backgroundProcessHistory { get; set; }
         public virtual DbSet<ProviderQualification> ProviderQualification { get; set; }
         public virtual DbSet<ProviderVenue> ProviderVenue { get; set; }
         public virtual DbSet<ProvisionGap> ProvisionGap { get; set; }

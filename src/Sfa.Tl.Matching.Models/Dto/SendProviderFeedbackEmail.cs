@@ -2,6 +2,6 @@
 {
     public class SendProviderFeedbackEmail
     {
-        public int ProviderFeedbackRequestHistoryId { get; set; }
+        public int BackgroundProcessHistoryId { get; set; }
     }
 }

@@ -2,24 +2,24 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHistory.Builders;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.backgroundProcessHistory.Builders;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderFeedbackRequestHistory
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.backgroundProcessHistory
 {
-    public class When_ProviderFeedbackRequestHistoryRepository_CreateMany_Is_Called
+    public class When_backgroundProcessHistoryRepository_CreateMany_Is_Called
     {
         private readonly int _result;
 
-        public When_ProviderFeedbackRequestHistoryRepository_CreateMany_Is_Called()
+        public When_backgroundProcessHistoryRepository_CreateMany_Is_Called()
         {
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.ProviderFeedbackRequestHistory>>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.BackgroundProcessHistory>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
-                var data = new ValidProviderFeedbackRequestHistoryListBuilder().Build();
+                var data = new ValidbackgroundProcessHistoryListBuilder().Build();
 
-                var repository = new GenericRepository<Domain.Models.ProviderFeedbackRequestHistory>(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.BackgroundProcessHistory>(logger, dbContext);
                 _result = repository.CreateMany(data)
                     .GetAwaiter().GetResult();
             }

@@ -85,7 +85,7 @@
     <Build Include="Tables\EmailHistory.sql" />
     <Build Include="Tables\FunctionLog.sql" />
     <None Include="PostDeployment\Reset Data.sql" />
-    <Build Include="Tables\ProviderFeedbackRequestHistory.sql" />
+    <Build Include="Tables\BackgroundProcessHistory.sql" />
     <Build Include="Tables\LearningAimsReference.sql" />
     <Build Include="Tables\LearningAimsReferenceStaging.sql" />
     <Build Include="Tables\ProviderReferenceStaging.sql" />

@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.Enums
 {
-    public enum ProviderFeedbackRequestStatus
+    public enum BackgroundProcessHistoryStatus
     {
         Pending = 1,
         Processing,

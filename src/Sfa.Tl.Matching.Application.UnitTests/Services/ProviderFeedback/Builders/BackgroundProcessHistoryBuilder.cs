@@ -3,13 +3,13 @@ using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders
 {
-    public class ProviderFeedbackRequestHistoryBuilder
+    public class BackgroundProcessHistoryBuilder
     {
-        public ProviderFeedbackRequestHistory Build() => new ProviderFeedbackRequestHistory
+        public BackgroundProcessHistory Build() => new BackgroundProcessHistory
         {
                 Id = 1,
-                ProviderCount = 0,
-                Status = ProviderFeedbackRequestStatus.Pending.ToString(),
+                RecordCount = 0,
+                Status = BackgroundProcessHistoryStatus.Pending.ToString(),
                 StatusMessage = null,
                 CreatedBy = "CreatedBy"
         };

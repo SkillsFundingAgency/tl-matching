@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IRepository<Provider> _providerRepository;
-        private readonly IRepository<ProviderFeedbackRequestHistory> _providerFeedbackRequestHistoryRepository;
+        private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
         private readonly IMessageQueueService _messageQueueService;
         private readonly ILogger<ProviderFeedbackService> _logger;
 
@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.Services
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
             IRepository<Provider> providerRepository,
-            IRepository<ProviderFeedbackRequestHistory> providerFeedbackRequestHistoryRepository,
+            IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository,
             IMessageQueueService messageQueueService,
             IDateTimeProvider dateTimeProvider)
         {
@@ -39,34 +39,34 @@ namespace Sfa.Tl.Matching.Application.Services
             _emailService = emailService;
             _emailHistoryService = emailHistoryService;
             _providerRepository = providerRepository;
-            _providerFeedbackRequestHistoryRepository = providerFeedbackRequestHistoryRepository;
+            _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
             _messageQueueService = messageQueueService;
             _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task RequestProviderQuarterlyUpdateAsync(string userName)
         {
-            var providerFeedbackRequestHistoryId = await _providerFeedbackRequestHistoryRepository.Create(
-                new ProviderFeedbackRequestHistory
+            var backgroundProcessHistoryId = await _backgroundProcessHistoryRepository.Create(
+                new BackgroundProcessHistory
                 {
-                    Status = ProviderFeedbackRequestStatus.Pending.ToString(),
+                    Status = BackgroundProcessHistoryStatus.Pending.ToString(),
                     CreatedBy = userName
                 });
 
             await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderFeedbackEmail
             {
-                ProviderFeedbackRequestHistoryId = providerFeedbackRequestHistoryId
+                BackgroundProcessHistoryId = backgroundProcessHistoryId
             });
         }
 
-        public async Task SendProviderQuarterlyUpdateEmailsAsync(int providerFeedbackRequestHistoryId, string userName)
+        public async Task SendProviderQuarterlyUpdateEmailsAsync(int backgroundProcessHistoryId, string userName)
         {
-            var providerFeedbackRequestHistory =
-                await _providerFeedbackRequestHistoryRepository
-                    .GetSingleOrDefault(p => p.Id == providerFeedbackRequestHistoryId);
+            var backgroundProcessHistory =
+                await _backgroundProcessHistoryRepository
+                    .GetSingleOrDefault(p => p.Id == backgroundProcessHistoryId);
 
-            if (providerFeedbackRequestHistory == null ||
-                providerFeedbackRequestHistory.Status != ProviderFeedbackRequestStatus.Pending.ToString())
+            if (backgroundProcessHistory == null ||
+                backgroundProcessHistory.Status != BackgroundProcessHistoryStatus.Pending.ToString())
             {
                 return;
             }
@@ -77,9 +77,9 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 var providers = await ((IProviderRepository)_providerRepository).GetProvidersWithFundingAsync();
 
-                await UpdateProviderFeedbackRequestHistory(providerFeedbackRequestHistory,
+                await UpdatebackgroundProcessHistory(backgroundProcessHistory,
                     providers.Count,
-                    ProviderFeedbackRequestStatus.Processing,
+                    BackgroundProcessHistoryStatus.Processing,
                     userName);
 
                 foreach (var provider in providers)
@@ -136,21 +136,21 @@ namespace Sfa.Tl.Matching.Application.Services
                     numberOfProviderEmailsSent++;
                 }
 
-                await UpdateProviderFeedbackRequestHistory(providerFeedbackRequestHistory,
+                await UpdatebackgroundProcessHistory(backgroundProcessHistory,
                     numberOfProviderEmailsSent,
-                    ProviderFeedbackRequestStatus.Complete,
+                    BackgroundProcessHistoryStatus.Complete,
                     userName);
             }
             catch (Exception ex)
             {
                 var errorMessage = $"Error sending provider quarterly update emails. {ex.Message} " +
-                                   $"Provider feedback id {providerFeedbackRequestHistory.Id}";
+                                   $"Provider feedback id {backgroundProcessHistory.Id}";
 
                 _logger.LogError(ex, errorMessage);
 
-                await UpdateProviderFeedbackRequestHistory(providerFeedbackRequestHistory,
+                await UpdatebackgroundProcessHistory(backgroundProcessHistory,
                     numberOfProviderEmailsSent,
-                    ProviderFeedbackRequestStatus.Error,
+                    BackgroundProcessHistoryStatus.Error,
                     userName,
                     errorMessage);
             }
@@ -178,17 +178,17 @@ namespace Sfa.Tl.Matching.Application.Services
                 createdBy);
         }
 
-        private async Task UpdateProviderFeedbackRequestHistory(
-            ProviderFeedbackRequestHistory providerFeedbackRequestHistory,
-            int providerCount, ProviderFeedbackRequestStatus status,
+        private async Task UpdatebackgroundProcessHistory(
+            BackgroundProcessHistory backgroundProcessHistory,
+            int providerCount, BackgroundProcessHistoryStatus historyStatus,
             string userName, string errorMessage = null)
         {
-            providerFeedbackRequestHistory.ProviderCount = providerCount;
-            providerFeedbackRequestHistory.Status = status.ToString();
-            providerFeedbackRequestHistory.StatusMessage = errorMessage;
-            providerFeedbackRequestHistory.ModifiedBy = userName;
-            providerFeedbackRequestHistory.ModifiedOn = _dateTimeProvider.UtcNow();
-            await _providerFeedbackRequestHistoryRepository.Update(providerFeedbackRequestHistory);
+            backgroundProcessHistory.RecordCount = providerCount;
+            backgroundProcessHistory.Status = historyStatus.ToString();
+            backgroundProcessHistory.StatusMessage = errorMessage;
+            backgroundProcessHistory.ModifiedBy = userName;
+            backgroundProcessHistory.ModifiedOn = _dateTimeProvider.UtcNow();
+            await _backgroundProcessHistoryRepository.Update(backgroundProcessHistory);
         }
     }
 }

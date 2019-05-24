@@ -23,15 +23,15 @@ namespace Sfa.Tl.Matching.Functions
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var providerFeedbackRequestHistoryId = providerRequestData.ProviderFeedbackRequestHistoryId;
+            var backgroundProcessHistoryId = providerRequestData.BackgroundProcessHistoryId;
 
             try
             {
-                await providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(providerFeedbackRequestHistoryId, "System");
+                await providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(backgroundProcessHistoryId, "System");
             }
             catch (Exception e)
             {
-                var errormessage = $"Error sending quarterly update emails for feedback id {providerFeedbackRequestHistoryId}. Internal Error Message {e}";
+                var errormessage = $"Error sending quarterly update emails for feedback id {backgroundProcessHistoryId}. Internal Error Message {e}";
 
                 logger.LogError(errormessage);
 
