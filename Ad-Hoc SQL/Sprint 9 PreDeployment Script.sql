@@ -98,3 +98,7 @@ GO
 IF EXISTS (SELECT 1 FROM sys.columns WHERE Name = 'ProviderCount' AND object_name(object_id) = 'BackgroundProcessHistory')
 	EXEC sp_rename 'BackgroundProcessHistory.ProviderCount', 'RecordCount', 'COLUMN';
 GO
+
+ALTER TABLE BackgroundProcessHistory
+ALTER COLUMN ProcessType VARCHAR(50) NOT NULL
+GO

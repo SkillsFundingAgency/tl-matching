@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[BackgroundProcessHistory]
 (
 	[Id] INT IDENTITY(1,1) NOT NULL, 
+	[ProcessType] VARCHAR(50) NOT NULL,
 	[RecordCount] INT NOT NULL,
 	[Status] VARCHAR(10) NOT NULL,
 	[StatusMessage] VARCHAR(4000) NULL,
