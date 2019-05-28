@@ -19,7 +19,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             _qualificationService = Substitute.For<IQualificationService>();
             _qualificationService.IsValidLarIdAsync("12345").Returns(false);
-            var qualificationController = new QualificationController(providerVenueService, _qualificationService);
+
+            var providerQualificationService = Substitute.For<IProviderQualificationService>();
+
+            var qualificationController = new QualificationController(providerVenueService, _qualificationService, providerQualificationService);
 
             var viewModel = new AddQualificationViewModel
             {

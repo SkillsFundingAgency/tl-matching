@@ -13,6 +13,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
     {
         private readonly IActionResult _result;
         private readonly IQualificationService _qualificationService;
+        private readonly IProviderQualificationService _providerQualificationService;
 
         public When_Qualification_Add_Qualification_Already_Exists()
         {
@@ -25,7 +26,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 Id = 1
             });
 
-            var qualificationController = new QualificationController(providerVenueService, _qualificationService);
+            _providerQualificationService = Substitute.For<IProviderQualificationService>();
+
+            var qualificationController = new QualificationController(providerVenueService, _qualificationService, _providerQualificationService);
             var controllerWithClaims = new ClaimsBuilder<QualificationController>(qualificationController)
                 .AddUserName("username")
                 .AddEmail("email@address.com")
@@ -75,6 +78,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         public void Then_IsValidLarId_Is_Called_Exactly_Once()
         {
             _qualificationService.Received(1).IsValidLarIdAsync("12345678");
+        }
+
+
+        [Fact]
+        public void Then_CreateQualification_Is_Called_Exactly_Once()
+        {
+            _providerQualificationService.Received(1).CreateProviderQualificationAsync(Arg.Any<AddQualificationViewModel>());
         }
     }
 }

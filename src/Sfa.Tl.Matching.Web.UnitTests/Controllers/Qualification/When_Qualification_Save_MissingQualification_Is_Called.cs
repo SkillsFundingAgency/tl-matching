@@ -19,7 +19,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             var providerVenueService = Substitute.For<IProviderVenueService>();
 
-            var qualificationController = new QualificationController(providerVenueService, qualificationService);
+            var providerQualificationService = Substitute.For<IProviderQualificationService>();
+
+            var qualificationController = new QualificationController(providerVenueService, qualificationService, providerQualificationService);
             var controllerWithClaims = new ClaimsBuilder<QualificationController>(qualificationController)
                 .AddUserName("username")
                 .AddEmail("email@address.com")

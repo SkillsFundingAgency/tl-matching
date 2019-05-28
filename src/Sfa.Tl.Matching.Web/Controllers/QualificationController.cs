@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -12,13 +13,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly IProviderVenueService _providerVenueService;
         private readonly IQualificationService _qualificationService;
+        private readonly IProviderQualificationService _providerQualificationService;
 
         public QualificationController(
             IProviderVenueService providerVenueService, 
-            IQualificationService qualificationService)
+            IQualificationService qualificationService,
+            IProviderQualificationService providerQualificationService)
         {
             _providerVenueService = providerVenueService;
             _qualificationService = qualificationService;
+            _providerQualificationService = providerQualificationService;
         }
         
         [Route("add-qualification/{providerVenueId}", Name = "AddQualification")]
@@ -54,10 +58,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 return RedirectToRoute("MissingQualification", new { providerVenueId = viewModel.ProviderVenueId });
             }
-            else
-            {
-                return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.ProviderVenueId });
-            }
+
+            viewModel.QualificationId = qualification.Id;
+            await _providerQualificationService.CreateProviderQualificationAsync(viewModel);
+
+            return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.ProviderVenueId });
         }
 
         [Route("missing-qualification/{providerVenueId}", Name = "MissingQualification")]

@@ -22,7 +22,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             _providerVenueService.GetVenuePostcodeAsync(1)
                 .Returns("CV1 2WT");
 
-            var qualificationController = new QualificationController(_providerVenueService, qualificationService);
+            var providerQualificationService = Substitute.For<IProviderQualificationService>();
+
+            var qualificationController = new QualificationController(_providerVenueService, qualificationService, providerQualificationService);
 
             _result = qualificationController.MissingQualification(1);
         }

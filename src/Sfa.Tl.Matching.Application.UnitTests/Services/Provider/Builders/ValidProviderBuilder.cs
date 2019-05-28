@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Sfa.Tl.Matching.Domain.Models;
+
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
 {
     public class ValidProviderBuilder
@@ -48,9 +48,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                     IsRemoved = false,
                     Postcode = "CV1 1WT",
                     Id = 10,
-                    ProviderQualification = new List<ProviderQualification>
+                    ProviderQualification = new List<Domain.Models.ProviderQualification>
                     {
-                        new ProviderQualification
+                        new Domain.Models.ProviderQualification
                         {
                             Id = 100,
                             NumberOfPlacements = 1,
@@ -64,15 +64,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                     IsRemoved = false,
                     Postcode = "CV1 2WT",
                     Id = 20,
-                    ProviderQualification = new List<ProviderQualification>
+                    ProviderQualification = new List<Domain.Models.ProviderQualification>
                     {
-                        new ProviderQualification
+                        new Domain.Models.ProviderQualification
                         {
                             Id = 200,
                             NumberOfPlacements = 2,
                             QualificationId = 2000
                         },
-                        new ProviderQualification
+                        new Domain.Models.ProviderQualification
                         {
                             Id = 300,
                             NumberOfPlacements = 1,
