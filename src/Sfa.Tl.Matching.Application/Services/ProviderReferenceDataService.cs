@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var backgroundProcessHistoryId = await CreateBackgroundProcessHistory();
 
-            var providerReferenceStagings = await GetProvidersForStagingTest();
+            var providerReferenceStagings = await GetProvidersForStaging();
             await _repository.BulkInsert(providerReferenceStagings);
             await _repository.MergeFromStaging();
 
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<List<ProviderReferenceStaging>> GetProvidersForStaging()
         {
-            var providers = await _providerDownload.GetAll(DateTime.UtcNow);
+            var providers = await _providerDownload.GetAll(DateTime.MinValue);
             var providerReferenceStagings = providers.Select(p => new ProviderReferenceStaging
             {
                 Name = p.ProviderName,

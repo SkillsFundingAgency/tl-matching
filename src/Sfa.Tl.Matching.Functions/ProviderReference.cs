@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("ImportProviderReference")]
         public static async Task ImportProviderReference(
-            [TimerTrigger("%TimerInterval%")] TimerInfo timer,
+            [TimerTrigger("%ProviderReferenceTrigger%")] TimerInfo timer,
             ExecutionContext context,
             ILogger logger,
             [Inject] IReferenceDataService referenceDataService)
