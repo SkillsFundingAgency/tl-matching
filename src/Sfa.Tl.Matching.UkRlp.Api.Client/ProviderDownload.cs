@@ -24,10 +24,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
             var client = GetClient();
 
             _logger.LogInformation("Downloading providers from UKRLP service...");
-
             var response = await client.retrieveAllProvidersAsync(query);
-
             _logger.LogInformation($"UKRLP service returned {response.ProviderQueryResponse.MatchingProviderRecords.LongLength} providers");
+
             results.AddRange(response.ProviderQueryResponse.MatchingProviderRecords);
 
             return results;

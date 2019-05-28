@@ -26,6 +26,7 @@ using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using Sfa.Tl.Matching.Application.FileReader.LearningAimsReferenceStaging;
+using Sfa.Tl.Matching.UkRlp.Api.Client;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
@@ -81,6 +82,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             RegisterApplicationServices(services);
 
             RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
+            RegisterUkRlpApi(services);
         }
 
         private static void RegisterFileReaders(IServiceCollection services)
@@ -154,6 +156,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
             services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
             services.AddTransient<IRepository<LearningAimsReferenceStaging>, GenericRepository<LearningAimsReferenceStaging>>();
+            services.AddTransient<IRepository<ProviderReferenceStaging>, GenericRepository<ProviderReferenceStaging>>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -165,7 +168,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<ILearningAimsReferenceSynchronizationService, LearningAimsReferenceSynchronizationService>();
-
+            services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
@@ -179,6 +182,11 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
                 new NotificationsApi(httpClient, apiConfiguration));
+        }
+
+        private static void RegisterUkRlpApi(IServiceCollection services)
+        {
+            services.AddTransient<IProviderDownload, ProviderDownload>();
         }
     }
 }
