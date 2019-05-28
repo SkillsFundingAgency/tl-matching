@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
@@ -18,7 +20,8 @@ namespace Sfa.Tl.Matching.Functions
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IFileImportService<LearningAimsReferenceStagingFileImportDto> fileImportService
+            [Inject] IFileImportService<LearningAimsReferenceStagingFileImportDto> fileImportService,
+            [Inject] IRepository<LearningAimsReferenceStaging> learningAimsReferenceStagingRepository
         )
         {
             var stream = await blockBlob.OpenReadAsync(null, null, null);
@@ -34,6 +37,8 @@ namespace Sfa.Tl.Matching.Functions
                 FileDataStream = stream,
                 CreatedBy = blockBlob.GetCreatedByMetadata()
             });
+
+            await learningAimsReferenceStagingRepository.MergeFromStaging();
 
             stopwatch.Stop();
 
