@@ -8,9 +8,9 @@ namespace Sfa.Tl.Matching.Models.Extensions
     public static class FileImportTypeExtensions
     {
         public const string Excel = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        public const string Csv = "Text/csv";
+        public const string Csv = "application/vnd.ms-excel";
 
-        public static (string, string) GetFileExtensionTypeAndErrorMessage(this DataImportType importFileType)
+        public static string GetFileExtensionType(this DataImportType importFileType)
         {
             var memInfo = importFileType.GetType().GetTypeInfo().GetDeclaredField(importFileType.ToString());
 
@@ -21,13 +21,16 @@ namespace Sfa.Tl.Matching.Models.Extensions
                                 .GetValue(attribute)
                                 .ToString();
 
+            return fileContentType;
+        }
+
+        public static string GetFileExtensionErrorMessage(this string fileContentType)
+        {
             var isExcel = fileContentType == Excel;
             var fileExtensionType = isExcel ? "XLSX" : "CSV";
             var fileType = isExcel ? "Excel" : "CSV";
             
-            var errorMessage = $"You must upload an { fileType } file with the { fileExtensionType } file extension";
-
-            return (fileContentType, errorMessage);
+            return $"You must upload an { fileType } file with the { fileExtensionType } file extension";
         }
     }
 }
