@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using Humanizer;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -37,9 +38,12 @@ namespace Sfa.Tl.Matching.Application.Extensions
                new string(Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
         }
 
-        public static DateTime ToDateTime(this string value)
+        public static DateTime ToDateTime(this string value, bool defaultNull = false)
         {
-            return DateTime.Parse(value);
+           var parsed = DateTime.TryParse(value, out var date);
+           if(!parsed && !defaultNull) throw new InvalidDataException($"Error Parsing InputValue '{value}' to DateTime");
+           
+           return !parsed ? DateTime.MinValue : date;
         }
 
         public static int ToInt(this string value)
