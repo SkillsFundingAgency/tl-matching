@@ -7,7 +7,9 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders;
+using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
@@ -23,6 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var mapper = new Mapper(config);
 
             var logger = Substitute.For<ILogger<ProviderRepository>>();
+            var providerReferenceRepository = Substitute.For<IRepository<ProviderReference>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
@@ -31,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
                 var providerRepository = new ProviderRepository(logger, dbContext);
 
-                var service = new ProviderService(mapper, providerRepository);
+                var service = new ProviderService(mapper, providerRepository, providerReferenceRepository);
 
                 _result = service.SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel()).GetAwaiter().GetResult();
             }

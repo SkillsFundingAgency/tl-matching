@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Data
         {
         }
 
+        public virtual DbSet<BackgroundProcessHistory> BackgroundProcessHistory { get; set; }
         public virtual DbSet<EmailHistory> EmailHistory { get; set; }
         public virtual DbSet<EmailPlaceholder> EmailPlaceholder { get; set; }
         public virtual DbSet<EmailTemplate> EmailTemplate { get; set; }
@@ -17,7 +18,7 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Opportunity> Opportunity { get; set; }
         public virtual DbSet<Path> Path { get; set; }
         public virtual DbSet<Provider> Provider { get; set; }
-        public virtual DbSet<BackgroundProcessHistory> backgroundProcessHistory { get; set; }
+        public virtual DbSet<ProviderReference> ProviderReference { get; set; }
         public virtual DbSet<ProviderQualification> ProviderQualification { get; set; }
         public virtual DbSet<ProviderVenue> ProviderVenue { get; set; }
         public virtual DbSet<ProvisionGap> ProvisionGap { get; set; }

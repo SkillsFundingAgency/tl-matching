@@ -13,34 +13,33 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 {
-    public class When_ProviderService_Is_Called_To_Search_Providers_By_UkPrn
+    public class When_ProviderService_Is_Called_To_Search_Providers_From_ReferenceData
     {
         private const long UkPrn = 10000546;
 
         private readonly ProviderSearchResultDto _result;
-        private readonly IRepository<Domain.Models.Provider> _providerRepository;
+        private readonly IRepository<ProviderReference> _providerReferenceRepository;
 
-        public When_ProviderService_Is_Called_To_Search_Providers_By_UkPrn()
+        public When_ProviderService_Is_Called_To_Search_Providers_From_ReferenceData()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
-            _providerRepository = Substitute.For<IRepository<Domain.Models.Provider>>();
+            var providerRepository = Substitute.For<IRepository<Domain.Models.Provider>>();
 
-            _providerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
-                .Returns(new ValidProviderBuilder().Build());
+            _providerReferenceRepository = Substitute.For<IRepository<ProviderReference>>();
+            _providerReferenceRepository.GetSingleOrDefault(Arg.Any<Expression<Func<ProviderReference, bool>>>())
+                .Returns(new ValidProviderReferenceBuilder().Build());
 
-            var providerReferenceRepository = Substitute.For<IRepository<ProviderReference>>();
+            var service = new ProviderService(mapper, providerRepository, _providerReferenceRepository);
 
-            var service = new ProviderService(mapper, _providerRepository, providerReferenceRepository);
-
-            _result = service.SearchAsync(UkPrn).GetAwaiter().GetResult();
+            _result = service.SearchReferenceDataAsync(UkPrn).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_ProviderRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_ProviderReferenceRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _providerRepository.Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>());
+            _providerReferenceRepository.Received(1)
+                .GetSingleOrDefault(Arg.Any<Expression<Func<ProviderReference, bool>>>());
         }
         
         [Fact]

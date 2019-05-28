@@ -12,12 +12,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_SearchProvider_Post_Is_Called
+    public class When_Provider_Controller_SearchProvider_Post_Is_Called_With_Provider_In_Service
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
 
-        public When_Provider_Controller_SearchProvider_Post_Is_Called()
+        public When_Provider_Controller_SearchProvider_Post_Is_Called_With_Provider_In_Service()
         {
             _providerService = Substitute.For<IProviderService>();
             _providerService
@@ -52,6 +52,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 .SearchProvidersWithFundingAsync(Arg.Any<ProviderSearchParametersViewModel>());
         }
 
+        [Fact]
+        public void Then_ProviderService_SearchReferenceDataAsync_Is_Not_Called()
+        {
+            _providerService
+                .DidNotReceive()
+                .SearchReferenceDataAsync(Arg.Any<long>());
+        }
         [Fact]
         public void Then_Result_Is_Not_Null() =>
             _result.Should().NotBeNull();

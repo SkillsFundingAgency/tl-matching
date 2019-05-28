@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -38,23 +40,38 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
+                return View(GetProviderSearchViewModel(viewModel));
+
+            if (!viewModel.UkPrn.HasValue)
             {
+                ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn),
+                    "You must enter a UKPRN");
                 return View(GetProviderSearchViewModel(viewModel));
             }
 
-            var searchResult = viewModel.UkPrn.HasValue
-                ? await _providerService.SearchAsync(viewModel.UkPrn.Value)
-                : null;
+            var searchResult = await _providerService.SearchAsync(viewModel.UkPrn.Value);
+            if (IsValidProviderSearch(searchResult))
+                return View(await SearchProvidersWithFundingAsync(viewModel));
 
-            if (searchResult == null || searchResult.Id == 0)
+            searchResult = await _providerService.SearchReferenceDataAsync(viewModel.UkPrn.Value);
+
+            return View(IsValidProviderSearch(searchResult) ? 
+                GetProviderSearchUkRlpViewModel(viewModel, searchResult) : 
+                new ProviderSearchViewModel(viewModel));
+        }
+
+        // TODO AU 
+        [Route("create-provider", Name = "CreateProvider")]
+        public async Task<IActionResult> CreateProvider(CreateProviderViewModel viewModel)
+        {
+            if (!await _providerService.IsNewProvider(viewModel.UkPrn))
             {
-                ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn), "You must enter a real UKPRN");
-                return View(GetProviderSearchViewModel(viewModel));
+                throw new ArgumentNullException();
             }
 
-            var resultsViewModel = await SearchProvidersWithFundingAsync(viewModel);
+            var providerId = await _providerService.CreateProvider(viewModel);
 
-            return View(resultsViewModel);
+            return RedirectToRoute("GetProviderDetail", new { id = providerId });
         }
 
         [HttpGet]
@@ -114,7 +131,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return RedirectToAction(nameof(SearchProvider));
         }
-
+        
         private async Task<ProviderSearchViewModel> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel viewModel)
         {
             var resultsViewModel = GetProviderSearchViewModel(viewModel);
@@ -134,6 +151,31 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
             };
+        }
+
+        private ProviderSearchViewModel GetProviderSearchUkRlpViewModel(ProviderSearchParametersViewModel searchParametersViewModel, ProviderSearchResultDto dto)
+        {
+            var viewModel = new ProviderSearchViewModel(searchParametersViewModel)
+            {
+                SearchResults =
+                {
+                    IsUkRlp = true
+                },
+                IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
+            };
+            viewModel.SearchResults.Results.Add(new ProviderSearchResultItemViewModel
+            {
+                ProviderId = dto.Id,
+                ProviderName = dto.Name,
+                UkPrn = dto.UkPrn
+            });
+
+            return viewModel;
+        }
+
+        private static bool IsValidProviderSearch(ProviderSearchResultDto searchResult)
+        {
+            return searchResult != null && searchResult.Id > 0;
         }
     }
 }
