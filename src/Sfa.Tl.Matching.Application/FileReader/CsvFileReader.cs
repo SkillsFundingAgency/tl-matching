@@ -17,13 +17,13 @@ namespace Sfa.Tl.Matching.Application.FileReader
 {
     public class CsvFileReader<TImportDto, TDto> : IFileReader<TImportDto, TDto> where TDto : class, new() where TImportDto : FileImportDto
     {
-        private readonly ILogger<ExcelFileReader<TImportDto, TDto>> _logger;
+        private readonly ILogger<CsvFileReader<TImportDto, TDto>> _logger;
         private readonly IDataParser<TDto> _dataParser;
         private readonly IValidator<TImportDto> _validator;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
         public CsvFileReader(
-            ILogger<ExcelFileReader<TImportDto, TDto>> logger,
+            ILogger<CsvFileReader<TImportDto, TDto>> logger,
             IDataParser<TDto> dataParser,
             IValidator<TImportDto> validator,
             IRepository<FunctionLog> functionLogRepository)
