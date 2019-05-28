@@ -4,9 +4,9 @@ namespace Sfa.Tl.Matching.Models.Dto
 {
     public class LearningAimsReferenceStagingDto
     {
-        public string LearnAimRef { get; set; }
-        public string LearnAimRefTitle { get; set; }
-        public string AwardOrgAimRef { get; set; }
+        public string LarId { get; set; }
+        public string Title { get; set; }
+        public string AwardOrgLarId { get; set; }
         public DateTime SourceCreatedOn { get; set; }
         public DateTime SourceModifiedOn { get; set; }
         public string CreatedBy { get; set; }

@@ -13,11 +13,11 @@ namespace Sfa.Tl.Matching.Application.FileReader.LearningAimsReferenceStaging
 
             var learningAimsReferenceDto = new LearningAimsReferenceStagingDto
             {
-                LearnAimRef = data.LearnAimRef,
-                LearnAimRefTitle = data.LearnAimRefTitle,
-                AwardOrgAimRef = data.AwardOrgAimRef,
-                SourceCreatedOn = data.SourceCreatedOn.ToDateTime(),
-                SourceModifiedOn = data.SourceModifiedOn.ToDateTime(),
+                LarId = data.LarId,
+                Title = data.Title,
+                AwardOrgLarId = data.AwardOrgLarId,
+                SourceCreatedOn = data.SourceCreatedOn.ToDateTime(true),
+                SourceModifiedOn = data.SourceModifiedOn.ToDateTime(true),
                 CreatedBy = data.CreatedBy
             };
 
