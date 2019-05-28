@@ -14,18 +14,21 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        @if (Model.SearchResults?.Results != null && Model.SearchResults.Results.Any())
+        
+        @if (Model.SearchResults?.Results?.Count > 0)
         {
-            <partial name="_searchresults" model="Model" />
+            @if (Model.SearchResults.IsUkRlp)
+             {
+                 <partial name="_addprovider" model="Model.SearchResults" />
+             }
+             else
+             {
+                 <partial name="_searchresults" model="Model" />
+             }
         }
-        @if (Model.SearchResults?.Results == null)
+        else
         {
-            <partial name="_addprovider" model="Model" />
-        }
-
-        @if (Model.SearchResults?.Results == null)
-        {
-            <p class="govuk-body">There is no active provider for [UKPRN]. Please try again.</p>
+            <p class="govuk-body">There is no active provider for @Model.SearchParameters.UkPrn. Please try again.</p>
         }
 
     </div>

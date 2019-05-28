@@ -108,10 +108,9 @@ namespace Sfa.Tl.Matching.Application.Services
             await _repository.Update(provider);
         }
 
-        // TODO AU
-        public async Task<int> CreateProvider(CreateProviderViewModel viewModel)
+        public async Task<int> CreateProvider(ProviderDetailViewModel viewModel)
         {
-            var provider = _mapper.Map<CreateProviderViewModel, Provider>(viewModel);
+            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
 
             return await _repository.Create(provider);
         }

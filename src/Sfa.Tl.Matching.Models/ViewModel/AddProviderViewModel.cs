@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.ViewModel
 {
-    public class CreateProviderViewModel
+    public class AddProviderViewModel
     {
         public long UkPrn { get; set; }
         public string Name { get; set; }
