@@ -2,7 +2,7 @@
 (
 	[LarId] VARCHAR(15) NOT NULL,
 	[Title] VARCHAR(400) NOT NULL,
-	[AwardOrgLarId] VARCHAR(50) NULL,
+	[AwardOrgLarId] VARCHAR(150) NULL,
 	[SourceCreatedOn] DATETIME2 NOT NULL,
 	[SourceModifiedOn] DATETIME2 NOT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetUTCDate(), 
