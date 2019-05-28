@@ -20,8 +20,7 @@ namespace Sfa.Tl.Matching.Functions
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject] ILearningAimsReferenceSynchronizationService learningAimsReferenceSynchronizationService,
-            [Inject] IRepository<LearningAimsReferenceStaging> learningAimsReferenceStagingRepository
+            [Inject] ILearningAimsReferenceSynchronizationService learningAimsReferenceSynchronizationService
         )
         {
             var stream = await blockBlob.OpenReadAsync(null, null, null);

@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Opportunity> Opportunity { get; set; }
         public virtual DbSet<Path> Path { get; set; }
         public virtual DbSet<Provider> Provider { get; set; }
+        public virtual DbSet<LearningAimsReference> LearningAimsReference { get; set; }
         public virtual DbSet<ProviderReference> ProviderReference { get; set; }
         public virtual DbSet<ProviderQualification> ProviderQualification { get; set; }
         public virtual DbSet<ProviderVenue> ProviderVenue { get; set; }
