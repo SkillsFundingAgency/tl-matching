@@ -18,5 +18,9 @@
         {
             <partial name="_searchresults" model="Model" />
         }
+        @if (Model.SearchResults?.Results == null)
+        {
+            <partial name="_addprovider" model="Model" />
+        }
     </div>
 </div>
