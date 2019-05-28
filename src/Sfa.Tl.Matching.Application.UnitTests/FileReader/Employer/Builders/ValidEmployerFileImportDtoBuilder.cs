@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Builders
         public const string Owner = "Owner";
         public const string CreatedBy = "CreatedBy";
 
-        public EmployerFileImportDto Build() => new EmployerFileImportDto
+        public EmployerStagingFileImportDto Build() => new EmployerStagingFileImportDto
         {
             CrmId = CrmId,
             CompanyName = Companyname,

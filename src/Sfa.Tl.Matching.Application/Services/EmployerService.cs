@@ -24,11 +24,11 @@ namespace Sfa.Tl.Matching.Application.Services
             _repository = repository;
         }
 
-        public async Task<EmployerDto> GetEmployer(int id)
+        public async Task<EmployerStagingDto> GetEmployer(int id)
         {
             var employer = await _repository.GetSingleOrDefault(e => e.Id == id);
 
-            var dto = _mapper.Map<Employer, EmployerDto>(employer);
+            var dto = _mapper.Map<Employer, EmployerStagingDto>(employer);
 
             return dto;
         }

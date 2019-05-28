@@ -18,31 +18,31 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
 {
     public class EmployerTestFixture : IDisposable
     {
-        public IFileImportService<EmployerFileImportDto> FileImportService;
+        public IFileImportService<EmployerStagingFileImportDto> FileImportService;
         public MatchingDbContext MatchingDbContext;
 
         public EmployerTestFixture()
         {
             var loggerRepository = new Logger<EmployerRepository>(new NullLoggerFactory());
-            var loggerExcelFileReader = new Logger<ExcelFileReader<EmployerFileImportDto, EmployerDto>>(new NullLoggerFactory());
+            var loggerExcelFileReader = new Logger<ExcelFileReader<EmployerStagingFileImportDto, EmployerStagingDto>>(new NullLoggerFactory());
 
-            var logger = new Logger<FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>>(new NullLoggerFactory());
+            var logger = new Logger<FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
             var repository = new EmployerRepository(loggerRepository, MatchingDbContext);
             var functionLogRepository = new GenericRepository<FunctionLog>(new NullLogger<GenericRepository<FunctionLog>>(), MatchingDbContext);
             
-            var dataValidator = new EmployerDataValidator();
-            var dataParser = new EmployerDataParser();
+            var dataValidator = new EmployerStagingDataValidator();
+            var dataParser = new EmployerStagingDataParser();
             var nullDataProcessor = new NullDataProcessor<Domain.Models.Employer>();
-            var excelFileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>(loggerExcelFileReader, dataParser, dataValidator, functionLogRepository);
+            var excelFileReader = new ExcelFileReader<EmployerStagingFileImportDto, EmployerStagingDto>(loggerExcelFileReader, dataParser, dataValidator, functionLogRepository);
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
 
             var mapper = new Mapper(config);
 
-            FileImportService = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(logger, mapper, excelFileReader, repository, nullDataProcessor);
+            FileImportService = new FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer>(logger, mapper, excelFileReader, repository, nullDataProcessor);
         }
 
         public void ResetData(string companyName)

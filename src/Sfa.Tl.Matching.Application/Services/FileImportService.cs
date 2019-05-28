@@ -97,7 +97,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static IEqualityComparer<TEntity> GetEqualityComparer()
         {
-            var comparerType = typeof(EmployerEqualityComparer).Assembly.GetTypes()
+            var comparerType = typeof(EmployerStagingEqualityComparer).Assembly.GetTypes()
                 .Single(comparer => typeof(IEqualityComparer<TEntity>).IsAssignableFrom(comparer));
             return (IEqualityComparer<TEntity>)Activator.CreateInstance(comparerType);
         }

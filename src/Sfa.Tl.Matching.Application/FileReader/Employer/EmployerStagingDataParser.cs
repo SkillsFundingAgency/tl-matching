@@ -5,13 +5,13 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileReader.Employer
 {
-    public class EmployerDataParser : IDataParser<EmployerDto>
+    public class EmployerStagingDataParser : IDataParser<EmployerStagingDto>
     {
-        public IEnumerable<EmployerDto> Parse(FileImportDto fileImportDto)
+        public IEnumerable<EmployerStagingDto> Parse(FileImportDto fileImportDto)
         {
-            if (!(fileImportDto is EmployerFileImportDto data)) return null;
+            if (!(fileImportDto is EmployerStagingFileImportDto data)) return null;
             
-            var employerDto = new EmployerDto
+            var employerStagingDto = new EmployerStagingDto
             {
                 CrmId = data.CrmId.ToGuid(),
                 CompanyName =  data.CompanyName.ToTitleCase(),
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
                 CreatedBy = data.CreatedBy
             };
 
-            return new List<EmployerDto> { employerDto };
+            return new List<EmployerStagingDto> { employerStagingDto };
         }
     }
 }

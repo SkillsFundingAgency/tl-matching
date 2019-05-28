@@ -3,9 +3,9 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Domain.EqualityComparer
 {
-    public sealed class EmployerEqualityComparer : IEqualityComparer<Employer>
+    public sealed class EmployerStagingEqualityComparer : IEqualityComparer<EmployerStaging>
     {
-        public bool Equals(Employer x, Employer y)
+        public bool Equals(EmployerStaging x, EmployerStaging y)
         {
             if (ReferenceEquals(x, y)) return true;
             if (ReferenceEquals(x, null)) return false;
@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
             return x.CrmId.Equals(y.CrmId) && string.Equals(x.CompanyName, y.CompanyName) && string.Equals(x.AlsoKnownAs, y.AlsoKnownAs) && string.Equals(x.Aupa, y.Aupa) && string.Equals(x.CompanyType, y.CompanyType) && string.Equals(x.PrimaryContact, y.PrimaryContact) && string.Equals(x.Phone, y.Phone) && string.Equals(x.Email, y.Email) && string.Equals(x.Postcode, y.Postcode) && string.Equals(x.Owner, y.Owner);
         }
 
-        public int GetHashCode(Employer obj)
+        public int GetHashCode(EmployerStaging obj)
         {
             unchecked
             {

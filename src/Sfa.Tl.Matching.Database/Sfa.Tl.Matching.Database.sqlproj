@@ -90,6 +90,7 @@
     <Build Include="Tables\LearningAimsReferenceStaging.sql" />
     <Build Include="Tables\ProviderReferenceStaging.sql" />
     <Build Include="Tables\ProviderReference.sql" />
+    <Build Include="Tables\EmployerStaging.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

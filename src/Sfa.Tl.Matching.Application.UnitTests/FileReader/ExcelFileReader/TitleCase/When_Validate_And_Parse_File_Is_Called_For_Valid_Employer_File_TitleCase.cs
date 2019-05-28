@@ -21,25 +21,25 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Title
 {
     public class When_Validate_And_Parse_File_Is_Called_For_Valid_Employer_File_TitleCase
     {
-        private readonly IValidator<EmployerFileImportDto> _dataValidator;
-        private readonly IDataParser<EmployerDto> _dataParser;
+        private readonly IValidator<EmployerStagingFileImportDto> _dataValidator;
+        private readonly IDataParser<EmployerStagingDto> _dataParser;
         private readonly IRepository<FunctionLog> _functionLogRepository;
-        private readonly IList<EmployerDto> _results;
+        private readonly IList<EmployerStagingDto> _results;
 
         public When_Validate_And_Parse_File_Is_Called_For_Valid_Employer_File_TitleCase()
         {
-            _dataValidator = Substitute.For<IValidator<EmployerFileImportDto>>();
+            _dataValidator = Substitute.For<IValidator<EmployerStagingFileImportDto>>();
             _dataValidator
-                .ValidateAsync(Arg.Any<EmployerFileImportDto>())
+                .ValidateAsync(Arg.Any<EmployerStagingFileImportDto>())
                 .Returns(Task.FromResult(new ValidationResult()));
 
-            _dataParser = Substitute.For<IDataParser<EmployerDto>>();
-            _dataParser.Parse(Arg.Any<EmployerFileImportDto>()).Returns(info => new EmployerDataParser().Parse(info.Arg<EmployerFileImportDto>()));
+            _dataParser = Substitute.For<IDataParser<EmployerStagingDto>>();
+            _dataParser.Parse(Arg.Any<EmployerStagingFileImportDto>()).Returns(info => new EmployerStagingDataParser().Parse(info.Arg<EmployerStagingFileImportDto>()));
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            var excelfileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>
+            var excelfileReader = new ExcelFileReader<EmployerStagingFileImportDto, EmployerStagingDto>
             (
-                new NullLogger<ExcelFileReader<EmployerFileImportDto, EmployerDto>>(),
+                new NullLogger<ExcelFileReader<EmployerStagingFileImportDto, EmployerStagingDto>>(),
                 _dataParser,
                 _dataValidator,
                 _functionLogRepository
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Title
             using (var stream = File.Open(filePath, FileMode.Open))
             {
 
-                _results = excelfileReader.ValidateAndParseFile(new EmployerFileImportDto
+                _results = excelfileReader.ValidateAndParseFile(new EmployerStagingFileImportDto
                 {
                     FileDataStream = stream
                 }).GetAwaiter().GetResult();
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Title
         [Fact]
         public void Then_Data_Validator_Validate_Is_called_Exactly_Once_And_Leading_And_Trailing_Speaces_are_Trimmed()
         {
-            _dataValidator.Received(1).ValidateAsync(Arg.Is<EmployerFileImportDto>(arg =>
+            _dataValidator.Received(1).ValidateAsync(Arg.Is<EmployerStagingFileImportDto>(arg =>
                 arg.CompanyName == "HARDIK DESAI LTD" && arg.AlsoKnownAs == "also known as"));
         }
 
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Title
         [Fact]
         public void Then_Data_Parser_Parse_Is_Called_Exactly_Once_And_Company_Name_And_Also_KnownAs_Fields_are_Converted_To_TitleCase()
         {
-            _dataParser.Received(1).Parse(Arg.Any<EmployerFileImportDto>());
+            _dataParser.Received(1).Parse(Arg.Any<EmployerStagingFileImportDto>());
         }
 
         [Fact]

@@ -20,13 +20,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
 
         public static IMapper GetMapper()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
             return new Mapper(config);
         }
 
         public static IDataParser<TDto> GetDataParser<TDto>() where TDto : class
         {
-            return (IDataParser<TDto>)Activator.CreateInstance(typeof(EmployerDataParser).Assembly.GetTypes()
+            return (IDataParser<TDto>)Activator.CreateInstance(typeof(EmployerStagingDataParser).Assembly.GetTypes()
                 .First(t => typeof(IDataParser<TDto>).IsAssignableFrom(t)));
         }
     }

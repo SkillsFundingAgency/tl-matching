@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.DuplicateRows
 {
-    public class When_Import_Is_Called_To_Import_Valid_Employer_File_With_Duplicate_Rows : IClassFixture<FileImportServiceDuplicateRowsTestFixture<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>>
+    public class When_Import_Is_Called_To_Import_Valid_Employer_File_With_Duplicate_Rows : IClassFixture<FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer>>
     {
-        private readonly FileImportServiceDuplicateRowsTestFixture<EmployerFileImportDto, EmployerDto, Domain.Models.Employer> _fixture;
+        private readonly FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer> _fixture;
 
-        public When_Import_Is_Called_To_Import_Valid_Employer_File_With_Duplicate_Rows(FileImportServiceDuplicateRowsTestFixture<EmployerFileImportDto, EmployerDto, Domain.Models.Employer> fixture)
+        public When_Import_Is_Called_To_Import_Valid_Employer_File_With_Duplicate_Rows(FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer> fixture)
         {
             _fixture = fixture;
         }
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         [Fact]
         public void Then_Data_Validator_Validate_Is_called_Exactly_Twice()
         {
-            _fixture.DataValidator.Received(2).ValidateAsync(Arg.Any<EmployerFileImportDto>());
+            _fixture.DataValidator.Received(2).ValidateAsync(Arg.Any<EmployerStagingFileImportDto>());
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         [Fact]
         public void Then_Data_Parser_Parse_Is_Called_Exactly_Twice()
         {
-            _fixture.DataParser.Received(2).Parse(Arg.Any<EmployerFileImportDto>());
+            _fixture.DataParser.Received(2).Parse(Arg.Any<EmployerStagingFileImportDto>());
         }
 
         [Fact]

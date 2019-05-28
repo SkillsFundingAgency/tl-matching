@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _dto.PlacementsKnown = PlacementsKnown;
             _dto.Placements = Placements;
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();

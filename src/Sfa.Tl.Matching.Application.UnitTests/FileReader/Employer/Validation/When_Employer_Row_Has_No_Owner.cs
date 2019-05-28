@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
             validationResult.IsValid.Should().BeFalse();
             validationResult.Errors.Count.Should().Be(1);
             validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.MissingMandatoryData.ToString());
-            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerFileImportDto.Owner)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerStagingFileImportDto.Owner)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
     }
 }

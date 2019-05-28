@@ -4,11 +4,11 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
-    public class EmployerMapper : Profile
+    public class EmployerStagingMapper : Profile
     {
-        public EmployerMapper()
+        public EmployerStagingMapper()
         {
-            CreateMap<EmployerDto, Employer>()
+            CreateMap<EmployerStagingDto, EmployerStaging>()
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())

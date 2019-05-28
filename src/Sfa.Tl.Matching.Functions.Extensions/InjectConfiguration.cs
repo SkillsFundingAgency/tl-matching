@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
             });
 
-            services.AddAutoMapper(expression => expression.AddProfiles(typeof(EmployerMapper).Assembly));
+            services.AddAutoMapper(expression => expression.AddProfiles(typeof(EmployerStagingMapper).Assembly));
 
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(_configuration.SqlConnectionString,
@@ -87,11 +87,12 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterFileReaders(IServiceCollection services)
         {
-            RegisterExcelFileReader<EmployerDto, EmployerFileImportDto, Employer, EmployerDataParser, EmployerDataValidator, NullDataProcessor<Employer>>(services);
             RegisterExcelFileReader<ProviderDto, ProviderFileImportDto, Provider, ProviderDataParser, ProviderDataValidator, NullDataProcessor<Provider>>(services);
             RegisterExcelFileReader<ProviderVenueDto, ProviderVenueFileImportDto, ProviderVenue, ProviderVenueDataParser, ProviderVenueDataValidator, ProviderVenueDataProcessor>(services);
             RegisterExcelFileReader<ProviderQualificationDto, ProviderQualificationFileImportDto, ProviderQualification, ProviderQualificationDataParser, ProviderQualificationDataValidator, NullDataProcessor<ProviderQualification>>(services);
-            
+
+            RegisterExcelFileReader<EmployerStagingDto, EmployerStagingFileImportDto, EmployerStaging, EmployerStagingDataParser, EmployerStagingDataValidator, NullDataProcessor<EmployerStaging>>(services);
+
             RegisterCsvFileReader<LearningAimsReferenceStagingDto, LearningAimsReferenceStagingFileImportDto, LearningAimsReferenceStaging, LearningAimsReferenceStagingDataParser, LearningAimsReferenceStagingDataValidator, NullDataProcessor<LearningAimsReferenceStaging>>(services);
         }
 
@@ -157,6 +158,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
             services.AddTransient<IRepository<LearningAimsReferenceStaging>, GenericRepository<LearningAimsReferenceStaging>>();
             services.AddTransient<IRepository<ProviderReferenceStaging>, GenericRepository<ProviderReferenceStaging>>();
+            services.AddTransient<IRepository<EmployerStaging>, GenericRepository<EmployerStaging>>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -168,6 +170,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<ILearningAimsReferenceSynchronizationService, LearningAimsReferenceSynchronizationService>();
+            services.AddTransient<IEmployerSynchronizationService, EmployerSynchronizationService>();
             services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();

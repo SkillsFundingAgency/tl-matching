@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
             
             validationResult.Errors.Count.Should().Be(1);
             validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.InvalidFormat.ToString());
-            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerFileImportDto.Aupa)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerStagingFileImportDto.Aupa)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
         }
     }
 }

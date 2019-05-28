@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var mapper = new Mapper(config);
 
             _employerService = Substitute.For<IEmployerService>();
-            _employerService.GetEmployer(Arg.Any<int>()).Returns(new EmployerDto
+            _employerService.GetEmployer(Arg.Any<int>()).Returns(new EmployerStagingDto
             {
                 CompanyName = EmployerName
             });

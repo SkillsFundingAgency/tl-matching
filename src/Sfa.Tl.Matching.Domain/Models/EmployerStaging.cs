@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Sfa.Tl.Matching.Models.Dto
+namespace Sfa.Tl.Matching.Domain.Models
 {
-    public class EmployerDto
+    public class EmployerStaging : BaseEntity
     {
+        [MergeKey]
         public Guid CrmId { get; set; }
         public string CompanyName { get; set; }
         public string AlsoKnownAs { get; set; }
@@ -15,8 +17,8 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string Email { get; set; }
         public string Postcode { get; set; }
         public string Owner { get; set; }
-        public string CreatedBy { get; set; }
-        public string CompanyNameWithAka => !string.IsNullOrWhiteSpace(AlsoKnownAs) ? 
-            $"{CompanyName} ({AlsoKnownAs})" : CompanyName;
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public int ChecksumCol { get; set; }
     }
 }

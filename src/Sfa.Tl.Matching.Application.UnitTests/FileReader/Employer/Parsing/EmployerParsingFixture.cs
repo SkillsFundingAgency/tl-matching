@@ -6,13 +6,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Parsing
 {
     public class EmployerParsingFixture
     {
-        public EmployerDataParser Parser;
-        public EmployerFileImportDto Dto;
+        public EmployerStagingDataParser Parser;
+        public EmployerStagingFileImportDto Dto;
 
         public EmployerParsingFixture()
         {
             Dto = new ValidEmployerFileImportDtoBuilder().Build();
-            Parser = new EmployerDataParser();
+            Parser = new EmployerStagingDataParser();
         }
     }
 }

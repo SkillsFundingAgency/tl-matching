@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Provider
             var nullDataProcessor = new NullDataProcessor<Domain.Models.Provider>();
             var excelFileReader = new ExcelFileReader<ProviderFileImportDto, ProviderDto>(loggerExcelFileReader, dataParser, dataValidator, functionLogRepository);
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
 
             FileImportService = new FileImportService<ProviderFileImportDto, ProviderDto, Domain.Models.Provider>(logger, mapper, excelFileReader, repository, nullDataProcessor);

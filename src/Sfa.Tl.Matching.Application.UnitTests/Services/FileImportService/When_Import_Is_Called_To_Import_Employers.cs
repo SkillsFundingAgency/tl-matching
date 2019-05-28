@@ -18,19 +18,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 {
     public class When_Import_Is_Called_To_Import_Employers
     {
-        private readonly EmployerFileImportDto _fileImportDto;
-        private readonly IList<EmployerDto> _fileReaderResults;
-        private readonly IFileReader<EmployerFileImportDto, EmployerDto> _fileReader;
+        private readonly EmployerStagingFileImportDto _stagingFileImportDto;
+        private readonly IList<EmployerStagingDto> _fileReaderResults;
+        private readonly IFileReader<EmployerStagingFileImportDto, EmployerStagingDto> _fileReader;
         private readonly IRepository<Domain.Models.Employer> _repository;
         private readonly int _result;
         private readonly IDataProcessor<Domain.Models.Employer> _dataProcessor;
 
         public When_Import_Is_Called_To_Import_Employers()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
-            var logger = Substitute.For<ILogger<FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>>>();
-            _fileReader = Substitute.For<IFileReader<EmployerFileImportDto, EmployerDto>>();
+            var logger = Substitute.For<ILogger<FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer>>>();
+            _fileReader = Substitute.For<IFileReader<EmployerStagingFileImportDto, EmployerStagingDto>>();
             _repository = Substitute.For<IRepository<Domain.Models.Employer>>();
             _dataProcessor = Substitute.For<IDataProcessor<Domain.Models.Employer>>();
 
@@ -42,19 +42,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
                     return passedEntities.Count();
                 });
 
-            _fileImportDto = new EmployerFileImportDto
+            _stagingFileImportDto = new EmployerStagingFileImportDto
             {
                 FileDataStream = new MemoryStream()
             };
 
             _fileReaderResults = Build(2);
 
-            _fileReader.ValidateAndParseFile(_fileImportDto)
+            _fileReader.ValidateAndParseFile(_stagingFileImportDto)
                 .Returns(Task.FromResult(_fileReaderResults));
 
-            var service = new FileImportService<EmployerFileImportDto, EmployerDto, Domain.Models.Employer>(logger, mapper, _fileReader, _repository, _dataProcessor);
+            var service = new FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
-            _result = service.Import(_fileImportDto).GetAwaiter().GetResult();
+            _result = service.Import(_stagingFileImportDto).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _fileReader
                 .Received(1)
-                .ValidateAndParseFile(_fileImportDto);
+                .ValidateAndParseFile(_stagingFileImportDto);
         }
 
         [Fact]
@@ -95,13 +95,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
             _fileReaderResults.Count.Should().Be(_result);
         }
 
-        public IList<EmployerDto> Build(int numberOfItems)
+        public IList<EmployerStagingDto> Build(int numberOfItems)
         {
-            var employerDtos = new List<EmployerDto>();
+            var employerDtos = new List<EmployerStagingDto>();
 
             for (var i = 0; i < numberOfItems; i++)
             {
-                employerDtos.Add(new EmployerDto
+                employerDtos.Add(new EmployerStagingDto
                 {
                     CrmId = new Guid($"{i}F7B99CB-0FAD-4FFC-AF6A-D5537293E04B"),
                     CompanyName = "Company Name",

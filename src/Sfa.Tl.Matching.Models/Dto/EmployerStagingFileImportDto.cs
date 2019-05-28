@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class EmployerFileImportDto : FileImportDto
+    public class EmployerStagingFileImportDto : FileImportDto
     {
         public override Stream FileDataStream { get; set; }
         public override int? NumberOfHeaderRows => 1;

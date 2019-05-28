@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Functions
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IFileImportService<EmployerFileImportDto> fileImportService
+            [Inject] IEmployerSynchronizationService employerSynchronizationService
         )
         {
             var stream = await blockBlob.OpenReadAsync(null, null, null);
@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRecords = await fileImportService.Import(new EmployerFileImportDto
+            var createdRecords = await employerSynchronizationService.SynchronizeEmployers(new EmployerStagingFileImportDto
             {
                 FileDataStream = stream,
                 CreatedBy = blockBlob.GetCreatedByMetadata()
