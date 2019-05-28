@@ -264,13 +264,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             var targetType = sourceType.Assembly.GetTypes().Single(t => t.Name == target);
 
             var ignoredColumn = new[] { "ModifiedOn", "ModifiedBy" };
-
-            var columnNameList = sourceType.GetProperties()
-                .Where(prop => prop.GetCustomAttribute<KeyAttribute>(false) == null
-                             && prop.GetCustomAttribute<DatabaseGeneratedAttribute>(false) == null
-                             && !ignoredColumn.Contains(prop.Name))
-                .Select(prop => prop.Name)
-                .ToList();
+            var columnNameList = sourceType.GetBulkInsertProperties().Select(prop => prop.Name).ToList();
 
             var targetColumnList = string.Join(", ", columnNameList);
 
