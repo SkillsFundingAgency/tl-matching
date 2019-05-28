@@ -28,15 +28,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> Index(DataImportParametersViewModel viewModel)
         {
             if (viewModel.File == null)
                 ModelState.AddModelError("file", "You must select a file");
 
-            var (extension, errorMessage) = viewModel.SelectedImportType.GetFileExtensionTypeAndErrorMessage();
+            var fileContentType = viewModel.SelectedImportType.GetFileExtensionType();
 
-            if (viewModel.File != null && viewModel.File.ContentType != extension)
-                ModelState.AddModelError("file", errorMessage);
+            if (viewModel.File != null && viewModel.File.ContentType != fileContentType)
+                ModelState.AddModelError("file", fileContentType.GetFileExtensionErrorMessage());
 
             if (ModelState.IsValid)
             {
