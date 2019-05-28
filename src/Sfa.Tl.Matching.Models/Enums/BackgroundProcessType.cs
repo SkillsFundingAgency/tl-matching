@@ -3,6 +3,6 @@
     public enum BackgroundProcessType
     {
         ProviderFeedbackRequest = 1,
-        ProviderReferenceDataDownload
+        ProviderReferenceData
     }
 }
