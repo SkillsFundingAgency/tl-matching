@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.EntityFrameworkCore;
@@ -218,6 +219,21 @@ namespace Sfa.Tl.Matching.Data.Repositories
                             }
                             catch (Exception ex)
                             {
+                                //string pattern = @"\d+";
+                                //Match match = Regex.Match(ex.Message.ToString(), pattern);
+                                //var index = Convert.ToInt32(match.Value) -1;
+
+                                //FieldInfo fi = typeof(SqlBulkCopy).GetField("_sortedColumnMappings", BindingFlags.NonPublic | BindingFlags.Instance);
+                                //var sortedColumns = fi.GetValue(bulkCopy);
+                                //var items = (Object[])sortedColumns.GetType().GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(sortedColumns);
+
+                                //FieldInfo itemdata = items[index].GetType().GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+                                //var metadata = itemdata.GetValue(items[index]);
+
+                                //var column = metadata.GetType().GetField("column", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(metadata);
+                                //var length = metadata.GetType().GetField("length", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(metadata);
+                                //throw new DataFormatException(String.Format("Column: {0} contains data with a length greater than: {1}", column, length));
+
                                 _logger.LogError($"{typeof(GenericRepository<T>).Name} - Error inserting {typeof(T).Name} data into the database. Internal Exception : {ex} ");
                                 throw;
                             }
@@ -247,15 +263,38 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
                     using (var transaction = connection.BeginTransaction())
                     {
-                        var mergeCommand = GetMergeCommand();
+                        var isSuccessful = false;
+                        try
+                        {
+                            var mergeSql = GetMergeCommand();
+                            var deleteCommand = new SqlCommand(mergeSql, connection, transaction);
+                            deleteCommand.ExecuteNonQuery();
+                            isSuccessful = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            isSuccessful = false;
+                            _logger.LogError($"{typeof(GenericRepository<T>).Name} - Error inserting {typeof(T).Name} data into the database. Internal Exception : {ex} ");
+                            throw;
+                        }
+                        finally
+                        {
+                            if (isSuccessful)
+                                transaction.Commit();
+                            else
+                                transaction.Rollback();
+
+                            connection.Close();
+                        }
                     }
                 }
+                transactionScope.Complete();
             }
 
             return Task.CompletedTask;
         }
 
-        private string GetMergeCommand()
+        private static string GetMergeCommand()
         {
             var sourceType = typeof(T);
             var source = sourceType.Name;
@@ -263,7 +302,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
             var target = source.Replace("Staging", string.Empty);
             var targetType = sourceType.Assembly.GetTypes().Single(t => t.Name == target);
 
-            var ignoredColumn = new[] { "ModifiedOn", "ModifiedBy" };
             var columnNameList = sourceType.GetBulkInsertProperties().Select(prop => prop.Name).ToList();
 
             var targetColumnList = string.Join(", ", columnNameList);
@@ -275,7 +313,13 @@ namespace Sfa.Tl.Matching.Data.Repositories
             var sourceCompareColumn = sourceType.GetProperties().Where(prop => prop.GetCustomAttribute<MergeKeyAttribute>(false) != null).Select(prop => prop.Name).Single();
             var targetCompareColumn = targetType.GetProperties().Where(prop => prop.GetCustomAttribute<MergeKeyAttribute>(false) != null).Select(prop => prop.Name).Single();
 
-            return $"MERGE INTO {target} AS TARGET USING ( SELECT * FROM {source} ) AS SOURCE ON SOURCE.{sourceCompareColumn} = TARGET.{targetCompareColumn} WHEN MATCHED AND ( TARGET.ChecksumCol <> SOURCE.ChecksumCol ) THEN UPDATE SET { fromSourceToTargetMappingForUpdate } WHEN NOT MATCHED BY TARGET THEN INSERT ( {targetColumnList} ) VALUES ( {sourceColumnList} ) WHEN NOT MATCHED BY SOURCE THEN DELETE;";
+            return $"MERGE INTO {target} AS TARGET " +
+                   $"USING ( SELECT * FROM {source} ) AS SOURCE ON SOURCE.{sourceCompareColumn} = TARGET.{targetCompareColumn} " +
+                   "WHEN MATCHED AND ( TARGET.ChecksumCol <> SOURCE.ChecksumCol ) THEN " +
+                   $"UPDATE SET { fromSourceToTargetMappingForUpdate } " +
+                   "WHEN NOT MATCHED BY TARGET THEN " +
+                   $"INSERT ( {targetColumnList} ) VALUES ( {sourceColumnList} ) " +
+                   "WHEN NOT MATCHED BY SOURCE THEN DELETE;";
         }
 
         private SqlBulkCopy CreateSqlBulkCopy(SqlConnection connection, SqlTransaction transaction, DataTable dataTable)
@@ -286,9 +330,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 DestinationTableName = $"dbo.{typeof(T).Name}"
             };
 
-            var properties = TypeDescriptor.GetProperties(typeof(T));
+            var properties = typeof(T).GetBulkInsertProperties();
 
-            foreach (PropertyDescriptor prop in properties)
+            foreach (var prop in properties)
             {
                 if (!dataTable.Columns.Contains(prop.Name)) continue; // ignore target column which is available source columns list
                 bulkCopy.ColumnMappings.Add(prop.Name, prop.Name);
