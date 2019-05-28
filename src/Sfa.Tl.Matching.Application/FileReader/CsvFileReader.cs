@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                 while (!reader.EndOfStream)
                 {
                     var row = await reader.ReadLineAsync();
-                    var values = row.Split(",");
+                    var values = row.Remove(0, 1).Remove(row.Length - 2).Split("\",\"");
                     ValidationResult validationResult;
 
                     foreach (var column in columnInfos)
