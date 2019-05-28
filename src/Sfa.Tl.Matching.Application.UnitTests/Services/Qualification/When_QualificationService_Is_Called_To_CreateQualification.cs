@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
@@ -15,6 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
     public class When_QualificationService_Is_Called_To_CreateQualification
     {
         private readonly IRepository<Domain.Models.Qualification> _qualificationRepository;
+        private readonly  int _result;
 
         public When_QualificationService_Is_Called_To_CreateQualification()
         {
@@ -33,8 +35,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                                 null);
             });
             var mapper = new Mapper(config);
-            _qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
 
+            _qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
+            _qualificationRepository.Create(Arg.Any<Domain.Models.Qualification>())
+                .Returns(1);
             _qualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
                 .Returns(new Domain.Models.Qualification());
 
@@ -46,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 LarsId = "10042982"
             };
 
-            var _result = qualificationService.CreateQualificationAsync(viewModel).GetAwaiter().GetResult();
+            _result = qualificationService.CreateQualificationAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -60,12 +64,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         [Fact]
         public void Then_QualificationRepository_Create_Is_Called_With_Expected_Values()
         {
-            //Can't check Status here because NSubstitute only remembers the last one
             _qualificationRepository
                 .Received()
                 .Create(Arg.Is<Domain.Models.Qualification> (
                     p => p.LarsId == "10042982"
                 ));
+        }
+
+        [Fact]
+        public void Then_Created_Qualification_Id_Should_Be_Greater_Than_Zero()
+        {
+            _result.Should().BeGreaterThan(0);
         }
     }
 }

@@ -24,5 +24,16 @@ namespace Sfa.Tl.Matching.Application.Services
             var qualification = _mapper.Map<Qualification>(viewModel);
             return await _qualificationRepository.Create(qualification);
         }
+
+        public async Task<QualificationDetailViewModel> GetQualificationAsync(string larId)
+        {
+            var qualification = await _qualificationRepository.GetSingleOrDefault(p => p.LarsId == larId);
+            return _mapper.Map<Qualification, QualificationDetailViewModel>(qualification);
+        }
+
+        public async Task<bool> IsValidLarIdAsync(string larId)
+        {
+            return await Task.FromResult(larId?.Length == 8);
+        }
     }
 }

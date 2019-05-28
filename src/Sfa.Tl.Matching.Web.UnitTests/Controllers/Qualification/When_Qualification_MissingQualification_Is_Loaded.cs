@@ -9,12 +9,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 {
-    public class When_Qualification_Add_Is_Loaded
+    public class When_Qualification_MissingQualification_Is_Loaded
     {
         private readonly IActionResult _result;
         private readonly IProviderVenueService _providerVenueService;
 
-        public When_Qualification_Add_Is_Loaded()
+        public When_Qualification_MissingQualification_Is_Loaded()
         {
             var qualificationService = Substitute.For<IQualificationService>();
 
@@ -24,14 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             var qualificationController = new QualificationController(_providerVenueService, qualificationService);
 
-            _result = qualificationController.AddQualification(1)
-                .GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_GetVenuePostcodeAsync_Is_Called_Exactly_Once()
-        {
-            _providerVenueService.Received(1).GetVenuePostcodeAsync(1);
+            _result = qualificationController.MissingQualification(1);
         }
 
         [Fact]
@@ -52,10 +45,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         [Fact]
         public void Then_ViewModel_Fields_Are_Set()
         {
-            var viewModel = _result.GetViewModel<AddQualificationViewModel>();
+            var viewModel = _result.GetViewModel<MissingQualificationViewModel>();
             viewModel.ProviderVenueId.Should().Be(1);
-            viewModel.Postcode.Should().Be("CV1 2WT");
-            viewModel.LarsId.Should().BeNullOrEmpty();
         }
     }
 }

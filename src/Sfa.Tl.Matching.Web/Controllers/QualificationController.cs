@@ -33,10 +33,51 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
+        [HttpPost]
+        [Route("add-qualification/{providerId}", Name = "CreateQualification")]
+        public async Task<IActionResult> AddQualification(AddQualificationViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            var isValid = await _qualificationService.IsValidLarIdAsync(viewModel.LarsId);
+
+            if (string.IsNullOrWhiteSpace(viewModel.LarsId) || !isValid)
+            {
+                ModelState.AddModelError("LarsId", "Enter a learning aim reference (LAR) that has 8 characters");
+                return View(viewModel);
+            }
+
+            var qualification = await _qualificationService.GetQualificationAsync(viewModel.LarsId);
+
+            if (qualification == null)
+            {
+                return RedirectToRoute("MissingQualification", new { providerVenueId = viewModel.ProviderVenueId });
+            }
+            else
+            {
+                return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.ProviderVenueId });
+            }
+        }
+
         [Route("missing-qualification/{providerVenueId}", Name = "MissingQualification")]
         public IActionResult MissingQualification(int providerVenueId)
         {
-            return View(new MissingQualificationViewModel { ProviderVenueId = providerVenueId });
+            return View(new MissingQualificationViewModel { ProviderVenueId = providerVenueId })
+                ;
+        }
+
+        [HttpPost]
+        [Route("missing-qualification/{providerVenueId}", Name = "MissingQualification")]
+        public IActionResult MissingQualification(MissingQualificationViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            //var qualificationId = qualification?.Id 
+            //                      ?? await _qualificationService.CreateQualificationAsync(viewModel);
+
+            return View(viewModel);
         }
     }
 }
