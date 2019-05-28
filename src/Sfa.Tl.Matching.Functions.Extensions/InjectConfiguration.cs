@@ -164,8 +164,10 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IEmailHistoryService, EmailHistoryService>();
             services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProximityService, ProximityService>();
-            services.AddTransient<ISearchProvider, SqlSearchProvider>();
+            services.AddTransient<ILearningAimsReferenceSynchronizationService, LearningAimsReferenceSynchronizationService>();
 
+
+            services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         }
 

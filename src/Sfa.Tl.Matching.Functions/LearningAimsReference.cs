@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Functions
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IFileImportService<LearningAimsReferenceStagingFileImportDto> fileImportService,
+            [Inject] ILearningAimsReferenceSynchronizationService learningAimsReferenceSynchronizationService,
             [Inject] IRepository<LearningAimsReferenceStaging> learningAimsReferenceStagingRepository
         )
         {
@@ -32,13 +32,11 @@ namespace Sfa.Tl.Matching.Functions
 
             var stopwatch = Stopwatch.StartNew();
             
-            var createdRecords = await fileImportService.BulkImport(new LearningAimsReferenceStagingFileImportDto
+            var createdRecords = await learningAimsReferenceSynchronizationService.SynchronizeLearningAimsReferences(new LearningAimsReferenceStagingFileImportDto
             {
                 FileDataStream = stream,
                 CreatedBy = blockBlob.GetCreatedByMetadata()
             });
-
-            await learningAimsReferenceStagingRepository.MergeFromStaging();
 
             stopwatch.Stop();
 
