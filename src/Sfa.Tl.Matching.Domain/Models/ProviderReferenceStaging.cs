@@ -4,6 +4,7 @@ namespace Sfa.Tl.Matching.Domain.Models
 {
     public class ProviderReferenceStaging : BaseEntity
     {
+        [MergeKey]
         public long UkPrn { get; set; }
         public string Name { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed),]
