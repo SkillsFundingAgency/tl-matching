@@ -22,5 +22,11 @@
         {
             <partial name="_addprovider" model="Model" />
         }
+
+        @if (Model.SearchResults?.Results == null)
+        {
+            <p class="govuk-body">There is no active provider for [UKPRN]. Please try again.</p>
+        }
+
     </div>
 </div>
