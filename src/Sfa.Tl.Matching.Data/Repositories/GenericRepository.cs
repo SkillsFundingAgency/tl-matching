@@ -249,8 +249,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public Task MergeFromStaging()
+        public async Task<int> MergeFromStaging()
         {
+            int numberOfRecordsAffected;
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
             {
                 using (var connection = new SqlConnection(_dbContext.Database.GetDbConnection().ConnectionString))
@@ -262,9 +263,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         var isSuccessful = false;
                         try
                         {
-                            var mergeSql = GetMergeCommand();
-                            var deleteCommand = new SqlCommand(mergeSql, connection, transaction);
-                            deleteCommand.ExecuteNonQuery();
+                            var mergeSql = GetMergeSql();
+
+                            var mergeCommand = new SqlCommand(mergeSql, connection, transaction);
+                            
+                            numberOfRecordsAffected = await mergeCommand.ExecuteNonQueryAsync();
+                            
                             isSuccessful = true;
                         }
                         catch (Exception ex)
@@ -287,10 +291,10 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 transactionScope.Complete();
             }
 
-            return Task.CompletedTask;
+            return numberOfRecordsAffected;
         }
 
-        private static string GetMergeCommand()
+        private static string GetMergeSql()
         {
             var sourceType = typeof(T);
             var source = sourceType.Name;
