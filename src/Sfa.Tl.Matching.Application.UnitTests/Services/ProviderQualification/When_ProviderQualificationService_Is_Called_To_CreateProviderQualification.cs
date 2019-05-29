@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
                 ProviderVenueId = 1,
                 QualificationId = 2,
                 Postcode = "CV1 2WT",
-                LarsId = "10042982"
+                LarId = "10042982"
             };
 
             _result = providerQualificationService.CreateProviderQualificationAsync(viewModel).GetAwaiter().GetResult();

@@ -16,7 +16,7 @@
         </h2>
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
-                <li><a sfa-validation-for="LarsId"></a></li>
+                <li><a sfa-validation-for="LarId"></a></li>
             </ul>
         </div>
     </div>
@@ -27,12 +27,12 @@
             <input asp-for="ProviderVenueId" type="hidden" />
             <h1 class="govuk-heading-l">Add a qualification for @Model.Postcode</h1>
 
-            <div class="govuk-form-group" sfa-validation-for="LarsId" sfa-validationerror-class="govuk-form-group--error">
-                <label class="govuk-label" asp-for="LarsId">
+            <div class="govuk-form-group" sfa-validation-for="LarId" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label" asp-for="LarId">
 Enter the learning aim reference (LAR)
                 </label>
-                <span class="govuk-error-message" asp-validation-for="LarsId"></span>
-                <input asp-for="LarsId" class="govuk-input govuk-input"
+                <span class="govuk-error-message" asp-validation-for="LarId"></span>
+                <input asp-for="LarId" class="govuk-input govuk-input"
                        sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error"
                        type="text">
             </div>

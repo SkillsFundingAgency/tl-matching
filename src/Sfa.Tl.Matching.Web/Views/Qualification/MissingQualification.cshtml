@@ -17,6 +17,7 @@
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 <li><a sfa-validation-for="ShortTitle"></a></li>
+                <li><a sfa-validation-for="Routes"></a></li>
             </ul>
         </div>
     </div>
@@ -32,7 +33,7 @@
                     Learning aim reference (LAR)
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    1234567
+                    @Model.LarId
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
@@ -40,15 +41,17 @@
                     Qualification title
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    NVQ Level 2 in Lawn Mowering
+                    @Model.Title
                 </dd>
-
             </div>
         </dl>
 
-        <p class="govuk-body"><a class="govuk-link" href="/add-qualification/2">Change qualification</a></p>
+        <p class="govuk-body"><a class="govuk-link" asp-route="AddQualification" asp-route-ProviderVenueId="@Model.ProviderVenueId">Change qualification</a></p>
 
-        <form>
+        <form asp-route="SaveMissingQualification" novalidate>
+            <input type="hidden" asp-for="ProviderVenueId" />
+            <input type="hidden" asp-for="LarId" />
+
             <div class="govuk-form-group govuk-!-margin-top-8" sfa-validation-for="ShortTitle" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" asp-for="ShortTitle">
                     <h2 class="govuk-heading-m govuk-!-margin-0">What is the short title for this qualification? </h2>
@@ -71,187 +74,33 @@
                     <span id="skill-area-hint" class="govuk-hint">
                         Select the ones that are the closest fit
                     </span>
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-1" name="skill-area" type="checkbox" value="Agriculture, environmental and animal care">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-1">
-                                Agriculture, environmental and animal care
-                            </label>
-                            <span id="skill-area-1-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: animal care and management; agriculture, land management and production
-                            </span>
+                
+                    @for (var i = 0; i < Model.Routes.Count; i++)
+                    {
+                        var route = Model.Routes[i];
+
+                        <div class="govuk-checkboxes">
+                            <div class="govuk-checkboxes__item">
+                                <input type="hidden" asp-for="@route.Id" name="Routes[@i].RouteId" />
+
+                                <input type="checkbox" class="govuk-checkboxes__input"
+                                       asp-for="@route.IsSelected"
+                                       name="Routes[@i].IsSelected">
+                                <label class="govuk-label govuk-checkboxes__label"
+                                       asp-for="@route.IsSelected"
+                                       name="Routes[@i].IsSelected">
+                                    @route.Name
+                                </label>
+                                <span class="govuk-hint govuk-checkboxes__hint"
+                                      id="Routes[@i]-hint">
+                                    Includes:
+                                    @String.Join("; ", route.PathNames.OrderBy(p => p).Select(p => p.ToLower()))
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    }
 
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-2" name="skill-area" type="checkbox" value="Business and administration">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-2">
-                                Business and administration
-                            </label>
-                            <span id="skill-area-2-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: management and administration; human resources (HR)
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-3" name="skill-area" type="checkbox" value="Care services">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-3">
-                                Care services
-                            </label>
-                            <span id="skill-area-3-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: support work for children, young people and families; adult care work
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-4" name="skill-area" type="checkbox" value="Catering and hospitality">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-4">
-                                Catering and hospitality
-                            </label>
-                            <span id="skill-area-4-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: preparing and serving food and drink; conferences and events
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-5" name="skill-area" type="checkbox" value="Construction">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-5">
-                                Construction
-                            </label>
-                            <span id="skill-area-5-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: design, surveying and planning; onsite construction; building services engineering
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-6" name="skill-area" type="checkbox" value="Creative and design">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-6">
-                                Creative and design
-                            </label>
-                            <span id="skill-area-6-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: craft and design; media, broadcast and production; cultural heritage and visitor attractions
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-7" name="skill-area" type="checkbox" value="Digital">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-7">
-                                Digital
-                            </label>
-                            <span id="skill-area-7-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: digital support and services; digital production design and development; digital business services
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-8" name="skill-area" type="checkbox" value="Education and childcare">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-8">
-                                Education and childcare
-                            </label>
-                            <span id="skill-area-8-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: early education and childcare work; teaching
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-9" name="skill-area" type="checkbox" value="Engineering and manufacturing">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-9">
-                                Engineering and manufacturing
-                            </label>
-                            <span id="skill-area-9-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: engineering design, development and control; engineering, manufacturing and process; maintenance, installation and repair
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-10" name="skill-area" type="checkbox" value="Hair and beauty">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-10">
-                                Hair and beauty
-                            </label>
-                            <span id="skill-area-10-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: hair, beauty and aesthetics
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-11" name="skill-area" type="checkbox" value="Health and science">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-11">
-                                Health and science
-                            </label>
-                            <span id="skill-area-11-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: health and healthcare science
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-12" name="skill-area" type="checkbox" value="Legal, financial and accounting">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-12">
-                                Legal, financial and accounting
-                            </label>
-                            <span id="skill-area-12-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: legal, financial services and accountancy
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-13" name="skill-area" type="checkbox" value="Protective services">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-13">
-                                Protective services
-                            </label>
-                            <span id="skill-area-13-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: emergency services; health and safety; security personnel; armed forces
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-14" name="skill-area" type="checkbox" value="Sales, marketing and procurement">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-14">
-                                Sales, marketing and procurement
-                            </label>
-                            <span id="skill-area-14-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: customer service; marketing; procurement; retail
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="skill-area-15" name="skill-area" type="checkbox" value="Transport and logistics">
-                            <label class="govuk-label govuk-checkboxes__label" for="skill-area-15">
-                                Transport and logistics
-                            </label>
-                            <span id="skill-area-15-hint" class="govuk-hint govuk-checkboxes__hint">
-                                Includes: transport, supply chain; logistics
-                            </span>
-                        </div>
-                    </div>
-
-
+                </fieldset>
             </div>
             <button class="govuk-button" type="submit">Add qualification</button>
         </form>

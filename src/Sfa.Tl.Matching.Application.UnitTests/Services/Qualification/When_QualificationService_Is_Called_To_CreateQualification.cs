@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             var viewModel = new AddQualificationViewModel
             {
                 Postcode = "CV1 2WT",
-                LarsId = "10042982"
+                LarId = "10042982"
             };
 
             _result = qualificationService.CreateQualificationAsync(viewModel).GetAwaiter().GetResult();

@@ -12,12 +12,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 {
-    public class When_Qualification_Save_MissingQualification_Is_Called
+    public class When_Qualification_Save_MissingQualification_Has_No_Selected_Routes
     {
-        //private readonly IQualificationService _qualificationService;
         private readonly IActionResult _result;
 
-        public When_Qualification_Save_MissingQualification_Is_Called()
+        public When_Qualification_Save_MissingQualification_Has_No_Selected_Routes()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(RouteViewModelMapper).Assembly));
             var mapper = new Mapper(config);
@@ -41,14 +40,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 LarId = "12345678",
                 QualificationId = 1,
                 Title = "Qualification title",
-                ShortTitle = new string('X', 100),
+                ShortTitle = new string("Short Title"),
                 Routes = new List<RouteViewModel>
                 {
                     new RouteViewModel
                     {
                         Id = 1,
                         Name = "Route 1",
-                        IsSelected = true
+                        IsSelected = false
                     }
                 }
             };
@@ -60,27 +59,27 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         public void Then_Result_Is_Not_Null() =>
             _result.Should().NotBeNull();
 
-
         [Fact]
-        public void Then_Result_Is_RedirectToRoute()
+        public void Then_Model_Is_Of_Type_MissingQualificationViewModel()
         {
-            var result = _result as RedirectToRouteResult;
-            result.Should().NotBeNull();
-            result?.RouteName.Should().Be("GetProviderVenueDetail");
+            var viewResult = _result as ViewResult;
+            viewResult?.Model.Should().BeOfType<MissingQualificationViewModel>();
         }
 
-
         [Fact]
-        public void Then_RouteValues_Has_Expected_Parameters()
+        public void Then_Model_Contains_Routes_Error()
         {
-            var result = _result as RedirectToRouteResult;
-            result?.RouteValues["providerVenueId"].Should().Be(1);
+            var viewResult = _result as ViewResult;
+            viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();
+            viewResult?.ViewData.ModelState["Routes"]
+                .Errors
+                .Should()
+                .ContainSingle(error =>
+                    error.ErrorMessage == "You must choose a skill area for this qualification");
         }
 
-        //[Fact]
-        //public void Then_CreateQualification_Is_Called_Exactly_Once()
-        //{
-        //    _qualificationService.Received(1).CreateQualificationAsync(Arg.Any<AddQualificationViewModel>());
-        //}
+        [Fact]
+        public void Then_View_Result_Is_Returned() =>
+            _result.Should().BeAssignableTo<ViewResult>();
     }
 }

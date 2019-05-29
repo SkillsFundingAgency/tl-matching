@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<AddQualificationViewModel, Qualification>()
                 .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.LarsId, config => config.MapFrom(s => s.LarId))
                 .ForMember(m => m.Title, config => config.Ignore())
                 .ForMember(m => m.ShortTitle, config => config.Ignore())
                 .ForMember(m => m.ProviderQualification, config => config.Ignore())

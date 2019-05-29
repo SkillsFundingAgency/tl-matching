@@ -1,3 +1,4 @@
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -16,6 +17,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
         public When_Qualification_Add_Is_Loaded()
         {
+            var mapper = Substitute.For<IMapper>();
+
             var qualificationService = Substitute.For<IQualificationService>();
 
             _providerVenueService = Substitute.For<IProviderVenueService>();
@@ -23,8 +26,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 .Returns("CV1 2WT");
 
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
+            var routePathService = Substitute.For<IRoutePathService>();
 
-            var qualificationController = new QualificationController(_providerVenueService, qualificationService, providerQualificationService);
+            var qualificationController = new QualificationController(mapper, _providerVenueService, qualificationService, providerQualificationService, routePathService);
 
             _result = qualificationController.AddQualification(1)
                 .GetAwaiter().GetResult();
@@ -57,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var viewModel = _result.GetViewModel<AddQualificationViewModel>();
             viewModel.ProviderVenueId.Should().Be(1);
             viewModel.Postcode.Should().Be("CV1 2WT");
-            viewModel.LarsId.Should().BeNullOrEmpty();
+            viewModel.LarId.Should().BeNullOrEmpty();
         }
     }
 }
