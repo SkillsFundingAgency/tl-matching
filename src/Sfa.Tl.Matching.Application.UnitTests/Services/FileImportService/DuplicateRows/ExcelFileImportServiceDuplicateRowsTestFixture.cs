@@ -15,7 +15,7 @@ using Path = System.IO.Path;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.DuplicateRows
 {
-    public class FileImportServiceDuplicateRowsTestFixture<TImportDto, TDto, TEntity> 
+    public class ExcelFileImportServiceDuplicateRowsTestFixture<TImportDto, TDto, TEntity> 
         where TImportDto : FileImportDto, new()
         where TDto : class, new()
         where TEntity : BaseEntity, new()
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         internal readonly IRepository<TEntity> Repository;
         internal readonly FileImportService<TImportDto, TDto, TEntity> FileImportService;
 
-        public FileImportServiceDuplicateRowsTestFixture()
+        public ExcelFileImportServiceDuplicateRowsTestFixture()
         {
             DataValidator = Substitute.For<IValidator<TImportDto>>();
             DataValidator

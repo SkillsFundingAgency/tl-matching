@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.DuplicateRows
 {
-    public class When_Import_Is_Called_To_Import_Valid_Employer_File_With_Duplicate_Rows : IClassFixture<FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging>>
+    public class When_Import_Is_Called_To_Import_Valid_EmployerStaging_File_With_Duplicate_Rows : IClassFixture<ExcelFileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging>>
     {
-        private readonly FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging> _fixture;
+        private readonly ExcelFileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging> _fixture;
 
-        public When_Import_Is_Called_To_Import_Valid_Employer_File_With_Duplicate_Rows(FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging> fixture)
+        public When_Import_Is_Called_To_Import_Valid_EmployerStaging_File_With_Duplicate_Rows(ExcelFileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging> fixture)
         {
             _fixture = fixture;
         }
