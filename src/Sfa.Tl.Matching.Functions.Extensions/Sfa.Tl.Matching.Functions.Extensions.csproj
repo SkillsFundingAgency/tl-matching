@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.UkRlp.Api.Client\Sfa.Tl.Matching.UkRlp.Api.Client.csproj" />
   </ItemGroup>
 
 </Project>
