@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
@@ -35,6 +36,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 _logger.LogInformation($"PostSignIn - User '{HttpContext.User.Identity.Name}' does not have a valid role");
                 foreach (var cookie in Request.Cookies.Keys)
                 {
+                    if(string.Equals(cookie, "seen_cookie_message", StringComparison.InvariantCultureIgnoreCase)) continue;
                     Response.Cookies.Delete(cookie);
                 }
 
@@ -51,6 +53,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             foreach (var cookie in Request.Cookies.Keys)
             {
+                if(string.Equals(cookie, "seen_cookie_message", StringComparison.InvariantCultureIgnoreCase)) continue;
                 Response.Cookies.Delete(cookie);
             }
 
