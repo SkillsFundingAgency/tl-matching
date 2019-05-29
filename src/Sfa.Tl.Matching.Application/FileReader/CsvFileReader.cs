@@ -59,18 +59,16 @@ namespace Sfa.Tl.Matching.Application.FileReader
                 while (!reader.EndOfStream)
                 {
                     var row = await reader.ReadLineAsync();
-                    var values = row.Remove(0, 1).Remove(row.Length - 2).Split("\",\"");
+                    var columnValues = row.Remove(0, 1).Remove(row.Length - 2).Split("\",\"");
                     ValidationResult validationResult;
 
                     foreach (var column in columnInfos)
                     {
-                        if (values.Length < column.Index)
-                        {
-                            var error = new ValidationResult { Errors = { new ValidationFailure(nameof(TDto), $"Error Parsing Column { column.ColumnInfo.Name } No Data at Index { column.Index }") } };
-                            LogErrorsAndWarnings(startIndex, error, validationErrors);
-                        }
+                        //if column index is greater then csv column length then either csv is in invalid format or TImportDto has invalid config
+                        //this will result in null values or column shifted data which should fail data validation
+                        if (column.Index > columnValues.Length) continue;
 
-                        var cellValue = values[column.Index];
+                        var cellValue = columnValues[column.Index];
 
                         column.ColumnInfo.SetValue(fileImportDto, cellValue.Trim());
                     }
