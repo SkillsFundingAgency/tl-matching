@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
 {
-    public class When_EmployerStaging_Row_Has_No_Postcode : IClassFixture<EmployerStagingFileImportFixture>
+    public class When_EmployerStagingStaging_Row_Has_No_Postcode : IClassFixture<EmployerStagingFileImportFixture>
     {
         private readonly EmployerStagingFileImportFixture _fixture;
 
-        public When_EmployerStaging_Row_Has_No_Postcode(EmployerStagingFileImportFixture fixture)
+        public When_EmployerStagingStaging_Row_Has_No_Postcode(EmployerStagingFileImportFixture fixture)
         {
             _fixture = fixture;
         }

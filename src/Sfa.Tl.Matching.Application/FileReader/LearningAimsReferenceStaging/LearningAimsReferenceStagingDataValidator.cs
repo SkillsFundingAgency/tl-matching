@@ -12,35 +12,35 @@ namespace Sfa.Tl.Matching.Application.FileReader.LearningAimsReferenceStaging
         {
             RuleFor(dto => dto.LarId)
                 .NotEmpty()
-                .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.LarId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
-                .MaximumLength(8)
-                .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.LarId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.LarId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .Length(8)
+                    .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
+                    .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.LarId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(dto => dto.Title)
                 .NotEmpty()
-                .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.Title)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .MaximumLength(400)
-                .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
-                .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.Title)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
+                    .WithErrorCode(ValidationErrorCode.InvalidLength.ToString())
+                    .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.Title)}' - {ValidationErrorCode.InvalidLength.Humanize()}");
 
             RuleFor(dto => dto.SourceCreatedOn)
                 .NotEmpty()
-                .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.SourceCreatedOn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.SourceCreatedOn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .Must(dto => dto.IsDateTime())
-                .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.SourceCreatedOn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                    .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
+                    .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.SourceCreatedOn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(dto => dto.SourceModifiedOn)
                 .NotEmpty()
-                .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.SourceModifiedOn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
+                    .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.SourceModifiedOn)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .Must(dto => dto.IsDateTime())
-                .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.SourceModifiedOn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                    .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
+                    .WithMessage($"'{nameof(LearningAimsReferenceStagingFileImportDto.SourceModifiedOn)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
         }
     }
 }
