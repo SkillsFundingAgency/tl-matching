@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
 {
-    public class When_Employer_Row_CrmId_Has_Invalid_Format : IClassFixture<EmployerFileImportFixture>
+    public class When_EmployerStaging_Row_CrmId_Has_Invalid_Format : IClassFixture<EmployerStagingFileImportFixture>
     {
-        private readonly EmployerFileImportFixture _fixture;
+        private readonly EmployerStagingFileImportFixture _fixture;
 
-        public When_Employer_Row_CrmId_Has_Invalid_Format(EmployerFileImportFixture fixture)
+        public When_EmployerStaging_Row_CrmId_Has_Invalid_Format(EmployerStagingFileImportFixture fixture)
         {
             _fixture = fixture;
         }

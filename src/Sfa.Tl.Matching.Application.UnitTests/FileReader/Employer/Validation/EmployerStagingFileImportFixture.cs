@@ -4,14 +4,14 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
 {
-    public class EmployerFileImportFixture
+    public class EmployerStagingFileImportFixture
     {
         public EmployerStagingDataValidator Validator;
         public EmployerStagingFileImportDto Dto;
 
-        public EmployerFileImportFixture()
+        public EmployerStagingFileImportFixture()
         {
-            Dto = new ValidEmployerFileImportDtoBuilder().Build();
+            Dto = new ValidEmployerStagingFileImportDtoBuilder().Build();
             Validator = new EmployerStagingDataValidator();
         }
     }

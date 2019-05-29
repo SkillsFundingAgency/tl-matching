@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
 {
-    public class When_Employer_Row_Has_No_Owner : IClassFixture<EmployerFileImportFixture>
+    public class When_EmployerStaging_Row_Has_No_Owner : IClassFixture<EmployerStagingFileImportFixture>
     {
-        private readonly EmployerFileImportFixture _fixture;
+        private readonly EmployerStagingFileImportFixture _fixture;
 
-        public When_Employer_Row_Has_No_Owner(EmployerFileImportFixture fixture)
+        public When_EmployerStaging_Row_Has_No_Owner(EmployerStagingFileImportFixture fixture)
         {
             _fixture = fixture;
         }

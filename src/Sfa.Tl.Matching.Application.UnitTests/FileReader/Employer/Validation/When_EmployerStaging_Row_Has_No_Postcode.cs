@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
 {
-    public class When_Employer_Row_Has_No_CompanyName : IClassFixture<EmployerFileImportFixture>
+    public class When_EmployerStaging_Row_Has_No_Postcode : IClassFixture<EmployerStagingFileImportFixture>
     {
-        private readonly EmployerFileImportFixture _fixture;
+        private readonly EmployerStagingFileImportFixture _fixture;
 
-        public When_Employer_Row_Has_No_CompanyName(EmployerFileImportFixture fixture)
+        public When_EmployerStaging_Row_Has_No_Postcode(EmployerStagingFileImportFixture fixture)
         {
             _fixture = fixture;
         }
@@ -18,14 +18,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void Then_Validation_Result_Is_Not_Valid(string companyName)
+        public void Then_Validation_Result_Is_Not_Valid(string postcode)
         {
-            _fixture.Dto.CompanyName = companyName;
+            _fixture.Dto.Postcode = postcode;
             var validationResult = _fixture.Validator.Validate(_fixture.Dto);
             validationResult.IsValid.Should().BeFalse();
             validationResult.Errors.Count.Should().Be(1);
             validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.MissingMandatoryData.ToString());
-            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerStagingFileImportDto.CompanyName)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerStagingFileImportDto.Postcode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
     }
 }

@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
 {
-    public class When_Employer_Row_Has_No_Postcode : IClassFixture<EmployerFileImportFixture>
+    public class When_EmployerStaging_Row_Has_No_Aupa : IClassFixture<EmployerStagingFileImportFixture>
     {
-        private readonly EmployerFileImportFixture _fixture;
+        private readonly EmployerStagingFileImportFixture _fixture;
 
-        public When_Employer_Row_Has_No_Postcode(EmployerFileImportFixture fixture)
+        public When_EmployerStaging_Row_Has_No_Aupa(EmployerStagingFileImportFixture fixture)
         {
             _fixture = fixture;
         }
@@ -18,14 +18,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Validation
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void Then_Validation_Result_Is_Not_Valid(string postcode)
+        public void Then_Validation_Result_Is_Not_Valid(string aupa)
         {
-            _fixture.Dto.Postcode = postcode;
+            _fixture.Dto.Aupa = aupa;
             var validationResult = _fixture.Validator.Validate(_fixture.Dto);
             validationResult.IsValid.Should().BeFalse();
             validationResult.Errors.Count.Should().Be(1);
             validationResult.Errors[0].ErrorCode.Should().Be(ValidationErrorCode.MissingMandatoryData.ToString());
-            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerStagingFileImportDto.Postcode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+            validationResult.Errors[0].ErrorMessage.Should().Be($"'{nameof(EmployerStagingFileImportDto.Aupa)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
     }
 }

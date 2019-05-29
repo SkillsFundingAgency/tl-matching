@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Builders
 {
-    public class ValidEmployerFileImportDtoBuilder
+    public class ValidEmployerStagingFileImportDtoBuilder
     {
         public const string CrmId = "7FBD4621-CEAF-4DFA-B8D6-E98C0567CD27";
         public const string Companyname = "Companyname";

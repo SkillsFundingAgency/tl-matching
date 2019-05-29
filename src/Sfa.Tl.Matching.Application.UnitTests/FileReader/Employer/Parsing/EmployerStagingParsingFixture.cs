@@ -4,14 +4,14 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Parsing
 {
-    public class EmployerParsingFixture
+    public class EmployerStagingParsingFixture
     {
         public EmployerStagingDataParser Parser;
         public EmployerStagingFileImportDto Dto;
 
-        public EmployerParsingFixture()
+        public EmployerStagingParsingFixture()
         {
-            Dto = new ValidEmployerFileImportDtoBuilder().Build();
+            Dto = new ValidEmployerStagingFileImportDtoBuilder().Build();
             Parser = new EmployerStagingDataParser();
         }
     }
