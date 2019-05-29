@@ -114,12 +114,5 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return await _repository.Create(provider);
         }
-
-        public async Task<bool> IsNewProvider(long ukPrn)
-        {
-            var provider = await _repository.GetSingleOrDefault(p => p.UkPrn == ukPrn);
-            
-            return provider == null;
-        }
     }
 }

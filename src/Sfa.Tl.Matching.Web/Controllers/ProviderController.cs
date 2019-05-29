@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("create-provider/{ukPrn}/{name}", Name = "CreateProviderDetail")]
+        [Route("create-provider/{ukPrn}/{name}", Name = "AddProviderDetail")]
         public IActionResult ProviderDetail(AddProviderViewModel viewModel)
         {
             return View(new ProviderDetailViewModel
@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("create-provider/{ukPrn}/{name}", Name = "CreateProviderDetail")]
         public async Task<IActionResult> CreateProviderDetail(ProviderDetailViewModel viewModel)
         {
-            if (!viewModel.IsSaveSection)
+            if (viewModel.IsSaveAndAddVenue)
                 return await SaveProvider(viewModel);
 
             if (!viewModel.IsCdfProvider)
