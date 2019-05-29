@@ -88,17 +88,17 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await _repository.BulkInsert(entities);
 
-            await _repository.MergeFromStaging();
+            var numberOfRecordsAffected = await _repository.MergeFromStaging();
 
             _dataProcessor.PostProcessingHandler(entities);
 
-            return 1;
+            return numberOfRecordsAffected;
         }
 
         private static IEqualityComparer<TEntity> GetEqualityComparer()
         {
             var comparerType = typeof(EmployerStagingEqualityComparer).Assembly.GetTypes()
-                .Single(comparer => typeof(IEqualityComparer<TEntity>).IsAssignableFrom(comparer));
+                .Single(comparer => comparer.GetInterfaces().Contains(typeof(IEqualityComparer<TEntity>)));
             return (IEqualityComparer<TEntity>)Activator.CreateInstance(comparerType);
         }
     }
