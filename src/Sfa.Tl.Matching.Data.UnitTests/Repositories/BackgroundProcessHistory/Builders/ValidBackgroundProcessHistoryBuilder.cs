@@ -1,8 +1,8 @@
 ﻿using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 
-namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.backgroundProcessHistory.Builders
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory.Builders
 {
-    public class ValidbackgroundProcessHistoryBuilder
+    public class ValidBackgroundProcessHistoryBuilder
     {
         public Domain.Models.BackgroundProcessHistory Build() => new Domain.Models.BackgroundProcessHistory
         {

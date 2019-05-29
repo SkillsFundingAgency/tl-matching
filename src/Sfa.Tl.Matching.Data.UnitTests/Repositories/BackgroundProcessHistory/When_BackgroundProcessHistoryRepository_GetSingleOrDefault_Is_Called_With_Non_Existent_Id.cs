@@ -2,22 +2,22 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.backgroundProcessHistory.Builders;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory.Builders;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.backgroundProcessHistory
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory
 {
-    public class When_backgroundProcessHistoryRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id
+    public class When_BackgroundProcessHistoryRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id
     {
         private readonly Domain.Models.BackgroundProcessHistory _result;
 
-        public When_backgroundProcessHistoryRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id()
+        public When_BackgroundProcessHistoryRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id()
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.BackgroundProcessHistory>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
-                dbContext.Add(new ValidbackgroundProcessHistoryBuilder().Build());
+                dbContext.Add(new ValidBackgroundProcessHistoryBuilder().Build());
                 dbContext.SaveChanges();
 
                 var repository = new GenericRepository<Domain.Models.BackgroundProcessHistory>(logger, dbContext);

@@ -2,9 +2,9 @@
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Models.Enums;
 
-namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.backgroundProcessHistory.Builders
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory.Builders
 {
-    public class ValidbackgroundProcessHistoryListBuilder
+    public class ValidBackgroundProcessHistoryListBuilder
     {
         public IList<Domain.Models.BackgroundProcessHistory> Build() => new List<Domain.Models.BackgroundProcessHistory>
         { 
