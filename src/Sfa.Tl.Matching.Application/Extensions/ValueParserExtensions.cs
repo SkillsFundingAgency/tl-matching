@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using Humanizer;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -38,12 +37,9 @@ namespace Sfa.Tl.Matching.Application.Extensions
                new string(Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
         }
 
-        public static DateTime ToDateTime(this string value, bool defaultNull = false)
+        public static DateTime ToDateTime(this string value)
         {
-           var parsed = DateTime.TryParse(value, out var date);
-           if(!parsed && !defaultNull) throw new InvalidDataException($"Error Parsing InputValue '{value}' to DateTime");
-           
-           return !parsed ? DateTime.MinValue : date;
+           return DateTime.Parse(value);
         }
 
         public static int ToInt(this string value)
@@ -88,6 +84,11 @@ namespace Sfa.Tl.Matching.Application.Extensions
             var ofstedRating = value.DehumanizeTo<OfstedRating>();
 
             return ofstedRating;
+        }
+
+        public static bool IsDateTime(this string value)
+        {
+            return DateTime.TryParse(value, out _);
         }
 
         public static bool IsGuid(this string value)
