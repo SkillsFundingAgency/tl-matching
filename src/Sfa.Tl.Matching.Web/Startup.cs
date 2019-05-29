@@ -171,7 +171,7 @@ namespace Sfa.Tl.Matching.Web
 
         private static void RegisterRepositories(IServiceCollection services)
         {
-            services.AddTransient<IRepository<Employer>, EmployerRepository>();
+            services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
             services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
             services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
