@@ -12,5 +12,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string ShortTitle { get; set; }
         public string Title { get; set; }
         public IList<RouteViewModel> Routes { get; set; }
+        public string Source { get; set; }
     }
 }

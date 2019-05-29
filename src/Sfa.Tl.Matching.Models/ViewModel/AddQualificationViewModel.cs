@@ -9,5 +9,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string Postcode { get; set; }
         [Required(ErrorMessage = "You must enter a LAR ID")]
         public string LarId { get; set; }
+        public string Source { get; set; }
     }
 }

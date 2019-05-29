@@ -21,7 +21,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<AddQualificationViewModel, ProviderQualification>()
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.NumberOfPlacements, config => config.Ignore())
-                .ForMember(m => m.Source, config => config.MapFrom<LoggedInUserEmailResolver<AddQualificationViewModel, ProviderQualification>>())
                 .ForMember(m => m.ProviderVenue, config => config.Ignore())
                 .ForMember(m => m.Qualification, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<AddQualificationViewModel, ProviderQualification>>())
