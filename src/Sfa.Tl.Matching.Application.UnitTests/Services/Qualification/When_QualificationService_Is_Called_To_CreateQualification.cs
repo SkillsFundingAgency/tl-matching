@@ -27,11 +27,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 c.AddProfiles(typeof(QualificationMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<AddQualificationViewModel, Domain.Models.Qualification>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<MissingQualificationViewModel, Domain.Models.Qualification>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<AddQualificationViewModel, Domain.Models.Qualification>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<MissingQualificationViewModel, Domain.Models.Qualification>(httpcontextAccesor) :
                             type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<AddQualificationViewModel, Domain.Models.Qualification>(new DateTimeProvider()) :
+                                new UtcNowResolver<MissingQualificationViewModel, Domain.Models.Qualification>(new DateTimeProvider()) :
                                 null);
             });
             var mapper = new Mapper(config);
@@ -44,10 +44,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var qualificationService = new QualificationService(mapper, _qualificationRepository);
 
-            var viewModel = new AddQualificationViewModel
+            var viewModel = new MissingQualificationViewModel
             {
-                Postcode = "CV1 2WT",
-                LarId = "10042982"
+                ProviderVenueId = 1,
+                LarId = "10042982",
+                Title = "Title",
+                ShortTitle = "Short Title",
             };
 
             _result = qualificationService.CreateQualificationAsync(viewModel).GetAwaiter().GetResult();

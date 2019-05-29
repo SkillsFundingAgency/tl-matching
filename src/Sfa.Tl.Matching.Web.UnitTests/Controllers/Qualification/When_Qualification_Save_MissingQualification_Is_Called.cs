@@ -14,7 +14,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 {
     public class When_Qualification_Save_MissingQualification_Is_Called
     {
-        //private readonly IQualificationService _qualificationService;
+        private readonly IProviderQualificationService _providerQualificationService;
+        private readonly IQualificationService _qualificationService;
         private readonly IActionResult _result;
 
         public When_Qualification_Save_MissingQualification_Is_Called()
@@ -22,14 +23,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(RouteViewModelMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var qualificationService = Substitute.For<IQualificationService>();
+            _qualificationService = Substitute.For<IQualificationService>();
             var providerVenueService = Substitute.For<IProviderVenueService>();
-            var providerQualificationService = Substitute.For<IProviderQualificationService>();
+            _providerQualificationService = Substitute.For<IProviderQualificationService>();
             var routePathService = Substitute.For<IRoutePathService>();
 
             var qualificationController = new QualificationController(mapper,
-                providerVenueService, qualificationService,
-                providerQualificationService, routePathService);
+                providerVenueService, _qualificationService,
+                _providerQualificationService, routePathService);
             var controllerWithClaims = new ClaimsBuilder<QualificationController>(qualificationController)
                 .AddUserName("username")
                 .AddEmail("email@address.com")
@@ -53,14 +54,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 }
             };
 
-            _result = controllerWithClaims.MissingQualification(viewModel);
+            _result = controllerWithClaims.MissingQualification(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_Result_Is_Not_Null() =>
             _result.Should().NotBeNull();
-
-
+        
         [Fact]
         public void Then_Result_Is_RedirectToRoute()
         {
@@ -77,10 +77,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             result?.RouteValues["providerVenueId"].Should().Be(1);
         }
 
-        //[Fact]
-        //public void Then_CreateQualification_Is_Called_Exactly_Once()
-        //{
-        //    _qualificationService.Received(1).CreateQualificationAsync(Arg.Any<AddQualificationViewModel>());
-        //}
+        [Fact]
+        public void Then_CreateProviderQualification_Is_Called_Exactly_Once()
+        {
+            _providerQualificationService.Received(1).CreateProviderQualificationAsync(Arg.Any<AddQualificationViewModel>());
+        }
+
+        [Fact]
+        public void Then_CreateQualification_Is_Called_Exactly_Once()
+        {
+            _qualificationService.Received(1).CreateQualificationAsync(Arg.Any<MissingQualificationViewModel>());
+        }
     }
 }

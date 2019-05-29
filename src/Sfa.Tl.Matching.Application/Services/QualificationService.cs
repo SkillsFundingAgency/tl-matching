@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _qualificationRepository = qualificationRepository;
         }
 
-        public async Task<int> CreateQualificationAsync(AddQualificationViewModel viewModel)
+        public async Task<int> CreateQualificationAsync(MissingQualificationViewModel viewModel)
         {
             var qualification = _mapper.Map<Qualification>(viewModel);
             return await _qualificationRepository.Create(qualification);

@@ -25,6 +25,7 @@
     <div class="govuk-grid-column-two-thirds">
         <form asp-route="AddQualification" novalidate>
             <input asp-for="ProviderVenueId" type="hidden" />
+            <input asp-for="Postcode" type="hidden" />
             <input asp-for="Source" value="Admin" type="hidden" />
             <h1 class="govuk-heading-l">Add a qualification for @Model.Postcode</h1>
 

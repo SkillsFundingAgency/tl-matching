@@ -83,10 +83,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         {
             _qualificationService.Received(1).IsValidLarIdAsync("12345678");
         }
-
-
+        
         [Fact]
-        public void Then_CreateQualification_Is_Called_Exactly_Once()
+        public void Then_CreateProviderQualification_Is_Called_Exactly_Once()
         {
             _providerQualificationService.Received(1).CreateProviderQualificationAsync(Arg.Any<AddQualificationViewModel>());
         }

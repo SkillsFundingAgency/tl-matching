@@ -26,7 +26,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             _qualificationService = Substitute.For<IQualificationService>();
             _qualificationService.IsValidLarIdAsync("12345678").Returns(true);
             _qualificationService.GetQualificationAsync("12345678").ReturnsNull();
-            _qualificationService.CreateQualificationAsync(Arg.Any<AddQualificationViewModel>()).Returns(1);
 
             _providerQualificationService = Substitute.For<IProviderQualificationService>();
 
@@ -86,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         }
 
         [Fact]
-        public void Then_CreateQualification_Is_Not_Called()
+        public void Then_CreateProviderQualification_Is_Not_Called()
         {
             _providerQualificationService.DidNotReceive().CreateProviderQualificationAsync(Arg.Any<AddQualificationViewModel>());
         }

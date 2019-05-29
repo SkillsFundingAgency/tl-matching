@@ -94,7 +94,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "SaveMissingQualification")]
-        public IActionResult MissingQualification(MissingQualificationViewModel viewModel)
+        public async Task<IActionResult> MissingQualification(MissingQualificationViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -116,8 +116,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(viewModel);
             }
 
-            //var qualificationId = qualification?.Id 
-            //                      ?? await _qualificationService.CreateQualificationAsync(viewModel);
+            var qualificationId = await _qualificationService.CreateQualificationAsync(viewModel);
+
+            await _providerQualificationService.CreateProviderQualificationAsync(
+                new AddQualificationViewModel
+                {
+                    ProviderVenueId = viewModel.ProviderVenueId,
+                    QualificationId = qualificationId,
+                    Source = viewModel.Source
+                });
 
             return RedirectToRoute("GetProviderVenueDetail",
                 new { providerVenueId = viewModel.ProviderVenueId });

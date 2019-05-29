@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
     public class When_Qualification_Add_Has_Invalid_LarId
     {
         private readonly IActionResult _result;
+        private readonly IProviderQualificationService _providerQualificationService;
         private readonly IQualificationService _qualificationService;
         
         public When_Qualification_Add_Has_Invalid_LarId()
@@ -23,10 +24,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             _qualificationService = Substitute.For<IQualificationService>();
             _qualificationService.IsValidLarIdAsync("12345").Returns(false);
 
-            var providerQualificationService = Substitute.For<IProviderQualificationService>();
+            _providerQualificationService = Substitute.For<IProviderQualificationService>();
             var routePathService = Substitute.For<IRoutePathService>();
 
-            var qualificationController = new QualificationController(mapper, providerVenueService, _qualificationService, providerQualificationService, routePathService);
+            var qualificationController = new QualificationController(mapper, providerVenueService, _qualificationService, _providerQualificationService, routePathService);
 
             var viewModel = new AddQualificationViewModel
             {
@@ -59,9 +60,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         }
 
         [Fact]
-        public void Then_CreateVenue_Is_Not_Called()
+        public void Then_CreateProviderQualificationAsync_Is_Not_Called()
         {
-            _qualificationService.DidNotReceive().CreateQualificationAsync(Arg.Any<AddQualificationViewModel>());
+            _providerQualificationService.DidNotReceive().CreateProviderQualificationAsync(Arg.Any<AddQualificationViewModel>());
         }
     }
 }

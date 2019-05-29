@@ -31,6 +31,17 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
                 ;
+
+            CreateMap<MissingQualificationViewModel, Qualification>()
+                .ForMember(m => m.Id, config => config.Ignore())
+                .ForMember(m => m.LarsId, config => config.MapFrom(s => s.LarId))
+                .ForMember(m => m.ProviderQualification, config => config.Ignore())
+                .ForMember(m => m.QualificationRoutePathMapping, config => config.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<MissingQualificationViewModel, Qualification>>())
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                ;
         }
     }
 }
