@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Sfa.Tl.Matching.Domain.Models;
 
-namespace Sfa.Tl.Matching.Domain.Models
+namespace Sfa.Tl.Matching.Domain.EqualityComparer
 {
     public sealed class LearningAimsReferenceStagingEqualityComparer : IEqualityComparer<LearningAimsReferenceStaging>
     {
