@@ -18,8 +18,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             var mapper = new Mapper(config);
 
             var qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
+            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<Domain.Models.QualificationRoutePathMapping>>();
 
-            var qualificationService = new QualificationService(mapper, qualificationRepository);
+            var qualificationService = new QualificationService(mapper, qualificationRepository, qualificationRoutePathMappingRepository);
 
             _result = qualificationService.IsValidLarIdAsync("12345678").GetAwaiter().GetResult();
         }

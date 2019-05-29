@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -11,18 +12,52 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Qualification> _qualificationRepository;
+        private readonly IRepository<QualificationRoutePathMapping> _qualificationRoutePathMappingRepository;
 
         public QualificationService(IMapper mapper,
-            IRepository<Qualification> qualificationRepository)
+            IRepository<Qualification> qualificationRepository,
+            IRepository<QualificationRoutePathMapping> qualificationRoutePathMappingRepository)
         {
             _mapper = mapper;
             _qualificationRepository = qualificationRepository;
+            _qualificationRoutePathMappingRepository = qualificationRoutePathMappingRepository;
         }
 
         public async Task<int> CreateQualificationAsync(MissingQualificationViewModel viewModel)
         {
             var qualification = _mapper.Map<Qualification>(viewModel);
-            return await _qualificationRepository.Create(qualification);
+            var qualificationId = await _qualificationRepository.Create(qualification);
+
+            //This doesn't work - CrateMany tries to add records twice
+            //var mappings = viewModel
+            //    .Routes?
+            //    .Where(r => r.IsSelected)
+            //    .Select(route => new QualificationRoutePathMapping
+            //    {
+            //        QualificationId = qualificationId,
+            //        RouteId = route.Id,
+            //        Source = viewModel.Source,
+            //        Qualification = null
+            //    }).ToList();
+
+            //await _qualificationRoutePathMappingRepository.CreateMany(mappings);
+
+            if (viewModel.Routes != null)
+            {
+                foreach (var route in viewModel.Routes.Where(r => r.IsSelected))
+                {
+                    await _qualificationRoutePathMappingRepository.Create(
+                        new QualificationRoutePathMapping
+                        {
+                            QualificationId = qualificationId,
+                            RouteId = route.Id,
+                            Source = viewModel.Source,
+                            Qualification = null
+                        });
+                }
+            }
+
+            return qualificationId;
         }
 
         public async Task<QualificationDetailViewModel> GetQualificationAsync(string larId)

@@ -148,7 +148,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 {
                     route.IsSelected = true;
                 }
-
             }
 
             return routesList;

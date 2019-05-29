@@ -42,7 +42,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             _qualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
                 .Returns(new Domain.Models.Qualification());
 
-            var qualificationService = new QualificationService(mapper, _qualificationRepository);
+            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<Domain.Models.QualificationRoutePathMapping>>();
+
+            var qualificationService = new QualificationService(mapper, _qualificationRepository, qualificationRoutePathMappingRepository);
 
             var viewModel = new MissingQualificationViewModel
             {
@@ -50,6 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 LarId = "10042982",
                 Title = "Title",
                 ShortTitle = "Short Title",
+                Source = "Test"
             };
 
             _result = qualificationService.CreateQualificationAsync(viewModel).GetAwaiter().GetResult();
