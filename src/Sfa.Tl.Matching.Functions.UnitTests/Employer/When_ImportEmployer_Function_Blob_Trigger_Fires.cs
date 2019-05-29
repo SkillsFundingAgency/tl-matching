@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Employer
 {
     public class When_ImportEmployer_Function_Blob_Trigger_Fires
     {
-        private readonly IEmployerSynchronizationService _employerService;
+        private readonly IFileImportService<EmployerStagingFileImportDto> _employerService;
 
         public When_ImportEmployer_Function_Blob_Trigger_Fires()
         {
@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Employer
             blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
-            _employerService = Substitute.For<IEmployerSynchronizationService>();
+            _employerService = Substitute.For<IFileImportService<EmployerStagingFileImportDto>>();
             Functions.Employer.ImportEmployer(
                 blobStream,
                 "test",
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Employer
         {
             _employerService
                 .Received(1)
-                .SynchronizeEmployers(Arg.Any<EmployerStagingFileImportDto>());
+                .BulkImport(Arg.Any<EmployerStagingFileImportDto>());
         }
     }
 }

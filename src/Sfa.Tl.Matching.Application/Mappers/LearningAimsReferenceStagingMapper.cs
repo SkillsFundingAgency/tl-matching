@@ -10,9 +10,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
         {
             CreateMap<LearningAimsReferenceStagingDto, LearningAimsReferenceStaging>()
                 .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.LarId, config => config.Ignore())
-                .ForMember(m => m.Title, config => config.Ignore())
-                .ForMember(m => m.AwardOrgLarId, config => config.Ignore())
                 .ForMember(m => m.ChecksumCol, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())

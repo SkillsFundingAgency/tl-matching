@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         {
             _functionLogRepository.Received(1).CreateMany(Arg.Is<List<FunctionLog>>(list =>
                 list.Count == 1 &&
-                list[0].FunctionName == "Employer" &&
+                list[0].FunctionName == "EmployerStaging" &&
                 list[0].RowNumber == 1 &&
                 list[0].ErrorMessage == _errorMessage));
         }

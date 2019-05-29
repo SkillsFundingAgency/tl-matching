@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.DuplicateRows
 {
-    public class When_Import_Is_Called_To_Import_Valid_Employer_File_With_Duplicate_Rows : IClassFixture<FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer>>
+    public class When_Import_Is_Called_To_Import_Valid_Employer_File_With_Duplicate_Rows : IClassFixture<FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging>>
     {
-        private readonly FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer> _fixture;
+        private readonly FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging> _fixture;
 
-        public When_Import_Is_Called_To_Import_Valid_Employer_File_With_Duplicate_Rows(FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer> fixture)
+        public When_Import_Is_Called_To_Import_Valid_Employer_File_With_Duplicate_Rows(FileImportServiceDuplicateRowsTestFixture<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging> fixture)
         {
             _fixture = fixture;
         }
@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         [Fact]
         public void Then_Repository_Create_Many_Is_called_With_Only_One_Item()
         {
-            _fixture.Repository.Received(1).CreateMany(Arg.Is<IList<Domain.Models.Employer>>(arg => arg.Count == 1));
+            _fixture.Repository.Received(1).CreateMany(Arg.Is<IList<EmployerStaging>>(arg => arg.Count == 1));
         }
     }
 }

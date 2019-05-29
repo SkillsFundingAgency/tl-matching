@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                _createdRecordCount = await _testFixture.FileImportService.Import(new EmployerStagingFileImportDto
+                _createdRecordCount = await _testFixture.FileImportService.BulkImport(new EmployerStagingFileImportDto
                 {
                     FileDataStream = stream,
                     CreatedBy = nameof(EmployerTestFixture)

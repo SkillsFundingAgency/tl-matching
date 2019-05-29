@@ -11,6 +11,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -21,24 +22,24 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         private readonly EmployerStagingFileImportDto _stagingFileImportDto;
         private readonly IList<EmployerStagingDto> _fileReaderResults;
         private readonly IFileReader<EmployerStagingFileImportDto, EmployerStagingDto> _fileReader;
-        private readonly IRepository<Domain.Models.Employer> _repository;
+        private readonly IRepository<EmployerStaging> _repository;
         private readonly int _result;
-        private readonly IDataProcessor<Domain.Models.Employer> _dataProcessor;
+        private readonly IDataProcessor<EmployerStaging> _dataProcessor;
 
         public When_Import_Is_Called_To_Import_Employers()
         {
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
-            var logger = Substitute.For<ILogger<FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer>>>();
+            var logger = Substitute.For<ILogger<FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging>>>();
             _fileReader = Substitute.For<IFileReader<EmployerStagingFileImportDto, EmployerStagingDto>>();
-            _repository = Substitute.For<IRepository<Domain.Models.Employer>>();
-            _dataProcessor = Substitute.For<IDataProcessor<Domain.Models.Employer>>();
+            _repository = Substitute.For<IRepository<EmployerStaging>>();
+            _dataProcessor = Substitute.For<IDataProcessor<EmployerStaging>>();
 
             _repository
-                .CreateMany(Arg.Any<IList<Domain.Models.Employer>>())
+                .CreateMany(Arg.Any<IList<EmployerStaging>>())
                 .Returns(callinfo =>
                 {
-                    var passedEntities = callinfo.ArgAt<IEnumerable<Domain.Models.Employer>>(0);
+                    var passedEntities = callinfo.ArgAt<IEnumerable<EmployerStaging>>(0);
                     return passedEntities.Count();
                 });
 
@@ -52,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
             _fileReader.ValidateAndParseFile(_stagingFileImportDto)
                 .Returns(Task.FromResult(_fileReaderResults));
 
-            var service = new FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, Domain.Models.Employer>(logger, mapper, _fileReader, _repository, _dataProcessor);
+            var service = new FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
             _result = service.Import(_stagingFileImportDto).GetAwaiter().GetResult();
         }
@@ -70,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _repository
                 .Received(1)
-                .CreateMany(Arg.Any<IList<Domain.Models.Employer>>());
+                .CreateMany(Arg.Any<IList<EmployerStaging>>());
         }
 
         [Fact]
@@ -78,7 +79,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _dataProcessor
                 .Received(1)
-                .PreProcessingHandler(Arg.Any<IList<Domain.Models.Employer>>());
+                .PreProcessingHandler(Arg.Any<IList<EmployerStaging>>());
         }
 
         [Fact]
@@ -86,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _dataProcessor
                 .Received(1)
-                .PostProcessingHandler(Arg.Any<IList<Domain.Models.Employer>>());
+                .PostProcessingHandler(Arg.Any<IList<EmployerStaging>>());
         }
 
         [Fact]

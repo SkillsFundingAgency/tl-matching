@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimsReference
 {
     public class When_ImportLearningAimsReference_Function_Blob_Trigger_Fires
     {
-        private readonly ILearningAimsReferenceSynchronizationService _learningAimsReferenceService;
+        private readonly IFileImportService<LearningAimsReferenceStagingFileImportDto> _fileImportService;
 
         public When_ImportLearningAimsReference_Function_Blob_Trigger_Fires()
         {
@@ -19,21 +19,21 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimsReference
             blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
-            _learningAimsReferenceService = Substitute.For<ILearningAimsReferenceSynchronizationService>();
+            _fileImportService = Substitute.For<IFileImportService<LearningAimsReferenceStagingFileImportDto>>();
             Functions.LearningAimsReference.ImportLearningAimsReference(
                 blobStream,
                 "test",
                 context,
                 logger,
-                _learningAimsReferenceService).GetAwaiter().GetResult();
+                _fileImportService).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void ImportLearningAimsReference_Is_Called_Exactly_Once()
         {
-            _learningAimsReferenceService
+            _fileImportService
                 .Received(1)
-                .SynchronizeLearningAimsReferences(Arg.Any<LearningAimsReferenceStagingFileImportDto>());
+                .BulkImport(Arg.Any<LearningAimsReferenceStagingFileImportDto>());
         }
     }
 }
