@@ -7,10 +7,10 @@ using Sfa.Tl.Matching.Functions.Extensions;
 
 namespace Sfa.Tl.Matching.Functions
 {
-    public static class ProviderReference
+    public class ProviderReference
     {
         [FunctionName("ImportProviderReference")]
-        public static async Task ImportProviderReference(
+        public async Task ImportProviderReference(
             [TimerTrigger("%ProviderReferenceTrigger%")] TimerInfo timer,
             ExecutionContext context,
             ILogger logger,

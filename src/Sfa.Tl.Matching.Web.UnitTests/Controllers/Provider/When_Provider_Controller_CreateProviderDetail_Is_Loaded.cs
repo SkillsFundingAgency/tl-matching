@@ -57,6 +57,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var viewModel = _result.GetViewModel<ProviderDetailViewModel>();
             viewModel.Name.Should().Be("ProviderName");
             viewModel.UkPrn.Should().Be(123);
+            viewModel.IsCdfProvider.Should().BeTrue();
+            viewModel.IsEnabledForReferral.Should().BeTrue();
         }
     }
 }

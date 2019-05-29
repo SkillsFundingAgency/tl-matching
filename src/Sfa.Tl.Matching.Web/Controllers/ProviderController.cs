@@ -76,8 +76,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View(new ProviderDetailViewModel
             {
-                IsEnabledForReferral = true,
-                IsCdfProvider = true,
                 Name = viewModel.Name,
                 UkPrn = viewModel.UkPrn
             });

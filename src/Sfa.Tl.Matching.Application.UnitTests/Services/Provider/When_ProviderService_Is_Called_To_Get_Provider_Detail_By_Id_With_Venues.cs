@@ -30,7 +30,8 @@
 
 //            _providerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>()).Returns(providers);
 
-//            var service = new ProviderService(mapper, _providerRepository);
+//            var providerReferenceRepository = Substitute.For<IRepository<Domain.Models.ProviderReference>>();
+//            var service = new ProviderService(mapper, _providerRepository, providerReferenceRepository);
 
 //            _result = service.GetProviderDetailByIdAsync(1).GetAwaiter().GetResult();
 //        }
@@ -61,31 +62,31 @@
 //        [Fact]
 //        public void Then_The_Provider_Venue1_data_Is_As_Expected()
 //        {
-//            _result.ProviderVenue.Count.Should().Be(2);
-//            _result.ProviderVenue.ElementAt(0).Postcode.Should().Be("CV1 1WT");
-//            _result.ProviderVenue.ElementAt(0).ProviderVenueId.Should().Be(10);
-//            _result.ProviderVenue.ElementAt(0).IsRemoved.Should().Be(true);
+//            _result.ProviderVenues.Count.Should().Be(2);
+//            _result.ProviderVenues.ElementAt(0).Postcode.Should().Be("CV1 1WT");
+//            _result.ProviderVenues.ElementAt(0).ProviderVenueId.Should().Be(10);
+//            _result.ProviderVenues.ElementAt(0).IsRemoved.Should().Be(true);
 //        }
 
 //        [Fact]
 //        public void Then_The_Provider_Venue1_Has_One_Qualification()
 //        {
-//            _result.ProviderVenue.ElementAt(0).QualificationCount.Should().Be(1);
+//            _result.ProviderVenues.ElementAt(0).QualificationCount.Should().Be(1);
 //        }
 
 //        [Fact]
 //        public void Then_The_Provider_Venue2_data_Is_As_Expected()
 //        {
-//            _result.ProviderVenue.Count.Should().Be(2);
-//            _result.ProviderVenue.ElementAt(1).Postcode.Should().Be("CV1 2WT");
-//            _result.ProviderVenue.ElementAt(1).ProviderVenueId.Should().Be(20);
-//            _result.ProviderVenue.ElementAt(1).IsRemoved.Should().Be(true);
+//            _result.ProviderVenues.Count.Should().Be(2);
+//            _result.ProviderVenues.ElementAt(1).Postcode.Should().Be("CV1 2WT");
+//            _result.ProviderVenues.ElementAt(1).ProviderVenueId.Should().Be(20);
+//            _result.ProviderVenues.ElementAt(1).IsRemoved.Should().Be(true);
 //        }
 
 //        [Fact]
 //        public void Then_The_Provider_Venue2_Has_Two_Qualification()
 //        {
-//            _result.ProviderVenue.ElementAt(1).QualificationCount.Should().Be(2);
+//            _result.ProviderVenues.ElementAt(1).QualificationCount.Should().Be(2);
 //        }
 //    }
 //}

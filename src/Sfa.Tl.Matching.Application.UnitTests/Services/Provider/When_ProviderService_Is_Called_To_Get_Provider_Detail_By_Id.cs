@@ -25,13 +25,16 @@
 //            var mapper = new Mapper(config);
 //            _providerRepository = Substitute.For<IRepository<Domain.Models.Provider>>();
 
+//            var providerReferenceRepository = Substitute.For<IRepository<Domain.Models.ProviderReference>>();
+
 //            _providerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
 //                .Returns(new ValidProviderBuilder().Build());
 
 //            var providers = new FakeAsyncEnumerable<Domain.Models.Provider>(new List<Domain.Models.Provider> { new ValidProviderBuilder().Build() });
 //            _providerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>()).Returns(providers);
 
-//            var service = new ProviderService(mapper, _providerRepository);
+//            var service = new ProviderService(mapper, _providerRepository,
+//                providerReferenceRepository);
 
 //            _result = service.GetProviderDetailByIdAsync(1).GetAwaiter().GetResult();
 //        }
