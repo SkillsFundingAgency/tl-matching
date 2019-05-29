@@ -85,10 +85,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("create-provider/{ukPrn}/{name}", Name = "CreateProviderDetail")]
-        public async Task<IActionResult> CreateProviderDetail(ProviderDetailViewModel viewModel)
+        public async Task<IActionResult> CreateProviderDetail(CreateProviderDetailViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+                return View(nameof(ProviderDetail), viewModel);
+
             if (viewModel.IsSaveAndAddVenue)
-                return await SaveProvider(viewModel);
+            {
+                var providerId = await _providerService.CreateProvider(viewModel);
+                return RedirectToRoute("AddVenue", new
+                {
+                    providerId
+                });
+            }
 
             if (!viewModel.IsCdfProvider)
                 return RedirectToAction(nameof(SearchProvider));
@@ -127,30 +136,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(nameof(ProviderDetail), viewModel);
 
-            if (viewModel.IsSaveAndAddVenue)
-                return await PerformSaveAndAddVenue(viewModel);
+            if (!viewModel.IsSaveAndAddVenue)
+                return await PerformSaveAndFinish(viewModel);
 
-            return await PerformSaveAndFinish(viewModel);
+            var providerId = viewModel.Id;
+            await _providerService.UpdateProviderDetail(viewModel);
+
+            return RedirectToRoute("AddVenue", new
+            {
+                providerId
+            });
         }
 
         private async Task<IActionResult> PerformSaveSection(ProviderDetailViewModel viewModel)
         {
             await _providerService.UpdateProviderDetailSectionAsync(viewModel);
             return RedirectToAction(nameof(ProviderDetail), viewModel.Id);
-        }
-
-        private async Task<IActionResult> PerformSaveAndAddVenue(ProviderDetailViewModel viewModel)
-        {
-            var providerId = viewModel.Id;
-            if (viewModel.Id > 0)
-                await _providerService.UpdateProviderDetail(viewModel);
-            else
-                providerId = await _providerService.CreateProvider(viewModel);
-
-            return RedirectToRoute("AddVenue", new
-            {
-                providerId
-            });
         }
 
         private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)

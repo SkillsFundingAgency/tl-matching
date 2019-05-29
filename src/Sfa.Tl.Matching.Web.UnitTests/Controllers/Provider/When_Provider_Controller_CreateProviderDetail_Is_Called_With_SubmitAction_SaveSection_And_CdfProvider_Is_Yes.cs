@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
     public class When_Provider_Controller_CreateProviderDetail_Is_Called_With_SubmitAction_SaveSection_And_CdfProvider_Is_Yes
     {
         private readonly IActionResult _result;
-        private readonly ProviderDetailViewModel _viewModel = new ProviderDetailViewModel
+        private readonly CreateProviderDetailViewModel _viewModel = new CreateProviderDetailViewModel
         {
             Name = "ProviderName",
             UkPrn = 123,

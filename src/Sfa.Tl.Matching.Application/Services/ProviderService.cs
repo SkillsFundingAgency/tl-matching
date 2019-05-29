@@ -103,14 +103,15 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
         {
-            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+            var trackedEntity = await _repository.GetSingleOrDefault(p => p.Id == viewModel.Id);
+            trackedEntity = _mapper.Map(viewModel, trackedEntity);
 
-            await _repository.Update(provider);
+            await _repository.Update(trackedEntity);
         }
 
-        public async Task<int> CreateProvider(ProviderDetailViewModel viewModel)
+        public async Task<int> CreateProvider(CreateProviderDetailViewModel viewModel)
         {
-            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+            var provider = _mapper.Map<CreateProviderDetailViewModel, Provider>(viewModel);
 
             return await _repository.Create(provider);
         }
