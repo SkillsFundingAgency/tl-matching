@@ -13,15 +13,14 @@
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.4" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.26" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="System.Private.ServiceModel" Version="4.5.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Functions.Extensions\Sfa.Tl.Matching.Functions.Extensions.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Private.ServiceModel">
-      <HintPath>..\..\..\..\..\..\Users\Adam\.nuget\packages\system.private.servicemodel\4.5.3\runtimes\win\lib\netstandard2.0\System.Private.ServiceModel.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+  <Target Name="CopySPSM" BeforeTargets="Build">
+    <Copy SourceFiles="$(USERPROFILE)\.nuget\packages\system.private.servicemodel\4.5.3\runtimes\win\lib\netstandard2.0\System.Private.ServiceModel.dll" DestinationFolder="$(OutputPath)\bin" />
+  </Target>
   <ItemGroup>
     <None Update="extensions.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

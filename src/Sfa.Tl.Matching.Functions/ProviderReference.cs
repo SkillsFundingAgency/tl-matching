@@ -19,9 +19,7 @@ namespace Sfa.Tl.Matching.Functions
             logger.LogInformation($"Function {context.FunctionName} triggered");
 
             var stopwatch = Stopwatch.StartNew();
-
             var createdRecords = await referenceDataService.SynchronizeProviderReference();
-
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} finished processing\n" +

@@ -67,22 +67,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return providerReferenceStagings;
         }
 
-        private async Task<List<ProviderReferenceStaging>> GetProvidersForStagingTest()
-        {
-            var providerReferenceStagings = new List<ProviderReferenceStaging>
-            {
-                new ProviderReferenceStaging
-                {
-                    Name = "THE CAMDEN SCHOOL FOR GIRLS12",
-                    UkPrn = 10000001,
-                    CreatedOn = _dateTimeProvider.UtcNow(),
-                    CreatedBy = "System"
-                }
-            };
-
-            return providerReferenceStagings;
-        }
-
         private async Task UpdateBackgroundProcessHistory(int backgroundProcessHistoryId, int providerReferenceCount)
         {
             var backgroundProcessHistory = await _backgroundProcessHistoryRepository.GetSingleOrDefault(p => p.Id == backgroundProcessHistoryId);
