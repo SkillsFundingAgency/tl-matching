@@ -56,19 +56,19 @@
     <None Update="Employer\Employer-WrongDataType.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="LearningAimsReference\LearningAimsReference-Empty-Db-Add.csv">
+    <None Update="LearningAimReference\LearningAimReference-Empty-Db-Add.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="LearningAimsReference\LearningAimsReference_Existing_Matching_Record.csv">
+    <None Update="LearningAimReference\LearningAimReference_Existing_Matching_Record.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="LearningAimsReference\LearningAimsReference_Existing_Non_Matching_Record.csv">
+    <None Update="LearningAimReference\LearningAimReference_Existing_Non_Matching_Record.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="LearningAimsReference\LearningAimsReference_Existing_Record_Missing_From_Upload.csv">
+    <None Update="LearningAimReference\LearningAimReference_Existing_Record_Missing_From_Upload.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="LearningAimsReference\LearningAimsReference_Invalid.csv">
+    <None Update="LearningAimReference\LearningAimReference_Invalid.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="ProviderQualification\ProviderQualification-InvalidFormat.xlsx">

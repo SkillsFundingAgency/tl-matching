@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Models.Enums
         [Description("Provider qualification"), FileExtensions(Extensions = FileImportTypeExtensions.Excel)]
         ProviderQualification,
 
-        [Description("Learning Aims Reference"), FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
-        LearningAimsReference
+        [Description("Learning Aim Reference"), FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
+        LearningAimReference
     }
 }

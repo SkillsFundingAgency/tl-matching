@@ -4,11 +4,11 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
-    public class LearningAimsReferenceStagingMapper : Profile
+    public class LearningAimReferenceStagingMapper : Profile
     {
-        public LearningAimsReferenceStagingMapper()
+        public LearningAimReferenceStagingMapper()
         {
-            CreateMap<LearningAimsReferenceStagingDto, LearningAimsReferenceStaging>()
+            CreateMap<LearningAimReferenceStagingDto, LearningAimReferenceStaging>()
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.ChecksumCol, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())

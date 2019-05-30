@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Services\FileImportService\DuplicateRows\LearningAimsReferenceStaging-DuplicateRows.csv">
+    <None Update="Services\FileImportService\DuplicateRows\LearningAimReferenceStaging-DuplicateRows.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Services\FileImportService\DuplicateRows\EmployerStaging-DuplicateRows.xlsx">

@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(QualificationMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var learningAimsReferenceRepository = Substitute.For<IRepository<LearningAimsReference>>();
+            var learningAimsReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
 
             _qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
 

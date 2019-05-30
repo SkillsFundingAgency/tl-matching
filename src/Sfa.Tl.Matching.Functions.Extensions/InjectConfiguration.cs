@@ -25,7 +25,7 @@ using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
-using Sfa.Tl.Matching.Application.FileReader.LearningAimsReferenceStaging;
+using Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging;
 using Sfa.Tl.Matching.UkRlp.Api.Client;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             RegisterExcelFileReader<EmployerStagingDto, EmployerStagingFileImportDto, EmployerStaging, EmployerStagingDataParser, EmployerStagingDataValidator, NullDataProcessor<EmployerStaging>>(services);
 
-            RegisterCsvFileReader<LearningAimsReferenceStagingDto, LearningAimsReferenceStagingFileImportDto, LearningAimsReferenceStaging, LearningAimsReferenceStagingDataParser, LearningAimsReferenceStagingDataValidator, NullDataProcessor<LearningAimsReferenceStaging>>(services);
+            RegisterCsvFileReader<LearningAimReferenceStagingDto, LearningAimReferenceStagingFileImportDto, LearningAimReferenceStaging, LearningAimReferenceStagingDataParser, LearningAimReferenceStagingDataValidator, NullDataProcessor<LearningAimReferenceStaging>>(services);
         }
 
         private static void RegisterExcelFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
@@ -156,7 +156,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
             services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
-            services.AddTransient<IRepository<LearningAimsReferenceStaging>, GenericRepository<LearningAimsReferenceStaging>>();
+            services.AddTransient<IRepository<LearningAimReferenceStaging>, GenericRepository<LearningAimReferenceStaging>>();
             services.AddTransient<IRepository<ProviderReferenceStaging>, GenericRepository<ProviderReferenceStaging>>();
             services.AddTransient<IRepository<EmployerStaging>, GenericRepository<EmployerStaging>>();
         }

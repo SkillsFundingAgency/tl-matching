@@ -13,12 +13,12 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IMapper _mapper;
         private readonly IRepository<Qualification> _qualificationRepository;
         private readonly IRepository<QualificationRoutePathMapping> _qualificationRoutePathMappingRepository;
-        private readonly IRepository<LearningAimsReference> _learningAimsReferenceRepository;
+        private readonly IRepository<LearningAimReference> _learningAimsReferenceRepository;
 
         public QualificationService(IMapper mapper,
             IRepository<Qualification> qualificationRepository,
             IRepository<QualificationRoutePathMapping> qualificationRoutePathMappingRepository,
-            IRepository<LearningAimsReference> learningAimsReferenceRepository)
+            IRepository<LearningAimReference> learningAimsReferenceRepository)
         {
             _mapper = mapper;
             _qualificationRepository = qualificationRepository;
