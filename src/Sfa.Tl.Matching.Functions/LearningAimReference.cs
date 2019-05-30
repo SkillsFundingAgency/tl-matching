@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("ImportLearningAimReference")]
         public static async Task ImportLearningAimReference(
-            [BlobTrigger("learningaimsreference/{name}", Connection = "BlobStorageConnectionString")]ICloudBlob blockBlob,
+            [BlobTrigger("learningaimreference/{name}", Connection = "BlobStorageConnectionString")]ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
             ILogger logger,

@@ -37,8 +37,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
 
             _createdRecordCount.Should().Be(0);
 
-            var learningAimsReference = _testFixture.MatchingDbContext.LearningAimReference.Count(e => e.Title == "LearningAimReference_Invalid");
-            learningAimsReference.Should().Be(0);
+            var learningAimReference = _testFixture.MatchingDbContext.LearningAimReference.Count(e => e.Title == "LearningAimReference_Invalid");
+            learningAimReference.Should().Be(0);
         }
 
         public void Dispose()

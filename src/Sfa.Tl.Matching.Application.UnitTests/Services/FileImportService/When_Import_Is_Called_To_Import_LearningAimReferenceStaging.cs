@@ -98,11 +98,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 
         public IList<LearningAimReferenceStagingDto> Build(int numberOfItems)
         {
-            var learningAimsReferenceDtos = new List<LearningAimReferenceStagingDto>();
+            var learningAimReferenceDtos = new List<LearningAimReferenceStagingDto>();
 
             for (var i = 0; i < numberOfItems; i++)
             {
-                learningAimsReferenceDtos.Add(new LearningAimReferenceStagingDto
+                learningAimReferenceDtos.Add(new LearningAimReferenceStagingDto
                 {
                    Title = "LearningAimReference",
                    LarId = (10000000 + i).ToString(),
@@ -113,7 +113,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
                 });
             }
 
-            return learningAimsReferenceDtos;
+            return learningAimReferenceDtos;
         }
     }
 }

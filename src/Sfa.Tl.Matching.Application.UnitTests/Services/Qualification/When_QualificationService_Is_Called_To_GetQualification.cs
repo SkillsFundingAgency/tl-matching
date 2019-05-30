@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(QualificationMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var learningAimsReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
+            var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
 
             _qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
 
@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var qualificationRoutePathMappingRepository = Substitute.For<IRepository<Domain.Models.QualificationRoutePathMapping>>();
 
-            var qualificationService = new QualificationService(mapper, _qualificationRepository, qualificationRoutePathMappingRepository, learningAimsReferenceRepository);
+            var qualificationService = new QualificationService(mapper, _qualificationRepository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
             
             _result = qualificationService.GetQualificationAsync("10042982").GetAwaiter().GetResult();
         }

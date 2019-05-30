@@ -55,20 +55,20 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
                 return;
             }
 
-            var learningAimsReference = MatchingDbContext.LearningAimReference.FirstOrDefault(e => e.Title == title);
+            var learningAimReference = MatchingDbContext.LearningAimReference.FirstOrDefault(e => e.Title == title);
 
-            if (learningAimsReference == null) return;
+            if (learningAimReference == null) return;
             
-            MatchingDbContext.LearningAimReference.Remove(learningAimsReference);
+            MatchingDbContext.LearningAimReference.Remove(learningAimReference);
             var count = MatchingDbContext.SaveChanges();
             count.Should().Be(1);
         }
 
         public void AddExisting(string larId, string title)
         {
-            var learningAimsReference = MatchingDbContext.LearningAimReference.FirstOrDefault(e => e.Title == title);
+            var learningAimReference = MatchingDbContext.LearningAimReference.FirstOrDefault(e => e.Title == title);
 
-            if (learningAimsReference != null) return;
+            if (learningAimReference != null) return;
             
             MatchingDbContext.LearningAimReference.Add(new Domain.Models.LearningAimReference
             {
@@ -85,9 +85,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
 
         public void UpdateExisting(string title)
         {
-            var learningAimsReference = MatchingDbContext.LearningAimReference.FirstOrDefault(e => e.Title == title);
+            var learningAimReference = MatchingDbContext.LearningAimReference.FirstOrDefault(e => e.Title == title);
 
-            if (learningAimsReference != null) return;
+            if (learningAimReference != null) return;
             
             MatchingDbContext.LearningAimReference.Add(new Domain.Models.LearningAimReference
             {

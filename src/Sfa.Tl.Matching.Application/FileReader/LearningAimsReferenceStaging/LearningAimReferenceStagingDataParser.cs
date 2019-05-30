@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging
         {
             if (!(fileImportDto is LearningAimReferenceStagingFileImportDto data)) return null;
 
-            var learningAimsReferenceDto = new LearningAimReferenceStagingDto
+            var learningAimReferenceDto = new LearningAimReferenceStagingDto
             {
                 LarId = data.LarId,
                 Title = data.Title,
@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging
                 CreatedBy = data.CreatedBy
             };
 
-            return new List<LearningAimReferenceStagingDto> { learningAimsReferenceDto };
+            return new List<LearningAimReferenceStagingDto> { learningAimReferenceDto };
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             });
             var mapper = new Mapper(config);
 
-            var learningAimsReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
+            var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
 
             _qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
             _qualificationRepository.Create(Arg.Any<Domain.Models.Qualification>())
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var qualificationRoutePathMappingRepository = Substitute.For<IRepository<Domain.Models.QualificationRoutePathMapping>>();
 
-            var qualificationService = new QualificationService(mapper, _qualificationRepository, qualificationRoutePathMappingRepository, learningAimsReferenceRepository);
+            var qualificationService = new QualificationService(mapper, _qualificationRepository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
 
             var viewModel = new MissingQualificationViewModel
             {

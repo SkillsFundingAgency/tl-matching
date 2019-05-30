@@ -13,17 +13,17 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IMapper _mapper;
         private readonly IRepository<Qualification> _qualificationRepository;
         private readonly IRepository<QualificationRoutePathMapping> _qualificationRoutePathMappingRepository;
-        private readonly IRepository<LearningAimReference> _learningAimsReferenceRepository;
+        private readonly IRepository<LearningAimReference> _learningAimReferenceRepository;
 
         public QualificationService(IMapper mapper,
             IRepository<Qualification> qualificationRepository,
             IRepository<QualificationRoutePathMapping> qualificationRoutePathMappingRepository,
-            IRepository<LearningAimReference> learningAimsReferenceRepository)
+            IRepository<LearningAimReference> learningAimReferenceRepository)
         {
             _mapper = mapper;
             _qualificationRepository = qualificationRepository;
             _qualificationRoutePathMappingRepository = qualificationRoutePathMappingRepository;
-            _learningAimsReferenceRepository = learningAimsReferenceRepository;
+            _learningAimReferenceRepository = learningAimReferenceRepository;
         }
 
         public async Task<int> CreateQualificationAsync(MissingQualificationViewModel viewModel)
@@ -71,13 +71,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<string> GetLarTitleAsync(string larId)
         {
-            var lar = await _learningAimsReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);
+            var lar = await _learningAimReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);
             return lar?.Title;
         }
 
         public async Task<bool> IsValidOfqualLarIdAsync(string larId)
         {
-            var lar = await _learningAimsReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);
+            var lar = await _learningAimReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);
             return lar != null;
         }
 

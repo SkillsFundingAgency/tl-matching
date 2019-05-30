@@ -27,8 +27,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
         [Fact]
         public async Task Then_Record_Is_Delete()
         {
-            var learningAimsReferenceCount = _testFixture.MatchingDbContext.LearningAimReference.Count();
-            learningAimsReferenceCount.Should().Be(2);
+            var learningAimReferenceCount = _testFixture.MatchingDbContext.LearningAimReference.Count();
+            learningAimReferenceCount.Should().Be(2);
 
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
@@ -42,8 +42,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
 
             _createdRecordCount.Should().Be(1);
             
-            learningAimsReferenceCount = _testFixture.MatchingDbContext.LearningAimReference.Count();
-            learningAimsReferenceCount.Should().Be(1);
+            learningAimReferenceCount = _testFixture.MatchingDbContext.LearningAimReference.Count();
+            learningAimReferenceCount.Should().Be(1);
         }
 
         public void Dispose()
