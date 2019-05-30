@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
             var nullDataProcessor = new NullDataProcessor<Domain.Models.ProviderQualification>();
             var excelFileReader = new ExcelFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>(loggerExcelFileReader, dataParser, dataValidator, functionLogRepository);
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
 
             var mapper = new Mapper(config);
 
@@ -106,11 +106,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
                 ShortTitle = nameof(ProviderQualificationTestFixture),
                 CreatedOn = CreatedOn,
                 CreatedBy = CreatedByUser,
-                QualificationRoutePathMapping = new List<Domain.Models.QualificationRoutePathMapping>
+                QualificationRoutePathMapping = new List<QualificationRoutePathMapping>
                 {
-                    new Domain.Models.QualificationRoutePathMapping
+                    new QualificationRoutePathMapping
                     {
-                        PathId = 10,
+                        RouteId = 5,
                         Source = nameof(ProviderQualificationTestFixture),
                         CreatedOn = CreatedOn,
                         CreatedBy = CreatedByUser                        

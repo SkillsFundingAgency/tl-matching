@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         {
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(EmployerMapper).Assembly);
+                c.AddMaps(typeof(EmployerStagingMapper).Assembly);
                 c.ConstructServicesUsing(d => new UtcNowResolver<SaveProximityData, Domain.Models.ProviderVenue>(new DateTimeProvider()));
             });
 

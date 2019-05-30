@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
 {
     internal class ValidEmployerDtoBuilder
     {
-        public EmployerDto Build() => new EmployerDto
+        public EmployerStagingDto Build() => new EmployerStagingDto
         {
             CrmId = new Guid("D7A48843-44CA-46A4-A391-70D7B01C68BC"),
             CompanyName = "EmployerName",

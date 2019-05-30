@@ -7,6 +7,7 @@ using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -21,14 +22,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
         public When_ProviderService_Is_Called_To_Search_Providers_By_UkPrn()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
             _providerRepository = Substitute.For<IRepository<Domain.Models.Provider>>();
 
             _providerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
                 .Returns(new ValidProviderBuilder().Build());
 
-            var service = new ProviderService(mapper, _providerRepository);
+            var providerReferenceRepository = Substitute.For<IRepository<ProviderReference>>();
+
+            var service = new ProviderService(mapper, _providerRepository, providerReferenceRepository);
 
             _result = service.SearchAsync(UkPrn).GetAwaiter().GetResult();
         }

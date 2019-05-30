@@ -37,6 +37,11 @@ namespace Sfa.Tl.Matching.Application.Extensions
                new string(Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
         }
 
+        public static DateTime ToDateTime(this string value)
+        {
+           return DateTime.Parse(value);
+        }
+
         public static int ToInt(this string value)
         {
             return int.Parse(value);
@@ -79,6 +84,11 @@ namespace Sfa.Tl.Matching.Application.Extensions
             var ofstedRating = value.DehumanizeTo<OfstedRating>();
 
             return ofstedRating;
+        }
+
+        public static bool IsDateTime(this string value)
+        {
+            return DateTime.TryParse(value, out _);
         }
 
         public static bool IsGuid(this string value)

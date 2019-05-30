@@ -8,11 +8,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Trim
 {
-    public class When_Validate_And_Parse_File_Is_Called_For_Valid_Employer_File_Trim_Spaces : IClassFixture<ExcelFileReaderTrimDataTestFixture<EmployerFileImportDto, EmployerDto>>
+    public class When_Validate_And_Parse_File_Is_Called_For_Valid_Employer_File_Trim_Spaces : IClassFixture<ExcelFileReaderTrimDataTestFixture<EmployerStagingFileImportDto, EmployerStagingDto>>
     {
-        private readonly ExcelFileReaderTrimDataTestFixture<EmployerFileImportDto, EmployerDto> _fixture;
+        private readonly ExcelFileReaderTrimDataTestFixture<EmployerStagingFileImportDto, EmployerStagingDto> _fixture;
 
-        public When_Validate_And_Parse_File_Is_Called_For_Valid_Employer_File_Trim_Spaces(ExcelFileReaderTrimDataTestFixture<EmployerFileImportDto, EmployerDto> fixture)
+        public When_Validate_And_Parse_File_Is_Called_For_Valid_Employer_File_Trim_Spaces(ExcelFileReaderTrimDataTestFixture<EmployerStagingFileImportDto, EmployerStagingDto> fixture)
         {
             _fixture = fixture;
         }
@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Trim
         [Fact]
         public void Then_Data_Validator_Validate_Is_called_Exactly_Once_And_Leading_And_Trailing_Speaces_are_Trimmed()
         {
-            _fixture.DataValidator.Received(1).ValidateAsync(Arg.Is<EmployerFileImportDto>(arg =>
+            _fixture.DataValidator.Received(1).ValidateAsync(Arg.Is<EmployerStagingFileImportDto>(arg =>
                 arg.CrmId == "9082609f-9cf8-e811-80e0-000d3a214f60" && 
                 arg.CompanyName == "HARDIK DESAI LTD" && 
                 arg.AlsoKnownAs == "also known as" &&
@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Trim
         [Fact]
         public void Then_Data_Parser_Parse_Is_Called_Exactly_Once_And_Company_Name_And_Also_KnownAs_Fields_are_Converted_To_TitleCase()
         {
-            _fixture.DataParser.Received(1).Parse(Arg.Any<EmployerFileImportDto>());
+            _fixture.DataParser.Received(1).Parse(Arg.Any<EmployerStagingFileImportDto>());
         }
 
         [Fact]

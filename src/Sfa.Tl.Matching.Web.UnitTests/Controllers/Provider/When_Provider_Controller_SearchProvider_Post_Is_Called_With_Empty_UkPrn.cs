@@ -1,9 +1,9 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             _providerService = Substitute.For<IProviderService>();
             _providerService
                 .SearchAsync(Arg.Any<long>())
-                .Returns((ProviderSearchResultDto)null);
+                .ReturnsNull();
 
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             viewResult?.ViewData.ModelState["UkPrn"]
                 .Errors
                 .Should()
-                .ContainSingle(error => error.ErrorMessage == "You must enter a real UKPRN");
+                .ContainSingle(error => error.ErrorMessage == "You must enter a UKPRN");
         }
 
         [Fact]

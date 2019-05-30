@@ -150,7 +150,7 @@ namespace Sfa.Tl.Matching.Web
         private void RegisterDependencies(IServiceCollection services)
         {
             //Inject AutoMapper
-            services.AddAutoMapper();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             //Inject DbContext
             services.AddDbContext<MatchingDbContext>(options =>
@@ -171,16 +171,20 @@ namespace Sfa.Tl.Matching.Web
 
         private static void RegisterRepositories(IServiceCollection services)
         {
-            services.AddTransient<IRepository<Employer>, EmployerRepository>();
+            services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
             services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
             services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
             services.AddTransient<IRepository<Opportunity>, OpportunityRepository>();
+            services.AddTransient<IRepository<Qualification>, GenericRepository<Qualification>>();
+            services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
-            services.AddTransient<IRepository<ProviderFeedbackRequestHistory>, GenericRepository<ProviderFeedbackRequestHistory>>();
+            services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
+            services.AddTransient<IRepository<ProviderReference>, GenericRepository<ProviderReference>>();
+            services.AddTransient<IRepository<BackgroundProcessHistory>, GenericRepository<BackgroundProcessHistory>>();
             services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
@@ -208,7 +212,9 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<IReferralService, ReferralService>();
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
-
+            services.AddTransient<IQualificationService, QualificationService>();
+            services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
+            
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();

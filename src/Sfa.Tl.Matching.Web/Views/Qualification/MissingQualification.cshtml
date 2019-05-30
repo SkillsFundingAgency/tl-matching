@@ -1,0 +1,110 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.MissingQualificationViewModel
+
+@{
+    ViewData["Title"] = "We need extra information for this qualification";
+}
+
+@section backButton{
+    <a asp-route="GetProviderVenueDetail" asp-route-providerId="@Model.ProviderVenueId" class="govuk-back-link">Back</a>
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+            This page has errors
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li><a sfa-validation-for="ShortTitle"></a></li>
+                <li><a sfa-validation-for="Routes"></a></li>
+            </ul>
+        </div>
+    </div>
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Learning aim reference (LAR)
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @Model.LarId
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Qualification title
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @Model.Title
+                </dd>
+            </div>
+        </dl>
+
+        <p class="govuk-body"><a class="govuk-link" asp-route="AddQualification" asp-route-ProviderVenueId="@Model.ProviderVenueId">Change qualification</a></p>
+
+        <form asp-route="SaveMissingQualification" novalidate>
+            <input type="hidden" asp-for="ProviderVenueId" />
+            <input type="hidden" asp-for="LarId" />
+            <input type="hidden" asp-for="Title" />
+            <input asp-for="Source" value="Admin" type="hidden" />
+
+            <div class="govuk-form-group govuk-!-margin-top-8" sfa-validation-for="ShortTitle" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label" asp-for="ShortTitle">
+                    <h2 class="govuk-heading-m govuk-!-margin-0">What is the short title for this qualification? </h2>
+                </label>
+                <span id="short-title-hint" class="govuk-hint">
+                    Start typing a short title
+                </span>
+                <span class="govuk-error-message" asp-validation-for="ShortTitle"></span>
+
+                <input asp-for="ShortTitle" sfa-validation-for="ShortTitle" sfa-validationerror-class="govuk-input--error" class="govuk-input" name="ShortTitle" type="text" aria-describedby="short-title-hint">
+            </div>
+
+            <div class="govuk-form-group govuk-!-margin-top-8">
+                <fieldset class="govuk-fieldset" aria-describedby="skill-area-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h1 class="govuk-fieldset__heading">
+                            Which skill area does this qualification belong to?
+                        </h1>
+                    </legend>
+                    <span id="skill-area-hint" class="govuk-hint">
+                        Select the ones that are the closest fit
+                    </span>
+
+                    @for (var i = 0; i < Model.Routes.Count; i++)
+                    {
+                        var route = Model.Routes[i];
+
+                        <div class="govuk-checkboxes">
+                            <div class="govuk-checkboxes__item">
+                                <input type="hidden" asp-for="@route.Id" name="Routes[@i].Id" />
+
+                                <input type="checkbox" class="govuk-checkboxes__input"
+                                       asp-for="@route.IsSelected"
+                                       name="Routes[@i].IsSelected">
+                                <label class="govuk-label govuk-checkboxes__label"
+                                       asp-for="@route.IsSelected"
+                                       name="Routes[@i].IsSelected">
+                                    @route.Name
+                                </label>
+                                <span class="govuk-hint govuk-checkboxes__hint"
+                                      id="Routes[@i]-hint">
+                                    Includes:
+                                    @String.Join("; ", route.PathNames.OrderBy(p => p).Select(p => p.ToLower()))
+                                </span>
+                            </div>
+                        </div>
+                    }
+
+                </fieldset>
+            </div>
+            <button class="govuk-button" type="submit">Add qualification</button>
+        </form>
+    </div>
+</div>

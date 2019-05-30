@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
             try
             {
                 await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderFeedbackEmail
-                    {ProviderFeedbackRequestHistoryId = 1001});
+                    {BackgroundProcessHistoryId = 1001});
                 retrievedMessage = await _queue.GetMessageAsync();
                 retrievedMessage.Should().NotBeNull();
                 retrievedMessage.AsString.Should().Contain("1001");

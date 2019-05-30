@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Extensions;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -27,13 +28,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> Index(DataImportParametersViewModel viewModel)
         {
             if (viewModel.File == null)
                 ModelState.AddModelError("file", "You must select a file");
 
-            if (viewModel.File != null && viewModel.File.ContentType != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                ModelState.AddModelError("file", "You must upload an Excel file with the XLSX file extension");
+            var fileContentType = viewModel.SelectedImportType.GetFileExtensionType();
+
+            if (viewModel.File != null && viewModel.File.ContentType != fileContentType)
+                ModelState.AddModelError("file", fileContentType.GetFileExtensionErrorMessage());
 
             if (ModelState.IsValid)
             {

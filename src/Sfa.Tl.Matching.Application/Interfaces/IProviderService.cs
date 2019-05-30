@@ -11,8 +11,9 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters);
         Task<int> GetProvidersWithFundingCountAsync();
         Task<ProviderSearchResultDto> SearchAsync(long ukPrn);
+        Task<ProviderSearchResultDto> SearchReferenceDataAsync(long ukPrn);
         Task UpdateProviderDetail(ProviderDetailViewModel viewModel);
         Task UpdateProviderDetailSectionAsync(ProviderDetailViewModel viewModel);
-        Task<int> CreateProvider(ProviderDetailViewModel viewModel);
+        Task<int> CreateProvider(CreateProviderDetailViewModel viewModel);
     }
 }

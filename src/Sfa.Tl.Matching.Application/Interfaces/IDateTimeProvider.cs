@@ -6,5 +6,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         string UtcNowString(string format);
         DateTime UtcNow();
+        DateTime MinValue();
     }
 }

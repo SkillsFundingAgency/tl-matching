@@ -1,0 +1,13 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderSearchResultsViewModel
+<form class="form" asp-route="AddProvider" novalidate>
+    <input type="hidden" asp-for="@Model.Results[0].UkPrn" name="UkPrn" />
+    <input type="hidden" asp-for="@Model.Results[0].ProviderName" name="Name" />
+
+    <p class="govuk-body">This provider is not yet in our service:</p>
+    <p class="govuk-heading-s govuk-!-margin-bottom-1">UKPRN</p>
+    <p class="govuk-body">@Model.Results[0].UkPrn</p>
+
+    <p class="govuk-heading-s govuk-!-margin-bottom-1">Provider name</p>
+    <p class="govuk-body">@Model.Results[0].ProviderName</p>
+    <button class="govuk-button">Add this provider</button>
+</form>

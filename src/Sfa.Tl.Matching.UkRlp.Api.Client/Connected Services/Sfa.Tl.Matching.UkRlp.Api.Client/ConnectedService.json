@@ -1,0 +1,18 @@
+﻿{
+  "ProviderId": "Microsoft.VisualStudio.ConnectedService.Wcf",
+  "Version": "15.0.30423.811",
+  "ExtendedData": {
+    "inputs": [
+      "http://webservices.ukrlp.co.uk/UkrlpProviderQueryWS/ProviderQueryServiceV3"
+    ],
+    "collectionTypes": [
+      "System.Array",
+      "System.Collections.Generic.Dictionary`2"
+    ],
+    "namespaceMappings": [
+      "*, Sfa.Tl.Matching.UkRlp.Api.Client"
+    ],
+    "targetFramework": "netstandard2.0",
+    "typeReuseMode": "All"
+  }
+}

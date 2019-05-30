@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -25,7 +26,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
             _dataBlobUploadService = Substitute.For<IDataBlobUploadService>();
             _dataImportController = new DataImportController(mapper, _dataBlobUploadService);
 
-            var viewModel = new DataImportParametersViewModel();
+            var viewModel = new DataImportParametersViewModel
+            {
+                SelectedImportType = DataImportType.ProviderVenue
+            };
             _result = _dataImportController.Index(viewModel).Result;
         }
 

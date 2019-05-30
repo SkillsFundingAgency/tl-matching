@@ -26,11 +26,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         public When_Employer_Details_Is_Loaded_With_Existing_Details()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerDtoMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
             _employerService = Substitute.For<IEmployerService>();
-            _employerService.GetEmployer(Arg.Any<int>()).Returns(new EmployerDto
+            _employerService.GetEmployer(Arg.Any<int>()).Returns(new EmployerStagingDto
             {
                 CompanyName = EmployerName
             });

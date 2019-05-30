@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapp
             new Domain.Models.QualificationRoutePathMapping
             {
                 Id = QualificationRoutePathMappingConstants.Id,
-                PathId = QualificationRoutePathMappingConstants.PathId,
+                RouteId = QualificationRoutePathMappingConstants.RouteId,
                 Source = QualificationRoutePathMappingConstants.Source,
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapp
             new Domain.Models.QualificationRoutePathMapping
             {
                 Id = QualificationRoutePathMappingConstants.Id2,
-                PathId = QualificationRoutePathMappingConstants.PathId2,
+                RouteId = QualificationRoutePathMappingConstants.RouteId2,
                 Source = QualificationRoutePathMappingConstants.Source,
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,

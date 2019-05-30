@@ -20,27 +20,27 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
 {
     public class When_Validate_And_Parse_File_Is_Called_For_Invalid_File
     {
-        private readonly IValidator<EmployerFileImportDto> _dataValidator;
-        private readonly IDataParser<EmployerDto> _dataParser;
+        private readonly IValidator<EmployerStagingFileImportDto> _dataValidator;
+        private readonly IDataParser<EmployerStagingDto> _dataParser;
         private readonly IRepository<FunctionLog> _functionLogRepository;
-        private readonly string _errorMessage = $"'{nameof(EmployerFileImportDto.CrmId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}";
+        private readonly string _errorMessage = $"'{nameof(EmployerStagingFileImportDto.CrmId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}";
         public When_Validate_And_Parse_File_Is_Called_For_Invalid_File()
         {
-            _dataValidator = Substitute.For<IValidator<EmployerFileImportDto>>();
+            _dataValidator = Substitute.For<IValidator<EmployerStagingFileImportDto>>();
             _dataValidator
-                .ValidateAsync(Arg.Any<EmployerFileImportDto>())
+                .ValidateAsync(Arg.Any<EmployerStagingFileImportDto>())
                 .Returns(Task.FromResult(new ValidationResult
                 {
                     Errors = { new ValidationFailure("CrmId", _errorMessage) }
                 }));
 
-            _dataParser = Substitute.For<IDataParser<EmployerDto>>();
+            _dataParser = Substitute.For<IDataParser<EmployerStagingDto>>();
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            var excelfileReader = new ExcelFileReader<EmployerFileImportDto, EmployerDto>
+            var excelfileReader = new ExcelFileReader<EmployerStagingFileImportDto, EmployerStagingDto>
             (
-                new NullLogger<ExcelFileReader<EmployerFileImportDto, EmployerDto>>(),
+                new NullLogger<ExcelFileReader<EmployerStagingFileImportDto, EmployerStagingDto>>(),
                 _dataParser,
                 _dataValidator,
                 _functionLogRepository
@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
             using (var stream = File.Open(filePath, FileMode.Open))
             {
 
-                excelfileReader.ValidateAndParseFile(new EmployerFileImportDto
+                excelfileReader.ValidateAndParseFile(new EmployerStagingFileImportDto
                 {
                     FileDataStream = stream
                 }).GetAwaiter().GetResult();
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         [Fact]
         public void Then_Data_Validator_Validate_Is_called_Exactly_Once()
         {
-            _dataValidator.Received(1).ValidateAsync(Arg.Is<EmployerFileImportDto>(arg =>
+            _dataValidator.Received(1).ValidateAsync(Arg.Is<EmployerStagingFileImportDto>(arg =>
                 arg.CompanyName == "Employer-MissingMandatory"));
         }
 
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         {
             _functionLogRepository.Received(1).CreateMany(Arg.Is<List<FunctionLog>>(list =>
                 list.Count == 1 &&
-                list[0].FunctionName == "Employer" &&
+                list[0].FunctionName == "EmployerStaging" &&
                 list[0].RowNumber == 1 &&
                 list[0].ErrorMessage == _errorMessage));
         }
@@ -77,7 +77,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         [Fact]
         public void Then_Data_Parser_Parse_Is_NOT_Called()
         {
-            _dataParser.DidNotReceive().Parse(Arg.Any<EmployerFileImportDto>());
+            _dataParser.DidNotReceive().Parse(Arg.Any<EmployerStagingFileImportDto>());
         }
     }
 }

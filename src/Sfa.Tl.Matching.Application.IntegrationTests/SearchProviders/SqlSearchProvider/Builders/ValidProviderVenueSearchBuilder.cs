@@ -147,11 +147,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                         LarsId = "12345678",
                         Title = "Qualification Title",
                         ShortTitle = "Short Title",
-                        QualificationRoutePathMapping = new List<Domain.Models.QualificationRoutePathMapping>
+                        QualificationRoutePathMapping = new List<QualificationRoutePathMapping>
                         {
-                            new Domain.Models.QualificationRoutePathMapping
+                            new QualificationRoutePathMapping
                             {
-                                PathId = 16,
+                                RouteId = 7,
                                 Source = "Test"
                             }
                         }

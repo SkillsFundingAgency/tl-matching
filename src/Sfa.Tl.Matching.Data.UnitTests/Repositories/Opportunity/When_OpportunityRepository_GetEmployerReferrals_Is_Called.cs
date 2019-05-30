@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
         }
 
         [Fact]
-        public void Then_One_QualificationShortTitles_Item_Is_Returned() =>
+        public void Then_Two_QualificationShortTitles_Item_Are_Returned() =>
             _result.ProviderReferralInfo.First()
                 .QualificationShortTitles
                 .Count()

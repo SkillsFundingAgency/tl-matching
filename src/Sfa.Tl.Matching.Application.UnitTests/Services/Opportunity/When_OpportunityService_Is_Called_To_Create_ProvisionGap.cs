@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(OpportunityMapper).Assembly);
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                         type.Name.Contains("LoggedInUserNameResolver") ?
                             (object)new LoggedInUserNameResolver<CheckAnswersProvisionGapViewModel, ProvisionGap>(httpcontextAccesor) :

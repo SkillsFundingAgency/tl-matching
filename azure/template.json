@@ -44,6 +44,9 @@
         },
         "certificateName": {
             "type": "string"
+        },
+		"providerReferenceTrigger": {
+            "type": "string"
         }
     },
     "variables": {
@@ -256,6 +259,10 @@
                             {
                                 "name": "ServiceName",
                                 "value": "Sfa.Tl.Matching"
+                            },
+                            {
+                                "name": "ProviderReferenceTrigger",
+                                "value": "[parameters('providerReferenceTrigger')]"
                             },
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",

@@ -12,9 +12,7 @@ using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Application.FileReader.ProviderQualification;
 using Sfa.Tl.Matching.Application.FileReader.ProviderVenue;
-using Sfa.Tl.Matching.Application.FileReader.QualificationRoutePathMapping;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -26,6 +24,8 @@ using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging;
+using Sfa.Tl.Matching.UkRlp.Api.Client;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
             });
 
-            services.AddAutoMapper(expression => expression.AddProfiles(typeof(EmployerMapper).Assembly));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(_configuration.SqlConnectionString,
@@ -81,18 +81,21 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             RegisterApplicationServices(services);
 
             RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
+            RegisterUkRlpApi(services);
         }
 
         private static void RegisterFileReaders(IServiceCollection services)
         {
-            RegisterFileReader<EmployerDto, EmployerFileImportDto, Employer, EmployerDataParser, EmployerDataValidator, NullDataProcessor<Employer>>(services);
-            RegisterFileReader<ProviderDto, ProviderFileImportDto, Provider, ProviderDataParser, ProviderDataValidator, NullDataProcessor<Provider>>(services);
-            RegisterFileReader<ProviderVenueDto, ProviderVenueFileImportDto, ProviderVenue, ProviderVenueDataParser, ProviderVenueDataValidator, ProviderVenueDataProcessor>(services);
-            RegisterFileReader<ProviderQualificationDto, ProviderQualificationFileImportDto, ProviderQualification, ProviderQualificationDataParser, ProviderQualificationDataValidator, NullDataProcessor<ProviderQualification>>(services);
-            RegisterFileReader<QualificationRoutePathMappingDto, QualificationRoutePathMappingFileImportDto, QualificationRoutePathMapping, QualificationRoutePathMappingDataParser, QualificationRoutePathMappingDataValidator, NullDataProcessor<QualificationRoutePathMapping>>(services);
+            RegisterExcelFileReader<ProviderDto, ProviderFileImportDto, Provider, ProviderDataParser, ProviderDataValidator, NullDataProcessor<Provider>>(services);
+            RegisterExcelFileReader<ProviderVenueDto, ProviderVenueFileImportDto, ProviderVenue, ProviderVenueDataParser, ProviderVenueDataValidator, ProviderVenueDataProcessor>(services);
+            RegisterExcelFileReader<ProviderQualificationDto, ProviderQualificationFileImportDto, ProviderQualification, ProviderQualificationDataParser, ProviderQualificationDataValidator, NullDataProcessor<ProviderQualification>>(services);
+
+            RegisterExcelFileReader<EmployerStagingDto, EmployerStagingFileImportDto, EmployerStaging, EmployerStagingDataParser, EmployerStagingDataValidator, NullDataProcessor<EmployerStaging>>(services);
+
+            RegisterCsvFileReader<LearningAimReferenceStagingDto, LearningAimReferenceStagingFileImportDto, LearningAimReferenceStaging, LearningAimReferenceStagingDataParser, LearningAimReferenceStagingDataValidator, NullDataProcessor<LearningAimReferenceStaging>>(services);
         }
 
-        private static void RegisterFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
+        private static void RegisterExcelFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
                 where TDto : class, new()
                 where TImportDto : FileImportDto
                 where TEntity : BaseEntity, new()
@@ -114,22 +117,47 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddTransient<IFileImportService<TImportDto>, FileImportService<TImportDto, TDto, TEntity>>();
         }
+        private static void RegisterCsvFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
+                where TDto : class, new()
+                where TImportDto : FileImportDto
+                where TEntity : BaseEntity, new()
+                where TParser : class, IDataParser<TDto>
+                where TValidator : class, IValidator<TImportDto>
+                where TDataProcessor : class, IDataProcessor<TEntity>
+        {
+            services.AddTransient<IDataParser<TDto>, TParser>();
+            services.AddTransient<IValidator<TImportDto>, TValidator>();
+            services.AddTransient<IDataProcessor<TEntity>, TDataProcessor>();
+
+            services.AddTransient<IFileReader<TImportDto, TDto>, CsvFileReader<TImportDto, TDto>>(provider =>
+                new CsvFileReader<TImportDto, TDto>(
+                    provider.GetService<ILogger<CsvFileReader<TImportDto, TDto>>>(),
+                    provider.GetService<IDataParser<TDto>>(),
+                    (IValidator<TImportDto>)provider.GetServices(typeof(IValidator<TImportDto>)).Single(t => t.GetType() == typeof(TValidator)),
+                    provider.GetService<IRepository<FunctionLog>>()
+                    ));
+
+            services.AddTransient<IFileImportService<TImportDto>, FileImportService<TImportDto, TDto, TEntity>>();
+        }
 
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
             services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
             services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
-            services.AddTransient<IRepository<Employer>, EmployerRepository>();
+            services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
             services.AddTransient<IRepository<Qualification>, GenericRepository<Qualification>>();
             services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
-            services.AddTransient<IRepository<ProviderFeedbackRequestHistory>, GenericRepository<ProviderFeedbackRequestHistory>>();
+            services.AddTransient<IRepository<BackgroundProcessHistory>, GenericRepository<BackgroundProcessHistory>>();
             services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
             services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
+            services.AddTransient<IRepository<LearningAimReferenceStaging>, GenericRepository<LearningAimReferenceStaging>>();
+            services.AddTransient<IRepository<ProviderReferenceStaging>, GenericRepository<ProviderReferenceStaging>>();
+            services.AddTransient<IRepository<EmployerStaging>, GenericRepository<EmployerStaging>>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -140,8 +168,9 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IEmailHistoryService, EmailHistoryService>();
             services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProximityService, ProximityService>();
-            services.AddTransient<ISearchProvider, SqlSearchProvider>();
+            services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
 
+            services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         }
 
@@ -153,6 +182,12 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
                 new NotificationsApi(httpClient, apiConfiguration));
+        }
+
+        private static void RegisterUkRlpApi(IServiceCollection services)
+        {
+            services.AddTransient<IProviderDownload, ProviderDownload>();
+            services.AddTransient<IProviderDownloadClient, ProviderDownloadClient>();
         }
     }
 }

@@ -50,8 +50,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapp
             => _result.First().Qualification.ShortTitle.Should().BeEquivalentTo(QualificationRoutePathMappingConstants.ShortTitle);
 
         [Fact]
-        public void Then_RoutePathMapping_PathId_Is_Returned()
-            => _result.First().PathId.Should().Be(QualificationRoutePathMappingConstants.PathId);
+        public void Then_RoutePathMapping_RouteId_Is_Returned()
+            => _result.First().RouteId.Should().Be(QualificationRoutePathMappingConstants.RouteId);
 
         [Fact]
         public void Then_RoutePathMapping_Source_Is_Returned() =>

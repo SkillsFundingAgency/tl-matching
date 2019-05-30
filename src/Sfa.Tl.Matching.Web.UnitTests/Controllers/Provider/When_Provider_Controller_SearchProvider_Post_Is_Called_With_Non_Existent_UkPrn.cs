@@ -1,12 +1,13 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
@@ -21,7 +22,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             _providerService = Substitute.For<IProviderService>();
             _providerService
                 .SearchAsync(Arg.Any<long>())
-                .Returns((ProviderSearchResultDto)null);
+                .ReturnsNull();
+
+            _providerService
+                .SearchReferenceDataAsync(Arg.Any<long>())
+                .ReturnsNull();
 
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
@@ -39,6 +44,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
+        public void Then_ProviderService_SearchReferenceDataAsync_Is_Called_Exactly_Once()
+        {
+            _providerService
+                .Received(1)
+                .SearchReferenceDataAsync(Arg.Any<long>());
+        }
+
+        [Fact]
         public void Then_Result_Is_Not_Null() =>
             _result.Should().NotBeNull();
 
@@ -48,20 +61,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
         }
-
-        [Fact]
-        public void Then_Model_Contains_Postcode_Error()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();
-            viewResult?.ViewData.ModelState["UkPrn"]
-                .Errors
-                .Should()
-                .ContainSingle(error => error.ErrorMessage == "You must enter a real UKPRN");
-        }
-
+        
         [Fact]
         public void Then_View_Result_Is_Returned() =>
             _result.Should().BeAssignableTo<ViewResult>();
+
+        [Fact]
+        public void Then_SearchResultProviderCount_Is_Zero()
+        {
+            var viewModel = _result.GetViewModel<ProviderSearchViewModel>();
+            viewModel.SearchResults.SearchResultProviderCount.Should().Be(0);
+        }
     }
 }

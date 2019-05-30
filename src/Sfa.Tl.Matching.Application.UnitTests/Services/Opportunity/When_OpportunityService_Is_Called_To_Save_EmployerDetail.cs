@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
         public When_OpportunityService_Is_Called_To_Save_EmployerDetail()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
             
             _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();

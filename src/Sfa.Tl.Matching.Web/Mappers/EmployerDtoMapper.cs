@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<EmployerDetailsViewModel, EmployerDetailDto>>())
                 ;
 
-            CreateMap<EmployerDto, EmployerDetailsViewModel>()
+            CreateMap<EmployerStagingDto, EmployerDetailsViewModel>()
                 .ForMember(m => m.OpportunityId, o => o.Ignore())
                 .ForMember(m => m.EmployerName, o => o.MapFrom(s => s.CompanyName))
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.PrimaryContact))

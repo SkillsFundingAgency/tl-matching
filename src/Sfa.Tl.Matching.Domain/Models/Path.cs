@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Sfa.Tl.Matching.Domain.Models
+﻿namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Path : BaseEntity
     {
@@ -10,6 +8,5 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string Summary { get; set; }
 
         public virtual Route Route { get; set; }
-        public virtual ICollection<QualificationRoutePathMapping> QualificationRoutePathMapping { get; set; }
     }
 }

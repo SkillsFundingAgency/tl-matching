@@ -117,10 +117,6 @@
                 </tbody>
             </table>
 
-            @*<p class="govuk-body">
-                    <a class="govuk-link" id="addQual" href="#">Add a qualification</a>
-                </p>*@
-
             @if (Model.Qualifications == null || Model.Qualifications.Count == 0)
             {
                 <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm"
@@ -130,6 +126,9 @@
             }
             else
             {
+                <p class="govuk-body">
+                    <a class="govuk-link" asp-route="AddQualification" asp-route-ProviderVenueId="@Model.Id">Add a qualification</a>
+                </p>
                 <button type="submit" class="govuk-button" id="tl-confirm"
                         name="SubmitAction" value="SaveAndFinish">
                     Save and return to provider overview

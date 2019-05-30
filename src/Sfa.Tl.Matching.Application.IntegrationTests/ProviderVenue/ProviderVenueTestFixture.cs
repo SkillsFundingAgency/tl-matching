@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderVenue
             var dataProcessor = new ProviderVenueDataProcessor(new MessageQueueService(new NullLogger<MessageQueueService>(), new MatchingConfiguration()));
             var excelFileReader = new ExcelFileReader<ProviderVenueFileImportDto, ProviderVenueDto>(loggerExcelFileReader, dataParser, dataValidator, functionLogRepository);
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
 
             var mapper = new Mapper(config);
 

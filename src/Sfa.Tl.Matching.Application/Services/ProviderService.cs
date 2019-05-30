@@ -16,11 +16,14 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Provider> _repository;
+        private readonly IRepository<ProviderReference> _referenceRepository;
 
-        public ProviderService(IMapper mapper, IRepository<Provider> repository)
+        public ProviderService(IMapper mapper, IRepository<Provider> repository,
+            IRepository<ProviderReference> referenceRepository)
         {
             _mapper = mapper;
             _repository = repository;
+            _referenceRepository = referenceRepository;
         }
 
         public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters)
@@ -41,10 +44,15 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<ProviderSearchResultDto> SearchAsync(long ukPrn)
         {
             var provider = await _repository.GetSingleOrDefault(p => p.UkPrn == ukPrn);
-
             var dto = _mapper.Map<Provider, ProviderSearchResultDto>(provider);
 
             return dto;
+        }
+
+        public async Task<ProviderSearchResultDto> SearchReferenceDataAsync(long ukPrn)
+        {
+            var providerReference = await _referenceRepository.GetSingleOrDefault(pr => pr.UkPrn == ukPrn);
+            return _mapper.Map<ProviderReference, ProviderSearchResultDto>(providerReference);
         }
 
         public async Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId)
@@ -95,14 +103,15 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
         {
-            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+            var trackedEntity = await _repository.GetSingleOrDefault(p => p.Id == viewModel.Id);
+            trackedEntity = _mapper.Map(viewModel, trackedEntity);
 
-            await _repository.Update(provider);
+            await _repository.Update(trackedEntity);
         }
 
-        public async Task<int> CreateProvider(ProviderDetailViewModel viewModel)
+        public async Task<int> CreateProvider(CreateProviderDetailViewModel viewModel)
         {
-            var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
+            var provider = _mapper.Map<CreateProviderDetailViewModel, Provider>(viewModel);
 
             return await _repository.Create(provider);
         }

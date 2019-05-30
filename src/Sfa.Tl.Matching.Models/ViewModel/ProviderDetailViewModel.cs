@@ -44,11 +44,11 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string SecondaryContactPhone { get; set; }
 
         [Required(ErrorMessage = "You must tell us whether the provider should receive referrals")]
-        public bool? IsEnabledForReferral { get; set; }
+        public bool? IsEnabledForReferral { get; set; } = true;
 
         public string SubmitAction { get; set; }
         public string Source { get; set; }
-        public bool IsCdfProvider { get; set; }
+        public bool IsCdfProvider { get; set; } = true;
 
         public IList<ProviderVenueViewModel> ProviderVenues { get; set; }
 

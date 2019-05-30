@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Recording_Referrals_And_Emails_Sent_Is_Loaded()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(SentViewModelMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(SentViewModelMapper).Assembly));
 
             var mapper = new Mapper(config);
 

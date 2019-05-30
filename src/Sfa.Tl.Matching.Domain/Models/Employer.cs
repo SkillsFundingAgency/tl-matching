@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Employer : BaseEntity
     {
+        [MergeKey]
         public Guid CrmId { get; set; }
         public string CompanyName { get; set; }
         public string AlsoKnownAs { get; set; }
@@ -15,5 +17,8 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string Email { get; set; }
         public string Postcode { get; set; }
         public string Owner { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public int ChecksumCol { get; set; }
     }
 }

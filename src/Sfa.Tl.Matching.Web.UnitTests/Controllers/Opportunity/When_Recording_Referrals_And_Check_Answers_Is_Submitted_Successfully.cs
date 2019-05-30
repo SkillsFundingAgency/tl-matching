@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(CheckAnswersDtoMapper).Assembly);
+                c.AddMaps(typeof(CheckAnswersDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<CheckAnswersReferralViewModel, CheckAnswersDto>(httpcontextAccesor) :
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
         
         [Fact]
-        public void Then_Result_Is_Redirect_to_EmailsSent()
+        public void Then_Result_Is_Redirect_To_EmailsSent()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();

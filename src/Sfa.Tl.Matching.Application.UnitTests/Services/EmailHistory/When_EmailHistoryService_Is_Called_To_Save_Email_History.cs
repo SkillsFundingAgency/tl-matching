@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
         {
             var logger = Substitute.For<ILogger<EmailHistoryService>>();
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmailHistoryMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailHistoryMapper).Assembly));
             var mapper = new Mapper(config);
 
             var emailTemplate = new EmailTemplate

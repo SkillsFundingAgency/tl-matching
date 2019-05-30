@@ -9,9 +9,9 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.4" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NSubstitute" Version="4.0.0" />
+    <PackageReference Include="NSubstitute" Version="4.2.0" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1">
@@ -32,7 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Services\FileImportService\DuplicateRows\Employer-DuplicateRows.xlsx">
+    <None Update="Services\FileImportService\DuplicateRows\LearningAimReferenceStaging-DuplicateRows.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Services\FileImportService\DuplicateRows\EmployerStaging-DuplicateRows.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Services\FileImportService\DuplicateRows\Provider-DuplicateRows.xlsx">
@@ -44,13 +47,10 @@
     <None Update="Services\FileImportService\DuplicateRows\ProviderVenue-DuplicateRows.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Services\FileImportService\DuplicateRows\QualificationRoutePathMapping-DuplicateRows.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="FileReader\ExcelFileReader\Employer-MissingMandatory.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="FileReader\ExcelFileReader\Trim\Employer-Trim.xlsx">
+    <None Update="FileReader\ExcelFileReader\Trim\EmployerStaging-Trim.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="FileReader\ExcelFileReader\TitleCase\Employer-TitleCase.xlsx">
@@ -66,9 +66,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="FileReader\ExcelFileReader\Trim\ProviderVenue-Trim.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="FileReader\ExcelFileReader\Trim\QualificationRoutePathMapping-Trim.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

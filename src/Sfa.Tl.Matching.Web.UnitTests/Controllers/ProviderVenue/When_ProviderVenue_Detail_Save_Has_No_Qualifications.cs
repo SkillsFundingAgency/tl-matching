@@ -44,18 +44,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             viewResult?.Model.Should().NotBeNull();
         }
 
-        //[Fact]
-        //public void Then_Result_Is_RedirectResult() =>
-        //    _result.Should().BeOfType<RedirectToRouteResult>();
+        [Fact]
+        public void Then_Result_Is_RedirectResult() =>
+            _result.Should().BeOfType<RedirectToRouteResult>();
 
         [Fact]
         public void Then_Result_Is_Redirect_To_Add_Qualification()
         {
-            var redirect = _result as RedirectToRouteResult;
-            //TODO: use commented line below when Add Qualification is implemented
-            //TODO: Also uncomment test above - Then_Result_Is_RedirectResult
-            redirect.Should().BeNull();
-            //redirect?.RouteName.Should().BeEquivalentTo("AddQualification");
+            var result = _result as RedirectToRouteResult;
+            result.Should().NotBeNull();
+
+            result?.RouteName.Should().BeEquivalentTo("AddQualification");
         }
 
         [Fact]

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
@@ -25,6 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
             var viewModel = new DataImportParametersViewModel
             {
+                SelectedImportType = DataImportType.ProviderVenue,
                 File = formFile
             };
             var mapper = Substitute.For<IMapper>();

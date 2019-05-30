@@ -6,6 +6,7 @@ using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -38,23 +39,72 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
+                return View(GetProviderSearchViewModel(viewModel));
+
+            if (!viewModel.UkPrn.HasValue)
             {
+                ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn),
+                    "You must enter a UKPRN");
                 return View(GetProviderSearchViewModel(viewModel));
             }
 
-            var searchResult = viewModel.UkPrn.HasValue
-                ? await _providerService.SearchAsync(viewModel.UkPrn.Value)
-                : null;
+            var searchResult = await _providerService.SearchAsync(viewModel.UkPrn.Value);
+            if (IsValidProviderSearch(searchResult))
+                return View(await SearchProvidersWithFundingAsync(viewModel));
 
-            if (searchResult == null || searchResult.Id == 0)
+            searchResult = await _providerService.SearchReferenceDataAsync(viewModel.UkPrn.Value);
+
+            return View(IsValidProviderSearch(searchResult) ?
+                GetProviderSearchUkRlpViewModel(viewModel, searchResult) :
+                new ProviderSearchViewModel(viewModel));
+        }
+
+        [HttpPost]
+        [Route("add-provider", Name = "AddProvider")]
+        public IActionResult AddProvider(AddProviderViewModel viewModel)
+        {
+            return RedirectToRoute("CreateProviderDetail", new
             {
-                ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn), "You must enter a real UKPRN");
-                return View(GetProviderSearchViewModel(viewModel));
+                ukPrn = viewModel.UkPrn,
+                name = viewModel.Name
+            });
+        }
+
+        [HttpGet]
+        [Route("create-provider/{ukPrn}/{name}", Name = "AddProviderDetail")]
+        public IActionResult ProviderDetail(AddProviderViewModel viewModel)
+        {
+            return View(new ProviderDetailViewModel
+            {
+                Name = viewModel.Name,
+                UkPrn = viewModel.UkPrn
+            });
+        }
+
+        [HttpPost]
+        [Route("create-provider/{ukPrn}/{name}", Name = "CreateProviderDetail")]
+        public async Task<IActionResult> CreateProviderDetail(CreateProviderDetailViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(nameof(ProviderDetail), viewModel);
+
+            if (viewModel.IsSaveAndAddVenue)
+            {
+                var providerId = await _providerService.CreateProvider(viewModel);
+                return RedirectToRoute("AddVenue", new
+                {
+                    providerId
+                });
             }
 
-            var resultsViewModel = await SearchProvidersWithFundingAsync(viewModel);
+            if (!viewModel.IsCdfProvider)
+                return RedirectToAction(nameof(SearchProvider));
 
-            return View(resultsViewModel);
+            return RedirectToAction(nameof(ProviderDetail), new AddProviderViewModel
+            {
+                UkPrn = viewModel.UkPrn,
+                Name = viewModel.Name
+            });
         }
 
         [HttpGet]
@@ -64,9 +114,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var viewModel = new ProviderDetailViewModel();
 
             if (providerId > 0)
-            {
                 viewModel = await _providerService.GetProviderDetailByIdAsync(providerId);
-            }
 
             return View(viewModel);
         }
@@ -78,28 +126,30 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (viewModel.IsSaveSection)
                 return await PerformSaveSection(viewModel);
 
+            return await SaveProvider(viewModel);
+        }
+
+        private async Task<IActionResult> SaveProvider(ProviderDetailViewModel viewModel)
+        {
             if (!ModelState.IsValid)
                 return View(nameof(ProviderDetail), viewModel);
 
-            if (viewModel.IsSaveAndAddVenue)
-                return await PerformSaveAndAddVenue(viewModel);
+            if (!viewModel.IsSaveAndAddVenue)
+                return await PerformSaveAndFinish(viewModel);
 
-            return await PerformSaveAndFinish(viewModel);
+            var providerId = viewModel.Id;
+            await _providerService.UpdateProviderDetail(viewModel);
+
+            return RedirectToRoute("AddVenue", new
+            {
+                providerId
+            });
         }
 
         private async Task<IActionResult> PerformSaveSection(ProviderDetailViewModel viewModel)
         {
             await _providerService.UpdateProviderDetailSectionAsync(viewModel);
             return RedirectToAction(nameof(ProviderDetail), viewModel.Id);
-        }
-
-        private async Task<IActionResult> PerformSaveAndAddVenue(ProviderDetailViewModel viewModel)
-        {
-            await _providerService.UpdateProviderDetail(viewModel);
-            return RedirectToRoute("AddVenue", new
-            {
-                providerId = viewModel.Id
-            });
         }
 
         private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)
@@ -134,6 +184,31 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
             };
+        }
+
+        private ProviderSearchViewModel GetProviderSearchUkRlpViewModel(ProviderSearchParametersViewModel searchParametersViewModel, ProviderSearchResultDto dto)
+        {
+            var viewModel = new ProviderSearchViewModel(searchParametersViewModel)
+            {
+                SearchResults =
+                {
+                    IsUkRlp = true
+                },
+                IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
+            };
+            viewModel.SearchResults.Results.Add(new ProviderSearchResultItemViewModel
+            {
+                ProviderId = dto.Id,
+                ProviderName = dto.Name,
+                UkPrn = dto.UkPrn
+            });
+
+            return viewModel;
+        }
+
+        private static bool IsValidProviderSearch(ProviderSearchResultDto searchResult)
+        {
+            return searchResult != null && searchResult.Id > 0;
         }
     }
 }

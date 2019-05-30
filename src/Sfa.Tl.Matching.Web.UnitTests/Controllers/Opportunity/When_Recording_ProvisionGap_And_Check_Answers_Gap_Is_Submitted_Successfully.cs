@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(CheckAnswersDtoMapper).Assembly);
+                c.AddMaps(typeof(CheckAnswersDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>(httpcontextAccesor) :

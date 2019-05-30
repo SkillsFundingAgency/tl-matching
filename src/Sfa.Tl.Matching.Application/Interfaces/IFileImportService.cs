@@ -7,5 +7,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         where TImportDto : FileImportDto
     {
         Task<int> Import(TImportDto fileImportDto);
+        Task<int> BulkImport(TImportDto fileImportDto);
     }
 }
