@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
@@ -16,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 {
     public class When_QualificationService_Is_Called_To_CreateQualification
     {
-        private readonly IRepository<Domain.Models.Qualification> _qualificationRepository;
+        private readonly IRepository<QualificationRoutePathMapping>  _qualificationRoutePathMappingRepository;
         private readonly  int _result;
 
         public When_QualificationService_Is_Called_To_CreateQualification()
@@ -39,15 +41,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
 
-            _qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
-            _qualificationRepository.Create(Arg.Any<Domain.Models.Qualification>())
+            var qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
+            qualificationRepository
+                .Create(Arg.Do<Domain.Models.Qualification>(
+                q => q.Id = 1))
                 .Returns(1);
-            _qualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
+            qualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
                 .Returns(new Domain.Models.Qualification());
+            
+            _qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRoutePathMapping>>();
+            _qualificationRoutePathMappingRepository
+                .CreateMany(Arg.Do<IList<QualificationRoutePathMapping>>(
+                        qrpm => qrpm.First().Qualification.Id = 1))
+                .Returns(1);
 
-            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<Domain.Models.QualificationRoutePathMapping>>();
-
-            var qualificationService = new QualificationService(mapper, _qualificationRepository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
+            var qualificationService = new QualificationService(mapper, qualificationRepository, _qualificationRoutePathMappingRepository, learningAimReferenceRepository);
 
             var viewModel = new MissingQualificationViewModel
             {
@@ -55,27 +63,43 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 LarId = "10042982",
                 Title = "Title",
                 ShortTitle = "Short Title",
-                Source = "Test"
+                Source = "Test",
+                Routes = new List<RouteViewModel>
+                {
+                    new RouteViewModel
+                    {
+                        Id = 1,
+                        Name = "Route 1",
+                        IsSelected = true,
+                        PathNames = new List<string>
+                        {
+                            "Path 1"
+                        }
+                    }
+                }
             };
 
             _result = qualificationService.CreateQualificationAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_ProviderVenueRepository_Create_Is_Called_Exactly_Once()
+        public void Then_QualificationRoutePathMappingRepository_CreateMany_Is_Called_Exactly_Once()
         {
-            _qualificationRepository
+            _qualificationRoutePathMappingRepository
                 .Received(1)
-                .Create(Arg.Any<Domain.Models.Qualification>());
+                .CreateMany(Arg.Any<IList<QualificationRoutePathMapping>>());
         }
 
         [Fact]
-        public void Then_QualificationRepository_Create_Is_Called_With_Expected_Values()
+        public void Then_QualificationRoutePathMappingRepository_CreateMany_Is_Called_With_Expected_Values()
         {
-            _qualificationRepository
-                .Received()
-                .Create(Arg.Is<Domain.Models.Qualification> (
-                    p => p.LarsId == "10042982"
+            _qualificationRoutePathMappingRepository
+                .Received(1)
+                .CreateMany(Arg.Is<IList<QualificationRoutePathMapping>>(
+                    qrpm => qrpm.Count == 1 && 
+                            qrpm.First().Qualification.LarsId == "10042982" &&
+                            qrpm.First().Qualification.ShortTitle == "Short Title" &&
+                            qrpm.First().RouteId == 1
                 ));
         }
 

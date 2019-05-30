@@ -29,38 +29,23 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<int> CreateQualificationAsync(MissingQualificationViewModel viewModel)
         {
             var qualification = _mapper.Map<Qualification>(viewModel);
-            var qualificationId = await _qualificationRepository.Create(qualification);
 
-            //This doesn't work - CrateMany tries to add records twice
-            //var mappings = viewModel
-            //    .Routes?
-            //    .Where(r => r.IsSelected)
-            //    .Select(route => new QualificationRoutePathMapping
-            //    {
-            //        QualificationId = qualificationId,
-            //        RouteId = route.Id,
-            //        Source = viewModel.Source,
-            //        Qualification = null
-            //    }).ToList();
-
-            //await _qualificationRoutePathMappingRepository.CreateMany(mappings);
-
-            if (viewModel.Routes != null)
-            {
-                foreach (var route in viewModel.Routes.Where(r => r.IsSelected))
+            var qualificationRoutePathMappings = viewModel
+                .Routes?
+                .Where(r => r.IsSelected)
+                .Select(route => new QualificationRoutePathMapping
                 {
-                    await _qualificationRoutePathMappingRepository.Create(
-                        new QualificationRoutePathMapping
-                        {
-                            QualificationId = qualificationId,
-                            RouteId = route.Id,
-                            Source = viewModel.Source,
-                            Qualification = null
-                        });
-                }
+                    RouteId = route.Id,
+                    Source = viewModel.Source,
+                    Qualification = qualification
+                }).ToList();
+
+            if (qualificationRoutePathMappings?.Count > 0)
+            {
+                await _qualificationRoutePathMappingRepository.CreateMany(qualificationRoutePathMappings);
             }
 
-            return qualificationId;
+            return qualification.Id;
         }
 
         public async Task<QualificationDetailViewModel> GetQualificationAsync(string larId)
