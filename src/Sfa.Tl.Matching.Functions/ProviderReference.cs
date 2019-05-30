@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
         }
 
-        [FunctionName("ImportProviderReferenceHttp")]
+        [FunctionName("ManualImportProviderReference")]
         public async Task<IActionResult> ImportProviderReferenceHttp(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
             HttpRequest req,
