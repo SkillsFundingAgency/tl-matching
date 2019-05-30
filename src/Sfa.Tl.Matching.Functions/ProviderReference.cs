@@ -14,16 +14,16 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("ImportProviderReference")]
         public async Task ImportProviderReference(
-            [TimerTrigger("%ProviderReferenceTrigger%")]
-            TimerInfo timer,
+            [TimerTrigger("%ProviderReferenceTrigger%")] TimerInfo timer,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IReferenceDataService referenceDataService)
+            [Inject] IReferenceDataService referenceDataService,
+            [Inject] IDateTimeProvider dateTimeProvider)
         {
             logger.LogInformation($"Function {context.FunctionName} triggered");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRecords = await referenceDataService.SynchronizeProviderReference();
+            var createdRecords = await referenceDataService.SynchronizeProviderReference(dateTimeProvider.UtcNow());
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -32,17 +32,17 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("ManualImportProviderReference")]
-        public async Task<IActionResult> ImportProviderReferenceHttp(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
-            HttpRequest req,
+        public async Task<IActionResult> ManualImportProviderReference(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IReferenceDataService referenceDataService)
+            [Inject] IReferenceDataService referenceDataService,
+            [Inject] IDateTimeProvider dateTimeProvider)
         {
             logger.LogInformation($"Function {context.FunctionName} triggered");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRecords = await referenceDataService.SynchronizeProviderReference();
+            var createdRecords = await referenceDataService.SynchronizeProviderReference(dateTimeProvider.MinValue());
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} finished processing\n" +

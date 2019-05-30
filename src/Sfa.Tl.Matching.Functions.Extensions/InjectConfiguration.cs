@@ -188,6 +188,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         private static void RegisterUkRlpApi(IServiceCollection services)
         {
             services.AddTransient<IProviderDownload, ProviderDownload>();
+            services.AddTransient<IProviderDownloadClient, ProviderDownloadClient>();
         }
     }
 }

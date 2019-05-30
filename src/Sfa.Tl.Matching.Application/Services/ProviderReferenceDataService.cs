@@ -29,11 +29,10 @@ namespace Sfa.Tl.Matching.Application.Services
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public async Task<int> SynchronizeProviderReference()
+        public async Task<int> SynchronizeProviderReference(DateTime lastUpdateDate)
         {
             var backgroundProcessHistoryId = await CreateBackgroundProcessHistory();
-
-            var providerReferenceStagings = await GetProvidersForStaging();
+            var providerReferenceStagings = await GetProvidersForStaging(lastUpdateDate);
             await _repository.BulkInsert(providerReferenceStagings);
             await _repository.MergeFromStaging();
 
@@ -54,9 +53,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return backgroundProcessHistoryId;
         }
 
-        private async Task<List<ProviderReferenceStaging>> GetProvidersForStaging()
+        private async Task<List<ProviderReferenceStaging>> GetProvidersForStaging(DateTime lastUpdateDate)
         {
-            var providers = await _providerDownload.GetAll(DateTime.MinValue);
+            var providers = await _providerDownload.GetAll(lastUpdateDate);
             var providerReferenceStagings = providers.Select(p => new ProviderReferenceStaging
             {
                 Name = p.ProviderName,

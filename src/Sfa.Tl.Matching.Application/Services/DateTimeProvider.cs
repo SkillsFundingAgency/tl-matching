@@ -14,5 +14,10 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             return UtcNow().ToString(format).Replace("Z", string.Empty);
         }
+
+        public DateTime MinValue()
+        {
+            return DateTime.MinValue;
+        }
     }
 }
