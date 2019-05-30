@@ -18,8 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.LearningAimReference.
         [Fact]
         public void Then_Validation_Result_Is_Not_Valid()
         {
-            
-            _fixture.Dto.Title = new string('*', 401);;
+            _fixture.Dto.Title = new string('*', 401);
             
             var validationResult = _fixture.Validator.Validate(_fixture.Dto);
             

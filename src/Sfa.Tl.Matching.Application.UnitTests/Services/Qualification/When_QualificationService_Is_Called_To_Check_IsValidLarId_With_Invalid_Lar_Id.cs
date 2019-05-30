@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
 
             var qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
-            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<Domain.Models.QualificationRoutePathMapping>>();
+            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRoutePathMapping>>();
 
             var qualificationService = new QualificationService(mapper, qualificationRepository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
 

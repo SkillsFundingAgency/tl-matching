@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
             if (ReferenceEquals(x, null)) return false;
             if (ReferenceEquals(y, null)) return false;
             if (x.GetType() != y.GetType()) return false;
-            return string.Equals(x.LarId, y.LarId) && string.Equals(x.Title, y.Title) && string.Equals(x.AwardOrgLarId, y.AwardOrgLarId) && string.Equals(x.SourceCreatedOn, y.SourceCreatedOn) && string.Equals(x.SourceModifiedOn, y.SourceModifiedOn);
+            return string.Equals(x.LarId, y.LarId) && string.Equals(x.Title, y.Title) && string.Equals(x.AwardOrgLarId, y.AwardOrgLarId) && Equals(x.SourceCreatedOn, y.SourceCreatedOn) && Equals(x.SourceModifiedOn, y.SourceModifiedOn);
         }
 
         public int GetHashCode(LearningAimReferenceStaging obj)
