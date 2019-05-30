@@ -17,11 +17,8 @@ GO
 --Copy IsFundedForNextYear to IsCDFProvider and IsEnabledForReferral
 if exists (select 1 from sys.columns where name = 'IsFundedForNextYear' and object_name(object_id) = 'Provider')
 	EXEC('UPDATE [dbo].[Provider]
-		 SET [IsCDFProvider] = [IsFundedForNextYear]')
-GO
-
-EXEC('UPDATE [dbo].[Provider]
-      Set [IsEnabledForReferral] = [IsCDFProvider]')
+		 SET [IsCDFProvider] = [IsFundedForNextYear],
+			[IsEnabledForReferral] = [IsFundedForNextYear]')
 GO
 
 if exists (select 1 from sys.columns where name = 'IsFundedForNextYear' and object_name(object_id) = 'Provider')
@@ -59,15 +56,19 @@ BEGIN
 	WHERE [IsEnabledForReferral] IS NULL
 END
 
-ALTER TABLE [dbo].[ProviderVenue] ALTER COLUMN [IsEnabledForReferral] BIT NOT NULL
+if exists (select 1 from sys.columns where name = 'IsEnabledForReferral' and is_nullable = 1 and object_name(object_id) = 'ProviderVenue')
+	ALTER TABLE [dbo].[ProviderVenue] 
+	ALTER COLUMN [IsEnabledForReferral] BIT NOT NULL
 GO
 
-ALTER TABLE Provider
-ALTER COLUMN SecondaryContact nvarchar(100) NULL
+if exists (select 1 from sys.columns where name = 'SecondaryContact' and is_nullable = 0 and object_name(object_id) = 'Provider')
+	ALTER TABLE Provider
+	ALTER COLUMN SecondaryContact nvarchar(100) NULL
 GO
 
-ALTER TABLE Provider
-ALTER COLUMN SecondaryContactEmail varchar(320) NULL
+if exists (select 1 from sys.columns where name = 'SecondaryContact' and is_nullable = 0 and object_name(object_id) = 'Provider')
+	ALTER TABLE Provider
+	ALTER COLUMN SecondaryContactEmail varchar(320) NULL
 GO
 
 --Change Status column in ProviderFeedbackRequestHistory to string
