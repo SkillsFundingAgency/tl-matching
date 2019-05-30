@@ -26,6 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             _qualificationService = Substitute.For<IQualificationService>();
             _qualificationService.IsValidLarIdAsync("12345678").Returns(true);
             _qualificationService.GetQualificationAsync("12345678").ReturnsNull();
+            _qualificationService.IsValidOfqualLarIdAsync("12345678").Returns(true);
 
             _providerQualificationService = Substitute.For<IProviderQualificationService>();
 

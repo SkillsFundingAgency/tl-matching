@@ -17,6 +17,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
     public class When_Qualification_MissingQualification_Is_Loaded
     {
         private readonly IActionResult _result;
+        private readonly IQualificationService _qualificationService;
         private readonly IRoutePathService _routePathService;
 
         public When_Qualification_MissingQualification_Is_Loaded()
@@ -37,7 +38,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(RouteViewModelMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var qualificationService = Substitute.For<IQualificationService>();
+             _qualificationService = Substitute.For<IQualificationService>();
+
+            _qualificationService.GetLarTitleAsync("12345678")
+                .Returns("LAR title from lookup");
 
             var providerVenueService = Substitute.For<IProviderVenueService>();
             providerVenueService.GetVenuePostcodeAsync(1)
@@ -49,9 +53,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
 
-            var qualificationController = new QualificationController(mapper, providerVenueService, qualificationService, providerQualificationService, _routePathService);
+            var qualificationController = new QualificationController(mapper, providerVenueService, _qualificationService, providerQualificationService, _routePathService);
 
-            _result = qualificationController.MissingQualification(1, "12345678");
+            _result = qualificationController.MissingQualification(1, "12345678")
+                .GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -59,12 +64,18 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         {
             _routePathService.Received(1).GetRoutes();
         }
-
-
+        
         [Fact]
         public void Then_GetPaths_Is_Called_Exactly_Once()
         {
             _routePathService.Received(1).GetPaths();
+        }
+
+
+        [Fact]
+        public void Then_GetLarTitleAsync_Is_Called_Exactly_Once()
+        {
+            _qualificationService.Received(1).GetLarTitleAsync("12345678");
         }
 
         [Fact]
@@ -88,7 +99,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var viewModel = _result.GetViewModel<MissingQualificationViewModel>();
             viewModel.ProviderVenueId.Should().Be(1);
             viewModel.LarId.Should().Be("12345678");
-            viewModel.Title.Should().BeEquivalentTo("TODO: Lookup title");
+            viewModel.Title.Should().BeEquivalentTo("LAR title from lookup");
             viewModel.Routes.Should().NotBeNullOrEmpty();
         }
         

@@ -13,14 +13,17 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IMapper _mapper;
         private readonly IRepository<Qualification> _qualificationRepository;
         private readonly IRepository<QualificationRoutePathMapping> _qualificationRoutePathMappingRepository;
+        private readonly IRepository<LearningAimsReference> _learningAimsReferenceRepository;
 
         public QualificationService(IMapper mapper,
             IRepository<Qualification> qualificationRepository,
-            IRepository<QualificationRoutePathMapping> qualificationRoutePathMappingRepository)
+            IRepository<QualificationRoutePathMapping> qualificationRoutePathMappingRepository,
+            IRepository<LearningAimsReference> learningAimsReferenceRepository)
         {
             _mapper = mapper;
             _qualificationRepository = qualificationRepository;
             _qualificationRoutePathMappingRepository = qualificationRoutePathMappingRepository;
+            _learningAimsReferenceRepository = learningAimsReferenceRepository;
         }
 
         public async Task<int> CreateQualificationAsync(MissingQualificationViewModel viewModel)
@@ -64,6 +67,18 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var qualification = await _qualificationRepository.GetSingleOrDefault(p => p.LarsId == larId);
             return _mapper.Map<Qualification, QualificationDetailViewModel>(qualification);
+        }
+
+        public async Task<string> GetLarTitleAsync(string larId)
+        {
+            var lar = await _learningAimsReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);
+            return lar?.Title;
+        }
+
+        public async Task<bool> IsValidOfqualLarIdAsync(string larId)
+        {
+            var lar = await _learningAimsReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);
+            return lar != null;
         }
 
         public async Task<bool> IsValidLarIdAsync(string larId)

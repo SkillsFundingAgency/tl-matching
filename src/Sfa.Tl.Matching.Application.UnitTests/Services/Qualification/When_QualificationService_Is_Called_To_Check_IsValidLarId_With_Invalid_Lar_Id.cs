@@ -4,6 +4,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
@@ -17,10 +18,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             var config = new MapperConfiguration(c => c.AddProfiles(typeof(QualificationMapper).Assembly));
             var mapper = new Mapper(config);
 
+            var learningAimsReferenceRepository = Substitute.For<IRepository<LearningAimsReference>>();
+
             var qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
             var qualificationRoutePathMappingRepository = Substitute.For<IRepository<Domain.Models.QualificationRoutePathMapping>>();
 
-            var qualificationService = new QualificationService(mapper, qualificationRepository, qualificationRoutePathMappingRepository);
+            var qualificationService = new QualificationService(mapper, qualificationRepository, qualificationRoutePathMappingRepository, learningAimsReferenceRepository);
 
             _result = qualificationService.IsValidLarIdAsync("12345").GetAwaiter().GetResult();
         }

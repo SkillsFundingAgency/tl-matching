@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (string.IsNullOrWhiteSpace(viewModel.LarId) || !isValid)
             {
-                ModelState.AddModelError("LarsId", "Enter a learning aim reference (LAR) that has 8 characters");
+                ModelState.AddModelError("LarId", "Enter a learning aim reference (LAR) that has 8 characters");
                 return View(viewModel);
             }
 
@@ -64,6 +64,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (qualification == null)
             {
+                var isValidLar = await _qualificationService.IsValidOfqualLarIdAsync(viewModel.LarId);
+                if (!isValidLar)
+                {
+                    ModelState.AddModelError("LarId", "You must enter a real learning aim reference (LAR)");
+                    return View(viewModel);
+                }
+
                 return RedirectToRoute("MissingQualification",
                     new
                     {
@@ -80,14 +87,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "MissingQualification")]
-        public IActionResult MissingQualification(int providerVenueId, string larId)
+        public async Task<IActionResult> MissingQualification(int providerVenueId, string larId)
         {
+            //Get title from service, based on LAR
+            var title = await _qualificationService.GetLarTitleAsync(larId);
+
             return View(new MissingQualificationViewModel
             {
                 ProviderVenueId = providerVenueId,
                 LarId = larId,
                 QualificationId = 1,
-                Title = "TODO: Lookup title",
+                Title = title,
                 Routes = GetRoutes()
             });
         }
