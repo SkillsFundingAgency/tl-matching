@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
         public When_ProviderVenueService_Is_Called_To_Get_RemoveProviderVenueViewModel()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderVenueMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(ProviderVenueMapper).Assembly));
             var mapper = new Mapper(config);
             var locationService = Substitute.For<ILocationService>();
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();

@@ -150,7 +150,7 @@ namespace Sfa.Tl.Matching.Web
         private void RegisterDependencies(IServiceCollection services)
         {
             //Inject AutoMapper
-            services.AddAutoMapper();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             //Inject DbContext
             services.AddDbContext<MatchingDbContext>(options =>

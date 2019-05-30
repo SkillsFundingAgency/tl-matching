@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
             var nullDataProcessor = new NullDataProcessor<EmployerStaging>();
             var excelFileReader = new ExcelFileReader<EmployerStagingFileImportDto, EmployerStagingDto>(loggerExcelFileReader, dataParser, dataValidator, functionLogRepository);
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
 
             var mapper = new Mapper(config);
 

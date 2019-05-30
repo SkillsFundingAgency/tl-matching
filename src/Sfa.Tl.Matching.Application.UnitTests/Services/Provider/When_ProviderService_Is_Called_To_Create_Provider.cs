@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(ProviderMapper).Assembly);
+                c.AddMaps(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<CreateProviderDetailViewModel, Domain.Models.Provider>(httpcontextAccesor) :

@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             var provisionGapRepository = new GenericRepository<ProvisionGap>(loggerProvisionGapRepository, MatchingDbContext);
             var referralRepository = new GenericRepository<Referral>(loggerReferralRepository, MatchingDbContext);
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
 
             OpportunityService = new OpportunityService(mapper, 

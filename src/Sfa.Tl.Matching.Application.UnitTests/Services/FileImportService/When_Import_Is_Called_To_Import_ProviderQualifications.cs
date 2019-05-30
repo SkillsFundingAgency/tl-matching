@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 
         public When_Import_Is_Called_To_Import_ProviderQualifications()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
             var logger = Substitute.For<ILogger<FileImportService<ProviderQualificationFileImportDto, ProviderQualificationDto, Domain.Models.ProviderQualification>>>();
             _fileReader = Substitute.For<IFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>>();

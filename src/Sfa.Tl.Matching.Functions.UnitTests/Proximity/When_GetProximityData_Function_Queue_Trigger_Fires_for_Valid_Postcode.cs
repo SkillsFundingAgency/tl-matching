@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         {
             var httpClient = new PostcodesIoHttpClient().Get();
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(OpportunityMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
             
             var locationService = new LocationService(

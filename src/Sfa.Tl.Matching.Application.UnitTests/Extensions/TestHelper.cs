@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
 
         public static IMapper GetMapper()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             return new Mapper(config);
         }
 

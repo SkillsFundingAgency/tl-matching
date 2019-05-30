@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 
         public When_Import_Is_Called_To_Import_LearningAimReferenceStaging()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(LearningAimReferenceStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(LearningAimReferenceStagingMapper).Assembly));
             var mapper = new Mapper(config);
             var logger = Substitute.For<ILogger<FileImportService<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto, LearningAimReferenceStaging>>>();
             _fileReader = Substitute.For<IFileReader<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto>>();

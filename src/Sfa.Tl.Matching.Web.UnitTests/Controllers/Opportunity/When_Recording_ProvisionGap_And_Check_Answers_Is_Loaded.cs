@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Recording_ProvisionGap_And_Check_Answers_Is_Loaded()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(CheckAnswersDtoMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(CheckAnswersDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
             var dto = new ValidCheckAnswersDtoBuilder().Build();

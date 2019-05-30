@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(QualificationMapper).Assembly);
+                c.AddMaps(typeof(QualificationMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<MissingQualificationViewModel, Domain.Models.Qualification>(httpcontextAccesor) :

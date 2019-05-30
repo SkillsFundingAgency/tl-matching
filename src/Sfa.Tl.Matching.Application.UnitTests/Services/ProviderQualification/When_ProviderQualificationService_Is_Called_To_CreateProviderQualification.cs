@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(ProviderQualificationMapper).Assembly);
+                c.AddMaps(typeof(ProviderQualificationMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<AddQualificationViewModel, Domain.Models.ProviderQualification>(httpcontextAccesor) :

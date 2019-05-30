@@ -13,7 +13,6 @@ using Sfa.Tl.Matching.Application.FileReader.Provider;
 using Sfa.Tl.Matching.Application.FileReader.ProviderQualification;
 using Sfa.Tl.Matching.Application.FileReader.ProviderVenue;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -61,7 +60,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                     level >= (category == "Microsoft" ? LogLevel.Error : LogLevel.Information));
             });
 
-            services.AddAutoMapper(expression => expression.AddProfiles(typeof(EmployerStagingMapper).Assembly));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(_configuration.SqlConnectionString,

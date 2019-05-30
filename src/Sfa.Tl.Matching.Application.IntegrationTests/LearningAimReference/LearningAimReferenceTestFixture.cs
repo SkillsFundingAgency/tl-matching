@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
             var nullDataProcessor = new NullDataProcessor<LearningAimReferenceStaging>();
             var csvFileReader = new CsvFileReader<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto>(loggerCsvFileReader, dataParser, dataValidator, functionLogRepository);
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(LearningAimReferenceStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(LearningAimReferenceStagingMapper).Assembly));
 
             var mapper = new Mapper(config);
 

@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
         public When_Qualification_Save_MissingQualification_Is_Called()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(RouteViewModelMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(RouteViewModelMapper).Assembly));
             var mapper = new Mapper(config);
 
             _qualificationService = Substitute.For<IQualificationService>();

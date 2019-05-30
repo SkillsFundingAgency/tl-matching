@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(EmployerDtoMapper).Assembly);
+                c.AddMaps(typeof(EmployerDtoMapper).Assembly);
                 c.ConstructServicesUsing(type => 
                     type.Name.Contains("LoggedInUserEmailResolver") ? 
                         new LoggedInUserEmailResolver<FindEmployerViewModel, EmployerNameDto>(httpcontextAccesor) :

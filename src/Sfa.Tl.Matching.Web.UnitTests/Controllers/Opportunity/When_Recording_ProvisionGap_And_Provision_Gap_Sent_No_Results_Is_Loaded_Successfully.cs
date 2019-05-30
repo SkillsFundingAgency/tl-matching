@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Recording_ProvisionGap_And_Provision_Gap_Sent_No_Results_Is_Loaded_Successfully()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(SentViewModelMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(SentViewModelMapper).Assembly));
             var mapper = new Mapper(config);
 
             _opportunityService = Substitute.For<IOpportunityService>();

@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
         public When_ProviderService_Is_Called_To_Search_Providers_By_UkPrn()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
             _providerRepository = Substitute.For<IRepository<Domain.Models.Provider>>();
 

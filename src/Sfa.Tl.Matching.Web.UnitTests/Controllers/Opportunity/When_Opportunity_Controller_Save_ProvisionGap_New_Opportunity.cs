@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(EmployerDtoMapper).Assembly);
+                c.AddMaps(typeof(EmployerDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<SaveProvisionGapViewModel, OpportunityDto>(httpcontextAccesor) :

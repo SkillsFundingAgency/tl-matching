@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
 
         public When_ProviderService_Is_Called_To_Search_Providers_With_Funding()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(ProviderMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(ProviderMapper).Assembly));
             var mapper = new Mapper(config);
 
             var logger = Substitute.For<ILogger<ProviderRepository>>();

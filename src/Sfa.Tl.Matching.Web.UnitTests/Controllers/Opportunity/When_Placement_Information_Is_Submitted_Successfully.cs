@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(PlacementInformationSaveDtoMapper).Assembly);
+                c.AddMaps(typeof(PlacementInformationSaveDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<PlacementInformationSaveViewModel, PlacementInformationSaveDto>(httpcontextAccesor) :

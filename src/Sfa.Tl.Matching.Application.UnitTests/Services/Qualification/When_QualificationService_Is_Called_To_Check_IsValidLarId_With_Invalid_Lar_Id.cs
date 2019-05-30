@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
         public When_QualificationService_Is_Called_To_Check_IsValidLarId_With_Invalid_Lar_Id()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(QualificationMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(QualificationMapper).Assembly));
             var mapper = new Mapper(config);
 
             var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();

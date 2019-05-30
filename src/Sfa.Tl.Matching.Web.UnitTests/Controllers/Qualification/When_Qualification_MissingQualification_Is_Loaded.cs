@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 new Path {Id = 3, RouteId = 2, Name = "Path 3"}
             }.AsQueryable();
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(RouteViewModelMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(RouteViewModelMapper).Assembly));
             var mapper = new Mapper(config);
 
              _qualificationService = Substitute.For<IQualificationService>();

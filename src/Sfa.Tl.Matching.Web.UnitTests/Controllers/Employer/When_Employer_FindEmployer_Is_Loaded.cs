@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 EmployerName = EmployerName,
                 EmployerId = EmployerId
             });
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerDtoMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
             var employerController = new EmployerController(employerService, opportunityService, mapper);

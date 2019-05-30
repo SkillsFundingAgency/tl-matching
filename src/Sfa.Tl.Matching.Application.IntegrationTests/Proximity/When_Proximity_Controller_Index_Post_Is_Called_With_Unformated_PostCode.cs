@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             }
             .AsQueryable();
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
             var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), new LocationService(httpClient, new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }));

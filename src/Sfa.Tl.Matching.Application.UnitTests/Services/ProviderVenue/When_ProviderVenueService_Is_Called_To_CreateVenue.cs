@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(ProviderVenueMapper).Assembly);
+                c.AddMaps(typeof(ProviderVenueMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<AddProviderVenueViewModel, Domain.Models.ProviderVenue>(httpcontextAccesor) :

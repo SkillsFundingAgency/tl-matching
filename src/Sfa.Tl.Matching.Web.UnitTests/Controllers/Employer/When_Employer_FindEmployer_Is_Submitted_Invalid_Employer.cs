@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 CompanyName = "Invalid Business Name"
             };
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
 
             _employerController = new EmployerController(employerService, opportunityService, mapper);

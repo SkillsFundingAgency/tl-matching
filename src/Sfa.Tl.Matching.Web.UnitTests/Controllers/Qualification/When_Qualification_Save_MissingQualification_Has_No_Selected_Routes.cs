@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
         public When_Qualification_Save_MissingQualification_Has_No_Selected_Routes()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(RouteViewModelMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(RouteViewModelMapper).Assembly));
             var mapper = new Mapper(config);
 
             var qualificationService = Substitute.For<IQualificationService>();

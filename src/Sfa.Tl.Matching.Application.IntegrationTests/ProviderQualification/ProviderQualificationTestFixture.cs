@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderQualification
             var nullDataProcessor = new NullDataProcessor<Domain.Models.ProviderQualification>();
             var excelFileReader = new ExcelFileReader<ProviderQualificationFileImportDto, ProviderQualificationDto>(loggerExcelFileReader, dataParser, dataValidator, functionLogRepository);
 
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
 
             var mapper = new Mapper(config);
 

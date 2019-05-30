@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         public When_Employer_FindEmployer_Is_Submitted_With_Invalid_EmployerName_And_Valid_EmployerId()
         {
-            var config = new MapperConfiguration(c => c.AddProfiles(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
 
             var opportunityService = Substitute.For<IOpportunityService>();

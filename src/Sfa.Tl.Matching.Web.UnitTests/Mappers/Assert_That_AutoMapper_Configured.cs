@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers
         
         public When_AutoMapper_Profiles_Are_Configured()
         {
-            _config = new MapperConfiguration(c => c.AddProfiles(typeof(SearchParametersViewModelMapper).Assembly));
+            _config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
         }
 
         [Fact]
