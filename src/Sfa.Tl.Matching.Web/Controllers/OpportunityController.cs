@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿// ReSharper disable RedundantUsingDirective
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,9 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
+#if !NoAuth
     [Authorize(Roles = RolesExtensions.AdminUser + "," + RolesExtensions.StandardUser)]
+#endif
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;

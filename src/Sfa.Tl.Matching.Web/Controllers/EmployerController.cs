@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿// ReSharper disable RedundantUsingDirective
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,7 +12,9 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
+#if !NoAuth
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
+#endif
     public class EmployerController : Controller
     {
         private readonly IEmployerService _employerService;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿// ReSharper disable RedundantUsingDirective
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,9 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
+#if !NoAuth
     [Authorize(Roles = RolesExtensions.AdminUser)]
+#endif
     public class ProviderController : Controller
     {
         private readonly MatchingConfiguration _configuration;

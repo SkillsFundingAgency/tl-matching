@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
 
         public static string GetUserEmail(this ClaimsPrincipal user)
         {
-            return user.Claims.Single(c => c.Type == ClaimTypes.Upn).Value;
+            return user.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Upn)?.Value;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿// ReSharper disable RedundantUsingDirective
+using System;
 using System.Globalization;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -65,16 +66,21 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddMvc(config =>
             {
+#if !NoAuth
+
                 var policy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
+#endif
                 config.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 config.Filters.Add(new CustomExceptionFilterAttribute(_loggerFactory));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+#if !NoAuth
             AddAuthentication(services);
+#endif
 
             RegisterDependencies(services);
         }
@@ -116,14 +122,16 @@ namespace Sfa.Tl.Matching.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+#if !NoAuth
 
             app.UseAuthentication();
-
+#endif
             app.UseMvcWithDefaultRoute();
             app.UseCookiePolicy();
             app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
         }
 
+        // ReSharper disable once UnusedMember.Local
         private void AddAuthentication(IServiceCollection services)
         {
             services.AddAuthentication(sharedOptions =>

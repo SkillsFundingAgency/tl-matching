@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿// ReSharper disable RedundantUsingDirective
+using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -10,12 +11,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         public IActionResult Index()
         {
+#if NoAuth
+            return RedirectToAction("Start", "Proximity");
+#else
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("PostSignIn", "Account");
             }
 
             return View();
+#endif
         }
 
         [Route("page-not-found", Name = "PageNotFound")]
