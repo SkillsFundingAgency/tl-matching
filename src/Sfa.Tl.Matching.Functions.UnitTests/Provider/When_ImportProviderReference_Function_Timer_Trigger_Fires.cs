@@ -4,6 +4,10 @@ using Microsoft.Azure.WebJobs.Extensions.Timers;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Data.Repositories;
+using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
@@ -20,13 +24,16 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             dateTimeProvider.MinValue().Returns(_minValue);
 
+            var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
+
             var providerReference = new ProviderReference();
             providerReference.ImportProviderReference(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
                 new NullLogger<ProviderReference>(),
                 _referenceDataService,
-                dateTimeProvider).GetAwaiter().GetResult();
+                dateTimeProvider,
+                functionLogRepository).GetAwaiter().GetResult();
         }
 
         [Fact]
