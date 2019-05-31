@@ -18,9 +18,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Functions.Extensions\Sfa.Tl.Matching.Functions.Extensions.csproj" />
   </ItemGroup>
-  <Target Name="CopySPSM" BeforeTargets="Build">
-    <Copy SourceFiles="$(USERPROFILE)\.nuget\packages\system.private.servicemodel\4.5.3\runtimes\win\lib\netstandard2.0\System.Private.ServiceModel.dll" DestinationFolder="$(OutputPath)\bin" />
-  </Target>
+  <ItemGroup>
+    <Reference Include="System.Private.ServiceModel">
+      <HintPath>System.Private.ServiceModel.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <None Update="extensions.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -32,7 +35,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="System.Private.ServiceModel.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>
