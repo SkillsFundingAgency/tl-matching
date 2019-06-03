@@ -49,6 +49,10 @@
         border-right: none;
     }
 
+    .tl-search-input--error {
+        border: 4px solid #b10e1e;
+    }
+
     button {
         boder-radius: 0;
         box-shadow: none;
