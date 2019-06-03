@@ -60,7 +60,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<List<ProviderReferenceStaging>> GetProvidersForStaging(DateTime lastUpdateDate)
         {
-            lastUpdateDate = DateTime.Now.AddDays(-1);
             var providers = await _providerDownload.GetAll(lastUpdateDate);
             var providerReferenceStagings = providers.Select(p => new ProviderReferenceStaging
             {
