@@ -26,9 +26,9 @@
                  <partial name="_searchresults" model="Model" />
              }
         }
-        else
+        else if (Model.SearchParameters.UkPrn.HasValue)
         {
-            <p class="govuk-body">There is no active provider for @Model.SearchParameters.UkPrn. Please try again.</p>
+            <p class="govuk-body">There is no active provider for <span class="govuk-!-font-weight-bold">@Model.SearchParameters.UkPrn</span>. Please try again.</p>
         }
 
     </div>

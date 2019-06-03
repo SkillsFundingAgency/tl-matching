@@ -6,6 +6,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.UkRlp.Api.Client;
 using System.Threading.Tasks;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -17,24 +18,27 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly MatchingConfiguration _matchingConfiguration;
 
         public ProviderReferenceDataService(IProviderDownload providerDownload,
             IRepository<ProviderReferenceStaging> repository,
             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository,
-            IDateTimeProvider dateTimeProvider)
+            IDateTimeProvider dateTimeProvider,
+            MatchingConfiguration matchingConfiguration)
         {
             _providerDownload = providerDownload;
             _repository = repository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
             _dateTimeProvider = dateTimeProvider;
+            _matchingConfiguration = matchingConfiguration;
         }
 
         public async Task<int> SynchronizeProviderReference(DateTime lastUpdateDate)
         {
             var backgroundProcessHistoryId = await CreateBackgroundProcessHistory();
             var providerReferenceStagings = await GetProvidersForStaging(lastUpdateDate);
-            await _repository.BulkInsert(providerReferenceStagings);
-            await _repository.MergeFromStaging();
+            await _repository.BulkInsert(providerReferenceStagings, _matchingConfiguration.SqlConnectionString);
+            await _repository.MergeFromStaging(_matchingConfiguration.SqlConnectionString);
 
             await UpdateBackgroundProcessHistory(backgroundProcessHistoryId, providerReferenceStagings.Count);
 
@@ -50,12 +54,12 @@ namespace Sfa.Tl.Matching.Application.Services
                     Status = BackgroundProcessHistoryStatus.Processing.ToString(),
                     CreatedBy = "System"
                 });
+
             return backgroundProcessHistoryId;
         }
 
         private async Task<List<ProviderReferenceStaging>> GetProvidersForStaging(DateTime lastUpdateDate)
         {
-            lastUpdateDate = DateTime.Now.AddDays(-1);
             var providers = await _providerDownload.GetAll(lastUpdateDate);
             var providerReferenceStagings = providers.Select(p => new ProviderReferenceStaging
             {
@@ -64,6 +68,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 CreatedOn = _dateTimeProvider.UtcNow(),
                 CreatedBy = "System"
             }).ToList();
+
             return providerReferenceStagings;
         }
 

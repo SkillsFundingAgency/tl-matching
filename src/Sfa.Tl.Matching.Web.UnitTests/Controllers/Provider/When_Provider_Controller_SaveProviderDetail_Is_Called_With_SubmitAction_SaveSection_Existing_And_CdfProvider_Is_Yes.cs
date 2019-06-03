@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -10,7 +11,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_And_CdfProvider_Is_No
+    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_Existing_And_CdfProvider_Is_Yes
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
@@ -18,10 +19,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         {
             Id = 1,
             SubmitAction = "SaveSection",
-            IsCdfProvider = false
+            IsCdfProvider = true
         };
 
-        public When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_And_CdfProvider_Is_No()
+        public When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_Existing_And_CdfProvider_Is_Yes()
         {
             _providerService = Substitute.For<IProviderService>();
 
@@ -38,10 +39,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_SearchProvider()
+        public void Then_Result_Is_Redirect_To_Provider_Detail_With_Provider_Id()
         {
             var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().Be("SearchProvider");
+            redirect?.RouteName.Should().BeEquivalentTo("GetProviderDetail");
+            redirect?.RouteValues
+                .Should()
+                .Contain(new KeyValuePair<string, object>("providerId", 1));
         }
 
         [Fact]
