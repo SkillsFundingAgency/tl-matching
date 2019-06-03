@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return View(IsValidProviderSearch(searchResult) ?
                 GetProviderSearchUkRlpViewModel(viewModel, searchResult) :
-                new ProviderSearchViewModel(viewModel));
+                GetProviderSearchViewModel(viewModel));
         }
 
         [HttpPost]
@@ -154,13 +154,21 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<IActionResult> PerformSaveSection(ProviderDetailViewModel viewModel)
         {
-            if (viewModel.Id > 0)
+            var isNew = viewModel.Id == 0;
+            if (!isNew)
                 await _providerService.UpdateProviderDetailSectionAsync(viewModel);
 
             if (!viewModel.IsCdfProvider)
                 return RedirectToRoute("SearchProvider");
 
-            return View(nameof(ProviderDetail), viewModel);
+            if (isNew)
+                return RedirectToAction(nameof(ProviderDetail), new AddProviderViewModel
+                {
+                    UkPrn = viewModel.UkPrn,
+                    Name = viewModel.Name
+                });
+
+            return RedirectToAction(nameof(ProviderDetail), viewModel.Id);
         }
 
         private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)
