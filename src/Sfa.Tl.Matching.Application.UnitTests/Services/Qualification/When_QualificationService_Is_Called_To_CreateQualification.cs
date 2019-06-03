@@ -71,10 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                         Id = 1,
                         Name = "Route 1",
                         IsSelected = true,
-                        PathNames = new List<string>
-                        {
-                            "Path 1"
-                        }
+                        Summary = "Route Summary"
                     }
                 }
             };

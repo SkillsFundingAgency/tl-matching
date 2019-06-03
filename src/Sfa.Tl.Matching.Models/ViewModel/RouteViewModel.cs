@@ -1,6 +1,4 @@
 ﻿
-using System.Collections.Generic;
-
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
     public class RouteViewModel
@@ -8,6 +6,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int Id { get; set; }
         public bool IsSelected { get; set; }
         public string Name { get; set; }
-        public IList<string> PathNames { get; set; }
+        public string Summary { get; set; }
     }
 }

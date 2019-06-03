@@ -146,17 +146,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private IList<RouteViewModel> GetRoutes(MissingQualificationViewModel viewModel = null)
         {
             var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
-            var paths = _routePathService.GetPaths().ToList();
 
             var routesList = _mapper.Map<RouteViewModel[]>(routes);
 
             foreach (var route in routesList)
             {
-                route.PathNames = paths
-                    .Where(p => p.RouteId == route.Id)
-                    .OrderBy(p => p.Name)
-                    .Select(p => p.Name).ToList();
-
                 if (viewModel?.Routes.Any(r => r.Id == route.Id && r.IsSelected) == true)
                 {
                     route.IsSelected = true;

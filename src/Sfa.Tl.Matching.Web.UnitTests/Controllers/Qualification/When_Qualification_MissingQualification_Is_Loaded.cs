@@ -24,17 +24,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         {
             var routes = new List<Route>
             {
-                new Route {Id = 1, Name = "Route 1"},
-                new Route {Id = 2, Name = "Route 2"}
+                new Route {Id = 1, Name = "Route 1", Summary = "Route Summary 1"},
+                new Route {Id = 2, Name = "Route 2", Summary = "Route Summary 2"}
             }.AsQueryable();
-
-            var paths = new List<Path>
-            {
-                new Path {Id = 1, RouteId = 1, Name = "Path 1"},
-                new Path {Id = 2, RouteId = 2, Name = "Path 2"},
-                new Path {Id = 3, RouteId = 2, Name = "Path 3"}
-            }.AsQueryable();
-
+            
             var config = new MapperConfiguration(c => c.AddMaps(typeof(RouteViewModelMapper).Assembly));
             var mapper = new Mapper(config);
 
@@ -49,7 +42,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             _routePathService = Substitute.For<IRoutePathService>();
             _routePathService.GetRoutes().Returns(routes);
-            _routePathService.GetPaths().Returns(paths);
 
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
 
@@ -64,13 +56,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         {
             _routePathService.Received(1).GetRoutes();
         }
-        
-        [Fact]
-        public void Then_GetPaths_Is_Called_Exactly_Once()
-        {
-            _routePathService.Received(1).GetPaths();
-        }
-
 
         [Fact]
         public void Then_GetLarTitleAsync_Is_Called_Exactly_Once()
@@ -113,10 +98,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             routes.Should().Contain(r => r.Id == 1 && r.Name == "Route 1");
             routes.Should().Contain(r => r.Id == 2 && r.Name == "Route 2");
             
-            routes.Single(r => r.Id == 1).PathNames.Should().Contain("Path 1");
-            routes.Single(r => r.Id == 2).PathNames.Should().Contain("Path 3");
-            routes.Single(r => r.Id == 2).PathNames.Should().Contain("Path 3");
+            routes.Single(r => r.Id == 1).Summary.Should().Be("Route Summary 1");
+            routes.Single(r => r.Id == 2).Summary.Should().Be("Route Summary 2");
         }
-
     }
 }
