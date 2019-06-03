@@ -92,21 +92,27 @@
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
             <h2 class="govuk-heading-m">Qualifications</h2>
 
-            <table class="govuk-table">
-                <thead class="govuk-table__head">
+            @if (Model.Qualifications == null || Model.Qualifications.Count == 0)
+            {
+            <p class="govuk-body">You need to add a qualification for this venue.</p>
+            }
+            else
+            {
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header" scope="col">Learning aim reference</th>
                         <th class="govuk-table__header" scope="col">Qualification title</th>
                         <th class="govuk-table__header" scope="col"></th>
                     </tr>
-                </thead>
-                <tbody class="govuk-table__body">
+                    </thead>
+                    <tbody class="govuk-table__body">
                     @for (var i = 0; i < Model.Qualifications?.Count; i++)
                     {
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell">
-                                <input type="hidden" asp-for="@Model.Qualifications[i].LarsId" name="Qualifications[@i].LarsId" />
-                                <input type="hidden" asp-for="@Model.Qualifications[i].Title" name="Qualifications[@i].Title" />
+                                <input type="hidden" asp-for="@Model.Qualifications[i].LarsId" name="Qualifications[@i].LarsId"/>
+                                <input type="hidden" asp-for="@Model.Qualifications[i].Title" name="Qualifications[@i].Title"/>
                                 @Model.Qualifications[i].LarsId
                             </td>
                             <td class="govuk-table__cell">@Model.Qualifications[i].Title</td>
@@ -114,8 +120,9 @@
 
                         </tr>
                     }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            }
 
             @if (Model.Qualifications == null || Model.Qualifications.Count == 0)
             {
