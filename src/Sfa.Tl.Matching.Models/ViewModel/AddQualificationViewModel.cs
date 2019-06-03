@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int ProviderVenueId { get; set; }
         public int QualificationId { get; set; }
         public string Postcode { get; set; }
-        [Required(ErrorMessage = "You must enter a LAR ID")]
+        [Required(ErrorMessage = "You must enter a learning aim reference (LAR)")]
         public string LarId { get; set; }
         public string Source { get; set; }
     }
