@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<int> Delete(int id);
         Task Delete(T entity);
         Task DeleteMany(IList<T> entities);
-        Task BulkInsert(List<T> entities);
+        Task BulkInsert(List<T> entities, string connectionString = "");
         Task<int> MergeFromStaging();
     }
 }
