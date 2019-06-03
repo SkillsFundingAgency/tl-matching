@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var backgroundProcessHistoryId = await CreateBackgroundProcessHistory();
             var providerReferenceStagings = await GetProvidersForStaging(lastUpdateDate);
             await _repository.BulkInsert(providerReferenceStagings, _matchingConfiguration.SqlConnectionString);
-            await _repository.MergeFromStaging();
+            await _repository.MergeFromStaging(_matchingConfiguration.SqlConnectionString);
 
             await UpdateBackgroundProcessHistory(backgroundProcessHistoryId, providerReferenceStagings.Count);
 

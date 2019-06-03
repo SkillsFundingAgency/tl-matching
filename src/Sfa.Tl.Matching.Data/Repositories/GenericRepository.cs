@@ -252,12 +252,15 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public async Task<int> MergeFromStaging()
+        public async Task<int> MergeFromStaging(string connectionString = "")
         {
             int numberOfRecordsAffected;
+            if (string.IsNullOrEmpty(connectionString))
+                connectionString = _dbContext.Database.GetDbConnection().ConnectionString;
+
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
             {
-                using (var connection = new SqlConnection(_dbContext.Database.GetDbConnection().ConnectionString))
+                using (var connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
 

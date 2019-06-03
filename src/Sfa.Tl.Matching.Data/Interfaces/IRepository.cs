@@ -20,6 +20,6 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task Delete(T entity);
         Task DeleteMany(IList<T> entities);
         Task BulkInsert(List<T> entities, string connectionString = "");
-        Task<int> MergeFromStaging();
+        Task<int> MergeFromStaging(string connectionString = "");
     }
 }
