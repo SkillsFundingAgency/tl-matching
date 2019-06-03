@@ -29,7 +29,7 @@ USING (VALUES
   (21, 10, N'Health'),
   (22, 10, N'Healthcare science'),
   (23, 10, N'Science'),
-  (24, 10, N'Community exercise, fitness and health '),
+  (24, 10, N'Community exercise, fitness and health'),
   (25, 11, N'Accountancy'),
   (26, 11, N'Financial'),
   (27, 11, N'Legal'),
@@ -46,8 +46,8 @@ USING (VALUES
 ON Target.[Id] = Source.[Id] 
 -- Update from Source when Id is Matched
 WHEN MATCHED 
-	 AND (Target.[Name] <> Source.[Name] 
-	 OR Target.[RouteId] <> Source.[RouteId]) 
+	 AND ((Target.[Name] <> Source.[Name] COLLATE Latin1_General_CS_AS)
+	   OR (Target.[RouteId] <> Source.[RouteId])) 
 THEN 
 UPDATE SET 
 	[Name] = Source.[Name],
@@ -61,4 +61,3 @@ WHEN NOT MATCHED BY SOURCE THEN
 DELETE;
 
 SET IDENTITY_INSERT [dbo].[Path] OFF
-
