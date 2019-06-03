@@ -109,26 +109,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "SaveMissingQualification")]
         public async Task<IActionResult> MissingQualification(MissingQualificationViewModel viewModel)
         {
+            Validate(viewModel);
+
             if (!ModelState.IsValid)
             {
                 viewModel.Routes = GetRoutes(viewModel);
                 return View(viewModel);
             }
-
-            if (string.IsNullOrWhiteSpace(viewModel.ShortTitle) || viewModel.ShortTitle.Length > 100)
-            {
-                ModelState.AddModelError("ShortTitle", "You must enter a short title that is 100 characters or fewer");
-                viewModel.Routes = GetRoutes(viewModel);
-                return View(viewModel);
-            }
-
-            if (!viewModel.Routes.Any(r => r.IsSelected))
-            {
-                ModelState.AddModelError("Routes", "You must choose a skill area for this qualification");
-                viewModel.Routes = GetRoutes(viewModel);
-                return View(viewModel);
-            }
-
+            
             var qualificationId = await _qualificationService.CreateQualificationAsync(viewModel);
 
             await _providerQualificationService.CreateProviderQualificationAsync(
@@ -158,6 +146,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             return routesList;
+        }
+
+        private void Validate(MissingQualificationViewModel viewModel)
+        {
+            if (string.IsNullOrWhiteSpace(viewModel.ShortTitle) || viewModel.ShortTitle.Length > 100)
+            {
+                ModelState.AddModelError("ShortTitle", "You must enter a short title that is 100 characters or fewer");
+            }
+
+            if (!viewModel.Routes.Any(r => r.IsSelected))
+            {
+                ModelState.AddModelError("Routes", "You must choose a skill area for this qualification");
+            }
         }
     }
 }
