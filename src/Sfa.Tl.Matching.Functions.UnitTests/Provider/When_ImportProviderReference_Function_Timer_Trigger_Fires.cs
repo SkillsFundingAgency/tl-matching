@@ -4,9 +4,7 @@ using Microsoft.Azure.WebJobs.Extensions.Timers;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
 
