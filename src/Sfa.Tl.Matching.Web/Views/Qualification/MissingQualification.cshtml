@@ -86,10 +86,10 @@
                                 <input type="hidden" asp-for="@route.Id" name="Routes[@i].Id" />
 
                                 <input type="checkbox" class="govuk-checkboxes__input"
-                                       asp-for="@route.IsSelected"
+                                       asp-for="@Model.Routes[i].IsSelected"
                                        name="Routes[@i].IsSelected">
                                 <label class="govuk-label govuk-checkboxes__label"
-                                       asp-for="@route.IsSelected"
+                                       asp-for="@Model.Routes[i].IsSelected"
                                        name="Routes[@i].IsSelected">
                                     @route.Name
                                 </label>

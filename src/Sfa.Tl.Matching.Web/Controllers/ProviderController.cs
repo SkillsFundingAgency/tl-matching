@@ -88,6 +88,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("create-provider/{ukPrn}/{name}", Name = "CreateProviderDetail")]
         public async Task<IActionResult> CreateProviderDetail(CreateProviderDetailViewModel viewModel)
         {
+            if (viewModel.IsSaveSection)
+                return await PerformSaveSection(viewModel);
+
             if (!ModelState.IsValid)
                 return View(nameof(ProviderDetail), viewModel);
 
@@ -151,8 +154,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<IActionResult> PerformSaveSection(ProviderDetailViewModel viewModel)
         {
-            await _providerService.UpdateProviderDetailSectionAsync(viewModel);
-            return RedirectToAction(nameof(ProviderDetail), viewModel.Id);
+            if (viewModel.Id > 0)
+                await _providerService.UpdateProviderDetailSectionAsync(viewModel);
+
+            if (!viewModel.IsCdfProvider)
+                return RedirectToRoute("SearchProvider");
+
+            return View(nameof(ProviderDetail), viewModel);
         }
 
         private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)

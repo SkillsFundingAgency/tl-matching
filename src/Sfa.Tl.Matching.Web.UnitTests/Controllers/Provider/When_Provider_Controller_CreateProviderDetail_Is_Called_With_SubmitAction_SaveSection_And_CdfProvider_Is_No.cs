@@ -38,10 +38,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_Result_Is_Redirect_To_SearchProvider()
         {
-            var result = _result as RedirectToActionResult;
+            var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.ActionName.Should().Be("SearchProvider");
+            result?.RouteName.Should().Be("SearchProvider");
         }
     }
 }
