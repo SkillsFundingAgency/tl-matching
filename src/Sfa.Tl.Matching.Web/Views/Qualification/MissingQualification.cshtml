@@ -27,29 +27,10 @@
 
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-        @*<dl class="govuk-summary-list">
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Learning aim reference (LAR)
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    @Model.LarId
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Qualification title
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    @Model.Title
-                </dd>
-            </div>
-        </dl>*@
-
         <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Learning aim reference (LAR)</p>
-        <p class="govuk-body">1234567</p>
+        <p class="govuk-body">@Model.LarId</p>
         <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Qualification title</p>
-        <p class="govuk-body">NVQ Level 3 in Lawn Mowering</p>
+        <p class="govuk-body">@Model.Title</p>
 
         <p class="govuk-body"><a class="govuk-link" asp-route="AddQualification" asp-route-ProviderVenueId="@Model.ProviderVenueId">Change qualification</a></p>
 
