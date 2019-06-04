@@ -52,6 +52,7 @@ namespace Sfa.Tl.Matching.Functions
             }
         }
 
+        // ReSharper disable once UnusedMember.Global
         [FunctionName("ManualImportProviderReference")]
         public async Task<IActionResult> ManualImportProviderReference(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,

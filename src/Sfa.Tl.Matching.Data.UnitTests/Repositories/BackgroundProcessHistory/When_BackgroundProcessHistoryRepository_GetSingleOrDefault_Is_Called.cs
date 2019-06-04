@@ -2,8 +2,8 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory.Builders;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 

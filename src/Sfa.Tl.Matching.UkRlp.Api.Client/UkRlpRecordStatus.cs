@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+// ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.UkRlp.Api.Client
 {

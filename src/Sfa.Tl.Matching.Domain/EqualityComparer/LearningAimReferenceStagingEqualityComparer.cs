@@ -3,6 +3,7 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Domain.EqualityComparer
 {
+    // ReSharper disable once UnusedMember.Global
     public sealed class LearningAimReferenceStagingEqualityComparer : IEqualityComparer<LearningAimReferenceStaging>
     {
         public bool Equals(LearningAimReferenceStaging x, LearningAimReferenceStaging y)
@@ -21,8 +22,8 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
                 var hashCode = (obj.LarId != null ? obj.LarId.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (obj.Title != null ? obj.Title.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (obj.AwardOrgLarId != null ? obj.AwardOrgLarId.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (obj.SourceCreatedOn != null ? obj.SourceCreatedOn.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (obj.SourceModifiedOn != null ? obj.SourceModifiedOn.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (obj.SourceCreatedOn.GetHashCode());
+                hashCode = (hashCode * 397) ^ (obj.SourceModifiedOn.GetHashCode());
                 return hashCode;
             }
         }

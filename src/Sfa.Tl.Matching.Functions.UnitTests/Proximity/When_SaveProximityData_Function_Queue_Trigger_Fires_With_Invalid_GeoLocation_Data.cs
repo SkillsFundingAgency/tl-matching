@@ -12,13 +12,13 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 {
     public class When_SaveProximityData_Function_Queue_Trigger_Fires_With_Invalid_GeoLocation_Data
     {
-        private readonly IRepository<Domain.Models.ProviderVenue> _providerVenueRepository;
+        private readonly IRepository<ProviderVenue> _providerVenueRepository;
         private readonly ILogger _logger;
 
         public When_SaveProximityData_Function_Queue_Trigger_Fires_With_Invalid_GeoLocation_Data()
         {
             var mapper = Substitute.For<IMapper>();
-            _providerVenueRepository = Substitute.For<IRepository<Domain.Models.ProviderVenue>>();
+            _providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
             _logger = Substitute.For<ILogger>();
 
             var proximityfunctions = new Functions.Proximity();
@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         {
             _providerVenueRepository
                 .DidNotReceive()
-                .Update(Arg.Any<Domain.Models.ProviderVenue>());
+                .Update(Arg.Any<ProviderVenue>());
         }
 
         [Fact]

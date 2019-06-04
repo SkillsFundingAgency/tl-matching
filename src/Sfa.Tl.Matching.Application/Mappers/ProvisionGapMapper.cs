@@ -5,6 +5,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
+    // ReSharper disable once UnusedMember.Global
     public class ProvisionGapMapper : Profile
     {
         public ProvisionGapMapper()

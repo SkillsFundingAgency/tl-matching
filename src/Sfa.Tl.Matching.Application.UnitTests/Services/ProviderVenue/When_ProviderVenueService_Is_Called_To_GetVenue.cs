@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 {
                     ProviderId = ProviderId,
                     Name = Name,
-                    Postcode = Postcode,
+                    Postcode = Postcode
                 });
 
             var locationService = Substitute.For<ILocationService>();

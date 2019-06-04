@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
             var viewModel = new DataImportParametersViewModel
             {
-                SelectedImportType = DataImportType.ProviderVenue,
+                SelectedImportType = DataImportType.Employer,
                 File = formFile
             };
             var mapper = Substitute.For<IMapper>();

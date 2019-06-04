@@ -4,11 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using SFA.DAS.Notifications.Api.Client;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using SFA.DAS.Notifications.Api.Client;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email

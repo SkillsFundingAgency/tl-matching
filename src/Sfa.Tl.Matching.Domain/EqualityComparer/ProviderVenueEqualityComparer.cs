@@ -3,6 +3,7 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Domain.EqualityComparer
 {
+    // ReSharper disable once UnusedMember.Global
     public sealed class ProviderVenueEqualityComparer : IEqualityComparer<ProviderVenue>
     {
         public bool Equals(ProviderVenue x, ProviderVenue y)

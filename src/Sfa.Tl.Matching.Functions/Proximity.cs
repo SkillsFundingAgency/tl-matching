@@ -17,6 +17,7 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class Proximity
     {
+        // ReSharper disable once UnusedMember.Global
         [FunctionName("ManualProximityDataUpdate")]
         [return: Queue(QueueName.SaveProximityQueue)]
         public async Task<SaveProximityData> GetProximityDataHttp(
@@ -74,7 +75,7 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IMapper mapper,
-            [Inject] IRepository<Domain.Models.ProviderVenue> providerVenueRepository,
+            [Inject] IRepository<ProviderVenue> providerVenueRepository,
             [Inject] IRepository<FunctionLog> functionlogRepository
         )
         {

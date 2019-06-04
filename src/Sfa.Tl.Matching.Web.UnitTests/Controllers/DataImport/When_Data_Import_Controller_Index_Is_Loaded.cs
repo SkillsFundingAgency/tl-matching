@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
         public void Then_DataImportType_Text_Is_Populated_With_Description()
         {
             var viewModel = _result.GetViewModel<DataImportParametersViewModel>();
-            viewModel.ImportType[3].Text.Should().Be(DataImportType.ProviderQualification.Humanize());
+            viewModel.ImportType[1].Text.Should().Be(DataImportType.LearningAimReference.Humanize());
         }
     }
 }

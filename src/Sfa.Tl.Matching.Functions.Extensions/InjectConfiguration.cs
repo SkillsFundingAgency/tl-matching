@@ -6,12 +6,14 @@ using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.Http;
+using SFA.DAS.Http.TokenGenerators;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
-using Sfa.Tl.Matching.Application.FileReader.Provider;
-using Sfa.Tl.Matching.Application.FileReader.ProviderQualification;
-using Sfa.Tl.Matching.Application.FileReader.ProviderVenue;
+using Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
@@ -20,11 +22,6 @@ using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
-using SFA.DAS.Http;
-using SFA.DAS.Http.TokenGenerators;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Client.Configuration;
-using Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging;
 using Sfa.Tl.Matching.UkRlp.Api.Client;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
@@ -86,10 +83,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterFileReaders(IServiceCollection services)
         {
-            RegisterExcelFileReader<ProviderDto, ProviderFileImportDto, Provider, ProviderDataParser, ProviderDataValidator, NullDataProcessor<Provider>>(services);
-            RegisterExcelFileReader<ProviderVenueDto, ProviderVenueFileImportDto, ProviderVenue, ProviderVenueDataParser, ProviderVenueDataValidator, ProviderVenueDataProcessor>(services);
-            RegisterExcelFileReader<ProviderQualificationDto, ProviderQualificationFileImportDto, ProviderQualification, ProviderQualificationDataParser, ProviderQualificationDataValidator, NullDataProcessor<ProviderQualification>>(services);
-
             RegisterExcelFileReader<EmployerStagingDto, EmployerStagingFileImportDto, EmployerStaging, EmployerStagingDataParser, EmployerStagingDataValidator, NullDataProcessor<EmployerStaging>>(services);
 
             RegisterCsvFileReader<LearningAimReferenceStagingDto, LearningAimReferenceStagingFileImportDto, LearningAimReferenceStaging, LearningAimReferenceStagingDataParser, LearningAimReferenceStagingDataValidator, NullDataProcessor<LearningAimReferenceStaging>>(services);

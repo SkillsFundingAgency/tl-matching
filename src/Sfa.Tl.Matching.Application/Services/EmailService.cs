@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Types;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Types;
 
 namespace Sfa.Tl.Matching.Application.Services
 {

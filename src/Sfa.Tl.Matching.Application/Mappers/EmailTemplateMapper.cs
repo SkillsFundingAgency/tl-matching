@@ -4,6 +4,7 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
+    // ReSharper disable once UnusedMember.Global
     public class EmailTemplateMapper : Profile
     {
         public EmailTemplateMapper()

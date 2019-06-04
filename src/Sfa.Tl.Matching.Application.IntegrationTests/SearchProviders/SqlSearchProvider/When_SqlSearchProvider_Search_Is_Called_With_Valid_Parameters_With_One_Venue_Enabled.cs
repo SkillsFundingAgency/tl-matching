@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider.Builders;
 using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -15,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
     {
         private readonly IEnumerable<ProviderVenueSearchResultDto> _results;
         private readonly MatchingDbContext _dbContext;
-        private readonly IList<Domain.Models.ProviderVenue> _providerVenues;
+        private readonly IList<ProviderVenue> _providerVenues;
 
         public When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters_With_One_Venue_Enabled()
         {

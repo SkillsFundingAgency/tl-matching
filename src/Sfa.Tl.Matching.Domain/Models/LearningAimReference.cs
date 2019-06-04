@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
+    // ReSharper disable once UnusedMember.Global
     public class LearningAimReference : BaseEntity
     {
         [MergeKey]
@@ -12,7 +13,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public DateTime SourceCreatedOn { get; set; }
         public DateTime SourceModifiedOn { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed),]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int ChecksumCol { get; set; }
     }
 }

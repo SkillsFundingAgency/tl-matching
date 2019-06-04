@@ -10,11 +10,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         private const decimal Latitude = 52.400997m;
         private const decimal Longitude = -1.508122m;
 
-        public Domain.Models.ProviderVenue BuildOneVenue()
+        public ProviderVenue BuildOneVenue()
         {
             var location = CreatePointLocation((double)Latitude, (double)Longitude);
 
-            return new Domain.Models.ProviderVenue
+            return new ProviderVenue
             {
                 Provider = BuildProvider(true),
                 Postcode = "CV1 2WT",
@@ -28,11 +28,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             };
         }
 
-        public Domain.Models.ProviderVenue BuildOneVenueWithDisabledProvider()
+        public ProviderVenue BuildOneVenueWithDisabledProvider()
         {
             var location = CreatePointLocation((double)Latitude, (double)Longitude);
 
-            return new Domain.Models.ProviderVenue
+            return new ProviderVenue
             {
                 Provider = BuildProvider(false),
                 Postcode = "CV1 2WT",
@@ -46,13 +46,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             };
         }
 
-        public IList<Domain.Models.ProviderVenue> BuildWithOneVenueEnabled()
+        public IList<ProviderVenue> BuildWithOneVenueEnabled()
         {
             var location = CreatePointLocation((double)Latitude, (double)Longitude);
 
-            return new List<Domain.Models.ProviderVenue>
+            return new List<ProviderVenue>
             {
-                new Domain.Models.ProviderVenue
+                new ProviderVenue
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 },
-                new Domain.Models.ProviderVenue
+                new ProviderVenue
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
@@ -79,13 +79,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             };
         }
 
-        public IList<Domain.Models.ProviderVenue> BuildWithTwoVenuesEnabled()
+        public IList<ProviderVenue> BuildWithTwoVenuesEnabled()
         {
             var location = CreatePointLocation((double)Latitude, (double)Longitude);
 
-            return new List<Domain.Models.ProviderVenue>
+            return new List<ProviderVenue>
             {
-                new Domain.Models.ProviderVenue
+                new ProviderVenue
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
@@ -97,7 +97,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                     Source = "Test",
                     ProviderQualification = BuildProviderQualifications()
                 },
-                new Domain.Models.ProviderVenue
+                new ProviderVenue
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
@@ -118,9 +118,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             return geometryFactory.CreatePoint(new Coordinate(longitude, latitude));
         }
 
-        private static Domain.Models.Provider BuildProvider(bool isCdfProvider)
+        private static Provider BuildProvider(bool isCdfProvider)
         {
-            return new Domain.Models.Provider
+            return new Provider
             {
                 UkPrn = 10203040,
                 Name = "SQL Search Provider",
@@ -136,11 +136,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             };
         }
 
-        private static ICollection<Domain.Models.ProviderQualification> BuildProviderQualifications()
+        private static ICollection<ProviderQualification> BuildProviderQualifications()
         {
-            return new List<Domain.Models.ProviderQualification>
+            return new List<ProviderQualification>
             {
-                new Domain.Models.ProviderQualification
+                new ProviderQualification
                 {
                     Qualification = new Qualification
                     {

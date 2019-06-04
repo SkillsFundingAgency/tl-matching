@@ -55,11 +55,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         public When_RoutePathService_Is_Called_To_Get_Routes()
         {
             _routeRepository = Substitute.For<IRepository<Route>>();
-            var pathRepository = Substitute.For<IRepository<Path>>();
 
             _routeRepository.GetMany().Returns(_routeData);
 
-            IRoutePathService service = new RoutePathService(_routeRepository, pathRepository);
+            IRoutePathService service = new RoutePathService(_routeRepository);
 
             _result = service.GetRoutes();
         }

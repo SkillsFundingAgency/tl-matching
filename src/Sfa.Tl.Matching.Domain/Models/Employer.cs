@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
+    // ReSharper disable once UnusedMember.Global
     public class Employer : BaseEntity
     {
         [MergeKey]

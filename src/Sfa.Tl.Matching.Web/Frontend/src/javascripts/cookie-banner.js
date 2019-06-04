@@ -1,5 +1,5 @@
 (function () {
-    "use strict"
+    "use strict";
     var root = this;
     if (typeof root.GOVUK === 'undefined') { root.GOVUK = {}; }
 
@@ -30,7 +30,7 @@
         }
     };
     GOVUK.setCookie = function (name, value, options) {
-        if (typeof options === 'undefined') {
+        if (typeof options === 'undefined' || options === null) {
             options = {};
         }
         var cookieString = name + "=" + value + "; path=/";
@@ -39,28 +39,28 @@
             date.setTime(date.getTime() + (options.days * 24 * 60 * 60 * 1000));
             cookieString = cookieString + "; expires=" + date.toGMTString();
         }
-        if (document.location.protocol == 'https:') {
+        if (document.location.protocol === 'https:') {
             cookieString = cookieString + "; Secure";
         }
         document.cookie = cookieString;
     };
     GOVUK.getCookie = function (name) {
-        var nameEQ = name + "=";
+        var nameEq = name + "=";
         var cookies = document.cookie.split(';');
         for (var i = 0, len = cookies.length; i < len; i++) {
             var cookie = cookies[i];
-            while (cookie.charAt(0) == ' ') {
+            while (cookie.charAt(0) === ' ') {
                 cookie = cookie.substring(1, cookie.length);
             }
-            if (cookie.indexOf(nameEQ) === 0) {
-                return decodeURIComponent(cookie.substring(nameEQ.length));
+            if (cookie.indexOf(nameEq) === 0) {
+                return decodeURIComponent(cookie.substring(nameEq.length));
             }
         }
         return null;
     };
 }).call(this);
 (function () {
-    "use strict"
+    "use strict";
     var root = this;
     if (typeof root.GOVUK === 'undefined') { root.GOVUK = {}; }
 
@@ -80,7 +80,7 @@
     };
 }).call(this);
 (function () {
-    "use strict"
+    "use strict";
 
     // add cookie message
     if (window.GOVUK && GOVUK.addCookieMessage) {

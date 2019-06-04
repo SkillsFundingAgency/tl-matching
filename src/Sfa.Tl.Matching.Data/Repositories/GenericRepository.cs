@@ -240,8 +240,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                             {
                                 if (isSuccessful)
                                     transaction.Commit();
-                                else
-                                    transaction.Rollback();
+                                transaction.Rollback();
 
                                 connection.Close();
                             }
@@ -287,8 +286,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         {
                             if (isSuccessful)
                                 transaction.Commit();
-                            else
-                                transaction.Rollback();
+                            transaction.Rollback();
 
                             connection.Close();
                         }

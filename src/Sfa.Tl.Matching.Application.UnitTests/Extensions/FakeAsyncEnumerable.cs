@@ -6,8 +6,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
 {
     public class FakeAsyncEnumerable<T> : EnumerableQuery<T>, IAsyncEnumerable<T>, IQueryable<T>
     {
-        public FakeAsyncEnumerable(IEnumerable<T> enumerable) : base(enumerable) { }
-
         public FakeAsyncEnumerable(Expression expression) : base(expression) { }
 
         public IAsyncEnumerator<T> GetEnumerator()

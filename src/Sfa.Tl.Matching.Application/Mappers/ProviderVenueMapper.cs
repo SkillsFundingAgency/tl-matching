@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Mappers
@@ -10,15 +9,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
     {
         public ProviderVenueMapper()
         {
-            CreateMap<ProviderVenueDto, ProviderVenue>()
-                .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.Provider, config => config.Ignore())
-                .ForMember(m => m.ProviderQualification, config => config.Ignore())
-                .ForMember(m => m.Referral, config => config.Ignore())
-                .ForMember(m => m.CreatedOn, config => config.Ignore())
-                .ForMember(m => m.Location, config => config.Ignore())
-                ;
-
             CreateMap<ProviderVenue, RemoveProviderVenueViewModel>()
                 .ForMember(m => m.ProviderVenueId, config => config.MapFrom(s => s.Id));
 

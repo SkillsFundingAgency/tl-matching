@@ -16,19 +16,19 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 {
     public class When_SaveProximityData_Function_Queue_Trigger_Fires
     {
-        private readonly IRepository<Domain.Models.ProviderVenue> _providerVenueRepository;
+        private readonly IRepository<ProviderVenue> _providerVenueRepository;
 
         public When_SaveProximityData_Function_Queue_Trigger_Fires()
         {
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(EmployerStagingMapper).Assembly);
-                c.ConstructServicesUsing(d => new UtcNowResolver<SaveProximityData, Domain.Models.ProviderVenue>(new DateTimeProvider()));
+                c.ConstructServicesUsing(d => new UtcNowResolver<SaveProximityData, ProviderVenue>(new DateTimeProvider()));
             });
 
             var mapper = new Mapper(config);
-            _providerVenueRepository = Substitute.For<IRepository<Domain.Models.ProviderVenue>>();
-            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>()).Returns(new Domain.Models.ProviderVenue{Id = 12345678, Postcode = "CV12WT"});
+            _providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
+            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<ProviderVenue, bool>>>()).Returns(new ProviderVenue{Id = 12345678, Postcode = "CV12WT"});
             var proximityfunctions = new Functions.Proximity();
             proximityfunctions.SaveProximityData(new SaveProximityData { Postcode = "CV12WT", Longitude = "1.2", Latitude = "3.4", ProviderVenueId = 12345678 }, new ExecutionContext(), new NullLogger<Functions.Proximity>(), mapper, _providerVenueRepository, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
         }
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         {
             _providerVenueRepository
                 .Received(1)
-                .Update(Arg.Is<Domain.Models.ProviderVenue>(s => s.Longitude == 1.2M && s.Latitude == 3.4m && s.Postcode == "CV12WT"));
+                .Update(Arg.Is<ProviderVenue>(s => s.Longitude == 1.2M && s.Latitude == 3.4m && s.Postcode == "CV12WT"));
         }
     }
 }

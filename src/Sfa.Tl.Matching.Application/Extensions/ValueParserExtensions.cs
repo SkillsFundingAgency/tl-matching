@@ -10,16 +10,6 @@ namespace Sfa.Tl.Matching.Application.Extensions
         private const string Yes = "yes";
         private const string No = "no";
 
-        //public static string FirstLetterToUpperCase(this string value)
-        //{
-        //    if (string.IsNullOrEmpty(value))
-        //        return string.Empty;
-
-        //    var charArray = value.ToCharArray();
-        //    charArray[0] = char.ToUpper(charArray[0]);
-        //    return new string(charArray);
-        //}
-
         /// <summary>
         /// The TextInfo.ToTitleCase ignores ALL CAPS as special case because of that ToLowerInvariant is required
         /// </summary>
@@ -40,16 +30,6 @@ namespace Sfa.Tl.Matching.Application.Extensions
         public static DateTime ToDateTime(this string value)
         {
            return DateTime.Parse(value);
-        }
-
-        public static int ToInt(this string value)
-        {
-            return int.Parse(value);
-        }
-
-        public static int? ToNullableInt(this string value)
-        {
-            return string.IsNullOrEmpty(value) ? default(int?) : int.Parse(value);
         }
 
         public static long ToLong(this string value)
@@ -79,13 +59,6 @@ namespace Sfa.Tl.Matching.Application.Extensions
             }
         }
 
-        public static OfstedRating ToOfstedRating(this string value)
-        {
-            var ofstedRating = value.DehumanizeTo<OfstedRating>();
-
-            return ofstedRating;
-        }
-
         public static bool IsDateTime(this string value)
         {
             return DateTime.TryParse(value, out _);
@@ -94,24 +67,6 @@ namespace Sfa.Tl.Matching.Application.Extensions
         public static bool IsGuid(this string value)
         {
             return Guid.TryParse(value, out _);
-        }
-
-        public static bool IsYesNo(this string value)
-        {
-            return value == null || value.ToLower() == Yes || value.ToLower() == No;
-        }
-
-        public static bool IsOfstedRating(this string value)
-        {
-            try
-            {
-                value.DehumanizeTo<OfstedRating>();
-                return true;
-            }
-            catch (NoMatchFoundException)
-            {
-                return false;
-            }
         }
 
         public static bool IsAupaStatus(this string value)

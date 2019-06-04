@@ -1,5 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.Dto
 {
+    // ReSharper disable once UnusedMember.Global
     public class EmailPlaceholderDto
     {
         public int EmailHistoryId { get; set; }

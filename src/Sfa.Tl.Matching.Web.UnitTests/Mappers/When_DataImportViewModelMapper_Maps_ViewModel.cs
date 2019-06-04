@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers
             {
                 File = formFile,
                 IsImportSuccessful = true,
-                SelectedImportType = DataImportType.ProviderVenue
+                SelectedImportType = DataImportType.Employer
             };
 
             var config = new MapperConfiguration(c =>
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers
 
         [Fact]
         public void Then_Result_ImportType_Should_Be_Mapped() =>
-            _result.ImportType.Should().Be(DataImportType.ProviderVenue);
+            _result.ImportType.Should().Be(DataImportType.Employer);
 
         [Fact]
         public void Then_Result_Data_Should_Be_Mapped() =>

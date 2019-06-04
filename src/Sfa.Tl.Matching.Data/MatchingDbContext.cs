@@ -3,6 +3,7 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data
 {
+    // ReSharper disable UnusedMember.Global
     public class MatchingDbContext : DbContext
     {
         public MatchingDbContext(DbContextOptions options)

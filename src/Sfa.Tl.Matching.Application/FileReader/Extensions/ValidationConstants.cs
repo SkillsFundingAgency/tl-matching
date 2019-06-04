@@ -2,6 +2,7 @@
 
 namespace Sfa.Tl.Matching.Application.FileReader.Extensions
 {
+    // ReSharper disable UnusedMember.Global
     public static class ValidationConstants
     {
         public static Regex UkprnRegex => new Regex(@"^((?!(0))[0-9]{8})$");

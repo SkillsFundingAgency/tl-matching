@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
             var viewModel = new DataImportParametersViewModel
             {
-                SelectedImportType = DataImportType.ProviderVenue
+                SelectedImportType = DataImportType.Employer
             };
             _result = _dataImportController.Index(viewModel).Result;
         }

@@ -1,5 +1,7 @@
-﻿namespace Sfa.Tl.Matching.Models.Dto
+﻿// ReSharper disable UnusedMember.Global
+namespace Sfa.Tl.Matching.Models.Dto
 {
+    // ReSharper disable once UnusedMember.Global
     public class EmailHistoryDto
     {
         public int? OpportunityId { get; set; }

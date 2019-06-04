@@ -164,7 +164,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 { "secondary_contact_details", expectedSecondaryDetailsList },
                 { "provider_has_venues", "no" },
                 { "provider_has_no_venues", "yes" },
-                { "venues_and_qualifications_list", expectedProviderVenueQualificationsList },
+                { "venues_and_qualifications_list", expectedProviderVenueQualificationsList }
             };
 
             _emailService

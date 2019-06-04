@@ -1,4 +1,5 @@
-﻿namespace Sfa.Tl.Matching.Models.Enums
+﻿// ReSharper disable UnusedMember.Global
+namespace Sfa.Tl.Matching.Models.Enums
 {
     public enum CompanyType
     {

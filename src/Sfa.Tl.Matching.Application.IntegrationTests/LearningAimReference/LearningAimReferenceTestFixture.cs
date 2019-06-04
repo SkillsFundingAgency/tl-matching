@@ -76,26 +76,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
                 AwardOrgLarId = "",
                 LarId = larId,
                 SourceCreatedOn = new DateTime(2019, 01, 01),
-                SourceModifiedOn = new DateTime(2019, 01, 01),
-            });
-
-            var count = MatchingDbContext.SaveChanges();
-            count.Should().Be(1);
-        }
-
-        public void UpdateExisting(string title)
-        {
-            var learningAimReference = MatchingDbContext.LearningAimReference.FirstOrDefault(e => e.Title == title);
-
-            if (learningAimReference != null) return;
-            
-            MatchingDbContext.LearningAimReference.Add(new Domain.Models.LearningAimReference
-            {
-                Title = title,
-                AwardOrgLarId = "",
-                LarId = "12345678",
-                SourceCreatedOn = new DateTime(2019, 01, 01),
-                SourceModifiedOn = new DateTime(2019, 01, 01),
+                SourceModifiedOn = new DateTime(2019, 01, 01)
             });
 
             var count = MatchingDbContext.SaveChanges();

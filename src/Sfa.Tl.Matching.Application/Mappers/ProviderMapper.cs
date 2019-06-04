@@ -10,17 +10,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
     {
         public ProviderMapper()
         {
-            CreateMap<ProviderDto, Provider>()
-                .ForMember(m => m.ProviderVenue, config => config.Ignore())
-                .ForMember(m => m.CreatedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore())
-                ;
-
-            CreateMap<Provider, ProviderDto>()
-                .ForMember(m => m.OfstedRating, config => config.Ignore())
-                ;
-
             CreateMap<Provider, ProviderDetailViewModel>()
                 .ForMember(m => m.SubmitAction, config => config.Ignore())
                 .ForMember(m => m.ProviderVenues, config => config.MapFrom(s => s.ProviderVenue))

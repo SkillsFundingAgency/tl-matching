@@ -8,11 +8,7 @@ namespace Sfa.Tl.Matching.Application.Configuration
 
         public string AuthorisedAdminUserEmail { get; set; }
 
-        public AzureSearchConfiguration AzureSearchConfiguration { get; set; }
-
         public string BlobStorageConnectionString { get; set; }
-
-        public string ServiceBusConnectionString { get; set; }
 
         public NotificationsApiClientConfiguration NotificationsApiClientConfiguration { get; set; }
 

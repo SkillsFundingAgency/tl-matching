@@ -2,6 +2,7 @@
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
+    // ReSharper disable once UnusedMember.Global
     public class Route : BaseEntity
     {
         public string Name { get; set; }

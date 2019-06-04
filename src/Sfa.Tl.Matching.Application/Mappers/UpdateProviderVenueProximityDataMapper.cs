@@ -8,6 +8,7 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
+    // ReSharper disable once UnusedMember.Global
     public class UpdateProviderVenueProximityDataMapper : Profile
     {
         public UpdateProviderVenueProximityDataMapper()

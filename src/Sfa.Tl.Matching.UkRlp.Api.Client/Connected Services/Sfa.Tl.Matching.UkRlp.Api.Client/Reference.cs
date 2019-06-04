@@ -7,12 +7,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+using System.CodeDom.Compiler;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Description;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+
 namespace Sfa.Tl.Matching.UkRlp.Api.Client
 {
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ukrlp.co.uk.server.ws.v3")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(AnonymousType=true, Namespace="http://ukrlp.co.uk.server.ws.v3")]
     public partial class faultDetail
     {
         
@@ -21,7 +33,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private string minorField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=0)]
         public string major
         {
             get
@@ -35,7 +47,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=1)]
         public string minor
         {
             get
@@ -50,9 +62,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/PersonDescriptives")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/PersonDescriptives")]
     public partial class PersonMaritalStatusStructure
     {
         
@@ -63,7 +75,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private bool verificationLevelFieldSpecified;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [XmlElement(Order=0)]
         public MaritalStatusType MaritalStatus
         {
             get
@@ -77,7 +89,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public VerificationLevelType VerificationLevel
         {
             get
@@ -91,7 +103,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool VerificationLevelSpecified
         {
             get
@@ -106,8 +118,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/core")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/core")]
     public enum MaritalStatusType
     {
         
@@ -131,44 +143,44 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/PersonDescriptives")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/PersonDescriptives")]
     public enum VerificationLevelType
     {
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("Level 0")]
+        [XmlEnum("Level 0")]
         Level0,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("Level 1")]
+        [XmlEnum("Level 1")]
         Level1,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("Level 2")]
+        [XmlEnum("Level 2")]
         Level2,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("Level 3")]
+        [XmlEnum("Level 3")]
         Level3,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/PersonDescriptives")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/PersonDescriptives")]
     public partial class PersonDeathDateStructure
     {
         
-        private System.DateTime personDeathDateField;
+        private DateTime personDeathDateField;
         
         private VerificationLevelType verificationLevelField;
         
         private bool verificationLevelFieldSpecified;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=0)]
-        public System.DateTime PersonDeathDate
+        [XmlElement(DataType="date", Order=0)]
+        public DateTime PersonDeathDate
         {
             get
             {
@@ -181,7 +193,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public VerificationLevelType VerificationLevel
         {
             get
@@ -195,7 +207,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool VerificationLevelSpecified
         {
             get
@@ -210,21 +222,21 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/PersonDescriptives")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/PersonDescriptives")]
     public partial class PersonBirthDateStructure
     {
         
-        private System.DateTime personBirthDateField;
+        private DateTime personBirthDateField;
         
         private VerificationLevelType verificationLevelField;
         
         private bool verificationLevelFieldSpecified;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=0)]
-        public System.DateTime PersonBirthDate
+        [XmlElement(DataType="date", Order=0)]
+        public DateTime PersonBirthDate
         {
             get
             {
@@ -237,7 +249,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public VerificationLevelType VerificationLevel
         {
             get
@@ -251,7 +263,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool VerificationLevelSpecified
         {
             get
@@ -266,9 +278,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class AONrangeStructure
     {
         
@@ -277,7 +289,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private string suffixField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
+        [XmlElement(DataType="positiveInteger", Order=0)]
         public string Number
         {
             get
@@ -291,7 +303,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public string Suffix
         {
             get
@@ -306,9 +318,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class LandAndPropertyIdentifierStructure
     {
         
@@ -328,20 +340,20 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         
         private bool officialAddressMarkerFieldSpecified;
         
-        private System.DateTime lPIstartDateField;
+        private DateTime lPIstartDateField;
         
-        private System.DateTime lPIentryDateField;
+        private DateTime lPIentryDateField;
         
-        private System.DateTime lPIendDateField;
+        private DateTime lPIendDateField;
         
         private bool lPIendDateFieldSpecified;
         
-        private System.DateTime lPIlastUpdateDateField;
+        private DateTime lPIlastUpdateDateField;
         
         private object itemField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [XmlElement(Order=0)]
         public AONstructure PAON
         {
             get
@@ -355,7 +367,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public AONstructure SAON
         {
             get
@@ -369,7 +381,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [XmlElement(Order=2)]
         public string PostTown
         {
             get
@@ -383,7 +395,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
+        [XmlElement(Order=3)]
         public string PostCode
         {
             get
@@ -397,7 +409,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        [XmlElement(Order=4)]
         public string Level
         {
             get
@@ -411,7 +423,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
+        [XmlElement(Order=5)]
         public LogicalStatusType LogicalStatus
         {
             get
@@ -425,7 +437,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
+        [XmlElement(Order=6)]
         public bool OfficialAddressMarker
         {
             get
@@ -439,7 +451,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool OfficialAddressMarkerSpecified
         {
             get
@@ -453,8 +465,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=7)]
-        public System.DateTime LPIstartDate
+        [XmlElement(DataType="date", Order=7)]
+        public DateTime LPIstartDate
         {
             get
             {
@@ -467,8 +479,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=8)]
-        public System.DateTime LPIentryDate
+        [XmlElement(DataType="date", Order=8)]
+        public DateTime LPIentryDate
         {
             get
             {
@@ -481,8 +493,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=9)]
-        public System.DateTime LPIendDate
+        [XmlElement(DataType="date", Order=9)]
+        public DateTime LPIendDate
         {
             get
             {
@@ -495,7 +507,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool LPIendDateSpecified
         {
             get
@@ -509,8 +521,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=10)]
-        public System.DateTime LPIlastUpdateDate
+        [XmlElement(DataType="date", Order=10)]
+        public DateTime LPIlastUpdateDate
         {
             get
             {
@@ -523,8 +535,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Street", typeof(StreetStructure), Order=11)]
-        [System.Xml.Serialization.XmlElementAttribute("USRN", typeof(string), DataType="integer", Order=11)]
+        [XmlElement("Street", typeof(StreetStructure), Order=11)]
+        [XmlElement("USRN", typeof(string), DataType="integer", Order=11)]
         public object Item
         {
             get
@@ -539,16 +551,16 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class AONstructure
     {
         
         private string descriptionField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [XmlElement(Order=0)]
         public string Description
         {
             get
@@ -563,44 +575,44 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public enum LogicalStatusType
     {
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("1")]
+        [XmlEnum("1")]
         Item1,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("2")]
+        [XmlEnum("2")]
         Item2,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3")]
+        [XmlEnum("3")]
         Item3,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("5")]
+        [XmlEnum("5")]
         Item5,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("6")]
+        [XmlEnum("6")]
         Item6,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("8")]
+        [XmlEnum("8")]
         Item8,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("9")]
+        [XmlEnum("9")]
         Item9,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class StreetStructure
     {
         
@@ -614,9 +626,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         
         private string streetVersionNumberField;
         
-        private System.DateTime streetEntryDateField;
+        private DateTime streetEntryDateField;
         
-        private System.DateTime streetClosureDateField;
+        private DateTime streetClosureDateField;
         
         private bool streetClosureDateFieldSpecified;
         
@@ -631,7 +643,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private string usrnField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [XmlElement(Order=0)]
         public StreetReferenceTypeType StreetReferenceType
         {
             get
@@ -645,7 +657,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public CoordinateStructure StartCoordinate
         {
             get
@@ -659,7 +671,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [XmlElement(Order=2)]
         public CoordinateStructure EndCoordinate
         {
             get
@@ -673,7 +685,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
+        [XmlElement(Order=3)]
         public decimal Tolerance
         {
             get
@@ -687,7 +699,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=4)]
+        [XmlElement(DataType="positiveInteger", Order=4)]
         public string StreetVersionNumber
         {
             get
@@ -701,8 +713,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=5)]
-        public System.DateTime StreetEntryDate
+        [XmlElement(DataType="date", Order=5)]
+        public DateTime StreetEntryDate
         {
             get
             {
@@ -715,8 +727,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=6)]
-        public System.DateTime StreetClosureDate
+        [XmlElement(DataType="date", Order=6)]
+        public DateTime StreetClosureDate
         {
             get
             {
@@ -729,7 +741,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool StreetClosureDateSpecified
         {
             get
@@ -743,7 +755,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="integer", Order=7)]
+        [XmlElement(DataType="integer", Order=7)]
         public string ResponsibleAuthority
         {
             get
@@ -757,7 +769,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
+        [XmlElement(Order=8)]
         public StreetDescriptiveIdentifierStructure DescriptiveIdentifier
         {
             get
@@ -771,7 +783,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
+        [XmlElement(Order=9)]
         public StreetDescriptiveIdentifierStructure StreetAlias
         {
             get
@@ -785,7 +797,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=10)]
+        [XmlElement(Order=10)]
         public StreetStructureStreetCrossReferences StreetCrossReferences
         {
             get
@@ -799,7 +811,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="integer")]
+        [XmlAttribute(DataType="integer")]
         public string usrn
         {
             get
@@ -814,32 +826,32 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public enum StreetReferenceTypeType
     {
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("1")]
+        [XmlEnum("1")]
         Item1,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("2")]
+        [XmlEnum("2")]
         Item2,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3")]
+        [XmlEnum("3")]
         Item3,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("4")]
+        [XmlEnum("4")]
         Item4,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class CoordinateStructure
     {
         
@@ -848,7 +860,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private ulong yField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [XmlElement(Order=0)]
         public ulong X
         {
             get
@@ -862,7 +874,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public ulong Y
         {
             get
@@ -877,9 +889,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class StreetDescriptiveIdentifierStructure
     {
         
@@ -892,7 +904,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private ItemsChoiceType1[] itemsElementNameField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [XmlElement(Order=0)]
         public string StreetDescription
         {
             get
@@ -906,7 +918,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public string Locality
         {
             get
@@ -920,9 +932,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AdministrativeArea", typeof(string), Order=2)]
-        [System.Xml.Serialization.XmlElementAttribute("Town", typeof(string), Order=2)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlElement("AdministrativeArea", typeof(string), Order=2)]
+        [XmlElement("Town", typeof(string), Order=2)]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public string[] Items
         {
             get
@@ -936,8 +948,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order=3)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order=3)]
+        [XmlIgnore()]
         public ItemsChoiceType1[] ItemsElementName
         {
             get
@@ -952,8 +964,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666", IncludeInSchema=false)]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666", IncludeInSchema=false)]
     public enum ItemsChoiceType1
     {
         
@@ -965,17 +977,17 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(AnonymousType=true, Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class StreetStructureStreetCrossReferences
     {
         
         private object[] itemsField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ElementaryStreetUnit", typeof(ElementaryStreetUnitStructure), Order=0)]
-        [System.Xml.Serialization.XmlElementAttribute("UniqueStreetReferenceNumbers", typeof(string), DataType="integer", Order=0)]
+        [XmlElement("ElementaryStreetUnit", typeof(ElementaryStreetUnitStructure), Order=0)]
+        [XmlElement("UniqueStreetReferenceNumbers", typeof(string), DataType="integer", Order=0)]
         public object[] Items
         {
             get
@@ -990,9 +1002,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class ElementaryStreetUnitStructure
     {
         
@@ -1000,9 +1012,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         
         private string eSUversionField;
         
-        private System.DateTime eSUentryDateField;
+        private DateTime eSUentryDateField;
         
-        private System.DateTime eSUclosureDateField;
+        private DateTime eSUclosureDateField;
         
         private bool eSUclosureDateFieldSpecified;
         
@@ -1015,7 +1027,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private CoordinateStructure[] intermediateCoordField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [XmlElement(Order=0)]
         public string ESUidentity
         {
             get
@@ -1029,7 +1041,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=1)]
+        [XmlElement(DataType="positiveInteger", Order=1)]
         public string ESUversion
         {
             get
@@ -1043,8 +1055,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=2)]
-        public System.DateTime ESUentryDate
+        [XmlElement(DataType="date", Order=2)]
+        public DateTime ESUentryDate
         {
             get
             {
@@ -1057,8 +1069,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=3)]
-        public System.DateTime ESUclosureDate
+        [XmlElement(DataType="date", Order=3)]
+        public DateTime ESUclosureDate
         {
             get
             {
@@ -1071,7 +1083,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool ESUclosureDateSpecified
         {
             get
@@ -1085,7 +1097,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        [XmlElement(Order=4)]
         public CoordinateStructure StartCoordinate
         {
             get
@@ -1099,7 +1111,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
+        [XmlElement(Order=5)]
         public CoordinateStructure EndCoordinate
         {
             get
@@ -1113,7 +1125,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
+        [XmlElement(Order=6)]
         public decimal Tolerance
         {
             get
@@ -1127,7 +1139,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("IntermediateCoord", Order=7)]
+        [XmlElement("IntermediateCoord", Order=7)]
         public CoordinateStructure[] IntermediateCoord
         {
             get
@@ -1142,9 +1154,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class BasicLandAndPropertyUnitStructure
     {
         
@@ -1158,22 +1170,22 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         
         private CoordinateStructure gridReferenceField;
         
-        private System.DateTime bLPUentryDateField;
+        private DateTime bLPUentryDateField;
         
-        private System.DateTime bLPUstartDateField;
+        private DateTime bLPUstartDateField;
         
-        private System.DateTime bLPUendDateField;
+        private DateTime bLPUendDateField;
         
         private bool bLPUendDateFieldSpecified;
         
-        private System.DateTime bLPUlastUpdateDateField;
+        private DateTime bLPUlastUpdateDateField;
         
         private LandAndPropertyIdentifierStructure[] landAndPropertyIdentifierField;
         
         private ProvenanceStructure[] provenanceField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="integer", Order=0)]
+        [XmlElement(DataType="integer", Order=0)]
         public string UniquePropertyReferenceNumber
         {
             get
@@ -1187,7 +1199,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="integer", Order=1)]
+        [XmlElement(DataType="integer", Order=1)]
         public string CustodianCode
         {
             get
@@ -1201,7 +1213,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [XmlElement(Order=2)]
         public RepresentativePointCodeType RepresentativePointCode
         {
             get
@@ -1215,7 +1227,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
+        [XmlElement(Order=3)]
         public LogicalStatusType LogicalStatus
         {
             get
@@ -1229,7 +1241,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        [XmlElement(Order=4)]
         public CoordinateStructure GridReference
         {
             get
@@ -1243,8 +1255,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=5)]
-        public System.DateTime BLPUentryDate
+        [XmlElement(DataType="date", Order=5)]
+        public DateTime BLPUentryDate
         {
             get
             {
@@ -1257,8 +1269,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=6)]
-        public System.DateTime BLPUstartDate
+        [XmlElement(DataType="date", Order=6)]
+        public DateTime BLPUstartDate
         {
             get
             {
@@ -1271,8 +1283,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=7)]
-        public System.DateTime BLPUendDate
+        [XmlElement(DataType="date", Order=7)]
+        public DateTime BLPUendDate
         {
             get
             {
@@ -1285,7 +1297,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool BLPUendDateSpecified
         {
             get
@@ -1299,8 +1311,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=8)]
-        public System.DateTime BLPUlastUpdateDate
+        [XmlElement(DataType="date", Order=8)]
+        public DateTime BLPUlastUpdateDate
         {
             get
             {
@@ -1313,7 +1325,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("LandAndPropertyIdentifier", Order=9)]
+        [XmlElement("LandAndPropertyIdentifier", Order=9)]
         public LandAndPropertyIdentifierStructure[] LandAndPropertyIdentifier
         {
             get
@@ -1327,7 +1339,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Provenance", Order=10)]
+        [XmlElement("Provenance", Order=10)]
         public ProvenanceStructure[] Provenance
         {
             get
@@ -1342,40 +1354,40 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public enum RepresentativePointCodeType
     {
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("1")]
+        [XmlEnum("1")]
         Item1,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("2")]
+        [XmlEnum("2")]
         Item2,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("3")]
+        [XmlEnum("3")]
         Item3,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("4")]
+        [XmlEnum("4")]
         Item4,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("5")]
+        [XmlEnum("5")]
         Item5,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("9")]
+        [XmlEnum("9")]
         Item9,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class ProvenanceStructure
     {
         
@@ -1383,20 +1395,20 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         
         private string annotationField;
         
-        private System.DateTime provEntryDateField;
+        private DateTime provEntryDateField;
         
-        private System.DateTime provStartDateField;
+        private DateTime provStartDateField;
         
-        private System.DateTime provEndDateField;
+        private DateTime provEndDateField;
         
         private bool provEndDateFieldSpecified;
         
-        private System.DateTime provLastUpdateDateField;
+        private DateTime provLastUpdateDateField;
         
         private BLPUextentStructure bLPUextentField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [XmlElement(Order=0)]
         public ProvenanceCodeType ProvenanceCode
         {
             get
@@ -1410,7 +1422,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public string Annotation
         {
             get
@@ -1424,8 +1436,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=2)]
-        public System.DateTime ProvEntryDate
+        [XmlElement(DataType="date", Order=2)]
+        public DateTime ProvEntryDate
         {
             get
             {
@@ -1438,8 +1450,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=3)]
-        public System.DateTime ProvStartDate
+        [XmlElement(DataType="date", Order=3)]
+        public DateTime ProvStartDate
         {
             get
             {
@@ -1452,8 +1464,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=4)]
-        public System.DateTime ProvEndDate
+        [XmlElement(DataType="date", Order=4)]
+        public DateTime ProvEndDate
         {
             get
             {
@@ -1466,7 +1478,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool ProvEndDateSpecified
         {
             get
@@ -1480,8 +1492,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=5)]
-        public System.DateTime ProvLastUpdateDate
+        [XmlElement(DataType="date", Order=5)]
+        public DateTime ProvLastUpdateDate
         {
             get
             {
@@ -1494,7 +1506,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
+        [XmlElement(Order=6)]
         public BLPUextentStructure BLPUextent
         {
             get
@@ -1509,8 +1521,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public enum ProvenanceCodeType
     {
         
@@ -1537,30 +1549,30 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class BLPUextentStructure
     {
         
         private string sourceDescriptionField;
         
-        private System.DateTime extentEntryDateField;
+        private DateTime extentEntryDateField;
         
-        private System.DateTime extentSourceDateField;
+        private DateTime extentSourceDateField;
         
-        private System.DateTime extentStartDateField;
+        private DateTime extentStartDateField;
         
-        private System.DateTime extentEndDateField;
+        private DateTime extentEndDateField;
         
         private bool extentEndDateFieldSpecified;
         
-        private System.DateTime extentLastUpdateDateField;
+        private DateTime extentLastUpdateDateField;
         
         private BLPUpolygonStructure[] extentDefinitionField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [XmlElement(Order=0)]
         public string SourceDescription
         {
             get
@@ -1574,8 +1586,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=1)]
-        public System.DateTime ExtentEntryDate
+        [XmlElement(DataType="date", Order=1)]
+        public DateTime ExtentEntryDate
         {
             get
             {
@@ -1588,8 +1600,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=2)]
-        public System.DateTime ExtentSourceDate
+        [XmlElement(DataType="date", Order=2)]
+        public DateTime ExtentSourceDate
         {
             get
             {
@@ -1602,8 +1614,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=3)]
-        public System.DateTime ExtentStartDate
+        [XmlElement(DataType="date", Order=3)]
+        public DateTime ExtentStartDate
         {
             get
             {
@@ -1616,8 +1628,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=4)]
-        public System.DateTime ExtentEndDate
+        [XmlElement(DataType="date", Order=4)]
+        public DateTime ExtentEndDate
         {
             get
             {
@@ -1630,7 +1642,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool ExtentEndDateSpecified
         {
             get
@@ -1644,8 +1656,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date", Order=5)]
-        public System.DateTime ExtentLastUpdateDate
+        [XmlElement(DataType="date", Order=5)]
+        public DateTime ExtentLastUpdateDate
         {
             get
             {
@@ -1658,7 +1670,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ExtentDefinition", Order=6)]
+        [XmlElement("ExtentDefinition", Order=6)]
         public BLPUpolygonStructure[] ExtentDefinition
         {
             get
@@ -1673,9 +1685,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class BLPUpolygonStructure
     {
         
@@ -1688,7 +1700,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private object[] itemsField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger", Order=0)]
+        [XmlElement(DataType="positiveInteger", Order=0)]
         public string PolygonID
         {
             get
@@ -1702,7 +1714,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public BLPUpolygonStructurePolygonType PolygonType
         {
             get
@@ -1716,7 +1728,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool PolygonTypeSpecified
         {
             get
@@ -1730,8 +1742,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ExternalRef", typeof(ulong), Order=2)]
-        [System.Xml.Serialization.XmlElementAttribute("Vertices", typeof(CoordinateStructure), Order=2)]
+        [XmlElement("ExternalRef", typeof(ulong), Order=2)]
+        [XmlElement("Vertices", typeof(CoordinateStructure), Order=2)]
         public object[] Items
         {
             get
@@ -1746,8 +1758,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(AnonymousType=true, Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public enum BLPUpolygonStructurePolygonType
     {
         
@@ -1756,9 +1768,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ukrlp.co.uk.server.ws.v3")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://ukrlp.co.uk.server.ws.v3")]
     public partial class ProviderQueryResultStructure
     {
         
@@ -1771,7 +1783,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private string schemaVersionField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MatchingProviderRecords", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
+        [XmlElement("MatchingProviderRecords", Form=XmlSchemaForm.Unqualified, Order=0)]
         public ProviderRecordStructure[] MatchingProviderRecords
         {
             get
@@ -1785,7 +1797,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer", Order=1)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, DataType="integer", Order=1)]
         public string QueryId
         {
             get
@@ -1799,7 +1811,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer", Order=2)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, DataType="integer", Order=2)]
         public string StakeholderId
         {
             get
@@ -1813,7 +1825,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string SchemaVersion
         {
             get
@@ -1828,9 +1840,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ukrlp.co.uk.server.ws.v3")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://ukrlp.co.uk.server.ws.v3")]
     public partial class ProviderRecordStructure
     {
         
@@ -1840,18 +1852,18 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         
         private string providerStatusField;
         
-        private System.DateTime providerVerificationDateField;
+        private DateTime providerVerificationDateField;
         
         private bool providerVerificationDateFieldSpecified;
         
-        private System.DateTime expiryDateField;
+        private DateTime expiryDateField;
         
         private bool expiryDateFieldSpecified;
         
         private AssociationRecordStructure[] providerAssociationsField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="positiveInteger", Order=0)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, DataType="positiveInteger", Order=0)]
         public string UnitedKingdomProviderReferenceNumber
         {
             get
@@ -1865,7 +1877,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=1)]
         public string ProviderName
         {
             get
@@ -1879,7 +1891,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=2)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=2)]
         public string ProviderStatus
         {
             get
@@ -1893,8 +1905,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=4)]
-        public System.DateTime ProviderVerificationDate
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=4)]
+        public DateTime ProviderVerificationDate
         {
             get
             {
@@ -1907,7 +1919,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool ProviderVerificationDateSpecified
         {
             get
@@ -1921,8 +1933,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=5)]
-        public System.DateTime ExpiryDate
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=5)]
+        public DateTime ExpiryDate
         {
             get
             {
@@ -1935,7 +1947,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool ExpiryDateSpecified
         {
             get
@@ -1949,7 +1961,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ProviderAssociations", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=6)]
+        [XmlElement("ProviderAssociations", Form=XmlSchemaForm.Unqualified, Order=6)]
         public AssociationRecordStructure[] ProviderAssociations
         {
             get
@@ -1964,9 +1976,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666")]
     public partial class BSaddressStructure
     {
         
@@ -1991,7 +2003,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private string uniquePropertyReferenceNumberField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [XmlElement(Order=0)]
         public AONstructure SAON
         {
             get
@@ -2005,7 +2017,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [XmlElement(Order=1)]
         public AONstructure PAON
         {
             get
@@ -2019,7 +2031,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [XmlElement(Order=2)]
         public string StreetDescription
         {
             get
@@ -2033,7 +2045,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="integer", Order=3)]
+        [XmlElement(DataType="integer", Order=3)]
         public string UniqueStreetReferenceNumber
         {
             get
@@ -2047,7 +2059,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        [XmlElement(Order=4)]
         public string Locality
         {
             get
@@ -2061,9 +2073,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AdministrativeArea", typeof(string), Order=5)]
-        [System.Xml.Serialization.XmlElementAttribute("Town", typeof(string), Order=5)]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+        [XmlElement("AdministrativeArea", typeof(string), Order=5)]
+        [XmlElement("Town", typeof(string), Order=5)]
+        [XmlChoiceIdentifier("ItemsElementName")]
         public string[] Items
         {
             get
@@ -2077,8 +2089,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName", Order=6)]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlElement("ItemsElementName", Order=6)]
+        [XmlIgnore()]
         public ItemsChoiceType[] ItemsElementName
         {
             get
@@ -2092,7 +2104,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
+        [XmlElement(Order=7)]
         public string PostTown
         {
             get
@@ -2106,7 +2118,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
+        [XmlElement(Order=8)]
         public string PostCode
         {
             get
@@ -2120,7 +2132,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="integer", Order=9)]
+        [XmlElement(DataType="integer", Order=9)]
         public string UniquePropertyReferenceNumber
         {
             get
@@ -2135,8 +2147,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/bs7666", IncludeInSchema=false)]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/bs7666", IncludeInSchema=false)]
     public enum ItemsChoiceType
     {
         
@@ -2148,9 +2160,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/people/PersonDescriptives")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/people/PersonDescriptives")]
     public partial class PersonNameStructure
     {
         
@@ -2165,7 +2177,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private string personRequestedNameField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonNameTitle", Order=0)]
+        [XmlElement("PersonNameTitle", Order=0)]
         public string[] PersonNameTitle
         {
             get
@@ -2179,7 +2191,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonGivenName", Order=1)]
+        [XmlElement("PersonGivenName", Order=1)]
         public string[] PersonGivenName
         {
             get
@@ -2193,7 +2205,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [XmlElement(Order=2)]
         public string PersonFamilyName
         {
             get
@@ -2207,7 +2219,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PersonNameSuffix", Order=3)]
+        [XmlElement("PersonNameSuffix", Order=3)]
         public string[] PersonNameSuffix
         {
             get
@@ -2221,7 +2233,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        [XmlElement(Order=4)]
         public string PersonRequestedName
         {
             get
@@ -2236,9 +2248,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ukrlp.co.uk.server.ws.v3")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://ukrlp.co.uk.server.ws.v3")]
     public partial class AssociationRecordStructure
     {
         
@@ -2250,20 +2262,20 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         
         private string associationStatusField;
         
-        private System.DateTime associationCreatedDateField;
+        private DateTime associationCreatedDateField;
         
         private string associationMembershipStatusField;
         
-        private System.DateTime associationMemberSinceDateField;
+        private DateTime associationMemberSinceDateField;
         
-        private System.DateTime associationMembershipEndDateField;
+        private DateTime associationMembershipEndDateField;
         
         private bool associationMembershipEndDateFieldSpecified;
         
         private YesNoType leadProviderFlagField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=0)]
         public string TypeOfAssociation
         {
             get
@@ -2277,7 +2289,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="positiveInteger", Order=1)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, DataType="positiveInteger", Order=1)]
         public string AssociationId
         {
             get
@@ -2291,7 +2303,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=2)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=2)]
         public string AssociationDescription
         {
             get
@@ -2305,7 +2317,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=3)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=3)]
         public string AssociationStatus
         {
             get
@@ -2319,8 +2331,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=4)]
-        public System.DateTime AssociationCreatedDate
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=4)]
+        public DateTime AssociationCreatedDate
         {
             get
             {
@@ -2333,7 +2345,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=5)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=5)]
         public string AssociationMembershipStatus
         {
             get
@@ -2347,8 +2359,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=6)]
-        public System.DateTime AssociationMemberSinceDate
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=6)]
+        public DateTime AssociationMemberSinceDate
         {
             get
             {
@@ -2361,8 +2373,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=7)]
-        public System.DateTime AssociationMembershipEndDate
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=7)]
+        public DateTime AssociationMembershipEndDate
         {
             get
             {
@@ -2375,7 +2387,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool AssociationMembershipEndDateSpecified
         {
             get
@@ -2389,7 +2401,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=8)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=8)]
         public YesNoType LeadProviderFlag
         {
             get
@@ -2404,8 +2416,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.govtalk.gov.uk/core")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(Namespace="http://www.govtalk.gov.uk/core")]
     public enum YesNoType
     {
         
@@ -2417,9 +2429,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ukrlp.co.uk.server.ws.v3")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://ukrlp.co.uk.server.ws.v3")]
     public partial class authenticationDetails
     {
         
@@ -2428,7 +2440,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private string passwordField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=0)]
         public string userName
         {
             get
@@ -2442,7 +2454,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=1)]
         public string password
         {
             get
@@ -2457,9 +2469,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ukrlp.co.uk.server.ws.v3")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://ukrlp.co.uk.server.ws.v3")]
     public partial class SelectionCriteriaStructure
     {
         
@@ -2477,15 +2489,15 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         
         private bool maxDistanceFromBasePostcodeFieldSpecified;
         
-        private System.DateTime providerUpdatedSinceField;
+        private DateTime providerUpdatedSinceField;
         
         private bool providerUpdatedSinceFieldSpecified;
         
-        private System.DateTime providerVerifiedAfterField;
+        private DateTime providerVerifiedAfterField;
         
         private bool providerVerifiedAfterFieldSpecified;
         
-        private System.DateTime providerVerifiedBeforeField;
+        private DateTime providerVerifiedBeforeField;
         
         private bool providerVerifiedBeforeFieldSpecified;
         
@@ -2502,8 +2514,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private string providerStatusField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("UnitedKingdomProviderReferenceNumber", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="positiveInteger", IsNullable=false)]
+        [XmlArray(Form=XmlSchemaForm.Unqualified, Order=0)]
+        [XmlArrayItem("UnitedKingdomProviderReferenceNumber", Form=XmlSchemaForm.Unqualified, DataType="positiveInteger", IsNullable=false)]
         public string[] UnitedKingdomProviderReferenceNumberList
         {
             get
@@ -2517,8 +2529,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=1)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("ProviderName", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        [XmlArray(Form=XmlSchemaForm.Unqualified, Order=1)]
+        [XmlArrayItem("ProviderName", Form=XmlSchemaForm.Unqualified, IsNullable=false)]
         public string[] ProviderNameList
         {
             get
@@ -2532,8 +2544,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=2)]
-        [System.Xml.Serialization.XmlArrayItemAttribute("Postcode", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=false)]
+        [XmlArray(Form=XmlSchemaForm.Unqualified, Order=2)]
+        [XmlArrayItem("Postcode", Form=XmlSchemaForm.Unqualified, IsNullable=false)]
         public string[] PostcodeList
         {
             get
@@ -2547,7 +2559,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=3)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=3)]
         public string SearchTerm
         {
             get
@@ -2561,7 +2573,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=4)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=4)]
         public string BasePostcode
         {
             get
@@ -2575,7 +2587,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=5)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=5)]
         public int MaxDistanceFromBasePostcode
         {
             get
@@ -2589,7 +2601,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool MaxDistanceFromBasePostcodeSpecified
         {
             get
@@ -2603,8 +2615,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=6)]
-        public System.DateTime ProviderUpdatedSince
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=6)]
+        public DateTime ProviderUpdatedSince
         {
             get
             {
@@ -2617,7 +2629,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool ProviderUpdatedSinceSpecified
         {
             get
@@ -2631,8 +2643,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=7)]
-        public System.DateTime ProviderVerifiedAfter
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=7)]
+        public DateTime ProviderVerifiedAfter
         {
             get
             {
@@ -2645,7 +2657,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool ProviderVerifiedAfterSpecified
         {
             get
@@ -2659,8 +2671,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=8)]
-        public System.DateTime ProviderVerifiedBefore
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=8)]
+        public DateTime ProviderVerifiedBefore
         {
             get
             {
@@ -2673,7 +2685,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool ProviderVerifiedBeforeSpecified
         {
             get
@@ -2687,7 +2699,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=9)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=9)]
         public QueryCriteriaConditionType CriteriaCondition
         {
             get
@@ -2701,7 +2713,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool CriteriaConditionSpecified
         {
             get
@@ -2715,7 +2727,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer", Order=10)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, DataType="integer", Order=10)]
         public string StakeholderId
         {
             get
@@ -2729,7 +2741,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=11)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=11)]
         public YesNoType ApprovedProvidersOnly
         {
             get
@@ -2743,7 +2755,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [XmlIgnore()]
         public bool ApprovedProvidersOnlySpecified
         {
             get
@@ -2757,7 +2769,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=12)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=12)]
         public string ProviderStatus
         {
             get
@@ -2772,8 +2784,8 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.ukrlp.gov.uk/commonlibrary")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [XmlType(Namespace="http://www.ukrlp.gov.uk/commonlibrary")]
     public enum QueryCriteriaConditionType
     {
         
@@ -2785,9 +2797,9 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://ukrlp.co.uk.server.ws.v3")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(Namespace="http://ukrlp.co.uk.server.ws.v3")]
     public partial class ProviderQueryStructure
     {
         
@@ -2798,7 +2810,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private string schemaVersionField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, Order=0)]
         public SelectionCriteriaStructure SelectionCriteria
         {
             get
@@ -2812,7 +2824,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer", Order=1)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, DataType="integer", Order=1)]
         public string QueryId
         {
             get
@@ -2826,7 +2838,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        [XmlAttribute(DataType="token")]
         public string SchemaVersion
         {
             get
@@ -2840,28 +2852,28 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://ukrlp.co.uk.server.ws.v3", ConfigurationName="Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryPortType")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [ServiceContract(Namespace="http://ukrlp.co.uk.server.ws.v3", ConfigurationName="Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryPortType")]
     public interface ProviderQueryPortType
     {
         
-        [System.ServiceModel.OperationContractAttribute(Action="retrieveAllProviders", ReplyAction="*")]
-        [System.ServiceModel.FaultContractAttribute(typeof(Sfa.Tl.Matching.UkRlp.Api.Client.faultDetail), Action="retrieveAllProviders", Name="faultDetail")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PersonMaritalStatusStructure))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PersonDeathDateStructure))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(PersonBirthDateStructure))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(AONrangeStructure))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BasicLandAndPropertyUnitStructure))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ProviderQueryResultStructure))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(authenticationDetails))]
-        System.Threading.Tasks.Task<Sfa.Tl.Matching.UkRlp.Api.Client.response> retrieveAllProvidersAsync(Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryParam request);
+        [OperationContract(Action="retrieveAllProviders", ReplyAction="*")]
+        [FaultContract(typeof(faultDetail), Action="retrieveAllProviders", Name="faultDetail")]
+        [XmlSerializerFormat(SupportFaults=true)]
+        [ServiceKnownType(typeof(PersonMaritalStatusStructure))]
+        [ServiceKnownType(typeof(PersonDeathDateStructure))]
+        [ServiceKnownType(typeof(PersonBirthDateStructure))]
+        [ServiceKnownType(typeof(AONrangeStructure))]
+        [ServiceKnownType(typeof(BasicLandAndPropertyUnitStructure))]
+        [ServiceKnownType(typeof(ProviderQueryResultStructure))]
+        [ServiceKnownType(typeof(authenticationDetails))]
+        Task<response> retrieveAllProvidersAsync(ProviderQueryParam request);
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://ukrlp.co.uk.server.ws.v3")]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [DebuggerStepThrough()]
+    [XmlType(AnonymousType=true, Namespace="http://ukrlp.co.uk.server.ws.v3")]
     public partial class ProviderQueryResponse
     {
         
@@ -2872,7 +2884,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         private string stakeholderIdField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MatchingProviderRecords", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, Order=0)]
+        [XmlElement("MatchingProviderRecords", Form=XmlSchemaForm.Unqualified, Order=0)]
         public ProviderRecordStructure[] MatchingProviderRecords
         {
             get
@@ -2886,7 +2898,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer", Order=1)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, DataType="integer", Order=1)]
         public string QueryId
         {
             get
@@ -2900,7 +2912,7 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="integer", Order=2)]
+        [XmlElement(Form=XmlSchemaForm.Unqualified, DataType="integer", Order=2)]
         public string StakeholderId
         {
             get
@@ -2914,54 +2926,54 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    [DebuggerStepThrough()]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [MessageContract(IsWrapped=false)]
     public partial class ProviderQueryParam
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ukrlp.co.uk.server.ws.v3", Order=0)]
-        public Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryStructure ProviderQueryRequest;
+        [MessageBodyMember(Namespace="http://ukrlp.co.uk.server.ws.v3", Order=0)]
+        public ProviderQueryStructure ProviderQueryRequest;
         
         public ProviderQueryParam()
         {
         }
         
-        public ProviderQueryParam(Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryStructure ProviderQueryRequest)
+        public ProviderQueryParam(ProviderQueryStructure ProviderQueryRequest)
         {
             this.ProviderQueryRequest = ProviderQueryRequest;
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    [DebuggerStepThrough()]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [MessageContract(IsWrapped=false)]
     public partial class response
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ukrlp.co.uk.server.ws.v3", Order=0)]
-        public Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryResponse ProviderQueryResponse;
+        [MessageBodyMember(Namespace="http://ukrlp.co.uk.server.ws.v3", Order=0)]
+        public ProviderQueryResponse ProviderQueryResponse;
         
         public response()
         {
         }
         
-        public response(Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryResponse ProviderQueryResponse)
+        public response(ProviderQueryResponse ProviderQueryResponse)
         {
             this.ProviderQueryResponse = ProviderQueryResponse;
         }
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    public interface ProviderQueryPortTypeChannel : Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryPortType, System.ServiceModel.IClientChannel
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    public interface ProviderQueryPortTypeChannel : ProviderQueryPortType, IClientChannel
     {
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
-    public partial class ProviderQueryPortTypeClient : System.ServiceModel.ClientBase<Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryPortType>, Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryPortType
+    [DebuggerStepThrough()]
+    [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]
+    public partial class ProviderQueryPortTypeClient : ClientBase<ProviderQueryPortType>, ProviderQueryPortType
     {
         
         /// <summary>
@@ -2969,95 +2981,95 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client
         /// </summary>
         /// <param name="serviceEndpoint">The endpoint to configure</param>
         /// <param name="clientCredentials">The client credentials</param>
-        static partial void ConfigureEndpoint(System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Description.ClientCredentials clientCredentials);
+        static partial void ConfigureEndpoint(ServiceEndpoint serviceEndpoint, ClientCredentials clientCredentials);
         
         public ProviderQueryPortTypeClient() : 
-                base(ProviderQueryPortTypeClient.GetDefaultBinding(), ProviderQueryPortTypeClient.GetDefaultEndpointAddress())
+                base(GetDefaultBinding(), GetDefaultEndpointAddress())
         {
             this.Endpoint.Name = EndpointConfiguration.ProviderQueryPort.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
         public ProviderQueryPortTypeClient(EndpointConfiguration endpointConfiguration) : 
-                base(ProviderQueryPortTypeClient.GetBindingForEndpoint(endpointConfiguration), ProviderQueryPortTypeClient.GetEndpointAddress(endpointConfiguration))
+                base(GetBindingForEndpoint(endpointConfiguration), GetEndpointAddress(endpointConfiguration))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
         public ProviderQueryPortTypeClient(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
-                base(ProviderQueryPortTypeClient.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
+                base(GetBindingForEndpoint(endpointConfiguration), new EndpointAddress(remoteAddress))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public ProviderQueryPortTypeClient(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(ProviderQueryPortTypeClient.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
+        public ProviderQueryPortTypeClient(EndpointConfiguration endpointConfiguration, EndpointAddress remoteAddress) : 
+                base(GetBindingForEndpoint(endpointConfiguration), remoteAddress)
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public ProviderQueryPortTypeClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public ProviderQueryPortTypeClient(Binding binding, EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress)
         {
         }
         
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<Sfa.Tl.Matching.UkRlp.Api.Client.response> Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryPortType.retrieveAllProvidersAsync(Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryParam request)
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        Task<response> ProviderQueryPortType.retrieveAllProvidersAsync(ProviderQueryParam request)
         {
             return base.Channel.retrieveAllProvidersAsync(request);
         }
         
-        public System.Threading.Tasks.Task<Sfa.Tl.Matching.UkRlp.Api.Client.response> retrieveAllProvidersAsync(Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryStructure ProviderQueryRequest)
+        public Task<response> retrieveAllProvidersAsync(ProviderQueryStructure ProviderQueryRequest)
         {
-            Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryParam inValue = new Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryParam();
+            ProviderQueryParam inValue = new ProviderQueryParam();
             inValue.ProviderQueryRequest = ProviderQueryRequest;
-            return ((Sfa.Tl.Matching.UkRlp.Api.Client.ProviderQueryPortType)(this)).retrieveAllProvidersAsync(inValue);
+            return ((ProviderQueryPortType)(this)).retrieveAllProvidersAsync(inValue);
         }
         
-        public virtual System.Threading.Tasks.Task OpenAsync()
+        public virtual Task OpenAsync()
         {
-            return System.Threading.Tasks.Task.Factory.FromAsync(((System.ServiceModel.ICommunicationObject)(this)).BeginOpen(null, null), new System.Action<System.IAsyncResult>(((System.ServiceModel.ICommunicationObject)(this)).EndOpen));
+            return Task.Factory.FromAsync(((ICommunicationObject)(this)).BeginOpen(null, null), new Action<IAsyncResult>(((ICommunicationObject)(this)).EndOpen));
         }
         
-        public virtual System.Threading.Tasks.Task CloseAsync()
+        public virtual Task CloseAsync()
         {
-            return System.Threading.Tasks.Task.Factory.FromAsync(((System.ServiceModel.ICommunicationObject)(this)).BeginClose(null, null), new System.Action<System.IAsyncResult>(((System.ServiceModel.ICommunicationObject)(this)).EndClose));
+            return Task.Factory.FromAsync(((ICommunicationObject)(this)).BeginClose(null, null), new Action<IAsyncResult>(((ICommunicationObject)(this)).EndClose));
         }
         
-        private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
+        private static Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {
             if ((endpointConfiguration == EndpointConfiguration.ProviderQueryPort))
             {
-                System.ServiceModel.BasicHttpBinding result = new System.ServiceModel.BasicHttpBinding();
+                BasicHttpBinding result = new BasicHttpBinding();
                 result.MaxBufferSize = int.MaxValue;
-                result.ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max;
+                result.ReaderQuotas = XmlDictionaryReaderQuotas.Max;
                 result.MaxReceivedMessageSize = int.MaxValue;
                 result.AllowCookies = true;
                 return result;
             }
-            throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
+            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
         
-        private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
+        private static EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
         {
             if ((endpointConfiguration == EndpointConfiguration.ProviderQueryPort))
             {
-                return new System.ServiceModel.EndpointAddress("http://webservices.ukrlp.co.uk/UkrlpProviderQueryWS/ProviderQueryServiceV3");
+                return new EndpointAddress("http://webservices.ukrlp.co.uk/UkrlpProviderQueryWS/ProviderQueryServiceV3");
             }
-            throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
+            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
         
-        private static System.ServiceModel.Channels.Binding GetDefaultBinding()
+        private static Binding GetDefaultBinding()
         {
-            return ProviderQueryPortTypeClient.GetBindingForEndpoint(EndpointConfiguration.ProviderQueryPort);
+            return GetBindingForEndpoint(EndpointConfiguration.ProviderQueryPort);
         }
         
-        private static System.ServiceModel.EndpointAddress GetDefaultEndpointAddress()
+        private static EndpointAddress GetDefaultEndpointAddress()
         {
-            return ProviderQueryPortTypeClient.GetEndpointAddress(EndpointConfiguration.ProviderQueryPort);
+            return GetEndpointAddress(EndpointConfiguration.ProviderQueryPort);
         }
         
         public enum EndpointConfiguration
