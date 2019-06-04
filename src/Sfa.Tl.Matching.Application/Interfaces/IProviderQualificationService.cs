@@ -6,5 +6,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     public interface IProviderQualificationService
     {
         Task<int> CreateProviderQualificationAsync(AddQualificationViewModel viewModel);
+        Task RemoveProviderQualificationAsync(int providerVenueId, int qualificationId);
     }
 }

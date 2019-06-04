@@ -94,7 +94,7 @@
 
             @if (Model.Qualifications == null || Model.Qualifications.Count == 0)
             {
-            <p class="govuk-body">You need to add a qualification for this venue.</p>
+                <p class="govuk-body">You need to add a qualification for this venue.</p>
             }
             else
             {
@@ -116,8 +116,11 @@
                                 @Model.Qualifications[i].LarsId
                             </td>
                             <td class="govuk-table__cell">@Model.Qualifications[i].Title</td>
-                            <td class="govuk-table__cell"><a href="#" class="govuk-link">Remove qualification</a></td>
-
+                            <td class="govuk-table__cell">
+                                <a asp-controller="Qualification" asp-action="RemoveQualification" asp-route-providerVenueId="@Model.Id" asp-route-qualificationId="@Model.Qualifications[i].Id" class="govuk-link">
+                                    Remove qualification
+                                </a>
+                            </td>
                         </tr>
                     }
                     </tbody>

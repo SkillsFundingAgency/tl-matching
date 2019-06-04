@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -20,6 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
         private const bool IsCdfProvider = true;
         private const bool IsEnabledForReferral = false;
         private const bool IsRemoved = false;
+        private const int QualificationId = 99;
         private const string LarsId = "1234";
         private const string Title = "Title";
         private const string ShortTitle = "ShortTitle";
@@ -49,6 +51,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
                         {
                             Qualification = new Domain.Models.Qualification
                             {
+                                Id = QualificationId,
                                 LarsId = LarsId,
                                 Title = Title,
                                 ShortTitle = ShortTitle
@@ -65,39 +68,24 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
         }
 
         [Fact]
-        public void Then_Id_Is_Returned() =>
+        public void Then_Result_Fields_Have_Expected_Value()
+        {
             _result.Id.Should().Be(Id);
-
-        [Fact]
-        public void Then_ProviderId_Is_Returned() =>
             _result.ProviderId.Should().Be(ProviderId);
-
-        [Fact]
-        public void Then_ProviderName_Is_Returned() =>
             _result.ProviderName.Should().Be(ProviderName);
-
-        [Fact]
-        public void Then_Postcode_Is_Returned() =>
             _result.Postcode.Should().BeEquivalentTo(Postcode);
-
-        [Fact]
-        public void Then_VenueName_Is_Returned() =>
             _result.Name.Should().Be(VenueName);
-
-        [Fact]
-        public void Then_IsEnabledForSearchProviderVenue_Is_Returned() =>
             _result.IsRemoved.Should().Be(IsRemoved);
+        }
 
         [Fact]
-        public void Then_First_Qualification_LarsId_Is_Returned() =>
-            _result.Qualifications[0].LarsId.Should().Be(LarsId);
-
-        [Fact]
-        public void Then_First_Qualification_Title_Is_Returned() =>
-            _result.Qualifications[0].Title.Should().Be(Title);
-
-        [Fact]
-        public void Then_First_Qualification_ShortTitle_Is_Returned() =>
-            _result.Qualifications[0].ShortTitle.Should().Be(ShortTitle);
+        public void Then_First_Qualification_Fields_Have_Expected_Values()
+        {
+            var qualification = _result.Qualifications.First();
+            qualification.Id.Should().Be(QualificationId);
+            qualification.LarsId.Should().Be(LarsId);
+            qualification.Title.Should().Be(Title);
+            qualification.ShortTitle.Should().Be(ShortTitle);
+        }
     }
 }

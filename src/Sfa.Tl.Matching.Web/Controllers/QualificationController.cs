@@ -131,6 +131,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 new { providerVenueId = viewModel.ProviderVenueId });
         }
 
+        [Route("remove-qualification/{providerVenueId}/{qualificationId}", Name = "RemoveQualification")]
+        public async Task<IActionResult> RemoveQualification(int providerVenueId, int qualificationId)
+        {
+            await _providerQualificationService.RemoveProviderQualificationAsync(providerVenueId, qualificationId);
+
+            return RedirectToRoute("GetProviderVenueDetail", new {providerVenueId });
+        }
+
         private IList<RouteViewModel> GetRoutes(MissingQualificationViewModel viewModel = null)
         {
             var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();

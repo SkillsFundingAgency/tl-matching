@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var lar = await _learningAimReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);
             return lar?.Title;
         }
-
+        
         public async Task<bool> IsValidOfqualLarIdAsync(string larId)
         {
             var lar = await _learningAimReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);

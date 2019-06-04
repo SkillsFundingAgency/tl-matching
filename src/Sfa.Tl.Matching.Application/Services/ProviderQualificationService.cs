@@ -33,5 +33,17 @@ namespace Sfa.Tl.Matching.Application.Services
             providerQualification = _mapper.Map<ProviderQualification>(viewModel);
             return await _providerQualificationRepository.Create(providerQualification);
         }
+
+        public async Task RemoveProviderQualificationAsync(int providerVenueId, int qualificationId)
+        {
+            var providerQualification = await _providerQualificationRepository.GetSingleOrDefault(
+                pq => pq.ProviderVenueId == providerVenueId
+                      && pq.QualificationId == qualificationId);
+
+            if (providerQualification != null)
+            {
+                await _providerQualificationRepository.Delete(providerQualification);
+            }
+        }
     }
 }

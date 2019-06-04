@@ -38,6 +38,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                    where pv1.Id == id
                                                    select new QualificationDetailViewModel
                                                    {
+                                                       Id = q.Id,
                                                        LarsId = q.LarsId,
                                                        Title = q.Title,
                                                        ShortTitle = q.ShortTitle
