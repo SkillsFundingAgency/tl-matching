@@ -52,7 +52,7 @@
                 <input asp-for="ShortTitle" sfa-validation-for="ShortTitle" sfa-validationerror-class="govuk-input--error" class="govuk-input" name="ShortTitle" type="text" aria-describedby="short-title-hint">
             </div>
 
-            <div class="govuk-form-group govuk-!-margin-top-8">
+            <div class="govuk-form-group govuk-!-margin-top-8" sfa-validation-for="Routes" sfa-validationerror-class="govuk-form-group--error">
                 <fieldset class="govuk-fieldset" aria-describedby="skill-area-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                         <h1 class="govuk-fieldset__heading">
@@ -62,6 +62,8 @@
                     <span id="skill-area-hint" class="govuk-hint">
                         Select the ones that are the closest fit
                     </span>
+
+                    <span class="govuk-error-message" asp-validation-for="Routes"></span>
 
                     @for (var i = 0; i < Model.Routes.Count; i++)
                     {
