@@ -31,7 +31,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                         !string.IsNullOrEmpty(pv.Provider.DisplayName) ? pv.Provider.DisplayName :
                                         pv.Provider.Name,
                                  IsEnabledForReferral = pv.IsEnabledForReferral,
-                                 IsRemoved = pv.IsRemoved,
                                  Qualifications = (from q in _dbContext.Qualification
                                                    join pq in _dbContext.ProviderQualification on q.Id equals pq.QualificationId
                                                    join pv1 in _dbContext.ProviderVenue on pq.ProviderVenueId equals pv1.Id

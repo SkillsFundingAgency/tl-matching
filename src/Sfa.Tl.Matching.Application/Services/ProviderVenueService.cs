@@ -65,6 +65,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task UpdateVenueAsync(ProviderVenueDetailViewModel viewModel)
         {
             var trackedEntity = await _providerVenueRepository.GetSingleOrDefault(v => v.Id == viewModel.Id);
+
             trackedEntity = _mapper.Map(viewModel, trackedEntity);
 
             await _providerVenueRepository.Update(trackedEntity);

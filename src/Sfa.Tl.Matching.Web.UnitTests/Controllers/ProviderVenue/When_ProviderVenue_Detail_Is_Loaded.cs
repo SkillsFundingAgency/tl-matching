@@ -25,7 +25,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                     ProviderId = 1,
                     ProviderName = "ProviderName",
                     Source = "Admin",
-                    IsRemoved = false,
                     Name = "VenueName"
                 });
 
@@ -56,51 +55,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         }
 
         [Fact]
-        public void Then_Id_Is_Set()
+        public void Then_viewModel_Values_Are_Set()
         {
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
             viewModel.Id.Should().Be(1);
-        }
-
-        [Fact]
-        public void Then_Postcode_Is_Set()
-        {
-            var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
             viewModel.Postcode.Should().Be("CV1 2WT");
-        }
-
-        [Fact]
-        public void Then_ProviderId_Is_Set()
-        {
-            var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
             viewModel.ProviderId.Should().Be(1);
-        }
-
-        [Fact]
-        public void Then_ProviderName_Is_Set()
-        {
-            var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
             viewModel.ProviderName.Should().Be("ProviderName");
-        }
-
-        [Fact]
-        public void Then_Source_Is_Set()
-        {
-            var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
             viewModel.Source.Should().Be("Admin");
-        }
-        
-        [Fact]
-        public void Then_IsRemoved_Is_Set()
-        {
-            var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
-            viewModel.IsRemoved.Should().BeFalse();
-        }
-
-        [Fact]
-        public void Then_VenueName_Is_Set()
-        {
-            var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
             viewModel.Name.Should().Be("VenueName");
         }
     }
