@@ -239,9 +239,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
                             finally
                             {
                                 if (isSuccessful)
+                                {
                                     transaction.Commit();
-                                transaction.Rollback();
-
+                                }
+                                // ReSharper disable once RedundantIfElseBlock
+                                else
+                                {
+                                    transaction.Rollback();
+                                }
                                 connection.Close();
                             }
                         }
@@ -285,9 +290,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         finally
                         {
                             if (isSuccessful)
+                            {
                                 transaction.Commit();
-                            transaction.Rollback();
-
+                            }
+                            // ReSharper disable once RedundantIfElseBlock
+                            else
+                            {
+                                transaction.Rollback();
+                            }
                             connection.Close();
                         }
                     }
