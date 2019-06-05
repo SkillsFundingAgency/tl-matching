@@ -10,5 +10,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<bool> IsValidLarIdAsync(string larId);
         Task<bool> IsValidOfqualLarIdAsync(string larId);
         Task<string> GetLarTitleAsync(string larId);
+        Task UpdateQualificationAsync(SaveQualificationViewModel viewModel);
     }
 }
