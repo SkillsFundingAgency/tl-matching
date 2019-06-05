@@ -57,12 +57,7 @@
         "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-fa')]",
         "azureSearchName": "[concat(variables('resourceNamePrefix'), '-mtch-azs')]",
         "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-mtch-db')]",
-        "serviceBusName": "[concat(variables('resourceNamePrefix'), '-mtch-ns')]",
-        "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'mtchstr'), '-', '')]",
-        "queues": {
-          "getProximityMessageQueueName": "get-proximity-queue",
-          "saveProximityMessageQueueName": "save-proximity-queue"
-        }
+        "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'mtchstr'), '-', '')]"
     },
     "resources": [
         {
@@ -273,10 +268,6 @@
                                 "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
                             {
-                                "name": "ServiceBusConnectionString",
-                                "value": "[reference('service-bus').outputs.ServiceBusEndpoint.value]"
-                            },
-                            {
                                 "name": "AzureWebJobsStorage",
                                 "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
@@ -360,29 +351,6 @@
                     },
                     "serverName": {
                         "value": "[parameters('sharedSQLServerName')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2017-05-10",
-            "name": "service-bus",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'service-bus.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "serviceBusNamespaceName": {
-                        "value": "[variables('serviceBusName')]"
-                  },
-                    "serviceBusQueues": {
-                        "value": [
-                            "[variables('queues').getProximityMessageQueueName]",
-                            "[variables('queues').saveProximityMessageQueueName]"
-                        ]
                     }
                 }
             }
