@@ -30,18 +30,13 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<ProviderVenueDetailViewModel, ProviderVenue>()
-                .ForMember(m => m.Town, config => config.Ignore())
-                .ForMember(m => m.County, config => config.Ignore())
-                .ForMember(m => m.Location, config => config.Ignore())
-                .ForMember(m => m.Longitude, config => config.Ignore())
-                .ForMember(m => m.Latitude, config => config.Ignore())
-                .ForMember(m => m.Provider, config => config.Ignore())
-                .ForMember(m => m.ProviderQualification, config => config.Ignore())
-                .ForMember(m => m.Referral, config => config.Ignore())
-                .ForMember(m => m.CreatedBy, config => config.Ignore())
-                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.Id, config => config.MapFrom(s => s.Id))
+                .ForMember(m => m.Name, config => config.MapFrom(s => s.Name))
+                .ForMember(m => m.IsEnabledForReferral, config => config.MapFrom(s => s.IsEnabledForReferral))
+                .ForMember(m => m.Source, config => config.MapFrom(s => s.Source))
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<ProviderVenueDetailViewModel, ProviderVenue>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<ProviderVenueDetailViewModel, ProviderVenue>>())
+                .ForAllOtherMembers(config => config.Ignore())
                 ;
 
             CreateMap<AddProviderVenueViewModel, ProviderVenue>()

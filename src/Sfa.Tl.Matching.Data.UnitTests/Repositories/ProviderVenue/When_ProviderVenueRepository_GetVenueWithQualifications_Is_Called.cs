@@ -75,7 +75,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
             _result.ProviderName.Should().Be(ProviderName);
             _result.Postcode.Should().BeEquivalentTo(Postcode);
             _result.Name.Should().Be(VenueName);
-            _result.IsRemoved.Should().Be(IsRemoved);
         }
 
         [Fact]
