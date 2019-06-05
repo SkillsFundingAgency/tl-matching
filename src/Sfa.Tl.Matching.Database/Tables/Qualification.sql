@@ -4,6 +4,8 @@
 	[LarsId] NVARCHAR(8) NOT NULL,
 	[Title] NVARCHAR(250) NOT NULL, 
 	[ShortTitle] NVARCHAR(100) NULL,
+	[QualificationSearch] NVARCHAR(350) NOT NULL,
+	[ShortTitleSearch] NVARCHAR(100) NOT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 
