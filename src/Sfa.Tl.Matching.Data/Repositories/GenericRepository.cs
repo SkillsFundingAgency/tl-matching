@@ -275,10 +275,10 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         {
                             var mergeSql = GetMergeSql();
 
-                            var mergeCommand = new SqlCommand(mergeSql, connection, transaction);
-                            
+                            var mergeCommand = new SqlCommand(mergeSql, connection, transaction) { CommandTimeout = 120 };
+
                             numberOfRecordsAffected = await mergeCommand.ExecuteNonQueryAsync();
-                            
+
                             isSuccessful = true;
                         }
                         catch (Exception ex)
