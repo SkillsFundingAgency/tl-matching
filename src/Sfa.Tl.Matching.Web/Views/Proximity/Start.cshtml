@@ -21,15 +21,18 @@
 
         @if (Context.User.HasAdminRole())
         {
-        <h2 class="govuk-heading-m">Service administration</h2>
-        <ul class="govuk-list">
-            <li>
-                <a asp-action="Index" class="govuk-link" asp-controller="DataImport" id="tl-upload-link">Upload employer and provider data</a>
-            </li>
-            <li>
-                <a asp-action="SearchProvider" class="govuk-link" asp-controller="Provider" id="tl-Add-edit-provider-link">Add or edit provider data</a>
-            </li>
-        </ul>
+            <h2 class="govuk-heading-m">Service administration</h2>
+            <ul class="govuk-list">
+                <li>
+                    <a asp-action="Index" class="govuk-link" asp-controller="DataImport" id="tl-upload-link">Upload employer and provider data</a>
+                </li>
+                <li>
+                    <a asp-action="SearchProvider" class="govuk-link" asp-controller="Provider" id="tl-Add-edit-provider-link">Add or edit provider data</a>
+                </li>
+                <li>
+                    <a asp-action="EditQualifications" class="govuk-link" asp-controller="Qualification" id="tl-edit-qualifications-link">Edit qualifications</a>
+                </li>
+            </ul>
         }
     </div>
 </div>

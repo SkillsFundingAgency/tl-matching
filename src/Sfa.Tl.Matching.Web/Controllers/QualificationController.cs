@@ -88,7 +88,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("GetProviderVenueDetail", 
                 new { providerVenueId = viewModel.ProviderVenueId });
         }
+        
+        [Route("edit-qualifications", Name = "EditQualifications")]
+        public IActionResult EditQualifications()
+        {
+            return View(new QualificationSearchViewModel());
+        }
 
+        [HttpPost]
+        [Route("edit-qualifications", Name = "EditQualifications")]
+        public async Task<IActionResult> EditQualifications(QualificationSearchViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            return View(viewModel);
+        }
+        
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "MissingQualification")]
         public async Task<IActionResult> MissingQualification(int providerVenueId, string larId)
         {
