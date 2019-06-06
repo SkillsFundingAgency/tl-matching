@@ -65,8 +65,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<QualificationSearchViewModel> SearchQualification(string searchTerm)
         {
+            var searchCount = await _qualificationRepository.Count(q => EF.Functions.Like(q.QualificationSearch, $"%{searchTerm.ToLetter()}%"));
+            if (searchCount == 0)
+                return new QualificationSearchViewModel();
+
             var searchResults = new QualificationSearchViewModel
             {
+                ResultCount = searchCount,
                 Title = searchTerm,
                 Results = await _qualificationRepository
                     .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{searchTerm.ToLetter()}%"))
@@ -79,6 +84,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         LarId = q.LarsId,
                         RouteIds = q.QualificationRoutePathMapping.Select(r => r.RouteId).ToList()
                     })
+                    .Take(50)
                     .ToListAsync()
             };
 
