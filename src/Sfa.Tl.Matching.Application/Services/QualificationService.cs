@@ -66,7 +66,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<QualificationSearchViewModel> SearchQualification(string searchTerm)
         {
-            var searchCount = await _qualificationRepository.Count(q => EF.Functions.Like(q.QualificationSearch, $"%{searchTerm.ToLetter()}%"));
+            var qualificationSearch = searchTerm.ToQualificationSearch();
+            var searchCount = await _qualificationRepository.Count(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"));
             if (searchCount == 0)
                 return new QualificationSearchViewModel
                 {
@@ -78,7 +79,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 ResultCount = searchCount,
                 Title = searchTerm,
                 Results = await _qualificationRepository
-                    .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{searchTerm.ToLetter()}%"))
+                    .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
                     .OrderBy(q => q.Title)
                     .Select(q => new QualificationSearchResultViewModel
                     {
