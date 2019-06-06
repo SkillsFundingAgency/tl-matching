@@ -6,6 +6,7 @@ using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
@@ -28,9 +29,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             {
                 User = new ClaimsPrincipal(new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.GivenName, "createdByUserName")
+                    new Claim(ClaimTypes.GivenName, "adminUserName")
                 }))
             });
+
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
+            dateTimeProvider.UtcNow().Returns(new DateTime(2019, 1, 1));
 
             var config = new MapperConfiguration(c =>
             {
@@ -40,7 +44,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                         new LoggedInUserEmailResolver<SaveQualificationViewModel, Domain.Models.Qualification>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
                             (object)new LoggedInUserNameResolver<SaveQualificationViewModel, Domain.Models.Qualification>(httpcontextAccesor) :
-                            null);
+                            type.Name.Contains("UtcNowResolver") ?
+                                new UtcNowResolver<SaveQualificationViewModel, Domain.Models.Qualification>(dateTimeProvider) :
+                                null);
             });
             var mapper = new Mapper(config);
 
@@ -122,7 +128,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .Received(1)
                 .Update(Arg.Is<Domain.Models.Qualification>(
                     q => q.Id == 1 &&
-                            q.ShortTitle == "Short Title"
+                            q.ShortTitle == "Short Title" &&
+                            q.ModifiedBy == "adminUserName" &&
+                            q.ModifiedOn == new DateTime(2019, 1, 1)
                 ));
         }
 
@@ -144,7 +152,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                             qrpm.First().QualificationId == 1 &&
                             qrpm.First().RouteId == 3 &&
                             qrpm.First().Source == "Test" &&
-                            qrpm.First().CreatedBy == "createdByUserName"
+                            qrpm.First().CreatedBy == "adminUserName"
                 ));
         }
 
