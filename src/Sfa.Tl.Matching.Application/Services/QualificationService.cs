@@ -67,7 +67,10 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var searchCount = await _qualificationRepository.Count(q => EF.Functions.Like(q.QualificationSearch, $"%{searchTerm.ToLetter()}%"));
             if (searchCount == 0)
-                return new QualificationSearchViewModel();
+                return new QualificationSearchViewModel
+                {
+                    Title = searchTerm
+                };
 
             var searchResults = new QualificationSearchViewModel
             {
