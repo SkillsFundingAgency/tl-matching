@@ -21,7 +21,6 @@
         @include govuk-font($size: 19, $weight: bold);
         border: none;
         width: 100%;
-        z-index: 100;
         position: relative;
 
 
@@ -54,7 +53,7 @@
         border: 5px solid govuk-colour("grey-3");
         padding: 10px;
         box-sizing: border-box;
-        z-index: 90;
+        z-index: 100;
         max-height: 270px;
         width: 200%;
         max-width: 292px;
