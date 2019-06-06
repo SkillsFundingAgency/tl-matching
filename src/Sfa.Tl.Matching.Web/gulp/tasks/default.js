@@ -21,7 +21,8 @@ gulp.task('govuk-js', () => {
 gulp.task('copy-js', function () {
     return gulp.src([
         'node_modules/jquery/dist/jquery.min.js',
-        'Frontend/src/javascripts/cookie-banner.js'
+        'Frontend/src/javascripts/cookie-banner.js',
+        'Frontend/src/javascripts/edit-qualifications.js'
         ])
         .pipe(concat('all.js'))
         .pipe(minify({
