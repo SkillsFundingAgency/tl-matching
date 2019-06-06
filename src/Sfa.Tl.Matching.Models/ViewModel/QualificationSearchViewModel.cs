@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     public class QualificationSearchViewModel
     {
         [Required(ErrorMessage = "You must enter 2 or more letters for your search")]
-        public int Title { get; set; }
+        public string Title { get; set; }
         public IList<QualificationSearchResultViewModel> Results { get; set; }
     }
 }
