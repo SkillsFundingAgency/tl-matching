@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.EqualityComparer;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 
@@ -94,9 +95,30 @@ namespace Sfa.Tl.Matching.Application.Services
             return searchResults;
         }
 
-        public Task UpdateQualificationAsync(SaveQualificationViewModel viewModel)
+        public async Task UpdateQualificationAsync(SaveQualificationViewModel viewModel)
         {
-            throw new System.NotImplementedException();
+            var qualification = await _qualificationRepository.GetSingleOrDefault(v => v.Id == viewModel.QualificationId);
+            qualification = _mapper.Map(viewModel, qualification);
+            await _qualificationRepository.Update(qualification);
+
+            var existingMappings = _qualificationRoutePathMappingRepository
+                .GetMany(r => r.Id == viewModel.QualificationId)
+                .ToList();
+
+            var comparer = new QualificationRoutePathMappingEqualityComparer();
+            var newMappings = _mapper.Map<IList<QualificationRoutePathMapping>>(viewModel);
+            
+            var toBeAdded = newMappings.Except(existingMappings, comparer).ToList();
+            var same = existingMappings.Intersect(newMappings, comparer).ToList();
+            var toBeDeleted = existingMappings.Except(same).ToList();
+
+            QualificationRoutePathMapping Find(QualificationRoutePathMapping qrpm) => 
+                existingMappings.First(r => r.Id == qrpm.Id);
+
+            var deleteMappings = toBeDeleted.Select(Find).ToList();
+            await _qualificationRoutePathMappingRepository.DeleteMany(deleteMappings);
+
+            await _qualificationRoutePathMappingRepository.CreateMany(toBeAdded);
         }
 
         public async Task<bool> IsValidOfqualLarIdAsync(string larId)

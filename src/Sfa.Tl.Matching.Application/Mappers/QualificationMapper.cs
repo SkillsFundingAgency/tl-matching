@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
@@ -62,6 +62,31 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                ;
+
+            CreateMap<SaveQualificationViewModel, Qualification>()
+                .ForMember(m => m.Id, config => config.MapFrom(s => s.QualificationId))
+                .ForMember(m => m.ShortTitle, config => config.MapFrom(s => s.ShortTitle))
+                .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>>())
+                .ForAllOtherMembers(o => o.Ignore())
+                ;
+
+            CreateMap<SaveQualificationViewModel, IList<QualificationRoutePathMapping>>()
+                .ConstructUsing((m, context) =>
+                {
+                    var userNameResolver = context.Mapper.ServiceCtor(typeof(LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>))
+                        as LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>;
+
+                    return m.Routes.Where(r => r.IsSelected)
+                        .Select(route => new QualificationRoutePathMapping
+                        {
+                            QualificationId = m.QualificationId,
+                            RouteId = route.Id,
+                            Source = m.Source,
+                            CreatedBy = userNameResolver?.Resolve(m, null, "CreatedBy", context)
+                        })
+                        .ToList();
+                })
                 ;
         }
 
