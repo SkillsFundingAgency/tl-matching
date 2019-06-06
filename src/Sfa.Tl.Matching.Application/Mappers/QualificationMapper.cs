@@ -56,6 +56,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<SaveQualificationViewModel, Qualification>()
                 .ForMember(m => m.Id, config => config.MapFrom(s => s.QualificationId))
                 .ForMember(m => m.ShortTitle, config => config.MapFrom(s => s.ShortTitle))
+                .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => GetSearchTerm(s.Title, s.ShortTitle)))
+                .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => GetSearchTerm(s.ShortTitle)))
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<SaveQualificationViewModel, Qualification>>())
                 .ForAllOtherMembers(o => o.Ignore())
