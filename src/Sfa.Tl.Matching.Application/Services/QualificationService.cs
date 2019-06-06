@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -58,6 +61,28 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var lar = await _learningAimReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);
             return lar?.Title;
+        }
+
+        public async Task<QualificationSearchViewModel> SearchQualification(string searchTerm)
+        {
+            var searchResults = new QualificationSearchViewModel
+            {
+                Title = searchTerm,
+                Results = await _qualificationRepository
+                    .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{searchTerm.ToLetter()}%"))
+                    .OrderBy(q => q.Title)
+                    .Select(q => new QualificationSearchResultViewModel
+                    {
+                        QualificationId = q.Id,
+                        Title = q.Title,
+                        ShortTitle = q.ShortTitle,
+                        LarId = q.LarsId,
+                        RouteIds = q.QualificationRoutePathMapping.Select(r => r.RouteId).ToList()
+                    })
+                    .ToListAsync()
+            };
+
+            return searchResults;
         }
 
         public Task UpdateQualificationAsync(SaveQualificationViewModel viewModel)

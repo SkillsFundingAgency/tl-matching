@@ -27,6 +27,12 @@ namespace Sfa.Tl.Matching.Application.Extensions
                new string(Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
         }
 
+        public static string ToLetter(this string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty :
+                new string(Array.FindAll(value.ToCharArray(), char.IsLetter));
+        }
+
         public static DateTime ToDateTime(this string value)
         {
            return DateTime.Parse(value);

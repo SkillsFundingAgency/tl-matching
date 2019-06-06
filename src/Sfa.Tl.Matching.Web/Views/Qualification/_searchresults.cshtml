@@ -1,4 +1,6 @@
-﻿<table class="govuk-table">
+﻿@model Sfa.Tl.Matching.Models.ViewModel.QualificationSearchViewModel
+
+<table class="govuk-table">
     <thead class="govuk-table__head">
         <tr class="govuk-table__row">
             <th class="govuk-table__header govuk-!-width-one-half" scope="col">Qualification title (learning aim reference)</th>
@@ -8,13 +10,18 @@
         </tr>
     </thead>
     <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-            <th class="govuk-table__cell">Level 3 Diploma in Mowing (10001234)</th>
-            <td class="govuk-table__cell">
-                Autocomplete
-            </td>
-            <td class="govuk-table__cell">Expandable</td>
-            <td class="govuk-table__cell"><button class="govuk-button govuk-!-margin-0">Save</button></td>
-        </tr>
+        @for (var i = 0; i < Model.Results?.Count; i++)
+        {
+            var searchResult = Model.Results[i];
+
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">@searchResult.Title (@searchResult.LarId)</td>
+                <td class="govuk-table__cell">
+                    @searchResult.ShortTitle
+                </td>
+                <td class="govuk-table__cell">Expandable</td>
+                <td class="govuk-table__cell"><button class="govuk-button govuk-!-margin-0">Save</button></td>
+            </tr>
+        }
     </tbody>
 </table>
