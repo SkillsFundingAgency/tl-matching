@@ -1,8 +1,10 @@
-﻿@if (Model.ResultCount > 50)
+﻿@model Sfa.Tl.Matching.Models.ViewModel.QualificationSearchViewModel
+
+
+@if (Model.ResultCount > 50)
 {
     <p class="govuk-body">Showing top 50 results. If you cannot find the qualification you need, refine your search.</p>
 }
-
 <table class="govuk-table">
     <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -17,19 +19,10 @@
         {
             var searchResult = Model.Results[i];
 
-            <tr class="govuk-table__row">
-                <td class="govuk-table__cell">@searchResult.Title (@searchResult.LarId)</td>
-                <td class="govuk-table__cell">
-                    @searchResult.ShortTitle
-                </td>
-                <td class="govuk-table__cell">Expandable</td>
-                <td class="govuk-table__cell"><button class="govuk-button govuk-!-margin-0">Save</button></td>
-            </tr>
-        }
         <tr class="govuk-table__row">
-            <td class="govuk-table__cell">Level 3 Diploma in Mowing (10001234)</td>
+            <td class="govuk-table__cell">@searchResult.Title (@searchResult.LarId)</td>
             <td class="govuk-table__cell">
-                Auto
+                @searchResult.ShortTitle
             </td>
             <td class="govuk-table__cell">
                 <div class="tl-expandable">
@@ -141,8 +134,6 @@
                                         Transport and logistics
                                     </label>
                                 </div>
-
-
                             </div>
                         </fieldset>
 
@@ -151,5 +142,6 @@
             </td>
             <td class="govuk-table__cell"><button class="govuk-button govuk-!-margin-0">Save</button></td>
         </tr>
+        }
     </tbody>
 </table>
