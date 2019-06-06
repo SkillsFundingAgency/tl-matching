@@ -218,7 +218,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError("ShortTitle", "You must enter a short title that is 100 characters or fewer");
             }
 
-            if (!viewModel.Routes.Any(r => r.IsSelected))
+            if (viewModel.Routes == null || !viewModel.Routes.Any(r => r.IsSelected))
             {
                 ModelState.AddModelError("Routes", "You must choose a skill area for this qualification");
             }
