@@ -27,6 +27,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<int> Count(Expression<Func<T, bool>> predicate = null)
+        {
+            return predicate != null ? await _dbContext.Set<T>().CountAsync(predicate) : 
+                await _dbContext.Set<T>().CountAsync();
+        }
+
         public virtual async Task<int> CreateMany(IList<T> entities)
         {
             await _dbContext.AddRangeAsync(entities);
@@ -275,10 +281,10 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         {
                             var mergeSql = GetMergeSql();
 
-                            var mergeCommand = new SqlCommand(mergeSql, connection, transaction);
-                            
+                            var mergeCommand = new SqlCommand(mergeSql, connection, transaction) { CommandTimeout = 120 };
+
                             numberOfRecordsAffected = await mergeCommand.ExecuteNonQueryAsync();
-                            
+
                             isSuccessful = true;
                         }
                         catch (Exception ex)

@@ -96,13 +96,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("edit-qualifications", Name = "EditQualifications")]
+        [Route("edit-qualifications", Name = "SearchQualifications")]
         public async Task<IActionResult> EditQualifications(QualificationSearchViewModel viewModel)
         {
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            return View(viewModel);
+            var searchResult = await _qualificationService.SearchQualification(viewModel.Title);
+
+            return View(searchResult);
         }
         
         [HttpPost]

@@ -39,6 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 QualificationId = 1,
                 Title = "Qualification title",
                 ShortTitle = new string('X', 101),
+                Source = "Test",
                 Routes = new List<RouteViewModel>
                 {
                     new RouteViewModel

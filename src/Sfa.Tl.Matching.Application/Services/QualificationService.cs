@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.EqualityComparer;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 
@@ -60,9 +64,61 @@ namespace Sfa.Tl.Matching.Application.Services
             return lar?.Title;
         }
 
-        public Task UpdateQualificationAsync(SaveQualificationViewModel viewModel)
+        public async Task<QualificationSearchViewModel> SearchQualification(string searchTerm)
         {
-            throw new System.NotImplementedException();
+            var searchCount = await _qualificationRepository.Count(q => EF.Functions.Like(q.QualificationSearch, $"%{searchTerm.ToLetter()}%"));
+            if (searchCount == 0)
+                return new QualificationSearchViewModel
+                {
+                    Title = searchTerm
+                };
+
+            var searchResults = new QualificationSearchViewModel
+            {
+                ResultCount = searchCount,
+                Title = searchTerm,
+                Results = await _qualificationRepository
+                    .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{searchTerm.ToLetter()}%"))
+                    .OrderBy(q => q.Title)
+                    .Select(q => new QualificationSearchResultViewModel
+                    {
+                        QualificationId = q.Id,
+                        Title = q.Title,
+                        ShortTitle = q.ShortTitle,
+                        LarId = q.LarsId,
+                        RouteIds = q.QualificationRoutePathMapping.Select(r => r.RouteId).ToList()
+                    })
+                    .Take(50)
+                    .ToListAsync()
+            };
+
+            return searchResults;
+        }
+
+        public async Task UpdateQualificationAsync(SaveQualificationViewModel viewModel)
+        {
+            var qualification = await _qualificationRepository.GetSingleOrDefault(v => v.Id == viewModel.QualificationId);
+            qualification = _mapper.Map(viewModel, qualification);
+            await _qualificationRepository.Update(qualification);
+
+            var existingMappings = _qualificationRoutePathMappingRepository
+                .GetMany(r => r.Id == viewModel.QualificationId)
+                .ToList();
+
+            var comparer = new QualificationRoutePathMappingEqualityComparer();
+            var newMappings = _mapper.Map<IList<QualificationRoutePathMapping>>(viewModel);
+            
+            var toBeAdded = newMappings.Except(existingMappings, comparer).ToList();
+            var same = existingMappings.Intersect(newMappings, comparer).ToList();
+            var toBeDeleted = existingMappings.Except(same).ToList();
+
+            QualificationRoutePathMapping Find(QualificationRoutePathMapping qrpm) => 
+                existingMappings.First(r => r.Id == qrpm.Id);
+
+            var deleteMappings = toBeDeleted.Select(Find).ToList();
+            await _qualificationRoutePathMappingRepository.DeleteMany(deleteMappings);
+
+            await _qualificationRoutePathMappingRepository.CreateMany(toBeAdded);
         }
 
         public async Task<bool> IsValidOfqualLarIdAsync(string larId)

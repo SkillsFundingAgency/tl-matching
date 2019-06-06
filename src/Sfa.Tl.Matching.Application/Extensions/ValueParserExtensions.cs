@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Humanizer;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Extensions
@@ -25,6 +26,12 @@ namespace Sfa.Tl.Matching.Application.Extensions
         {
             return string.IsNullOrWhiteSpace(value) ? string.Empty : 
                new string(Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
+        }
+
+        public static string ToLetter(this string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty :
+                new string(Array.FindAll(value.ToCharArray(), char.IsLetter));
         }
 
         public static DateTime ToDateTime(this string value)
@@ -95,6 +102,14 @@ namespace Sfa.Tl.Matching.Application.Extensions
             {
                 return false;
             }
+        }
+
+        public static string ToQualificationSearch(this string value)
+        {
+            foreach (var term in QualificationTerms.Ignored)
+                value = value.Replace(term, string.Empty, StringComparison.OrdinalIgnoreCase);
+
+            return value.ToLetter();
         }
     }
 }

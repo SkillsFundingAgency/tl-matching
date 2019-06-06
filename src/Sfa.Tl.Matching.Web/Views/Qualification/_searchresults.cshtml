@@ -1,4 +1,11 @@
-﻿<table class="govuk-table">
+﻿@model Sfa.Tl.Matching.Models.ViewModel.QualificationSearchViewModel
+
+
+@if (Model.ResultCount > 50)
+{
+    <p class="govuk-body">Showing top 50 results. If you cannot find the qualification you need, refine your search.</p>
+}
+<table class="govuk-table">
     <thead class="govuk-table__head">
         <tr class="govuk-table__row">
             <th class="govuk-table__header govuk-!-width-one-half" scope="col">Qualification title (learning aim reference)</th>
@@ -132,5 +139,18 @@
                 </div></td>
             <td class="govuk-table__cell"><button class="govuk-button govuk-!-margin-0">Save</button></td>
         </tr>
+        @for (var i = 0; i < Model.Results?.Count; i++)
+        {
+            var searchResult = Model.Results[i];
+
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">@searchResult.Title (@searchResult.LarId)</td>
+                <td class="govuk-table__cell">
+                    @searchResult.ShortTitle
+                </td>
+                <td class="govuk-table__cell">Expandable</td>
+                <td class="govuk-table__cell"><button class="govuk-button govuk-!-margin-0">Save</button></td>
+            </tr>
+        }
     </tbody>
 </table>

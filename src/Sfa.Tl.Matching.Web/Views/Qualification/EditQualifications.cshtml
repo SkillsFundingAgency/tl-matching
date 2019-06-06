@@ -18,8 +18,14 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <partial name="_searchresults" />
-
+        @if (Model.Results.Any())
+        {
+            <partial name="_searchresults" />
+        }
+        else if (!string.IsNullOrEmpty(Model.Title) && Model.ResultCount == 0)
+        {
+            <p class="govuk-body">No results. Please try again.</p>
+        }
     </div>
 </div>
 @section jsfiles{
