@@ -78,7 +78,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         }
 
         [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
+        public void Then_Partial_View_Result_Is_Returned()
+        {
+            var result = _result as PartialViewResult;
+            result.Should().NotBeNull();
+            result?.ViewName.Should().Be("_qualificationitem");
+        }
     }
 }

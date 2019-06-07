@@ -116,19 +116,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
             {
                 //viewModel.Routes = GetRoutes(viewModel);
-                return View("EditQualifications", new QualificationSearchViewModel
-                {
-                        SearchTerms = viewModel.SearchTerms
-                });
+                return PartialView("_qualificationitem", 
+                    new QualificationSearchResultViewModel
+                    {
+                        QualificationId = viewModel.QualificationId,
+                        LarId = viewModel.LarId,
+                        Title = viewModel.Title,
+                        ShortTitle = viewModel.ShortTitle
+                        //Routes = GetRoutes()
+                    });
             }
 
             await _qualificationService.UpdateQualificationAsync(viewModel);
 
-            return RedirectToRoute("EditQualifications"); 
-            //    new QualificationSearchViewModel
-            //    {
-            //        Title = viewModel.SearchString
-            //    });
+            //Retrieve the changed item
+            var qualification = await _qualificationService.GetQualificationAsync(viewModel.QualificationId);
+            
+            return PartialView("_qualificationitem", qualification);
         }
 
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "MissingQualification")]
