@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.Services
             if (string.IsNullOrEmpty(qualificationSearch))
                 return new QualificationSearchViewModel
                 {
-                    Title = searchTerm,
+                    SearchTerms = searchTerm,
                     HasTooManyResults = true
                 };
 
