@@ -77,12 +77,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                     error.ErrorMessage == "You must choose a skill area for this qualification");
         }
 
-        //TODO: Change back to ViewResult - temporarily commented out until validation is fixed in controller
-        //[Fact]
-        //public void Then_View_Result_Is_Returned() =>
-        //    _result.Should().BeAssignableTo<ViewResult>();
         [Fact]
-        public void Then_Result_Is_RedirectToRoute() =>
-            _result.Should().BeAssignableTo<RedirectToRouteResult>();
+        public void Then_Partial_View_Result_Is_Returned()
+        {
+            var result = _result as PartialViewResult;
+            result.Should().NotBeNull();
+            result?.ViewName.Should().Be("_qualificationitem");
+        }
     }
 }

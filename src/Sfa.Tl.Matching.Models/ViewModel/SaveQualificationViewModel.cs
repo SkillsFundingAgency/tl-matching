@@ -7,6 +7,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     {
         public int QualificationId { get; set; }
         [Required(ErrorMessage = "You must enter a short title")]
+        public string LarId { get; set; }
         public string ShortTitle { get; set; }
         public string Title { get; set; }
         public string Source { get; set; }
