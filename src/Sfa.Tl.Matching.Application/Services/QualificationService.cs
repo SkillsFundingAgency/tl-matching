@@ -57,7 +57,9 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<QualificationSearchResultViewModel> GetQualificationAsync(int id)
         {
             var qualification = await _qualificationRepository
-                .GetSingleOrDefault(p => p.Id == id);
+                .GetSingleOrDefault(p => p.Id == id,
+                    q => q.QualificationRoutePathMapping);
+
             return _mapper.Map<Qualification, QualificationSearchResultViewModel>(qualification);
         }
 

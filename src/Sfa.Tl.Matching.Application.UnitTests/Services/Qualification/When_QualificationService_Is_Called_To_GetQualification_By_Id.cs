@@ -27,7 +27,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             _qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
 
-            _qualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
+            _qualificationRepository.GetSingleOrDefault(
+                    Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>(),
+                    Arg.Any<Expression<Func<Domain.Models.Qualification, object>>[]>())
                 .Returns(new ValidQualificationBuilder().BuildWithRoutes());
 
             var qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRoutePathMapping>>();
@@ -42,7 +44,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         {
             _qualificationRepository
                 .Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>());
+                .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>(),
+                    Arg.Any<Expression<Func<Domain.Models.Qualification, object>>[]>());
         }
 
         [Fact]
