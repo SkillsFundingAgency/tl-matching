@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +69,13 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<QualificationSearchViewModel> SearchQualification(string searchTerm)
         {
             var qualificationSearch = searchTerm.ToQualificationSearch();
+            if (string.IsNullOrEmpty(qualificationSearch))
+                return new QualificationSearchViewModel
+                {
+                    Title = searchTerm,
+                    HasTooManyResults = true
+                };
+
             var searchCount = await _qualificationRepository.Count(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"));
             if (searchCount == 0)
                 return new QualificationSearchViewModel
@@ -132,5 +141,43 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             return await Task.FromResult(larId?.Length == 8);
         }
+
+        #region TODO DELETE AFTER SPRINT 10
+        // TODO DELETE AFTER SPRINT 10
+        public async Task<int> UpdateQualificationsSearchColumns()
+        {
+            var qualificationsFromDb = _qualificationRepository.GetMany()
+                .Where(q => string.IsNullOrEmpty(q.ShortTitleSearch) || string.IsNullOrEmpty(q.QualificationSearch))
+                .ToList();
+
+            if (qualificationsFromDb.Count > 0)
+            {
+                foreach (var qualification in qualificationsFromDb)
+                {
+                    qualification.ShortTitleSearch = GetSearchTerm(qualification.ShortTitle);
+                    qualification.QualificationSearch = GetSearchTerm(qualification.Title, qualification.ShortTitle);
+                    qualification.ModifiedOn = DateTime.UtcNow;
+                    qualification.ModifiedBy = "System";
+                }
+
+                await _qualificationRepository.UpdateManyWithSpecifedColumnsOnly(qualificationsFromDb,
+                    x => x.QualificationSearch,
+                    x => x.ShortTitleSearch,
+                    x => x.ModifiedOn,
+                    x => x.ModifiedBy);
+            }
+
+            return qualificationsFromDb.Count;
+        }
+
+        private static string GetSearchTerm(params string[] searchTerms)
+        {
+            var searchTerm = new StringBuilder();
+            foreach (var term in searchTerms)
+                searchTerm.Append(term.ToQualificationSearch());
+
+            return searchTerm.ToString();
+        }
+        #endregion
     }
 }

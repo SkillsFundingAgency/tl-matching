@@ -11,5 +11,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string Title { get; set; }
         public IList<QualificationSearchResultViewModel> Results { get; set; } = new List<QualificationSearchResultViewModel>();
         public int ResultCount { get; set; }
+        public bool HasTooManyResults { get; set; }
     }
 }

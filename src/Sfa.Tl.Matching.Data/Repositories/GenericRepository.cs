@@ -363,5 +363,22 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
             return bulkCopy;
         }
+
+        public virtual async Task UpdateManyWithSpecifedColumnsOnly(IList<T> entities, params Expression<Func<T, object>>[] properties)
+        {
+            foreach (var entity in entities)
+            foreach (var property in properties)
+                _dbContext.Entry(entity).Property(property).IsModified = true;
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException due)
+            {
+                _logger.LogError(due.Message, due.InnerException);
+                throw;
+            }
+        }
     }
 }

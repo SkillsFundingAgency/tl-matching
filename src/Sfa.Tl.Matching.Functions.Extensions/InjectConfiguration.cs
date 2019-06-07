@@ -79,6 +79,12 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
             RegisterUkRlpApi(services);
+
+            #region TODO DELETE AFTER SPRINT 10
+            // TODO DELETE AFTER SPRINT 10
+            services.AddTransient<IQualificationService, QualificationService>(); 
+            services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
+            #endregion
         }
 
         private static void RegisterFileReaders(IServiceCollection services)

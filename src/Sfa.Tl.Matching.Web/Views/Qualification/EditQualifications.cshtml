@@ -22,6 +22,10 @@
         {
             <partial name="_searchresults" />
         }
+        else if (Model.HasTooManyResults)
+        {
+            <p class="govuk-body">Too many results. Please try a different search.</p>
+        }
         else if (!string.IsNullOrEmpty(Model.Title) && Model.ResultCount == 0)
         {
             <p class="govuk-body">No results. Please try again.</p>

@@ -12,5 +12,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<string> GetLarTitleAsync(string larId);
         Task<QualificationSearchViewModel> SearchQualification(string searchTerm);
         Task UpdateQualificationAsync(SaveQualificationViewModel viewModel);
+        Task<int> UpdateQualificationsSearchColumns();
     }
 }

@@ -22,5 +22,6 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task DeleteMany(IList<T> entities);
         Task BulkInsert(List<T> entities, string connectionString = "");
         Task<int> MergeFromStaging(string connectionString = "");
+        Task UpdateManyWithSpecifedColumnsOnly(IList<T> entities, params Expression<Func<T, object>>[] properties);
     }
 }
