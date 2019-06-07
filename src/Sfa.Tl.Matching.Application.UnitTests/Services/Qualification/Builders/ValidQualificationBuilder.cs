@@ -8,6 +8,8 @@
             LarsId = "10042982",
             Title = "Title",
             ShortTitle = "Short Title",
+            QualificationSearch = "TitleShortTitle",
+            ShortTitleSearch = "ShortTitle",
             CreatedBy = "CreatedBy",
             ModifiedBy = "ModifiedBy"
         };

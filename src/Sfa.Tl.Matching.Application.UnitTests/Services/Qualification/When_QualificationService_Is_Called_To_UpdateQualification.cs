@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -55,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             _qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
             _qualificationRepository
                 .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
-                .Returns(new Domain.Models.Qualification());
+                .Returns(new ValidQualificationBuilder().Build());
 
             _qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRoutePathMapping>>();
             _qualificationRoutePathMappingRepository
@@ -85,7 +86,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             {
                 QualificationId = 1,
                 Title = "Title",
-                ShortTitle = "Short Title",
+                ShortTitle = "Modified Short Title",
                 Source = "Test",
                 Routes = new List<RouteViewModel>
                 {
@@ -128,7 +129,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .Received(1)
                 .Update(Arg.Is<Domain.Models.Qualification>(
                     q => q.Id == 1 &&
-                            q.ShortTitle == "Short Title" &&
+                            q.Title == "Title" &&
+                            q.ShortTitle == "Modified Short Title" &&
+                            q.QualificationSearch == "TitleModifiedShortTitle" &&
+                            q.ShortTitleSearch == "ModifiedShortTitle" && 
                             q.ModifiedBy == "adminUserName" &&
                             q.ModifiedOn == new DateTime(2019, 1, 1)
                 ));
