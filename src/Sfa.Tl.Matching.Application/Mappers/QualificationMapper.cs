@@ -69,7 +69,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                     var userNameResolver = context.Mapper.ServiceCtor(typeof(LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>))
                         as LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>;
 
-                    return m.Routes.Where(r => r.IsSelected)
+                    return m.Routes == null ? 
+                        new List<QualificationRoutePathMapping>() :
+                        m.Routes.Where(r => r.IsSelected)
                         .Select(route => new QualificationRoutePathMapping
                         {
                             QualificationId = m.QualificationId,

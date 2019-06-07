@@ -111,12 +111,12 @@ namespace Sfa.Tl.Matching.Application.Services
             
             var toBeAdded = newMappings.Except(existingMappings, comparer).ToList();
             var same = existingMappings.Intersect(newMappings, comparer).ToList();
-            var toBeDeleted = existingMappings.Except(same).ToList();
+            var toBeDeleted = existingMappings?.Except(same).ToList();
 
             QualificationRoutePathMapping Find(QualificationRoutePathMapping qrpm) => 
-                existingMappings.First(r => r.Id == qrpm.Id);
+                existingMappings?.First(r => r.Id == qrpm.Id);
 
-            var deleteMappings = toBeDeleted.Select(Find).ToList();
+            var deleteMappings = toBeDeleted?.Select(Find).ToList();
             await _qualificationRoutePathMappingRepository.DeleteMany(deleteMappings);
 
             await _qualificationRoutePathMappingRepository.CreateMany(toBeAdded);

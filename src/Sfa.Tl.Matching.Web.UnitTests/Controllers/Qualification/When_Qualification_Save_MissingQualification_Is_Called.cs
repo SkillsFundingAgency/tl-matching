@@ -68,8 +68,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             result.Should().NotBeNull();
             result?.RouteName.Should().Be("GetProviderVenueDetail");
         }
-
-
+        
         [Fact]
         public void Then_RouteValues_Has_Expected_Parameters()
         {
