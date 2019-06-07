@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 QualificationId = 1,
                 Title = "Qualification title",
                 ShortTitle = new string('X', 100),
-                SearchString = "Search String",
+                SearchTerms = "Search String",
                 Source = "Test",
                 Routes = new List<RouteViewModel>
                 {

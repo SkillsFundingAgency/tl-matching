@@ -80,13 +80,13 @@ namespace Sfa.Tl.Matching.Application.Services
             if (searchCount == 0)
                 return new QualificationSearchViewModel
                 {
-                    Title = searchTerm
+                    SearchTerms = searchTerm
                 };
 
             var searchResults = new QualificationSearchViewModel
             {
                 ResultCount = searchCount,
-                Title = searchTerm,
+                SearchTerms = searchTerm,
                 Results = await _qualificationRepository
                     .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
                     .OrderBy(q => q.Title)

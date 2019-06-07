@@ -11,6 +11,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string Title { get; set; }
         public string Source { get; set; }
         public IList<RouteViewModel> Routes { get; set; }
-        public string SearchString { get; set; }
+        public string SearchTerms { get; set; }
     }
 }

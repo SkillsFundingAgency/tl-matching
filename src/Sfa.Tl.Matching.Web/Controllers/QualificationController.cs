@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var searchResult = await _qualificationService.SearchQualification(viewModel.Title);
+            var searchResult = await _qualificationService.SearchQualification(viewModel.SearchTerms);
 
             return View(searchResult);
         }
@@ -118,7 +118,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 //viewModel.Routes = GetRoutes(viewModel);
                 return View("EditQualifications", new QualificationSearchViewModel
                 {
-                        Title = viewModel.SearchString
+                        SearchTerms = viewModel.SearchTerms
                 });
             }
 
