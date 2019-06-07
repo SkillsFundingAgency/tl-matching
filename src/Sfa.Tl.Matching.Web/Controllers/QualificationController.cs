@@ -106,7 +106,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return View(searchResult);
         }
-        
+
+        [HttpGet]
+        [Route("search-short-title", Name = "SearchShortTitle")]
+        public IActionResult SearchShortTitle(string query)
+        {
+            var shortTitles = _qualificationService.SearchShortTitle(query);
+
+            return Ok(shortTitles.ToList());
+        }
+
         [HttpPost]
         [Route("save-qualification", Name = "SaveQualification")]
         public async Task<IActionResult> SaveQualification(SaveQualificationViewModel viewModel)

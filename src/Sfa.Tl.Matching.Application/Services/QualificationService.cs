@@ -114,6 +114,22 @@ namespace Sfa.Tl.Matching.Application.Services
             return searchResults;
         }
 
+        public IEnumerable<QualificationShortTitleSearchResultViewModel> SearchShortTitle(string shortTitle)
+        {
+            var shortTitleSearch = shortTitle.ToQualificationSearch();
+
+            var searchResults = _qualificationRepository
+                .GetMany(q => EF.Functions.Like(q.ShortTitleSearch, $"%{shortTitleSearch}%"))
+                .OrderBy(q => q.ShortTitle)
+                .Select(q => new QualificationShortTitleSearchResultViewModel
+                {
+                    Id = q.Id,
+                    ShortTitle = q.ShortTitle
+                });
+
+            return searchResults;
+        }
+
         public async Task UpdateQualificationAsync(SaveQualificationViewModel viewModel)
         {
             var qualification = await _qualificationRepository.GetSingleOrDefault(v => v.Id == viewModel.QualificationId);
@@ -188,5 +204,11 @@ namespace Sfa.Tl.Matching.Application.Services
             return searchTerm.ToString();
         }
         #endregion
+    }
+
+    public class QualificationShortTitleSearchResultViewModel
+    {
+        public int Id { get; set; }
+        public string ShortTitle { get; set; }
     }
 }
