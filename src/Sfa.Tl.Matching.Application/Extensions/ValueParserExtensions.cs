@@ -106,6 +106,8 @@ namespace Sfa.Tl.Matching.Application.Extensions
 
         public static string ToQualificationSearch(this string value)
         {
+            if (value == null) return null;
+
             foreach (var term in QualificationTerms.Ignored)
                 value = value.Replace(term, string.Empty, StringComparison.OrdinalIgnoreCase);
 
