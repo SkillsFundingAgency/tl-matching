@@ -5,5 +5,5 @@ $('.tl-expandable--header').click(function (e) {
 
 $('.tl-editquals-item').submit(function (event) {
     event.preventDefault();
-    alert('form submitted');
+    alert('dev test form submitted');
 });

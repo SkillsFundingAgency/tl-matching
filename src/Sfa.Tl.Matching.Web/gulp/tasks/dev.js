@@ -25,7 +25,7 @@ gulp.task('dev-copy-editquals-js', function () {
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
         'Frontend/src/javascripts/edit-qualifications.js'
     ])
-        .pipe(concat('edit-quals.js'))
+        .pipe(concat('edit-quals.min.js'))
         .pipe(gulp.dest(paths.dist.defaultJs));
 });
 
