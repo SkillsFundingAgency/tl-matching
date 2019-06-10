@@ -65,11 +65,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 {
                     new QualificationRoutePathMapping
                     {
+                        Id = 101,
                         QualificationId = 1,
                         RouteId = 1
                     },
                     new QualificationRoutePathMapping
                     {
+                        Id = 102,
                         QualificationId = 1,
                         RouteId = 2
                     }
@@ -167,6 +169,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .Received(1)
                 .DeleteMany(Arg.Is<IList<QualificationRoutePathMapping>>(
                     qrpm => qrpm.Count == 1 &&
+                            qrpm.First().Id == 101 &&
                             qrpm.First().QualificationId == 1 &&
                             qrpm.First().RouteId == 1
                 ));

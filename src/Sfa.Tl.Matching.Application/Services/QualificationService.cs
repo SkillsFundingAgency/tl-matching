@@ -140,7 +140,7 @@ namespace Sfa.Tl.Matching.Application.Services
             await _qualificationRepository.Update(qualification);
 
             var existingMappings = _qualificationRoutePathMappingRepository
-                .GetMany(r => r.Id == viewModel.QualificationId)
+                .GetMany(r => r.QualificationId == viewModel.QualificationId)
                 .ToList();
 
             var comparer = new QualificationRoutePathMappingEqualityComparer();
