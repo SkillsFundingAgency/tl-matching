@@ -32,6 +32,8 @@ var editQualifications = (function () {
             showNoOptionsFound: false,
             name: this.id
         });
+
+        $("#" + this.name).val($("#Hidden" + this.name).val());
     });
 
     function searchShortTitle(query, populateResults) {
