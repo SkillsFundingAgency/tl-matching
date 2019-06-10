@@ -24,6 +24,7 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Api.Clients.ProviderReference;
 using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
+using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {

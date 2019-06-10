@@ -1,4 +1,4 @@
-namespace Sfa.Tl.Matching.Application.Configuration
+namespace Sfa.Tl.Matching.Models.Configuration
 {
     public class AuthenticationConfig
     {

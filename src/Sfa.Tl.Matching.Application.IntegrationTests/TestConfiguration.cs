@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests
 {

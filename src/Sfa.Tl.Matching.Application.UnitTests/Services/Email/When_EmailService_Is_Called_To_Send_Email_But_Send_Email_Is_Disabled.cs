@@ -8,6 +8,7 @@ using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Configuration;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email

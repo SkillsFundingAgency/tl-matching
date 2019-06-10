@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Models.Configuration;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
