@@ -85,10 +85,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             viewModel.QualificationId = qualification.Id;
             await _providerQualificationService.CreateProviderQualificationAsync(viewModel);
 
-            return RedirectToRoute("GetProviderVenueDetail", 
+            return RedirectToRoute("GetProviderVenueDetail",
                 new { providerVenueId = viewModel.ProviderVenueId });
         }
-        
+
         [Route("edit-qualifications", Name = "EditQualifications")]
         public IActionResult EditQualifications()
         {
@@ -103,6 +103,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(viewModel);
 
             var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
+
+            PopulateRoutesForQualificationSearchItem(searchResult);
 
             return View(searchResult);
         }
@@ -124,15 +126,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                //viewModel.Routes = GetRoutes(viewModel);
-                return PartialView("_qualificationitem", 
+                return PartialView("_qualificationitem",
                     new QualificationSearchResultViewModel
                     {
                         QualificationId = viewModel.QualificationId,
                         LarId = viewModel.LarId,
                         Title = viewModel.Title,
-                        ShortTitle = viewModel.ShortTitle
-                        //Routes = GetRoutes()
+                        ShortTitle = viewModel.ShortTitle,
+                        Routes = GetRoutesForQualificationSearchItem(viewModel)
                     });
             }
 
@@ -140,7 +141,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             //Retrieve the changed item
             var qualification = await _qualificationService.GetQualificationAsync(viewModel.QualificationId);
-            
+                qualification.Routes = GetRoutesForQualificationSearchItem(viewModel);
             return PartialView("_qualificationitem", qualification);
         }
 
@@ -171,7 +172,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 viewModel.Routes = GetRoutes(viewModel);
                 return View(viewModel);
             }
-            
+
             var qualificationId = await _qualificationService.CreateQualificationAsync(viewModel);
 
             await _providerQualificationService.CreateProviderQualificationAsync(
@@ -191,7 +192,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             await _providerQualificationService.RemoveProviderQualificationAsync(providerVenueId, qualificationId);
 
-            return RedirectToRoute("GetProviderVenueDetail", new {providerVenueId });
+            return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId });
         }
 
         private IList<RouteViewModel> GetRoutes(MissingQualificationViewModel viewModel = null)
@@ -209,6 +210,45 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             return routesList;
+        }
+
+        private IList<RouteViewModel> GetRoutesForQualificationSearchItem(QualificationSearchResultViewModel viewModel, IList<Domain.Models.Route> routes)
+        {
+            var routesList = _mapper.Map<RouteViewModel[]>(routes);
+
+            foreach (var route in routesList.Where(r => viewModel.RouteIds.Contains(r.Id)))
+            {
+                route.IsSelected = true;
+            }
+
+            return routesList;
+        }
+
+        private IList<RouteViewModel> GetRoutesForQualificationSearchItem(SaveQualificationViewModel viewModel)
+        {
+            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
+
+            var routesList = _mapper.Map<RouteViewModel[]>(routes);
+
+            foreach (var route in routesList)
+            {
+                if (viewModel.Routes.Any(r => r.Id == route.Id && r.IsSelected))
+                {
+                    route.IsSelected = true;
+                }
+            }
+
+            return routesList;
+        }
+
+        private void PopulateRoutesForQualificationSearchItem(QualificationSearchViewModel searchResult)
+        {
+            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
+
+            foreach (var searchResultItem in searchResult.Results)
+            {
+                searchResultItem.Routes = GetRoutesForQualificationSearchItem(searchResultItem, routes);
+            }
         }
 
         private void Validate(MissingQualificationViewModel viewModel)
