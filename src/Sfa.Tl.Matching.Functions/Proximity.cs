@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -25,12 +26,15 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IMapper mapper,
-            [Inject] ILocationApiClient locationApiClient
+            [Inject] ILocationApiClient locationApiClient,
+            [Inject] IGoogleMapApiClient googleMapApiClient
         )
         {
             var saveProximityData = new SaveProximityData { Postcode = req.Query["Postcode"].ToString(), ProviderVenueId = req.Query["ProviderVenueId"].ToString().ToLong() };
 
             var geoLocationData = await locationApiClient.GetGeoLocationData(req.Query["postcode"].ToString());
+            
+            var googleAddressdetail = await googleMapApiClient.GetAddressDetails(req.Query["postcode"].ToString());
 
             return mapper.Map(geoLocationData, saveProximityData);
         }

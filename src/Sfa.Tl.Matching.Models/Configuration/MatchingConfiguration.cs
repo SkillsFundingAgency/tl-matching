@@ -19,5 +19,8 @@ namespace Sfa.Tl.Matching.Models.Configuration
         public string PostcodeRetrieverBaseUrl { get; set; }
 
         public string SqlConnectionString { get; set; }
+
+        public string GoogleMapsApiBaseUrl { get; set; }
+        public string GoogleMapsApiKey { get; set; }
     }
 }

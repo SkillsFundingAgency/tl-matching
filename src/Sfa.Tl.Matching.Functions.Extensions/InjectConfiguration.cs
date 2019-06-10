@@ -25,6 +25,7 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Api.Clients.ProviderReference;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
@@ -70,7 +71,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                             .UseNetTopologySuite()));
 
             services.AddSingleton(_configuration);
-            services.AddHttpClient<ILocationApiClient, LocationApiClient>();
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
@@ -81,7 +81,8 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             RegisterApplicationServices(services);
 
             RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
-            RegisterUkRlpApi(services);
+
+            RegisterApiClient(services);
 
             #region TODO DELETE AFTER SPRINT 10
             // TODO DELETE AFTER SPRINT 10
@@ -186,8 +187,11 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 new NotificationsApi(httpClient, apiConfiguration));
         }
 
-        private static void RegisterUkRlpApi(IServiceCollection services)
+        private static void RegisterApiClient(IServiceCollection services)
         {
+            services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
+            services.AddHttpClient<ILocationApiClient, LocationApiClient>();
+
             services.AddTransient(svcProvider =>
             {
                var client = new ProviderQueryPortTypeClient();
