@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var searchResult = await _qualificationService.SearchQualification(viewModel.SearchTerms);
+            var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
 
             return View(searchResult);
         }

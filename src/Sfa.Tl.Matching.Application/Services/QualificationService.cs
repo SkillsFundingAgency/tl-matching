@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return lar?.Title;
         }
 
-        public async Task<QualificationSearchViewModel> SearchQualification(string searchTerm)
+        public async Task<QualificationSearchViewModel> SearchQualificationAsync(string searchTerm)
         {
             var qualificationSearch = searchTerm.ToQualificationSearch();
             if (string.IsNullOrEmpty(qualificationSearch))
@@ -117,6 +117,9 @@ namespace Sfa.Tl.Matching.Application.Services
         public IEnumerable<QualificationShortTitleSearchResultViewModel> SearchShortTitle(string shortTitle)
         {
             var shortTitleSearch = shortTitle.ToQualificationSearch();
+
+            if (string.IsNullOrEmpty(shortTitleSearch))
+                return new List<QualificationShortTitleSearchResultViewModel>();
 
             var searchResults = _qualificationRepository
                 .GetMany(q => EF.Functions.Like(q.ShortTitleSearch, $"%{shortTitleSearch}%"))
