@@ -147,6 +147,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var newMappings = _mapper.Map<IList<QualificationRoutePathMapping>>(viewModel);
             
             var toBeAdded = newMappings.Except(existingMappings, comparer).ToList();
+
             var same = existingMappings.Intersect(newMappings, comparer).ToList();
             var toBeDeleted = existingMappings?.Except(same).ToList();
 
@@ -156,7 +157,19 @@ namespace Sfa.Tl.Matching.Application.Services
             var deleteMappings = toBeDeleted?.Select(Find).ToList();
             await _qualificationRoutePathMappingRepository.DeleteMany(deleteMappings);
 
-            await _qualificationRoutePathMappingRepository.CreateMany(toBeAdded);
+            try
+            {
+                //await _qualificationRoutePathMappingRepository.CreateMany(toBeAdded);
+                foreach (var toBeAddedItem in toBeAdded)
+                {
+                    //toBeAddedItem.Qualification = qualification;
+                    await _qualificationRoutePathMappingRepository.Create(toBeAddedItem);
+                }
+            }
+            catch (Exception e)
+            {
+                //TODO: Remove this - only for debugging;
+            }
         }
 
         public async Task<bool> IsValidOfqualLarIdAsync(string larId)
