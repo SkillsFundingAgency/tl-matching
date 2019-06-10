@@ -19,7 +19,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Sfa.Tl.Matching.UkRlp.Api.Client
+namespace Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client
 {
     /// <remarks/>
     [GeneratedCode("Microsoft.Tools.ServiceModel.Svcutil", "2.0.1-preview-30422-0661")]

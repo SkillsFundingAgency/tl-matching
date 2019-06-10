@@ -7,26 +7,26 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
-using Sfa.Tl.Matching.UkRlp.Api.Client;
+using Sfa.Tl.Matching.Api.Clients.ProviderReference;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class ProviderReferenceDataService : IReferenceDataService
     {
-        private readonly IProviderDownload _providerDownload;
+        private readonly IProviderReferenceDataClient _providerReferenceDataClient;
         private readonly IRepository<ProviderReferenceStaging> _repository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly MatchingConfiguration _matchingConfiguration;
 
-        public ProviderReferenceDataService(IProviderDownload providerDownload,
+        public ProviderReferenceDataService(IProviderReferenceDataClient providerReferenceDataClient,
             IRepository<ProviderReferenceStaging> repository,
             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository,
             IDateTimeProvider dateTimeProvider,
             MatchingConfiguration matchingConfiguration)
         {
-            _providerDownload = providerDownload;
+            _providerReferenceDataClient = providerReferenceDataClient;
             _repository = repository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
             _dateTimeProvider = dateTimeProvider;
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<List<ProviderReferenceStaging>> GetProvidersForStaging(DateTime lastUpdateDate)
         {
-            var providers = await _providerDownload.GetAll(lastUpdateDate);
+            var providers = await _providerReferenceDataClient.GetAll(lastUpdateDate);
             var providerReferenceStagings = providers.Select(p => new ProviderReferenceStaging
             {
                 Name = p.ProviderName,

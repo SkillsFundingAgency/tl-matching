@@ -4,21 +4,23 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
+using Sfa.Tl.Matching.Api.Clients.ProviderReference;
 using Xunit;
 
-namespace Sfa.Tl.Matching.UkRlp.Api.Client.UnitTests
+namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 {
-    public class When_ProviderDownload_Is_Called_To_GetAll
+    public class When_ProviderReferenecDataClient_Is_Called_To_GetAll
     {
         private readonly List<ProviderRecordStructure> _result;
-        private readonly IProviderDownloadClient _client;
+        private readonly IProviderQueryPortTypeClient _client;
 
-        public When_ProviderDownload_Is_Called_To_GetAll()
+        public When_ProviderReferenecDataClient_Is_Called_To_GetAll()
         {
             var lastUpdateDate = new DateTime(2019, 5, 6);
-            var logger = new NullLogger<ProviderDownload>();
+            var logger = new NullLogger<ProviderReferenceDataClient>();
 
-            _client = Substitute.For<IProviderDownloadClient>();
+            _client = Substitute.For<IProviderQueryPortTypeClient>();
             var r = new response
             {
                 ProviderQueryResponse = new ProviderQueryResponse
@@ -34,18 +36,18 @@ namespace Sfa.Tl.Matching.UkRlp.Api.Client.UnitTests
                     UnitedKingdomProviderReferenceNumber = "123"
                 };
 
-            _client.RetrieveAll(Arg.Any<ProviderQueryStructure>())
+            _client.retrieveAllProvidersAsync(Arg.Any<ProviderQueryParam>())
                 .Returns(Task.FromResult(r));
 
-            var providerDownload = new ProviderDownload(logger, _client);
-            _result = providerDownload.GetAll(lastUpdateDate).GetAwaiter().GetResult();
+            var providerReferenceDataClient = new ProviderReferenceDataClient(logger, _client);
+            _result = providerReferenceDataClient.GetAll(lastUpdateDate).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void RetrieveAllProvidersAsync_Is_Called_Exactly_Once()
         {
             _client.Received(1)
-                .RetrieveAll(Arg.Any<ProviderQueryStructure>());
+                .retrieveAllProvidersAsync(Arg.Any<ProviderQueryParam>());
         }
 
         [Fact]

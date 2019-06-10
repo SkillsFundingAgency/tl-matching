@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
+
 // ReSharper disable UnusedMember.Global
 
-namespace Sfa.Tl.Matching.UkRlp.Api.Client
+namespace Sfa.Tl.Matching.Api.Clients.ProviderReference
 {
     public enum UkRlpRecordStatus
     {

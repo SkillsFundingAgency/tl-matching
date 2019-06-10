@@ -22,7 +22,8 @@ using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.UkRlp.Api.Client;
+using Sfa.Tl.Matching.Api.Clients.ProviderReference;
+using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
@@ -61,7 +62,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(_configuration.SqlConnectionString,
-                    builder => 
+                    builder =>
                         builder
                             .EnableRetryOnFailure()
                             .UseNetTopologySuite()));
@@ -82,7 +83,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             #region TODO DELETE AFTER SPRINT 10
             // TODO DELETE AFTER SPRINT 10
-            services.AddTransient<IQualificationService, QualificationService>(); 
+            services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
             #endregion
         }
@@ -185,8 +186,19 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterUkRlpApi(IServiceCollection services)
         {
-            services.AddTransient<IProviderDownload, ProviderDownload>();
-            services.AddTransient<IProviderDownloadClient, ProviderDownloadClient>();
+            services.AddTransient(svcProvider =>
+            {
+               var client = new ProviderQueryPortTypeClient();
+
+               var fiveMinuteTimeSpan = new TimeSpan(0, 5, 0);
+
+               client.Endpoint.Binding.SendTimeout = fiveMinuteTimeSpan;
+               client.Endpoint.Binding.ReceiveTimeout = fiveMinuteTimeSpan;
+
+               return client;
+            });
+
+            services.AddTransient<IProviderReferenceDataClient, ProviderReferenceDataClient>();
         }
     }
 }

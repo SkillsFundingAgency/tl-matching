@@ -17,10 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sfa.Tl.Matching.Api.Clients\Sfa.Tl.Matching.Api.Clients.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Domain\Sfa.Tl.Matching.Domain.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Models\Sfa.Tl.Matching.Models.csproj" />
-    <ProjectReference Include="..\Sfa.Tl.Matching.UkRlp.Api.Client\Sfa.Tl.Matching.UkRlp.Api.Client.csproj" />
   </ItemGroup>
 
 </Project>
