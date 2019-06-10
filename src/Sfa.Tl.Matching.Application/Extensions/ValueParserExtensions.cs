@@ -112,7 +112,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
             var words = value.Split(" ");
             for (var i = 0; i < words.Length; i++)
             {
-                if (QualificationTerms.Ignored.Contains(words[i]))
+                if (QualificationTerms.Ignored.Contains(words[i].ToLower()))
                     words[i] = "";
             }
 

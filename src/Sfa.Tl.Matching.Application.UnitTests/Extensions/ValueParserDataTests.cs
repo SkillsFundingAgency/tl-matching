@@ -10,7 +10,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
         [Theory(DisplayName = "QualificationSearch Data Tests")]
         [InlineData("and", "")]
         [InlineData("BTEC Level", "")]
-        [InlineData("Level 2 Diploma Health Social Care (Adults) for England", "DiplomaHealthSocialCareAdultsforEngland")]
+        [InlineData("and BTEC LEVEL", "")]
+        [InlineData("and BTEC Level", "")]
+        [InlineData("Level 2 Diploma Health Social Care (Adults) for England", "HealthSocialCareAdultsforEngland")]
         [InlineData("skills for professions in building and construction", "skillsforprofessionsbuildingconstruction")]
         [InlineData("BTEC skills for professions and BTEC skills for building and BTEC skills for construction", "skillsforprofessionsskillsforbuildingskillsforconstruction")]
         public void QualificationSearchDataTests(string searchTerm, string result)
