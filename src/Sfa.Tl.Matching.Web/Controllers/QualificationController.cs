@@ -1,4 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -141,7 +143,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             //Retrieve the changed item
             var qualification = await _qualificationService.GetQualificationAsync(viewModel.QualificationId);
-                qualification.Routes = GetRoutesForQualificationSearchItem(viewModel);
+            qualification.Routes = GetRoutesForQualificationSearchItem(viewModel);
             return PartialView("_qualificationitem", qualification);
         }
 
@@ -270,12 +272,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 ModelState.AddModelError("ShortTitle", "You must enter a short title that is 100 characters or fewer");
             }
-
-            //TODO: Validate route ids. Taken out to test intial save
-            //if (viewModel.Routes == null || !viewModel.Routes.Any(r => r.IsSelected))
-            //{
-            //    ModelState.AddModelError("Routes", "You must choose a skill area for this qualification");
-            //}
+            
+            if (viewModel.Routes == null || !viewModel.Routes.Any(r => r.IsSelected))
+            {
+                ModelState.AddModelError("Routes", "You must choose a skill area for this qualification");
+            }
         }
     }
 }
