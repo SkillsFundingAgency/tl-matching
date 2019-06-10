@@ -123,9 +123,9 @@ namespace Sfa.Tl.Matching.Application.Services
                 .OrderBy(q => q.ShortTitle)
                 .Select(q => new QualificationShortTitleSearchResultViewModel
                 {
-                    Id = q.Id,
                     ShortTitle = q.ShortTitle
-                });
+                })
+                .Distinct();
 
             return searchResults;
         }
@@ -185,11 +185,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     qualification.ModifiedBy = "System";
                 }
 
-                await _qualificationRepository.UpdateManyWithSpecifedColumnsOnly(qualificationsFromDb,
-                    x => x.QualificationSearch,
-                    x => x.ShortTitleSearch,
-                    x => x.ModifiedOn,
-                    x => x.ModifiedBy);
+                await _qualificationRepository.UpdateMany(qualificationsFromDb);
             }
 
             return qualificationsFromDb.Count;
@@ -204,11 +200,5 @@ namespace Sfa.Tl.Matching.Application.Services
             return searchTerm.ToString();
         }
         #endregion
-    }
-
-    public class QualificationShortTitleSearchResultViewModel
-    {
-        public int Id { get; set; }
-        public string ShortTitle { get; set; }
     }
 }

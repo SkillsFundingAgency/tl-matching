@@ -9,7 +9,9 @@
         <tr class="govuk-table__row">
             <td class="govuk-table__cell">@Model.Title (@Model.LarId)</td>
             <td class="govuk-table__cell">
-                <input asp-for="ShortTitle" sfa-validation-for="ShortTitle" sfa-validationerror-class="govuk-input--error" class="govuk-input" type="text" aria-describedby="short-title-hint">
+                <select asp-for="ShortTitle" sfa-validation-for="ShortTitle" sfa-validationerror-class="govuk-input--error" 
+                    id="ShortTitle_@Model.QualificationId" name="ShortTitle_@Model.QualificationId" 
+                    class="govuk-input" aria-describedby="short-title-hint"></select>
             </td>
             <td class="govuk-table__cell">
                 <div class="tl-expandable">
