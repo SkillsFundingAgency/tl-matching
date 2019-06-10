@@ -8,7 +8,17 @@ var editQualifications = (function () {
 
     $('.tl-editquals-item').submit(function (event) {
         event.preventDefault();
-        alert('dev test form submitted');
+
+    $.ajax({
+        url: $(this).attr('action'),
+        type: "POST",
+        data: $(this).serialize(),
+        success: function (result) {
+            alert('and back');
+            alert(result);
+            $(this).replaceWith(result);
+        }
+    });
     });
 
     var queryMinLength = 2;
