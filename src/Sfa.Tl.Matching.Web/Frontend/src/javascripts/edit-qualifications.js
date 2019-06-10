@@ -9,16 +9,15 @@ var editQualifications = (function () {
     $('.tl-editquals-item').submit(function (event) {
         event.preventDefault();
 
-    $.ajax({
-        url: $(this).attr('action'),
-        type: "POST",
-        data: $(this).serialize(),
-        success: function (result) {
-            alert('and back');
-            alert(result);
-            $(this).replaceWith(result);
-        }
-    });
+        $.ajax({
+            url: $(this).attr('action'),
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (result) {
+                alert(result);
+                $(this).replaceWith(result);
+            }
+        });
     });
 
     var queryMinLength = 2;
