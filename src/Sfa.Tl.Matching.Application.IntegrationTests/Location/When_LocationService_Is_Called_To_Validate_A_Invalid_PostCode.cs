@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using FluentAssertions;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Configuration;
@@ -13,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
 
         public When_LocationService_Is_Called_To_Validate_A_Invalid_PostCode()
         {
-            var locationService = new LocationService(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
+            var locationService = new LocationApiClient(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
             _result = locationService.IsValidPostCode("CV1234").GetAwaiter().GetResult();
         }
 

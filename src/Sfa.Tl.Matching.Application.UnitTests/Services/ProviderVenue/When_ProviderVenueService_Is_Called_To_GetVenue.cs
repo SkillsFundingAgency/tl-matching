@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                     Postcode = Postcode
                 });
 
-            var locationService = Substitute.For<ILocationService>();
+            var locationService = Substitute.For<ILocationApiClient>();
             var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository,
                 locationService);
 

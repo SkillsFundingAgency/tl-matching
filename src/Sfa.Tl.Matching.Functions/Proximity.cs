@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Extensions;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
@@ -25,12 +25,12 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IMapper mapper,
-            [Inject] ILocationService locationService
+            [Inject] ILocationApiClient locationApiClient
         )
         {
             var saveProximityData = new SaveProximityData { Postcode = req.Query["Postcode"].ToString(), ProviderVenueId = req.Query["ProviderVenueId"].ToString().ToLong() };
 
-            var geoLocationData = await locationService.GetGeoLocationData(req.Query["postcode"].ToString());
+            var geoLocationData = await locationApiClient.GetGeoLocationData(req.Query["postcode"].ToString());
 
             return mapper.Map(geoLocationData, saveProximityData);
         }
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IMapper mapper,
-            [Inject] ILocationService locationService,
+            [Inject] ILocationApiClient locationApiClient,
             [Inject] IRepository<FunctionLog> functionlogRepository
         )
         {
@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Functions
 
             try
             {
-                var geoLocationData = await locationService.GetGeoLocationData(getProximityData.Postcode);
+                var geoLocationData = await locationApiClient.GetGeoLocationData(getProximityData.Postcode);
                 return mapper.Map(geoLocationData, saveProximityData);
             }
             catch (Exception e)

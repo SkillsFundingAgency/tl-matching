@@ -2,7 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         private const int SearchRadius = 5;
         private const int RouteId = 2;
         private readonly IEnumerable<ProviderVenueSearchResultDto> _result;
-        private readonly ILocationService _locationService;
+        private readonly ILocationApiClient _locationApiClient;
         private readonly ISearchProvider _searchProvider;
 
         public When_ProximityService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
@@ -29,15 +29,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
                 .SearchProvidersByPostcodeProximity(dto)
                 .Returns(new SearchResultsBuilder().Build());
 
-            _locationService = Substitute.For<ILocationService>();
-            _locationService.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
+            _locationApiClient = Substitute.For<ILocationApiClient>();
+            _locationApiClient.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
             {
                 Postcode = Postcode,
                 Longitude = "1.2",
                 Latitude = "1.2"
             });
 
-            var service = new ProximityService(_searchProvider, _locationService);
+            var service = new ProximityService(_searchProvider, _locationApiClient);
 
             _result = service.SearchProvidersByPostcodeProximity(dto).GetAwaiter().GetResult();
         }
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         [Fact]
         public void Then_The_LocationService_Is_Called_Exactly_Once()
         {
-            _locationService.Received(1).GetGeoLocationData(Postcode);
+            _locationApiClient.Received(1).GetGeoLocationData(Postcode);
         }
 
         [Fact]

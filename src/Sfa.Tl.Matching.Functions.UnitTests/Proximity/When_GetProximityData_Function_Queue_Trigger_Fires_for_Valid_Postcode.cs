@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
@@ -25,7 +26,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
             
-            var locationService = new LocationService(
+            var locationService = new LocationApiClient(
                 httpClient, 
                 new MatchingConfiguration
                 {
