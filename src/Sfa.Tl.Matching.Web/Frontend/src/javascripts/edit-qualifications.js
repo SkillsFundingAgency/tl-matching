@@ -16,7 +16,7 @@ var editQualifications = (function () {
     $("select").each(function () {
         accessibleAutocomplete.enhanceSelectElement({
             defaultValue: "",
-            autoSelect: true,
+            autoselect: false,
             selectElement: document.querySelector("#" + this.id),
             minLength: queryMinLength,
             source: searchShortTitle,

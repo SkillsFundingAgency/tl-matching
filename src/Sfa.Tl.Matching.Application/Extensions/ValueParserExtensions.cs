@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using Humanizer;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Models.Enums;
@@ -108,10 +109,14 @@ namespace Sfa.Tl.Matching.Application.Extensions
         {
             if (value == null) return null;
 
-            foreach (var term in QualificationTerms.Ignored)
-                value = value.Replace(term, string.Empty, StringComparison.OrdinalIgnoreCase);
+            var words = value.Split(" ");
+            for (var i = 0; i < words.Length; i++)
+            {
+                if (QualificationTerms.Ignored.Contains(words[i].ToLower()))
+                    words[i] = "";
+            }
 
-            return value.ToLetter();
+            return string.Join(" ", words.Where(x => !string.IsNullOrEmpty(x))).ToLetter();
         }
     }
 }
