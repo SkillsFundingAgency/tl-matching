@@ -14,7 +14,7 @@ var editQualifications = (function () {
             type: "POST",
             data: $(this).serialize(),
             success: function (result) {
-                alert(result);
+                //alert(result);
                 $(this).replaceWith(result);
             }
         });
