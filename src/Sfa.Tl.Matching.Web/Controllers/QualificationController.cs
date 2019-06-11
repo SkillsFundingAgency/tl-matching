@@ -129,7 +129,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                var errorList = ModelState.ToDictionary(
+                var errorList = ModelState.Where(e => e.Value.Errors.Any()).ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
                 );
