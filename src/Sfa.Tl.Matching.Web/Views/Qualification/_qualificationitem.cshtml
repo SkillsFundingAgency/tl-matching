@@ -16,10 +16,10 @@
 
             <td class="govuk-table__cell">
                 <div class="tl-autocomplete tl-error">
-                    <select asp-for="ShortTitle" sfa-validation-for="ShortTitle" sfa-validationerror-class="govuk-input--error"
-                            id="ShortTitle_@Model.QualificationId" name="ShortTitle_@Model.QualificationId"
+                    <select sfa-validation-for="ShortTitle" sfa-validationerror-class="govuk-input--error"
+                            id="SelectShortTitle_@Model.QualificationId" name="SelectShortTitle_@Model.QualificationId"
                             class="govuk-input" aria-describedby="short-title-hint"></select>
-                    <input id="HiddenShortTitle_@Model.QualificationId" asp-for="ShortTitle" type="hidden" />
+                    <input id="ShortTitle_@Model.QualificationId" asp-for="ShortTitle" type="hidden" />
                 </div>
             </td>
             <td class="govuk-table__cell">

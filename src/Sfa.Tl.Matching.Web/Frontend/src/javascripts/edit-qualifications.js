@@ -9,25 +9,31 @@ var editQualifications = (function () {
     $('.tl-editquals-item').submit(function (event) {
         event.preventDefault();
 
-        var myForm = $(this);
+        $('#ShortTitle_' + this.elements.QualificationId.value).val($('#SelectShortTitle_' + this.elements.QualificationId.value).val());
+
+        var formData = $(this).serialize();
 
         $.ajax({
             url: $(this).attr('action'),
             type: "POST",
-            data: $(this).serialize(),
+            data: formData,
             success: function (result) {
-                //alert(result);
-                myForm.replaceWith(result);
-                //TODO: Reattach this event
+                alert("Succes");
+            },
+            error: function (result) {
+                alert("Succes");
             }
+
         });
     });
 
     var queryMinLength = 2;
 
     $("select").each(function () {
+        var shortTitleDefaultValue = $("#" + this.name.replace("Select", "")).val();
+
         accessibleAutocomplete.enhanceSelectElement({
-            defaultValue: $("#Hidden" + this.name).val(),
+            defaultValue: shortTitleDefaultValue,
             autoselect: false,
             selectElement: document.querySelector("#" + this.id),
             minLength: queryMinLength,
