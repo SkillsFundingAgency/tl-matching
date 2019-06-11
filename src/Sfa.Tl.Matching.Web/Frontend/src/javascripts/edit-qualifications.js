@@ -27,7 +27,7 @@ var editQualifications = (function () {
 
     $("select").each(function () {
         accessibleAutocomplete.enhanceSelectElement({
-            defaultValue: "",
+            defaultValue: $("#Hidden" + this.name).val(),
             autoselect: false,
             selectElement: document.querySelector("#" + this.id),
             minLength: queryMinLength,
@@ -35,39 +35,24 @@ var editQualifications = (function () {
             showNoOptionsFound: false,
             name: this.id
         });
-
-        $("#" + this.name).val($("#Hidden" + this.name).val());
-
-        for (var i = 1; i <= 3; i++) {
-            var timeout = i * 1000;
-            setTimeout(() => {
-                $("#" + this.name + "__listbox").attr('class',
-                    "autocomplete__menu autocomplete__menu--inline autocomplete__menu--hidden");
-            },
-            timeout);
-        }
     });
 
     function searchShortTitle(query, populateResults) {
-        var delayInMs = 100;
+        $.ajax({
+            url: "/search-short-title",
+            contentType: "application/json",
+            data: { query: query },
+            success: function (shortTitles) {
+                var shortTitlesList = $.map(shortTitles, function (st) {
+                    return st.shortTitle;
+                });
 
-        setTimeout(function () {
-            $.ajax({
-                url: "/search-short-title",
-                contentType: "application/json",
-                data: { query: query },
-                success: function (shortTitles) {
-                    var shortTitlesList = $.map(shortTitles, function (st) {
-                        return st.shortTitle;
-                    });
-
-                    populateResults(shortTitlesList);
-                },
-                timeout: 5000,
-                error: function () {
-                    console.log("An error occurred.");
-                }
-            });
-        }, delayInMs);
+                populateResults(shortTitlesList);
+            },
+            timeout: 5000,
+            error: function () {
+                console.log("An error occurred.");
+            }
+        });
     }
 })();
