@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         private const string Postcode = "CV1 2WT";
 
         private readonly IProviderVenueRepository _providerVenueRepository;
-        private readonly ILocationService _locationService;
+        private readonly ILocationApiClient _locationApiClient;
 
         public When_ProviderVenueService_Is_Called_To_CreateVenue()
         {
@@ -43,15 +43,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new Domain.Models.ProviderVenue());
 
-            _locationService = Substitute.For<ILocationService>();
-            _locationService.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
+            _locationApiClient = Substitute.For<ILocationApiClient>();
+            _locationApiClient.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
             {
                 Postcode = Postcode,
                 Longitude = "1.2",
                 Latitude = "1.2"
             });
             var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository,
-                _locationService);
+                _locationApiClient);
 
             var viewModel = new AddProviderVenueViewModel
             {
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         [Fact]
         public void Then_LocationService_GetGeoLocationData_Is_Called_Exactly_Once()
         {
-            _locationService.Received(1).GetGeoLocationData(Postcode);
+            _locationApiClient.Received(1).GetGeoLocationData(Postcode);
         }
 
         [Fact]

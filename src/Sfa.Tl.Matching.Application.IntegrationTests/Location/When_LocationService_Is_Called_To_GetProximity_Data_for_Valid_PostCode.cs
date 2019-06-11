@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.IntegrationTests.Proximity;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -15,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
         {
             var httpClient = new PostcodesIoHttpClient().Get();
 
-            var locationService = new LocationService(httpClient, new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
+            var locationService = new LocationApiClient(httpClient, new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
             _postCodeLookupResultDto = locationService.GetGeoLocationData("CV1 2WT").GetAwaiter().GetResult();
         }
 

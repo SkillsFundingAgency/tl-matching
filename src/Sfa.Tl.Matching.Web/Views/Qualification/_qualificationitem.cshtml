@@ -19,6 +19,7 @@
                     <select asp-for="ShortTitle" sfa-validation-for="ShortTitle" sfa-validationerror-class="govuk-input--error"
                             id="ShortTitle_@Model.QualificationId" name="ShortTitle_@Model.QualificationId"
                             class="govuk-input" aria-describedby="short-title-hint"></select>
+                    <input id="HiddenShortTitle_@Model.QualificationId" asp-for="ShortTitle" type="hidden" />
                 </div>
             </td>
             <td class="govuk-table__cell">
@@ -30,107 +31,22 @@
                     <div class="tl-expandable--content">
                         <fieldset class="govuk-fieldset">
                             <div class="govuk-checkboxes">
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-1" name="item" type="checkbox" value="Agriculture, environmental and animal care">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-1">
-                                        Agriculture, environmental and animal care
-                                    </label>
-                                </div>
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-2" name="item" type="checkbox" value="Business and administration">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-2">
-                                        Business and administration
-                                    </label>
-                                </div>
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-3" name="item" type="checkbox" value="Care services">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-3">
-                                        Care services
-                                    </label>
-                                </div>
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-4" name="item" type="checkbox" value="Catering and hospitality">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-4">
-                                        Catering and hospitality
-                                    </label>
-                                </div>
+                                @for (var i = 0; i < Model.Routes.Count; i++)
+                                {
+                                    var route = Model.Routes[i];
+                                    <div class="govuk-checkboxes__item">
+                                        <input type="hidden" asp-for="@route.Id" name="Routes[@i].Id"/>
 
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-5" name="item" type="checkbox" value="Construction">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-5">
-                                        Construction
-                                    </label>
-                                </div>
-
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-6" name="item" type="checkbox" value="Creative and design">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-6">
-                                        Creative and design
-                                    </label>
-                                </div>
-
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-7" name="item" type="checkbox" value="Digital">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-7">
-                                        Digital
-                                    </label>
-                                </div>
-
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-8" name="item" type="checkbox" value="Education and childcare">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-8">
-                                        Education and childcare
-                                    </label>
-                                </div>
-
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-9" name="item" type="checkbox" value="Engineering and manufacturing">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-9">
-                                        Engineering and manufacturing
-                                    </label>
-                                </div>
-
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-10" name="item" type="checkbox" value="Hair and beauty">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-10">
-                                        Hair and beauty
-                                    </label>
-                                </div>
-
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-11" name="item" type="checkbox" value="Health and science">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-11">
-                                        Health and science
-                                    </label>
-                                </div>
-
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-12" name="item" type="checkbox" value="Legal, financial and accounting">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-12">
-                                        Legal, financial and accounting
-                                    </label>
-                                </div>
-
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-13" name="item" type="checkbox" value="Protective services">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-13">
-                                        Protective services
-                                    </label>
-                                </div>
-
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-14" name="item" type="checkbox" value="Sales, marketing and procurement">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-14">
-                                        Sales, marketing and procurement
-                                    </label>
-                                </div>
-
-                                <div class="govuk-checkboxes__item">
-                                    <input class="govuk-checkboxes__input" id="item-15" name="item" type="checkbox" value="Transport and logistics">
-                                    <label class="govuk-label govuk-checkboxes__label" for="item-15">
-                                        Transport and logistics
-                                    </label>
-                                </div>
+                                        <input type="checkbox" class="govuk-checkboxes__input"
+                                               asp-for="@Model.Routes[i].IsSelected"
+                                               name="Routes[@i].IsSelected">
+                                        <label class="govuk-label govuk-checkboxes__label"
+                                               asp-for="@Model.Routes[i].IsSelected"
+                                               name="Routes[@i].IsSelected">
+                                            @route.Name
+                                        </label>
+                                    </div>
+                                }
                             </div>
                         </fieldset>
 

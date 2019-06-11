@@ -65,11 +65,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 {
                     new QualificationRoutePathMapping
                     {
+                        Id = 101,
                         QualificationId = 1,
                         RouteId = 1
                     },
                     new QualificationRoutePathMapping
                     {
+                        Id = 102,
                         QualificationId = 1,
                         RouteId = 2
                     }
@@ -146,17 +148,30 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .GetMany(Arg.Any<Expression<Func<QualificationRoutePathMapping, bool>>>());
         }
 
+        //[Fact]
+        //public void Then_QualificationRoutePathMappingRepository_CreateMany_Is_Called_With_Expected_Values()
+        //{
+        //    _qualificationRoutePathMappingRepository
+        //        .Received(1)
+        //        .CreateMany(Arg.Is<IList<QualificationRoutePathMapping>>(
+        //            qrpm => qrpm.Count == 1 &&
+        //                    qrpm.First().QualificationId == 1 &&
+        //                    qrpm.First().RouteId == 3 &&
+        //                    qrpm.First().Source == "Test" &&
+        //                    qrpm.First().CreatedBy == "adminUserName"
+        //        ));
+        //}
+
         [Fact]
-        public void Then_QualificationRoutePathMappingRepository_CreateMany_Is_Called_With_Expected_Values()
+        public void Then_QualificationRoutePathMappingRepository_Create_Is_Called_With_Expected_Values()
         {
             _qualificationRoutePathMappingRepository
                 .Received(1)
-                .CreateMany(Arg.Is<IList<QualificationRoutePathMapping>>(
-                    qrpm => qrpm.Count == 1 &&
-                            qrpm.First().QualificationId == 1 &&
-                            qrpm.First().RouteId == 3 &&
-                            qrpm.First().Source == "Test" &&
-                            qrpm.First().CreatedBy == "adminUserName"
+                .Create(Arg.Is<QualificationRoutePathMapping>(
+                    qrpm => qrpm.QualificationId == 1 &&
+                            qrpm.RouteId == 3 &&
+                            qrpm.Source == "Test" &&
+                            qrpm.CreatedBy == "adminUserName"
                 ));
         }
 
@@ -167,6 +182,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .Received(1)
                 .DeleteMany(Arg.Is<IList<QualificationRoutePathMapping>>(
                     qrpm => qrpm.Count == 1 &&
+                            qrpm.First().Id == 101 &&
                             qrpm.First().QualificationId == 1 &&
                             qrpm.First().RouteId == 1
                 ));

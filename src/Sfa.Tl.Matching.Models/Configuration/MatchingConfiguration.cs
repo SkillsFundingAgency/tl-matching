@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.Notifications.Api.Client.Configuration;
 
-namespace Sfa.Tl.Matching.Application.Configuration
+namespace Sfa.Tl.Matching.Models.Configuration
 {
     public class MatchingConfiguration
     {

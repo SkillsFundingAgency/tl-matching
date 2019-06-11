@@ -1,19 +1,18 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Sfa.Tl.Matching.Application.Configuration;
-using Sfa.Tl.Matching.Application.Extensions;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Api.Clients.Extensions;
 
-namespace Sfa.Tl.Matching.Application.Services
+namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
 {
-    public class LocationService : ILocationService
+    public class LocationApiClient : ILocationApiClient
     {
         private readonly HttpClient _httpClient;
         private readonly MatchingConfiguration _matchingConfiguration;
 
-        public LocationService(HttpClient httpClient, MatchingConfiguration matchingConfiguration)
+        public LocationApiClient(HttpClient httpClient, MatchingConfiguration matchingConfiguration)
         {
             _httpClient = httpClient;
             _matchingConfiguration = matchingConfiguration;

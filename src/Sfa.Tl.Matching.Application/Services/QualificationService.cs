@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return lar?.Title;
         }
 
-        public async Task<QualificationSearchViewModel> SearchQualification(string searchTerm)
+        public async Task<QualificationSearchViewModel> SearchQualificationAsync(string searchTerm)
         {
             var qualificationSearch = searchTerm.ToQualificationSearch();
             if (string.IsNullOrEmpty(qualificationSearch))
@@ -118,6 +118,9 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var shortTitleSearch = shortTitle.ToQualificationSearch();
 
+            if (string.IsNullOrEmpty(shortTitleSearch))
+                return new List<QualificationShortTitleSearchResultViewModel>();
+
             var searchResults = _qualificationRepository
                 .GetMany(q => EF.Functions.Like(q.ShortTitleSearch, $"%{shortTitleSearch}%"))
                 .OrderBy(q => q.ShortTitle)
@@ -137,13 +140,14 @@ namespace Sfa.Tl.Matching.Application.Services
             await _qualificationRepository.Update(qualification);
 
             var existingMappings = _qualificationRoutePathMappingRepository
-                .GetMany(r => r.Id == viewModel.QualificationId)
+                .GetMany(r => r.QualificationId == viewModel.QualificationId)
                 .ToList();
 
             var comparer = new QualificationRoutePathMappingEqualityComparer();
             var newMappings = _mapper.Map<IList<QualificationRoutePathMapping>>(viewModel);
             
             var toBeAdded = newMappings.Except(existingMappings, comparer).ToList();
+
             var same = existingMappings.Intersect(newMappings, comparer).ToList();
             var toBeDeleted = existingMappings?.Except(same).ToList();
 
@@ -153,7 +157,19 @@ namespace Sfa.Tl.Matching.Application.Services
             var deleteMappings = toBeDeleted?.Select(Find).ToList();
             await _qualificationRoutePathMappingRepository.DeleteMany(deleteMappings);
 
-            await _qualificationRoutePathMappingRepository.CreateMany(toBeAdded);
+            try
+            {
+                //await _qualificationRoutePathMappingRepository.CreateMany(toBeAdded);
+                foreach (var toBeAddedItem in toBeAdded)
+                {
+                    //toBeAddedItem.Qualification = qualification;
+                    await _qualificationRoutePathMappingRepository.Create(toBeAddedItem);
+                }
+            }
+            catch (Exception e)
+            {
+                //TODO: Remove this - only for debugging;
+            }
         }
 
         public async Task<bool> IsValidOfqualLarIdAsync(string larId)

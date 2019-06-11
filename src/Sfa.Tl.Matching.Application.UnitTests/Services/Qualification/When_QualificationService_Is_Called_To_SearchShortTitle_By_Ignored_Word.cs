@@ -7,7 +7,6 @@ using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -15,49 +14,37 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 {
-    [Trait("QualificationService", "Search Short Title")]
-    public class When_QualificationService_Is_Called_To_SearchShortTitle
+    [Trait("QualificationService", "Search Short Title By Ignored Words")]
+    public class When_QualificationService_Is_Called_To_SearchShortTitle_By_Ignored_Word
     {
         private readonly IRepository<Domain.Models.Qualification> _repository;
         private readonly List<QualificationShortTitleSearchResultViewModel> _searchResults;
 
-        private readonly QualificationShortTitleSearchResultViewModel _firstQualification;
-        private readonly QualificationShortTitleSearchResultViewModel _secondQualification;
-
-        public When_QualificationService_Is_Called_To_SearchShortTitle()
+        public When_QualificationService_Is_Called_To_SearchShortTitle_By_Ignored_Word()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(QualificationMapper).Assembly));
             var mapper = new Mapper(config);
             _repository = Substitute.For<IRepository<Domain.Models.Qualification>>();
-            _repository.GetMany(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
-                .Returns(new QualificiationSearchResultsBuilder().Build().AsQueryable());
 
             var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
             var qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRoutePathMapping>>();
 
             var service = new QualificationService(mapper, _repository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
 
-            const string shortTitle = "sport and enterprise in the community";
-
-            _searchResults = service.SearchShortTitle(shortTitle).ToList();
-
-            _firstQualification = _searchResults[0];
-            _secondQualification = _searchResults[1];
+            _searchResults = service.SearchShortTitle("the").ToList();
         }
 
         [Fact]
         public void Then_Correct_Number_Of_Results()
         {
-            _searchResults.Count.Should().Be(2);
-            _firstQualification.ShortTitle.Should().Be("sport and enterprise in the community");
-            _secondQualification.ShortTitle.Should().Be("sport and enterprise in the community");
+            _searchResults.Count.Should().Be(0);
         }
 
         [Fact]
-        public void Then_QualificationRoutePathMappingRepository_GetMany_Is_Called_Exactly_Once()
+        public void Then_QualificationRoutePathMappingRepository_GetMany_Is_Not_Called()
         {
             _repository
-                .Received(1)
+                .DidNotReceive()
                 .GetMany(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>());
         }
     }

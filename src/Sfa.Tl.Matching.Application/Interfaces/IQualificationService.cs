@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
@@ -13,7 +12,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<bool> IsValidLarIdAsync(string larId);
         Task<bool> IsValidOfqualLarIdAsync(string larId);
         Task<string> GetLarTitleAsync(string larId);
-        Task<QualificationSearchViewModel> SearchQualification(string searchTerm);
+        Task<QualificationSearchViewModel> SearchQualificationAsync(string searchTerm);
         IEnumerable<QualificationShortTitleSearchResultViewModel> SearchShortTitle(string shortTitle);
         Task UpdateQualificationAsync(SaveQualificationViewModel viewModel);
         Task<int> UpdateQualificationsSearchColumns();

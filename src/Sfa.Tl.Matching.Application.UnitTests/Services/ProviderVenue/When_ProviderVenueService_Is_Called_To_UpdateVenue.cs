@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new Domain.Models.ProviderVenue());
 
-            var locationService = Substitute.For<ILocationService>();
+            var locationService = Substitute.For<ILocationApiClient>();
             var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository,
                 locationService);
 

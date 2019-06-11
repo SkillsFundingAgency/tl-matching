@@ -8,7 +8,19 @@ var editQualifications = (function () {
 
     $('.tl-editquals-item').submit(function (event) {
         event.preventDefault();
-        alert('dev test form submitted');
+
+        var myForm = $(this);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (result) {
+                //alert(result);
+                myForm.replaceWith(result);
+                //TODO: Reattach this event
+            }
+        });
     });
 
     var queryMinLength = 2;
@@ -23,6 +35,8 @@ var editQualifications = (function () {
             showNoOptionsFound: false,
             name: this.id
         });
+
+        $("#" + this.name).val($("#Hidden" + this.name).val());
     });
 
     function searchShortTitle(query, populateResults) {

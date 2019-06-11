@@ -6,7 +6,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         public When_GetProximityData_Function_Queue_Trigger_Fires_For_Invalid_PostCode()
         {
             var mapper = Substitute.For<IMapper>();
-            var locationService = Substitute.For<ILocationService>();
+            var locationService = Substitute.For<ILocationApiClient>();
             locationService.GetGeoLocationData("CV1234").Throws(new HttpRequestException("Invalid Postcode"));
 
             _logger = Substitute.For<ILogger>();
