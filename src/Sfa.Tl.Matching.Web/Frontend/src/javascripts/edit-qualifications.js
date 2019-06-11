@@ -9,13 +9,16 @@ var editQualifications = (function () {
     $('.tl-editquals-item').submit(function (event) {
         event.preventDefault();
 
+        var myForm = $(this);
+
         $.ajax({
             url: $(this).attr('action'),
             type: "POST",
             data: $(this).serialize(),
             success: function (result) {
                 //alert(result);
-                $(this).replaceWith(result);
+                myForm.replaceWith(result);
+                //TODO: Reattach this event
             }
         });
     });
