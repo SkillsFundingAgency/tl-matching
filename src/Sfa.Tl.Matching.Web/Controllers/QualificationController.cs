@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -128,23 +129,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return PartialView("_qualificationitem",
-                    new QualificationSearchResultViewModel
-                    {
-                        QualificationId = viewModel.QualificationId,
-                        LarId = viewModel.LarId,
-                        Title = viewModel.Title,
-                        ShortTitle = viewModel.ShortTitle,
-                        Routes = GetRoutesForQualificationSearchItem(viewModel)
-                    });
+                var errorList = ModelState.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+
+                var errors = JsonConvert.SerializeObject(errorList);
+
+                return Json(new { success = false, response = errors });
             }
 
             await _qualificationService.UpdateQualificationAsync(viewModel);
 
-            //Retrieve the changed item
-            var qualification = await _qualificationService.GetQualificationAsync(viewModel.QualificationId);
-            qualification.Routes = GetRoutesForQualificationSearchItem(viewModel);
-            return PartialView("_qualificationitem", qualification);
+            return Json(new { success = true, response = string.Empty });
         }
 
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "MissingQualification")]
@@ -272,7 +269,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 ModelState.AddModelError("ShortTitle", "You must enter a short title that is 100 characters or fewer");
             }
-            
+
             if (viewModel.Routes == null || !viewModel.Routes.Any(r => r.IsSelected))
             {
                 ModelState.AddModelError("Routes", "You must choose a skill area for this qualification");
