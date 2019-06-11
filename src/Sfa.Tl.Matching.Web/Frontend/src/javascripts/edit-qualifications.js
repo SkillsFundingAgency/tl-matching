@@ -37,13 +37,9 @@ var editQualifications = (function () {
         });
 
         $("#" + this.name).val($("#Hidden" + this.name).val());
-        var currentClassName = $("#" + this.name + "__listbox").attr("class");
 
-        for (var i = 1; i <= 10; i++) {
+        for (var i = 1; i <= 3; i++) {
             var timeout = i * 1000;
-            if (currentClassName === "autocomplete__menu autocomplete__menu--inline autocomplete__menu--visible") {
-                break;
-            }
             setTimeout(() => {
                 $("#" + this.name + "__listbox").attr('class',
                     "autocomplete__menu autocomplete__menu--inline autocomplete__menu--hidden");
