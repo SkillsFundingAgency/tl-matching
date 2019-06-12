@@ -15,8 +15,6 @@ var editQualifications = (function () {
         $(".tl-expandable").removeClass("active");
     });
 
-
-
     $(".tl-qual-row").on("change", "input", function () {
         $(this).closest(".tl-qual-row").addClass("test");
     });
@@ -66,11 +64,8 @@ var editQualifications = (function () {
         clearValidationError(qualId);
 
         const errorsArray = [];
-        const errors = new Array();
 
         if (error.ShortTitle !== undefined && error.ShortTitle !== null) {
-            // TODO Add Input Error 
-            //$(`#tl-autocomplete_${qualId}`).addClass("govuk-input--error");
             $(`#tl-autocomplete_${qualId}`).addClass("tl-error");
 
             const shortTitleError = {};
@@ -78,8 +73,6 @@ var editQualifications = (function () {
             shortTitleError.fieldName = "SelectShortTitle";
             shortTitleError.error = error.ShortTitle[0];
             errorsArray.push(shortTitleError);
-
-            errors.push(error.ShortTitle[0]);
         }
 
         if (error.Routes !== undefined && error.Routes !== null) {
@@ -90,15 +83,17 @@ var editQualifications = (function () {
             routeError.fieldName = "tl-expandable";
             routeError.error = error.Routes[0];
             errorsArray.push(routeError);
-
-            errors.push(error.Routes[0]);
         }
 
         if (errorsArray.length > 0) {
             $(`#tl-error_${qualId}`).addClass("tl-visible");
-            const errorsAsText = errors.join("<br/>");
 
-            $(`#tl-error_${qualId}`).html(errorsAsText);
+            const errors = $.map(errorsArray,
+                function (e) {
+                    return e.error;
+                });
+
+            $(`#tl-error_${qualId}`).html(errors.join("<br/>"));
 
             populateErrorSummary(errorsArray, qualId);
         }
@@ -124,8 +119,6 @@ var editQualifications = (function () {
     }
 
     function clearValidationError(qualId) {
-        //$(`#tl-autocomplete_${qualId}`).removeClass("govuk-input--error");
-
         $(`#tl-autocomplete_${qualId}`).removeClass("tl-error");
         $(`#tl-expandable_${qualId}`).removeClass("tl-error");
         $(`#tl-error_${qualId}`).removeClass("tl-visible");
