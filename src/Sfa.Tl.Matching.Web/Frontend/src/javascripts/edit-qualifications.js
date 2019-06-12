@@ -6,6 +6,15 @@ var editQualifications = (function () {
         $(this).parent().toggleClass("active");
     });
 
+    
+
+    $(".tl-expandable").focusout(function (e) {
+        if ($(this).find(e.relatedTarget).length === 0) {
+            e.preventDefault();
+            $(this).toggleClass("active");
+        }
+    });
+
     $(".tl-editquals-item").submit(function (event) {
 
         const qualEditform = $(this);

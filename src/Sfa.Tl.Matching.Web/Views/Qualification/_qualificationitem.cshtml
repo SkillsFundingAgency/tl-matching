@@ -1,57 +1,58 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.QualificationSearchResultViewModel
 
-    <form class="tl-editquals-item" asp-route="SaveQualification" novalidate>
-        <input type="hidden" asp-for="QualificationId" />
-        <input type="hidden" asp-for="LarId" />
-        <input type="hidden" asp-for="Title" />
-        <input name="Source" value="Admin" type="hidden" />
+<form class="tl-editquals-item" asp-route="SaveQualification" novalidate>
+    <input type="hidden" asp-for="QualificationId" />
+    <input type="hidden" asp-for="LarId" />
+    <input type="hidden" asp-for="Title" />
+    <input name="Source" value="Admin" type="hidden" />
 
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-                @Model.Title (@Model.LarId)
-                <span class="govuk-error-message govuk-!-font-size-16">
-                    You must choose a skill area for this qualification
-                </span>
-            </td>
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+            @Model.Title (@Model.LarId)
+            <span class="govuk-error-message govuk-!-font-size-16">
+                You must choose a skill area for this qualification
+            </span>
+        </td>
 
-            <td class="govuk-table__cell">
-                <div class="tl-autocomplete" id="tl-autocomplete_@Model.QualificationId">
-                    <select id="SelectShortTitle_@Model.QualificationId" name="SelectShortTitle_@Model.QualificationId"
-                            class="govuk-input" aria-describedby="short-title-hint"></select>
-                    <input id="ShortTitle_@Model.QualificationId" asp-for="ShortTitle" type="hidden" />
+        <td class="govuk-table__cell">
+            <div class="tl-autocomplete" id="tl-autocomplete_@Model.QualificationId">
+                <select id="SelectShortTitle_@Model.QualificationId" name="SelectShortTitle_@Model.QualificationId"
+                        class="govuk-input" aria-describedby="short-title-hint"></select>
+                <input id="ShortTitle_@Model.QualificationId" asp-for="ShortTitle" type="hidden" />
+            </div>
+        </td>
+        <td class="govuk-table__cell">
+            @* Please Do Not Remove TabIndex as its used for OnBlur Event https://stackoverflow.com/a/15629457 *@
+            <div class="tl-expandable" id="tl-expandable_@Model.QualificationId" tabindex="-1@(Model.QualificationId)">
+                <button class="tl-expandable--header" tabindex="0" type="button">
+                    <span class="tl-expandable--header-text">Skill areas</span>
+                    <svg version="1.1" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="m225.84 414.16l256 256c16.683 16.683 43.691 16.683 60.331 0l256-256c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-225.84 225.84-225.84-225.84c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"></path></svg>
+                </button>
+                <div class="tl-expandable--content">
+                    <fieldset class="govuk-fieldset">
+                        <div class="govuk-checkboxes">
+                            @for (var i = 0; i < Model.Routes.Count; i++)
+                            {
+                                var route = Model.Routes[i];
+                                <div class="govuk-checkboxes__item">
+                                    <input type="hidden" asp-for="@route.Id" name="Routes[@i].Id" />
+
+                                    <input type="checkbox" class="govuk-checkboxes__input"
+                                           asp-for="@Model.Routes[i].IsSelected"
+                                           name="Routes[@i].IsSelected">
+                                    <label class="govuk-label govuk-checkboxes__label"
+                                           asp-for="@Model.Routes[i].IsSelected"
+                                           name="Routes[@i].IsSelected">
+                                        @route.Name
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </fieldset>
+
                 </div>
-            </td>
-            <td class="govuk-table__cell">
-                <div class="tl-expandable" id="tl-expandable_@Model.QualificationId">
-                    <button class="tl-expandable--header" tabindex="0" type="button">
-                        <span class="tl-expandable--header-text">Skill areas</span>
-                        <svg version="1.1" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="m225.84 414.16l256 256c16.683 16.683 43.691 16.683 60.331 0l256-256c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-225.84 225.84-225.84-225.84c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"></path></svg>
-                    </button>
-                    <div class="tl-expandable--content">
-                        <fieldset class="govuk-fieldset">
-                            <div class="govuk-checkboxes">
-                                @for (var i = 0; i < Model.Routes.Count; i++)
-                                {
-                                    var route = Model.Routes[i];
-                                    <div class="govuk-checkboxes__item">
-                                        <input type="hidden" asp-for="@route.Id" name="Routes[@i].Id"/>
-
-                                        <input type="checkbox" class="govuk-checkboxes__input"
-                                               asp-for="@Model.Routes[i].IsSelected"
-                                               name="Routes[@i].IsSelected">
-                                        <label class="govuk-label govuk-checkboxes__label"
-                                               asp-for="@Model.Routes[i].IsSelected"
-                                               name="Routes[@i].IsSelected">
-                                            @route.Name
-                                        </label>
-                                    </div>
-                                }
-                            </div>
-                        </fieldset>
-
-                    </div>
-                </div>
-            </td>
-            <td class="govuk-table__cell"><button class="govuk-button govuk-!-margin-0">Save</button></td>
-        </tr>
-    </form>
+            </div>
+        </td>
+        <td class="govuk-table__cell"><button class="govuk-button govuk-!-margin-0">Save</button></td>
+    </tr>
+</form>
