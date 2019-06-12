@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -78,11 +79,23 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         }
 
         [Fact]
-        public void Then_Partial_View_Result_Is_Returned()
+        public void Then_Json_Result_Is_Returned()
         {
-            var result = _result as PartialViewResult;
+            var result = _result as JsonResult;
             result.Should().NotBeNull();
-            result?.ViewName.Should().Be("_qualificationitem");
+
+            var validJson = result?.Value.ToString()
+                    .Replace("=", ":")
+                    .Replace(" False", "\"False\"")
+                    .Replace(" True", "\"True\"");
+
+            dynamic responseObject = JsonConvert.DeserializeObject(validJson);
+
+            Assert.True(responseObject.success == "False");
+
+            var responseString = responseObject.response.ToString() as string;
+            responseString.Should().Contain("Routes");
+            responseString.Should().Contain("You must choose a skill area for this qualification");
         }
     }
 }
