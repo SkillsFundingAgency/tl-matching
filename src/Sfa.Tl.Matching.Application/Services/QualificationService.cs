@@ -145,30 +145,21 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var comparer = new QualificationRoutePathMappingEqualityComparer();
             var newMappings = _mapper.Map<IList<QualificationRoutePathMapping>>(viewModel);
-            
+
             var toBeAdded = newMappings.Except(existingMappings, comparer).ToList();
 
             var same = existingMappings.Intersect(newMappings, comparer).ToList();
-            var toBeDeleted = existingMappings?.Except(same).ToList();
+            var toBeDeleted = existingMappings.Except(same).ToList();
 
-            QualificationRoutePathMapping Find(QualificationRoutePathMapping qrpm) => 
-                existingMappings?.First(r => r.Id == qrpm.Id);
+            QualificationRoutePathMapping Find(QualificationRoutePathMapping qrpm) =>
+                existingMappings.First(r => r.Id == qrpm.Id);
 
-            var deleteMappings = toBeDeleted?.Select(Find).ToList();
+            var deleteMappings = toBeDeleted.Select(Find).ToList();
             await _qualificationRoutePathMappingRepository.DeleteMany(deleteMappings);
 
-            try
+            foreach (var toBeAddedItem in toBeAdded)
             {
-                //await _qualificationRoutePathMappingRepository.CreateMany(toBeAdded);
-                foreach (var toBeAddedItem in toBeAdded)
-                {
-                    //toBeAddedItem.Qualification = qualification;
-                    await _qualificationRoutePathMappingRepository.Create(toBeAddedItem);
-                }
-            }
-            catch (Exception e)
-            {
-                //TODO: Remove this - only for debugging;
+                await _qualificationRoutePathMappingRepository.Create(toBeAddedItem);
             }
         }
 

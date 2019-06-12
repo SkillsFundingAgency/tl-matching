@@ -63,6 +63,21 @@ gulp.task('copy-employer-js', function () {
         .pipe(gulp.dest(paths.dist.defaultJs));
 });
 
+gulp.task('copy-missing-quals-js', function () {
+    return gulp.src([
+            'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
+            'Frontend/src/javascripts/missing-qualification-search.js'
+        ])
+        .pipe(concat('missing-quals.js'))
+        .pipe(minify({
+            noSource: true,
+            ext: {
+                min: '.min.js'
+            }
+        }))
+        .pipe(gulp.dest(paths.dist.defaultJs));
+});
+
 gulp.task('copy-assets', () => {
     gulp.src(paths.src.defaultAssets)
         .pipe(gulp.dest(paths.dist.defaultAssets));
