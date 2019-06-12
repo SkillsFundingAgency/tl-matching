@@ -61,7 +61,7 @@ var editQualifications = (function () {
             $(`#tl-autocomplete_${qualId}`).addClass("tl-error");
         }
 
-        if (error.Routes !== undefined && error.ShortTitle !== null) {            
+        if (error.Routes !== undefined && error.Routes !== null) {            
             $(`#tl-expandable_${qualId}`).addClass("tl-error");
         }
 
