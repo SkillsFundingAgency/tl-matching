@@ -153,6 +153,8 @@ var editQualifications = (function () {
     });
 
     function searchShortTitle(query, populateResults) {
+        if (query.trim().length < queryMinLength) return;
+
         $.ajax({
             url: "/search-short-title",
             contentType: "application/json",

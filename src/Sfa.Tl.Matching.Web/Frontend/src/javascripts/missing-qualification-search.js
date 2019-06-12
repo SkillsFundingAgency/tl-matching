@@ -14,28 +14,25 @@ var missingQualShortTitle = (function () {
     });
 
     function searchShortTitle(query, populateResults) {
-        var delayInMs = 100;
+        if (query.trim().length < queryMinLength) return;
 
-        setTimeout(function() {
-                $.ajax({
-                    url: "/search-short-title",
-                    contentType: "application/json",
-                    data: { query: query },
-                    success: function(shortTitles) {
-                        const shortTitlesList = $.map(shortTitles,
-                            function(st) {
-                                return st.shortTitle;
-                            });
+        $.ajax({
+            url: "/search-short-title",
+            contentType: "application/json",
+            data: { query: query },
+            success: function (shortTitles) {
+                const shortTitlesList = $.map(shortTitles,
+                    function (st) {
+                        return st.shortTitle;
+                    });
 
-                        populateResults(shortTitlesList);
-                    },
-                    timeout: 5000,
-                    error: function() {
-                        console.log("An error occurred.");
-                    }
-                });
+                populateResults(shortTitlesList);
             },
-            delayInMs);
+            timeout: 5000,
+            error: function () {
+                console.log("An error occurred.");
+            }
+        });
     }
 
     function setSelectedShortTitle() {
