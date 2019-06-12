@@ -15,6 +15,11 @@ var editQualifications = (function () {
         }
     });
 
+    $(".tl-qual-row").on("change", "input", function () {
+        console.log("test");
+        $(this).closest(".tl-qual-row").addClass("test");
+    });
+
     $(".tl-editquals-item").submit(function (event) {
 
         const qualEditform = $(this);
