@@ -1,4 +1,5 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.QualificationSearchViewModel
+﻿@using System.Text.RegularExpressions
+@model Sfa.Tl.Matching.Models.ViewModel.QualificationSearchViewModel
 
 @{
     ViewData["Title"] = "Edit qualifications";
@@ -26,7 +27,8 @@
         {
             <p class="govuk-body">Too many results. Please try a different search.</p>
         }
-        else if (!string.IsNullOrEmpty(Model.SearchTerms) && Model.ResultCount == 0 && Model.SearchTerms.Length > 1)
+        else if (!string.IsNullOrEmpty(Model.SearchTerms) && Model.ResultCount == 0 && Model.SearchTerms.Length > 1
+            && Regex.IsMatch(Model.SearchTerms, @"^[a-zA-Z]+$"))
         {
             <p class="govuk-body">No results. Please try again.</p>
         }
