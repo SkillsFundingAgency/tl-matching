@@ -17,7 +17,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
     public class When_Qualification_SaveQualification_Is_Called
     {
         private readonly IQualificationService _qualificationService;
-        private readonly IRoutePathService _routePathService;
         private readonly IActionResult _result;
 
         public When_Qualification_SaveQualification_Is_Called()
@@ -28,12 +27,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var providerVenueService = Substitute.For<IProviderVenueService>();
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
 
-            _routePathService = Substitute.For<IRoutePathService>();
+            var routePathService = Substitute.For<IRoutePathService>();
             var routes = new List<Route>
             {
                 new Route {Id = 1, Name = "Route 1", Summary = "Route Summary 1"},
             }.AsQueryable();
-            _routePathService.GetRoutes().Returns(routes);
+            routePathService.GetRoutes().Returns(routes);
 
             _qualificationService = Substitute.For<IQualificationService>();
             _qualificationService.GetQualificationAsync(1)
@@ -47,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             var qualificationController = new QualificationController(mapper,
                 providerVenueService, _qualificationService,
-                providerQualificationService, _routePathService);
+                providerQualificationService, routePathService);
             var controllerWithClaims = new ClaimsBuilder<QualificationController>(qualificationController)
                 .AddUserName("username")
                 .AddEmail("email@address.com")
@@ -79,29 +78,18 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             _result.Should().NotBeNull();
 
         [Fact]
-        public void Then_Partial_View_Result_Is_Returned()
-        {
-            var result = _result as PartialViewResult;
-            result.Should().NotBeNull();
-            result?.ViewName.Should().Be("_qualificationitem");
-        }
-
-        [Fact]
         public void Then_UpdateQualification_Is_Called_Exactly_Once()
         {
             _qualificationService.Received(1).UpdateQualificationAsync(Arg.Any<SaveQualificationViewModel>());
         }
 
         [Fact]
-        public void Then_GetQualification_Is_Called_Exactly_Once()
+        public void Then_Json_Result_Is_Returned()
         {
-            _qualificationService.Received(1).GetQualificationAsync(1);
-        }
+            var result = _result as JsonResult;
+            result.Should().NotBeNull();
 
-        [Fact]
-        public void Then_GetRoutes_Is_Called_Exactly_Once()
-        {
-            _routePathService.Received(1).GetRoutes();
+            result?.Value.ToString().Should().Contain("success = True");
         }
     }
 }
