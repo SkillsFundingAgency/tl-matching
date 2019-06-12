@@ -222,24 +222,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return routesList;
         }
-
-        private IList<RouteViewModel> GetRoutesForQualificationSearchItem(SaveQualificationViewModel viewModel)
-        {
-            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
-
-            var routesList = _mapper.Map<RouteViewModel[]>(routes);
-
-            foreach (var route in routesList)
-            {
-                if (viewModel.Routes.Any(r => r.Id == route.Id && r.IsSelected))
-                {
-                    route.IsSelected = true;
-                }
-            }
-
-            return routesList;
-        }
-
+        
         private void PopulateRoutesForQualificationSearchItem(QualificationSearchViewModel searchResult)
         {
             var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
@@ -252,25 +235,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private void Validate(MissingQualificationViewModel viewModel)
         {
-            if (string.IsNullOrWhiteSpace(viewModel.ShortTitle) || viewModel.ShortTitle.Length > 100)
-            {
-                ModelState.AddModelError("ShortTitle", "You must enter a short title that is 100 characters or fewer");
-            }
-
-            if (!viewModel.Routes.Any(r => r.IsSelected))
-            {
-                ModelState.AddModelError("Routes", "You must choose a skill area for this qualification");
-            }
+            Validate(viewModel.ShortTitle, viewModel.Routes);
         }
 
         private void Validate(SaveQualificationViewModel viewModel)
         {
-            if (string.IsNullOrWhiteSpace(viewModel.ShortTitle) || viewModel.ShortTitle.Length > 100)
+            Validate(viewModel.ShortTitle, viewModel.Routes);
+        }
+
+        private void Validate(string shortTitle, IList<RouteViewModel> routes)
+        {
+            if (string.IsNullOrWhiteSpace(shortTitle) || shortTitle.Length > 100)
             {
                 ModelState.AddModelError("ShortTitle", "You must enter a short title that is 100 characters or fewer");
             }
 
-            if (viewModel.Routes == null || !viewModel.Routes.Any(r => r.IsSelected))
+            if (routes == null || !routes.Any(r => r.IsSelected))
             {
                 ModelState.AddModelError("Routes", "You must choose a skill area for this qualification");
             }
