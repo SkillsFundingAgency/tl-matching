@@ -4,20 +4,27 @@ var editQualifications = (function () {
     $(".tl-expandable--header").click(function (e) {
         e.preventDefault();
         $(this).parent().toggleClass("active");
+        e.stopPropagation();
     });
 
-    
-
-    $(".tl-expandable").focusout(function (e) {
-        if ($(this).find(e.relatedTarget).length === 0) {
-            e.preventDefault();
-            $(this).toggleClass("active");
-        }
+    $(".tl-expandable--content").click(function (e) {
+        e.stopPropagation();
     });
+
+    $(document).on('click', function (e) {
+        $(".tl-expandable").removeClass("active");
+    });
+
+
 
     $(".tl-qual-row").on("change", "input", function () {
-        console.log("test");
         $(this).closest(".tl-qual-row").addClass("test");
+    });
+
+
+    $(".tl-qual-row").on("change", "input", function () {
+        $(this).closest(".tl-qual-row").addClass("tl-qual-change");
+        $(this).closest(".tl-qual-row").find(".tl-qual-button").removeClass("govuk-button--disabled").attr("disabled", false);
     });
 
     $(".tl-editquals-item").submit(function (event) {
@@ -27,6 +34,8 @@ var editQualifications = (function () {
         event.preventDefault();
 
         const autoCompleteShortTitle = $(`#SelectShortTitle_${this.elements.QualificationId.value}`).val();
+
+        $(this).closest(".tl-qual-row").find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
 
         $(`#ShortTitle_${this.elements.QualificationId.value}`).val(autoCompleteShortTitle);
 
@@ -52,6 +61,7 @@ var editQualifications = (function () {
 
     function setValidationError(response, qualId) {
         const error = JSON.parse(response);
+        $(`#tl-autocomplete_${qualId}`).closest(".tl-qual-row").find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
 
         clearValidationError(qualId);
 
@@ -61,7 +71,7 @@ var editQualifications = (function () {
             $(`#tl-autocomplete_${qualId}`).addClass("tl-error");
         }
 
-        if (error.Routes !== undefined && error.Routes !== null) {            
+        if (error.Routes !== undefined && error.Routes !== null) {
             $(`#tl-expandable_${qualId}`).addClass("tl-error");
         }
 

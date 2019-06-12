@@ -51,7 +51,6 @@
         left: 0;
         background: white;
         border: 5px solid govuk-colour("grey-3");
-        padding: 10px;
         box-sizing: border-box;
         z-index: 100;
         max-height: 270px;
@@ -61,6 +60,10 @@
         transform: scaleY(0);
         transition: 0.2s ease-in-out;
         transform-origin: top;
+
+        .govuk-fieldset {
+            padding: 10px;
+        }
 
 
         .govuk-checkboxes__input {
