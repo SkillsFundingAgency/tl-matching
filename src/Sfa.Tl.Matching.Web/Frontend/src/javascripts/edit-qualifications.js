@@ -65,15 +65,15 @@ var editQualifications = (function () {
 
         clearValidationError(qualId);
 
-        var errorsArray = [];
-        var errors = new Array();
+        const errorsArray = [];
+        const errors = new Array();
 
         if (error.ShortTitle !== undefined && error.ShortTitle !== null) {
             // TODO Add Input Error 
             //$(`#tl-autocomplete_${qualId}`).addClass("govuk-input--error");
             $(`#tl-autocomplete_${qualId}`).addClass("tl-error");
 
-            var shortTitleError = {};
+            const shortTitleError = {};
             shortTitleError.qualId = qualId;
             shortTitleError.fieldName = "SelectShortTitle";
             shortTitleError.error = error.ShortTitle[0];
@@ -85,7 +85,7 @@ var editQualifications = (function () {
         if (error.Routes !== undefined && error.Routes !== null) {
             $(`#tl-expandable_${qualId}`).addClass("tl-error");
 
-            var routeError = {};
+            const routeError = {};
             routeError.qualId = qualId;
             routeError.fieldName = "tl-expandable";
             routeError.error = error.Routes[0];
@@ -96,19 +96,29 @@ var editQualifications = (function () {
 
         if (errorsArray.length > 0) {
             $(`#tl-error_${qualId}`).addClass("tl-visible");
-            var errorsAsText = errors.join("<br/>");
+            const errorsAsText = errors.join("<br/>");
 
             $(`#tl-error_${qualId}`).html(errorsAsText);
 
-            populateErrorSummary(errorsArray);
+            populateErrorSummary(errorsArray, qualId);
         }
     }
 
-    function populateErrorSummary(errorsArray) {
+    function populateErrorSummary(errorsArray, qualId) {
         $(`#tl-error-summary`).removeClass("tl-hidden");
 
-        for (var i = 0; i < errorsArray.length; i++) {
-            $(`#tl-error-summary ul`)
+        $(`#tl-error-summary`).append(`
+            <div class="govuk-error-summary__body" id="errorSummary_${qualId}">
+                <div>
+                    <ul class="govuk-list govuk-error-summary__list">
+                    </ul>
+                <div>
+                <br/>
+            </div>
+        `);
+
+        for (let i = 0; i < errorsArray.length; i++) {
+            $(`#errorSummary_${qualId} ul`)
                 .append(`<a href=#${errorsArray[i].fieldName}_${errorsArray[i].qualId}>${errorsArray[i].error}</a><br/>`);
         }
     }
@@ -119,7 +129,11 @@ var editQualifications = (function () {
         $(`#tl-autocomplete_${qualId}`).removeClass("tl-error");
         $(`#tl-expandable_${qualId}`).removeClass("tl-error");
         $(`#tl-error_${qualId}`).removeClass("tl-visible");
-        $(`#tl-error-summary`).addClass("tl-hidden");
+        $(`#errorSummary_${qualId}`).remove();
+
+        if ($('.govuk-error-summary__body').length === 0) {
+            $(`#tl-error-summary`).addClass("tl-hidden");
+        }
     }
 
     var queryMinLength = 2;
