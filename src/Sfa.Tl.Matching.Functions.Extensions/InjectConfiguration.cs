@@ -192,7 +192,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
 
-            services.AddTransient(svcProvider =>
+            services.AddTransient<IProviderQueryPortTypeClient>(svcProvider =>
             {
                var client = new ProviderQueryPortTypeClient();
 
