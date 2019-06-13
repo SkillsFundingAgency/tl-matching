@@ -19,5 +19,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
         {
             searchTerm.ToQualificationSearch().Should().Be(result);
         }
+
+
+        [Theory(DisplayName = "AllSpecialCharactersOrNumbers Data Tests")]
+        [InlineData("Test", false)]
+        [InlineData("Test2342423", false)]
+        [InlineData("Test Test2", false)]
+        [InlineData("Test Test2 Test3 Test4", false)]
+        [InlineData("Test 4234 Test2 33", false)]
+        [InlineData("$£%$£$ $£$", true)]
+        [InlineData("123213", true)]
+        [InlineData("$", true)]
+        [InlineData("$£%$£$", true)]
+        public void AllSpecialCharactersOrNumbersDataTests(string searchTerm, bool result)
+        {
+            searchTerm.IsAllSpecialCharactersOrNumbers().Should().Be(result);
+        }
     }
 }

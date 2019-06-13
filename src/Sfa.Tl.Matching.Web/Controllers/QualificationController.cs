@@ -102,6 +102,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("edit-qualifications", Name = "SearchQualifications")]
         public async Task<IActionResult> EditQualifications(QualificationSearchViewModel viewModel)
         {
+            if (viewModel.SearchTerms.IsAllSpecialCharactersOrNumbers())
+                ModelState.AddModelError("SearchTerms", "You must enter 2 or more letters for your search");
+
             if (!ModelState.IsValid)
                 return View(viewModel);
 

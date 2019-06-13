@@ -118,5 +118,17 @@ namespace Sfa.Tl.Matching.Application.Extensions
 
             return string.Join(" ", words.Where(x => !string.IsNullOrEmpty(x))).ToLetter();
         }
+
+        public static bool IsAllSpecialCharactersOrNumbers(this string value)
+        {
+            var countOfSpecialCharactersAndNumbers = 0;
+            foreach (var c in value)
+            {
+                if (!char.IsLetter(c))
+                    countOfSpecialCharactersAndNumbers++;
+            }
+
+            return value.Length == countOfSpecialCharactersAndNumbers;
+        }
     }
 }
