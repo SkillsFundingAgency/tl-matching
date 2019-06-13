@@ -31,8 +31,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
             var mapper = new Mapper(config);
             var logger = Substitute.For<ILogger<FileImportService<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto, LearningAimReferenceStaging>>>();
             _fileReader = Substitute.For<IFileReader<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto>>();
-            _repository = Substitute.For<IBulkInsertRepository<LearningAimReferenceStaging>>();
             _dataProcessor = Substitute.For<IDataProcessor<LearningAimReferenceStaging>>();
+
+            _repository = Substitute.For<IBulkInsertRepository<LearningAimReferenceStaging>>();
+            _repository.MergeFromStaging().Returns(2);
             
             _stagingFileImportDto = new LearningAimReferenceStagingFileImportDto
             {

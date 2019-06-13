@@ -11,7 +11,7 @@ var editQualifications = (function () {
         e.stopPropagation();
     });
 
-    $(document).on('click', function (e) {
+    $(document).on('click', function () {
         $(".tl-expandable").removeClass("active");
     });
 
@@ -41,7 +41,7 @@ var editQualifications = (function () {
             success: function (result) {
                 if (result.success === false) {
                     setValidationError(result.response, qualId);
-                    hideSuccessMessage()
+                    hideSuccessMessage();
                 }
                 if (result.success === true) {
                     clearValidationError(qualId);

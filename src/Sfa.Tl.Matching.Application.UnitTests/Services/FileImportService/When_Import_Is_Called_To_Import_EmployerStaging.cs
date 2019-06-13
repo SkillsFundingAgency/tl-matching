@@ -18,11 +18,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 {
     public class When_Import_Is_Called_To_Import_EmployerStaging
     {
+        private readonly int _result;
         private readonly EmployerStagingFileImportDto _stagingFileImportDto;
         private readonly IList<EmployerStagingDto> _fileReaderResults;
         private readonly IFileReader<EmployerStagingFileImportDto, EmployerStagingDto> _fileReader;
         private readonly IBulkInsertRepository<EmployerStaging> _repository;
-        private readonly int _result;
         private readonly IDataProcessor<EmployerStaging> _dataProcessor;
 
         public When_Import_Is_Called_To_Import_EmployerStaging()
@@ -31,8 +31,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
             var mapper = new Mapper(config);
             var logger = Substitute.For<ILogger<FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging>>>();
             _fileReader = Substitute.For<IFileReader<EmployerStagingFileImportDto, EmployerStagingDto>>();
-            _repository = Substitute.For<IBulkInsertRepository<EmployerStaging>>();
             _dataProcessor = Substitute.For<IDataProcessor<EmployerStaging>>();
+
+            _repository = Substitute.For<IBulkInsertRepository<EmployerStaging>>();
+            _repository.MergeFromStaging().Returns(2);
 
             _stagingFileImportDto = new EmployerStagingFileImportDto
             {
