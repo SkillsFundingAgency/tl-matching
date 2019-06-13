@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         internal readonly IValidator<TImportDto> DataValidator;
         internal readonly IDataParser<TDto> DataParser;
         internal readonly IRepository<FunctionLog> FunctionLogRepository;
-        internal readonly IRepository<TEntity> Repository;
+        internal readonly IBulkInsertRepository<TEntity> Repository;
         internal readonly FileImportService<TImportDto, TDto, TEntity> FileImportService;
 
         public CsvFileImportServiceDuplicateRowsTestFixture()
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
                 FunctionLogRepository
             );
 
-            Repository = Substitute.For<IRepository<TEntity>>();
+            Repository = Substitute.For<IBulkInsertRepository<TEntity>>();
 
             FileImportService = new FileImportService<TImportDto, TDto, TEntity>
             (
@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
             var filePath = Path.Combine(TestHelper.GetTestExecutionDirectory(), $"Services\\FileImportService\\DuplicateRows\\{typeof(TEntity).Name}-DuplicateRows.csv");
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                FileImportService.Import(new TImportDto
+                FileImportService.BulkImport(new TImportDto
                 {
                     FileDataStream = stream
                 }).GetAwaiter().GetResult();

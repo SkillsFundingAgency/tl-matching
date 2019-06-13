@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -22,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         private readonly LearningAimReferenceStagingFileImportDto _stagingFileImportDto;
         private readonly IList<LearningAimReferenceStagingDto> _fileReaderResults;
         private readonly IFileReader<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto> _fileReader;
-        private readonly IRepository<LearningAimReferenceStaging> _repository;
+        private readonly IBulkInsertRepository<LearningAimReferenceStaging> _repository;
         private readonly int _result;
         private readonly IDataProcessor<LearningAimReferenceStaging> _dataProcessor;
 
@@ -32,17 +31,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
             var mapper = new Mapper(config);
             var logger = Substitute.For<ILogger<FileImportService<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto, LearningAimReferenceStaging>>>();
             _fileReader = Substitute.For<IFileReader<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto>>();
-            _repository = Substitute.For<IRepository<LearningAimReferenceStaging>>();
+            _repository = Substitute.For<IBulkInsertRepository<LearningAimReferenceStaging>>();
             _dataProcessor = Substitute.For<IDataProcessor<LearningAimReferenceStaging>>();
-
-            _repository
-                .CreateMany(Arg.Any<IList<LearningAimReferenceStaging>>())
-                .Returns(callinfo =>
-                {
-                    var passedEntities = callinfo.ArgAt<IEnumerable<LearningAimReferenceStaging>>(0);
-                    return passedEntities.Count();
-                });
-
+            
             _stagingFileImportDto = new LearningAimReferenceStagingFileImportDto
             {
                 FileDataStream = new MemoryStream()
@@ -55,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 
             var service = new FileImportService<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto, LearningAimReferenceStaging>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
-            _result = service.Import(_stagingFileImportDto).GetAwaiter().GetResult();
+            _result = service.BulkImport(_stagingFileImportDto).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -71,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _repository
                 .Received(1)
-                .CreateMany(Arg.Any<IList<LearningAimReferenceStaging>>());
+                .BulkInsert(Arg.Any<IList<LearningAimReferenceStaging>>());
         }
 
         [Fact]

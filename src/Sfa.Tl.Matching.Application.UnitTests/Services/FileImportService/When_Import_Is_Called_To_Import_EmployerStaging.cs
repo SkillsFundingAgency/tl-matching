@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -22,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         private readonly EmployerStagingFileImportDto _stagingFileImportDto;
         private readonly IList<EmployerStagingDto> _fileReaderResults;
         private readonly IFileReader<EmployerStagingFileImportDto, EmployerStagingDto> _fileReader;
-        private readonly IRepository<EmployerStaging> _repository;
+        private readonly IBulkInsertRepository<EmployerStaging> _repository;
         private readonly int _result;
         private readonly IDataProcessor<EmployerStaging> _dataProcessor;
 
@@ -32,16 +31,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
             var mapper = new Mapper(config);
             var logger = Substitute.For<ILogger<FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging>>>();
             _fileReader = Substitute.For<IFileReader<EmployerStagingFileImportDto, EmployerStagingDto>>();
-            _repository = Substitute.For<IRepository<EmployerStaging>>();
+            _repository = Substitute.For<IBulkInsertRepository<EmployerStaging>>();
             _dataProcessor = Substitute.For<IDataProcessor<EmployerStaging>>();
-
-            _repository
-                .CreateMany(Arg.Any<IList<EmployerStaging>>())
-                .Returns(callinfo =>
-                {
-                    var passedEntities = callinfo.ArgAt<IEnumerable<EmployerStaging>>(0);
-                    return passedEntities.Count();
-                });
 
             _stagingFileImportDto = new EmployerStagingFileImportDto
             {
@@ -55,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 
             var service = new FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
-            _result = service.Import(_stagingFileImportDto).GetAwaiter().GetResult();
+            _result = service.BulkImport(_stagingFileImportDto).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -71,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _repository
                 .Received(1)
-                .CreateMany(Arg.Any<IList<EmployerStaging>>());
+                .BulkInsert(Arg.Any<IList<EmployerStaging>>());
         }
 
         [Fact]

@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         [Fact]
         public void Then_Repository_Create_Many_Is_called_With_Only_One_Item()
         {
-            _fixture.Repository.Received(1).CreateMany(Arg.Is<IList<LearningAimReferenceStaging>>(arg => arg.Count == 1));
+            _fixture.Repository.Received(1).BulkInsert(Arg.Is<IList<LearningAimReferenceStaging>>(arg => arg.Count == 1));
         }
     }
 }

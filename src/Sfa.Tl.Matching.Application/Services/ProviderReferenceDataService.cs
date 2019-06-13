@@ -7,38 +7,34 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Api.Clients.ProviderReference;
-using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class ProviderReferenceDataService : IReferenceDataService
     {
         private readonly IProviderReferenceDataClient _providerReferenceDataClient;
-        private readonly IRepository<ProviderReferenceStaging> _repository;
+        private readonly IBulkInsertRepository<ProviderReferenceStaging> _bulkInsertRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly MatchingConfiguration _matchingConfiguration;
 
         public ProviderReferenceDataService(IProviderReferenceDataClient providerReferenceDataClient,
-            IRepository<ProviderReferenceStaging> repository,
+            IBulkInsertRepository<ProviderReferenceStaging> bulkInsertRepository,
             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository,
-            IDateTimeProvider dateTimeProvider,
-            MatchingConfiguration matchingConfiguration)
+            IDateTimeProvider dateTimeProvider)
         {
             _providerReferenceDataClient = providerReferenceDataClient;
-            _repository = repository;
+            _bulkInsertRepository = bulkInsertRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
             _dateTimeProvider = dateTimeProvider;
-            _matchingConfiguration = matchingConfiguration;
         }
 
         public async Task<int> SynchronizeProviderReference(DateTime lastUpdateDate)
         {
             var backgroundProcessHistoryId = await CreateBackgroundProcessHistory();
             var providerReferenceStagings = await GetProvidersForStaging(lastUpdateDate);
-            await _repository.BulkInsert(providerReferenceStagings, _matchingConfiguration.SqlConnectionString);
-            await _repository.MergeFromStaging(_matchingConfiguration.SqlConnectionString);
+            await _bulkInsertRepository.BulkInsert(providerReferenceStagings);
+            await _bulkInsertRepository.MergeFromStaging();
 
             await UpdateBackgroundProcessHistory(backgroundProcessHistoryId, providerReferenceStagings.Count);
 

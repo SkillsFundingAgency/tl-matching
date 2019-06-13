@@ -24,14 +24,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
 
         public LearningAimReferenceTestFixture()
         {
-            var loggerRepository = new Logger<GenericRepository<LearningAimReferenceStaging>>(new NullLoggerFactory());
+            var loggerRepository = new Logger<SqlBulkInsertRepository<LearningAimReferenceStaging>>(new NullLoggerFactory());
             var loggerCsvFileReader = new Logger<CsvFileReader<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto>>(new NullLoggerFactory());
 
             var logger = new Logger<FileImportService<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto, LearningAimReferenceStaging>>(new NullLoggerFactory());
 
-            MatchingDbContext = new TestConfiguration().GetDbContext();
+            var testConfig = new TestConfiguration();
+            MatchingDbContext = testConfig.GetDbContext();
+            var matchingConfiguration = TestConfiguration.MatchingConfiguration;
 
-            var repository = new GenericRepository<LearningAimReferenceStaging>(loggerRepository, MatchingDbContext);
+            var repository = new SqlBulkInsertRepository<LearningAimReferenceStaging>(loggerRepository, matchingConfiguration);
             var functionLogRepository = new GenericRepository<FunctionLog>(new NullLogger<GenericRepository<FunctionLog>>(), MatchingDbContext);
             
             var dataValidator = new LearningAimReferenceStagingDataValidator();
