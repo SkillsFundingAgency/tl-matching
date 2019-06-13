@@ -28,7 +28,7 @@ var editQualifications = (function () {
 
         const autoCompleteShortTitle = $(`#SelectShortTitle_${this.elements.QualificationId.value}`).val();
 
-        $(this).siblings(".tl-qual-row:first").find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
+        $(this).nextUntil(".tl-qual-row").next().find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
 
         $(`#ShortTitle_${this.elements.QualificationId.value}`).val(autoCompleteShortTitle);
 
@@ -166,6 +166,9 @@ var editQualifications = (function () {
 
     function showSuccessMessage() {
         $(".tl-sticky").addClass("tl-sticky--success");
+        setTimeout(function () {
+            hideSuccessMessage();
+        }, 3000);
         $(".tl-sticky--success span").text("We have saved your changes");
     }
 
