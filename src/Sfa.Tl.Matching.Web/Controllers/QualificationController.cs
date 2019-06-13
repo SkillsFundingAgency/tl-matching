@@ -233,24 +233,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
         }
 
-        private void Validate(MissingQualificationViewModel viewModel)
+        private void Validate(QualificationViewModelBase viewModel)
         {
-            Validate(viewModel.ShortTitle, viewModel.Routes);
-        }
-
-        private void Validate(SaveQualificationViewModel viewModel)
-        {
-            Validate(viewModel.ShortTitle, viewModel.Routes);
-        }
-
-        private void Validate(string shortTitle, IList<RouteViewModel> routes)
-        {
-            if (string.IsNullOrWhiteSpace(shortTitle) || shortTitle.Length > 100)
+            if (string.IsNullOrWhiteSpace(viewModel.ShortTitle) || viewModel.ShortTitle.Length > 100)
             {
                 ModelState.AddModelError("ShortTitle", "You must enter a short title that is 100 characters or fewer");
             }
 
-            if (routes == null || !routes.Any(r => r.IsSelected))
+            if (viewModel.Routes == null || !viewModel.Routes.Any(r => r.IsSelected))
             {
                 ModelState.AddModelError("Routes", "You must choose a skill area for this qualification");
             }
