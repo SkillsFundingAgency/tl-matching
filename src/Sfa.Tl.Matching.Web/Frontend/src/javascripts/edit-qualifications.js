@@ -28,7 +28,7 @@ var editQualifications = (function () {
 
         const autoCompleteShortTitle = $(`#SelectShortTitle_${this.elements.QualificationId.value}`).val();
 
-        $(this).siblings(".tl-qual-row").find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
+        $(this).siblings(".tl-qual-row:first").find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
 
         $(`#ShortTitle_${this.elements.QualificationId.value}`).val(autoCompleteShortTitle);
 
@@ -41,9 +41,11 @@ var editQualifications = (function () {
             success: function (result) {
                 if (result.success === false) {
                     setValidationError(result.response, qualId);
+                    hideSuccessMessage()
                 }
                 if (result.success === true) {
                     clearValidationError(qualId);
+                    showSuccessMessage();
                 }
             },
             error: function () {
@@ -111,6 +113,7 @@ var editQualifications = (function () {
             $(`#errorSummary_${qualId} ul`)
                 .append(`<a href=#${errorsArray[i].fieldName}_${errorsArray[i].qualId}>${errorsArray[i].error}</a><br/>`);
         }
+
     }
 
     function clearValidationError(qualId) {
@@ -159,5 +162,15 @@ var editQualifications = (function () {
                 console.log("An error occurred.");
             }
         });
+    }
+
+    function showSuccessMessage() {
+        $(".tl-sticky").addClass("tl-sticky--success");
+        $(".tl-sticky--success span").text("We have saved your changes");
+    }
+
+    function hideSuccessMessage() {
+        $(".tl-sticky").removeClass("tl-sticky--success");
+        $(".tl-sticky--success span").text("");
     }
 })();
