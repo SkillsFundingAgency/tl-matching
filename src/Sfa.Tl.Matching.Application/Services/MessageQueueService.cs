@@ -21,13 +21,6 @@ namespace Sfa.Tl.Matching.Application.Services
             _configuration = configuration;
         }
 
-        public async Task PushProximityDataAsync(GetProximityData getProximityData)
-        {
-            await PushMessageAsync(
-                JsonConvert.SerializeObject(getProximityData), 
-                QueueName.GetProximityQueue);
-        }
-
         public async Task PushProviderQuarterlyRequestMessageAsync(SendProviderFeedbackEmail providerRequest)
         {
             await PushMessageAsync(
