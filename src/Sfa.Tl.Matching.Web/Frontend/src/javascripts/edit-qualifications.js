@@ -16,11 +16,6 @@ var editQualifications = (function () {
     });
 
     $(".tl-qual-row").on("change", "input", function () {
-        $(this).closest(".tl-qual-row").addClass("test");
-    });
-
-
-    $(".tl-qual-row").on("change", "input", function () {
         $(this).closest(".tl-qual-row").addClass("tl-qual-change");
         $(this).closest(".tl-qual-row").find(".tl-qual-button").removeClass("govuk-button--disabled").attr("disabled", false);
     });
@@ -33,7 +28,7 @@ var editQualifications = (function () {
 
         const autoCompleteShortTitle = $(`#SelectShortTitle_${this.elements.QualificationId.value}`).val();
 
-        $(this).closest(".tl-qual-row").find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
+        $(this).siblings(".tl-qual-row").find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
 
         $(`#ShortTitle_${this.elements.QualificationId.value}`).val(autoCompleteShortTitle);
 
