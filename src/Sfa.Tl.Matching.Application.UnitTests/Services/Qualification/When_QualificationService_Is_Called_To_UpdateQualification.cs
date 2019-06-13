@@ -147,21 +147,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .Received(1)
                 .GetMany(Arg.Any<Expression<Func<QualificationRoutePathMapping, bool>>>());
         }
-
-        //[Fact]
-        //public void Then_QualificationRoutePathMappingRepository_CreateMany_Is_Called_With_Expected_Values()
-        //{
-        //    _qualificationRoutePathMappingRepository
-        //        .Received(1)
-        //        .CreateMany(Arg.Is<IList<QualificationRoutePathMapping>>(
-        //            qrpm => qrpm.Count == 1 &&
-        //                    qrpm.First().QualificationId == 1 &&
-        //                    qrpm.First().RouteId == 3 &&
-        //                    qrpm.First().Source == "Test" &&
-        //                    qrpm.First().CreatedBy == "adminUserName"
-        //        ));
-        //}
-
+        
         [Fact]
         public void Then_QualificationRoutePathMappingRepository_Create_Is_Called_With_Expected_Values()
         {
