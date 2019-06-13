@@ -85,6 +85,16 @@
       "type": "boolean",
       "environmentVariable": "SendEmailEnabled"
     },
+	"GoogleMapsApiBaseUrl": {
+      "minLength": 1,
+      "type": "string",
+      "environmentVariable": "GoogleMapsApiBaseUrl"
+    },
+	"GoogleMapsApiKey": {
+      "minLength": 1,
+      "type": "string",
+      "environmentVariable": "GoogleMapsApiKey"
+    },
     "BlobStorageConnectionString": {
       "type": "string",
       "environmentVariable": "BlobStorageConnectionString"
