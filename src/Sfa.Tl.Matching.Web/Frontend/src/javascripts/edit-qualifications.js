@@ -180,7 +180,7 @@ var editQualifications = (function () {
         $(".tl-sticky--success span").text(`Your changes to ${qualTitle} have been saved`);
     }
 
-    function hideSuccessMessage(qualTitle) {
+    function hideSuccessMessage() {
         $(".tl-sticky").removeClass("tl-sticky--success");
         $(".tl-sticky--success span").text("");
     }
