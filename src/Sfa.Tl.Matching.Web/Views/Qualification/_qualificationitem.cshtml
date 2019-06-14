@@ -11,12 +11,10 @@
             <p class="govuk-!-font-size-19 govuk-!-margin-0">@Model.Title (@Model.LarId)
                 <span class="govuk-error-message govuk-!-font-size-16" id="tl-error_@Model.QualificationId"></span>
             </p>
-            
         </div>
         <div class="tl-table__cell tl-table__cell-20">
             <div class="tl-autocomplete" id="tl-autocomplete_@Model.QualificationId">
-                <select id="SelectShortTitle_@Model.QualificationId" name="SelectShortTitle_@Model.QualificationId"
-                        class="govuk-input" aria-describedby="short-title-hint"></select>
+                <select id="SelectShortTitle_@Model.QualificationId" name="SelectShortTitle_@Model.QualificationId" class="govuk-input" aria-describedby="short-title-hint"></select>
                 <input id="ShortTitle_@Model.QualificationId" asp-for="ShortTitle" type="hidden" />
             </div>
         </div>
