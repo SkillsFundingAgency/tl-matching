@@ -3,3 +3,61 @@
         color: govuk-colour("grey-1");
     }
 }
+
+
+.tl-table {
+    width: 100%;
+    display: block;
+
+    .tl-table__row {
+        border-bottom: 1px solid #bfc1c3;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+
+        p {
+            width: 100%;
+            display: inline-block;
+        }
+    }
+
+    .tl-table__cell, .tl-table__header {
+        display: inline-block;
+        width: 25%;
+        display: inline-flex;
+        padding: 10px;
+    }
+
+    .tl-table__cell-50 {
+        width: 50%;
+
+        @include govuk-media-query($until: tablet) {
+            width: 100%;
+        }
+    }
+
+    .tl-table__cell-40 {
+        width: 40%;
+
+        @include govuk-media-query($until: tablet) {
+            width: 100%;
+        }
+    }
+
+    .tl-table__cell-20 {
+        width: 20%;
+
+        @include govuk-media-query($until: tablet) {
+            width: 100%;
+        }
+    }
+
+    .tl-table__cell-10 {
+        width: 10%;
+
+        @include govuk-media-query($until: tablet) {
+            width: 100%;
+        }
+    }
+}
