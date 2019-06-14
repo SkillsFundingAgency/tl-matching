@@ -28,6 +28,9 @@ using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -168,7 +171,10 @@ namespace Sfa.Tl.Matching.Web
 
             //Inject services
             services.AddSingleton(_configuration);
-            services.AddHttpClient<ILocationService, LocationService>();
+            
+            services.AddHttpClient<ILocationApiClient, LocationApiClient>();
+            services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
+            
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 

@@ -19,6 +19,7 @@
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
     <partial name="_govuk_CookieBanner" />
+    @RenderSection("sticky", false)
 
     <partial name="_govuk_Header" />
     <partial name="_govuk_PhaseBanner" />
@@ -31,6 +32,7 @@
     </div>
 
     <partial name="_govuk_Footer" />
+
     <partial name="_govuk_Scripts" />
 
     @RenderSection("jsfiles", false)

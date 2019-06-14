@@ -3,7 +3,8 @@ using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue.Builders;
@@ -22,13 +23,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(ProviderVenueMapper).Assembly));
             var mapper = new Mapper(config);
-            var locationService = Substitute.For<ILocationService>();
-            _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
 
+            var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+            var locationService = Substitute.For<ILocationApiClient>();
+
+            _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
             _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new ValidProviderVenueBuilder().Build());
 
-            var service = new ProviderVenueService(mapper, _providerVenueRepository, locationService);
+            var service = new ProviderVenueService(mapper, _providerVenueRepository, locationService, googleMapApiClient);
 
             _result = service.GetRemoveProviderVenueViewModelAsync(1).GetAwaiter().GetResult();
         }

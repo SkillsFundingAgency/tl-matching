@@ -3,7 +3,8 @@ using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
@@ -16,10 +17,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
     public class When_ProviderVenueService_Is_Called_To_CreateVenue
     {
-        private const string Postcode = "CV1 2WT";
+        private const string UnFormatedPostcode = "CV12WT";
+        private const string FormatedPostcode = "CV1 2WT";
 
         private readonly IProviderVenueRepository _providerVenueRepository;
-        private readonly ILocationService _locationService;
+        private readonly ILocationApiClient _locationApiClient;
+        private readonly IGoogleMapApiClient _googleMapApiClient;
 
         public When_ProviderVenueService_Is_Called_To_CreateVenue()
         {
@@ -43,34 +46,47 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new Domain.Models.ProviderVenue());
 
-            _locationService = Substitute.For<ILocationService>();
-            _locationService.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
+            _locationApiClient = Substitute.For<ILocationApiClient>();
+            _locationApiClient.GetGeoLocationData(UnFormatedPostcode).Returns(new PostCodeLookupResultDto
             {
-                Postcode = Postcode,
+                Postcode = FormatedPostcode,
                 Longitude = "1.2",
                 Latitude = "1.2"
             });
-            var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository,
-                _locationService);
+
+            _googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+            _googleMapApiClient.GetAddressDetails(Arg.Any<string>()).Returns("Coventry");
+
+            var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository, _locationApiClient, _googleMapApiClient);
 
             var viewModel = new AddProviderVenueViewModel
             {
-                Postcode = Postcode
+                Postcode = UnFormatedPostcode
             };
 
             providerVenueService.CreateVenueAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_LocationService_GetGeoLocationData_Is_Called_Exactly_Once()
+        public void Then_LocationApiClient_GetGeoLocationData_Is_Called_Exactly_Once()
         {
-            _locationService.Received(1).GetGeoLocationData(Postcode);
+            _locationApiClient.Received(1).GetGeoLocationData(UnFormatedPostcode);
+        }
+
+        [Fact]
+        public void Then_GoogleMapApiClient_GetAddressDetails_Is_Called_Exactly_Once()
+        {
+            _googleMapApiClient.Received(1).GetAddressDetails("CV1 2WT");
         }
 
         [Fact]
         public void Then_ProviderVenueRepository_Create_Is_Called_Exactly_Once()
         {
-            _providerVenueRepository.Received(1).Create(Arg.Any<Domain.Models.ProviderVenue>());
+            _providerVenueRepository.Received(1).Create(Arg.Is<Domain.Models.ProviderVenue>(venue =>
+                venue.Postcode == FormatedPostcode &&
+                venue.Town == "Coventry" &&
+                venue.Longitude == 1.2m &&
+                venue.Latitude == 1.2m));
         }
     }
 }

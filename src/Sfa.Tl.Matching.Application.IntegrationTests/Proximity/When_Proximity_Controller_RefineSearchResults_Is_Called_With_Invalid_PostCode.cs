@@ -5,11 +5,12 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -30,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
             var mapper = Substitute.For<IMapper>();
 
-            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), new LocationService(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }));
+            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), new LocationApiClient(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);

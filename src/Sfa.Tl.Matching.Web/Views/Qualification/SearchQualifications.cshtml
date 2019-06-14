@@ -1,0 +1,41 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.QualificationSearchViewModel
+
+@{
+    ViewData["Title"] = "Edit qualifications";
+}
+
+@section sticky{
+    <div class="tl-sticky"><p class="tl-sticky--content"><span></span></p></div>
+}
+
+@section backButton{
+    <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link">Back</a>
+}
+
+<h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <partial name="_searchbox" />
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        @if (Model.Results.Any())
+        {
+            <partial name="_searchresults" />
+        }
+        else if (Model.HasTooManyResults)
+        {
+            <p class="govuk-body">Too many results. Please try a different search.</p>
+        }
+        else if (!string.IsNullOrEmpty(Model.SearchTerms) && Model.ResultCount == 0 && Model.SearchTerms.Length > 1)
+        {
+            <p class="govuk-body">No results. Please try again.</p>
+        }
+    </div>
+</div>
+@section jsfiles{
+    <script src="~/javascripts/edit-quals.min.js"></script>
+}

@@ -21,7 +21,7 @@ gulp.task('govuk-js', () => {
 gulp.task('copy-js', function () {
     return gulp.src([
         'node_modules/jquery/dist/jquery.min.js',
-        'Frontend/src/javascripts/cookie-banner.js'
+        'Frontend/src/javascripts/cookie-banner.js',
         ])
         .pipe(concat('all.js'))
         .pipe(minify({
@@ -33,7 +33,20 @@ gulp.task('copy-js', function () {
         .pipe(gulp.dest(paths.dist.defaultJs));
 });
 
-
+gulp.task('copy-editquals-js', function () {
+    return gulp.src([
+        'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
+        'Frontend/src/javascripts/edit-qualifications.js'
+    ])
+        .pipe(concat('edit-quals.js'))
+        .pipe(minify({
+            noSource: true,
+            ext: {
+                min: '.min.js'
+            }
+        }))
+        .pipe(gulp.dest(paths.dist.defaultJs));
+});
 
 gulp.task('copy-employer-js', function () {
     return gulp.src([
@@ -41,6 +54,21 @@ gulp.task('copy-employer-js', function () {
         'Frontend/src/javascripts/employer-search.js'
     ])
         .pipe(concat('employer-search.js'))
+        .pipe(minify({
+            noSource: true,
+            ext: {
+                min: '.min.js'
+            }
+        }))
+        .pipe(gulp.dest(paths.dist.defaultJs));
+});
+
+gulp.task('copy-missing-quals-js', function () {
+    return gulp.src([
+            'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
+            'Frontend/src/javascripts/missing-qualification-search.js'
+        ])
+        .pipe(concat('missing-quals.js'))
         .pipe(minify({
             noSource: true,
             ext: {

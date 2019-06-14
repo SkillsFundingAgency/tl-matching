@@ -2,43 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
-using Sfa.Tl.Matching.UkRlp.Api.Client;
+using Sfa.Tl.Matching.Api.Clients.ProviderReference;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class ProviderReferenceDataService : IReferenceDataService
     {
-        private readonly IProviderDownload _providerDownload;
-        private readonly IRepository<ProviderReferenceStaging> _repository;
+        private readonly IProviderReferenceDataClient _providerReferenceDataClient;
+        private readonly IBulkInsertRepository<ProviderReferenceStaging> _bulkInsertRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly MatchingConfiguration _matchingConfiguration;
 
-        public ProviderReferenceDataService(IProviderDownload providerDownload,
-            IRepository<ProviderReferenceStaging> repository,
+        public ProviderReferenceDataService(IProviderReferenceDataClient providerReferenceDataClient,
+            IBulkInsertRepository<ProviderReferenceStaging> bulkInsertRepository,
             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository,
-            IDateTimeProvider dateTimeProvider,
-            MatchingConfiguration matchingConfiguration)
+            IDateTimeProvider dateTimeProvider)
         {
-            _providerDownload = providerDownload;
-            _repository = repository;
+            _providerReferenceDataClient = providerReferenceDataClient;
+            _bulkInsertRepository = bulkInsertRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
             _dateTimeProvider = dateTimeProvider;
-            _matchingConfiguration = matchingConfiguration;
         }
 
         public async Task<int> SynchronizeProviderReference(DateTime lastUpdateDate)
         {
             var backgroundProcessHistoryId = await CreateBackgroundProcessHistory();
             var providerReferenceStagings = await GetProvidersForStaging(lastUpdateDate);
-            await _repository.BulkInsert(providerReferenceStagings, _matchingConfiguration.SqlConnectionString);
-            await _repository.MergeFromStaging(_matchingConfiguration.SqlConnectionString);
+            await _bulkInsertRepository.BulkInsert(providerReferenceStagings);
+            await _bulkInsertRepository.MergeFromStaging();
 
             await UpdateBackgroundProcessHistory(backgroundProcessHistoryId, providerReferenceStagings.Count);
 
@@ -60,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<List<ProviderReferenceStaging>> GetProvidersForStaging(DateTime lastUpdateDate)
         {
-            var providers = await _providerDownload.GetAll(lastUpdateDate);
+            var providers = await _providerReferenceDataClient.GetAll(lastUpdateDate);
             var providerReferenceStagings = providers.Select(p => new ProviderReferenceStaging
             {
                 Name = p.ProviderName,

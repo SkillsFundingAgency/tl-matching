@@ -49,7 +49,9 @@
                 </span>
                 <span class="govuk-error-message" asp-validation-for="ShortTitle"></span>
 
-                <input asp-for="ShortTitle" sfa-validation-for="ShortTitle" sfa-validationerror-class="govuk-input--error" class="govuk-input" name="ShortTitle" type="text" aria-describedby="short-title-hint">
+                <select id="ShortTitle" name="ShortTitle"
+                        class="govuk-input" aria-describedby="short-title-hint"></select>
+                <input id="shortTitleHidden" asp-for="ShortTitle" type="hidden" />
             </div>
 
             <div class="govuk-form-group govuk-!-margin-top-8" sfa-validation-for="Routes" sfa-validationerror-class="govuk-form-group--error">
@@ -95,3 +97,6 @@
         </form>
     </div>
 </div>
+@section jsfiles{
+    <script src="~/javascripts/missing-quals.min.js"></script>
+}

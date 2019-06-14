@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using Humanizer;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Extensions
@@ -25,6 +27,12 @@ namespace Sfa.Tl.Matching.Application.Extensions
         {
             return string.IsNullOrWhiteSpace(value) ? string.Empty : 
                new string(Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
+        }
+
+        public static string ToLetter(this string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty :
+                new string(Array.FindAll(value.ToCharArray(), char.IsLetter));
         }
 
         public static DateTime ToDateTime(this string value)
@@ -95,6 +103,31 @@ namespace Sfa.Tl.Matching.Application.Extensions
             {
                 return false;
             }
+        }
+
+        public static string ToQualificationSearch(this string value)
+        {
+            if (value == null) return null;
+
+            var words = value.Split(" ");
+            var allowedWords = words.Except(QualificationTerms.Ignored, StringComparer.OrdinalIgnoreCase);
+            var qualificationSearch = words.Where(x => allowedWords.Contains(x)).ToList();
+
+            return string.Join(string.Empty, qualificationSearch).ToLetter();
+        }
+
+        public static bool IsAllSpecialCharactersOrNumbers(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return true;
+             
+            var countOfSpecialCharactersAndNumbers = 0;
+            foreach (var c in value)
+            {
+                if (!char.IsLetter(c))
+                    countOfSpecialCharactersAndNumbers++;
+            }
+
+            return value.Length == countOfSpecialCharactersAndNumbers;
         }
     }
 }

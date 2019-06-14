@@ -1,0 +1,22 @@
+.tl-sticky {
+    position: sticky;
+    display: none;
+    width: 100%;
+    background-color: govuk-colour("green");
+    box-sizing: border-box;
+    z-index: 200;
+    padding: 10px;
+    top: 0px;
+    box-shadow: 0 2px 0 #003418;
+
+    &.tl-sticky--success {
+        display: block;
+    }
+
+
+    .tl-sticky--content {
+        color: white;
+        padding: 0;
+        margin: 0;
+    }
+}

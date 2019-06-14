@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.IntegrationTests.Proximity;
-using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Models.Configuration;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
             const string requestPostcode = "Cv12wT";
             var httpClient = new PostcodesIoHttpClient().Get(requestPostcode);
 
-            var locationService = new LocationService(httpClient, new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
+            var locationService = new LocationApiClient(httpClient, new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
             _postCodeResultDto = locationService.IsValidPostCode(requestPostcode).GetAwaiter().GetResult();
         }
 

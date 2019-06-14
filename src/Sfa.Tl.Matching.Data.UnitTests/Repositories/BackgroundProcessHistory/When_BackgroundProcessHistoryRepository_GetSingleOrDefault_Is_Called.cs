@@ -7,7 +7,7 @@ using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.backgroundProcessHistory
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory
 {
     public class When_BackgroundProcessHistoryRepository_GetSingleOrDefault_Is_Called
     {

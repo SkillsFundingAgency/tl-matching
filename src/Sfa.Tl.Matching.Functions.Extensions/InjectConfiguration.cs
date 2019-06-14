@@ -10,6 +10,7 @@ using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
@@ -22,7 +23,10 @@ using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.UkRlp.Api.Client;
+using Sfa.Tl.Matching.Api.Clients.ProviderReference;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
@@ -61,13 +65,12 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(_configuration.SqlConnectionString,
-                    builder => 
+                    builder =>
                         builder
                             .EnableRetryOnFailure()
                             .UseNetTopologySuite()));
 
             services.AddSingleton(_configuration);
-            services.AddHttpClient<ILocationService, LocationService>();
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
@@ -78,7 +81,14 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             RegisterApplicationServices(services);
 
             RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
-            RegisterUkRlpApi(services);
+
+            RegisterApiClient(services);
+
+            #region TODO DELETE AFTER SPRINT 10
+            // TODO DELETE AFTER SPRINT 10
+            services.AddTransient<IQualificationService, QualificationService>();
+            services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
+            #endregion
         }
 
         private static void RegisterFileReaders(IServiceCollection services)
@@ -148,9 +158,10 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
             services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
-            services.AddTransient<IRepository<LearningAimReferenceStaging>, GenericRepository<LearningAimReferenceStaging>>();
-            services.AddTransient<IRepository<ProviderReferenceStaging>, GenericRepository<ProviderReferenceStaging>>();
-            services.AddTransient<IRepository<EmployerStaging>, GenericRepository<EmployerStaging>>();
+            
+            services.AddTransient<IBulkInsertRepository<LearningAimReferenceStaging>, SqlBulkInsertRepository<LearningAimReferenceStaging>>();
+            services.AddTransient<IBulkInsertRepository<ProviderReferenceStaging>, SqlBulkInsertRepository<ProviderReferenceStaging>>();
+            services.AddTransient<IBulkInsertRepository<EmployerStaging>, SqlBulkInsertRepository<EmployerStaging>>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -177,10 +188,24 @@ namespace Sfa.Tl.Matching.Functions.Extensions
                 new NotificationsApi(httpClient, apiConfiguration));
         }
 
-        private static void RegisterUkRlpApi(IServiceCollection services)
+        private static void RegisterApiClient(IServiceCollection services)
         {
-            services.AddTransient<IProviderDownload, ProviderDownload>();
-            services.AddTransient<IProviderDownloadClient, ProviderDownloadClient>();
+            services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
+            services.AddHttpClient<ILocationApiClient, LocationApiClient>();
+
+            services.AddTransient<IProviderQueryPortTypeClient>(svcProvider =>
+            {
+               var client = new ProviderQueryPortTypeClient();
+
+               var fiveMinuteTimeSpan = new TimeSpan(0, 5, 0);
+
+               client.Endpoint.Binding.SendTimeout = fiveMinuteTimeSpan;
+               client.Endpoint.Binding.ReceiveTimeout = fiveMinuteTimeSpan;
+
+               return client;
+            });
+
+            services.AddTransient<IProviderReferenceDataClient, ProviderReferenceDataClient>();
         }
     }
 }

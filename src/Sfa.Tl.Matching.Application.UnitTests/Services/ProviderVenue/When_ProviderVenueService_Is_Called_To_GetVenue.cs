@@ -3,7 +3,8 @@ using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -24,8 +25,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(ProviderVenueMapper).Assembly));
             var mapper = new Mapper(config);
-            _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
 
+            _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
             _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new Domain.Models.ProviderVenue
                 {
@@ -33,10 +34,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                     Name = Name,
                     Postcode = Postcode
                 });
+            
+            var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+            var locationService = Substitute.For<ILocationApiClient>();
 
-            var locationService = Substitute.For<ILocationService>();
-            var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository,
-                locationService);
+            var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository, locationService, googleMapApiClient);
 
             _result = providerVenueService.GetVenue(ProviderId, Postcode).GetAwaiter().GetResult();
         }

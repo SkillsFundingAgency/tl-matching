@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
-using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -19,13 +19,6 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _logger = logger;
             _configuration = configuration;
-        }
-
-        public async Task PushProximityDataAsync(GetProximityData getProximityData)
-        {
-            await PushMessageAsync(
-                JsonConvert.SerializeObject(getProximityData), 
-                QueueName.GetProximityQueue);
         }
 
         public async Task PushProviderQuarterlyRequestMessageAsync(SendProviderFeedbackEmail providerRequest)

@@ -9,6 +9,7 @@ namespace Sfa.Tl.Matching.Data.Interfaces
 {
     public interface IRepository<T> where T : BaseEntity, new()
     {
+        Task<int> Count(Expression<Func<T, bool>> predicate = null);
         Task<int> Create(T entity);
         Task<int> CreateMany(IList<T> entities);
         IQueryable<T> GetMany(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] navigationPropertyPath);
@@ -19,7 +20,5 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<int> Delete(int id);
         Task Delete(T entity);
         Task DeleteMany(IList<T> entities);
-        Task BulkInsert(List<T> entities, string connectionString = "");
-        Task<int> MergeFromStaging(string connectionString = "");
     }
 }

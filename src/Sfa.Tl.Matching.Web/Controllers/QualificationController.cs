@@ -1,10 +1,13 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -85,8 +88,63 @@ namespace Sfa.Tl.Matching.Web.Controllers
             viewModel.QualificationId = qualification.Id;
             await _providerQualificationService.CreateProviderQualificationAsync(viewModel);
 
-            return RedirectToRoute("GetProviderVenueDetail", 
+            return RedirectToRoute("GetProviderVenueDetail",
                 new { providerVenueId = viewModel.ProviderVenueId });
+        }
+
+        [Route("edit-qualifications", Name = "EditQualifications")]
+        public IActionResult SearchQualifications()
+        {
+            return View(new QualificationSearchViewModel());
+        }
+
+        [HttpPost]
+        [Route("edit-qualifications", Name = "SearchQualifications")]
+        public async Task<IActionResult> SearchQualifications(QualificationSearchViewModel viewModel)
+        {
+            if (viewModel.SearchTerms.IsAllSpecialCharactersOrNumbers())
+                ModelState.AddModelError("SearchTerms", "You must enter 2 or more letters for your search");
+
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
+
+            PopulateRoutesForQualificationSearchItem(searchResult);
+
+            return View(searchResult);
+        }
+
+        [HttpGet]
+        [Route("search-short-title", Name = "SearchShortTitle")]
+        public IActionResult SearchShortTitle(string query)
+        {
+            var shortTitles = _qualificationService.SearchShortTitle(query);
+
+            return Ok(shortTitles.ToList());
+        }
+
+        [HttpPost]
+        [Route("save-qualification", Name = "SaveQualification")]
+        public async Task<IActionResult> SaveQualification(SaveQualificationViewModel viewModel)
+        {
+            Validate(viewModel);
+
+            if (!ModelState.IsValid)
+            {
+                var errorList = ModelState.Where(e => e.Value.Errors.Any()).ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+
+                var errors = JsonConvert.SerializeObject(errorList);
+
+                return Json(new { success = false, response = errors });
+            }
+
+            await _qualificationService.UpdateQualificationAsync(viewModel);
+
+            return Json(new { success = true, response = string.Empty });
         }
 
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "MissingQualification")]
@@ -116,7 +174,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 viewModel.Routes = GetRoutes(viewModel);
                 return View(viewModel);
             }
-            
+
             var qualificationId = await _qualificationService.CreateQualificationAsync(viewModel);
 
             await _providerQualificationService.CreateProviderQualificationAsync(
@@ -136,7 +194,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             await _providerQualificationService.RemoveProviderQualificationAsync(providerVenueId, qualificationId);
 
-            return RedirectToRoute("GetProviderVenueDetail", new {providerVenueId });
+            return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId });
         }
 
         private IList<RouteViewModel> GetRoutes(MissingQualificationViewModel viewModel = null)
@@ -156,14 +214,36 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return routesList;
         }
 
-        private void Validate(MissingQualificationViewModel viewModel)
+        private IList<RouteViewModel> GetRoutesForQualificationSearchItem(QualificationSearchResultViewModel viewModel, IList<Domain.Models.Route> routes)
+        {
+            var routesList = _mapper.Map<RouteViewModel[]>(routes);
+
+            foreach (var route in routesList.Where(r => viewModel.RouteIds.Contains(r.Id)))
+            {
+                route.IsSelected = true;
+            }
+
+            return routesList;
+        }
+        
+        private void PopulateRoutesForQualificationSearchItem(QualificationSearchViewModel searchResult)
+        {
+            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
+
+            foreach (var searchResultItem in searchResult.Results)
+            {
+                searchResultItem.Routes = GetRoutesForQualificationSearchItem(searchResultItem, routes);
+            }
+        }
+
+        private void Validate(QualificationViewModelBase viewModel)
         {
             if (string.IsNullOrWhiteSpace(viewModel.ShortTitle) || viewModel.ShortTitle.Length > 100)
             {
                 ModelState.AddModelError("ShortTitle", "You must enter a short title that is 100 characters or fewer");
             }
 
-            if (!viewModel.Routes.Any(r => r.IsSelected))
+            if (viewModel.Routes == null || !viewModel.Routes.Any(r => r.IsSelected))
             {
                 ModelState.AddModelError("Routes", "You must choose a skill area for this qualification");
             }

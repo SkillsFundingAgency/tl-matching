@@ -2,6 +2,7 @@
 var Searchresult = null;
 var employer = (function () {
     var queryMinLength = 2;
+    var timeoutId;
 
     accessibleAutocomplete.enhanceSelectElement({
         defaultValue: "",
@@ -17,9 +18,13 @@ var employer = (function () {
     $("#CompanyName").val($("#companyNameHidden").val());
 
     function search(query, populateResults) {
-        var delayInMs = 100;
+        if (query.trim().length < queryMinLength) return;
 
-        setTimeout(function () {
+        const delayInMs = 400;
+
+        clearTimeout(timeoutId);
+
+        timeoutId = setTimeout(function () {
             $.ajax({
                 url: "/employer-search",
                 contentType: "application/json",

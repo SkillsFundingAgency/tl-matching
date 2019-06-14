@@ -2,42 +2,44 @@
 using AutoMapper;
 using GeoAPI.Geometries;
 using NetTopologySuite;
-using Sfa.Tl.Matching.Application.Extensions;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Application.Extensions;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class ProviderVenueService : IProviderVenueService
     {
         private readonly IMapper _mapper;
-        private readonly ILocationService _locationService;
+        private readonly ILocationApiClient _locationApiClient;
+        private readonly IGoogleMapApiClient _googleMapApiClient;
         private readonly IProviderVenueRepository _providerVenueRepository;
 
         public ProviderVenueService(IMapper mapper,
             IRepository<ProviderVenue> providerVenueRepository,
-            ILocationService locationService)
+            ILocationApiClient locationApiClient,
+            IGoogleMapApiClient googleMapApiClient)
         {
             _mapper = mapper;
-            _locationService = locationService;
+            _locationApiClient = locationApiClient;
+            _googleMapApiClient = googleMapApiClient;
             _providerVenueRepository = (IProviderVenueRepository)providerVenueRepository;
         }
 
         public async Task<(bool, string)> IsValidPostCodeAsync(string postCode)
         {
-            return await _locationService.IsValidPostCode(postCode);
+            return await _locationApiClient.IsValidPostCode(postCode);
         }
 
         public async Task<ProviderVenueDetailViewModel> GetVenue(int providerId, string postCode)
         {
-            var venue = await _providerVenueRepository.GetSingleOrDefault(pv => pv.ProviderId == providerId &&
-                                                                                pv.Postcode == postCode);
+            var venue = await _providerVenueRepository.GetSingleOrDefault(pv => pv.ProviderId == providerId && pv.Postcode == postCode);
 
-            var dto = venue != null
-                ? _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue)
-                : null;
+            var dto = venue == null ? null : _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue);
 
             return dto;
         }
@@ -46,13 +48,28 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var providerVenue = _mapper.Map<ProviderVenue>(viewModel);
 
-            var geoLocationData = await _locationService.GetGeoLocationData(viewModel.Postcode);
-            providerVenue.Latitude = geoLocationData.Latitude.ToDecimal();
-            providerVenue.Longitude = geoLocationData.Longitude.ToDecimal();
-            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-            providerVenue.Location = geometryFactory.CreatePoint(new Coordinate(double.Parse(geoLocationData.Longitude), double.Parse(geoLocationData.Latitude)));
+            await GetGeoLocationData(viewModel, providerVenue);
+
+            await GetGoogleAddressDetails(providerVenue);
 
             return await _providerVenueRepository.Create(providerVenue);
+        }
+
+        private async Task GetGoogleAddressDetails(ProviderVenue providerVenue)
+        {
+            providerVenue.Town = await _googleMapApiClient.GetAddressDetails(providerVenue.Postcode);
+        }
+
+        private async Task GetGeoLocationData(AddProviderVenueViewModel viewModel, ProviderVenue providerVenue)
+        {
+            var geoLocationData = await _locationApiClient.GetGeoLocationData(viewModel.Postcode);
+
+            providerVenue.Postcode = geoLocationData.Postcode;
+            providerVenue.Latitude = geoLocationData.Latitude.ToDecimal();
+            providerVenue.Longitude = geoLocationData.Longitude.ToDecimal();
+
+            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
+            providerVenue.Location = geometryFactory.CreatePoint(new Coordinate(double.Parse(geoLocationData.Longitude), double.Parse(geoLocationData.Latitude)));
         }
 
         public async Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int providerVenueId)

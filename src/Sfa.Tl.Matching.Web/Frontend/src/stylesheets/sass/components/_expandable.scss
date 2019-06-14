@@ -1,0 +1,110 @@
+.tl-expandable {
+    position: relative;
+
+    &:hover {
+        .tl-expandable--header {
+            background-color: govuk-colour("grey-2");
+        }
+
+        .tl-expandable--content {
+            border: 5px solid govuk-colour("grey-2");
+        }
+    }
+
+    .tl-expandable--header {
+        cursor: pointer;
+        display: block;
+        text-align: left;
+        padding: 9px 8px 6px 8px;
+        margin-top: 2px;
+        background-color: govuk-colour("grey-3");
+        @include govuk-font($size: 19, $weight: bold);
+        border: none;
+        width: 100%;
+        position: relative;
+
+
+
+
+        .tl-expandable--header-text {
+            margin-right: 40px;
+        }
+
+        &:focus {
+            outline: 3px solid $govuk-focus-colour;
+            outline-offset: 0;
+        }
+
+
+        svg {
+            width: 30px;
+            position: absolute;
+            top: 0;
+            height: 100%;
+            right: 10px;
+        }
+    }
+
+    .tl-expandable--content {
+        display: none;
+        position: absolute;
+        left: 0;
+        background: white;
+        border: 5px solid govuk-colour("grey-3");
+        box-sizing: border-box;
+        z-index: 100;
+        max-height: 270px;
+        width: 200%;
+        max-width: 292px;
+        overflow-y: scroll;
+        transform: scaleY(0);
+        transition: 0.2s ease-in-out;
+        transform-origin: top;
+
+        .govuk-fieldset {
+            padding: 10px;
+        }
+
+
+        .govuk-checkboxes__input {
+            top: 5px;
+            left: 0;
+            width: 26px;
+            height: 26px;
+        }
+
+        .govuk-checkboxes__label {
+            padding: 4px 0px;
+            @include govuk-font($size: 16);
+
+
+            &:before {
+                width: 30px;
+                height: 30px;
+            }
+
+            &:after {
+                top: 9px;
+                left: 7px;
+                width: 13px;
+                height: 5px;
+                border-width: 0 0 4px 4px;
+            }
+        }
+    }
+}
+
+.tl-expandable.active {
+    .tl-expandable--content {
+        display: block;
+        transform: scaleY(1);
+    }
+
+    .tl-expandable--header {
+
+        svg {
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+    }
+}

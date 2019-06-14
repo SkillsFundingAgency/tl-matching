@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
+using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Application.Configuration
 {

@@ -135,9 +135,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public List<ReferralDto> GetReferrals(int opportunityId)
         {
-            var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId);
-
-            var providers = referrals
+            var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId)
                 .OrderBy(r => r.DistanceFromEmployer)
                 .Select(r => new ReferralDto
                 {
@@ -148,7 +146,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 })
                 .ToList();
 
-            return providers;
+            return referrals;
         }
 
         public async Task<bool> IsNewReferral(int opportunityId)

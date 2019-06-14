@@ -1,0 +1,7 @@
+.tl-autocomplete {
+    height: 38px;
+    overflow: visible;
+    .autocomplete__menu {
+        z-index: 100;
+    }
+}
