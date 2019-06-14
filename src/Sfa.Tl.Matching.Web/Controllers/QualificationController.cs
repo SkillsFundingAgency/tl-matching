@@ -100,19 +100,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("edit-qualifications", Name = "SearchQualifications")]
-        public async Task<IActionResult> EditQualifications(QualificationSearchViewModel viewModel)
+        public async Task<IActionResult> SearchQualifications(QualificationSearchViewModel viewModel)
         {
             if (viewModel.SearchTerms.IsAllSpecialCharactersOrNumbers())
                 ModelState.AddModelError("SearchTerms", "You must enter 2 or more letters for your search");
 
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View(nameof(EditQualifications));
 
             var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
 
             PopulateRoutesForQualificationSearchItem(searchResult);
 
-            return View(searchResult);
+            return View(nameof(EditQualifications), searchResult);
         }
 
         [HttpGet]
