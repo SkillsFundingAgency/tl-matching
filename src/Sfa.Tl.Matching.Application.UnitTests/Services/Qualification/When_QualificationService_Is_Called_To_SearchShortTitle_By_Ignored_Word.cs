@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         }
 
         [Fact]
-        public void Then_Correct_Number_Of_Results()
+        public void Then_The_Expected_Number_Of_Search_Results_Is_Returned()
         {
             _searchResults.Count.Should().Be(0);
         }

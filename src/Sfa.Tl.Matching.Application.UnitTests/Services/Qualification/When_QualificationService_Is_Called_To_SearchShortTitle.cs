@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         }
 
         [Fact]
-        public void Then_Correct_Number_Of_Results()
+        public void Then_The_Expected_Search_Results_Are_Returned()
         {
             _searchResults.Count.Should().Be(2);
             _firstQualification.ShortTitle.Should().Be("sport and enterprise in the community");
