@@ -121,6 +121,8 @@ namespace Sfa.Tl.Matching.Application.Extensions
 
         public static bool IsAllSpecialCharactersOrNumbers(this string value)
         {
+            if (string.IsNullOrWhiteSpace(value)) return true;
+             
             var countOfSpecialCharactersAndNumbers = 0;
             foreach (var c in value)
             {
