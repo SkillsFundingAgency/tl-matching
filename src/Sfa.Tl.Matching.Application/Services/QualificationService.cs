@@ -85,33 +85,26 @@ namespace Sfa.Tl.Matching.Application.Services
                     HasTooManyResults = true
                 };
 
-            var searchCount = await _qualificationRepository.Count(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"));
-            if (searchCount == 0)
-                return new QualificationSearchViewModel
+            var searchResult = await _qualificationRepository
+                .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
+                .OrderBy(q => q.Title)
+                .Select(q => new QualificationSearchResultViewModel
                 {
-                    SearchTerms = searchTerm
-                };
+                    QualificationId = q.Id,
+                    Title = q.Title,
+                    ShortTitle = q.ShortTitle,
+                    LarId = q.LarsId,
+                    RouteIds = q.QualificationRoutePathMapping.Select(r => r.RouteId).ToList()
+                })
+                .Take(51)
+                .ToListAsync();
 
-            var searchResults = new QualificationSearchViewModel
+            return new QualificationSearchViewModel
             {
-                ResultCount = searchCount,
+                ResultCount = searchResult.Count,
                 SearchTerms = searchTerm,
-                Results = await _qualificationRepository
-                    .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
-                    .OrderBy(q => q.Title)
-                    .Select(q => new QualificationSearchResultViewModel
-                    {
-                        QualificationId = q.Id,
-                        Title = q.Title,
-                        ShortTitle = q.ShortTitle,
-                        LarId = q.LarsId,
-                        RouteIds = q.QualificationRoutePathMapping.Select(r => r.RouteId).ToList()
-                    })
-                    .Take(50)
-                    .ToListAsync()
+                Results = searchResult.Take(50).ToList()
             };
-
-            return searchResults;
         }
 
         public IEnumerable<QualificationShortTitleSearchResultViewModel> SearchShortTitle(string shortTitle)
