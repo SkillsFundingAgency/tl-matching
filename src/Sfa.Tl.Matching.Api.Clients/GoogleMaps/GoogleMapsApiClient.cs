@@ -24,6 +24,8 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleMaps
 
         public async Task<string> GetAddressDetails(string postCode)
         {
+            if (string.IsNullOrWhiteSpace(_matchingConfiguration.GoogleMapsApiKey)) return null;
+            
             var lookupUrl = $"{_matchingConfiguration.GoogleMapsApiBaseUrl}place/textsearch/json?region=uk&radius=1&key={_matchingConfiguration.GoogleMapsApiKey}&query={postCode.ToLetterOrDigit()}";
 
             var responseMessage = await _httpClient.GetAsync(lookupUrl);
