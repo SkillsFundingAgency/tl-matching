@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("edit-qualifications", Name = "EditQualifications")]
-        public IActionResult EditQualifications()
+        public IActionResult SearchQualifications()
         {
             return View(new QualificationSearchViewModel());
         }
@@ -106,13 +106,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError("SearchTerms", "You must enter 2 or more letters for your search");
 
             if (!ModelState.IsValid)
-                return View(nameof(EditQualifications), viewModel);
+                return View(viewModel);
 
             var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
 
             PopulateRoutesForQualificationSearchItem(searchResult);
 
-            return View(nameof(EditQualifications), searchResult);
+            return View(searchResult);
         }
 
         [HttpGet]
