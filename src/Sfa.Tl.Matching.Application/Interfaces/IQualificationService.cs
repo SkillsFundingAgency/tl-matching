@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     public interface IQualificationService
     {
         Task<int> CreateQualificationAsync(MissingQualificationViewModel viewModel);
-        Task<QualificationSearchResultViewModel> GetQualificationAsync(int id);
+        Task<QualificationSearchResultViewModel> GetQualificationByIdAsync(int id);
         Task<QualificationDetailViewModel> GetQualificationAsync(string larId);
         Task<bool> IsValidLarIdAsync(string larId);
         Task<bool> IsValidOfqualLarIdAsync(string larId);

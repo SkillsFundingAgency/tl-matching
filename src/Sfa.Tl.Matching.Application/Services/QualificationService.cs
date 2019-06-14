@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return qualification.Id;
         }
 
-        public async Task<QualificationSearchResultViewModel> GetQualificationAsync(int id)
+        public async Task<QualificationSearchResultViewModel> GetQualificationByIdAsync(int id)
         {
             var qualification = await _qualificationRepository
                 .GetSingleOrDefault(p => p.Id == id,
