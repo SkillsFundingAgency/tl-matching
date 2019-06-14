@@ -4,7 +4,7 @@
 {
     <p class="govuk-body">Showing top 50 results. If you cannot find the qualification you need, refine your search.</p>
 }
-<table class="govuk-table">
+@*<table class="govuk-table">
     <thead class="govuk-table__head">
         <tr class="govuk-table__row">
             <th class="govuk-table__header govuk-!-width-one-half" scope="col">Qualification title (learning aim reference)</th>
@@ -19,4 +19,19 @@
             <partial name="_qualificationitem" model="@Model.Results[i]" />
         }
     </tbody>
-</table>
+</table>*@
+
+<div class="tl-table">
+    <div class="tl-table__head">
+        <div class="tl-table__row">
+            <div class="tl-table__cell tl-table__cell-50"><h4 class="govuk-heading-s">Qualification title (learning aim reference)</h4></div>
+            <div class="tl-table__cell tl-table__cell-20"><h4 class="govuk-heading-s">Edit short title</h4></div>
+            <div class="tl-table__cell tl-table__cell-20"><h4 class="govuk-heading-s">Edit skill area</h4></div>
+            <div class="tl-table__cell tl-table__cell-10"></div>
+        </div>
+            @for (var i = 0; i < Model.Results?.Count; i++)
+            {
+                <partial name="_qualificationitem" model="@Model.Results[i]" />
+            }
+    </div>
+</div>

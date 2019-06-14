@@ -28,7 +28,7 @@ var editQualifications = (function () {
 
         const autoCompleteShortTitle = $(`#SelectShortTitle_${this.elements.QualificationId.value}`).val();
 
-        $(this).nextUntil(".tl-qual-row").next().find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
+        $(this).find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
 
         $(`#ShortTitle_${this.elements.QualificationId.value}`).val(autoCompleteShortTitle);
 
