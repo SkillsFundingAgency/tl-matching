@@ -11,7 +11,7 @@ var editQualifications = (function () {
         e.stopPropagation();
     });
 
-    $(document).on('click', function (e) {
+    $(document).on('click', function () {
         $(".tl-expandable").removeClass("active");
     });
 
@@ -25,7 +25,8 @@ var editQualifications = (function () {
         const qualEditform = $(this);
         const qualId = qualEditform[0].elements.QualificationId.value;
         event.preventDefault();
-
+        
+        const qualTitle = qualEditform[0].elements.Title.value;
         const autoCompleteShortTitle = $(`#SelectShortTitle_${this.elements.QualificationId.value}`).val();
 
         $(this).find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
@@ -41,11 +42,11 @@ var editQualifications = (function () {
             success: function (result) {
                 if (result.success === false) {
                     setValidationError(result.response, qualId);
-                    hideSuccessMessage()
+                    hideSuccessMessage(qualTitle);
                 }
                 if (result.success === true) {
                     clearValidationError(qualId);
-                    showSuccessMessage();
+                    showSuccessMessage(qualTitle);
                 }
             },
             error: function () {
@@ -143,33 +144,40 @@ var editQualifications = (function () {
         });
     });
 
+    var timeoutId;
+
     function searchShortTitle(query, populateResults) {
         if (query.trim().length < queryMinLength) return;
+        const delayInMs = 400;
 
-        $.ajax({
-            url: "/search-short-title",
-            contentType: "application/json",
-            data: { query: query },
-            success: function (shortTitles) {
-                const shortTitlesList = $.map(shortTitles, function (st) {
-                    return st.shortTitle;
-                });
+        clearTimeout(timeoutId);
 
-                populateResults(shortTitlesList);
-            },
-            timeout: 5000,
-            error: function () {
-                console.log("An error occurred.");
-            }
-        });
+        timeoutId = setTimeout(function () {
+            $.ajax({
+                url: "/search-short-title",
+                contentType: "application/json",
+                data: { query: query },
+                success: function (shortTitles) {
+                    const shortTitlesList = $.map(shortTitles, function (st) {
+                        return st.shortTitle;
+                    });
+
+                    populateResults(shortTitlesList);
+                },
+                timeout: 5000,
+                error: function () {
+                    console.log("An error occurred.");
+                }
+            });
+        }, delayInMs);
     }
 
-    function showSuccessMessage() {
+    function showSuccessMessage(qualTitle) {
         $(".tl-sticky").addClass("tl-sticky--success");
         setTimeout(function () {
             hideSuccessMessage();
         }, 3000);
-        $(".tl-sticky--success span").text("We have saved your changes");
+        $(".tl-sticky--success span").text(`Your changes to ${qualTitle} have been saved`);
     }
 
     function hideSuccessMessage() {

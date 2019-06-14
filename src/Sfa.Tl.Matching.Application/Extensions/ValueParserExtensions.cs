@@ -110,13 +110,24 @@ namespace Sfa.Tl.Matching.Application.Extensions
             if (value == null) return null;
 
             var words = value.Split(" ");
-            for (var i = 0; i < words.Length; i++)
+            var allowedWords = words.Except(QualificationTerms.Ignored, StringComparer.OrdinalIgnoreCase);
+            var qualificationSearch = words.Where(x => allowedWords.Contains(x)).ToList();
+
+            return string.Join(string.Empty, qualificationSearch).ToLetter();
+        }
+
+        public static bool IsAllSpecialCharactersOrNumbers(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return true;
+             
+            var countOfSpecialCharactersAndNumbers = 0;
+            foreach (var c in value)
             {
-                if (QualificationTerms.Ignored.Contains(words[i].ToLower()))
-                    words[i] = "";
+                if (!char.IsLetter(c))
+                    countOfSpecialCharactersAndNumbers++;
             }
 
-            return string.Join(" ", words.Where(x => !string.IsNullOrEmpty(x))).ToLetter();
+            return value.Length == countOfSpecialCharactersAndNumbers;
         }
     }
 }

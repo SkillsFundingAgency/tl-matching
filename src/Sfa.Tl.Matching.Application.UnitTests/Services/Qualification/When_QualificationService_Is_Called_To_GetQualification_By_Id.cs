@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var qualificationService = new QualificationService(mapper, _qualificationRepository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
             
-            _result = qualificationService.GetQualificationAsync(1).GetAwaiter().GetResult();
+            _result = qualificationService.GetQualificationByIdAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]

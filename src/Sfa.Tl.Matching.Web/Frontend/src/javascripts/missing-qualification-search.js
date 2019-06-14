@@ -1,6 +1,7 @@
 "use strict";
 var missingQualShortTitle = (function () {
     var queryMinLength = 2;
+    var timeoutId;
 
     accessibleAutocomplete.enhanceSelectElement({
         defaultValue: "",
@@ -16,29 +17,34 @@ var missingQualShortTitle = (function () {
     function searchShortTitle(query, populateResults) {
         if (query.trim().length < queryMinLength) return;
 
-        $.ajax({
-            url: "/search-short-title",
-            contentType: "application/json",
-            data: { query: query },
-            success: function (shortTitles) {
-                const shortTitlesList = $.map(shortTitles,
-                    function (st) {
-                        return st.shortTitle;
-                    });
+        const delayInMs = 400;
+        
+        clearTimeout(timeoutId);
 
-                populateResults(shortTitlesList);
-            },
-            timeout: 5000,
-            error: function () {
-                console.log("An error occurred.");
-            }
-        });
+        timeoutId = setTimeout(function () {
+            $.ajax({
+                url: "/search-short-title",
+                contentType: "application/json",
+                data: { query: query },
+                success: function (shortTitles) {
+                    const shortTitlesList = $.map(shortTitles,
+                        function (st) {
+                            return st.shortTitle;
+                        });
+
+                    populateResults(shortTitlesList);
+                },
+                timeout: 5000,
+                error: function () {
+                    console.log("An error occurred.");
+                }
+            });
+        }, delayInMs);
     }
 
     function setSelectedShortTitle() {
-        $.each(Searchresult,
-            function () {
-                $("#shortTitleHidden").val($("#ShortTitle").val());
-            });
+        $.each(Searchresult, function () {
+            $("#shortTitleHidden").val($("#ShortTitle").val());
+        });
     }
 })();

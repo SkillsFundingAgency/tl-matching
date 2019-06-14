@@ -158,9 +158,10 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
             services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
-            services.AddTransient<IRepository<LearningAimReferenceStaging>, GenericRepository<LearningAimReferenceStaging>>();
-            services.AddTransient<IRepository<ProviderReferenceStaging>, GenericRepository<ProviderReferenceStaging>>();
-            services.AddTransient<IRepository<EmployerStaging>, GenericRepository<EmployerStaging>>();
+            
+            services.AddTransient<IBulkInsertRepository<LearningAimReferenceStaging>, SqlBulkInsertRepository<LearningAimReferenceStaging>>();
+            services.AddTransient<IBulkInsertRepository<ProviderReferenceStaging>, SqlBulkInsertRepository<ProviderReferenceStaging>>();
+            services.AddTransient<IBulkInsertRepository<EmployerStaging>, SqlBulkInsertRepository<EmployerStaging>>();
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -192,7 +193,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
 
-            services.AddTransient(svcProvider =>
+            services.AddTransient<IProviderQueryPortTypeClient>(svcProvider =>
             {
                var client = new ProviderQueryPortTypeClient();
 

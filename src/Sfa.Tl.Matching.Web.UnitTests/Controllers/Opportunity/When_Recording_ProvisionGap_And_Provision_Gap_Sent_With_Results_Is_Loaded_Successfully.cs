@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -16,6 +17,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
+        private readonly Guid _employerCrmId;
 
         public When_Recording_ProvisionGap_And_Provision_Gap_Sent_With_Results_Is_Loaded_Successfully()
         {
@@ -25,6 +27,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
 
             var dto = new ValidOpportunityDtoBuilder().Build();
+            _employerCrmId = dto.EmployerCrmId;
+            
             _opportunityService.GetOpportunity(1).Returns(dto);
 
             var referralService = Substitute.For<IReferralService>();
@@ -67,7 +71,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewModel.JobTitle.Should().Be("JobTitle");
             viewModel.Placements.Should().Be(2);
             viewModel.EmployerName.Should().Be("EmployerName");
-            viewModel.EmployerCrmRecord.Should().Be("https://crm.employer.imservices.org.uk/EmployerCRM/main.aspx?etc=1&extraqs=formid%3d53e2f137-d7f8-4556-a260-bd320fa7e62c&id=%7b65021261-8c70-4c4f-954f-4e5282250a85%7d&pagetype=entityrecord");
+            viewModel.EmployerCrmRecord.Should().Be($"https://esfa-cs-prod.crm4.dynamics.com/main.aspx?pagetype=entityrecord&etc=1&id=%7b{_employerCrmId}%7d&extraqs=&newWindow=true");
             viewModel.WithResults.Should().BeTrue();
             viewModel.NoResults.Should().BeFalse();
         }

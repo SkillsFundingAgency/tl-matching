@@ -23,14 +23,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Employer
 
         public EmployerTestFixture()
         {
-            var loggerRepository = new Logger<GenericRepository<EmployerStaging>>(new NullLoggerFactory());
+            var loggerRepository = new Logger<SqlBulkInsertRepository<EmployerStaging>>(new NullLoggerFactory());
             var loggerExcelFileReader = new Logger<ExcelFileReader<EmployerStagingFileImportDto, EmployerStagingDto>>(new NullLoggerFactory());
 
             var logger = new Logger<FileImportService<EmployerStagingFileImportDto, EmployerStagingDto, EmployerStaging>>(new NullLoggerFactory());
 
-            MatchingDbContext = new TestConfiguration().GetDbContext();
+            var testConfig = new TestConfiguration();
+            MatchingDbContext = testConfig.GetDbContext();
+            var matchingConfiguration = TestConfiguration.MatchingConfiguration;
 
-            var repository = new GenericRepository<EmployerStaging>(loggerRepository, MatchingDbContext);
+            var repository = new SqlBulkInsertRepository<EmployerStaging>(loggerRepository, matchingConfiguration);
             var functionLogRepository = new GenericRepository<FunctionLog>(new NullLogger<GenericRepository<FunctionLog>>(), MatchingDbContext);
             
             var dataValidator = new EmployerStagingDataValidator();

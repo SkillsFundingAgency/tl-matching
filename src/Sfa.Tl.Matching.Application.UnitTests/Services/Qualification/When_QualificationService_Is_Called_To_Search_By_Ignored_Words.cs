@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         }
 
         [Fact]
-        public void Then_Correct_Number_Of_Results()
+        public void Then_Result_Has_Too_Many_Results_And_Count_Is_Zero()
         {
             _searchResult.HasTooManyResults.Should().BeTrue();
             _searchResult.SearchTerms.Should().Be("the");

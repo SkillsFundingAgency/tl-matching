@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         }
 
         [Fact]
-        public void Then_Correct_Number_Of_Results()
+        public void Then_No_Search_Results_Should_Be_Returned()
         {
             _searchResult.SearchTerms.Should().Be("No Qualification Exists");
             _searchResult.Results.Count.Should().Be(0);

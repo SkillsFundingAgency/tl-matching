@@ -5,9 +5,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Sfa.Tl.Matching.Functions.UnitTests
+namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 {
-    public class FakeResponseHandler : DelegatingHandler
+    public class FakeHttpMessageHandler : DelegatingHandler
     {
         private readonly Dictionary<Uri, HttpResponseMessage> _fakeResponses = new Dictionary<Uri, HttpResponseMessage>();
 

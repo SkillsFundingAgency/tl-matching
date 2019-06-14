@@ -2,6 +2,7 @@
 var Searchresult = null;
 var employer = (function () {
     var queryMinLength = 2;
+    var timeoutId;
 
     accessibleAutocomplete.enhanceSelectElement({
         defaultValue: "",
@@ -19,30 +20,36 @@ var employer = (function () {
     function search(query, populateResults) {
         if (query.trim().length < queryMinLength) return;
 
-        $.ajax({
-            url: "/employer-search",
-            contentType: "application/json",
-            data: { query: query },
-            success: function (employers) {
-                var employerNames = $.map(employers, function (e) {
-                    return getEmployerNameWithAka(e);
-                });
+        const delayInMs = 400;
 
-                Searchresult = employers;
+        clearTimeout(timeoutId);
 
-                if (Searchresult !== undefined && Searchresult !== null) {
-                    if (Searchresult[0] !== undefined && Searchresult[0] !== null) {
-                        $("#SelectedEmployerId").val(Searchresult[0].id);
+        timeoutId = setTimeout(function () {
+            $.ajax({
+                url: "/employer-search",
+                contentType: "application/json",
+                data: { query: query },
+                success: function (employers) {
+                    var employerNames = $.map(employers, function (e) {
+                        return getEmployerNameWithAka(e);
+                    });
+
+                    Searchresult = employers;
+
+                    if (Searchresult !== undefined && Searchresult !== null) {
+                        if (Searchresult[0] !== undefined && Searchresult[0] !== null) {
+                            $("#SelectedEmployerId").val(Searchresult[0].id);
+                        }
                     }
-                }
 
-                populateResults(employerNames);
-            },
-            timeout: 5000,
-            error: function () {
-                console.log("An error occurred.");
-            }
-        });
+                    populateResults(employerNames);
+                },
+                timeout: 5000,
+                error: function () {
+                    console.log("An error occurred.");
+                }
+            });
+        }, delayInMs);
     }
 
     function getEmployerNameWithAka(e) {

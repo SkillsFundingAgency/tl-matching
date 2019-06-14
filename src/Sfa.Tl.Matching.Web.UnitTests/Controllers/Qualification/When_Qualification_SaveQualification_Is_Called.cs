@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             routePathService.GetRoutes().Returns(routes);
 
             _qualificationService = Substitute.For<IQualificationService>();
-            _qualificationService.GetQualificationAsync(1)
+            _qualificationService.GetQualificationByIdAsync(1)
                 .Returns(new QualificationSearchResultViewModel
                 {
                     QualificationId = 1,

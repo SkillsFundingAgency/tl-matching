@@ -117,14 +117,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         }
 
         [Fact]
-        public void Then_QualificationRepository_Update_Is_Called_Exactly_Once()
-        {
-            _qualificationRepository
-                .Received(1)
-                .Update(Arg.Any<Domain.Models.Qualification>());
-        }
-
-        [Fact]
         public void Then_QualificationRepository_Update_Is_Called_With_Expected_Values()
         {
             _qualificationRepository
