@@ -106,7 +106,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError("SearchTerms", "You must enter 2 or more letters for your search");
 
             if (!ModelState.IsValid)
-                return View(nameof(EditQualifications));
+                return View(nameof(EditQualifications), viewModel);
 
             var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
 
