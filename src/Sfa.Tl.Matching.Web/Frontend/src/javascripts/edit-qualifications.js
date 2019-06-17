@@ -25,10 +25,11 @@ var editQualifications = (function () {
         const qualEditform = $(this);
         const qualId = qualEditform[0].elements.QualificationId.value;
         event.preventDefault();
-
+        
+        const qualTitle = qualEditform[0].elements.Title.value;
         const autoCompleteShortTitle = $(`#SelectShortTitle_${this.elements.QualificationId.value}`).val();
 
-        $(this).nextUntil(".tl-qual-row").next().find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
+        $(this).find(".tl-qual-button").addClass("govuk-button--disabled").attr("disabled", true);
 
         $(`#ShortTitle_${this.elements.QualificationId.value}`).val(autoCompleteShortTitle);
 
@@ -41,11 +42,11 @@ var editQualifications = (function () {
             success: function (result) {
                 if (result.success === false) {
                     setValidationError(result.response, qualId);
-                    hideSuccessMessage();
+                    hideSuccessMessage(qualTitle);
                 }
                 if (result.success === true) {
                     clearValidationError(qualId);
-                    showSuccessMessage();
+                    showSuccessMessage(qualTitle);
                 }
             },
             error: function () {
@@ -171,12 +172,12 @@ var editQualifications = (function () {
         }, delayInMs);
     }
 
-    function showSuccessMessage() {
+    function showSuccessMessage(qualTitle) {
         $(".tl-sticky").addClass("tl-sticky--success");
         setTimeout(function () {
             hideSuccessMessage();
         }, 3000);
-        $(".tl-sticky--success span").text("We have saved your changes");
+        $(".tl-sticky--success span").text(`Your changes to ${qualTitle} have been saved`);
     }
 
     function hideSuccessMessage() {

@@ -115,6 +115,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             qualificationService.UpdateQualificationAsync(viewModel).GetAwaiter().GetResult();
         }
+        
+        [Fact]
+        public void Then_Qualification_GetSingleOrDefault_Is_Called_Exactly_Once()
+        {
+            _qualificationRepository
+                .Received(1)
+                .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>());
+        }
 
         [Fact]
         public void Then_QualificationRepository_Update_Is_Called_With_Expected_Values()
