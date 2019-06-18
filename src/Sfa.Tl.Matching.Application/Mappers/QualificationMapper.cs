@@ -43,6 +43,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<MissingQualificationViewModel, Qualification>()
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.LarsId, config => config.MapFrom(s => s.LarId))
+                .ForMember(m => m.ShortTitle, config => config.MapFrom(s => s.ShortTitle.ToLower()))
                 .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => GetSearchTerm(s.Title, s.ShortTitle)))
                 .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => GetSearchTerm(s.ShortTitle)))
                 .ForMember(m => m.ProviderQualification, config => config.Ignore())

@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .CreateMany(Arg.Is<IList<QualificationRoutePathMapping>>(
                     qrpm => qrpm.Count == 1 && 
                             qrpm.First().Qualification.LarsId == "10042982" &&
-                            qrpm.First().Qualification.ShortTitle == "Short Title" &&
+                            qrpm.First().Qualification.ShortTitle == "short title" &&
                             qrpm.First().RouteId == 1
                 ));
         }
