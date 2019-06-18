@@ -132,7 +132,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .Update(Arg.Is<Domain.Models.Qualification>(
                     q => q.Id == 1 &&
                             q.Title == "Title" &&
-                            q.ShortTitle == "Modified Short Title" &&
+                            q.ShortTitle == "modified short title" &&
                             q.QualificationSearch == "TitleModifiedShortTitle" &&
                             q.ShortTitleSearch == "ModifiedShortTitle" && 
                             q.ModifiedBy == "adminUserName" &&
