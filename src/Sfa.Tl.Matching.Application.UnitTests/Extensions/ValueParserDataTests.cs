@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
+using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Xunit;
 
@@ -12,9 +14,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
         [InlineData("BTEC Level", "")]
         [InlineData("and BTEC LEVEL", "")]
         [InlineData("and BTEC Level", "")]
+        [InlineData("city & guilds", "")]
         [InlineData("Level 2 Diploma Health Social Care (Adults) for England", "HealthSocialCareAdultsforEngland")]
         [InlineData("skills for professions in building and construction", "skillsforprofessionsbuildingconstruction")]
         [InlineData("BTEC skills for professions and BTEC skills for building and BTEC skills for construction", "skillsforprofessionsskillsforbuildingskillsforconstruction")]
+        [InlineData("BTEC skills city & guilds professions", "skillsprofessions")]
         public void QualificationSearchDataTests(string searchTerm, string result)
         {
             searchTerm.ToQualificationSearch().Should().Be(result);

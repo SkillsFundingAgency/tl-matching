@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
 
         public static string ToLetterOrDigit(this string value)
         {
-            return string.IsNullOrWhiteSpace(value) ? string.Empty : 
+            return string.IsNullOrWhiteSpace(value) ? string.Empty :
                new string(Array.FindAll(value.ToCharArray(), char.IsLetterOrDigit));
         }
 
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
 
         public static DateTime ToDateTime(this string value)
         {
-           return DateTime.Parse(value);
+            return DateTime.Parse(value);
         }
 
         public static long ToLong(this string value)
@@ -109,6 +109,10 @@ namespace Sfa.Tl.Matching.Application.Extensions
         {
             if (value == null) return null;
 
+            value = RemovePhrases(value);
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
             var words = value.Split(" ");
             var allowedWords = words.Except(QualificationTerms.Ignored, StringComparer.OrdinalIgnoreCase);
             var qualificationSearch = words.Where(x => allowedWords.Contains(x)).ToList();
@@ -119,7 +123,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
         public static bool IsAllSpecialCharactersOrNumbers(this string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return true;
-             
+
             var countOfSpecialCharactersAndNumbers = 0;
             foreach (var c in value)
             {
@@ -128,6 +132,26 @@ namespace Sfa.Tl.Matching.Application.Extensions
             }
 
             return value.Length == countOfSpecialCharactersAndNumbers;
+        }
+
+        private static string RemovePhrases(string value)
+        {
+            var termsWithMoreThanOneWord = QualificationTerms.Ignored
+                .GroupBy(t => t.Split(" ").Count())
+                .Where(i => i.Key > 1)
+                .OrderByDescending(t => t.Key)
+                .SelectMany(g => g);
+
+            foreach (var t in termsWithMoreThanOneWord)
+            {
+                if (value.ToLower().Contains(t.ToLower()))
+                    value = value.Replace(t, string.Empty, StringComparison.OrdinalIgnoreCase);
+
+                if (string.IsNullOrEmpty(value))
+                    return string.Empty;
+            }
+
+            return value;
         }
     }
 }
