@@ -133,8 +133,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                     q => q.Id == 1 &&
                             q.Title == "Title" &&
                             q.ShortTitle == "modified short title" &&
-                            q.QualificationSearch == "TitleModifiedShortTitle" &&
-                            q.ShortTitleSearch == "ModifiedShortTitle" && 
+                            q.QualificationSearch == "Titlemodifiedshorttitle" &&
+                            q.ShortTitleSearch == "modifiedshorttitle" && 
                             q.ModifiedBy == "adminUserName" &&
                             q.ModifiedOn == new DateTime(2019, 1, 1)
                 ));
