@@ -4,7 +4,7 @@ var missingQualShortTitle = (function () {
     var timeoutId;
 
     accessibleAutocomplete.enhanceSelectElement({
-        defaultValue: "",
+        defaultValue: $("#shortTitleHidden").val(),
         autoselect: false,
         selectElement: document.querySelector("#ShortTitle"),
         minLength: queryMinLength,
