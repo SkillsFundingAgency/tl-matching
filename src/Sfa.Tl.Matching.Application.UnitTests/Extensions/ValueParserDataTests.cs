@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using FluentAssertions;
-using Sfa.Tl.Matching.Application.Configuration;
+﻿using FluentAssertions;
 using Sfa.Tl.Matching.Application.Extensions;
 using Xunit;
 
