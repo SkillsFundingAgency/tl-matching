@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_Model_State_Has_Empty_Error()
         {
             var modelStateEntry = _opportunityController.ViewData.ModelState[nameof(PlacementInformationSaveViewModel.Placements)];
-            modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must estimate how many placements the employer wants at this location");
+            modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must estimate how many students the employer wants for this job at this location");
         }
     }
 }
