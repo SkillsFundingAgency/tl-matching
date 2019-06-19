@@ -32,7 +32,8 @@
             <p class="govuk-body">Too many results. Please try a different search.</p>
         }
         else if (!string.IsNullOrEmpty(Model.SearchTerms) && Model.ResultCount == 0 && Model.SearchTerms.Length > 1
-            && !Model.SearchTerms.IsAllSpecialCharactersOrNumbers())
+            && !Model.SearchTerms.IsAllSpecialCharactersOrNumbers()
+            && Model.SearchTerms.ToLetter().Length > 1)
         {
             <p class="govuk-body">No results. Please try again.</p>
         }
