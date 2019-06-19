@@ -50,7 +50,7 @@
             <div class="govuk-form-group" sfa-validation-for="PlacementsKnown" sfa-validationerror-class="govuk-form-group--error">
                 <fieldset class="govuk-fieldset" aria-describedby="placement-location-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m" id="PlacementsKnown" name="PlacementsKnown">
-                            Does the employer know how many placements they want at this location?
+                        Does the employer know how many students they want for this job at @Model.Postcode?
                     </legend>
                     <span id="placement-location-hint" class="govuk-hint">
                         This can be an estimate
@@ -67,7 +67,7 @@
                         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-placement-location">
                             <div class="govuk-form-group" sfa-validation-for="Placements" sfa-validationerror-class="govuk-form-group--error">
                                 <label class="govuk-label" asp-for="Placements">
-                                    Number of placements
+                                    Number of students
                                 </label>
                                 <span class="govuk-error-message" asp-validation-for="Placements"></span>
                                 <input asp-for="Placements" class="govuk-input govuk-input--width-3"

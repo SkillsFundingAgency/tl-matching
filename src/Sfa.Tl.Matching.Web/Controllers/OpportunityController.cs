@@ -186,11 +186,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!viewModel.PlacementsKnown.HasValue || !viewModel.PlacementsKnown.Value) return;
             if (!viewModel.Placements.HasValue)
-                ModelState.AddModelError(nameof(viewModel.Placements), "You must estimate how many placements the employer wants at this location");
+                ModelState.AddModelError(nameof(viewModel.Placements), "You must estimate how many students the employer wants for this job at this location");
             else if (viewModel.Placements < 1)
-                ModelState.AddModelError(nameof(viewModel.Placements), "The number of placements must be 1 or more");
+                ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 1 or more");
             else if (viewModel.Placements > 999)
-                ModelState.AddModelError(nameof(viewModel.Placements), "The number of placements must be 999 or less");
+                ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 999 or less");
         }
 
         private async Task<CheckAnswersReferralViewModel> GetCheckAnswersReferralViewModel(int id)
