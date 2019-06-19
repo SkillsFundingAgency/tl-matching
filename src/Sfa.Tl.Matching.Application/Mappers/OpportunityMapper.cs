@@ -89,7 +89,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<PlacementInformationSaveDto, Opportunity>()
-                .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                .ForMember(m => m.JobTitle,
+                    o => o.MapFrom(s => string.IsNullOrEmpty(s.JobTitle) ? 
+                        "None given" : s.JobTitle))
                 .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 .ForMember(m => m.Placements,
                     opt => opt.MapFrom(s => s.PlacementsKnown.HasValue && s.PlacementsKnown.Value ?

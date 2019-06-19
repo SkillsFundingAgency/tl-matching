@@ -11,10 +11,10 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
-    public class When_OpportunityService_Is_Called_To_Save_PlacementInformation
+    public class When_OpportunityService_Is_Called_To_Save_PlacementInformation_With_Empty_Job_Title
     {
         private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
-        private const string JobTitle = "JobTitle";
+        private const string JobTitle = null;
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
         private const int OpportunityId = 1;
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const int Distance = 10;
         private const int RouteId = 1;
 
-        public When_OpportunityService_Is_Called_To_Save_PlacementInformation()
+        public When_OpportunityService_Is_Called_To_Save_PlacementInformation_With_Empty_Job_Title()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
@@ -53,13 +53,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityRepository.Received(1).Update(Arg.Is<Domain.Models.Opportunity>(opportunity => 
                 opportunity.Id == OpportunityId &&
-                opportunity.JobTitle == JobTitle &&
+                opportunity.JobTitle == "None given" &&
                 opportunity.PlacementsKnown == PlacementsKnown &&
                 opportunity.Placements == Placements &&
                 opportunity.Postcode == Postcode &&
                 opportunity.SearchRadius == Distance &&
-                opportunity.RouteId == RouteId
-                ));
+                opportunity.RouteId == RouteId));
         }
 
         [Fact]

@@ -14,19 +14,17 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Placement_Information_Is_Submitted_Successfully
+    public class When_Placement_Information_Is_Submitted_Successfully_With_Placements_Not_Known
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
 
-        public When_Placement_Information_Is_Submitted_Successfully()
+        public When_Placement_Information_Is_Submitted_Successfully_With_Placements_Not_Known()
         {
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
-                JobTitle = "Junior Tester",
-                PlacementsKnown = true,
-                Placements = 3
+                PlacementsKnown = false
             };
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
@@ -63,10 +61,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _opportunityService.Received(1).UpdateOpportunity(Arg.Is<PlacementInformationSaveDto>(
                 p => p.OpportunityId == 1 &&
-                    p.JobTitle == "Junior Tester" &&
                     p.PlacementsKnown.HasValue &&
-                    p.PlacementsKnown.Value &&
-                    p.Placements == 3
+                    !p.PlacementsKnown.Value &&
+                    p.Placements == 1
             ));
         }
 

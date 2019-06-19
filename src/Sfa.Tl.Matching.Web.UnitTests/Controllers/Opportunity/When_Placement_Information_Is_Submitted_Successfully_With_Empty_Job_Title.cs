@@ -14,21 +14,19 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Placement_Information_Is_Submitted_Successfully
+    public class When_Placement_Information_Is_Submitted_Successfully_With_Empty_Job_Title
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
 
-        public When_Placement_Information_Is_Submitted_Successfully()
+        public When_Placement_Information_Is_Submitted_Successfully_With_Empty_Job_Title()
         {
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
-                JobTitle = "Junior Tester",
-                PlacementsKnown = true,
-                Placements = 3
+                JobTitle = null,
+                PlacementsKnown = false
             };
-
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
@@ -59,15 +57,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_UpdateOpportunity_Is_Called_With_Expected_Field_Values()
+        public void Then_UpdateOpportunity_Is_Called_With_Default_Job_Title()
         {
             _opportunityService.Received(1).UpdateOpportunity(Arg.Is<PlacementInformationSaveDto>(
-                p => p.OpportunityId == 1 &&
-                    p.JobTitle == "Junior Tester" &&
-                    p.PlacementsKnown.HasValue &&
-                    p.PlacementsKnown.Value &&
-                    p.Placements == 3
-            ));
+                p => p.OpportunityId ==1 &&
+                     string.IsNullOrEmpty(p.JobTitle)));
         }
 
         [Fact]
