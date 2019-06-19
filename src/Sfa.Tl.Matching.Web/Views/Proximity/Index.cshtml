@@ -1,6 +1,6 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel
 @{
-    ViewData["Title"] = "Find local providers";
+    ViewData["Title"] = "Set up placement opportunity ";
 }
 
 @section backButton{
@@ -35,7 +35,7 @@
                 </label>
                 <select class="govuk-select" asp-for="SelectedRouteId" asp-items="Model.RoutesSelectList"></select>
             </div>
-            <h2 class="govuk-heading-m">Where is the placement?</h2>
+            <h2 class="govuk-heading-m">Where is the opportunity?</h2>
             <div class="govuk-form-group" sfa-validation-for="Postcode" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" asp-for="Postcode">
                     Postcode of workplace

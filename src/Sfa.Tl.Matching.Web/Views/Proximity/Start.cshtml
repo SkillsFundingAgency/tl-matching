@@ -8,15 +8,13 @@
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
         <p class="govuk-body">Use this service to help employers:</p>
         <ul class="govuk-list govuk-list--bullet">
+            <li>create opportunities for students to do industry placements</li>
             <li>find local providers with suitable students</li>
-            <li>talk to providers about placements</li>
-            <li>tell us if there are not enough providers</li>
+            <li>talk to providers about these opportunities</li>
+            <li>tell us if there are not enough providers to fill their opportunities</li>
         </ul>
-        <div class="govuk-inset-text">
-            You will only be able to find one type of placement for one location at a time.
-        </div>
         <div>
-            <a asp-action="Index" asp-controller="Proximity" id="tl-start-now" class="govuk-button govuk-button--start">Start now</a>
+            <a asp-action="Index" asp-controller="Proximity" id="tl-start-now" class="govuk-button govuk-button--start">Start a new opportunity</a>
         </div>
 
         @if (Context.User.HasAdminRole())
