@@ -78,8 +78,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
-
-            result?.RouteName.Should().Be("ProvisionGapSent_Get");
+            result?.RouteName.Should().Be("GetOpportunityBasket");
+            result?.RouteValues["id"].Should().Be(1);
         }
     }
 }

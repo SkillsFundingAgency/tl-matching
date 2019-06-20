@@ -120,7 +120,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
             await _referralService.SendProviderReferralEmail(dto.OpportunityId);
 
-            return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetOpportunityBasket", new { id = viewModel.OpportunityId });
         }
 
         [HttpGet]
@@ -143,7 +143,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.UpdateOpportunity(dto);
             await _opportunityService.CreateProvisionGap(viewModel);
 
-            return RedirectToRoute("ProvisionGapSent_Get", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetOpportunityBasket", new { id = viewModel.OpportunityId });
         }
 
         [HttpGet]
@@ -165,6 +165,18 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var viewModel = _mapper.Map<EmailsSentViewModel>(dto);
             viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
             
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        [Route("employer-opportunities/{id?}", Name = "GetOpportunityBasket")]
+        public async Task<IActionResult> OpportunityBasket(int id)
+        {
+            var viewModel = new OpportunityBasketViewModel
+            {
+                CompanyName = "Test Company Name"
+            };
+
             return View(viewModel);
         }
 

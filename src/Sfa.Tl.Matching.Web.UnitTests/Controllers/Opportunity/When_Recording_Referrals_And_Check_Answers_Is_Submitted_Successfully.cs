@@ -59,14 +59,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
         
         [Fact]
-        public void Then_Result_Is_Redirect_To_EmailsSent()
+        public void Then_Result_Is_Redirect_To_GetOpportunityBasket()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
-
-            result?.RouteName.Should().Be("EmailSentReferrals_Get");
+            result?.RouteName.Should().Be("GetOpportunityBasket");
+            result?.RouteValues["id"].Should().Be(1);
         }
-        
+
         [Fact]
         public void Then_SendProviderReferralEmail_Is_Called_Exactly_Once()
         {
