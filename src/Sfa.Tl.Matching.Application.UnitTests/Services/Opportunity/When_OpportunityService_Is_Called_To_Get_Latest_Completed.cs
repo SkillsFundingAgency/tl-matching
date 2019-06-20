@@ -83,7 +83,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_GetMany_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
+            _opportunityRepository
+                .Received(1)
+                .GetMany(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
         }
 
         [Fact]

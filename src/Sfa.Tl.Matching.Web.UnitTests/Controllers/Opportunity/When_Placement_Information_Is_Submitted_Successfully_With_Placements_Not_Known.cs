@@ -44,6 +44,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
+            _opportunityService.IsReferralOpportunity(1).Returns(true);
+            _opportunityService.GetOpportunityItemCountAsync(1).Returns(1);
+
             var referralService = Substitute.For<IReferralService>();
 
             var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
@@ -68,12 +71,29 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
+        public void Then_IsReferralOpportunity_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .IsReferralOpportunity(1);
+        }
+
+        [Fact]
+        public void Then_GetOpportunityItemCountAsync_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .GetOpportunityItemCountAsync(1);
+        }
+
+        [Fact]
         public void Then_Result_Is_Redirect_To_FindEmployer()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("LoadWhoIsEmployer");
+            result?.RouteValues["id"].Should().Be(1);
         }
     }
 }

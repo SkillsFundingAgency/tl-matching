@@ -14,12 +14,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Placement_Information_Is_Submitted_Successfully
+    public class When_Placement_Information_Is_Submitted_Successfully_For_Referral_And_There_Are_Multiple_Opportunities
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
 
-        public When_Placement_Information_Is_Submitted_Successfully()
+        public When_Placement_Information_Is_Submitted_Successfully_For_Referral_And_There_Are_Multiple_Opportunities()
         {
             var viewModel = new PlacementInformationSaveViewModel
             {
@@ -46,6 +46,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
+            _opportunityService.IsReferralOpportunity(1).Returns(true);
+            _opportunityService.GetOpportunityItemCountAsync(1).Returns(2);
+
             var referralService = Substitute.For<IReferralService>();
 
             var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
@@ -71,12 +74,29 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_FindEmployer()
+        public void Then_IsReferralOpportunity_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .IsReferralOpportunity(1);
+        }
+
+        [Fact]
+        public void Then_GetOpportunityItemCountAsync_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .GetOpportunityItemCountAsync(1);
+        }
+
+        [Fact]
+        public void Then_Result_Is_Redirect_To_GetCheckAnswersReferrals()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("LoadWhoIsEmployer");
+            result?.RouteName.Should().Be("GetCheckAnswersReferrals");
+            result?.RouteValues["id"].Should().Be(1);
         }
     }
 }

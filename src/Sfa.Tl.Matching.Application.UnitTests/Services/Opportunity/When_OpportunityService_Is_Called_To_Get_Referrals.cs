@@ -54,24 +54,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_GetMany_Is_Called_Exactly_Once()
         {
-            _referralRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>());
+            _referralRepository
+                .Received(1)
+                .GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>());
         }
 
         [Fact]
-        public void Then_ViewModel_Count_Is_1()
+        public void Then_Fields_Are_Set_To_Expected_Values()
         {
             _referralDtos.Count.Should().Be(1);
-        }
-
-        [Fact]
-        public void Then_Postcode_Is_Set()
-        {
             _referralDtos[0].Postcode.Should().Be("AA1 1AA");
-        }
-
-        [Fact]
-        public void Then_Name_Is_Set()
-        {
             _referralDtos[0].Name.Should().Be("Provider1");
         }
     }
