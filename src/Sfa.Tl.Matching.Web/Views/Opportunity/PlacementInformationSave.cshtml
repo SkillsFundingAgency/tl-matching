@@ -41,7 +41,7 @@
 
 
             @* Only show for no suitabel results journey *@
-            <div class="govuk-form-group">
+            <div class="govuk-form-group govuk-form-group--error">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                         <h1 class="govuk-fieldset__heading">
@@ -50,6 +50,9 @@
                     </legend>
                     <span class="govuk-hint">
                         Select all that apply
+                    </span>
+                    <span id="passport-issued-error" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span> You must tell us why the employer did not choose a provider
                     </span>
                     <div class="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
