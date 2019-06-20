@@ -95,6 +95,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = _mapper.Map<PlacementInformationSaveDto>(viewModel);
             await _opportunityService.UpdateOpportunity(dto);
 
+            var isReferralOpportunity = await _opportunityService.IsReferralOpportunity(viewModel.OpportunityId);
+            var opportunityCount = await _opportunityService.GetOpportunityItemCountAsync(viewModel.OpportunityId);
+
+            if (opportunityCount > 1)
+            {
+                return RedirectToRoute(isReferralOpportunity 
+                    ? "GetCheckAnswersReferrals"
+                    : "GetOpportunityBasket", 
+                    new { id = viewModel.OpportunityId });
+            }
             return RedirectToRoute("LoadWhoIsEmployer", new { id = viewModel.OpportunityId });
         }
 

@@ -14,19 +14,21 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Placement_Information_Is_Submitted_Successfully_With_Empty_Job_Title
+    public class When_Placement_Information_Is_Submitted_Successfully_For_Provision_Gap_And_There_Are_Multiple_Opportunities
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
 
-        public When_Placement_Information_Is_Submitted_Successfully_With_Empty_Job_Title()
+        public When_Placement_Information_Is_Submitted_Successfully_For_Provision_Gap_And_There_Are_Multiple_Opportunities()
         {
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
-                JobTitle = null,
-                PlacementsKnown = false
+                JobTitle = "Junior Tester",
+                PlacementsKnown = true,
+                Placements = 3
             };
+
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
@@ -44,8 +46,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsReferralOpportunity(1).Returns(true);
-            _opportunityService.GetOpportunityItemCountAsync(1).Returns(1);
+            _opportunityService.IsReferralOpportunity(1).Returns(false);
+            _opportunityService.GetOpportunityItemCountAsync(1).Returns(2);
 
             var referralService = Substitute.For<IReferralService>();
 
@@ -60,11 +62,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_UpdateOpportunity_Is_Called_With_Default_Job_Title()
+        public void Then_UpdateOpportunity_Is_Called_With_Expected_Field_Values()
         {
             _opportunityService.Received(1).UpdateOpportunity(Arg.Is<PlacementInformationSaveDto>(
-                p => p.OpportunityId ==1 &&
-                     string.IsNullOrEmpty(p.JobTitle)));
+                p => p.OpportunityId == 1 &&
+                    p.JobTitle == "Junior Tester" &&
+                    p.PlacementsKnown.HasValue &&
+                    p.PlacementsKnown.Value &&
+                    p.Placements == 3
+            ));
         }
 
         [Fact]
@@ -84,12 +90,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_FindEmployer()
+        public void Then_Result_Is_Redirect_To_GetCheckAnswersReferrals()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("LoadWhoIsEmployer");
+            result?.RouteName.Should().Be("GetOpportunityBasket");
             result?.RouteValues["id"].Should().Be(1);
         }
     }
