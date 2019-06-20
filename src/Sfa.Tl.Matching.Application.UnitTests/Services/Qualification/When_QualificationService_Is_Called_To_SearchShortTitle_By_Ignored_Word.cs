@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
@@ -18,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
     public class When_QualificationService_Is_Called_To_SearchShortTitle_By_Ignored_Word
     {
         private readonly IRepository<Domain.Models.Qualification> _repository;
-        private readonly List<QualificationShortTitleSearchResultViewModel> _searchResults;
+        private readonly IList<QualificationShortTitleSearchResultViewModel> _searchResults;
 
         public When_QualificationService_Is_Called_To_SearchShortTitle_By_Ignored_Word()
         {
@@ -31,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var service = new QualificationService(mapper, _repository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
 
-            _searchResults = service.SearchShortTitle("the").ToList();
+            _searchResults = service.SearchShortTitle("the").GetAwaiter().GetResult();
         }
 
         [Fact]
