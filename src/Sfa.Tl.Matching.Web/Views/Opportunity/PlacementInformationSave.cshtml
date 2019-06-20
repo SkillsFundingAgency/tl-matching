@@ -33,8 +33,47 @@
                     </div>
                 </div>
             }
+                <span class="govuk-caption-l">Company name here if already selected</span>
             <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-            <p class="govuk-body">This information helps us understand where there are not enough providers for industry placements.</p>
+
+            @* Only show for referral journey *@
+            <p class="govuk-body">This information will go in an email to the selected providers.</p>
+
+
+            @* Only show for no suitabel results journey *@
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h1 class="govuk-fieldset__heading">
+                            Why did the employer not choose a provider?
+                        </h1>
+                    </legend>
+                    <span class="govuk-hint">
+                        Select all that apply
+                    </span>
+                    <div class="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="provider-reason-1" name="provider-reason" type="checkbox" value="Providers do not have students doing the right course">
+                            <label class="govuk-label govuk-checkboxes__label" for="provider-reason-1">
+                                Providers do not have students doing the right course
+                            </label>
+                        </div>
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="provider-reason-2" name="provider-reason" type="checkbox" value="Employer had a bad experience with them">
+                            <label class="govuk-label govuk-checkboxes__label" for="provider-reason-2">
+                                Employer had a bad experience with them
+                            </label>
+                        </div>
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="provider-reason-3" name="provider-reason" type="checkbox" value="Providers were too far away">
+                            <label class="govuk-label govuk-checkboxes__label" for="provider-reason-3">
+                                Providers were too far away
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
 
             <div class="govuk-form-group" sfa-validation-for="JobTitle" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label govuk-label--m" asp-for="JobTitle">
