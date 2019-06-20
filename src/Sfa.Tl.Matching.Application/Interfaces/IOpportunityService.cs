@@ -20,5 +20,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task UpdateReferrals(OpportunityDto dto);
         Task<bool> IsNewReferral(int opportunityId);
         Task<bool> IsNewProvisionGap(int opportunityId);
+        Task<int> GetOpportunityItemCountAsync(int opportunityId);
     }
 }

@@ -167,6 +167,14 @@ namespace Sfa.Tl.Matching.Application.Services
             return isReferral;
         }
 
+        public async Task<int> GetOpportunityItemCountAsync(int opportunityId)
+        {
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == opportunityId);
+            //TODO: Return the actual count
+            //return opportunity.Count;
+            return 1;
+        }
+
         private static Expression<Func<Opportunity, bool>> FilterValidOpportunities()
         {
             return o => (o.ProvisionGap != null && o.ProvisionGap.Count > 0) ||
