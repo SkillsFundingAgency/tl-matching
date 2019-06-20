@@ -76,6 +76,7 @@
   <ItemGroup>
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
     <None Include="PostDeployment\Seed Email Templates.sql" />
+    <None Include="PostDeployment\Migrate Opportunity Data.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
@@ -88,7 +89,7 @@
     <Build Include="Tables\QualificationRoutePathMapping.sql" />
     <Build Include="Tables\Qualification.sql" />
     <Build Include="Tables\ProviderQualification.sql" />
-    <Build Include="Tables\Opportunity.sql" />
+    <Build Include="Tables\OLDOpportunity.sql" />
     <Build Include="Tables\ProvisionGap.sql" />
     <Build Include="Tables\Referral.sql" />
     <Build Include="Tables\EmailTemplate.sql" />
@@ -102,11 +103,17 @@
     <Build Include="Tables\EmployerStaging.sql" />
     <Build Include="Tables\LearningAimReference.sql" />
     <Build Include="Tables\LearningAimReferenceStaging.sql" />
+    <Build Include="Tables\DBProjDeployLog.sql" />
+    <Build Include="Tables\OpportunityItem.sql" />
+    <Build Include="Tables\Opportunity.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="PreDeployment\PreDeploy.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Sfa.Tl.Matching.Database.refactorlog" />
   </ItemGroup>
 </Project>
