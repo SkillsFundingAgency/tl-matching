@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var searchResult = await _qualificationRepository
                 .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
-                .OrderBy(q => q.Title)
+                .OrderBy(q => q.Id)
                 .Select(q => new QualificationSearchResultViewModel
                 {
                     QualificationId = q.Id,
@@ -97,7 +97,9 @@ namespace Sfa.Tl.Matching.Application.Services
                     RouteIds = q.QualificationRoutePathMapping.Select(r => r.RouteId).ToList()
                 })
                 .Take(51)
-                .ToListAsync();
+                .OrderBy(q => q.Title.IndexOf(qualificationSearch, StringComparison.Ordinal))
+                .ToListAsync()
+                ;
 
             return new QualificationSearchViewModel
             {
@@ -107,21 +109,22 @@ namespace Sfa.Tl.Matching.Application.Services
             };
         }
 
-        public IEnumerable<QualificationShortTitleSearchResultViewModel> SearchShortTitle(string shortTitle)
+        public async Task<IList<QualificationShortTitleSearchResultViewModel>> SearchShortTitle(string shortTitle)
         {
             var shortTitleSearch = shortTitle.ToQualificationSearch();
 
             if (string.IsNullOrEmpty(shortTitleSearch))
                 return new List<QualificationShortTitleSearchResultViewModel>();
 
-            var searchResults = _qualificationRepository
+            var searchResults = await _qualificationRepository
                 .GetMany(q => EF.Functions.Like(q.ShortTitleSearch, $"%{shortTitleSearch}%"))
-                .OrderBy(q => q.ShortTitle)
                 .Select(q => new QualificationShortTitleSearchResultViewModel
                 {
                     ShortTitle = q.ShortTitle
                 })
-                .Distinct();
+                .Distinct()
+                .OrderBy(q => q.ShortTitle.IndexOf(shortTitleSearch, StringComparison.Ordinal))
+                .ToListAsync();
 
             return searchResults;
         }
