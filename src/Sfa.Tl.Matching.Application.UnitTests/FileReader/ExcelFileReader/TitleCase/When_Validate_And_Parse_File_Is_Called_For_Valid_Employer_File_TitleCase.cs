@@ -70,13 +70,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Title
         }
 
         [Fact]
-        public void Then_Data_Parser_Parse_Is_Called_Exactly_Once_And_Company_Name_And_Also_KnownAs_Fields_are_Converted_To_TitleCase()
+        public void Then_Data_Parser_Parse_Is_Called_Exactly_Once_And_Company_Name_And_Also_KnownAs_Fields_Are_Converted_To_TitleCase()
         {
             _dataParser.Received(1).Parse(Arg.Any<EmployerStagingFileImportDto>());
         }
 
         [Fact]
-        public void Then_Returned_List_Has_One_Item_And_Company_Name_And_Also_KnownAs_Fields_are_Converted_To_TitleCase()
+        public void Then_Returned_List_Has_One_Item_And_Company_Name_And_Also_KnownAs_Fields_Are_Converted_To_TitleCase()
         {
             _results.Should().NotBeNullOrEmpty();
 
