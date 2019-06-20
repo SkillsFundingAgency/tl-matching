@@ -91,6 +91,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteName.Should().BeEquivalentTo("GetOpportunityBasket");
+            redirect?.RouteValues["id"].Should().Be(1);
         }
     }
 }

@@ -169,7 +169,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("employer-opportunities/{id?}", Name = "GetOpportunityBasket")]
+        [Route("employer-opportunities/{id}", Name = "GetOpportunityBasket")]
         public async Task<IActionResult> OpportunityBasket(int id)
         {
             var viewModel = new OpportunityBasketViewModel
