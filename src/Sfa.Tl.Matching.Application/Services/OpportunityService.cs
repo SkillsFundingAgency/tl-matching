@@ -75,6 +75,15 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
+        public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int id)
+        {
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id);
+
+            var dto = _mapper.Map<OpportunityBasketViewModel>(opportunity);
+
+            return dto;
+        }
+
         public OpportunityDto GetLatestCompletedOpportunity(Guid crmId)
         {
             var latestOpportunity = _opportunityRepository.GetMany(o => o.EmployerCrmId == crmId)

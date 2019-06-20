@@ -24,6 +24,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
 
             _opportunityService = Substitute.For<IOpportunityService>();
+            _opportunityService.GetOpportunityBasket(1).Returns(new OpportunityBasketViewModel
+            {
+                Id = 1,
+                CompanyName = "Company Name"
+            });
 
             var referralService = Substitute.For<IReferralService>();
 
@@ -43,7 +48,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
             var viewModel = _result.GetViewModel<OpportunityBasketViewModel>();
-            viewModel.CompanyName.Should().Be("Test Company Name");
+            viewModel.CompanyName.Should().Be("Company Name");
+        }
+
+        [Fact]
+        public void GetOpportunityBasketAsync_Is_Called_Exactly_Once()
+        {
+            _opportunityService.Received(1).GetOpportunityBasket(1);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Internal;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
@@ -107,6 +108,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
                 .ForAllOtherMembers(config => config.Ignore());
+
+            CreateMap<Opportunity, OpportunityBasketViewModel>()
+                .ForMember(m => m.CompanyName, o => o.MapFrom(s => s.EmployerName)); // TODO This will come from Employer table and not Opportunity when DB changes are in
         }
     }
 }

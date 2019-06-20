@@ -182,10 +182,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("employer-opportunities/{id}", Name = "GetOpportunityBasket")]
         public async Task<IActionResult> OpportunityBasket(int id)
         {
-            var viewModel = new OpportunityBasketViewModel
-            {
-                CompanyName = "Test Company Name"
-            };
+            var viewModel = await _opportunityService.GetOpportunityBasket(id);
 
             return View(viewModel);
         }

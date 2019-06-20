@@ -21,5 +21,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<bool> IsNewReferral(int opportunityId);
         Task<bool> IsNewProvisionGap(int opportunityId);
         Task<int> GetOpportunityItemCountAsync(int opportunityId);
+        Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
     }
 }
