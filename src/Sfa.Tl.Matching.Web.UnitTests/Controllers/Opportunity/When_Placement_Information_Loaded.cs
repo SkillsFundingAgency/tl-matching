@@ -5,6 +5,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
@@ -19,6 +20,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         private readonly PlacementInformationSaveDto _dto = new PlacementInformationSaveDto();
         private const string JobTitle = "JobTitle";
+        private const string CompanyName = "CompanyName";
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
         private const int OpportunityId = 12;
@@ -27,8 +29,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _dto.OpportunityId = OpportunityId;
             _dto.JobTitle = JobTitle;
+            _dto.OpportunityType = OpportunityType.Referral;
+            _dto.CompanyName = CompanyName;
             _dto.PlacementsKnown = PlacementsKnown;
             _dto.Placements = Placements;
+            _dto.NoSuitableStudent = true;
+            _dto.HadBadExperience = true;
+            _dto.ProvidersTooFarAway = true;
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
@@ -65,31 +72,24 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_OpportunityId_Is_Set()
+        public void Then_ViewModel_Fields_Are_Set()
         {
             var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.OpportunityId.Should().Be(OpportunityId);
-        }
-
-        [Fact]
-        public void Then_JobTitle_Is_Set()
-        {
-            var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.JobTitle.Should().Be(JobTitle);
-        }
-
-        [Fact]
-        public void Then_PlacementsKnown_Is_Set()
-        {
-            var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.PlacementsKnown.Should().Be(PlacementsKnown);
+            viewModel.Placements.Should().Be(Placements);
+            viewModel.OpportunityType.Should().Be(OpportunityType.Referral);
+            viewModel.CompanyName.Should().Be(CompanyName);
         }
 
         [Fact]
-        public void Then_Placements_Is_Set()
+        public void Then_ViewModel_Provision_Gap_Flags_Are_Set()
         {
             var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
-            viewModel.Placements.Should().Be(Placements);
+            viewModel.NoSuitableStudent.Should().BeTrue();
+            viewModel.HadBadExperience.Should().BeTrue();
+            viewModel.ProvidersTooFarAway.Should().BeTrue();
         }
     }
 }

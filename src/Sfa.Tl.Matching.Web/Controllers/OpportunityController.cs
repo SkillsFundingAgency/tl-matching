@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -80,6 +81,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
 
+            //TODO: Get these from the back end
+            //viewModel.IsReferral = await _opportunityService.IsNewReferral(id);
+            //viewModel.CompanyName = "Test Company Name";
+
             return View(viewModel);
         }
 
@@ -96,13 +101,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.UpdateOpportunity(dto);
 
             var isReferralOpportunity = await _opportunityService.IsReferralOpportunity(viewModel.OpportunityId);
+            var isNewProvisionGap = await _opportunityService.IsNewProvisionGap(viewModel.OpportunityId);
+            var isNewReferralOpportunity = await _opportunityService.IsNewReferral(viewModel.OpportunityId);
             var opportunityCount = await _opportunityService.GetOpportunityItemCountAsync(viewModel.OpportunityId);
 
             if (opportunityCount > 1)
             {
-                return RedirectToRoute(isReferralOpportunity 
+                return RedirectToRoute(isReferralOpportunity
                     ? "GetCheckAnswersReferrals"
-                    : "GetOpportunityBasket", 
+                    : "GetOpportunityBasket",
                     new { id = viewModel.OpportunityId });
             }
             return RedirectToRoute("LoadWhoIsEmployer", new { id = viewModel.OpportunityId });
@@ -174,7 +181,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = await _opportunityService.GetOpportunity(id);
             var viewModel = _mapper.Map<EmailsSentViewModel>(dto);
             viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
-            
+
             return View(viewModel);
         }
 
@@ -201,6 +208,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 viewModel.Postcode = opportunity.Postcode;
                 viewModel.SearchRadius = opportunity.SearchRadius;
                 viewModel.RouteId = opportunity.RouteId;
+            }
+
+            if (viewModel.OpportunityType == OpportunityType.ProvisionGap)
+            { 
+                if (!viewModel.NoSuitableStudent &&
+                    !viewModel.HadBadExperience &&
+                    !viewModel.ProvidersTooFarAway)
+                {
+                    ModelState.AddModelError(nameof(viewModel.NoSuitableStudent),
+                        "You must tell us why the employer did not choose a provider");
+                }
             }
 
             if (!viewModel.PlacementsKnown.HasValue || !viewModel.PlacementsKnown.Value) return;
