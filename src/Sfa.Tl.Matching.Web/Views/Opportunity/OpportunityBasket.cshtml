@@ -31,10 +31,10 @@
             switch (Model.Type)
             {
                 case OpportunityBasketType.SingleReferral:
-                    <partial name="_singleReferral", model="Model.Items[0]" />
+                    <partial name="_basketReferralSingle", model="Model.Items[0]" />
                     break;
                 case OpportunityBasketType.ProvisionGapsOnly:
-                    <partial name="_singleProvisionGap", model="Model.Items" />
+                    <partial name="_basketProvisionGap", model="Model.Items" />
                     break;
                     default:
                         <div class="govuk-tabs" data-module="tabs">
