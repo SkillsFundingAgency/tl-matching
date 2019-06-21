@@ -2,6 +2,7 @@
 {
     public enum OpportunityBasketType
     {
-        SingleReferral
+        SingleReferral,
+        ProvisionGapsOnly
     }
 }

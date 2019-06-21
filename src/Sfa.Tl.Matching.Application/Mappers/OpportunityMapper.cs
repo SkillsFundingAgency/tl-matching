@@ -123,6 +123,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
         {
             if (referralCount == 1 && provisionGapCount == 0)
                 return OpportunityBasketType.SingleReferral;
+            if (referralCount == 0 && provisionGapCount > 0)
+                return OpportunityBasketType.ProvisionGapsOnly;
 
             return OpportunityBasketType.SingleReferral;
         }
