@@ -122,7 +122,10 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id)
         {
             var placementInformation = await _opportunityRepository.GetSingleOrDefault(e => e.Id == id,
-                opp => opp.Route);
+                opp => opp.Route,
+                //TODO: Referral only included so we can map OpportunityType,
+                //      probably won't need it when data is refactored
+                opp => opp.Referral);
 
             var dto = _mapper.Map<Opportunity, PlacementInformationSaveDto>(placementInformation);
 

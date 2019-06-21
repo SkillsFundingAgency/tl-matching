@@ -1,3 +1,4 @@
+@using Sfa.Tl.Matching.Models.Enums
 @model Sfa.Tl.Matching.Models.ViewModel.PlacementInformationSaveViewModel
 @{
     ViewData["Title"] = "Placement information";
@@ -5,17 +6,19 @@
 
 @section backButton{
     <a class="govuk-back-link"
-       asp-route="ProviderResults_Get" 
-       asp-route-opportunityId="@Model.OpportunityId" 
-       asp-route-searchRadius="@Model.SearchRadius" 
-       asp-route-Postcode="@Model.Postcode" 
+       asp-route="ProviderResults_Get"
+       asp-route-opportunityId="@Model.OpportunityId"
+       asp-route-searchRadius="@Model.SearchRadius"
+       asp-route-Postcode="@Model.Postcode"
        asp-route-SelectedRouteId="@Model.RouteId">Back</a>
     <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Finish and start again </a>
 }
 
 <form asp-route="PlacementInformationSave_Post" novalidate>
     <input asp-for="OpportunityId" type="hidden" />
-     
+    <input asp-for="OpportunityType" type="hidden" />
+    <input asp-for="CompanyName" type="hidden" />
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             @if (!ViewData.ModelState.IsValid)
@@ -29,54 +32,60 @@
                             <li><a sfa-validation-for="JobTitle"></a></li>
                             <li><a href="#placement-location-yes" sfa-validation-for="PlacementsKnown"></a></li>
                             <li><a sfa-validation-for="Placements"></a></li>
+                            <li><a sfa-validation-for="NoSuitableStudent"></a></li>
                         </ul>
                     </div>
                 </div>
             }
-                <span class="govuk-caption-l">Company name here if already selected</span>
+
+            @*@if (!String.IsNullOrEmpty(Model.CompanyName))
+            {
+                <span class="govuk-caption-l">@Model.CompanyName</span>
+            }*@
             <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-            @* Only show for referral journey *@
-            <p class="govuk-body">This information will go in an email to the selected providers.</p>
-
-
-            @* Only show for no suitabel results journey *@
-            <div class="govuk-form-group govuk-form-group--error">
-                <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                        <h1 class="govuk-fieldset__heading">
-                            Why did the employer not choose a provider?
-                        </h1>
-                    </legend>
-                    <span class="govuk-hint">
-                        Select all that apply
-                    </span>
-                    <span id="passport-issued-error" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span> You must tell us why the employer did not choose a provider
-                    </span>
-                    <div class="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="provider-reason-1" name="provider-reason" type="checkbox" value="Providers do not have students doing the right course">
-                            <label class="govuk-label govuk-checkboxes__label" for="provider-reason-1">
-                                Providers do not have students doing the right course
-                            </label>
+            @if (Model.OpportunityType == OpportunityType.Referral)
+            {
+                <p class="govuk-body">This information will go in an email to the selected providers.</p>
+            }
+            else
+            {
+                <div class="govuk-form-group" sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-form-group--error">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                            <h1 class="govuk-fieldset__heading">
+                                Why did the employer not choose a provider?
+                            </h1>
+                        </legend>
+                        <span class="govuk-hint">
+                            Select all that apply
+                        </span>
+                        <div class="govuk-checkboxes">
+                            <div class="govuk-checkboxes__item">
+                                <input asp-for="NoSuitableStudent" class="govuk-checkboxes__input" type="checkbox"
+                                       sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-input--error">
+                                <label class="govuk-label govuk-checkboxes__label" asp-for="NoSuitableStudent">
+                                    Providers do not have students doing the right course
+                                </label>
+                            </div>
+                            <div class="govuk-checkboxes__item">
+                                <input asp-for="HadBadExperience" class="govuk-checkboxes__input" type="checkbox"
+                                       sfa-validation-for="HadBadExperience" sfa-validationerror-class="govuk-input--error">
+                                <label class="govuk-label govuk-checkboxes__label" asp-for="HadBadExperience">
+                                    Employer had a bad experience with them
+                                </label>
+                            </div>
+                            <div class="govuk-checkboxes__item">
+                                <input asp-for="ProvidersTooFarAway" class="govuk-checkboxes__input" type="checkbox"
+                                       sfa-validation-for="ProvidersTooFarAway" sfa-validationerror-class="govuk-input--error">
+                                <label class="govuk-label govuk-checkboxes__label" asp-for="ProvidersTooFarAway">
+                                    Providers were too far away
+                                </label>
+                            </div>
                         </div>
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="provider-reason-2" name="provider-reason" type="checkbox" value="Employer had a bad experience with them">
-                            <label class="govuk-label govuk-checkboxes__label" for="provider-reason-2">
-                                Employer had a bad experience with them
-                            </label>
-                        </div>
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="provider-reason-3" name="provider-reason" type="checkbox" value="Providers were too far away">
-                            <label class="govuk-label govuk-checkboxes__label" for="provider-reason-3">
-                                Providers were too far away
-                            </label>
-                        </div>
-                    </div>
-                </fieldset>
-            </div>
-
+                    </fieldset>
+                </div>
+            }
 
             <div class="govuk-form-group" sfa-validation-for="JobTitle" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label govuk-label--m" asp-for="JobTitle">

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
@@ -15,8 +16,14 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         public int? Placements { get; set; }
 
+        public bool NoSuitableStudent { get; set; }
+        public bool HadBadExperience { get; set; }
+        public bool ProvidersTooFarAway { get; set; }
+
         public int RouteId { get; set; }
         public string Postcode { get; set; }
         public short SearchRadius { get; set; }
+        public OpportunityType OpportunityType { get; set; }
+        public string CompanyName { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
@@ -24,6 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
+                OpportunityType = OpportunityType.Referral,
                 JobTitle = "Junior Tester",
                 PlacementsKnown = true,
                 Placements = 3
