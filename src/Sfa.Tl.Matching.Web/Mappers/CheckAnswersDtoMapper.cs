@@ -41,8 +41,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                     o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.Postcode,
                     o => o.MapFrom(s => s.Postcode))
-                .ForMember(m => m.ConfirmationSelected,
-                    o => o.MapFrom(s => s.ConfirmationSelected))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<CheckAnswersReferralViewModel, CheckAnswersDto>>())
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<CheckAnswersReferralViewModel, CheckAnswersDto>>())
                 .ForAllOtherMembers(config => config.Ignore())
