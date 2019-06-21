@@ -49,7 +49,7 @@
             }
             else
             {
-            <div class="govuk-form-group govuk-form-group--error">
+                <div class="govuk-form-group govuk-form-group--error">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                             <h1 class="govuk-fieldset__heading">
@@ -58,28 +58,28 @@
                         </legend>
                         <span class="govuk-hint">
                             Select all that apply
-                    </span>
-                    <span id="passport-issued-error" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span> You must tell us why the employer did not choose a provider
+                        </span>
+                        <span id="passport-issued-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> You must tell us why the employer did not choose a provider
                         </span>
                         <div class="govuk-checkboxes">
                             <div class="govuk-checkboxes__item">
-                                <input asp-for="NoSuitableStudent" class="govuk-checkboxes__input" type="checkbox" 
+                                <input asp-for="NoSuitableStudent" class="govuk-checkboxes__input" type="checkbox"
                                        sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-input--error">
                                 <label class="govuk-label govuk-checkboxes__label" asp-for="NoSuitableStudent">
                                     Providers do not have students doing the right course
                                 </label>
                             </div>
                             <div class="govuk-checkboxes__item">
-                                <input  asp-for="HadBadExperience" class="govuk-checkboxes__input" type="checkbox" 
+                                <input asp-for="HadBadExperience" class="govuk-checkboxes__input" type="checkbox"
                                        sfa-validation-for="HadBadExperience" sfa-validationerror-class="govuk-input--error">
                                 <label class="govuk-label govuk-checkboxes__label" asp-for="HadBadExperience">
                                     Employer had a bad experience with them
                                 </label>
                             </div>
                             <div class="govuk-checkboxes__item">
-                                <input  asp-for="ProvidersTooFarAway" class="govuk-checkboxes__input" type="checkbox" 
-                                        sfa-validation-for="ProvidersTooFarAway" sfa-validationerror-class="govuk-input--error">
+                                <input asp-for="ProvidersTooFarAway" class="govuk-checkboxes__input" type="checkbox"
+                                       sfa-validation-for="ProvidersTooFarAway" sfa-validationerror-class="govuk-input--error">
                                 <label class="govuk-label govuk-checkboxes__label" asp-for="ProvidersTooFarAway">
                                     Providers were too far away
                                 </label>
