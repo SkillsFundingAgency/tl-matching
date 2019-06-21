@@ -81,6 +81,10 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
+                .ForMember(m => m.CompanyName, o => o.MapFrom(s => s.EmployerName))
+                .ForPath(m => m.OpportunityType, 
+                    opt => opt.MapFrom(source => source.Referral.Any() ? 
+                        OpportunityType.Referral : OpportunityType.ProvisionGap))
                 .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
                 .ForMember(m => m.Placements,
                     opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ?
