@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.EqualityComparer;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -38,7 +39,21 @@ namespace Sfa.Tl.Matching.Application.Services
             dto.Id = 0;
             var opportunity = _mapper.Map<Opportunity>(dto);
 
-            return await _opportunityRepository.Create(opportunity);
+            var opportunityId = await _opportunityRepository.Create(opportunity);
+
+            //TODO: Refactor this - put in to mae up for loss of call to CreateProvisionGap
+            //      The ProvisionGapMapper might not want to take OpportunityDto
+            //      Should be able to do all of the below as part of the mapping from Dto above
+            //      Make sure this functionality is covered by tests
+            if (dto.OpportunityType == OpportunityType.ProvisionGap)
+            {
+                var provisionGap = _mapper.Map<ProvisionGap>(dto);
+                provisionGap.OpportunityId = opportunityId;
+
+                await _provisionGapRepository.Create(provisionGap);
+            }
+
+            return opportunityId;
         }
 
         public async Task UpdateReferrals(OpportunityDto dto)
@@ -150,11 +165,11 @@ namespace Sfa.Tl.Matching.Application.Services
             await _opportunityRepository.Update(trackedEntity);
         }
 
-        public Task<int> CreateProvisionGap(CheckAnswersProvisionGapViewModel dto)
+        public async Task<int> CreateProvisionGap(CheckAnswersProvisionGapViewModel dto)
         {
             var provisionGap = _mapper.Map<ProvisionGap>(dto);
 
-            return _provisionGapRepository.Create(provisionGap);
+            return await _provisionGapRepository.Create(provisionGap);
         }
 
         public List<ReferralDto> GetReferrals(int opportunityId)
