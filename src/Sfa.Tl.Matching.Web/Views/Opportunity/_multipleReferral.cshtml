@@ -1,4 +1,4 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketReferralViewModel
+﻿@model List<Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketItemViewModel>
 
 <form>
     <div class="govuk-form-group">
@@ -27,7 +27,7 @@
             </tr>
         </thead>
         <tbody class="govuk-table__body">
-            @foreach (var item in Model.Items)
+            @foreach (var item in Model)
             {
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell">

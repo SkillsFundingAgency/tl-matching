@@ -1,23 +1,27 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketReferralViewModel
+﻿@model List<Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketItemViewModel>
 
-<table class="govuk-table">
-    <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Workplace</th>
-            <th class="govuk-table__header" scope="col">Job role</th>
-            <th class="govuk-table__header" scope="col">Students wanted</th>
-            <th class="govuk-table__header" scope="col">Reason no providers chosen</th>
-        </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-        @foreach (var item in Model.Items)
-        {
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">@item.Workplace</td>
-            <td class="govuk-table__cell">@item.JobRole</td>
-            <td class="govuk-table__cell">@item.StudentsWanted</td>
-            <td class="govuk-table__cell"></td>
-        </tr>
-        }
-    </tbody>
-</table>
+<form>
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="col">Workplace</th>
+                <th class="govuk-table__header" scope="col">Job role</th>
+                <th class="govuk-table__header" scope="col">Students wanted</th>
+                <th class="govuk-table__header" scope="col">Reason no providers chosen</th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            @foreach (var item in Model)
+            {
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@item.Workplace</td>
+                    <td class="govuk-table__cell">@item.JobRole</td>
+                    <td class="govuk-table__cell">@item.StudentsWanted</td>
+                    <td class="govuk-table__cell">@item.Reason</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button class="govuk-button">Finish</button>
+</form>

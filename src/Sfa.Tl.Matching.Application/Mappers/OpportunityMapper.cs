@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Internal;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Mappers
@@ -110,7 +111,20 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<Opportunity, OpportunityBasketViewModel>()
-                .ForMember(m => m.CompanyName, o => o.MapFrom(s => s.EmployerName)); // TODO This will come from Employer table and not Opportunity when DB changes are in
+                .ForMember(m => m.CompanyName, o => 
+                    o.MapFrom(s => s.EmployerName)) // TODO This will come from Employer table and not Opportunity when DB changes are in
+                .ForMember(m => m.Type, config => 
+                    config.MapFrom(s => GetOpportunityBasketType(0, 3))) // TODO Put correct values when Opportunity Model is updated
+                .ForAllOtherMembers(config => config.Ignore())
+                ;
+        }
+
+        private static OpportunityBasketType GetOpportunityBasketType(int referralCount, int provisionGapCount)
+        {
+            if (referralCount == 1 && provisionGapCount == 0)
+                return OpportunityBasketType.SingleReferral;
+
+            return OpportunityBasketType.SingleReferral;
         }
     }
 }

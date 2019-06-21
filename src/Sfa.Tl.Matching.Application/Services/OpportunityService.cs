@@ -81,6 +81,18 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var dto = _mapper.Map<OpportunityBasketViewModel>(opportunity);
 
+            // TODO Get proper data when DB is done
+            dto.Items = new List<OpportunityBasketItemViewModel>
+            {
+                new OpportunityBasketItemViewModel
+                {
+                    StudentsWanted = "StudentsWanted",
+                    JobRole = "JobRole",
+                    Providers = 1,
+                    Workplace = "Workplace"
+                }
+            };
+
             return dto;
         }
 

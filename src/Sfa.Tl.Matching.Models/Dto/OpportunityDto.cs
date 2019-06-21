@@ -29,5 +29,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ModifiedBy { get; set; }
 
         public virtual ICollection<ReferralDto> Referral { get; set; }
+        public int ReferralCount { get; set; }
+        public int ProvisionGapCount { get; set; }
     }
 }

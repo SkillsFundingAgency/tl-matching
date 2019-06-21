@@ -1,29 +1,28 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketReferralViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketItemViewModel
 
-<table class="govuk-table">
-    <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Workplace</th>
-            <th class="govuk-table__header" scope="col">Job role</th>
-            <th class="govuk-table__header" scope="col">Students wanted</th>
-            <th class="govuk-table__header" scope="col">Providers</th>
-            <th class="govuk-table__header" scope="col"></th>
-            <th class="govuk-table__header" scope="col"></th>
-        </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-        @foreach (var item in Model.Items)
-        {
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">@item.Workplace</td>
-            <td class="govuk-table__cell">@item.JobRole</td>
-            <td class="govuk-table__cell">@item.StudentsWanted</td>
-            <td class="govuk-table__cell">@item.StudentsWanted</td>
-            <td class="govuk-table__cell"><a href="#" class="govuk-link">Edit</a></td>
-            <td class="govuk-table__cell"><a href="#" class="govuk-link">Delete</a></td>
-        </tr>
-        }
-    </tbody>
-</table>
+<form>
+    <table class="govuk-table">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="col">Workplace</th>
+                <th class="govuk-table__header" scope="col">Job role</th>
+                <th class="govuk-table__header" scope="col">Students wanted</th>
+                <th class="govuk-table__header" scope="col">Providers</th>
+                <th class="govuk-table__header" scope="col"></th>
+                <th class="govuk-table__header" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">@Model.Workplace</td>
+                <td class="govuk-table__cell">@Model.JobRole</td>
+                <td class="govuk-table__cell">@Model.StudentsWanted</td>
+                <td class="govuk-table__cell">@Model.Providers</td>
+                <td class="govuk-table__cell"><a href="#" class="govuk-link">Edit</a></td>
+                <td class="govuk-table__cell"><a href="#" class="govuk-link">Delete</a></td>
+            </tr>
+        </tbody>
+    </table>
 
-<button class="govuk-button">Continue with opportunity</button>
+    <button class="govuk-button">Continue with opportunity</button>
+</form>

@@ -32,6 +32,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.Placements, o => o.Ignore())
                 .ForMember(m => m.PlacementsKnown, o => o.Ignore())
                 .ForMember(m => m.RouteName, o => o.Ignore())
+                .ForMember(m => m.ReferralCount, o => o.Ignore()) // TODO Remove when DB structure is done
+                .ForMember(m => m.ProvisionGapCount, o => o.Ignore()) // TODO Remove when DB structure is done
                 ;
 
             CreateMap<SaveReferralViewModel, OpportunityDto>()
@@ -55,6 +57,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.Placements, o => o.Ignore())
                 .ForMember(m => m.PlacementsKnown, o => o.Ignore())
                 .ForMember(m => m.RouteName, o => o.Ignore())
+                .ForMember(m => m.ReferralCount, o => o.Ignore()) // TODO Remove when DB structure is done
+                .ForMember(m => m.ProvisionGapCount, o => o.Ignore()) // TODO Remove when DB structure is done
                 ;
 
             CreateMap<SelectedProviderViewModel, ReferralDto>()

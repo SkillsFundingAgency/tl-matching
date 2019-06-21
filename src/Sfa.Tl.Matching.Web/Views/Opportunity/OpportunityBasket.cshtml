@@ -1,4 +1,5 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketViewModel
+﻿@using Sfa.Tl.Matching.Models.Enums
+@model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketViewModel
 @{
     ViewData["Title"] = "All opportunities";
 }
@@ -22,29 +23,45 @@
         <button type="submit" class="govuk-button tl-button--grey">
             Add another opportunity
         </button>
+        
+        @if (Model.Items?.Count > 0)
+        {
+          <div>OpportunityBasketType = @Model.Type</div>
 
+            switch (Model.Type)
+            {
+                case OpportunityBasketType.SingleReferral:
+                    <partial name="_singleReferral", model="Model.Items[0]" />
+                    break;
+                case OpportunityBasketType.ProvisionGapsOnly:
+                    <partial name="_singleProvisionGap", model="Model.Items" />
+                    break;
+                    default:
+                        <div class="govuk-tabs" data-module="tabs">
 
-        <div class="govuk-tabs" data-module="tabs">
+                            <ul class="govuk-tabs__list">
+                                <li class="govuk-tabs__list-item">
+                                    <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#providers">
+                                        With providers
+                                    </a>
+                                </li>
+                                <li class="govuk-tabs__list-item">
+                                    <a class="govuk-tabs__tab" href="#no-providers">
+                                        With no providers
+                                    </a>
+                                </li>
+                            </ul>
 
-            <ul class="govuk-tabs__list">
-                <li class="govuk-tabs__list-item">
-                    <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#providers">
-                        With providers
-                    </a>
-                </li>
-                <li class="govuk-tabs__list-item">
-                    <a class="govuk-tabs__tab" href="#no-providers">
-                        With no providers
-                    </a>
-                </li>
-            </ul>
-
-            <section class="govuk-tabs__panel" id="providers">
-                <p>Insert partial here</p>
-            </section>
-            <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="no-providers">
-                <p>Insert partial here</p>
-            </section>
-        </div>
+                            <section class="govuk-tabs__panel" id="providers">
+                                <p>Insert partial here</p>
+                            </section>
+                            <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="no-providers">
+                                <p>Insert partial here</p>
+                            </section>
+                        </div>
+                        break;
+            }
+        }
+       
     </div>
 </div>
