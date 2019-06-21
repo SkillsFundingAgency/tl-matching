@@ -32,6 +32,7 @@
                             <li><a sfa-validation-for="JobTitle"></a></li>
                             <li><a href="#placement-location-yes" sfa-validation-for="PlacementsKnown"></a></li>
                             <li><a sfa-validation-for="Placements"></a></li>
+                            <li><a sfa-validation-for="NoSuitableStudent"></a></li>
                         </ul>
                     </div>
                 </div>
@@ -49,7 +50,7 @@
             }
             else
             {
-                <div class="govuk-form-group govuk-form-group--error">
+                <div class="govuk-form-group" sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-form-group--error">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                             <h1 class="govuk-fieldset__heading">
@@ -58,9 +59,6 @@
                         </legend>
                         <span class="govuk-hint">
                             Select all that apply
-                        </span>
-                        <span id="passport-issued-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> You must tell us why the employer did not choose a provider
                         </span>
                         <div class="govuk-checkboxes">
                             <div class="govuk-checkboxes__item">
