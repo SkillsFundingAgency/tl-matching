@@ -52,7 +52,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<Opportunity, OpportunityDto>()
                 .ForPath(m => m.RouteName, opt => opt.MapFrom(source => source.Route.Name))
-                .ForPath(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()));
+                .ForPath(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()))
+                .ForPath(m => m.OpportunityType,
+                    opt => opt.MapFrom(source => source.Referral.Any() ?
+                        OpportunityType.Referral : OpportunityType.ProvisionGap))
+                ;
 
             CreateMap<Opportunity, CheckAnswersDto>()
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 // ReSharper disable UnusedMember.Global
 
@@ -34,6 +35,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.RouteName, o => o.Ignore())
                 .ForMember(m => m.ReferralCount, o => o.Ignore()) // TODO Remove when DB structure is done
                 .ForMember(m => m.ProvisionGapCount, o => o.Ignore()) // TODO Remove when DB structure is done
+                .ForPath(o => o.OpportunityType, opt => opt.MapFrom(x => OpportunityType.ProvisionGap))
                 ;
 
             CreateMap<SaveReferralViewModel, OpportunityDto>()
@@ -59,6 +61,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.RouteName, o => o.Ignore())
                 .ForMember(m => m.ReferralCount, o => o.Ignore()) // TODO Remove when DB structure is done
                 .ForMember(m => m.ProvisionGapCount, o => o.Ignore()) // TODO Remove when DB structure is done
+                .ForPath(o => o.OpportunityType, opt => opt.MapFrom(x => OpportunityType.Referral))
                 ;
 
             CreateMap<SelectedProviderViewModel, ReferralDto>()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
@@ -31,5 +32,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public virtual ICollection<ReferralDto> Referral { get; set; }
         public int ReferralCount { get; set; }
         public int ProvisionGapCount { get; set; }
+        public OpportunityType OpportunityType { get; set; }
     }
 }
