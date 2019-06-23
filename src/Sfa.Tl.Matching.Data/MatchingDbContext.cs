@@ -17,6 +17,7 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<EmailTemplate> EmailTemplate { get; set; }
         public virtual DbSet<Employer> Employer { get; set; }
         public virtual DbSet<Opportunity> Opportunity { get; set; }
+        public virtual DbSet<OpportunityItem> OpportunityItem { get; set; }
         public virtual DbSet<Path> Path { get; set; }
         public virtual DbSet<Provider> Provider { get; set; }
         public virtual DbSet<LearningAimReference> LearningAimReference { get; set; }

@@ -2,10 +2,10 @@
 {
     public class Referral : BaseEntity
     {
-        public int OpportunityId { get; set; }
+        public int OpportunityItemId { get; set; }
         public int ProviderVenueId { get; set; }
         public decimal DistanceFromEmployer { get; set; }
-        public virtual Opportunity Opportunity { get; set; }
+        public virtual OpportunityItem OpportunityItem { get; set; }
         public virtual ProviderVenue ProviderVenue { get; set; }
     }
 }
