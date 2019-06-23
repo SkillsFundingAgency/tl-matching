@@ -13,7 +13,7 @@
 	[IsSaved]					BIT NULL DEFAULT 0,
 	[IsSelectedForReferral]		BIT NULL DEFAULT 0,
 	[IsCompleted]				BIT NULL DEFAULT 0,
-	[CreatedOn]					DATETIME2 NOT NULL DEFAULT GetUTCDATE(), 
+	[CreatedOn]					DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy]					NVARCHAR(50) NULL, 
 	[ModifiedOn]				DATETIME2 NULL, 
 	[ModifiedBy]				NVARCHAR(50) NULL

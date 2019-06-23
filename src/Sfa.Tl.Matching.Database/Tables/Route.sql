@@ -4,7 +4,7 @@
 	[Name] NVARCHAR(50) NOT NULL, 
 	[Keywords] NVARCHAR(500) NULL, 
 	[Summary] NVARCHAR(500) NULL, 
-	[CreatedOn] DATETIME2 NOT NULL DEFAULT GetDate(), 
+	[CreatedOn] DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 
 	[ModifiedBy] NVARCHAR(50) NULL

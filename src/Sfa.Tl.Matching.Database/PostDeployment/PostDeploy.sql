@@ -6,4 +6,5 @@ Post-Deployment Script
 :r ".\Seed Paths.sql"
 :r ".\Seed Email Templates.sql"
 :r ".\Migrate Opportunity Data.sql"
+:r ".\Update Date Columns to UTC.sql"
 

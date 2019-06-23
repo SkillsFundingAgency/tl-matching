@@ -77,6 +77,7 @@
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
     <None Include="PostDeployment\Seed Email Templates.sql" />
     <None Include="PostDeployment\Migrate Opportunity Data.sql" />
+    <None Include="PostDeployment\Update Date Columns to UTC.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />

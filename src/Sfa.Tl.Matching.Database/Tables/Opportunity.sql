@@ -5,7 +5,7 @@
 	[EmployerContact]		NVARCHAR(100) NULL,
 	[EmployerContactEmail]	VARCHAR(320) NULL,
 	[EmployerContactPhone]	VARCHAR(150) NULL,
-	[CreatedOn]				DATETIME2 NOT NULL DEFAULT GetUTCDate(), 
+	[CreatedOn]				DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy]				NVARCHAR(50) NULL, 
 	[ModifiedOn]			DATETIME2 NULL, 
 	[ModifiedBy]			NVARCHAR(50) NULL
