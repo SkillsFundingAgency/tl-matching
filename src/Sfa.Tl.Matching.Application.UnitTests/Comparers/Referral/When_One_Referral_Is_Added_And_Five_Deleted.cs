@@ -9,25 +9,25 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Comparers.Referral
     {
         private readonly ReferralDifference.ReferralDifferenceDto _dto;
 
-        private const int OpportunityId = 1;
+        private const int OpportunityItemId = 1;
 
         public When_One_Referral_Is_Added_And_Five_Deleted()
         {
             var viewModelReferrals = new List<Domain.Models.Referral>
             {
-                new Domain.Models.Referral { ProviderVenueId = 1, OpportunityId = OpportunityId },
-                new Domain.Models.Referral { ProviderVenueId = 7, OpportunityId = OpportunityId }
+                new Domain.Models.Referral { ProviderVenueId = 1, OpportunityItemId = OpportunityItemId },
+                new Domain.Models.Referral { ProviderVenueId = 7, OpportunityItemId = OpportunityItemId }
             };
 
             var databaseReferrals = new List<Domain.Models.Referral>
             {
-                new Domain.Models.Referral { ProviderVenueId = 1, OpportunityId = OpportunityId },
-                new Domain.Models.Referral { ProviderVenueId = 2, OpportunityId = OpportunityId },
-                new Domain.Models.Referral { ProviderVenueId = 3, OpportunityId = OpportunityId },
-                new Domain.Models.Referral { ProviderVenueId = 4, OpportunityId = OpportunityId },
-                new Domain.Models.Referral { ProviderVenueId = 5, OpportunityId = OpportunityId },
-                new Domain.Models.Referral { ProviderVenueId = 6, OpportunityId = OpportunityId },
-                new Domain.Models.Referral { ProviderVenueId = 6, OpportunityId = 2 }
+                new Domain.Models.Referral { ProviderVenueId = 1, OpportunityItemId = OpportunityItemId },
+                new Domain.Models.Referral { ProviderVenueId = 2, OpportunityItemId = OpportunityItemId },
+                new Domain.Models.Referral { ProviderVenueId = 3, OpportunityItemId = OpportunityItemId },
+                new Domain.Models.Referral { ProviderVenueId = 4, OpportunityItemId = OpportunityItemId },
+                new Domain.Models.Referral { ProviderVenueId = 5, OpportunityItemId = OpportunityItemId },
+                new Domain.Models.Referral { ProviderVenueId = 6, OpportunityItemId = OpportunityItemId },
+                new Domain.Models.Referral { ProviderVenueId = 6, OpportunityItemId = 2 }
             };
 
             var referralDifference = new ReferralDifference(new ReferralEqualityComparer());

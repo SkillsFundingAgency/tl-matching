@@ -19,8 +19,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private readonly OpportunityDto _opportunityDto;
         private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
 
-        private readonly Guid _crmId = new Guid("65021261-8C70-4C4F-954F-4E5282250A85");
-
         public When_OpportunityService_Is_Called_To_Get_Latest_Completed()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
@@ -34,13 +32,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     new Domain.Models.Opportunity
                     {
                         Id = 1,
-                        EmployerCrmId = _crmId,
+                        EmployerId = 1,
                         CreatedOn = new DateTime(2019, 1, 1, 23, 59, 58),
                         ProvisionGap = new List<ProvisionGap>
                         {
                             new ProvisionGap
                             {
-                                OpportunityId = 1
+                                OpportunityItemId = 1
                             }
                         }
                     },
@@ -52,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                         {
                             new ProvisionGap
                             {
-                                OpportunityId = 2
+                                OpportunityItemId = 2
                             }
                         }
                     },
@@ -65,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                         {
                             new Domain.Models.Referral
                             {
-                                OpportunityId = 3
+                                OpportunityItemId = 3
                             }
                         }
                     }
@@ -77,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityService = new OpportunityService(mapper, _opportunityRepository, provisionGapRepository,
                 referralRepository);
 
-            _opportunityDto = opportunityService.GetLatestCompletedOpportunity(_crmId);
+            _opportunityDto = opportunityService.GetLatestCompletedOpportunity(1);
         }
 
         [Fact]
