@@ -1,0 +1,38 @@
+﻿@using Sfa.Tl.Matching.Models.Enums
+@model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketViewModel
+
+<div class="govuk-tabs" data-module="tabs">
+    <ul class="govuk-tabs__list">
+        <li class="govuk-tabs__list-item">
+            <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#providers">
+                With providers
+            </a>
+        </li>
+        <li class="govuk-tabs__list-item">
+            <a class="govuk-tabs__tab" href="#no-providers">
+                With no providers
+            </a>
+        </li>
+    </ul>
+
+    <section class="govuk-tabs__panel" id="providers">
+        <p>
+            @if (Model.Type == OpportunityBasketType.ReferralSingleOnly)
+            {
+                <partial name="_basketReferralSingle" , model="Model.ReferralItems[0]" />
+            }
+            else
+            {
+                <partial name="_basketReferralMultiple" , model="Model.ReferralItems" />
+            }
+        </p>
+    </section>
+    <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="no-providers">
+        <form>
+            <p>
+                <partial name="_basketProvisionGap" , model="Model.ProvisionGapItems" />
+            </p>
+        </form>
+
+    </section>
+</div>
