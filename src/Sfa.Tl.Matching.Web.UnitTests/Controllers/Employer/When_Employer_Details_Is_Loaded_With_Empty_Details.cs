@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private readonly IEmployerService _employerService;
 
         private const int OpportunityId = 12;
+        private const int EmployerId = 1001;
         private const string EmployerName = "EmployerName";
         private const string EmployerContactPhone = "EmployerContactPhone";
         private const string EmployerContactEmail = "EmployerContactEmail";
@@ -39,6 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
             {
                 Id = OpportunityId,
+                EmployerId = EmployerId,
                 EmployerName = EmployerName,
                 EmployerContact = string.Empty,
                 EmployerContactPhone = string.Empty,
