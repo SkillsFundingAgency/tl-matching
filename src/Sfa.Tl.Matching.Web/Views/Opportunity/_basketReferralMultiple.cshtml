@@ -1,6 +1,6 @@
-﻿@model List<Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketItemViewModel>
+﻿@model List<Sfa.Tl.Matching.Models.ViewModel.BasketReferralItemViewModel>
 
-<form>
+<form asp-route="ContinueOpportunity" novalidate>
     <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
             <div class="govuk-checkboxes">
@@ -27,23 +27,27 @@
             </tr>
         </thead>
         <tbody class="govuk-table__body">
-            @foreach (var item in Model)
+            @for (var i = 0; i < Model.Count; i++)
             {
+                var basketItem = Model[i];
+
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
+                        <input type="hidden" asp-for="@basketItem.OpportunityItemId" name="SelectedOpportunity[@i].Id" />
+
                         <div class="govuk-checkboxes">
                             <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="referral1" name="referral1" type="checkbox" value="referral1">
-                                <label class="govuk-label govuk-checkboxes__label" for="referral1">
+                                <input class="govuk-checkboxes__input" asp-for="@Model[i].IsSelected" name="SelectedOpportunity[@i].IsSelected" type="checkbox">
+                                <label class="govuk-label govuk-checkboxes__label" asp-for="@Model[i].IsSelected">
                                     <span class="govuk-visually-hidden">Select this opportunity</span>
                                 </label>
                             </div>
                         </div>
                     </td>
-                    <td class="govuk-table__cell">@item.Workplace</td>
-                    <td class="govuk-table__cell">@item.JobRole</td>
-                    <td class="govuk-table__cell">@item.StudentsWanted</td>
-                    <td class="govuk-table__cell">Providers content here</td>
+                    <td class="govuk-table__cell">@basketItem.Workplace</td>
+                    <td class="govuk-table__cell">@basketItem.JobRole</td>
+                    <td class="govuk-table__cell">@basketItem.StudentsWanted</td>
+                    <td class="govuk-table__cell">@basketItem.Providers</td>
                     <td class="govuk-table__cell"><a href="#" class="govuk-link">Edit</a></td>
                     <td class="govuk-table__cell"><a href="#" class="govuk-link">Delete</a></td>
                 </tr>
@@ -51,5 +55,5 @@
         </tbody>
     </table>
 
-    <button class="govuk-button">Continue with selected opportunities</button>
+    <button class="govuk-button" type="submit">Continue with selected opportunities</button>
 </form>

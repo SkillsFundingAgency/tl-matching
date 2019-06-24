@@ -1,5 +1,6 @@
 ﻿@using Sfa.Tl.Matching.Models.Enums
 @model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketViewModel
+
 @{
     ViewData["Title"] = "All opportunities";
 }
@@ -23,45 +24,27 @@
         <button type="submit" class="govuk-button tl-button--grey">
             Add another opportunity
         </button>
-        
-        @if (Model.Items?.Count > 0)
-        {
-          <div>OpportunityBasketType = @Model.Type</div>
 
+        @if (Model.ReferralItems?.Count > 0 || Model.ProvisionGapItems?.Count > 0)
+        {
             switch (Model.Type)
             {
-                case OpportunityBasketType.SingleReferral:
-                    <partial name="_basketReferralSingle", model="Model.Items[0]" />
+                case OpportunityBasketType.ReferralSingleOnly:
+                    <partial name="_basketReferralSingle", model="Model.ReferralItems[0]" />
                     break;
-                case OpportunityBasketType.ProvisionGapsOnly:
-                    <partial name="_basketProvisionGap", model="Model.Items" />
+                case OpportunityBasketType.ProvisionGapOnly:
+                    <form>
+                        <partial name="_basketProvisionGap", model="Model.ProvisionGapItems" />
+                        <button class="govuk-button">Finish</button>
+                    </form>
                     break;
-                    default:
-                        <div class="govuk-tabs" data-module="tabs">
-
-                            <ul class="govuk-tabs__list">
-                                <li class="govuk-tabs__list-item">
-                                    <a class="govuk-tabs__tab govuk-tabs__tab--selected" href="#providers">
-                                        With providers
-                                    </a>
-                                </li>
-                                <li class="govuk-tabs__list-item">
-                                    <a class="govuk-tabs__tab" href="#no-providers">
-                                        With no providers
-                                    </a>
-                                </li>
-                            </ul>
-
-                            <section class="govuk-tabs__panel" id="providers">
-                                <p>Insert partial here</p>
-                            </section>
-                            <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="no-providers">
-                                <p>Insert partial here</p>
-                            </section>
-                        </div>
-                        break;
+                case OpportunityBasketType.ReferralMultipleOnly:
+                    <partial name="_basketReferralMultiple", model="Model.ReferralItems" />
+                    break;
+                default:
+                    <partial name="_basketTabs", model="Model" />
+                    break;
             }
         }
-       
     </div>
 </div>

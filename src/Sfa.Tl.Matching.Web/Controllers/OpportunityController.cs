@@ -194,6 +194,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        [Route("continue-opportunity", Name = "ContinueOpportunity")]
+        public async Task<IActionResult> OpportunityBasket(ContinueOpportunityViewModel viewModel)
+        {
+            return View();
+        }
+
         private async Task<IActionResult> CreateOpportunity(OpportunityDto dto)
         {
             var id = await _opportunityService.CreateOpportunity(dto);

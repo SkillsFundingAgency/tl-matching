@@ -1,6 +1,8 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketItemViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.BasketReferralItemViewModel
 
-<form>
+<form asp-route="ContinueOpportunity" novalidate>
+    <input type="hidden" asp-for="OpportunityItemId" name="SelectedOpportunity[0].Id" />
+
     <table class="govuk-table">
         <thead class="govuk-table__head">
             <tr class="govuk-table__row">
@@ -24,5 +26,5 @@
         </tbody>
     </table>
 
-    <button class="govuk-button">Continue with opportunity</button>
+    <button class="govuk-button" type="submit">Continue with opportunity</button>
 </form>

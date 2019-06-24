@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CompanyName, o => 
                     o.MapFrom(s => s.EmployerName)) // TODO This will come from Employer table and not Opportunity when DB changes are in
                 .ForMember(m => m.Type, config => 
-                    config.MapFrom(s => GetOpportunityBasketType(0, 3))) // TODO Put correct values when Opportunity Model is updated
+                    config.MapFrom(s => GetOpportunityBasketType(2, 2))) // TODO Put correct values when Opportunity Model is updated
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
         }
@@ -130,11 +130,17 @@ namespace Sfa.Tl.Matching.Application.Mappers
         private static OpportunityBasketType GetOpportunityBasketType(int referralCount, int provisionGapCount)
         {
             if (referralCount == 1 && provisionGapCount == 0)
-                return OpportunityBasketType.SingleReferral;
+                return OpportunityBasketType.ReferralSingleOnly;
             if (referralCount == 0 && provisionGapCount > 0)
-                return OpportunityBasketType.ProvisionGapsOnly;
+                return OpportunityBasketType.ProvisionGapOnly;
+            if (referralCount > 0 && provisionGapCount == 0)
+                return OpportunityBasketType.ReferralMultipleOnly;
+            if (referralCount == 1 && provisionGapCount > 0)
+                return OpportunityBasketType.ReferralSingleAndProvisionGap;
+            if (referralCount > 1 && provisionGapCount > 0)
+                return OpportunityBasketType.ReferralMultipleAndProvisionGap;
 
-            return OpportunityBasketType.SingleReferral;
+            return OpportunityBasketType.ReferralSingleOnly;
         }
     }
 }

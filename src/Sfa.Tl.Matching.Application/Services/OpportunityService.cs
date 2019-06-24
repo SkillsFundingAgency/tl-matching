@@ -94,21 +94,53 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id);
 
-            var dto = _mapper.Map<OpportunityBasketViewModel>(opportunity);
+            var viewModel = _mapper.Map<OpportunityBasketViewModel>(opportunity);
 
             // TODO Get proper data when DB is done
-            dto.Items = new List<OpportunityBasketItemViewModel>
+            viewModel.ReferralItems = new List<BasketReferralItemViewModel>
             {
-                new OpportunityBasketItemViewModel
+                new BasketReferralItemViewModel
                 {
+                    OpportunityItemId = 1,
                     StudentsWanted = "StudentsWanted",
                     JobRole = "JobRole",
                     Providers = 1,
                     Workplace = "Workplace"
+                },
+                new BasketReferralItemViewModel
+                {
+                    OpportunityItemId = 2,
+                    StudentsWanted = "StudentsWanted1",
+                    JobRole = "JobRole1",
+                    Providers = 2,
+                    Workplace = "Workplace1"
                 }
             };
 
-            return dto;
+            // TODO Add back in when DB changes are done if (opportunity.ProvisionGapCount > 0)
+            {
+                viewModel.ProvisionGapItems = new List<BasketProvisionGapItemViewModel>
+                {
+                    new BasketProvisionGapItemViewModel
+                    {
+                        OpportunityItemId = 3,
+                        StudentsWanted = "StudentsWanted",
+                        JobRole = "JobRole",
+                        Workplace = "Workplace",
+                        Reason = "Reason1"
+                    },
+                    new BasketProvisionGapItemViewModel
+                    {
+                        OpportunityItemId = 4,
+                        StudentsWanted = "StudentsWanted2",
+                        JobRole = "JobRole2",
+                        Workplace = "Workplace2",
+                        Reason = "Reason2"
+                    }
+                };
+            }
+
+            return viewModel;
         }
 
         public OpportunityDto GetLatestCompletedOpportunity(Guid crmId)
