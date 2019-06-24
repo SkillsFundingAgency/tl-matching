@@ -116,7 +116,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (IsEmployerPopulated(dto))
                 return _mapper.Map<EmployerDetailsViewModel>(dto);
 
-            var latestOpportunity = _opportunityService.GetLatestCompletedOpportunity(dto.EmployerCrmId);
+            var latestOpportunity = _opportunityService.GetLatestCompletedOpportunity(dto.EmployerId.Value);
             if (latestOpportunity != null && IsEmployerPopulated(latestOpportunity))
             {
                 var viewModel = _mapper.Map<EmployerDetailsViewModel>(latestOpportunity);

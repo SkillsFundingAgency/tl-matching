@@ -165,16 +165,20 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<bool> IsReferralOpportunity(int id)
         {
-            return await _opportunityRepository.GetMany(o => o.Id == id && o.Referral.Any()).AnyAsync();
+            return await _opportunityRepository.GetMany(o => o.Id == id 
+                                                             // && o.Referral.Any()
+                                                             ).AnyAsync();
         }
 
         public async Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id)
         {
-            var placementInformation = await _opportunityRepository.GetSingleOrDefault(e => e.Id == id,
-                opp => opp.Route,
+            var placementInformation = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id
+                // TODO Get Route data
+                //, opp => opp.Route,
                 //TODO: Referral only included so we can map OpportunityType,
                 //      probably won't need it when data is refactored
-                opp => opp.Referral);
+                //opp => opp.Referral
+                );
 
             var dto = _mapper.Map<Opportunity, PlacementInformationSaveDto>(placementInformation);
 
@@ -183,8 +187,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<CheckAnswersDto> GetCheckAnswers(int id)
         {
-            var checkAnswers = await _opportunityRepository.GetSingleOrDefault(e => e.Id == id,
-                opp => opp.Route);
+            var checkAnswers = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id
+                // TODO Get route data
+                // , opp => opp.Route
+                );
 
             var dto = _mapper.Map<Opportunity, CheckAnswersDto>(checkAnswers);
 
@@ -221,6 +227,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 return true;
 
             var isReferral = await IsReferralOpportunity(opportunityId);
+
             return !isReferral;
         }
 
