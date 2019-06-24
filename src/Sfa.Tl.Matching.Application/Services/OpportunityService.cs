@@ -41,14 +41,15 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var opportunityId = await _opportunityRepository.Create(opportunity);
 
-            //TODO: Refactor this - put in to mae up for loss of call to CreateProvisionGap
+            //TODO: Refactor this - put in to make up for loss of call to CreateProvisionGap
             //      The ProvisionGapMapper might not want to take OpportunityDto
             //      Should be able to do all of the below as part of the mapping from Dto above
             //      Make sure this functionality is covered by tests
             if (dto.OpportunityType == OpportunityType.ProvisionGap)
             {
                 var provisionGap = _mapper.Map<ProvisionGap>(dto);
-                provisionGap.OpportunityId = opportunityId;
+                //TODO: This should be opportunityItemId
+                provisionGap.OpportunityItemId = opportunityId;
 
                 await _provisionGapRepository.Create(provisionGap);
             }
