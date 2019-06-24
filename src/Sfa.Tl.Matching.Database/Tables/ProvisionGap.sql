@@ -4,7 +4,7 @@
 	[OpportunityItemId]		INT NOT NULL,
 	[NoSuitableStudent]		BIT NULL,
 	[HadBadExperience]		BIT NULL,
-	[ProviderTooFarAway]	BIT NULL,
+	[ProvidersTooFarAway]	BIT NULL,
 	[CreatedOn]				DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy]				NVARCHAR(50) NULL, 
 	[ModifiedOn]			DATETIME2 NULL, 
