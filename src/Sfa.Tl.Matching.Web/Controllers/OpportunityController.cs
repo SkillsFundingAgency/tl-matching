@@ -101,8 +101,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.UpdateOpportunity(dto);
 
             var isReferralOpportunity = await _opportunityService.IsReferralOpportunity(viewModel.OpportunityId);
-            var isNewProvisionGap = await _opportunityService.IsNewProvisionGap(viewModel.OpportunityId);
-            var isNewReferralOpportunity = await _opportunityService.IsNewReferral(viewModel.OpportunityId);
             var opportunityCount = await _opportunityService.GetOpportunityItemCountAsync(viewModel.OpportunityId);
 
             if (opportunityCount > 1)
