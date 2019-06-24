@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId)
         {
+            throw new Exception("TODO: fix query below");
+            /*
             return await (from op in _dbContext.Opportunity
                           join re in _dbContext.Referral on op.Id equals re.OpportunityId
                           join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
@@ -52,10 +55,13 @@ namespace Sfa.Tl.Matching.Data.Repositories
                               RouteName = r.Name,
                               CreatedBy = op.CreatedBy
                           }).ToListAsync();
+            */
         }
 
         public async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
         {
+            throw new Exception("TODO: fix query below");
+            /*
             return await (from op in _dbContext.Opportunity
                           join r in _dbContext.Route on op.RouteId equals r.Id
                           where op.Id == opportunityId
@@ -96,6 +102,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                               select q.ShortTitle).Distinct().ToList()
                                   }).ToList()
                           }).SingleOrDefaultAsync();
+            */
         }
     }
 }
