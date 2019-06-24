@@ -11,12 +11,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Placement_Information_Is_Submitted_For_Provision_Gap_With_No_Reason
+    public class When_Placement_Information_Is_Submitted_For_Provision_Gap_With_No_Reason_And_There_Are_Search_Results
     {
         private readonly IActionResult _result;
         private readonly OpportunityController _opportunityController;
 
-        public When_Placement_Information_Is_Submitted_For_Provision_Gap_With_No_Reason()
+        public When_Placement_Information_Is_Submitted_For_Provision_Gap_With_No_Reason_And_There_Are_Search_Results()
         {
             var opportunityService = Substitute.For<IOpportunityService>();
             var referralService = Substitute.For<IReferralService>();
@@ -24,6 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityType = OpportunityType.ProvisionGap,
+                SearchResultProviderCount = 1,
                 NoSuitableStudent = false,
                 HadBadExperience = false,
                 ProvidersTooFarAway = false
@@ -45,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_Model_State_Has_1_Error() =>
             _opportunityController.ViewData.ModelState.Should().ContainSingle();
 
-        [Fact]
+       [Fact]
         public void Then_Model_State_Has_No_Reason_Given_Key() =>
             _opportunityController.ViewData.ModelState.ContainsKey(nameof(PlacementInformationSaveViewModel.NoSuitableStudent))
                 .Should().BeTrue();

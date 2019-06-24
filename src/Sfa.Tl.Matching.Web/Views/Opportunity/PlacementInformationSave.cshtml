@@ -17,7 +17,8 @@
 <form asp-route="PlacementInformationSave_Post" novalidate>
     <input asp-for="OpportunityId" type="hidden" />
     <input asp-for="OpportunityType" type="hidden" />
-    <input asp-for="CompanyName" type="hidden" />
+    <input asp-for="SearchResultProviderCount" type="hidden" />
+    <input asp-for=" CompanyName" type="hidden" />
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -39,9 +40,9 @@
             }
 
             @*@if (!String.IsNullOrEmpty(Model.CompanyName))
-            {
-                <span class="govuk-caption-l">@Model.CompanyName</span>
-            }*@
+                {
+                    <span class="govuk-caption-l">@Model.CompanyName</span>
+                }*@
             <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
             @if (Model.OpportunityType == OpportunityType.Referral)
@@ -50,41 +51,44 @@
             }
             else
             {
-                <div class="govuk-form-group" sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-form-group--error">
-                    <fieldset class="govuk-fieldset">
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                            <h1 class="govuk-fieldset__heading">
-                                Why did the employer not choose a provider?
-                            </h1>
-                        </legend>
-                        <span class="govuk-hint">
-                            Select all that apply
-                        </span>
-                        <div class="govuk-checkboxes">
-                            <div class="govuk-checkboxes__item">
-                                <input asp-for="NoSuitableStudent" class="govuk-checkboxes__input" type="checkbox"
-                                       sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-input--error">
-                                <label class="govuk-label govuk-checkboxes__label" asp-for="NoSuitableStudent">
-                                    Providers do not have students doing the right course
-                                </label>
+                @if (Model.SearchResultProviderCount > 0)
+                {
+                    <div class="govuk-form-group" sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-form-group--error">
+                        <fieldset class="govuk-fieldset">
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                <h1 class="govuk-fieldset__heading">
+                                    Why did the employer not choose a provider?
+                                </h1>
+                            </legend>
+                            <span class="govuk-hint">
+                                Select all that apply
+                            </span>
+                            <div class="govuk-checkboxes">
+                                <div class="govuk-checkboxes__item">
+                                    <input asp-for="NoSuitableStudent" class="govuk-checkboxes__input" type="checkbox"
+                                           sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-input--error">
+                                    <label class="govuk-label govuk-checkboxes__label" asp-for="NoSuitableStudent">
+                                        Providers do not have students doing the right course
+                                    </label>
+                                </div>
+                                <div class="govuk-checkboxes__item">
+                                    <input asp-for="HadBadExperience" class="govuk-checkboxes__input" type="checkbox"
+                                           sfa-validation-for="HadBadExperience" sfa-validationerror-class="govuk-input--error">
+                                    <label class="govuk-label govuk-checkboxes__label" asp-for="HadBadExperience">
+                                        Employer had a bad experience with them
+                                    </label>
+                                </div>
+                                <div class="govuk-checkboxes__item">
+                                    <input asp-for="ProvidersTooFarAway" class="govuk-checkboxes__input" type="checkbox"
+                                           sfa-validation-for="ProvidersTooFarAway" sfa-validationerror-class="govuk-input--error">
+                                    <label class="govuk-label govuk-checkboxes__label" asp-for="ProvidersTooFarAway">
+                                        Providers were too far away
+                                    </label>
+                                </div>
                             </div>
-                            <div class="govuk-checkboxes__item">
-                                <input asp-for="HadBadExperience" class="govuk-checkboxes__input" type="checkbox"
-                                       sfa-validation-for="HadBadExperience" sfa-validationerror-class="govuk-input--error">
-                                <label class="govuk-label govuk-checkboxes__label" asp-for="HadBadExperience">
-                                    Employer had a bad experience with them
-                                </label>
-                            </div>
-                            <div class="govuk-checkboxes__item">
-                                <input asp-for="ProvidersTooFarAway" class="govuk-checkboxes__input" type="checkbox"
-                                       sfa-validation-for="ProvidersTooFarAway" sfa-validationerror-class="govuk-input--error">
-                                <label class="govuk-label govuk-checkboxes__label" asp-for="ProvidersTooFarAway">
-                                    Providers were too far away
-                                </label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
+                        </fieldset>
+                    </div>
+                }
             }
 
             <div class="govuk-form-group" sfa-validation-for="JobTitle" sfa-validationerror-class="govuk-form-group--error">

@@ -192,8 +192,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 viewModel.RouteId = opportunity.RouteId;
             }
 
-            if (viewModel.OpportunityType == OpportunityType.ProvisionGap)
-            { 
+            if (viewModel.SearchResultProviderCount > 0 &&
+                viewModel.OpportunityType == OpportunityType.ProvisionGap)
+            {
                 if (!viewModel.NoSuitableStudent &&
                     !viewModel.HadBadExperience &&
                     !viewModel.ProvidersTooFarAway)
