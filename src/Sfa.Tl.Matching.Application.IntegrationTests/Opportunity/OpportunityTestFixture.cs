@@ -21,12 +21,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
         public OpportunityTestFixture()
         {
             var loggerRepository = new Logger<GenericRepository<Domain.Models.Opportunity>>(new NullLoggerFactory());
+            var loggerOpportunityItemRepository = new Logger<GenericRepository<Domain.Models.OpportunityItem>>(new NullLoggerFactory());
             var loggerProvisionGapRepository = new Logger<GenericRepository<ProvisionGap>>(new NullLoggerFactory());
             var loggerReferralRepository = new Logger<GenericRepository<Referral>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
             var opportunityRepository = new GenericRepository<Domain.Models.Opportunity>(loggerRepository, MatchingDbContext);
+            var opportunityItemRepository = new GenericRepository<Domain.Models.OpportunityItem>(loggerOpportunityItemRepository, MatchingDbContext);
             var provisionGapRepository = new GenericRepository<ProvisionGap>(loggerProvisionGapRepository, MatchingDbContext);
             var referralRepository = new GenericRepository<Referral>(loggerReferralRepository, MatchingDbContext);
 
@@ -34,12 +36,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             var mapper = new Mapper(config);
 
             OpportunityService = new OpportunityService(mapper, 
-                opportunityRepository, provisionGapRepository, referralRepository);
+                opportunityRepository, opportunityItemRepository, 
+                provisionGapRepository, referralRepository);
         }
 
-        internal void ResetData(string postcode)
+        internal void ResetData(string employerContact)
         {
-            var opportunity = MatchingDbContext.Opportunity.FirstOrDefault(o => o.Postcode == postcode);
+            var opportunity = MatchingDbContext.Opportunity.FirstOrDefault(o => o.EmployerContact == employerContact);
             if (opportunity != null)
             {
                 MatchingDbContext.Opportunity.Remove(opportunity);
@@ -48,9 +51,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             }
         }
 
-        internal int GetCountBy(string postcode)
+        internal int GetCountBy(string employerContact)
         {
-            var opportunityCount = MatchingDbContext.Opportunity.Count(o => o.Postcode == postcode);
+            var opportunityCount = MatchingDbContext.Opportunity.Count(o => o.EmployerContact == employerContact);
 
             return opportunityCount;
         }
