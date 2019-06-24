@@ -69,10 +69,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     }
                 }.AsQueryable());
 
+            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, provisionGapRepository,
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository,
                 referralRepository);
 
             _opportunityDto = opportunityService.GetLatestCompletedOpportunity(1);

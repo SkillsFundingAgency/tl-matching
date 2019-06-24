@@ -22,13 +22,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var mapper = new Mapper(config);
 
             var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
                 .Returns(OpportunityId);
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, provisionGapRepository, _referralRepository);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, provisionGapRepository, _referralRepository);
 
             var dto = new OpportunityDto
             {

@@ -28,12 +28,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(new Domain.Models.Opportunity { Id = OpportunityId });
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, provisionGapRepository, referralRepository);
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository);
 
             var dto = new EmployerDetailDto
             {

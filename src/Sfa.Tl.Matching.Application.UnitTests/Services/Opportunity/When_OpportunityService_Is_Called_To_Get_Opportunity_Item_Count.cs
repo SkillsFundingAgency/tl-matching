@@ -22,6 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
@@ -33,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     //Count = 2
                 });
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, provisionGapRepository, referralRepository);
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository);
 
             _result = opportunityService.GetOpportunityItemCountAsync(1)
                 .GetAwaiter().GetResult();
