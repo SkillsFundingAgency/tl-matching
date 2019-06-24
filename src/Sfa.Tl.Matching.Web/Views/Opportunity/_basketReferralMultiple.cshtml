@@ -1,11 +1,11 @@
 ﻿@model List<Sfa.Tl.Matching.Models.ViewModel.BasketReferralItemViewModel>
 
-<form asp-route="ContinueOpportunity" novalidate>
-    <div class="govuk-form-group">
+<form asp-route="ContinueOpportunity" novalidate novalidate>
+    <div class="govuk-form-group js-visible">
         <fieldset class="govuk-fieldset">
             <div class="govuk-checkboxes">
                 <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="selectall" name="selectall" type="checkbox" value="selectall">
+                    <input class="govuk-checkboxes__input tl-selectall" id="selectall" name="selectall" type="checkbox" value="selectall">
                     <label class="govuk-label govuk-checkboxes__label" for="selectall">
                         Select all
                     </label>
@@ -37,7 +37,7 @@
 
                         <div class="govuk-checkboxes">
                             <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" asp-for="@Model[i].IsSelected" name="SelectedOpportunity[@i].IsSelected" type="checkbox">
+                                <input class="govuk-checkboxes__input  tl-checkbox" id="referral1" name="referral1" type="checkbox" value="referral1">
                                 <label class="govuk-label govuk-checkboxes__label" asp-for="@Model[i].IsSelected">
                                     <span class="govuk-visually-hidden">Select this opportunity</span>
                                 </label>
@@ -57,3 +57,7 @@
 
     <button class="govuk-button" type="submit">Continue with selected opportunities</button>
 </form>
+
+@section jsfiles{
+    <script src="~/javascripts/opportunity-basket.min.js"></script>
+}

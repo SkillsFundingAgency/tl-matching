@@ -11,6 +11,14 @@ const paths = require('../paths.json');
 const sassOptions = require('../sassOptions.js');
 
 
+gulp.task('dev-copy-opportunity-basket-js', function () {
+    return gulp.src([
+        'Frontend/src/javascripts/opportunity-basket.js'
+    ])
+        .pipe(concat('opportunity-basket.min.js'))
+        .pipe(gulp.dest(paths.dist.defaultJs));
+});
+
 gulp.task('dev-copy-employer-js', function () {
     return gulp.src([
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
