@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
             if (ReferenceEquals(x, null)) return false;
             if (ReferenceEquals(y, null)) return false;
             if (x.GetType() != y.GetType()) return false;
-            return x.OpportunityId == y.OpportunityId 
+            return x.OpportunityItemId == y.OpportunityItemId 
                    && x.ProviderVenueId == y.ProviderVenueId 
                 ;
         }
@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
         {
             unchecked
             {
-                var hashCode = obj.OpportunityId;
+                var hashCode = obj.OpportunityItemId;
                 hashCode = (hashCode * 397) ^ obj.ProviderVenueId;
                 return hashCode;
             }
