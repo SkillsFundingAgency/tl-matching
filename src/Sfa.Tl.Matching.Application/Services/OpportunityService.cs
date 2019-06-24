@@ -207,7 +207,16 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await _opportunityRepository.Update(trackedEntity);
         }
-        
+
+        // TODO Refactor this
+        public async Task UpdateOpportunityItem<T>(T dto) where T : BaseOpportunityUpdateDto
+        {
+            var trackedEntity = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
+            trackedEntity = _mapper.Map(dto, trackedEntity);
+
+            await _opportunityItemRepository.Update(trackedEntity);
+        }
+
         public List<ReferralDto> GetReferrals(int opportunityItemId)
         {
             var referrals = _referralRepository.GetMany(r => r.OpportunityItemId == opportunityItemId)

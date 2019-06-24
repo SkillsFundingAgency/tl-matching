@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
@@ -38,6 +39,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                         {
                             new OpportunityItem
                             {
+                                OpportunityType = OpportunityType.ProvisionGap.ToString(),
+                                IsCompleted = true,
                                 ProvisionGap = new List<ProvisionGap>
                                 {
                                     new ProvisionGap
@@ -56,6 +59,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                         {
                             new OpportunityItem
                             {
+                                OpportunityType = OpportunityType.ProvisionGap.ToString(),
+                                IsCompleted = true,
                                 ProvisionGap = new List<ProvisionGap>
                                 {
                                     new ProvisionGap
@@ -75,6 +80,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                             new OpportunityItem
                             {
                                IsCompleted = true, // TODO Should only look at IsCompleted records?
+                               OpportunityType = OpportunityType.Referral.ToString(),
                                Referral = new List<Domain.Models.Referral>
                                 {
                                     new Domain.Models.Referral
