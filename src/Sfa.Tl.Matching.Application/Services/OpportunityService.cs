@@ -143,9 +143,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return viewModel;
         }
 
-        public OpportunityDto GetLatestCompletedOpportunity(Guid crmId)
+        public OpportunityDto GetLatestCompletedOpportunity(int employerId)
         {
-            var latestOpportunity = _opportunityRepository.GetMany(o => o.EmployerCrmId == crmId)
+            var latestOpportunity = _opportunityRepository.GetMany(o => o.EmployerId == employerId)
                 .Where(FilterValidOpportunities())
                 .OrderByDescending(o => o.CreatedOn)
                 .Take(1).SingleOrDefault();
@@ -197,9 +197,9 @@ namespace Sfa.Tl.Matching.Application.Services
             await _opportunityRepository.Update(trackedEntity);
         }
         
-        public List<ReferralDto> GetReferrals(int opportunityId)
+        public List<ReferralDto> GetReferrals(int opportunityItemId)
         {
-            var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId)
+            var referrals = _referralRepository.GetMany(r => r.OpportunityItemId == opportunityItemId)
                 .OrderBy(r => r.DistanceFromEmployer)
                 .Select(r => new ReferralDto
                 {

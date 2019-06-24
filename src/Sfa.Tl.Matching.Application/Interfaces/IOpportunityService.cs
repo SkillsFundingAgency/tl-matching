@@ -11,8 +11,8 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<int> CreateOpportunity(OpportunityDto opportunityDto);
         Task<OpportunityDto> GetOpportunity(int id);
         Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id);
-        List<ReferralDto> GetReferrals(int opportunityId);
-        OpportunityDto GetLatestCompletedOpportunity(Guid crmId);
+        List<ReferralDto> GetReferrals(int opportunityItemId);
+        OpportunityDto GetLatestCompletedOpportunity(int employerId);
         Task<bool> IsReferralOpportunity(int id);
         Task<CheckAnswersDto> GetCheckAnswers(int id);
         Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto;
