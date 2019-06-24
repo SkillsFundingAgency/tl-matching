@@ -1,7 +1,7 @@
 ﻿SET NOCOUNT ON;
 SET XACT_ABORT ON;
-DECLARE @scriptName VARCHAR(255)= 'MigrateOpportunityData';
-DECLARE @TicketNo VARCHAR(32)= 'TLWP-749';
+SET @scriptName = 'MigrateOpportunityData';
+SET  @TicketNo  = 'TLWP-749';
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[DBProjDeployLog] WHERE [Name] = @scriptName )
 BEGIN

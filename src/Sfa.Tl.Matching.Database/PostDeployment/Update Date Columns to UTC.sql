@@ -1,7 +1,7 @@
 ﻿SET NOCOUNT ON;
 SET XACT_ABORT ON;
-DECLARE @scriptName VARCHAR(255)= 'UpdateDateColumnstoUTC';
-DECLARE @TicketNo VARCHAR(32)= 'TLWP-679';
+SET @scriptName = 'UpdateDateColumnstoUTC';
+SET  @TicketNo  = 'TLWP-679';
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[DBProjDeployLog] WHERE [Name] = @scriptName )
 BEGIN
