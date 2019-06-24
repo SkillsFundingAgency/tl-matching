@@ -59,12 +59,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task UpdateReferrals(OpportunityDto dto)
         {
-            var existingReferrals = _referralRepository.GetMany(r => r.OpportunityId == dto.Id)
+            // TODO Id should be OpportunityItemId
+            var existingReferrals = _referralRepository.GetMany(r => r.OpportunityItemId == dto.Id)
                 .ToList();
 
             var newReferrals = _mapper.Map<List<Referral>>(dto.Referral);
             foreach (var nr in newReferrals)
-                nr.OpportunityId = dto.Id;
+                nr.OpportunityItemId = dto.Id; // TODO Id should be OpportunityItemId
 
             var comparer = new ReferralEqualityComparer();
             var toBeAdded = newReferrals.Except(existingReferrals, comparer).ToList();
@@ -154,8 +155,8 @@ namespace Sfa.Tl.Matching.Application.Services
             if (latestOpportunity == null)
                 return null;
 
-            latestOpportunity.Referral?.Clear();
-            latestOpportunity.ProvisionGap?.Clear();
+            //latestOpportunity.Referral?.Clear();
+            //latestOpportunity.ProvisionGap?.Clear();
 
             var dto = _mapper.Map<OpportunityDto>(latestOpportunity);
 
@@ -242,8 +243,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static Expression<Func<Opportunity, bool>> FilterValidOpportunities()
         {
-            return o => (o.ProvisionGap != null && o.ProvisionGap.Count > 0) ||
-                        (o.Referral != null && o.Referral.Count > 0 && o.ConfirmationSelected.HasValue && o.ConfirmationSelected.Value);
+            // TODO Should this be only IsCompleted records?
+            return o => (o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString() &&
+                                                       oi.IsCompleted.HasValue && oi.IsCompleted.Value) > 0)
+                        ||
+                        (o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.Referral.ToString() &&
+                                                       oi.IsCompleted.HasValue && oi.IsCompleted.Value) > 0);
         }
     }
 }
