@@ -34,36 +34,54 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                         Id = 1,
                         EmployerId = 1,
                         CreatedOn = new DateTime(2019, 1, 1, 23, 59, 58),
-                        ProvisionGap = new List<ProvisionGap>
+                        OpportunityItem = new List<OpportunityItem>
                         {
-                            new ProvisionGap
+                            new OpportunityItem
                             {
-                                OpportunityItemId = 1
+                                ProvisionGap = new List<ProvisionGap>
+                                {
+                                    new ProvisionGap
+                                    {
+                                        OpportunityItemId = 1
+                                    }
+                                }
                             }
-                        }
+                        },
                     },
                     new Domain.Models.Opportunity
                     {
                         Id = 2,
                         CreatedOn = new DateTime(2019, 1, 1, 23, 59, 59),
-                        ProvisionGap = new List<ProvisionGap>
+                        OpportunityItem = new List<OpportunityItem>
                         {
-                            new ProvisionGap
+                            new OpportunityItem
                             {
-                                OpportunityItemId = 2
+                                ProvisionGap = new List<ProvisionGap>
+                                {
+                                    new ProvisionGap
+                                    {
+                                        OpportunityItemId = 2
+                                    }
+                                }
                             }
-                        }
+                        },
                     },
                     new Domain.Models.Opportunity
                     {
                         Id = 3,
                         CreatedOn = new DateTime(2018, 1, 1, 23, 59, 59),
-                        ConfirmationSelected = true,
-                        Referral = new List<Domain.Models.Referral>
+                        OpportunityItem = new List<OpportunityItem>
                         {
-                            new Domain.Models.Referral
+                            new OpportunityItem
                             {
-                                OpportunityItemId = 3
+                               IsCompleted = true, // TODO Should only look at IsCompleted records?
+                               Referral = new List<Domain.Models.Referral>
+                                {
+                                    new Domain.Models.Referral
+                                    {
+                                        OpportunityItemId = 3
+                                    }
+                                }
                             }
                         }
                     }
