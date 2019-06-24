@@ -196,14 +196,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await _opportunityRepository.Update(trackedEntity);
         }
-
-        public async Task<int> CreateProvisionGap(CheckAnswersProvisionGapViewModel dto)
-        {
-            var provisionGap = _mapper.Map<ProvisionGap>(dto);
-
-            return await _provisionGapRepository.Create(provisionGap);
-        }
-
+        
         public List<ReferralDto> GetReferrals(int opportunityId)
         {
             var referrals = _referralRepository.GetMany(r => r.OpportunityId == opportunityId)

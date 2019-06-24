@@ -139,29 +139,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("check-answers-gap/{id?}", Name = "GetCheckAnswersProvisionGap")]
-        public async Task<IActionResult> CheckAnswersProvisionGap(int id)
-        {
-            var dto = await _opportunityService.GetCheckAnswers(id);
-
-            var viewModel = _mapper.Map<CheckAnswersProvisionGapViewModel>(dto);
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [Route("check-answers-gap/{id?}", Name = "SaveCheckAnswersProvisionGap")]
-        public async Task<IActionResult> CheckAnswersProvisionGap(CheckAnswersProvisionGapViewModel viewModel)
-        {
-            var dto = _mapper.Map<CheckAnswersDto>(viewModel);
-
-            await _opportunityService.UpdateOpportunity(dto);
-            await _opportunityService.CreateProvisionGap(viewModel);
-
-            return RedirectToRoute("GetOpportunityBasket", new { id = viewModel.OpportunityId });
-        }
-
-        [HttpGet]
         [Route("placement-gap/{id?}", Name = "ProvisionGapSent_Get")]
         public async Task<IActionResult> ProvisionGapSent(int id)
         {
