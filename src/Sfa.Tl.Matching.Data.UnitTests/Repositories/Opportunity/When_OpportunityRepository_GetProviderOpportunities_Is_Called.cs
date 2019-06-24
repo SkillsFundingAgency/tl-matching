@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _result.Count.Should().Be(1);
 
         [Fact]
-        public void TThen_OpportunityReferralDto_Fields_Are_As_Expected()
+        public void Then_OpportunityReferralDto_Fields_Are_As_Expected()
         {
             var dto = _result.First();
             dto.OpportunityId.Should().Be(1);

@@ -1,31 +1,29 @@
 ﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 
-namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProvisionGap.Builders
 {
-    public class ValidOpportunityListBuilder
+    public class ValidProvisionGapListBuilder
     {
-        public IList<Domain.Models.Opportunity> Build() => new List<Domain.Models.Opportunity>
+        public IList<Domain.Models.ProvisionGap> Build() => new List<Domain.Models.ProvisionGap>
         {
-            new Domain.Models.Opportunity
+            new Domain.Models.ProvisionGap
             {
                 Id = 1,
-                EmployerId = 5,
-                EmployerContact = "Employer Contact",
-                EmployerContactPhone = "020 123 4567",
-                EmployerContactEmail = "employer.contact@employer.co.uk",
+                NoSuitableStudent = true,
+                HadBadExperience = false,
+                ProvidersTooFarAway = true,
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
                 ModifiedOn = EntityCreationConstants.ModifiedOn
             },
-            new Domain.Models.Opportunity
+            new Domain.Models.ProvisionGap
             {
                 Id = 2,
-                EmployerId = 5,
-                EmployerContact = "Employer Contact",
-                EmployerContactPhone = "020 123 4567",
-                EmployerContactEmail = "employer.contact@employer.co.uk",
+                NoSuitableStudent = false,
+                HadBadExperience = true,
+                ProvidersTooFarAway = false,
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,

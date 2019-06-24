@@ -3,25 +3,25 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.ProvisionGap.Builders;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
+namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProvisionGap
 {
-    public class When_OpportunityRepository_GetSingleOrDefault_Is_Called
+    public class When_ProvisionGapRepository_GetSingleOrDefault_Is_Called
     {
-        private readonly Domain.Models.Opportunity _result;
+        private readonly Domain.Models.ProvisionGap _result;
 
-        public When_OpportunityRepository_GetSingleOrDefault_Is_Called()
+        public When_ProvisionGapRepository_GetSingleOrDefault_Is_Called()
         {
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Opportunity>>>();
+            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.ProvisionGap>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
-                dbContext.AddRange(new ValidOpportunityListBuilder().Build());
+                dbContext.AddRange(new ValidProvisionGapListBuilder().Build());
                 dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.Opportunity>(logger, dbContext);
+                var repository = new GenericRepository<Domain.Models.ProvisionGap>(logger, dbContext);
                 _result = repository.GetSingleOrDefault(x => x.Id == 1)
                     .GetAwaiter().GetResult();
             }
@@ -31,10 +31,9 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
         public void Then_Fields_Are_As_Expected()
         {
             _result.Id.Should().Be(1);
-            _result.EmployerId.Should().Be(5);
-            _result.EmployerContact.Should().BeEquivalentTo("Employer Contact");
-            _result.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
-            _result.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
+            _result.NoSuitableStudent.Should().BeTrue();
+            _result.HadBadExperience.Should().BeFalse();
+            _result.ProvidersTooFarAway.Should().BeTrue();
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
             _result.ModifiedBy.Should().Be(EntityCreationConstants.ModifiedByUser);
