@@ -19,17 +19,20 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Opportunity> _opportunityRepository;
+        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly IRepository<ProvisionGap> _provisionGapRepository;
         private readonly IRepository<Referral> _referralRepository;
 
         public OpportunityService(
             IMapper mapper,
             IRepository<Opportunity> opportunityRepository,
+            IRepository<OpportunityItem> opportunityItemRepository,
             IRepository<ProvisionGap> provisionGapRepository,
             IRepository<Referral> referralRepository)
         {
             _mapper = mapper;
             _opportunityRepository = opportunityRepository;
+            _opportunityItemRepository = opportunityItemRepository;
             _provisionGapRepository = provisionGapRepository;
             _referralRepository = referralRepository;
         }
