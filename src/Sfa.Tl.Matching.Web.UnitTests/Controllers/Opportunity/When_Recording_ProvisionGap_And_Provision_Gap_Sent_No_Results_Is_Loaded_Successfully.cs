@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
 
             var dto = new ValidOpportunityDtoBuilder().Build();
-            dto.SearchResultProviderCount = 0;
+            //dto.SearchResultProviderCount = 0;
             _employerCrmId = dto.EmployerCrmId;
 
             _opportunityService.GetOpportunity(1).Returns(dto);

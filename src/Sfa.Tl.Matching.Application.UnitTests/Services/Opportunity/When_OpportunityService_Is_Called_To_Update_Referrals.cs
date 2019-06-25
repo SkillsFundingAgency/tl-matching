@@ -34,14 +34,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dto = new OpportunityDto
             {
                 EmployerContact = "EmployerContact",
-                Referral = new List<ReferralDto>
-                {
-                    new ReferralDto
-                    {
-                        ProviderVenueId = 1,
-                        DistanceFromEmployer = 3.5M
-                    }
-                }
+                //Referral = new List<ReferralDto>
+                //{
+                //    new ReferralDto
+                //    {
+                //        ProviderVenueId = 1,
+                //        DistanceFromEmployer = 3.5M
+                //    }
+                //}
             };
 
             opportunityService.UpdateReferrals(dto).GetAwaiter().GetResult();
