@@ -42,9 +42,9 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.SelectedEmployerId,
                     o => o.MapFrom(s => s.EmployerId))
                 .ForMember(m => m.CompanyName,
-                    o => o.MapFrom(s => s.EmployerName))
+                    o => o.MapFrom(s => s.CompanyName))
                 .ForMember(m => m.PreviousCompanyName,
-                    o => o.MapFrom(s => s.EmployerName))
+                    o => o.MapFrom(s => s.CompanyName))
                 ;
         }
     }
