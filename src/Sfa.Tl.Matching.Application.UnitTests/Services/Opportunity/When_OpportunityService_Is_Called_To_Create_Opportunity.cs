@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 EmployerContactPhone = "020 123 4567"
             };
 
-            _result = opportunityService.CreateOpportunity(dto).GetAwaiter().GetResult();
+            _result = opportunityService.CreateOpportunityAsync(dto).GetAwaiter().GetResult();
         }
 
         [Fact]

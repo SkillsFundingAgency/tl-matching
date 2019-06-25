@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
                 EmployerContact = EmployerContact
             };
 
-            _opportunityId = _testFixture.OpportunityService.CreateOpportunity(opportunityDto).GetAwaiter().GetResult();
+            _opportunityId = _testFixture.OpportunityService.CreateOpportunityAsync(opportunityDto).GetAwaiter().GetResult();
         }
 
         [Fact]

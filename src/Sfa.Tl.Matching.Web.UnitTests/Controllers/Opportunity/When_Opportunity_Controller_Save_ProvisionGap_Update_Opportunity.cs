@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             const int opportunityId = 1;
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsNewProvisionGap(opportunityId).Returns(false);
+            _opportunityService.IsNewProvisionGapAsync(opportunityId).Returns(false);
 
             var referralService = Substitute.For<IReferralService>();
 
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_CreateOpportunity_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().CreateOpportunity(Arg.Any<OpportunityDto>());
+            _opportunityService.DidNotReceive().CreateOpportunityAsync(Arg.Any<OpportunityDto>());
         }
 
         [Fact]

@@ -7,19 +7,19 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IOpportunityService
     {
-        Task<int> CreateOpportunity(OpportunityDto opportunityDto);
-        Task<int> CreateOpportunityItem(OpportunityItemDto opportunityItemDto);
+        Task<int> CreateOpportunityAsync(OpportunityDto opportunityDto);
+        Task<int> CreateOpportunityItemAsync(OpportunityItemDto opportunityItemDto);
         Task<OpportunityDto> GetOpportunity(int opportunityId);
         Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId);
         Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id);
         List<ReferralDto> GetReferrals(int opportunityItemId);
         OpportunityDto GetLatestCompletedOpportunity(int employerId);
-        Task<bool> IsReferralOpportunity(int id);
+        Task<bool> IsReferralOpportunityItemAsync(int id);
         Task<CheckAnswersDto> GetCheckAnswers(int id);
         Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto;
         Task UpdateReferrals(OpportunityDto dto);
-        Task<bool> IsNewReferral(int opportunityId);
-        Task<bool> IsNewProvisionGap(int opportunityId);
+        Task<bool> IsNewReferralAsync(int opportunityItemId);
+        Task<bool> IsNewProvisionGapAsync(int opportunityItemId);
         Task<int> GetOpportunityItemCountAsync(int opportunityId);
         Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
     }

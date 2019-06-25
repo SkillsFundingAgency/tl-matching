@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Placement_Information_Is_Submitted_For_Provision_Gap_With_No_Reason_And_There_Are_No_Search_Results()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsReferralOpportunity(1).Returns(false);
+            _opportunityService.IsReferralOpportunityItemAsync(1).Returns(false);
             _opportunityService.GetOpportunityItemCountAsync(1).Returns(1);
 
             var referralService = Substitute.For<IReferralService>();
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _opportunityService
                 .Received(1)
-                .IsReferralOpportunity(1);
+                .IsReferralOpportunityItemAsync(1);
         }
 
         [Fact]

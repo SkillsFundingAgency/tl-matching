@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsReferralOpportunity(1).Returns(true);
+            _opportunityService.IsReferralOpportunityItemAsync(1).Returns(true);
             _opportunityService.GetOpportunityItemCountAsync(1).Returns(1);
 
             var referralService = Substitute.For<IReferralService>();
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _opportunityService
                 .Received(1)
-                .IsReferralOpportunity(1);
+                .IsReferralOpportunityItemAsync(1);
         }
 
         [Fact]

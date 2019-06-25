@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _referralRepository = referralRepository;
         }
 
-        public async Task<int> CreateOpportunity(OpportunityDto dto)
+        public async Task<int> CreateOpportunityAsync(OpportunityDto dto)
         {
             dto.Id = 0;
             var opportunity = _mapper.Map<Opportunity>(dto);
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return opportunityId;
         }
 
-        public async Task<int> CreateOpportunityItem(OpportunityItemDto dto)
+        public async Task<int> CreateOpportunityItemAsync(OpportunityItemDto dto)
         {
             dto.Id = 0;
             var opportunityItem = _mapper.Map<OpportunityItem>(dto);
@@ -135,11 +135,12 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<bool> IsReferralOpportunity(int id)
+        public async Task<bool> IsReferralOpportunityItemAsync(int opportunityItemId)
         {
-            return await _opportunityRepository.GetMany(o => o.Id == id 
-                                                             // && o.Referral.Any()
-                                                             ).AnyAsync();
+            return await _opportunityItemRepository.GetMany(
+                o => o.Id == opportunityItemId 
+                     && o.Referral.Any()
+                     ).AnyAsync();
         }
 
         public async Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id)
@@ -202,22 +203,22 @@ namespace Sfa.Tl.Matching.Application.Services
             return referrals;
         }
 
-        public async Task<bool> IsNewReferral(int opportunityId)
+        public async Task<bool> IsNewReferralAsync(int opportunityItemId)
         {
-            if (opportunityId == 0)
+            if (opportunityItemId == 0)
                 return true;
 
-            var isReferral = await IsReferralOpportunity(opportunityId);
+            var isReferral = await IsReferralOpportunityItemAsync(opportunityItemId);
 
             return !isReferral;
         }
 
-        public async Task<bool> IsNewProvisionGap(int opportunityId)
+        public async Task<bool> IsNewProvisionGapAsync(int opportunityItemId)
         {
-            if (opportunityId == 0)
+            if (opportunityItemId == 0)
                 return true;
 
-            var isReferral = await IsReferralOpportunity(opportunityId);
+            var isReferral = await IsReferralOpportunityItemAsync(opportunityItemId);
             return isReferral;
         }
 

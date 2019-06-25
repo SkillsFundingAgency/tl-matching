@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 IsCompleted = true
             };
 
-            _result = opportunityService.CreateOpportunityItem(dto).GetAwaiter().GetResult();
+            _result = opportunityService.CreateOpportunityItemAsync(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
