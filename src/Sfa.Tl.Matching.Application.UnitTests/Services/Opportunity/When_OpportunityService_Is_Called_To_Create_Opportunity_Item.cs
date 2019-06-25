@@ -1,12 +1,16 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
@@ -21,9 +25,29 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
         public When_OpportunityService_Is_Called_To_Create_Opportunity_Item()
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
+            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.GivenName, "adminUserName")
+                }))
+            });
+
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver") ?
+                        new LoggedInUserEmailResolver<OpportunityItemDto, OpportunityItem>(httpcontextAccesor) :
+                        type.Name.Contains("LoggedInUserNameResolver") ?
+                            (object)new LoggedInUserNameResolver<OpportunityItemDto, OpportunityItem>(httpcontextAccesor) :
+                            type.Name.Contains("UtcNowResolver") ?
+                                new UtcNowResolver<OpportunityItemDto, OpportunityItem>(new DateTimeProvider()) :
+                                null);
+            });
             var mapper = new Mapper(config);
-            
+
             var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
@@ -37,7 +61,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dto = new OpportunityItemDto
             {
                 OpportunityId = OpportunityId,
-                OpportunityType = OpportunityType.Referral
+                OpportunityType = OpportunityType.Referral,
+                RouteId = 5,
+                Postcode = "AA1 1AA",
+                SearchRadius = 10,
+                JobTitle = "Test Title",
+                PlacementsKnown = true,
+                Placements = 3,
+                SearchResultProviderCount = 15,
+                IsSaved = true,
+                IsSelectedForReferral = true,
+                IsCompleted = true
             };
 
             _result = opportunityService.CreateOpportunityItem(dto).GetAwaiter().GetResult();
@@ -50,7 +84,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 .Received(1)
                 .Create(Arg.Is<OpportunityItem>(opportunity =>
                     opportunity.OpportunityId == OpportunityId &&
-                    opportunity.OpportunityType == OpportunityType.Referral.ToString()
+                    opportunity.OpportunityType == OpportunityType.Referral.ToString() &&
+                    opportunity.RouteId == 5 &&
+                    opportunity.Postcode == "AA1 1AA" &&
+                    opportunity.SearchRadius == 10 &&
+                    opportunity.JobTitle == "Test Title" &&
+                    opportunity.PlacementsKnown.HasValue &&
+                    opportunity.PlacementsKnown.Value &&
+                    opportunity.Placements == 3 &&
+                    opportunity.SearchResultProviderCount == 15 &&
+                    opportunity.IsSaved.HasValue &&
+                    opportunity.IsSaved.Value &&
+                    opportunity.IsSelectedForReferral.HasValue &&
+                    opportunity.IsSelectedForReferral.Value &&
+                    opportunity.IsCompleted.HasValue &&
+                    opportunity.IsCompleted.Value &&
+                    opportunity.CreatedBy == "adminUserName"
             ));
         }
 

@@ -1,10 +1,11 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore.Internal;
+﻿using System;
+using AutoMapper;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 using System.Linq;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
@@ -13,12 +14,31 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public OpportunityMapper()
         {
             CreateMap<OpportunityDto, Opportunity>()
-                .ForMember(m => m.CreatedOn, config => config.Ignore())
-                .ForMember(m => m.EmailHistory, o => o.Ignore())
+                .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.EmployerId))
+                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact))
+                .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
+                .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
+                .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityDto, Opportunity>>())
+                .ForAllOtherMembers(config => config.Ignore())
                 ;
 
             CreateMap<OpportunityItemDto, OpportunityItem>()
-                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
+                .ForMember(m => m.OpportunityType, config =>
+                    config.MapFrom(s => s.OpportunityType.ToString()))
+                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
+                .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
+                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
+                .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                .ForMember(m => m.Placements,
+                    opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ?
+                        src.Placements : null))
+                .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
+                .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
+                .ForMember(m => m.IsSaved, o => o.MapFrom(s => s.IsSaved))
+                .ForMember(m => m.IsSelectedForReferral, o => o.MapFrom(s => s.IsSelectedForReferral))
+                .ForMember(m => m.IsCompleted, o => o.MapFrom(s => s.IsCompleted))
+                .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityItemDto, OpportunityItem>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 
@@ -27,9 +47,12 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.OpportunityItem, o => o.Ignore())
                 .ForMember(m => m.ProviderVenue, o => o.Ignore())
                 .ForMember(m => m.Id, o => o.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<ReferralDto, Referral>>())
                 .ForMember(m => m.CreatedOn, o => o.Ignore())
                 .ForMember(m => m.ModifiedOn, o => o.Ignore())
                 .ForMember(m => m.ModifiedBy, o => o.Ignore())
+
+                .ForAllOtherMembers(config => config.Ignore())
                 ;
 
             CreateMap<EmployerDetailDto, Opportunity>()
@@ -55,20 +78,36 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<Opportunity, OpportunityDto>()
-                //.ForPath(m => m.RouteName, opt => opt.MapFrom(source => source.Route.Name))
-                //.ForPath(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()))
-                //.ForPath(m => m.OpportunityType,
-                //    opt => opt.MapFrom(source => source.Referral.Any() ?
-                //        OpportunityType.Referral : OpportunityType.ProvisionGap))
+                .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.EmployerId))
+                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact))
+                .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
+                .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
+                //.ForPath(m => m.CompanyName, opt => opt.MapFrom(source => source.Employer.CompanyName))
+                //.ForPath(m => m.EmployerCrmId, opt => opt.MapFrom(source => source.Employer.CrmId))
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 
             CreateMap<OpportunityItem, OpportunityItemDto>()
-                //.ForPath(m => m.RouteName, opt => opt.MapFrom(source => source.Route.Name))
-                //.ForPath(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()))
+                .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
                 //.ForPath(m => m.OpportunityType,
                 //    opt => opt.MapFrom(source => source.Referral.Any() ?
                 //        OpportunityType.Referral : OpportunityType.ProvisionGap))
+                .ForMember(m => m.OpportunityType, config =>
+                    config.MapFrom(s => ((OpportunityType)Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
+                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
+                .ForPath(m => m.RouteName, opt => opt.MapFrom(source => source.Route.Name))
+                .ForPath(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()))
+                .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
+                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
+                .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                .ForMember(m => m.Placements, o => o.MapFrom(s => s.Placements))
+                .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
+                .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
+                .ForMember(m => m.IsSaved, o => o.MapFrom(s => s.IsSaved))
+                .ForMember(m => m.IsSelectedForReferral, o => o.MapFrom(s => s.IsSelectedForReferral))
+                .ForMember(m => m.IsCompleted, o => o.MapFrom(s => s.IsCompleted))
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 
@@ -138,7 +177,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                     o.MapFrom(s => s.Id))
                 //.ForMember(m => m.CompanyName, o => 
                 //    o.MapFrom(s => s.EmployerName)) // TODO This will come from Employer table and not Opportunity when DB changes are in
-                .ForMember(m => m.Type, config => 
+                .ForMember(m => m.Type, config =>
                     config.MapFrom(s => GetOpportunityBasketType(s.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.Referral.ToString()),
                         s.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()))))
                 .ForAllOtherMembers(config => config.Ignore())
