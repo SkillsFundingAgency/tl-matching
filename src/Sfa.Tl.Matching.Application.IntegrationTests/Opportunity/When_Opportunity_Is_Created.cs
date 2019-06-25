@@ -7,7 +7,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
     public class When_Opportunity_Is_Created : IClassFixture<OpportunityTestFixture>
     {
         private readonly OpportunityTestFixture _testFixture;
-        private const string Postcode = "OP1 1CR";
         private const string EmployerContact = "Contact for Opportunity Test";
         private readonly int _opportunityId;
 
@@ -19,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             var opportunityDto = new OpportunityDto
             {
                 EmployerId = null,
-                EmployerContact = EmployerContact,
+                EmployerContact = EmployerContact
             };
 
             _opportunityId = _testFixture.OpportunityService.CreateOpportunity(opportunityDto).GetAwaiter().GetResult();
