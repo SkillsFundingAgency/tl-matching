@@ -1,4 +1,4 @@
-﻿// TODO Add test back in when DB changes are done
+﻿// TODO ADD BACK IN
 //using System;
 //using System.Linq.Expressions;
 //using AutoMapper;
@@ -25,6 +25,7 @@
 //            var mapper = new Mapper(config);
 
 //            _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+//            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 //            var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
 //            var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
@@ -37,7 +38,7 @@
 //                    EmployerName = "CompanyName"
 //                });
 
-//            var opportunityService = new OpportunityService(mapper, _opportunityRepository, provisionGapRepository, referralRepository);
+//            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository);
 
 //            _result = opportunityService.GetOpportunityBasket(1)
 //                .GetAwaiter().GetResult();

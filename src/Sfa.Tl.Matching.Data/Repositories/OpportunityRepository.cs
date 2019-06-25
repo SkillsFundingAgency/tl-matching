@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Data.Repositories
 {
@@ -103,6 +105,20 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   }).ToList()
                           }).SingleOrDefaultAsync();
             */
+        }
+
+        public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId)
+        {
+            var opportunityBasket = await (from o in _dbContext.Opportunity
+                where o.Id == opportunityId
+                select new OpportunityBasketViewModel
+                {
+                    Id = o.Id,
+                    ReferralCount = o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.Referral.ToString()),
+                    ProvisionGapCount = o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString())
+                }).SingleOrDefaultAsync();
+
+            return opportunityBasket;
         }
     }
 }

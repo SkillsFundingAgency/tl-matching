@@ -4,6 +4,7 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
+using System.Linq;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
@@ -97,31 +98,34 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
 
-            CreateMap<PlacementInformationSaveDto, Opportunity>()
-                //.ForMember(m => m.JobTitle,
-                //    o => o.MapFrom(s => string.IsNullOrEmpty(s.JobTitle) ? 
-                //        "None given" : s.JobTitle))
-                //.ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
-                //.ForMember(m => m.Placements,
-                //    opt => opt.MapFrom(s => s.PlacementsKnown.HasValue && s.PlacementsKnown.Value ?
-                //        s.Placements : 1))
+            CreateMap<PlacementInformationSaveDto, OpportunityItem>()
+                .ForMember(m => m.JobTitle,
+                    o => o.MapFrom(s => string.IsNullOrEmpty(s.JobTitle) ?
+                        "None given" : s.JobTitle))
+                .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
+                .ForMember(m => m.Placements,
+                    opt => opt.MapFrom(s => s.PlacementsKnown.HasValue && s.PlacementsKnown.Value ?
+                        s.Placements : 1))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
 
-            CreateMap<ProviderSearchDto, Opportunity>()
-                //.ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
-                //.ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
-                //.ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
+            CreateMap<ProviderSearchDto, OpportunityItem>()
+                .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
+                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
+                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
-                //.ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
+                .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<Opportunity, OpportunityBasketViewModel>()
+                .ForMember(m => m.Id, o =>
+                    o.MapFrom(s => s.Id))
                 //.ForMember(m => m.CompanyName, o => 
                 //    o.MapFrom(s => s.EmployerName)) // TODO This will come from Employer table and not Opportunity when DB changes are in
                 .ForMember(m => m.Type, config => 
-                    config.MapFrom(s => GetOpportunityBasketType(2, 2))) // TODO Put correct values when Opportunity Model is updated
+                    config.MapFrom(s => GetOpportunityBasketType(s.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.Referral.ToString()),
+                        s.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()))))
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
         }

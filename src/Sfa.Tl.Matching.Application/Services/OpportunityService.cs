@@ -95,59 +95,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int id)
-        {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id);
-
-            var viewModel = _mapper.Map<OpportunityBasketViewModel>(opportunity);
-
-            // TODO Get proper data when DB is done
-            viewModel.ReferralItems = new List<BasketReferralItemViewModel>
-            {
-                new BasketReferralItemViewModel
-                {
-                    OpportunityItemId = 1,
-                    StudentsWanted = "StudentsWanted",
-                    JobRole = "JobRole",
-                    Providers = 1,
-                    Workplace = "Workplace"
-                },
-                new BasketReferralItemViewModel
-                {
-                    OpportunityItemId = 2,
-                    StudentsWanted = "StudentsWanted1",
-                    JobRole = "JobRole1",
-                    Providers = 2,
-                    Workplace = "Workplace1"
-                }
-            };
-
-            // TODO Add back in when DB changes are done if (opportunity.ProvisionGapCount > 0)
-            {
-                viewModel.ProvisionGapItems = new List<BasketProvisionGapItemViewModel>
-                {
-                    new BasketProvisionGapItemViewModel
-                    {
-                        OpportunityItemId = 3,
-                        StudentsWanted = "StudentsWanted",
-                        JobRole = "JobRole",
-                        Workplace = "Workplace",
-                        Reason = "Reason1"
-                    },
-                    new BasketProvisionGapItemViewModel
-                    {
-                        OpportunityItemId = 4,
-                        StudentsWanted = "StudentsWanted2",
-                        JobRole = "JobRole2",
-                        Workplace = "Workplace2",
-                        Reason = "Reason2"
-                    }
-                };
-            }
-
-            return viewModel;
-        }
-
         public OpportunityDto GetLatestCompletedOpportunity(int employerId)
         {
             var latestOpportunity = _opportunityRepository.GetMany(o => o.EmployerId == employerId)
@@ -258,6 +205,60 @@ namespace Sfa.Tl.Matching.Application.Services
             //TODO: Return the actual count
             //return opportunity.Count;
             return 1;
+        }
+
+        public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int id)
+        {
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id,
+                o => o.OpportunityItem);
+ 
+            var viewModel = _mapper.Map<OpportunityBasketViewModel>(opportunity);
+
+            // TODO Get proper data when DB is done
+            viewModel.ReferralItems = new List<BasketReferralItemViewModel>
+            {
+                new BasketReferralItemViewModel
+                {
+                    OpportunityItemId = 1,
+                    StudentsWanted = "StudentsWanted",
+                    JobRole = "JobRole",
+                    Providers = 1,
+                    Workplace = "Workplace"
+                },
+                new BasketReferralItemViewModel
+                {
+                    OpportunityItemId = 2,
+                    StudentsWanted = "StudentsWanted1",
+                    JobRole = "JobRole1",
+                    Providers = 2,
+                    Workplace = "Workplace1"
+                }
+            };
+
+            // TODO Add back in when DB changes are done if (opportunity.ProvisionGapCount > 0)
+            {
+                viewModel.ProvisionGapItems = new List<BasketProvisionGapItemViewModel>
+                {
+                    new BasketProvisionGapItemViewModel
+                    {
+                        OpportunityItemId = 3,
+                        StudentsWanted = "StudentsWanted",
+                        JobRole = "JobRole",
+                        Workplace = "Workplace",
+                        Reason = "Reason1"
+                    },
+                    new BasketProvisionGapItemViewModel
+                    {
+                        OpportunityItemId = 4,
+                        StudentsWanted = "StudentsWanted2",
+                        JobRole = "JobRole2",
+                        Workplace = "Workplace2",
+                        Reason = "Reason2"
+                    }
+                };
+            }
+
+            return viewModel;
         }
 
         private static Expression<Func<Opportunity, bool>> FilterValidOpportunities()
