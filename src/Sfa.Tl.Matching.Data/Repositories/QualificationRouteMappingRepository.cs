@@ -7,16 +7,16 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.Repositories
 {
-    public class QualificationRoutePathMappingRepository : GenericRepository<QualificationRoutePathMapping>
+    public class QualificationRouteMappingRepository : GenericRepository<QualificationRouteMapping>
     {
         private readonly MatchingDbContext _dbContext;
 
-        public QualificationRoutePathMappingRepository(ILogger<QualificationRoutePathMappingRepository> logger, MatchingDbContext dbContext) : base(logger, dbContext)
+        public QualificationRouteMappingRepository(ILogger<QualificationRouteMappingRepository> logger, MatchingDbContext dbContext) : base(logger, dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public override async Task<int> CreateMany(IList<QualificationRoutePathMapping> entities)
+        public override async Task<int> CreateMany(IList<QualificationRouteMapping> entities)
         {
             var mappingList = entities.ToList();
 
@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             var list = mappingList.Where(mapping => mapping.Qualification != null)
                                   .GroupBy(mapping => mapping.Qualification, new QualificationEqualityComparer()).ToList();
 
-            var qualificationRoutePathMappings = list.SelectMany(grouping => new List<QualificationRoutePathMapping>(grouping.ToList()).Select(mapping =>
+            var qualificationRoutePathMappings = list.SelectMany(grouping => new List<QualificationRouteMapping>(grouping.ToList()).Select(mapping =>
             {
                 mapping.Qualification = grouping.Key;
                 return mapping;

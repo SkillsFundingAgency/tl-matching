@@ -18,12 +18,12 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Qualification> _qualificationRepository;
-        private readonly IRepository<QualificationRoutePathMapping> _qualificationRoutePathMappingRepository;
+        private readonly IRepository<QualificationRouteMapping> _qualificationRoutePathMappingRepository;
         private readonly IRepository<LearningAimReference> _learningAimReferenceRepository;
 
         public QualificationService(IMapper mapper,
             IRepository<Qualification> qualificationRepository,
-            IRepository<QualificationRoutePathMapping> qualificationRoutePathMappingRepository,
+            IRepository<QualificationRouteMapping> qualificationRoutePathMappingRepository,
             IRepository<LearningAimReference> learningAimReferenceRepository)
         {
             _mapper = mapper;
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var qualificationRoutePathMappings = viewModel
                 .Routes?
                 .Where(r => r.IsSelected)
-                .Select(route => new QualificationRoutePathMapping
+                .Select(route => new QualificationRouteMapping
                 {
                     RouteId = route.Id,
                     Source = viewModel.Source,
@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var qualification = await _qualificationRepository
                 .GetSingleOrDefault(p => p.Id == id,
-                    q => q.QualificationRoutePathMapping);
+                    q => q.QualificationRouteMapping);
 
             return _mapper.Map<Qualification, QualificationSearchResultViewModel>(qualification);
         }
@@ -94,7 +94,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     Title = q.Title,
                     ShortTitle = q.ShortTitle,
                     LarId = q.LarsId,
-                    RouteIds = q.QualificationRoutePathMapping.Select(r => r.RouteId).ToList()
+                    RouteIds = q.QualificationRouteMapping.Select(r => r.RouteId).ToList()
                 })
                 .Take(51)
                 .OrderBy(q => q.Title.IndexOf(qualificationSearch, StringComparison.Ordinal))
@@ -139,15 +139,15 @@ namespace Sfa.Tl.Matching.Application.Services
                 .GetMany(r => r.QualificationId == viewModel.QualificationId)
                 .ToList();
 
-            var comparer = new QualificationRoutePathMappingEqualityComparer();
-            var newMappings = _mapper.Map<IList<QualificationRoutePathMapping>>(viewModel);
+            var comparer = new QualificationRouteMappingEqualityComparer();
+            var newMappings = _mapper.Map<IList<QualificationRouteMapping>>(viewModel);
 
             var toBeAdded = newMappings.Except(existingMappings, comparer).ToList();
 
             var same = existingMappings.Intersect(newMappings, comparer).ToList();
             var toBeDeleted = existingMappings.Except(same).ToList();
 
-            QualificationRoutePathMapping Find(QualificationRoutePathMapping qrpm) =>
+            QualificationRouteMapping Find(QualificationRouteMapping qrpm) =>
                 existingMappings.First(r => r.Id == qrpm.Id);
 
             var deleteMappings = toBeDeleted.Select(Find).ToList();

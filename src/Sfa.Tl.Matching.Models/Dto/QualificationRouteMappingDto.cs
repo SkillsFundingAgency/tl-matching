@@ -2,7 +2,7 @@
 // ReSharper disable UnusedMember.Global
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class QualificationRoutePathMappingDto
+    public class QualificationRouteMappingDto
     {
         public QualificationDto Qualification { get; set; }
         public int RouteId { get; set; }

@@ -5,11 +5,11 @@ using Sfa.Tl.Matching.Models.Dto;
 namespace Sfa.Tl.Matching.Application.Mappers
 {
     // ReSharper disable once UnusedMember.Global
-    public class QualificationRoutePathMappingMapper : Profile
+    public class QualificationRouteMappingMapper : Profile
     {
-        public QualificationRoutePathMappingMapper()
+        public QualificationRouteMappingMapper()
         {
-            CreateMap<QualificationRoutePathMappingDto, QualificationRoutePathMapping>()
+            CreateMap<QualificationRouteMappingDto, QualificationRouteMapping>()
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.Route, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())

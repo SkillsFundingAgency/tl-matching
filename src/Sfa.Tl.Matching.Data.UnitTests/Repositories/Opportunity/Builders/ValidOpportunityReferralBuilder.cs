@@ -164,23 +164,23 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
             }
         };
 
-        public IList<Domain.Models.QualificationRoutePathMapping> BuildQualificationRoutePathMapping() => new List<Domain.Models.QualificationRoutePathMapping>
+        public IList<Domain.Models.QualificationRouteMapping> BuildQualificationRouteMapping() => new List<Domain.Models.QualificationRouteMapping>
         {
-            new Domain.Models.QualificationRoutePathMapping
+            new Domain.Models.QualificationRouteMapping
             {
                 Id = 1,
                 RouteId = 1,
                 Source = "Test",
                 QualificationId = 1
             },
-            new Domain.Models.QualificationRoutePathMapping
+            new Domain.Models.QualificationRouteMapping
             {
                 Id = 2,
                 RouteId = 1,
                 Source = "Test",
                 QualificationId = 2
             },
-            new Domain.Models.QualificationRoutePathMapping
+            new Domain.Models.QualificationRouteMapping
             {
                 Id = 3,
                 RouteId = 1,

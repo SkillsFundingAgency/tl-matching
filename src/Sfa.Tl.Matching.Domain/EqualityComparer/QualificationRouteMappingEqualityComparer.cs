@@ -4,9 +4,9 @@ using Sfa.Tl.Matching.Domain.Models;
 namespace Sfa.Tl.Matching.Domain.EqualityComparer
 {
     // ReSharper disable once UnusedMember.Global
-    public sealed class QualificationRoutePathMappingEqualityComparer : IEqualityComparer<QualificationRoutePathMapping>
+    public sealed class QualificationRouteMappingEqualityComparer : IEqualityComparer<QualificationRouteMapping>
     {
-        public bool Equals(QualificationRoutePathMapping x, QualificationRoutePathMapping y)
+        public bool Equals(QualificationRouteMapping x, QualificationRouteMapping y)
         {
             if (ReferenceEquals(x, y)) return true;
             if (ReferenceEquals(x, null)) return false;
@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
             return x.RouteId == y.RouteId && x.QualificationId == y.QualificationId;
         }
 
-        public int GetHashCode(QualificationRoutePathMapping obj)
+        public int GetHashCode(QualificationRouteMapping obj)
         {
             unchecked
             {

@@ -1,6 +1,6 @@
-﻿namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRoutePathMapping.Constants
+﻿namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.Constants
 {
-    public static class QualificationRoutePathMappingConstants
+    public static class QualificationRouteMappingConstants
     {
         public const int Id = 1;
         public const string LarsId = "1234567X";

@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Domain.Models
 {
-    public class QualificationRoutePathMapping : BaseEntity
+    public class QualificationRouteMapping : BaseEntity
     {
         public int RouteId { get; set; }
         public int QualificationId { get; set; }

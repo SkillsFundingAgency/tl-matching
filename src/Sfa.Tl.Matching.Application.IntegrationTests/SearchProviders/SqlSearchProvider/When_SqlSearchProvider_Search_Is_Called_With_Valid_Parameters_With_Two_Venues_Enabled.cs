@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         {
             var providerQualifications = _providerVenues.SelectMany(p => p.ProviderQualification).ToList();
 
-            var qualificationMappings = providerQualifications.SelectMany(q => q.Qualification.QualificationRoutePathMapping).ToList();
+            var qualificationMappings = providerQualifications.SelectMany(q => q.Qualification.QualificationRouteMapping).ToList();
             var qualifications = providerQualifications.Select(p => p.Qualification).ToList();
 
             _dbContext.RemoveRange(providerQualifications);

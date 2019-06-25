@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
 
         public void Dispose()
         {
-            var qualificationMappings = _providerVenue.ProviderQualification.SelectMany(q => q.Qualification.QualificationRoutePathMapping).ToList();
+            var qualificationMappings = _providerVenue.ProviderQualification.SelectMany(q => q.Qualification.QualificationRouteMapping).ToList();
             var qualifications = _providerVenue.ProviderQualification.Select(q => q.Qualification).ToList();
 
             _dbContext.RemoveRange(_providerVenue.ProviderQualification);

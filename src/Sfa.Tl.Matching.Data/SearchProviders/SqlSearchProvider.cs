@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             var result = await (from provider in _matchingDbContext.Provider
                                 join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId
                                 join providerQualification in _matchingDbContext.ProviderQualification on providerVenue.Id equals providerQualification.ProviderVenueId
-                                join qualificationRoutePathMapping in _matchingDbContext.QualificationRoutePathMapping on providerQualification.QualificationId equals qualificationRoutePathMapping.QualificationId
+                                join qualificationRoutePathMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals qualificationRoutePathMapping.QualificationId
                                 orderby providerVenue.Location.Distance(employerLocation)
                                 where qualificationRoutePathMapping.RouteId == dto.SelectedRouteId 
                                       && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters 
@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             var venueIds = result.Select(v => v.ProviderVenueId);
 
             var qualificationShortTitles = await (from providerQualification in _matchingDbContext.ProviderQualification
-                                           join routePathMapping in _matchingDbContext.QualificationRoutePathMapping on providerQualification.QualificationId equals routePathMapping.QualificationId
+                                           join routePathMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals routePathMapping.QualificationId
                                            join qualification in _matchingDbContext.Qualification on routePathMapping.QualificationId equals qualification.Id 
                                            where routePathMapping.RouteId == dto.SelectedRouteId && venueIds.Any(venueId => venueId == providerQualification.ProviderVenueId)
                                            select new

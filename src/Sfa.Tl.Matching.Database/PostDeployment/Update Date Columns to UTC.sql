@@ -62,7 +62,7 @@ BEGIN
  SET [CreatedOn] = CASE WHEN [CreatedOn] < '2019-03-31' THEN [CreatedOn] ELSE DATEADD(hh, -1, [CreatedOn]) END,
     [ModifiedOn] = CASE WHEN [ModifiedOn] < '2019-03-31' THEN [ModifiedOn] ELSE DATEADD(hh, -1, [ModifiedOn]) END
 
- UPDATE QualificationRoutePathMapping
+ UPDATE [QualificationRouteMapping]
  SET [CreatedOn] = CASE WHEN [CreatedOn] < '2019-03-31' THEN [CreatedOn] ELSE DATEADD(hh, -1, [CreatedOn]) END,
     [ModifiedOn] = CASE WHEN [ModifiedOn] < '2019-03-31' THEN [ModifiedOn] ELSE DATEADD(hh, -1, [ModifiedOn]) END
 

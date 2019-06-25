@@ -33,7 +33,7 @@
 //                .Returns(new QualificiationSearchResultsBuilder().Build().AsQueryable());
 
 //            var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
-//            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRoutePathMapping>>();
+//            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
 
 //            var service = new QualificationService(mapper, _repository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
 
@@ -54,7 +54,7 @@
 //        }
 
 //        [Fact]
-//        public void Then_QualificationRoutePathMappingRepository_GetMany_Is_Called_Exactly_Once()
+//        public void Then_QualificationRouteMappingRepository_GetMany_Is_Called_Exactly_Once()
 //        {
 //            _repository
 //                .Received(1)

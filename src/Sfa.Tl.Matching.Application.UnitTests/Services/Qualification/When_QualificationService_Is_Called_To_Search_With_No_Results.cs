@@ -26,7 +26,7 @@
 //            _repository = Substitute.For<IRepository<Domain.Models.Qualification>>();
             
 //            var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
-//            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRoutePathMapping>>();
+//            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
 
 //            var service = new QualificationService(mapper, _repository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
 
@@ -42,7 +42,7 @@
 //        }
 
 //        [Fact]
-//        public void Then_QualificationRoutePathMappingRepository_GetMany_Is_Not_Called()
+//        public void Then_QualificationRouteMappingRepository_GetMany_Is_Not_Called()
 //        {
 //            _repository
 //                .DidNotReceive()

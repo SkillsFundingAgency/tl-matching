@@ -11,6 +11,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string ShortTitleSearch { get; set; }
         
         public virtual ICollection<ProviderQualification> ProviderQualification { get; set; }
-        public virtual ICollection<QualificationRoutePathMapping> QualificationRoutePathMapping { get; set; }
+        public virtual ICollection<QualificationRouteMapping> QualificationRouteMapping { get; set; }
     }
 }

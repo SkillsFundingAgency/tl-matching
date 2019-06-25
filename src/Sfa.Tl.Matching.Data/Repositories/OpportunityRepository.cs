@@ -99,7 +99,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                       QualificationShortTitles =
                                           (from pq in _dbContext.ProviderQualification
                                               join q in _dbContext.Qualification on pq.QualificationId equals q.Id
-                                              join qm in _dbContext.QualificationRoutePathMapping on q.Id equals qm.QualificationId
+                                              join qm in _dbContext.QualificationRouteMapping on q.Id equals qm.QualificationId
                                               where pv.Id == pq.ProviderVenueId && qm.RouteId == op.RouteId
                                               select q.ShortTitle).Distinct().ToList()
                                   }).ToList()

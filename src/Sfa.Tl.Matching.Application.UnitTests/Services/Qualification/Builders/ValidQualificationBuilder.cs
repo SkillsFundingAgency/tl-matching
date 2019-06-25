@@ -26,15 +26,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders
             ShortTitleSearch = "ShortTitle",
             CreatedBy = "CreatedBy",
             ModifiedBy = "ModifiedBy",
-            QualificationRoutePathMapping =
-                new List<Domain.Models.QualificationRoutePathMapping>
+            QualificationRouteMapping =
+                new List<Domain.Models.QualificationRouteMapping>
                 { 
-                    new Domain.Models.QualificationRoutePathMapping
+                    new Domain.Models.QualificationRouteMapping
                     {
                         Id = 1,
                         RouteId = 1,
                     },
-                    new Domain.Models.QualificationRoutePathMapping
+                    new Domain.Models.QualificationRouteMapping
                     {
                         Id = 2,
                         RouteId = 2,

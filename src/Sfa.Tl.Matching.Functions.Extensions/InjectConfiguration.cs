@@ -152,7 +152,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
             services.AddTransient<IRepository<Qualification>, GenericRepository<Qualification>>();
-            services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
+            services.AddTransient<IRepository<QualificationRouteMapping>, QualificationRouteMappingRepository>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
             services.AddTransient<IRepository<BackgroundProcessHistory>, GenericRepository<BackgroundProcessHistory>>();
             services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
