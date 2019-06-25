@@ -44,19 +44,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var opportunityId = await _opportunityRepository.Create(opportunity);
 
-            //TODO: Refactor this - put in to make up for loss of call to CreateProvisionGap
-            //      The ProvisionGapMapper might not want to take OpportunityDto
-            //      Should be able to do all of the below as part of the mapping from Dto above
-            //      Make sure this functionality is covered by tests
-            if (dto.OpportunityType == OpportunityType.ProvisionGap)
-            {
-                var provisionGap = _mapper.Map<ProvisionGap>(dto);
-                //TODO: This should be opportunityItemId
-                provisionGap.OpportunityItemId = opportunityId;
-
-                await _provisionGapRepository.Create(provisionGap);
-            }
-
             return opportunityId;
         }
 
@@ -71,6 +58,7 @@ namespace Sfa.Tl.Matching.Application.Services
             //      The ProvisionGapMapper might not want to take OpportunityDto
             //      Should be able to do all of the below as part of the mapping from Dto above
             //      Make sure this functionality is covered by tests
+            
             if (dto.OpportunityType == OpportunityType.ProvisionGap)
             {
                 var provisionGap = _mapper.Map<ProvisionGap>(dto);
@@ -79,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await _provisionGapRepository.Create(provisionGap);
             }
-
+            
             return opportunityItemId;
         }
 
@@ -89,7 +77,9 @@ namespace Sfa.Tl.Matching.Application.Services
             var existingReferrals = _referralRepository.GetMany(r => r.OpportunityItemId == dto.Id)
                 .ToList();
 
-            var newReferrals = _mapper.Map<List<Referral>>(dto.Referral);
+            //TODO: Use OpportunityItemDto here
+            //var newReferrals = _mapper.Map<List<Referral>>(dto.Referral);
+            var newReferrals = new List<Referral>();
             foreach (var nr in newReferrals)
                 nr.OpportunityItemId = dto.Id; // TODO Id should be OpportunityItemId
 
