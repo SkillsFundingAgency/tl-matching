@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private readonly IEmployerService _employerService;
 
         private const int OpportunityId = 12;
-        private const string EmployerName = "EmployerName";
+        private const string CompanyName = "CompanyName";
         private const string EmployerContact = "EmployerContact";
         private const string EmployerContactPhone = "EmployerContactPhone";
         private const string EmployerContactEmail = "EmployerContactEmail";
@@ -32,13 +32,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _employerService = Substitute.For<IEmployerService>();
             _employerService.GetEmployer(Arg.Any<int>()).Returns(new EmployerStagingDto
             {
-                CompanyName = EmployerName
+                CompanyName = CompanyName
             });
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
             {
                 Id = OpportunityId,
-                EmployerName = EmployerName,
+                //EmployerName = EmployerName,
                 EmployerContact = EmployerContact,
                 EmployerContactPhone = EmployerContactPhone,
                 EmployerContactEmail = EmployerContactEmail
@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_EmployerName_Is_Populated()
         {
             var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
-            viewModel.EmployerName.Should().Be(EmployerName);
+            viewModel.EmployerName.Should().Be(CompanyName);
         }
 
         [Fact]

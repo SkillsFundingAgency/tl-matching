@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private const int OpportunityId = 12;
         private const int EmployerId = 1;
 
-        private const string EmployerName = "EmployerName";
+        private const string CompanyName = "CompanyName";
 
         public When_Employer_FindEmployer_Is_Loaded()
         {
@@ -27,7 +27,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
             {
                 Id = OpportunityId,
-                EmployerName = EmployerName,
+                //TODO: Get company name from opportunity
+                //EmployerName = CompanyName,
                 EmployerId = EmployerId
             });
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
@@ -71,7 +72,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_CompanyName_Is_Populated()
         {
             var viewModel = _result.GetViewModel<FindEmployerViewModel>();
-            viewModel.CompanyName.Should().Be(EmployerName);
+            viewModel.CompanyName.Should().Be(CompanyName);
         }
     }
 }
