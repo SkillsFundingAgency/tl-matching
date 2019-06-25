@@ -6,39 +6,39 @@
 @section backButton{
     <a asp-controller="Employer" asp-action="Details" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
     @* If first time through *@
-        <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel opportunity and start again</a>
-     @* Else *@
-        @*<a asp-controller="Opportunity" asp-action="OpportunityBasket" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel this opportunity</a>*@
-    }
+    <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel opportunity and start again</a>
+    @* Else *@
+    <a asp-route="GetOpportunityBasket" asp-route-id="@Model.OpportunityId" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel this opportunity</a>
+}
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-            <partial name="_placementInformation" model="Model.PlacementInformation" />
+        <partial name="_placementInformation" model="Model.PlacementInformation" />
 
-            <hr class="govuk-section-break govuk-section-break--l ">
+        <hr class="govuk-section-break govuk-section-break--l ">
 
-            <h2 class="govuk-heading-m">Provider information</h2>
-            @for (int i = 0; i < Model.Providers.Count(); i++)
+        <h2 class="govuk-heading-m">Provider information</h2>
+        @for (int i = 0; i < Model.Providers.Count(); i++)
+        {
+            var distance = @Model.Providers[i].DistanceFromEmployer;
+            var milesText = "miles";
+            if (distance == 1)
             {
-                var distance = @Model.Providers[i].DistanceFromEmployer;
-                var milesText = "miles";
-                if (distance == 1)
-                {
-                    milesText = "mile";
-                }
-
-                <h3 class="govuk-heading-s govuk-!-margin-0">Provider @(i + 1)</h3>
-                <p class="govuk-body govuk-!-margin-0">@Model.Providers[i].Name</p>
-                <p class="govuk-body govuk-!-margin-0">@($"{distance:#0.0}") @milesText from <span style="text-transform: uppercase">@Model.Postcode</span></p>
-                <hr class="govuk-section-break govuk-section-break--m ">
+                milesText = "mile";
             }
 
-            <form asp-route="SaveCheckAnswersReferrals" novalidate>
-                <input asp-for="OpportunityId" type="hidden" />
+            <h3 class="govuk-heading-s govuk-!-margin-0">Provider @(i + 1)</h3>
+            <p class="govuk-body govuk-!-margin-0">@Model.Providers[i].Name</p>
+            <p class="govuk-body govuk-!-margin-0">@($"{distance:#0.0}") @milesText from <span style="text-transform: uppercase">@Model.Postcode</span></p>
+            <hr class="govuk-section-break govuk-section-break--m ">
+        }
 
-                <button type="submit" class="govuk-button" id="tl-confirm">Confirm and save opportunity</button>
-            </form>
-        </div>
+        <form asp-route="SaveCheckAnswersReferrals" novalidate>
+            <input asp-for="OpportunityId" type="hidden" />
+
+            <button type="submit" class="govuk-button" id="tl-confirm">Confirm and save opportunity</button>
+        </form>
     </div>
+</div>
