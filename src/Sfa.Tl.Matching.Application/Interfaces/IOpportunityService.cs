@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -9,7 +8,9 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     public interface IOpportunityService
     {
         Task<int> CreateOpportunity(OpportunityDto opportunityDto);
-        Task<OpportunityDto> GetOpportunity(int id);
+        Task<int> CreateOpportunityItem(OpportunityItemDto opportunityItemDto);
+        Task<OpportunityDto> GetOpportunity(int opportunityId);
+        Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId);
         Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id);
         List<ReferralDto> GetReferrals(int opportunityItemId);
         OpportunityDto GetLatestCompletedOpportunity(int employerId);

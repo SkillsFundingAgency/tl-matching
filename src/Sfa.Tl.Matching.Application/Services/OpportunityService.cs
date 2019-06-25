@@ -60,6 +60,29 @@ namespace Sfa.Tl.Matching.Application.Services
             return opportunityId;
         }
 
+        public async Task<int> CreateOpportunityItem(OpportunityItemDto dto)
+        {
+            dto.Id = 0;
+            var opportunityItem = _mapper.Map<OpportunityItem>(dto);
+
+            var opportunityItemId = await _opportunityItemRepository.Create(opportunityItem);
+
+            //TODO: Refactor this - put in to make up for loss of call to CreateProvisionGap
+            //      The ProvisionGapMapper might not want to take OpportunityDto
+            //      Should be able to do all of the below as part of the mapping from Dto above
+            //      Make sure this functionality is covered by tests
+            if (dto.OpportunityType == OpportunityType.ProvisionGap)
+            {
+                var provisionGap = _mapper.Map<ProvisionGap>(dto);
+                //TODO: This should be opportunityItemId
+                provisionGap.OpportunityItemId = opportunityItemId;
+
+                await _provisionGapRepository.Create(provisionGap);
+            }
+
+            return opportunityItemId;
+        }
+
         public async Task UpdateReferrals(OpportunityDto dto)
         {
             // TODO Id should be OpportunityItemId
@@ -86,11 +109,20 @@ namespace Sfa.Tl.Matching.Application.Services
             await _referralRepository.UpdateMany(updateReferrals);
         }
 
-        public async Task<OpportunityDto> GetOpportunity(int id)
+        public async Task<OpportunityDto> GetOpportunity(int opportunityId)
         {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id);
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == opportunityId);
 
             var dto = _mapper.Map<OpportunityDto>(opportunity);
+
+            return dto;
+        }
+        
+        public async Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId)
+        {
+            var opportunityItem = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId);
+
+            var dto = _mapper.Map<OpportunityItemDto>(opportunityItem);
 
             return dto;
         }

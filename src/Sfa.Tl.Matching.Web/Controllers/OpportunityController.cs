@@ -184,12 +184,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task Validate(PlacementInformationSaveViewModel viewModel)
         {
-            var opportunity = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
-            if (opportunity != null)
+            var opportunityItem = await _opportunityService.GetOpportunityItem(viewModel.OpportunityItemId);
+            if (opportunityItem != null)
             {
-                viewModel.Postcode = opportunity.Postcode;
-                viewModel.SearchRadius = opportunity.SearchRadius;
-                viewModel.RouteId = opportunity.RouteId;
+                viewModel.Postcode = opportunityItem.Postcode;
+                viewModel.SearchRadius = opportunityItem.SearchRadius;
+                viewModel.RouteId = opportunityItem.RouteId;
             }
 
             if (viewModel.SearchResultProviderCount > 0 &&
