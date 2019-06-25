@@ -17,6 +17,10 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.EmailHistory, o => o.Ignore())
                 ;
 
+            CreateMap<OpportunityItemDto, OpportunityItem>()
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                ;
+
             CreateMap<ReferralDto, Referral>()
                 .ForMember(m => m.OpportunityItemId, o => o.Ignore())
                 .ForMember(m => m.OpportunityItem, o => o.Ignore())
@@ -50,6 +54,14 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<Opportunity, OpportunityDto>()
+                //.ForPath(m => m.RouteName, opt => opt.MapFrom(source => source.Route.Name))
+                //.ForPath(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()))
+                //.ForPath(m => m.OpportunityType,
+                //    opt => opt.MapFrom(source => source.Referral.Any() ?
+                //        OpportunityType.Referral : OpportunityType.ProvisionGap))
+                ;
+
+            CreateMap<OpportunityItem, OpportunityItemDto>()
                 //.ForPath(m => m.RouteName, opt => opt.MapFrom(source => source.Route.Name))
                 //.ForPath(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()))
                 //.ForPath(m => m.OpportunityType,
