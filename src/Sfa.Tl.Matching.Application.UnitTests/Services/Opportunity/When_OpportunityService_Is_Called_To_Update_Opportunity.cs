@@ -11,13 +11,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
-    public class When_OpportunityService_Is_Called_To_Update_Proximity_Search
+    public class When_OpportunityService_Is_Called_To_Update_Opportunity
     {
         private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
 
         private const int OpportunityId = 1;
 
-        public When_OpportunityService_Is_Called_To_Update_Proximity_Search()
+        public When_OpportunityService_Is_Called_To_Update_Opportunity()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
