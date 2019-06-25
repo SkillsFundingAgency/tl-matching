@@ -18,10 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 
             var opportunityDto = new OpportunityDto
             {
-                RouteId = 1,
-                Postcode = Postcode,
-                SearchRadius = 4,
-                EmployerId = 5,
+                EmployerId = null,
                 EmployerContact = EmployerContact,
             };
 
