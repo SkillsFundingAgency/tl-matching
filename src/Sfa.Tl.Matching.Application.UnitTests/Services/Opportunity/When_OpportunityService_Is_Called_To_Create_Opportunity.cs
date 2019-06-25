@@ -15,20 +15,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private readonly int _result;
         private const int OpportunityId = 1;
 
+        private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
+
         public When_OpportunityService_Is_Called_To_Create_Opportunity()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
             
-            var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
+            _opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
                 .Returns(OpportunityId);
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository);
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository);
 
             var dto = new OpportunityDto
             {
@@ -36,6 +38,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             };
 
             _result = opportunityService.CreateOpportunity(dto).GetAwaiter().GetResult();
+        }
+
+        [Fact]
+        public void Then_OpportunityItemRepository_Create_Is_Called_Exactly_Once()
+        {
+            _opportunityRepository
+                .Received(1)
+                .Create(Arg.Is<Domain.Models.Opportunity>(opportunity => 
+                    opportunity.EmployerContact == "EmployerContact"
+            ));
         }
 
         [Fact]
