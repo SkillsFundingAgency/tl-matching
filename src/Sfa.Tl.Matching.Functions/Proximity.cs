@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Functions
                 await functionlogRepository.Create(new FunctionLog
                 {
                     ErrorMessage = errormessage,
-                    FunctionName = nameof(QualificationSearchColumns),
+                    FunctionName = nameof(BackFillPostTown),
                     RowNumber = -1
                 });
                 throw;
