@@ -6,6 +6,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     public class PlacementInformationSaveViewModel
     {
         public int OpportunityId { get; set; }
+        public int OpportunityItemId { get; set; }
 
         [MinLength(2, ErrorMessage = "You must enter a job role using 2 or more characters")]
         [MaxLength(99, ErrorMessage = "You must enter a job role using 99 characters or less")]
