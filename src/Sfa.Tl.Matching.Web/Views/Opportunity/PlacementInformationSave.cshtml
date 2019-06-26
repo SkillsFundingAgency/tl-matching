@@ -8,6 +8,7 @@
     <a class="govuk-back-link"
        asp-route="ProviderResults_Get"
        asp-route-opportunityId="@Model.OpportunityId"
+       asp-route-opportunityItemId="@Model.OpportunityItemId"
        asp-route-searchRadius="@Model.SearchRadius"
        asp-route-Postcode="@Model.Postcode"
        asp-route-SelectedRouteId="@Model.RouteId">Back</a>
@@ -19,6 +20,7 @@
 
 <form asp-route="PlacementInformationSave_Post" novalidate>
     <input asp-for="OpportunityId" type="hidden" />
+    <input asp-for="OpportunityItemId" type="hidden" />
     <input asp-for="OpportunityType" type="hidden" />
     <input asp-for="SearchResultProviderCount" type="hidden" />
     <input asp-for=" CompanyName" type="hidden" />

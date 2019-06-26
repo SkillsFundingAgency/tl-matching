@@ -12,6 +12,7 @@
        asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
        asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
        asp-route-OpportunityId="@Model.SearchParameters.OpportunityId"
+       asp-route-OpportunityItemId="@Model.SearchParameters.OpportunityItemId"
        class="govuk-link" id="tl-search-nosuitable">No suitable providers? Let us know</a>.
 </p>
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
@@ -23,6 +24,7 @@
     <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden" />
     <input asp-for="SearchResults.SearchResultProviderCount" name="SearchResultProviderCount" type="hidden" />
     <input asp-for="SearchParameters.OpportunityId" name="OpportunityId" type="hidden" />
+    <input asp-for="SearchParameters.OpportunityItemId" name="OpportunityItemId" type="hidden" />
     <ol class="tl-search-results">
         @for (var i = 0; i < Model.SearchResults.SearchResultProviderCount; i++)
         {
@@ -33,7 +35,7 @@
                     <div class="govuk-checkboxes__item">
                         <input type="hidden" asp-for="@searchResult.Distance" name="SelectedProvider[@i].DistanceFromEmployer" />
                         <input type="hidden" asp-for="@searchResult.ProviderVenueId" name="SelectedProvider[@i].ProviderVenueId" />
-                        
+
                         @* DO NOT DELETE - asp-for needs to be Model.SearchResults.Results[i].IsSelected *@
                         <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" />
                         <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected">
