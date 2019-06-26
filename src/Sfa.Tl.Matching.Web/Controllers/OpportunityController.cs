@@ -119,7 +119,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(viewModel);
 
             var dto = _mapper.Map<PlacementInformationSaveDto>(viewModel);
-            await _opportunityService.UpdateOpportunity(dto);
+            await _opportunityService.UpdateOpportunityItemAsync(dto);
 
             var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityId);
             var opportunityCount = await _opportunityService.GetOpportunityItemCountAsync(viewModel.OpportunityId);

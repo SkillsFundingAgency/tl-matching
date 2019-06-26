@@ -64,9 +64,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_UpdateOpportunity_Is_Called_With_Expected_Field_Values()
+        public void Then_UpdateOpportunityItem_Is_Called_With_Expected_Field_Values()
         {
-            _opportunityService.Received(1).UpdateOpportunity(Arg.Is<PlacementInformationSaveDto>(
+            _opportunityService
+                .Received(1)
+                .UpdateOpportunityItemAsync(Arg.Is<PlacementInformationSaveDto>(
                 p => p.OpportunityId == 1 &&
                     p.JobRole == "Junior Tester" &&
                     p.PlacementsKnown.HasValue &&
