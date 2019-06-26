@@ -109,14 +109,44 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId)
         {
-            var opportunityBasket = await (from o in _dbContext.Opportunity
-                where o.Id == opportunityId
-                select new OpportunityBasketViewModel
-                {
-                    Id = o.Id,
-                    ReferralCount = o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.Referral.ToString()),
-                    ProvisionGapCount = o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString())
-                }).SingleOrDefaultAsync();
+            var opportunityBasket = await (from o in _dbContext.Opportunity.Include(o => o.OpportunityItem).ThenInclude(oi => oi.ProvisionGap)
+                                           join e in _dbContext.Employer
+                                               on o.EmployerId equals e.Id
+                                           where o.Id == opportunityId
+                                           select new OpportunityBasketViewModel
+                                           {
+                                               Id = o.Id,
+                                               CompanyName = e.CompanyName,
+                                               ReferralCount =
+                                                   o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.Referral.ToString()),
+                                               ProvisionGapCount =
+                                                   o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()),
+                                               ProvisionGapItems = o.OpportunityItem
+                                                   .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString())
+                                                   .Select(oi => new BasketProvisionGapItemViewModel
+                                                   {
+                                                       OpportunityItemId = oi.Id,
+                                                       JobRole = oi.JobTitle,
+                                                       StudentsWanted = oi.Placements.ToString(),
+                                                       Workplace = e.Postcode, // TODO Get town
+                                                       Reason = oi.ProvisionGap.First().HadBadExperience.HasValue
+                                                                    && oi.ProvisionGap.First().HadBadExperience.Value ? "Had Bad Experience" :
+                                                                oi.ProvisionGap.First().NoSuitableStudent.HasValue
+                                                                    && oi.ProvisionGap.First().NoSuitableStudent.Value ? "No Suitable Student" :
+                                                                oi.ProvisionGap.First().ProvidersTooFarAway.HasValue
+                                                                    && oi.ProvisionGap.First().ProvidersTooFarAway.Value ? "Providers Too Far Away" : "",
+                                                   }).ToList(),
+                                               ReferralItems = o.OpportunityItem
+                                                   .Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString())
+                                                   .Select(oi => new BasketReferralItemViewModel
+                                                   {
+                                                       OpportunityItemId = oi.Id,
+                                                       JobRole = oi.JobTitle,
+                                                       Workplace = e.Postcode, // TODO Get town
+                                                       StudentsWanted = oi.Placements.ToString(),
+                                                       Providers = oi.Referral.Count
+                                                   }).ToList(),
+                                           }).SingleOrDefaultAsync();
 
             return opportunityBasket;
         }

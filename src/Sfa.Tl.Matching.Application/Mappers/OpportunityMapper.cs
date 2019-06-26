@@ -171,33 +171,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
                 .ForAllOtherMembers(config => config.Ignore());
-
-            CreateMap<Opportunity, OpportunityBasketViewModel>()
-                .ForMember(m => m.Id, o =>
-                    o.MapFrom(s => s.Id))
-                //.ForMember(m => m.CompanyName, o => 
-                //    o.MapFrom(s => s.EmployerName)) // TODO This will come from Employer table and not Opportunity when DB changes are in
-                .ForMember(m => m.Type, config =>
-                    config.MapFrom(s => GetOpportunityBasketType(s.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.Referral.ToString()),
-                        s.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()))))
-                .ForAllOtherMembers(config => config.Ignore())
-                ;
-        }
-
-        private static OpportunityBasketType GetOpportunityBasketType(int referralCount, int provisionGapCount)
-        {
-            if (referralCount == 1 && provisionGapCount == 0)
-                return OpportunityBasketType.ReferralSingleOnly;
-            if (referralCount == 0 && provisionGapCount > 0)
-                return OpportunityBasketType.ProvisionGapOnly;
-            if (referralCount > 0 && provisionGapCount == 0)
-                return OpportunityBasketType.ReferralMultipleOnly;
-            if (referralCount == 1 && provisionGapCount > 0)
-                return OpportunityBasketType.ReferralSingleAndProvisionGap;
-            if (referralCount > 1 && provisionGapCount > 0)
-                return OpportunityBasketType.ReferralMultipleAndProvisionGap;
-
-            return OpportunityBasketType.ReferralSingleOnly;
         }
     }
 }
