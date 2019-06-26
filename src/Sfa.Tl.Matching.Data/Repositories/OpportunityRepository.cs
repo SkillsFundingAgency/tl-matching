@@ -124,7 +124,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        OpportunityItemId = oi.Id,
                                                        JobRole = oi.JobRole,
                                                        StudentsWanted = oi.Placements.ToString(),
-                                                       Workplace = e.Postcode, // TODO Get town
+                                                       Workplace = $"London {e.Postcode}",
                                                        Reason = oi.ProvisionGap.First().HadBadExperience.HasValue
                                                                     && oi.ProvisionGap.First().HadBadExperience.Value ? "Had Bad Experience" :
                                                                 oi.ProvisionGap.First().NoSuitableStudent.HasValue
@@ -138,7 +138,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                    {
                                                        OpportunityItemId = oi.Id,
                                                        JobRole = oi.JobRole,
-                                                       Workplace = e.Postcode, // TODO Get town
+                                                       Workplace = $"London {e.Postcode}",
                                                        StudentsWanted = oi.Placements.ToString(),
                                                        Providers = oi.Referral.Count
                                                    }).ToList(),
