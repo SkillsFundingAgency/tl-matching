@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
                 //.ForPath(m => m.OpportunityType,
                 //    opt => opt.MapFrom(source => source.Referral.Any() ?
-                //        OpportunityType.Referral : OpportunityType.ProvisionGap))
+                //        OpportunityType.Referral : OpportunityType.ProvisionGapSingle))
                 .ForMember(m => m.OpportunityType, config =>
                     config.MapFrom(s => ((OpportunityType)Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))

@@ -1,4 +1,5 @@
-﻿@using Sfa.Tl.Matching.Models.Enums
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding.Validation
+@using Sfa.Tl.Matching.Models.Enums
 @model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketViewModel
 
 @{
@@ -21,33 +22,35 @@
         }
         <span class="govuk-caption-l"> @Model.CompanyName</span>
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        
+
         <form asp-route="AddOpportunity">
             <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm">
                 Add another opportunity
             </button>
         </form>
-        
-        @if (Model.ReferralCount > 0 || Model.ProvisionGapCount > 0)
-        {
-            switch (Model.Type)
+        <form asp-route="SaveSelectedOpportunities" novalidate>
+
+            @if (Model.ReferralCount > 0 || Model.ProvisionGapCount > 0)
             {
-                case OpportunityBasketType.ReferralSingleOnly:
-                    <partial name="_basketReferralSingle", model="Model.ReferralItems[0]" />
-                    break;
-                case OpportunityBasketType.ProvisionGapOnly:
-                    <form>
-                        <partial name="_basketProvisionGap", model="Model.ProvisionGapItems" />
-                        <button class="govuk-button">Finish</button>
-                    </form>
-                    break;
-                case OpportunityBasketType.ReferralMultipleOnly:
-                    <partial name="_basketReferralMultiple", model="Model.ReferralItems" />
-                    break;
-                default:
-                    <partial name="_basketTabs", model="Model" />
-                    break;
+                switch (Model.Type)
+                {
+                    case OpportunityBasketType.ReferralSingle:
+                        <partial name="_basketReferralSingle" , model="Model.ReferralItems[0]" />
+                        break;
+                    case OpportunityBasketType.ProvisionGapSingle:
+                        <partial name="_basketProvisionGapSingle" , model="Model.ProvisionGapItems" />
+                        break;
+                    case OpportunityBasketType.ReferralMultipl:
+                        <partial name="_basketReferralMultiple" , model="Model.ReferralItems" />
+                        break;
+                    case OpportunityBasketType.MultipleReferralAndProvisionGap:
+                    case OpportunityBasketType.SingleReferralAndProvisionGap:
+                        <partial name="_basketTabs" , model="Model" />
+                        break;
+                    default:
+                        throw new NotImplementedException("Selected Employer Opprtunity Scenario is not implemented");
+                }
             }
-        }
+        </form>
     </div>
 </div>

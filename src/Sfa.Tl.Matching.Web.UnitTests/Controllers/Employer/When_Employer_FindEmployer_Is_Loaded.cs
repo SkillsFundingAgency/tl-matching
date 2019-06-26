@@ -55,23 +55,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_OpportunityId_Is_Set()
+        public void Then_FindEmployerViewModel_Has_All_Data_Item_Set_Correctly()
         {
             var viewModel = _result.GetViewModel<FindEmployerViewModel>();
             viewModel.OpportunityId.Should().Be(OpportunityId);
-        }
-
-        [Fact]
-        public void Then_EmployerId_Is_Set()
-        {
-            var viewModel = _result.GetViewModel<FindEmployerViewModel>();
             viewModel.SelectedEmployerId.Should().Be(EmployerId);
-        }
-
-        [Fact]
-        public void Then_CompanyName_Is_Populated()
-        {
-            var viewModel = _result.GetViewModel<FindEmployerViewModel>();
             viewModel.CompanyName.Should().Be(CompanyName);
         }
     }

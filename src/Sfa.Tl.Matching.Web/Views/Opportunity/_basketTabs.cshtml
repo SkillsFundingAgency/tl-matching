@@ -17,7 +17,7 @@
 
     <section class="govuk-tabs__panel" id="providers">
         <p>
-            @if (Model.Type == OpportunityBasketType.ReferralSingleOnly)
+            @if (Model.ReferralCount == 1)
             {
                 <partial name="_basketReferralSingle" , model="Model.ReferralItems[0]" />
             }
@@ -28,11 +28,8 @@
         </p>
     </section>
     <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="no-providers">
-        <form>
-            <p>
-                <partial name="_basketProvisionGap" , model="Model.ProvisionGapItems" />
-            </p>
-        </form>
-
+        <p>
+            <partial name="_basketProvisionGap" , model="Model.ProvisionGapItems" />
+        </p>
     </section>
 </div>

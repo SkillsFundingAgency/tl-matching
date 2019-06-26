@@ -50,12 +50,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
+        public void Then_Result_Is_Not_Null()
+        {
             _result.Should().NotBeNull();
+        }
 
         [Fact]
-        public void Then_View_Result_Is_Returned() =>
+        public void Then_View_Result_Is_Returned()
+        {
             _result.Should().BeAssignableTo<ViewResult>();
+        }
 
         [Fact]
         public void Then_Model_Is_Not_Null()
@@ -65,30 +69,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_OpportunityId_Is_Set()
+        public void Then_EmployerDetailsViewModel_Has_All_Data_Item_Set_Correctly()
         {
             var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
+
             viewModel.OpportunityId.Should().Be(OpportunityId);
-        }
-
-        [Fact]
-        public void Then_EmployerName_Is_Populated()
-        {
-            var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
             viewModel.EmployerName.Should().Be(CompanyName);
-        }
-
-        [Fact]
-        public void Then_EmployerContactPhone_Is_Populated()
-        {
-            var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
             viewModel.EmployerContactPhone.Should().Be(EmployerContactPhone);
-        }
-
-        [Fact]
-        public void Then_EmployerContactEmail_Is_Populated()
-        {
-            var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
             viewModel.EmployerContactEmail.Should().Be(EmployerContactEmail);
         }
 

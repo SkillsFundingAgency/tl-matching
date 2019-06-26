@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_ViewModel_Is_Correct()
         {
-            _result.Type.Should().Be(OpportunityBasketType.ReferralSingleOnly);
+            _result.Type.Should().Be(OpportunityBasketType.ReferralSingle);
             _result.CompanyName.Should().Be("CompanyName");
         }
     }

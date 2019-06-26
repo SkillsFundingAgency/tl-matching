@@ -9,6 +9,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string CompanyName { get; set; }
 
         public int ReferralCount => ReferralItems?.Count ?? 0;
+
         public int ProvisionGapCount => ProvisionGapItems?.Count ?? 0;
         
         public IList<BasketReferralItemViewModel> ReferralItems { get; set; }

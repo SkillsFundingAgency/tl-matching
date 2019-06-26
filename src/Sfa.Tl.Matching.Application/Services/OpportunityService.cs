@@ -246,17 +246,17 @@ namespace Sfa.Tl.Matching.Application.Services
         private static OpportunityBasketType GetOpportunityBasketType(OpportunityBasketViewModel viewModel)
         {
             if (viewModel.ReferralCount == 1 && viewModel.ProvisionGapCount == 0)
-                return OpportunityBasketType.ReferralSingleOnly;
+                return OpportunityBasketType.ReferralSingle;
             if (viewModel.ReferralCount == 0 && viewModel.ProvisionGapCount > 0)
-                return OpportunityBasketType.ProvisionGapOnly;
+                return OpportunityBasketType.ProvisionGapSingle;
             if (viewModel.ReferralCount > 0 && viewModel.ProvisionGapCount == 0)
-                return OpportunityBasketType.ReferralMultipleOnly;
+                return OpportunityBasketType.ReferralMultipl;
             if (viewModel.ReferralCount == 1 && viewModel.ProvisionGapCount > 0)
-                return OpportunityBasketType.ReferralSingleAndProvisionGap;
+                return OpportunityBasketType.SingleReferralAndProvisionGap;
             if (viewModel.ReferralCount > 1 && viewModel.ProvisionGapCount > 0)
-                return OpportunityBasketType.ReferralMultipleAndProvisionGap;
+                return OpportunityBasketType.MultipleReferralAndProvisionGap;
 
-            return OpportunityBasketType.ReferralSingleOnly;
+            return OpportunityBasketType.ReferralSingle;
         }
     }
 }

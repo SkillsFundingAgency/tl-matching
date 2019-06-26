@@ -198,10 +198,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("continue-opportunity", Name = "ContinueOpportunity")]
-        public async Task<IActionResult> OpportunityBasket(ContinueOpportunityViewModel viewModel)
+        [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
+        public IActionResult SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
-            return View();
+            return View("EmployerConsent");
         }
 
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)
