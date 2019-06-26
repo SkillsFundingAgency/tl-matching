@@ -17,25 +17,23 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     public class When_OpportunityService_Is_Called_To_Get_Opportunity_Basket_ReferralSingleOnly
     {
         private readonly OpportunityBasketViewModel _result;
-        private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
+        private readonly IOpportunityRepository _opportunityRepository;
 
         public When_OpportunityService_Is_Called_To_Get_Opportunity_Basket_ReferralSingleOnly()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
 
-            _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            _opportunityRepository = Substitute.For<IOpportunityRepository>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            var opportunity = new OpportunityBuilder()
+            var viewModel = new OpportunityBasketViewModelBuilder()
                 .AddReferralItem()
                 .Build();
 
-            _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(),
-                    Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>())
-                .Returns(opportunity);
+            _opportunityRepository.GetOpportunityBasket(1).Returns(viewModel);
 
             var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository);
 
@@ -44,19 +42,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         [Fact]
-        public void Then_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_GetOpportunityBasket_Is_Called_Exactly_Once()
         {
             _opportunityRepository
                 .Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(),
-                    Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>());
+                .GetOpportunityBasket(1);
         }
 
         [Fact]
         public void Then_ViewModel_Is_Correct()
         {
             _result.Type.Should().Be(OpportunityBasketType.ReferralSingleOnly);
-            // TODO FIX _result.CompanyName.Should().Be("CompanyName");
+            _result.CompanyName.Should().Be("CompanyName");
         }
     }
 }
