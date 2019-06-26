@@ -11,6 +11,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
             CreateMap<CheckAnswersPlacementViewModel, CheckAnswersDto>()
                 .ForMember(m => m.ConfirmationSelected, opt => opt.Ignore())
                 .ForMember(m => m.OpportunityId, opt => opt.Ignore())
+                .ForMember(m => m.OpportunityItemId, opt => opt.Ignore())
                 .ForMember(m => m.ModifiedBy, o => o.Ignore())
                 .ForMember(m => m.ModifiedOn, o => o.Ignore())
                 ;

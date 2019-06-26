@@ -3,7 +3,6 @@ using AutoMapper;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
-using Sfa.Tl.Matching.Models.ViewModel;
 using System.Linq;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 
@@ -51,7 +50,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CreatedOn, o => o.Ignore())
                 .ForMember(m => m.ModifiedOn, o => o.Ignore())
                 .ForMember(m => m.ModifiedBy, o => o.Ignore())
-
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 
@@ -133,21 +131,23 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
 
-            CreateMap<Opportunity, PlacementInformationSaveDto>()
-                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))
-                //.ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
-                //.ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
-                //.ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
-                //.ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
-                //.ForMember(m => m.CompanyName, o => o.MapFrom(s => s.EmployerName))
-                //.ForPath(m => m.OpportunityType, 
-                //    opt => opt.MapFrom(source => source.Referral.Any() ? 
-                //        OpportunityType.Referral : OpportunityType.ProvisionGap))
-                //.ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
-                //.ForMember(m => m.Placements,
-                //    opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ?
-                //        src.Placements : null))
-                //.ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
+            CreateMap<OpportunityItem, PlacementInformationSaveDto>()
+                .ForMember(m => m.OpportunityItemId, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
+                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
+                .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
+                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
+                .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
+                //TODO: Will need to map path via Opportunity and Employer
+                //.ForPath(m => m.CompanyName,
+                //    opt => opt.MapFrom(source => source.Opportunity.Employer?.CompanyName))
+                .ForMember(m => m.OpportunityType, config =>
+                    config.MapFrom(s => ((OpportunityType)Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
+                .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                .ForMember(m => m.Placements,
+                    opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ?
+                        src.Placements : null))
+                .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());

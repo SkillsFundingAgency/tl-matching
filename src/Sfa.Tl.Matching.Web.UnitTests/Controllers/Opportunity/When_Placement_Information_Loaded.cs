@@ -23,7 +23,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private const string CompanyName = "CompanyName";
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
-        private const int OpportunityId = 12;
+        private const int OpportunityId = 1;
+        private const int OpportunityItemId = 12;
 
         public When_Placement_Information_Loaded()
         {
@@ -41,19 +42,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetPlacementInformationSave(OpportunityId).Returns(_dto);
+            _opportunityService.GetPlacementInformationSaveAsync(OpportunityItemId).Returns(_dto);
 
             var referralService = Substitute.For<IReferralService>();
 
             var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
 
-            _result = opportunityController.PlacementInformationSave(OpportunityId).GetAwaiter().GetResult();
+            _result = opportunityController.PlacementInformationSave(OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetPlacementInformationSave_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetPlacementInformationSave(OpportunityId);
+            _opportunityService.Received(1).GetPlacementInformationSaveAsync(OpportunityItemId);
         }
 
         [Fact]

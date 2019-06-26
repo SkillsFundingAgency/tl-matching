@@ -13,11 +13,12 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 //    opt => opt.MapFrom(src => src.SearchResultProviderCount > 0))
                 //.ForMember(m => m.NoResults,
                 //    opt => opt.MapFrom(src => src.SearchResultProviderCount == 0))
-                .ForMember(m => m.EmployerCrmRecord, opt => opt.Ignore())
+                .ForAllOtherMembers(config => config.Ignore())
                 ;
 
             CreateMap<OpportunityDto, EmailsSentViewModel>()
                 .ForMember(m => m.EmployerCrmRecord, opt => opt.Ignore())
+                .ForAllOtherMembers(config => config.Ignore())
                 ;
         }
     }

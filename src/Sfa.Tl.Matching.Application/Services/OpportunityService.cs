@@ -143,17 +143,15 @@ namespace Sfa.Tl.Matching.Application.Services
                      ).AnyAsync();
         }
 
-        public async Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id)
+        public async Task<PlacementInformationSaveDto> GetPlacementInformationSaveAsync(int opportunityItemId)
         {
-            var placementInformation = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id
+            var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId
                 // TODO Get Route data
                 //, opp => opp.Route,
-                //TODO: Referral only included so we can map OpportunityType,
-                //      probably won't need it when data is refactored
-                //opp => opp.Referral
+                //TODO: Include Opportunity and Employer
                 );
 
-            var dto = _mapper.Map<Opportunity, PlacementInformationSaveDto>(placementInformation);
+            var dto = _mapper.Map<OpportunityItem, PlacementInformationSaveDto>(placementInformation);
 
             return dto;
         }

@@ -9,6 +9,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
         public EmployerDtoMapper()
         {
             CreateMap<FindEmployerViewModel, EmployerNameDto>()
+                .ForMember(m => m.OpportunityItemId, opt => opt.Ignore())
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<FindEmployerViewModel, EmployerNameDto>>())
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<FindEmployerViewModel, EmployerNameDto>>())
                 .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.SelectedEmployerId))
@@ -17,6 +18,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 ;
 
             CreateMap<EmployerDetailsViewModel, EmployerDetailDto>()
+                .ForMember(m => m.OpportunityItemId, opt => opt.Ignore())
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<EmployerDetailsViewModel, EmployerDetailDto>>())
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<EmployerDetailsViewModel, EmployerDetailDto>>())
                 ;
@@ -32,6 +34,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
             CreateMap<OpportunityDto, EmployerDetailsViewModel>()
                 .ForMember(m => m.OpportunityId,
                     o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.EmployerName, o => o.Ignore())
                 ;
 
             CreateMap<OpportunityDto, FindEmployerViewModel>()
