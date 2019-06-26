@@ -189,6 +189,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("add-opportunity", Name = "AddOpportunity")]
+        public IActionResult AddOpportunity()
+        {
+            return RedirectToRoute("Providers_Get");
+        }
+
+        [HttpPost]
         [Route("continue-opportunity", Name = "ContinueOpportunity")]
         public async Task<IActionResult> OpportunityBasket(ContinueOpportunityViewModel viewModel)
         {

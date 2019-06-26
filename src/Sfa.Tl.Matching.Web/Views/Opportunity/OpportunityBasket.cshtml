@@ -21,10 +21,13 @@
         }
         <span class="govuk-caption-l"> @Model.CompanyName</span>
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        <button type="submit" class="govuk-button tl-button--grey">
-            Add another opportunity
-        </button>
-
+        
+        <form asp-route="AddOpportunity">
+            <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm">
+                Add another opportunity
+            </button>
+        </form>
+        
         @if (Model.ReferralItems?.Count > 0 || Model.ProvisionGapItems?.Count > 0)
         {
             switch (Model.Type)
