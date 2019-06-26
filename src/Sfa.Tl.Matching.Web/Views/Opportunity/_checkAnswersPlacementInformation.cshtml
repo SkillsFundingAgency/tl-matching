@@ -4,7 +4,7 @@
     <caption class="govuk-table__caption govuk-heading-m">Placement information</caption>
     <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="row">Type of placement</th>
+            <th class="govuk-table__header" scope="row">Skill area</th>
             <td class="govuk-table__cell">
                 @Model.RouteName
             </td>
@@ -41,7 +41,7 @@
             </td>
         </tr>
         <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="row">Number of placements</th>
+            <th class="govuk-table__header" scope="row">Students wanted</th>
             <td class="govuk-table__cell">
                 @if (Model.PlacementsKnown.HasValue && Model.PlacementsKnown.Value)
                 {

@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private const string CreatedBy = "CreatedBy";
         private readonly IActionResult _result;
 
-        private const int OpportunityId = 1;
+        private const int OpportunityItemId = 1;
 
         public When_Recording_Referrals_And_Check_Answers_Is_Loaded()
         {
@@ -36,9 +36,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             };
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetCheckAnswers(OpportunityId).Returns(dto);
+            _opportunityService.GetCheckAnswers(OpportunityItemId).Returns(dto);
 
-            _opportunityService.GetReferrals(OpportunityId).Returns(providers);
+            _opportunityService.GetReferrals(OpportunityItemId).Returns(providers);
 
             var referralService = Substitute.For<IReferralService>();
 
@@ -47,13 +47,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(CreatedBy)
                 .Build();
 
-            _result = controllerWithClaims.CheckAnswersReferrals(OpportunityId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.CheckAnswersReferrals(OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetCheckAnswers_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetCheckAnswers(OpportunityId);
+            _opportunityService.Received(1).GetCheckAnswers(OpportunityItemId);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_CheckAnswersReferralViewModel_Has_All_Data_Items_Set_Correctly()
         {
             var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
-            viewModel.OpportunityId.Should().Be(OpportunityId);
+            viewModel.OpportunityId.Should().Be(OpportunityItemId);
             viewModel.PlacementInformation.EmployerName.Should().Be("EmployerName");
             viewModel.PlacementInformation.EmployerContact.Should().Be("EmployerContact");
             viewModel.PlacementInformation.JobRole.Should().Be("JobRole");

@@ -156,14 +156,12 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<CheckAnswersDto> GetCheckAnswers(int id)
+        public async Task<CheckAnswersDto> GetCheckAnswers(int opportunityItemId)
         {
-            var checkAnswers = await _opportunityRepository.GetSingleOrDefault(o => o.Id == id
-                // TODO Get route data
-                // , opp => opp.Route
-                );
+            var checkAnswers = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
+                opp => opp.Route);
 
-            var dto = _mapper.Map<Opportunity, CheckAnswersDto>(checkAnswers);
+            var dto = _mapper.Map<OpportunityItem, CheckAnswersDto>(checkAnswers);
 
             return dto;
         }

@@ -135,10 +135,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("check-answers/{id?}", Name = "GetCheckAnswersReferrals")]
-        public async Task<IActionResult> CheckAnswersReferrals(int id)
+        [Route("check-answers/{opportunityItemId}", Name = "GetCheckAnswersReferrals")]
+        public async Task<IActionResult> CheckAnswersReferrals(int opportunityItemId)
         {
-            var viewModel = await GetCheckAnswersReferralViewModel(id);
+            var viewModel = await GetCheckAnswersReferralViewModel(opportunityItemId);
 
             return View(viewModel);
         }
@@ -248,10 +248,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 999 or less");
         }
 
-        private async Task<CheckAnswersReferralViewModel> GetCheckAnswersReferralViewModel(int id)
+        private async Task<CheckAnswersReferralViewModel> GetCheckAnswersReferralViewModel(int opportunityItemId)
         {
-            var dto = await _opportunityService.GetCheckAnswers(id);
-            var providersForReferral = _opportunityService.GetReferrals(id);
+            var dto = await _opportunityService.GetCheckAnswers(opportunityItemId);
+            var providersForReferral = _opportunityService.GetReferrals(opportunityItemId);
 
             var viewModel = _mapper.Map<CheckAnswersReferralViewModel>(dto);
             viewModel.Providers = _mapper.Map<List<ReferralsViewModel>>(providersForReferral);
