@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchRadius = SearchParametersViewModel.DefaultSearchRadius
             };
 
-            return GetIndexViewAsync(viewModel);
+            return View(nameof(Index), GetSearchParametersViewModelAsync(viewModel));
         }
 
         [HttpPost]
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             viewModel.SearchRadius = SearchParametersViewModel.DefaultSearchRadius;
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
             {
-                return GetIndexViewAsync(viewModel);
+                return View(nameof(Index), GetSearchParametersViewModelAsync(viewModel));
             }
 
             return RedirectToRoute("ProviderResults_Get", new SearchParametersViewModel
@@ -119,11 +119,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
 
             return View(nameof(Results), searchViewModel);
-        }
-
-        private IActionResult GetIndexViewAsync(SearchParametersViewModel viewModel)
-        {
-            return View(nameof(Index), GetSearchParametersViewModelAsync(viewModel));
         }
 
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)

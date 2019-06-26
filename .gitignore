@@ -290,6 +290,8 @@ __pycache__/
 
 #Include Database publish xml file so that we can use it during the build and deploy
 !Sfa.Tl.Matching.Database.publish.xml
+!Sfa.Tl.Matching.Database.Local.publish.xml
+!Sfa.Tl.Matching.Database.Local.Int.Test.publish.xml
 
 # Azure Functions localsettings file
 **/*.Functions/local.settings.json

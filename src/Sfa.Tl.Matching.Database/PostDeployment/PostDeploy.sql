@@ -9,4 +9,5 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Seed Email Templates.sql"
 :r ".\Migrate Opportunity Data.sql"
 :r ".\Update Date Columns to UTC.sql"
+:r ".\Add Employer ForeignKey.sql"
 
