@@ -18,7 +18,7 @@ BEGIN
 	SET IDENTITY_INSERT dbo.OpportunityItem ON;  
 
 	INSERT INTO OpportunityItem
-	([Id], [OpportunityId], [RouteId], [OpportunityType], [Postcode], [SearchRadius], [SearchResultProviderCount], [JobTitle], [PlacementsKnown], [Placements], [IsSaved],				 [IsSelectedForReferral], [IsCompleted], [CreatedOn], [CreatedBy], [ModifiedOn], [ModifiedBy])	
+	([Id], [OpportunityId], [RouteId], [OpportunityType], [Postcode], [SearchRadius], [SearchResultProviderCount], [JobRole], [PlacementsKnown], [Placements], [IsSaved],				 [IsSelectedForReferral], [IsCompleted], [CreatedOn], [CreatedBy], [ModifiedOn], [ModifiedBy])	
 	SELECT 
 	[Id],  [Id],            [RouteId], 'Referral',        [Postcode], [SearchRadius], [SearchResultProviderCount], [JobTitle], [PlacementsKnown], [Placements], case [ConfirmationSelected] when 1 then 1 else 0 end, case [ConfirmationSelected] when 1 then 1 else 0 end,  case [ConfirmationSelected] when 1 then 1 else 0 end, case when [CreatedOn] < '2019-03-31' then [CreatedOn] else DATEADD(hh, -1, [CreatedOn]) end, [CreatedBy], case when [CreatedOn] < '2019-03-31' then [ModifiedOn] else DATEADD(hh, -1, [ModifiedOn]) end, [ModifiedBy]
 	FROM OLDOpportunity

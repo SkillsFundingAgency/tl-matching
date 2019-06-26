@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     public class When_OpportunityService_Is_Called_To_Save_PlacementInformation_With_Empty_Job_Title
     {
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
-        private const string JobTitle = null;
+        private const string JobRole = null;
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
         private const int OpportunityId = 1;
@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dto = new PlacementInformationSaveDto
             {
                 OpportunityId = OpportunityId,
-                JobTitle = JobTitle,
+                JobRole = JobRole,
                 PlacementsKnown = PlacementsKnown,
                 Placements = Placements
             };
@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityItemRepository.Received(1).Update(Arg.Is<OpportunityItem>(opportunityItem => 
                 opportunityItem.Id == OpportunityId &&
-                opportunityItem.JobTitle == "None given" &&
+                opportunityItem.JobRole == "None given" &&
                 opportunityItem.PlacementsKnown == PlacementsKnown &&
                 opportunityItem.Placements == Placements &&
                 opportunityItem.Postcode == Postcode &&

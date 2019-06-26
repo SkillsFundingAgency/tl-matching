@@ -11,7 +11,7 @@
         public string ProviderVenuePostcode { get; set; }
         public string RouteName { get; set; }
         public short SearchRadius { get; set; }
-        public string JobTitle { get; set; }
+        public string JobRole { get; set; }
         public string Postcode { get; set; }
         public string EmployerName { get; set; }
         public string EmployerContact { get; set; }

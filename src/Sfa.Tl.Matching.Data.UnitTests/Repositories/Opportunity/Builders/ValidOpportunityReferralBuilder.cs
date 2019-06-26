@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                     OpportunityType = OpportunityType.Referral.ToString(),
                     Postcode = "AA1 1AA",
                     SearchRadius = 10,
-                    JobTitle = "Testing Job Title",
+                    JobRole = "Testing Job Title",
                     PlacementsKnown = true,
                     Placements = 3,
                     SearchResultProviderCount = 12,

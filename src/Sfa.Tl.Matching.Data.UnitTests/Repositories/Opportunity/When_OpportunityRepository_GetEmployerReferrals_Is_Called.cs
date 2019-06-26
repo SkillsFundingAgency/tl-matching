@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _result.EmployerContact.Should().BeEquivalentTo("Employer Contact");
             _result.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
             _result.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
-            _result.JobTitle.Should().BeEquivalentTo("Testing Job Title");
+            _result.JobRole.Should().BeEquivalentTo("Testing Job Title");
             _result.Postcode.Should().BeEquivalentTo("AA1 1AA");
             _result.PlacementsKnown.Should().BeTrue();
             _result.Placements.Should().Be(3);

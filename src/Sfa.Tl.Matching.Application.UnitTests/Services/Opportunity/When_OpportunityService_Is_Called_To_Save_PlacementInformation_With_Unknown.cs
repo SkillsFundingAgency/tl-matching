@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     public class When_OpportunityService_Is_Called_To_Save_PlacementInformation_With_Unknown
     {
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
-        private const string JobTitle = "JobTitle";
+        private const string JobRole = "JobRole";
         private const bool PlacementsKnown = false;
         private const int Placements = 5;
         private const int OpportunityItemId = 1;
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dto = new PlacementInformationSaveDto
             {
                 OpportunityId = OpportunityItemId,
-                JobTitle = JobTitle,
+                JobRole = JobRole,
                 PlacementsKnown = PlacementsKnown,
                 Placements = Placements
             };
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityItemRepository.Received(1).Update(Arg.Is<OpportunityItem>(opportunityItem =>
                 opportunityItem.Id == OpportunityItemId &&
-                opportunityItem.JobTitle == JobTitle &&
+                opportunityItem.JobRole == JobRole &&
                 opportunityItem.PlacementsKnown == PlacementsKnown &&
                 opportunityItem.Placements == 1));
         }

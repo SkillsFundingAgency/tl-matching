@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             dto.RouteName.Should().BeEquivalentTo("Test Route");
             dto.SearchRadius.Should().Be(10);
             dto.Postcode.Should().BeEquivalentTo("AA1 1AA");
-            dto.JobTitle.Should().BeEquivalentTo("Testing Job Title");
+            dto.JobRole.Should().BeEquivalentTo("Testing Job Title");
             dto.EmployerName.Should().BeEquivalentTo("Employer");
             dto.EmployerContact.Should().BeEquivalentTo("Employer Contact");
             dto.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");

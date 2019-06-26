@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             SearchRadius = 3,
             RouteId = 1,
             RouteName = "RouteName",
-            JobTitle = "JobTitle",
+            JobRole = "JobRole",
             PlacementsKnown = true,
             Placements = 2,
             Postcode = "AA1 1AA",

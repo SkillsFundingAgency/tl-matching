@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                               EmployerContactEmail = op.EmployerContactEmail,
                               SearchRadius = op.SearchRadius,
                               Postcode = op.Postcode,
-                              JobTitle = op.JobTitle,
+                              JobRole = op.JobRole,
                               ProviderVenuePostcode = pv.Postcode,
                               PlacementsKnown = op.PlacementsKnown,
                               Placements = op.Placements,
@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                               EmployerContactPhone = op.EmployerContactPhone,
                               EmployerContactEmail = op.EmployerContactEmail,
                               Postcode = op.Postcode,
-                              JobTitle = op.JobTitle,
+                              JobRole = op.JobRole,
                               PlacementsKnown = op.PlacementsKnown,
                               Placements = op.Placements,
                               RouteName = r.Name,
@@ -126,7 +126,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                    .Select(oi => new BasketProvisionGapItemViewModel
                                                    {
                                                        OpportunityItemId = oi.Id,
-                                                       JobRole = oi.JobTitle,
+                                                       JobRole = oi.JobRole,
                                                        StudentsWanted = oi.Placements.ToString(),
                                                        Workplace = e.Postcode, // TODO Get town
                                                        Reason = oi.ProvisionGap.First().HadBadExperience.HasValue
@@ -141,7 +141,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                    .Select(oi => new BasketReferralItemViewModel
                                                    {
                                                        OpportunityItemId = oi.Id,
-                                                       JobRole = oi.JobTitle,
+                                                       JobRole = oi.JobRole,
                                                        Workplace = e.Postcode, // TODO Get town
                                                        StudentsWanted = oi.Placements.ToString(),
                                                        Providers = oi.Referral.Count

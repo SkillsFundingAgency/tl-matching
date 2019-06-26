@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 RouteId = 5,
                 Postcode = "AA1 1AA",
                 SearchRadius = 10,
-                JobTitle = "Test Title",
+                JobRole = "Test Title",
                 PlacementsKnown = true,
                 Placements = 3,
                 SearchResultProviderCount = 15,
@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     opportunity.RouteId == 5 &&
                     opportunity.Postcode == "AA1 1AA" &&
                     opportunity.SearchRadius == 10 &&
-                    opportunity.JobTitle == "Test Title" &&
+                    opportunity.JobRole == "Test Title" &&
                     opportunity.PlacementsKnown.HasValue &&
                     opportunity.PlacementsKnown.Value &&
                     opportunity.Placements == 3 &&

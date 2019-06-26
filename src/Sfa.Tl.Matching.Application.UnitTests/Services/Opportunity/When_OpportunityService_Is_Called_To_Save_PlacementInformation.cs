@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     {
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
 
-        private const string JobTitle = "JobTitle";
+        private const string JobRole = "JobRole";
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
         private const int OpportunityItemId = 1;
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dto = new PlacementInformationSaveDto
             {
                 OpportunityId = OpportunityItemId,
-                JobTitle = JobTitle,
+                JobRole = JobRole,
                 PlacementsKnown = PlacementsKnown,
                 Placements = Placements
             };
@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityItemRepository.Received(1).Update(Arg.Is<OpportunityItem>(opportunityItem => 
                 opportunityItem.Id == OpportunityItemId &&
-                opportunityItem.JobTitle == JobTitle &&
+                opportunityItem.JobRole == JobRole &&
                 opportunityItem.PlacementsKnown == PlacementsKnown &&
                 opportunityItem.Placements == Placements &&
                 opportunityItem.Postcode == Postcode &&

@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
-                .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                .ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
                 .ForMember(m => m.Placements,
                     opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ?
                         src.Placements : null))
@@ -101,7 +101,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForPath(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
-                .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                .ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
                 .ForMember(m => m.Placements, o => o.MapFrom(s => s.Placements))
                 .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
@@ -117,7 +117,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 //.ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact))
                 //.ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
                 //.ForMember(m => m.EmployerName, o => o.MapFrom(s => s.EmployerName))
-                //.ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                //.ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
                 //.ForMember(m => m.Placements, o => o.MapFrom(s => s.Placements))
                 //.ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 //.ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
@@ -143,7 +143,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 //.ForPath(m => m.OpportunityType, 
                 //    opt => opt.MapFrom(source => source.Referral.Any() ? 
                 //        OpportunityType.Referral : OpportunityType.ProvisionGap))
-                //.ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                //.ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
                 //.ForMember(m => m.Placements,
                 //    opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ?
                 //        src.Placements : null))
@@ -153,9 +153,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<PlacementInformationSaveDto, OpportunityItem>()
-                .ForMember(m => m.JobTitle,
-                    o => o.MapFrom(s => string.IsNullOrEmpty(s.JobTitle) ?
-                        "None given" : s.JobTitle))
+                .ForMember(m => m.JobRole,
+                    o => o.MapFrom(s => string.IsNullOrEmpty(s.JobRole) ?
+                        "None given" : s.JobRole))
                 .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 .ForMember(m => m.Placements,
                     opt => opt.MapFrom(s => s.PlacementsKnown.HasValue && s.PlacementsKnown.Value ?

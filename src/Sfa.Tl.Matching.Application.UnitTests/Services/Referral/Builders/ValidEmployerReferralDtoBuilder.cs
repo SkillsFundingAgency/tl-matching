@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
             EmployerContact = "Employer Contact",
             EmployerContactPhone = "020 123 4567",
             EmployerContactEmail = "employer.contact@employer.co.uk",
-            JobTitle = "Testing Job Title",
+            JobRole = "Testing Job Title",
             PlacementsKnown = false,
             Placements = 3,
             RouteName = "Agriculture, environmental and animal care",

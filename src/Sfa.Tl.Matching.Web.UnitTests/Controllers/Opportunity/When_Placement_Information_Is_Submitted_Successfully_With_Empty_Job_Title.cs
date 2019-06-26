@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
-                JobTitle = null,
+                JobRole = null,
                 PlacementsKnown = false
             };
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _opportunityService.Received(1).UpdateOpportunity(Arg.Is<PlacementInformationSaveDto>(
                 p => p.OpportunityId ==1 &&
-                     string.IsNullOrEmpty(p.JobTitle)));
+                     string.IsNullOrEmpty(p.JobRole)));
         }
 
         [Fact]

@@ -8,7 +8,7 @@
         public string Postcode { get; set; }
         public short SearchRadius { get; set; }
         public int RouteId { get; set; }
-        public string JobTitle { get; set; }
+        public string JobRole { get; set; }
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
         public string EmployerContact { get; set; }

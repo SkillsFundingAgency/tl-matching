@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string OpportunityType { get; set; }
         public string Postcode { get; set; }
         public short SearchRadius { get; set; }
-        public string JobTitle { get; set; }
+        public string JobRole { get; set; }
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
         public int? SearchResultProviderCount { get; set; }

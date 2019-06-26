@@ -7,7 +7,7 @@
 	[Postcode]					VARCHAR(10) NOT NULL,
 	[SearchRadius]				SMALLINT NOT NULL,
 	[SearchResultProviderCount] INT NULL,
-	[JobTitle]					NVARCHAR(250) NULL,
+	[JobRole]					NVARCHAR(250) NULL,
 	[PlacementsKnown]			BIT NULL,
 	[Placements]				INT NULL,
 	[IsSaved]					BIT NULL DEFAULT 0,

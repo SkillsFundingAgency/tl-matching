@@ -42,4 +42,11 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[QualificationRouteMapping]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="9dc063c8-2094-4e49-b77f-ae07c19c98bd" ChangeDateTime="06/26/2019 08:38:30">
+    <Property Name="ElementName" Value="[dbo].[OpportunityItem].[JobTitle]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OpportunityItem]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="JobRole" />
+  </Operation>
 </Operations>

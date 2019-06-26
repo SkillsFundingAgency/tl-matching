@@ -7,7 +7,7 @@
         public decimal? SearchRadius { get; set; }
         public string Postcode { get; set; }
         public string UserEmail { get; set; }
-        public string JobTitle { get; set; }
+        public string JobRole { get; set; }
         public int? Placements { get; set; }
         public string EmployerName { get; set; }
 

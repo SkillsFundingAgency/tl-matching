@@ -33,7 +33,7 @@
                     </h2>
                     <div class="govuk-error-summary__body">
                         <ul class="govuk-list govuk-error-summary__list">
-                            <li><a sfa-validation-for="JobTitle"></a></li>
+                            <li><a sfa-validation-for="JobRole"></a></li>
                             <li><a href="#placement-location-yes" sfa-validation-for="PlacementsKnown"></a></li>
                             <li><a sfa-validation-for="Placements"></a></li>
                             <li><a sfa-validation-for="NoSuitableStudent"></a></li>
@@ -94,15 +94,15 @@
                 }
             }
 
-            <div class="govuk-form-group" sfa-validation-for="JobTitle" sfa-validationerror-class="govuk-form-group--error">
-                <label class="govuk-label govuk-label--m" asp-for="JobTitle">
+            <div class="govuk-form-group" sfa-validation-for="JobRole" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label govuk-label--m" asp-for="JobRole">
                     What specific job would the placement student do? (optional)
                 </label>
                 <span id="placement-role-hint" class="govuk-hint">
                     For example, admin assistant, care worker, bricklayer
                 </span>
-                <span class="govuk-error-message" asp-validation-for="JobTitle"></span>
-                <input asp-for="JobTitle" class="govuk-input govuk-!-width-one-half" sfa-validation-for="JobTitle" sfa-validationerror-class="govuk-input--error" />
+                <span class="govuk-error-message" asp-validation-for="JobRole"></span>
+                <input asp-for="JobRole" class="govuk-input govuk-!-width-one-half" sfa-validation-for="JobRole" sfa-validationerror-class="govuk-input--error" />
             </div>
 
             <div class="govuk-form-group" sfa-validation-for="PlacementsKnown" sfa-validationerror-class="govuk-form-group--error">

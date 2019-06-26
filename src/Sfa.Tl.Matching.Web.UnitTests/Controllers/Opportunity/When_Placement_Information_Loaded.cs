@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private readonly IOpportunityService _opportunityService;
 
         private readonly PlacementInformationSaveDto _dto = new PlacementInformationSaveDto();
-        private const string JobTitle = "JobTitle";
+        private const string JobRole = "JobRole";
         private const string CompanyName = "CompanyName";
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Placement_Information_Loaded()
         {
             _dto.OpportunityId = OpportunityId;
-            _dto.JobTitle = JobTitle;
+            _dto.JobRole = JobRole;
             _dto.OpportunityType = OpportunityType.Referral;
             _dto.CompanyName = CompanyName;
             _dto.PlacementsKnown = PlacementsKnown;
@@ -76,7 +76,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.OpportunityId.Should().Be(OpportunityId);
-            viewModel.JobTitle.Should().Be(JobTitle);
+            viewModel.JobRole.Should().Be(JobRole);
             viewModel.PlacementsKnown.Should().Be(PlacementsKnown);
             viewModel.Placements.Should().Be(Placements);
             viewModel.OpportunityType.Should().Be(OpportunityType.Referral);

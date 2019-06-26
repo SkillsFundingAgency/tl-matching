@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         [MinLength(2, ErrorMessage = "You must enter a job role using 2 or more characters")]
         [MaxLength(99, ErrorMessage = "You must enter a job role using 99 characters or less")]
-        public string JobTitle { get; set; }
+        public string JobRole { get; set; }
 
         [Required(ErrorMessage = "You must tell us whether the employer knows how many students they want for this job at this location")]
         public bool? PlacementsKnown { get; set; }

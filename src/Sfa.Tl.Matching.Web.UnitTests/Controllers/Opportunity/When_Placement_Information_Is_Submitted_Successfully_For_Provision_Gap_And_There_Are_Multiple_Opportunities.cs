@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             {
                 OpportunityId = 1,
                 OpportunityType = OpportunityType.ProvisionGap,
-                JobTitle = "Junior Tester",
+                JobRole = "Junior Tester",
                 PlacementsKnown = true,
                 Placements = 3,
                 NoSuitableStudent = true
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _opportunityService.Received(1).UpdateOpportunity(Arg.Is<PlacementInformationSaveDto>(
                 p => p.OpportunityId == 1 &&
-                    p.JobTitle == "Junior Tester" &&
+                    p.JobRole == "Junior Tester" &&
                     p.PlacementsKnown.HasValue &&
                     p.PlacementsKnown.Value &&
                     p.Placements == 3
