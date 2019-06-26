@@ -150,14 +150,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(await GetCheckAnswersViewModel(viewModel.OpportunityItemId));
 
-            var opportunityId = 51; // TODO FIX Get the opportunityId
             var dto = _mapper.Map<CheckAnswersDto>(viewModel);
             await _opportunityService.UpdateOpportunity(dto);
 
             await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
             await _referralService.SendProviderReferralEmail(dto.OpportunityId);
 
-            return RedirectToRoute("GetOpportunityBasket", new { id = opportunityId });
+            return RedirectToRoute("GetOpportunityBasket", new { id = dto.OpportunityId });
         }
 
         [HttpGet]
