@@ -90,13 +90,25 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_CreateOpportunity_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().CreateOpportunityAsync(Arg.Any<OpportunityDto>());
+            _opportunityService
+                .DidNotReceive()
+                .CreateOpportunityAsync(Arg.Any<OpportunityDto>());
         }
 
         [Fact]
-        public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
+        public void Then_CreateOpportunityItem_Is_Not_Called()
         {
-            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<ProviderSearchDto>());
+            _opportunityService
+                .DidNotReceive()
+                .CreateOpportunityItemAsync(Arg.Any<OpportunityItemDto>());
+        }
+
+        [Fact]
+        public void Then_UpdateOpportunityItem_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .UpdateOpportunityItemAsync(Arg.Any<ProviderSearchDto>());
         }
 
         [Fact]

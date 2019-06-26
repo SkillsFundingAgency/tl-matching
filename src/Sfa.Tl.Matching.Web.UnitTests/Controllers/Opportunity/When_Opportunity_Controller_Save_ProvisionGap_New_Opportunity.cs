@@ -24,10 +24,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Opportunity_Controller_Save_ProvisionGap_New_Opportunity()
         {
-            const int opportunityId = 1;
-            const int opportunityItemId = 1;
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsNewProvisionGapAsync(opportunityItemId).Returns(true);
+            _opportunityService
+                .IsNewProvisionGapAsync(Arg.Any<int>())
+                .Returns(true);
 
             var referralService = Substitute.For<IReferralService>();
 
@@ -57,7 +57,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             _result = controllerWithClaims.SaveProvisionGap(new SaveProvisionGapViewModel
             {
-                OpportunityId = opportunityId,
+                OpportunityId = 0,
+                OpportunityItemId = 0,
                 SearchResultProviderCount = 0,
                 SelectedRouteId = 1,
                 Postcode = "cv12wt",
@@ -72,9 +73,27 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
+        public void Then_UpdateOpportunityItem_Is_Not_Called()
+        {
+            _opportunityService
+                .DidNotReceive()
+                .UpdateOpportunityItemAsync(Arg.Any<ProviderSearchDto>());
+        }
+
+        [Fact]
         public void Then_CreateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).CreateOpportunityAsync(Arg.Any<OpportunityDto>());
+            _opportunityService
+                .Received(1)
+                .CreateOpportunityAsync(Arg.Any<OpportunityDto>());
+        }
+        
+        [Fact]
+        public void Then_CreateOpportunityItem_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .CreateOpportunityItemAsync(Arg.Any<OpportunityItemDto>());
         }
 
         [Fact]
