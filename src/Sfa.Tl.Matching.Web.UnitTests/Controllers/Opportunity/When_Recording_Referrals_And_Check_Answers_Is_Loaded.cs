@@ -77,7 +77,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
             viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
             viewModel.PlacementInformation.EmployerName.Should().Be("EmployerName");
-            viewModel.PlacementInformation.EmployerContact.Should().Be("EmployerContact");
             viewModel.PlacementInformation.JobRole.Should().Be("JobRole");
             viewModel.PlacementInformation.SearchRadius.Should().Be(3);
             viewModel.PlacementInformation.PlacementsKnown.Should().BeTrue();

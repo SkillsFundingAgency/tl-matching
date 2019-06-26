@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private const string ModifiedBy = "ModifiedBy";
         private const int OpportunityItemId = 1;
 
+        private readonly IOpportunityService _opportunityService;
         private readonly IReferralService _referralService;
         private readonly IActionResult _result;
         private readonly CheckAnswersViewModel _viewModel = new CheckAnswersViewModel
@@ -45,10 +46,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var mapper = new Mapper(config);
 
-            var opportunityService = Substitute.For<IOpportunityService>();
+            _opportunityService = Substitute.For<IOpportunityService>();
             _referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(opportunityService, _referralService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService, _referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(ModifiedBy)
                 .Build();
@@ -65,6 +66,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
             result?.RouteName.Should().Be("GetOpportunityBasket");
             result?.RouteValues["id"].Should().Be(1);
+        }
+
+        [Fact]
+        public void Then_UpdateOpportunityItemAsync_Is_Called_Exactly_Once()
+        {
+            // TODO Assert args
+            _opportunityService.Received(1).UpdateOpportunityItemAsync(Arg.Any<CheckAnswersDto>());
         }
 
         [Fact]

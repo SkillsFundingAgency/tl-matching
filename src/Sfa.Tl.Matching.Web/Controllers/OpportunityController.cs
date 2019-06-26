@@ -151,7 +151,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(await GetCheckAnswersViewModel(viewModel.OpportunityItemId));
 
             var dto = _mapper.Map<CheckAnswersDto>(viewModel);
-            await _opportunityService.UpdateOpportunity(dto);
+            await _opportunityService.UpdateOpportunityItemAsync(dto);
 
             await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
             await _referralService.SendProviderReferralEmail(dto.OpportunityId);

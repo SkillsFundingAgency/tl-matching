@@ -110,7 +110,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<OpportunityItem, CheckAnswersDto>()
-                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
                 // TODO FIX .ForMember(m => m.EmployerName, o => o.MapFrom(s => s.EmployerName))
                 .ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
@@ -123,8 +123,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
 
-            CreateMap<CheckAnswersDto, Opportunity>()
-                //.ForMember(m => m.ConfirmationSelected, o => o.MapFrom(s => s.ConfirmationSelected))
+            CreateMap<CheckAnswersDto, OpportunityItem>()
+                .ForMember(m => m.IsSaved, o => o.MapFrom(s => s.IsSaved))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
