@@ -37,7 +37,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (await _opportunityService.IsNewProvisionGapAsync(viewModel.OpportunityItemId))
             {
-                var opportunityId = await CreateOpportunityAsync(opportunityDto);
+                var opportunityId = viewModel.OpportunityId;
+                if (opportunityId == 0)
+                {
+                    opportunityId = await CreateOpportunityAsync(opportunityDto);
+                }
                 opportunityItemDto.OpportunityId = opportunityId;
                 return await CreateOpportunityItemAsync(opportunityItemDto);
             }
@@ -65,7 +69,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (await _opportunityService.IsNewReferralAsync(saveReferralViewModel.OpportunityItemId))
             {
-                var opportunityId = await CreateOpportunityAsync(opportunityDto);
+                var opportunityId = saveReferralViewModel.OpportunityId;
+                if (opportunityId == 0)
+                {
+                    opportunityId = await CreateOpportunityAsync(opportunityDto);
+                }
                 opportunityItemDto.OpportunityId = opportunityId;
                 return await CreateOpportunityItemAsync(opportunityItemDto);
             }

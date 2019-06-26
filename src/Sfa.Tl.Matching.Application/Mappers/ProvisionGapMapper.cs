@@ -10,8 +10,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
     {
         public ProvisionGapMapper()
         {
-            CreateMap<OpportunityDto, ProvisionGap>()
-                .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityDto, ProvisionGap>>())
+            CreateMap<OpportunityItemDto, ProvisionGap>()
+                .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityItemDto, ProvisionGap>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
         }
