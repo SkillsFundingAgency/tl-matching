@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 Placements = Placements
             };
 
-            opportunityService.UpdateOpportunityItem(dto).GetAwaiter().GetResult();
+            opportunityService.UpdateOpportunityItemAsync(dto).GetAwaiter().GetResult();
         }
 
         [Fact]

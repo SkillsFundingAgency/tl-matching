@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         [Fact]
-        public void Then_OpportunityItemRepository_Create_Is_Called_Exactly_Once()
+        public void Then_OpportunityRepository_Create_Is_Called_Exactly_Once()
         {
             _opportunityRepository
                 .Received(1)
@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     opportunity.CreatedBy == "adminUserName"
             ));
         }
-
+        
         [Fact]
         public void Then_OpportunityId_Is_Created()
         {

@@ -48,13 +48,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var providerSearchDto = new ProviderSearchDto
             {
-                OpportunityId = opportunityItemDto.Id,
+                OpportunityId = opportunityItemDto.OpportunityId,
+                OpportunityItemId = opportunityItemDto.Id,
                 SearchRadius = viewModel.SearchRadius,
                 Postcode = viewModel.Postcode,
                 RouteId = viewModel.SelectedRouteId ?? 0,
                 SearchResultProviderCount = viewModel.SearchResultProviderCount
             };
-            await _opportunityService.UpdateOpportunity(providerSearchDto);
+            await _opportunityService.UpdateOpportunityItemAsync(providerSearchDto);
 
             return RedirectToRoute("PlacementInformationSave_Get", new { id = opportunityItemDto.Id });
         }
@@ -81,12 +82,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var providerSearchDto = new ProviderSearchDto
             {
                 OpportunityId = saveReferralViewModel.OpportunityId,
+                OpportunityItemId = saveReferralViewModel.OpportunityItemId,
                 SearchRadius = saveReferralViewModel.SearchRadius,
                 Postcode = saveReferralViewModel.Postcode,
                 RouteId = saveReferralViewModel.SelectedRouteId ?? 0,
                 SearchResultProviderCount = saveReferralViewModel.SearchResultProviderCount
             };
-            await _opportunityService.UpdateOpportunity(providerSearchDto);
+            await _opportunityService.UpdateOpportunityItemAsync(providerSearchDto);
             await _opportunityService.UpdateReferrals(opportunityDto);
 
             return RedirectToRoute("PlacementInformationSave_Get", new { id = saveReferralViewModel.OpportunityId });
@@ -102,7 +104,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             //TODO: Get these from the back end
             //viewModel.IsReferral = await _opportunityService.IsNewReferral(id);
-            //viewModel.CompanyName = "Test Company Name";
+            //viewModel.CompanyName = "Test Company Name";1
 
             return View(viewModel);
         }

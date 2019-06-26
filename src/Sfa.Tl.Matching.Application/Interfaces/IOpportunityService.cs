@@ -17,6 +17,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<bool> IsReferralOpportunityItemAsync(int id);
         Task<CheckAnswersDto> GetCheckAnswers(int id);
         Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto;
+        Task UpdateOpportunityItemAsync<T>(T dto) where T : BaseOpportunityUpdateDto;
         Task UpdateReferrals(OpportunityDto dto);
         Task<bool> IsNewReferralAsync(int opportunityItemId);
         Task<bool> IsNewProvisionGapAsync(int opportunityItemId);
