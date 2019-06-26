@@ -143,7 +143,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 //    opt => opt.MapFrom(source => source.Opportunity.Employer?.CompanyName))
                 .ForMember(m => m.OpportunityType, config =>
                     config.MapFrom(s => ((OpportunityType)Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
-                .ForMember(m => m.JobTitle, o => o.MapFrom(s => s.JobTitle))
+                .ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
                 .ForMember(m => m.Placements,
                     opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ?
                         src.Placements : null))
