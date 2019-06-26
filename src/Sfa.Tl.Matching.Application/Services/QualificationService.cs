@@ -18,17 +18,17 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Qualification> _qualificationRepository;
-        private readonly IRepository<QualificationRouteMapping> _qualificationRoutePathMappingRepository;
+        private readonly IRepository<QualificationRouteMapping> _qualificationRouteMappingRepository;
         private readonly IRepository<LearningAimReference> _learningAimReferenceRepository;
 
         public QualificationService(IMapper mapper,
             IRepository<Qualification> qualificationRepository,
-            IRepository<QualificationRouteMapping> qualificationRoutePathMappingRepository,
+            IRepository<QualificationRouteMapping> qualificationRouteMappingRepository,
             IRepository<LearningAimReference> learningAimReferenceRepository)
         {
             _mapper = mapper;
             _qualificationRepository = qualificationRepository;
-            _qualificationRoutePathMappingRepository = qualificationRoutePathMappingRepository;
+            _qualificationRouteMappingRepository = qualificationRouteMappingRepository;
             _learningAimReferenceRepository = learningAimReferenceRepository;
         }
 
@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var qualification = _mapper.Map<Qualification>(viewModel);
 
-            var qualificationRoutePathMappings = viewModel
+            var qualificationRouteMappings = viewModel
                 .Routes?
                 .Where(r => r.IsSelected)
                 .Select(route => new QualificationRouteMapping
@@ -46,9 +46,9 @@ namespace Sfa.Tl.Matching.Application.Services
                     Qualification = qualification
                 }).ToList();
 
-            if (qualificationRoutePathMappings?.Count > 0)
+            if (qualificationRouteMappings?.Count > 0)
             {
-                await _qualificationRoutePathMappingRepository.CreateMany(qualificationRoutePathMappings);
+                await _qualificationRouteMappingRepository.CreateMany(qualificationRouteMappings);
             }
 
             return qualification.Id;
@@ -135,7 +135,7 @@ namespace Sfa.Tl.Matching.Application.Services
             qualification = _mapper.Map(viewModel, qualification);
             await _qualificationRepository.Update(qualification);
 
-            var existingMappings = _qualificationRoutePathMappingRepository
+            var existingMappings = _qualificationRouteMappingRepository
                 .GetMany(r => r.QualificationId == viewModel.QualificationId)
                 .ToList();
 
@@ -151,11 +151,11 @@ namespace Sfa.Tl.Matching.Application.Services
                 existingMappings.First(r => r.Id == qrpm.Id);
 
             var deleteMappings = toBeDeleted.Select(Find).ToList();
-            await _qualificationRoutePathMappingRepository.DeleteMany(deleteMappings);
+            await _qualificationRouteMappingRepository.DeleteMany(deleteMappings);
 
             foreach (var toBeAddedItem in toBeAdded)
             {
-                await _qualificationRoutePathMappingRepository.Create(toBeAddedItem);
+                await _qualificationRouteMappingRepository.Create(toBeAddedItem);
             }
         }
 

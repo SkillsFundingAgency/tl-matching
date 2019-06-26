@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 {
     public class When_QualificationService_Is_Called_To_UpdateQualification
     {
-        private readonly IRepository<QualificationRouteMapping> _qualificationRoutePathMappingRepository;
+        private readonly IRepository<QualificationRouteMapping> _qualificationRouteMappingRepository;
         private readonly IRepository<Domain.Models.Qualification> _qualificationRepository;
 
         public When_QualificationService_Is_Called_To_UpdateQualification()
@@ -58,8 +58,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
                 .Returns(new ValidQualificationBuilder().Build());
 
-            _qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
-            _qualificationRoutePathMappingRepository
+            _qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
+            _qualificationRouteMappingRepository
                 .GetMany(Arg.Any<Expression<Func<QualificationRouteMapping, bool>>>())
                 .Returns(new List<QualificationRouteMapping>
                 {
@@ -77,7 +77,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                     }
                 }.AsQueryable());
 
-            var qualificationService = new QualificationService(mapper, _qualificationRepository, _qualificationRoutePathMappingRepository, learningAimReferenceRepository);
+            var qualificationService = new QualificationService(mapper, _qualificationRepository, _qualificationRouteMappingRepository, learningAimReferenceRepository);
 
             //Set up routes 1 and 2 in the database,
             //then 2 and 3 selected in the view model.
@@ -143,7 +143,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         [Fact]
         public void Then_QualificationRouteMappingRepository_GetMany_Is_Called_Exactly_Once()
         {
-            _qualificationRoutePathMappingRepository
+            _qualificationRouteMappingRepository
                 .Received(1)
                 .GetMany(Arg.Any<Expression<Func<QualificationRouteMapping, bool>>>());
         }
@@ -151,7 +151,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         [Fact]
         public void Then_QualificationRouteMappingRepository_Create_Is_Called_With_Expected_Values()
         {
-            _qualificationRoutePathMappingRepository
+            _qualificationRouteMappingRepository
                 .Received(1)
                 .Create(Arg.Is<QualificationRouteMapping>(
                     qrpm => qrpm.QualificationId == 1 &&
@@ -164,7 +164,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         [Fact]
         public void Then_QualificationRouteMappingRepository_DeleteMany_Is_Called_With_Expected_Values()
         {
-            _qualificationRoutePathMappingRepository
+            _qualificationRouteMappingRepository
                 .Received(1)
                 .DeleteMany(Arg.Is<IList<QualificationRouteMapping>>(
                     qrpm => qrpm.Count == 1 &&

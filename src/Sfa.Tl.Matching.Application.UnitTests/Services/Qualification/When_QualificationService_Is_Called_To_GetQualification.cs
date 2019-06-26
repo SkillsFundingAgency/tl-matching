@@ -30,9 +30,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             _qualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
                 .Returns(new ValidQualificationBuilder().Build());
 
-            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
+            var qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
 
-            var qualificationService = new QualificationService(mapper, _qualificationRepository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
+            var qualificationService = new QualificationService(mapper, _qualificationRepository, qualificationRouteMappingRepository, learningAimReferenceRepository);
             
             _result = qualificationService.GetQualificationAsync("10042982").GetAwaiter().GetResult();
         }

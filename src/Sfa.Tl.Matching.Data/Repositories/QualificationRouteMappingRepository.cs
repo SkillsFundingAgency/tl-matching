@@ -26,13 +26,13 @@ namespace Sfa.Tl.Matching.Data.Repositories
             var list = mappingList.Where(mapping => mapping.Qualification != null)
                                   .GroupBy(mapping => mapping.Qualification, new QualificationEqualityComparer()).ToList();
 
-            var qualificationRoutePathMappings = list.SelectMany(grouping => new List<QualificationRouteMapping>(grouping.ToList()).Select(mapping =>
+            var qualificationRouteMappings = list.SelectMany(grouping => new List<QualificationRouteMapping>(grouping.ToList()).Select(mapping =>
             {
                 mapping.Qualification = grouping.Key;
                 return mapping;
             }));
 
-            await _dbContext.AddRangeAsync(qualificationRoutePathMappings);
+            await _dbContext.AddRangeAsync(qualificationRouteMappings);
 
             recordCount += await _dbContext.SaveChangesAsync();
 

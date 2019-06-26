@@ -39,9 +39,9 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             var result = await (from provider in _matchingDbContext.Provider
                                 join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId
                                 join providerQualification in _matchingDbContext.ProviderQualification on providerVenue.Id equals providerQualification.ProviderVenueId
-                                join qualificationRoutePathMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals qualificationRoutePathMapping.QualificationId
+                                join qualificationRouteMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals qualificationRouteMapping.QualificationId
                                 orderby providerVenue.Location.Distance(employerLocation)
-                                where qualificationRoutePathMapping.RouteId == dto.SelectedRouteId 
+                                where qualificationRouteMapping.RouteId == dto.SelectedRouteId 
                                       && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters 
                                       && provider.IsCdfProvider
                                       && provider.IsEnabledForReferral

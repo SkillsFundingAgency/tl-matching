@@ -26,9 +26,9 @@
 //            _repository = Substitute.For<IRepository<Domain.Models.Qualification>>();
             
 //            var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
-//            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
+//            var qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
 
-//            var service = new QualificationService(mapper, _repository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
+//            var service = new QualificationService(mapper, _repository, qualificationRouteMappingRepository, learningAimReferenceRepository);
 
 //            _searchResult = service.SearchQualificationAsync("No Qualification Exists").GetAwaiter().GetResult();
 //        }
