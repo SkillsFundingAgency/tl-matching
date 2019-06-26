@@ -169,5 +169,36 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             return await Task.FromResult(larId?.Length == 8);
         }
+
+        public async Task<int> UpdateQualificationsSearchColumns()
+        {
+            var qualificationsFromDb = _qualificationRepository.GetMany()
+                .Where(q => string.IsNullOrEmpty(q.ShortTitleSearch) || string.IsNullOrEmpty(q.QualificationSearch))
+                .ToList();
+
+            if (qualificationsFromDb.Count > 0)
+            {
+                foreach (var qualification in qualificationsFromDb)
+                {
+                    qualification.ShortTitleSearch = GetSearchTerm(qualification.ShortTitle);
+                    qualification.QualificationSearch = GetSearchTerm(qualification.Title, qualification.ShortTitle);
+                    qualification.ModifiedOn = DateTime.UtcNow;
+                    qualification.ModifiedBy = "System";
+                }
+
+                await _qualificationRepository.UpdateMany(qualificationsFromDb);
+            }
+
+            return qualificationsFromDb.Count;
+        }
+
+        private static string GetSearchTerm(params string[] searchTerms)
+        {
+            var searchTerm = new StringBuilder();
+            foreach (var term in searchTerms)
+                searchTerm.Append(term.ToQualificationSearch());
+
+            return searchTerm.ToString();
+        }
     }
 }
