@@ -117,10 +117,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                            {
                                                Id = o.Id,
                                                CompanyName = e.CompanyName,
-                                               ReferralCount =
-                                                   o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.Referral.ToString()),
-                                               ProvisionGapCount =
-                                                   o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()),
                                                ProvisionGapItems = o.OpportunityItem
                                                    .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString())
                                                    .Select(oi => new BasketProvisionGapItemViewModel
