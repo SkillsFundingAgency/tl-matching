@@ -6,8 +6,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
     internal class OpportunityBasketViewModelBuilder
     {
         private readonly OpportunityBasketViewModel _viewModel;
-        private int _referralCount = 0;
-        private int _provisionGapCount = 0;
 
         public OpportunityBasketViewModelBuilder()
         {
@@ -27,8 +25,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
                 JobRole = "Referral"
             });
 
-            _viewModel.ReferralCount = ++_referralCount;
-
             return this;
         }
 
@@ -39,8 +35,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
                 JobRole = "ProvisionGap",
                 Reason = "Reason"
             });
-
-            _viewModel.ProvisionGapCount = ++_provisionGapCount;
 
             return this;
         }
