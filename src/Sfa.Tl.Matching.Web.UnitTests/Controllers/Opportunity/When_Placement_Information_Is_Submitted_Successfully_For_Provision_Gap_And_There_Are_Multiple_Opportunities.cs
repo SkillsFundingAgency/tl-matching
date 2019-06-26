@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_GetCheckAnswersReferrals()
+        public void Then_Result_Is_Redirect_To_GetCheckAnswers()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();

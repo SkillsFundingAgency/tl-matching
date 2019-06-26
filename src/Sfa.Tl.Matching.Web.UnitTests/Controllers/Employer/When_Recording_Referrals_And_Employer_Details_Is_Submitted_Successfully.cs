@@ -24,20 +24,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         
         private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel
         {
-            OpportunityId = OpportunityId,
+            OpportunityId = OpportunityItemId,
             EmployerContact = Contact,
             EmployerContactEmail = ContactEmail,
             EmployerContactPhone = ContactPhone
         };
 
-        private const int OpportunityId = 1;
+        private const int OpportunityItemId = 1;
 
         private readonly IActionResult _result;
 
         public When_Recording_Referrals_And_Employer_Details_Is_Submitted_Successfully()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsReferralOpportunityItemAsync(OpportunityId).Returns(true);
+            _opportunityService.IsReferralOpportunityItemAsync(OpportunityItemId).Returns(true);
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).IsReferralOpportunityItemAsync(OpportunityId);
+            _opportunityService.Received(1).IsReferralOpportunityItemAsync(OpportunityItemId);
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_Result_Is_Redirect_To_Results()
         {
             var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("GetCheckAnswersReferrals");
+            redirect?.RouteName.Should().BeEquivalentTo("GetCheckAnswers");
         }
     }
 }

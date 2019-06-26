@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityId);
 
-            return RedirectToRoute(isReferralOpportunityItem ? "GetCheckAnswersReferrals" : 
+            return RedirectToRoute(isReferralOpportunityItem ? "GetCheckAnswers" : 
                 "GetOpportunityBasket", new { id = viewModel.OpportunityId });
         }
 

@@ -17,13 +17,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     public class When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully
     {
         private const string ModifiedBy = "ModifiedBy";
-        private const int OpportunityId = 1;
+        private const int OpportunityItemId = 1;
 
         private readonly IReferralService _referralService;
         private readonly IActionResult _result;
-        private readonly CheckAnswersReferralViewModel _viewModel = new CheckAnswersReferralViewModel
+        private readonly CheckAnswersViewModel _viewModel = new CheckAnswersViewModel
         {
-            OpportunityId = OpportunityId
+            OpportunityItemId = OpportunityItemId
         };
 
         public When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully()
@@ -35,11 +35,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 c.AddMaps(typeof(CheckAnswersDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<CheckAnswersReferralViewModel, CheckAnswersDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<CheckAnswersViewModel, CheckAnswersDto>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<CheckAnswersReferralViewModel, CheckAnswersDto>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>(httpcontextAccesor) :
                             type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<CheckAnswersReferralViewModel, CheckAnswersDto>(new DateTimeProvider()) :
+                                new UtcNowResolver<CheckAnswersViewModel, CheckAnswersDto>(new DateTimeProvider()) :
                                 null);
             });
 
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.CheckAnswersReferrals(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.CheckAnswers(_viewModel).GetAwaiter().GetResult();
         }
         
         [Fact]
@@ -70,13 +70,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_SendProviderReferralEmail_Is_Called_Exactly_Once()
         {
-            _referralService.Received(1).SendProviderReferralEmail(OpportunityId);
+            _referralService.Received(1).SendProviderReferralEmail(OpportunityItemId);
         }
 
         [Fact]
         public void Then_SendEmployerReferralEmail_Is_Called_Exactly_Once()
         {
-            _referralService.Received(1).SendEmployerReferralEmail(OpportunityId);
+            _referralService.Received(1).SendEmployerReferralEmail(OpportunityItemId);
         }
     }
 }

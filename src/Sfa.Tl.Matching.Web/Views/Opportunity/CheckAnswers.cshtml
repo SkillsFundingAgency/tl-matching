@@ -1,4 +1,4 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.CheckAnswersReferralViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.CheckAnswersViewModel
 @{
     ViewData["Title"] = "Check answers";
 }
@@ -35,8 +35,8 @@
             <hr class="govuk-section-break govuk-section-break--m ">
         }
 
-        <form asp-route="SaveCheckAnswersReferrals" novalidate>
-            <input asp-for="OpportunityId" type="hidden" />
+        <form asp-route="SaveCheckAnswers" novalidate>
+            <input asp-for="OpportunityItemId" type="hidden" />
 
             <button type="submit" class="govuk-button" id="tl-confirm">Confirm and save opportunity</button>
         </form>

@@ -127,7 +127,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (opportunityCount > 1)
             {
                 return RedirectToRoute(isReferralOpportunityItem
-                    ? "GetCheckAnswersReferrals"
+                    ? "GetCheckAnswers"
                     : "GetOpportunityBasket",
                     new { id = viewModel.OpportunityId });
             }
@@ -135,28 +135,29 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("check-answers/{opportunityItemId}", Name = "GetCheckAnswersReferrals")]
-        public async Task<IActionResult> CheckAnswersReferrals(int opportunityItemId)
+        [Route("check-answers/{opportunityItemId}", Name = "GetCheckAnswers")]
+        public async Task<IActionResult> CheckAnswers(int opportunityItemId)
         {
-            var viewModel = await GetCheckAnswersReferralViewModel(opportunityItemId);
+            var viewModel = await GetCheckAnswersViewModel(opportunityItemId);
 
             return View(viewModel);
         }
 
         [HttpPost]
-        [Route("check-answers/{id?}", Name = "SaveCheckAnswersReferrals")]
-        public async Task<IActionResult> CheckAnswersReferrals(CheckAnswersReferralViewModel viewModel)
+        [Route("check-answers/{opportunityItemId}", Name = "SaveCheckAnswers")]
+        public async Task<IActionResult> CheckAnswers(CheckAnswersViewModel viewModel)
         {
             if (!ModelState.IsValid)
-                return View(await GetCheckAnswersReferralViewModel(viewModel.OpportunityId));
+                return View(await GetCheckAnswersViewModel(viewModel.OpportunityItemId));
 
+            var opportunityId = 51; // TODO FIX Get the opportunityId
             var dto = _mapper.Map<CheckAnswersDto>(viewModel);
             await _opportunityService.UpdateOpportunity(dto);
 
             await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
             await _referralService.SendProviderReferralEmail(dto.OpportunityId);
 
-            return RedirectToRoute("GetOpportunityBasket", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetOpportunityBasket", new { id = opportunityId });
         }
 
         [HttpGet]
@@ -248,12 +249,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 999 or less");
         }
 
-        private async Task<CheckAnswersReferralViewModel> GetCheckAnswersReferralViewModel(int opportunityItemId)
+        private async Task<CheckAnswersViewModel> GetCheckAnswersViewModel(int opportunityItemId)
         {
             var dto = await _opportunityService.GetCheckAnswers(opportunityItemId);
             var providersForReferral = _opportunityService.GetReferrals(opportunityItemId);
 
-            var viewModel = _mapper.Map<CheckAnswersReferralViewModel>(dto);
+            var viewModel = _mapper.Map<CheckAnswersViewModel>(dto);
             viewModel.Providers = _mapper.Map<List<ReferralsViewModel>>(providersForReferral);
 
             return viewModel;

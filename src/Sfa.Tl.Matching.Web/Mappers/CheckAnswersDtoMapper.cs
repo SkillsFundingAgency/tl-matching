@@ -17,22 +17,22 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 ;
 
             // Referrals
-            CreateMap<CheckAnswersDto, CheckAnswersReferralViewModel>()
+            CreateMap<CheckAnswersDto, CheckAnswersViewModel>()
                 .ForMember(m => m.PlacementInformation, opt => opt.MapFrom(s => s))
                 .ForMember(m => m.Providers, opt => opt.Ignore())
                 ;
 
-            CreateMap<CheckAnswersReferralViewModel, CheckAnswersDto>()
-                .ForMember(m => m.OpportunityId,
-                    o => o.MapFrom(s => s.OpportunityId))
+            CreateMap<CheckAnswersViewModel, CheckAnswersDto>()
+                .ForMember(m => m.OpportunityItemId,
+                    o => o.MapFrom(s => s.OpportunityItemId))
                 .ForMember(m => m.Postcode,
                     o => o.MapFrom(s => s.Postcode))
 
                 .ForMember(m => m.ConfirmationSelected,
                     o => o.MapFrom(s => true))
 
-                .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<CheckAnswersReferralViewModel, CheckAnswersDto>>())
-                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<CheckAnswersReferralViewModel, CheckAnswersDto>>())
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>>())
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<CheckAnswersViewModel, CheckAnswersDto>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 

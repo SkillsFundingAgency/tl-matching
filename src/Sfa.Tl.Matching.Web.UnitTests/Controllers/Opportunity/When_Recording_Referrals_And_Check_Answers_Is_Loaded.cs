@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(CreatedBy)
                 .Build();
 
-            _result = controllerWithClaims.CheckAnswersReferrals(OpportunityItemId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.CheckAnswers(OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -72,10 +72,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_CheckAnswersReferralViewModel_Has_All_Data_Items_Set_Correctly()
+        public void Then_CheckAnswersViewModel_Has_All_Data_Items_Set_Correctly()
         {
-            var viewModel = _result.GetViewModel<CheckAnswersReferralViewModel>();
-            viewModel.OpportunityId.Should().Be(OpportunityItemId);
+            var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
+            viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
             viewModel.PlacementInformation.EmployerName.Should().Be("EmployerName");
             viewModel.PlacementInformation.EmployerContact.Should().Be("EmployerContact");
             viewModel.PlacementInformation.JobRole.Should().Be("JobRole");
