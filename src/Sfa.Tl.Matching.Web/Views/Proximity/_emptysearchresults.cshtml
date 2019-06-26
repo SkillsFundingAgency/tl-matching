@@ -12,15 +12,7 @@
 </ul>
 <p class="govuk-body">
     If neither of these work,
-    @if (Model.SearchParameters.OpportunityItemId > 0)
-    {
-        <a asp-route="PlacementInformationSave_Get"
-           asp-route-id="@Model.SearchParameters.OpportunityItemId"
-           class="govuk-link">tell us that there are no suitable providers</a>
-    }
-    else
-    {
-        <a asp-route="SaveProvisionGap"
+   <a asp-route="SaveProvisionGap"
            asp-route-SearchResultProviderCount="@Model.SearchResults.SearchResultProviderCount"
            asp-route-Postcode="@Model.SearchParameters.Postcode"
            asp-route-SearchRadius="@Model.SearchParameters.SearchRadius"
@@ -28,6 +20,5 @@
            asp-route-OpportunityId="@Model.SearchParameters.OpportunityId"
            asp-route-OpportunityItemId="@Model.SearchParameters.OpportunityItemId"
            class="govuk-link" id="tl-search-noresults">tell us that there are no suitable providers</a>
-    }
     .
 </p>
