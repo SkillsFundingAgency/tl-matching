@@ -5,6 +5,7 @@ using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using System.Linq;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
@@ -136,9 +137,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
-                //TODO: Will need to map path via Opportunity and Employer
-                //.ForPath(m => m.CompanyName,
-                //    opt => opt.MapFrom(source => source.Opportunity.Employer?.CompanyName))
+                .ForPath(m => m.CompanyName,
+                    opt => opt.MapFrom(source => 
+                        source.Opportunity.Employer != null 
+                        ? source.Opportunity.Employer.CompanyName 
+                        : null))
                 .ForMember(m => m.OpportunityType, config =>
                     config.MapFrom(s => ((OpportunityType)Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
                 .ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
@@ -174,6 +177,17 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
+                .ForAllOtherMembers(config => config.Ignore());
+
+            CreateMap<OpportunityItem, FindEmployerViewModel>()
+                .ForMember(m => m.OpportunityItemId, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
+                .ForPath(m => m.SelectedEmployerId, o => o.MapFrom(s => s.Opportunity.EmployerId))
+                .ForPath(m => m.CompanyName,
+                    opt => opt.MapFrom(source =>
+                        source.Opportunity.Employer != null
+                            ? source.Opportunity.Employer.CompanyName
+                            : null))
                 .ForAllOtherMembers(config => config.Ignore());
         }
     }

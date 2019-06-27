@@ -24,5 +24,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<bool> IsNewProvisionGapAsync(int opportunityItemId);
         Task<int> GetOpportunityItemCountAsync(int opportunityId);
         Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
+        Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityItemId);
     }
 }

@@ -145,11 +145,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<PlacementInformationSaveDto> GetPlacementInformationSaveAsync(int opportunityItemId)
         {
-            var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId
-                // TODO Get Route data
-                //, opp => opp.Route,
-                //TODO: Include Opportunity and Employer
-                );
+            var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
+                oi => oi.Opportunity,
+                 oi => oi.Opportunity.Employer);
 
             var dto = _mapper.Map<OpportunityItem, PlacementInformationSaveDto>(placementInformation);
 
@@ -240,6 +238,17 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var viewModel = await ((IOpportunityRepository) _opportunityRepository).GetOpportunityBasket(id);
             viewModel.Type = GetOpportunityBasketType(viewModel);
+
+            return viewModel;
+        }
+
+        public async Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityItemId)
+        {
+            var opportunityItem = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
+                oi => oi.Opportunity,
+                oi => oi.Opportunity.Employer);
+
+            var viewModel = _mapper.Map<OpportunityItem, FindEmployerViewModel>(opportunityItem);
 
             return viewModel;
         }

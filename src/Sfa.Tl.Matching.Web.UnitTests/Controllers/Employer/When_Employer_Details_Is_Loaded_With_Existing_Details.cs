@@ -84,6 +84,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             _opportunityService.Received(1).GetOpportunity(OpportunityId);
         }
+
         [Fact]
         public void Then_GetEmployer_Is_Not_Called()
         {

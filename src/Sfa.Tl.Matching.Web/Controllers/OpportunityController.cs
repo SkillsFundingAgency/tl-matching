@@ -132,7 +132,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     : "GetOpportunityBasket",
                     new { id = viewModel.OpportunityId });
             }
-            return RedirectToRoute("LoadWhoIsEmployer", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("LoadWhoIsEmployer", new { id = viewModel.OpportunityItemId });
         }
 
         [HttpGet]

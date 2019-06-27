@@ -24,6 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
+                OpportunityItemId = 2,
                 PlacementsKnown = false
             };
 
@@ -95,7 +96,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("LoadWhoIsEmployer");
-            result?.RouteValues["id"].Should().Be(1);
+            result?.RouteValues["id"].Should().Be(2);
         }
     }
 }

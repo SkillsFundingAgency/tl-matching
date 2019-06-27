@@ -3,7 +3,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
@@ -15,7 +14,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
     public class When_Employer_GetOpportunityEmployerName_Is_Loaded
     {
         private readonly IActionResult _result;
-        private const int OpportunityId = 12;
+        private readonly IOpportunityService _opportunityService;
+        private const int OpportunityId = 1;
+        private const int OpportunityItemId = 12;
         private const int EmployerId = 1;
 
         private const string CompanyName = "CompanyName";
@@ -23,20 +24,31 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_GetOpportunityEmployerName_Is_Loaded()
         {
             var employerService = Substitute.For<IEmployerService>();
-            var opportunityService = Substitute.For<IOpportunityService>();
-            opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
-            {
-                Id = OpportunityId,
-                //TODO: Get company name from opportunity
-                //EmployerName = CompanyName,
-                EmployerId = EmployerId
-            });
+            _opportunityService = Substitute.For<IOpportunityService>();
+            
+            _opportunityService.GetOpportunityEmployerAsync(OpportunityItemId)
+                .Returns(new FindEmployerViewModel
+                {
+                    OpportunityId = OpportunityId,
+                    OpportunityItemId = OpportunityItemId,
+                    SelectedEmployerId = EmployerId,
+                    CompanyName = CompanyName,
+                });
+
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var employerController = new EmployerController(employerService, opportunityService, mapper);
+            var employerController = new EmployerController(employerService, _opportunityService, mapper);
 
-            _result = employerController.GetOpportunityEmployerName(OpportunityId).GetAwaiter().GetResult();
+            _result = employerController.GetOpportunityEmployerName(OpportunityItemId).GetAwaiter().GetResult();
+        }
+
+        [Fact]
+        public void Then_GetOpportunityEmployer_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .GetOpportunityEmployerAsync(OpportunityItemId);
         }
 
         [Fact]
