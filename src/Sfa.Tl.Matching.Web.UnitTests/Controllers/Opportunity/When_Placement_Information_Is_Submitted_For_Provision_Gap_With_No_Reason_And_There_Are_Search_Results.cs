@@ -23,6 +23,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var viewModel = new PlacementInformationSaveViewModel
             {
+                OpportunityId = 1,
+                OpportunityItemId = 1,
                 OpportunityType = OpportunityType.ProvisionGap,
                 SearchResultProviderCount = 1,
                 NoSuitableStudent = false,

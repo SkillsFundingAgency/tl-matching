@@ -99,12 +99,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> PlacementInformationSave(int id)
         {
             var dto = await _opportunityService.GetPlacementInformationSaveAsync(id);
-
+            
             var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
-
-            //TODO: Get these from the back end
-            //viewModel.IsReferral = await _opportunityService.IsNewReferral(id);
-            //viewModel.CompanyName = "Test Company Name";1
 
             return View(viewModel);
         }
@@ -120,6 +116,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var dto = _mapper.Map<PlacementInformationSaveDto>(viewModel);
             await _opportunityService.UpdateOpportunityItemAsync(dto);
+
+            if (viewModel.OpportunityType == OpportunityType.ProvisionGap)
+            {
+                await _opportunityService.UpdateProvisionGapAsync(dto);
+            }
 
             var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityId);
             var opportunityCount = await _opportunityService.GetOpportunityItemCountAsync(viewModel.OpportunityId);

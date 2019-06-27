@@ -183,6 +183,17 @@ namespace Sfa.Tl.Matching.Application.Services
             await _opportunityItemRepository.Update(trackedEntity);
         }
 
+        public async Task UpdateProvisionGapAsync(PlacementInformationSaveDto dto)
+        {
+            var provisionGap = await _provisionGapRepository.GetSingleOrDefault(p => p.OpportunityItemId == dto.OpportunityItemId);
+
+            if (provisionGap != null)
+            {
+                provisionGap = _mapper.Map(dto, provisionGap);
+                await _provisionGapRepository.Update(provisionGap);
+            }
+        }
+
         public List<ReferralDto> GetReferrals(int opportunityItemId)
         {
             var referrals = _referralRepository.GetMany(r => r.OpportunityItemId == opportunityItemId)

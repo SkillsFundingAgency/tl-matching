@@ -18,7 +18,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private readonly IActionResult _result;
         private readonly IOpportunityService _opportunityService;
 
-        private readonly PlacementInformationSaveDto _dto = new PlacementInformationSaveDto();
         private const string JobRole = "JobRole";
         private const string CompanyName = "CompanyName";
         private const bool PlacementsKnown = true;
@@ -28,21 +27,25 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Placement_Information_Loaded()
         {
-            _dto.OpportunityId = OpportunityId;
-            _dto.JobRole = JobRole;
-            _dto.OpportunityType = OpportunityType.Referral;
-            _dto.CompanyName = CompanyName;
-            _dto.PlacementsKnown = PlacementsKnown;
-            _dto.Placements = Placements;
-            _dto.NoSuitableStudent = true;
-            _dto.HadBadExperience = true;
-            _dto.ProvidersTooFarAway = true;
+            var dto = new PlacementInformationSaveDto
+            {
+                OpportunityId = OpportunityId,
+                OpportunityItemId = OpportunityItemId,
+                JobRole = JobRole,
+                OpportunityType = OpportunityType.Referral,
+                CompanyName = CompanyName,
+                PlacementsKnown = PlacementsKnown,
+                Placements = Placements,
+                NoSuitableStudent = true,
+                HadBadExperience = true,
+                ProvidersTooFarAway = true
+            };
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
-            
+
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetPlacementInformationSaveAsync(OpportunityItemId).Returns(_dto);
+            _opportunityService.GetPlacementInformationSaveAsync(OpportunityItemId).Returns(dto);
 
             var referralService = Substitute.For<IReferralService>();
 
