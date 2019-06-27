@@ -195,10 +195,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("add-opportunity", Name = "AddOpportunity")]
-        public IActionResult AddOpportunity()
+        [Route("add-opportunity/{id}", Name = "AddOpportunity")]
+        public IActionResult AddOpportunity(int id)
         {
-            return RedirectToRoute("Providers_Get");
+            return RedirectToRoute("Providers_Get", new { id });
         }
 
         [HttpPost]

@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Mvc.ModelBinding.Validation
-@using Sfa.Tl.Matching.Models.Enums
+﻿@using Sfa.Tl.Matching.Models.Enums
 @model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketViewModel
 
 @{
@@ -23,7 +22,7 @@
         <span class="govuk-caption-l"> @Model.CompanyName</span>
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-        <form asp-route="AddOpportunity">
+        <form asp-route="AddOpportunity" asp-route-id="@Model.Id">
             <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm">
                 Add another opportunity
             </button>

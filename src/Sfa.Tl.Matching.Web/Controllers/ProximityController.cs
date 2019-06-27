@@ -40,8 +40,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("find-providers", Name = "Providers_Get")]
-        public IActionResult Index()
+        [Route("find-providers/{id?}", Name = "Providers_Get")]
+        public IActionResult Index(int? id = null)
         {
             var viewModel = new SearchParametersViewModel
             {
