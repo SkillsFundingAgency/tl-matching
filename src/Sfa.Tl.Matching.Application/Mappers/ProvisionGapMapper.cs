@@ -14,6 +14,15 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityItemDto, ProvisionGap>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
+
+            CreateMap<PlacementInformationSaveDto, ProvisionGap>()
+                .ForMember(m => m.NoSuitableStudent, o => o.MapFrom(s => s.NoSuitableStudent))
+                .ForMember(m => m.HadBadExperience, o => o.MapFrom(s => s.HadBadExperience))
+                .ForMember(m => m.ProvidersTooFarAway, o => o.MapFrom(s => s.ProvidersTooFarAway))
+                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
+                .ForAllOtherMembers(config => config.Ignore())
+                ;
         }
     }
 }
