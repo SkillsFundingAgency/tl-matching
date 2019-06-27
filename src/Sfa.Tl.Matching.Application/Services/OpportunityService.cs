@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _opportunityItemRepository.GetMany(o => o.Id == opportunityItemId && o.Referral.Any()).AnyAsync();
         }
 
-        public async Task<PlacementInformationSaveDto> GetPlacementInformationSaveAsync(int opportunityItemId)
+        public async Task<PlacementInformationSaveDto> GetPlacementInformationAsync(int opportunityItemId)
         {
             var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
                 (Expression<Func<OpportunityItem, object>>)(oi => oi.Opportunity),

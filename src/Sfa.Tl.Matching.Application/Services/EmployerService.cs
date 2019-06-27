@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return searchResults;
         }
 
-        public async Task<EmployerDetailsViewModel> GetOpportunityEmployerDetails(int opportunityId)
+        public async Task<EmployerDetailsViewModel> GetOpportunityEmployerDetailAsync(int opportunityId)
         {
             var employerId = await _opportunityRepository.GetSingleOrDefault(
                 opportunity => opportunity.Id == opportunityId,

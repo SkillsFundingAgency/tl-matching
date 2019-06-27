@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<int> CreateOpportunityItemAsync(OpportunityItemDto opportunityItemDto);
         Task<OpportunityDto> GetOpportunity(int opportunityId);
         Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId);
-        Task<PlacementInformationSaveDto> GetPlacementInformationSaveAsync(int opportunityItemId);
+        Task<PlacementInformationSaveDto> GetPlacementInformationAsync(int opportunityItemId);
         List<ReferralDto> GetReferrals(int opportunityItemId);
         Task<bool> IsReferralOpportunityItemAsync(int id);
         Task<CheckAnswersDto> GetCheckAnswers(int id);

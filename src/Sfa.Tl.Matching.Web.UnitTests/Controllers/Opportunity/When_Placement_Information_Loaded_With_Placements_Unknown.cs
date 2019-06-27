@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             var opportunityService = Substitute.For<IOpportunityService>();
-            opportunityService.GetPlacementInformationSaveAsync(Arg.Any<int>()).Returns(_dto);
+            opportunityService.GetPlacementInformationAsync(Arg.Any<int>()).Returns(_dto);
 
             var referralService = Substitute.For<IReferralService>();
 

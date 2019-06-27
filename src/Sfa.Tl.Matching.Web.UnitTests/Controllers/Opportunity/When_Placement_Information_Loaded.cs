@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetPlacementInformationSaveAsync(OpportunityItemId).Returns(dto);
+            _opportunityService.GetPlacementInformationAsync(OpportunityItemId).Returns(dto);
 
             var referralService = Substitute.For<IReferralService>();
 
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_GetPlacementInformationSave_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetPlacementInformationSaveAsync(OpportunityItemId);
+            _opportunityService.Received(1).GetPlacementInformationAsync(OpportunityItemId);
         }
 
         [Fact]

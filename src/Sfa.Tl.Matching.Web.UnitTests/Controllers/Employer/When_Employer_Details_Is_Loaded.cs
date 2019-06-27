@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var mapper = new Mapper(config);
 
             var employerService = Substitute.For<IEmployerService>();
-            employerService.GetOpportunityEmployerDetails(Arg.Any<int>()).Returns(new EmployerDetailsViewModel
+            employerService.GetOpportunityEmployerDetailAsync(Arg.Any<int>()).Returns(new EmployerDetailsViewModel
             {
                 OpportunityId = OpportunityId,
                 EmployerName = EmployerName,

@@ -98,7 +98,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("placement-information/{id?}", Name = "PlacementInformationSave_Get")]
         public async Task<IActionResult> PlacementInformationSave(int id)
         {
-            var dto = await _opportunityService.GetPlacementInformationSaveAsync(id);
+            var dto = await _opportunityService.GetPlacementInformationAsync(id);
             
             var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
 

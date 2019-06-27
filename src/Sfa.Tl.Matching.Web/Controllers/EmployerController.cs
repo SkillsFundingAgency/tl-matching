@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("employer-details/{id?}", Name = "GetEmployerDetails")]
         public async Task<IActionResult> GetOpportunityEmployerDetails(int id)
         {
-            var viewModel = await _employerService.GetOpportunityEmployerDetails(id);
+            var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(id);
 
             return View("Details", viewModel);
         }
