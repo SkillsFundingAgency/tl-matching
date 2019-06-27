@@ -17,13 +17,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     public class When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully
     {
         private const string ModifiedBy = "ModifiedBy";
+        private const int OpportunityId = 1;
         private const int OpportunityItemId = 1;
 
         private readonly IOpportunityService _opportunityService;
-        private readonly IReferralService _referralService;
         private readonly IActionResult _result;
         private readonly CheckAnswersViewModel _viewModel = new CheckAnswersViewModel
         {
+            OpportunityId = OpportunityId,
             OpportunityItemId = OpportunityItemId
         };
 
@@ -47,9 +48,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _referralService = Substitute.For<IReferralService>();
+            var referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(_opportunityService, _referralService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(ModifiedBy)
                 .Build();
@@ -73,18 +74,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             // TODO Assert args
             _opportunityService.Received(1).UpdateOpportunityItemAsync(Arg.Any<CheckAnswersDto>());
-        }
-
-        [Fact]
-        public void Then_SendProviderReferralEmail_Is_Called_Exactly_Once()
-        {
-            _referralService.Received(1).SendProviderReferralEmail(OpportunityItemId);
-        }
-
-        [Fact]
-        public void Then_SendEmployerReferralEmail_Is_Called_Exactly_Once()
-        {
-            _referralService.Received(1).SendEmployerReferralEmail(OpportunityItemId);
         }
     }
 }

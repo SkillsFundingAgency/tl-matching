@@ -76,13 +76,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
             viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
-            viewModel.PlacementInformation.EmployerName.Should().Be("EmployerName");
-            viewModel.PlacementInformation.JobRole.Should().Be("JobRole");
-            viewModel.PlacementInformation.SearchRadius.Should().Be(3);
-            viewModel.PlacementInformation.PlacementsKnown.Should().BeTrue();
-            viewModel.PlacementInformation.Placements.Should().Be(2);
-            viewModel.PlacementInformation.Postcode.Should().Be("AA1 1AA");
-            viewModel.PlacementInformation.RouteName.Should().Be("RouteName");
+            viewModel.EmployerName.Should().Be("EmployerName");
+            viewModel.JobRole.Should().Be("JobRole");
+            viewModel.SearchRadius.Should().Be(3);
+            viewModel.PlacementsKnown.Should().BeTrue();
+            viewModel.Placements.Should().Be(2);
+            viewModel.Postcode.Should().Be("AA1 1AA");
+            viewModel.RouteName.Should().Be("RouteName");
             
             viewModel.Providers.Count.Should().Be(2);
 

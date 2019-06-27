@@ -154,6 +154,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = _mapper.Map<CheckAnswersDto>(viewModel);
             await _opportunityService.UpdateOpportunityItemAsync(dto);
 
+            return RedirectToRoute("GetOpportunityBasket", new { id = viewModel.OpportunityId });
+        }
+
+        // TODO FIX reuse this method later
+        [HttpPost]
+        [Route("send-emails/{opportunityItemId}", Name = "SendEmails")]
+        public async Task<IActionResult> SendEmails(CheckAnswersViewModel viewModel)
+        {
+            //if (!ModelState.IsValid)
+            //    return View(await GetCheckAnswersViewModel(viewModel.OpportunityItemId));
+
+            var dto = _mapper.Map<CheckAnswersDto>(viewModel);
+            await _opportunityService.UpdateOpportunityItemAsync(dto);
+
             await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
             await _referralService.SendProviderReferralEmail(dto.OpportunityId);
 

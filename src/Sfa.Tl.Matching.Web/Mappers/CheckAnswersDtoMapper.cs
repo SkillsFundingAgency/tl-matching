@@ -8,15 +8,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
     {
         public CheckAnswersDtoMapper()
         {
-            CreateMap<CheckAnswersPlacementViewModel, CheckAnswersDto>()
-                .ForMember(m => m.OpportunityId, opt => opt.Ignore())
-                .ForMember(m => m.OpportunityItemId, opt => opt.Ignore())
-                .ForMember(m => m.ModifiedBy, o => o.Ignore())
-                .ForMember(m => m.ModifiedOn, o => o.Ignore())
-                ;
-
             CreateMap<CheckAnswersDto, CheckAnswersViewModel>()
-                .ForMember(m => m.PlacementInformation, opt => opt.MapFrom(s => s))
                 .ForMember(m => m.Providers, opt => opt.Ignore())
                 ;
 
