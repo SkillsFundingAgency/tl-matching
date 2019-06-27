@@ -9,7 +9,6 @@
         //public string UserEmail { get; set; }
         //public string JobRole { get; set; }
         //public int? Placements { get; set; }
-        public string EmployerName { get; set; }
 
         private string _employerCrmId;
         public string EmployerCrmRecord
