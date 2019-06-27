@@ -138,9 +138,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
                 .ForPath(m => m.CompanyName,
-                    opt => opt.MapFrom(source => 
-                        source.Opportunity.Employer != null 
-                        ? source.Opportunity.Employer.CompanyName 
+                    opt => opt.MapFrom(source =>
+                        source.Opportunity.Employer != null
+                        ? source.Opportunity.Employer.CompanyName
                         : null))
                 .ForMember(m => m.OpportunityType, config =>
                     config.MapFrom(s => ((OpportunityType)Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
@@ -149,6 +149,18 @@ namespace Sfa.Tl.Matching.Application.Mappers
                     opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ?
                         src.Placements : null))
                 .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
+                .ForPath(m => m.NoSuitableStudent, o => o.MapFrom(s =>
+                    s.ProvisionGap != null && s.ProvisionGap.Any()
+                    ? s.ProvisionGap.First().NoSuitableStudent
+                    : null))
+                .ForPath(m => m.HadBadExperience, o => o.MapFrom(s =>
+                    s.ProvisionGap != null && s.ProvisionGap.Any()
+                    ? s.ProvisionGap.First().HadBadExperience
+                    : null))
+                .ForPath(m => m.ProvidersTooFarAway, o => o.MapFrom(s =>
+                    s.ProvisionGap != null && s.ProvisionGap.Any()
+                    ? s.ProvisionGap.First().ProvidersTooFarAway
+                    : null))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());

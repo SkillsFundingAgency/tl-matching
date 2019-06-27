@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var dto = new PlacementInformationSaveDto
             {
-                OpportunityId = OpportunityItemId,
+                OpportunityItemId = OpportunityItemId,
                 JobRole = JobRole,
                 PlacementsKnown = PlacementsKnown,
                 Placements = Placements

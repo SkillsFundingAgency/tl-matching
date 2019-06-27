@@ -126,6 +126,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
                 (Expression<Func<OpportunityItem, object>>)(oi => oi.Opportunity),
+                oi => oi.ProvisionGap, 
                 oi => oi.Opportunity.Employer);
 
             var dto = _mapper.Map<OpportunityItem, PlacementInformationSaveDto>(placementInformation);

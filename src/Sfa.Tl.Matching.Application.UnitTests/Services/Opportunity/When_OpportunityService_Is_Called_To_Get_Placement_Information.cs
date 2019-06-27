@@ -8,17 +8,18 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
-    public class When_OpportunityService_Is_Called_To_Get_Opportunity_Employer
+    public class When_OpportunityService_Is_Called_To_Get_Placement_Information
     {
-        private readonly FindEmployerViewModel _result;
+        private readonly PlacementInformationSaveDto _result;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
 
-        public When_OpportunityService_Is_Called_To_Get_Opportunity_Employer()
+        public When_OpportunityService_Is_Called_To_Get_Placement_Information()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
@@ -28,18 +29,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-			//var dto = new OpportunityItemBuilder()
-            //    .AddEmployer()
-            //    .Build();
+            var dto = new OpportunityItemBuilder()
+                .Build();
 
             _opportunityItemRepository.GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>())
                 .Returns(dto);
-                
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository);
+            
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository,
+                provisionGapRepository, referralRepository);
 
-            _result = opportunityService.GetOpportunityEmployerAsync(1)
+            _result = opportunityService.GetPlacementInformationSaveAsync(1)
                 .GetAwaiter().GetResult();
         }
 
@@ -49,17 +51,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _opportunityItemRepository
                 .Received(1)
                 .GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, FindEmployerViewModel>>>());
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>());
         }
 
         [Fact]
-        public void Then_Result_Fields_Are_As_Expected()
+        public void Then_Result_Fields_Are_Correct()
         {
             _result.OpportunityItemId.Should().Be(1);
             _result.OpportunityId.Should().Be(2);
-            _result.SelectedEmployerId.Should().Be(3);
-            _result.CompanyName.Should().Be("CompanyName");
-            _result.PreviousCompanyName.Should().Be("CompanyName");
+            _result.OpportunityType.Should().Be(OpportunityType.Referral);
         }
     }
 }
