@@ -56,6 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _result.OpportunityId.Should().Be(2);
             _result.SelectedEmployerId.Should().Be(3);
             _result.CompanyName.Should().Be("CompanyName");
+            _result.PreviousCompanyName.Should().Be("CompanyName");
         }
     }
 }

@@ -188,6 +188,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
                         source.Opportunity.Employer != null
                             ? source.Opportunity.Employer.CompanyName
                             : null))
+                .ForPath(m => m.PreviousCompanyName,
+                    opt => opt.MapFrom(source =>
+                        source.Opportunity.Employer != null
+                            ? source.Opportunity.Employer.CompanyName
+                            : null))
                 .ForAllOtherMembers(config => config.Ignore());
         }
     }
