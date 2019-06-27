@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.UpdateOpportunityItemAsync(providerSearchDto);
             await _opportunityService.UpdateReferrals(opportunityDto);
 
-            return RedirectToRoute("PlacementInformationSave_Get", new { id = saveReferralViewModel.OpportunityId });
+            return RedirectToRoute("PlacementInformationSave_Get", new { id = saveReferralViewModel.OpportunityItemId });
         }
 
         [HttpGet]

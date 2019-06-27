@@ -29,6 +29,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .IsNewReferralAsync(Arg.Any<int>())
                 .Returns(true);
 
+            _opportunityService.CreateOpportunityItemAsync(Arg.Any<OpportunityItemDto>()).Returns(2);
+
             var referralService = Substitute.For<IReferralService>();
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
@@ -127,6 +129,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("PlacementInformationSave_Get");
+            result?.RouteValues["id"].Should().Be(2);
         }
     }
 }
