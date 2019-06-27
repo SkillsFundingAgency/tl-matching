@@ -252,6 +252,12 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
+        public async Task RemoveOpportunityItemASync(int opportunityItemId)
+        {
+            var referralItems = _referralRepository.GetMany(referral => referral.OpportunityItemId == opportunityItemId);
+            await _referralRepository.DeleteMany(referralItems.ToList());
+            await _opportunityItemRepository.Delete(opportunityItemId);
+        }
 
         private static OpportunityBasketType GetOpportunityBasketType(OpportunityBasketViewModel viewModel)
         {

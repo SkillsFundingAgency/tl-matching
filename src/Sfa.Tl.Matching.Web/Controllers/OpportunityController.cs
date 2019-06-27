@@ -203,6 +203,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        [Route("remove-opportunityItem/{opportunityId}/{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
+        public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasket(int opportunityId, int opportunityItemId)
+        {
+            await _opportunityService.RemoveOpportunityItemASync(opportunityItemId);
+            var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
+
+            return RedirectToRoute(opportunityItemCount == 0 ? "Start" : "GetOpportunityBasket", new { id = opportunityId });
+        }
+
+        [HttpPost]
+        [Route("add-opportunity/{id}", Name = "AddOpportunity")]
+        public IActionResult AddOpportunity(int id)
+        {
+            return RedirectToRoute("Providers_Get", new { id });
+        }
+
         [HttpPost]
         [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
         public IActionResult SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)

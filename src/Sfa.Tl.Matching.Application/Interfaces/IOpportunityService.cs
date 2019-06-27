@@ -24,5 +24,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<int> GetOpportunityItemCountAsync(int opportunityId);
         Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
         Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityId, int opportunityItemId);
+        Task RemoveOpportunityItemASync(int opportunityItemId);
     }
 }
