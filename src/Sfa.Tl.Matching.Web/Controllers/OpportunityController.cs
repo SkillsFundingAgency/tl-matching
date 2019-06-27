@@ -214,13 +214,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("add-opportunity/{id}", Name = "AddOpportunity")]
-        public IActionResult AddOpportunity(int id)
-        {
-            return RedirectToRoute("Providers_Get", new { id });
-        }
-
-        [HttpPost]
         [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
         public IActionResult SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
