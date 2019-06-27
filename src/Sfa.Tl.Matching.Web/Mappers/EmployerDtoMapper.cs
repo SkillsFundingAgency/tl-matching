@@ -36,20 +36,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                     o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.EmployerName, o => o.Ignore())
                 ;
-
-            CreateMap<OpportunityDto, FindEmployerViewModel>()
-                .ForMember(m => m.OpportunityId,
-                    o => o.MapFrom(s => s.Id))
-                .ForMember(m => m.OpportunityItemId, o => o.Ignore())
-                .ForMember(m => m.SelectedEmployerId,
-                    o => o.MapFrom(s => s.EmployerId))
-                .ForMember(m => m.SelectedEmployerId,
-                    o => o.MapFrom(s => s.EmployerId))
-                .ForMember(m => m.CompanyName,
-                    o => o.MapFrom(s => s.CompanyName))
-                .ForMember(m => m.PreviousCompanyName,
-                    o => o.MapFrom(s => s.CompanyName))
-                ;
         }
     }
 }
