@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return searchResults;
         }
 
-        public async Task<EmployerDetailsViewModel> GetOpportunityEmployerDetailAsync(int opportunityId)
+        public async Task<EmployerDetailsViewModel> GetOpportunityEmployerDetailAsync(int opportunityId, int opportunityItemId)
         {
             var employerId = await _opportunityRepository.GetSingleOrDefault(
                 opportunity => opportunity.Id == opportunityId,
@@ -71,6 +71,7 @@ namespace Sfa.Tl.Matching.Application.Services
                          !string.IsNullOrEmpty(o.EmployerContactPhone),
                     o => new EmployerDetailsViewModel
                             {
+                                OpportunityItemId = opportunityItemId,
                                 OpportunityId = o.Id,
                                 EmployerName = o.Employer.CompanyName,
                                 EmployerContact = o.EmployerContact,
@@ -91,6 +92,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         o.OpportunityItem.Any(oi => oi.OpportunityType == OpportunityType.Referral.ToString() && oi.IsCompleted.HasValue && oi.IsCompleted.Value),
                     o => new EmployerDetailsViewModel
                     {
+                        OpportunityItemId = opportunityItemId,
                         OpportunityId = opportunityId,
                         EmployerName = o.Employer.CompanyName,
                         EmployerContact = o.EmployerContact,
@@ -105,6 +107,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     e => e.Id == employerId,
                     e => new EmployerDetailsViewModel
                     {
+                        OpportunityItemId = opportunityItemId,
                         OpportunityId = opportunityId,
                         EmployerName = e.CompanyName,
                         EmployerContact = e.PrimaryContact,

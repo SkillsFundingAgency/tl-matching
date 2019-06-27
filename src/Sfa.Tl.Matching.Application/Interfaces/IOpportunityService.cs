@@ -14,15 +14,15 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<PlacementInformationSaveDto> GetPlacementInformationAsync(int opportunityItemId);
         List<ReferralDto> GetReferrals(int opportunityItemId);
         Task<bool> IsReferralOpportunityItemAsync(int id);
-        Task<CheckAnswersDto> GetCheckAnswers(int id);
-        Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto;
-        Task UpdateOpportunityItemAsync<T>(T dto) where T : BaseOpportunityUpdateDto;
+        Task<CheckAnswersViewModel> GetCheckAnswers(int id);
+        Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityDto;
+        Task UpdateOpportunityItemAsync<T>(T dto) where T : BaseOpportunityDto;
         Task UpdateProvisionGapAsync(PlacementInformationSaveDto dto);
         Task UpdateReferrals(OpportunityDto dto);
         Task<bool> IsNewReferralAsync(int opportunityItemId);
         Task<bool> IsNewProvisionGapAsync(int opportunityItemId);
         Task<int> GetOpportunityItemCountAsync(int opportunityId);
         Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
-        Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityItemId);
+        Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityId, int opportunityItemId);
     }
 }

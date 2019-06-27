@@ -29,13 +29,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             _opportunityItemRepository.GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, FindEmployerViewModel>>>())
+                                                           Arg.Any<Expression<Func<OpportunityItem, FindEmployerViewModel>>>())
                 .Returns(new OpportunityItemBuilder().BuildWithEmployer());
-                
+
             var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository);
 
-            _result = opportunityService.GetOpportunityEmployerAsync(1)
-                .GetAwaiter().GetResult();
+            _result = opportunityService.GetOpportunityEmployerAsync(1, 2).GetAwaiter().GetResult();
         }
 
         [Fact]

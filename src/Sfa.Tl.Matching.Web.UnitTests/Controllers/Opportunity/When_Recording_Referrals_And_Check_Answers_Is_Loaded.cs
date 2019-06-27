@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -29,16 +28,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var dto = new ValidCheckAnswersDtoBuilder().Build();
 
-            var providers = new List<ReferralDto>
-            {
-                new ReferralDto { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
-                new ReferralDto { Name = "Provider2", DistanceFromEmployer = 31.6m, Postcode = "BB1 1BB" }
-            };
-
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetCheckAnswers(OpportunityItemId).Returns(dto);
-
-            _opportunityService.GetReferrals(OpportunityItemId).Returns(providers);
 
             var referralService = Substitute.For<IReferralService>();
 
@@ -47,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(CreatedBy)
                 .Build();
 
-            _result = controllerWithClaims.CheckAnswers(OpportunityItemId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.GetCheckAnswers(OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]

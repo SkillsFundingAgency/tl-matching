@@ -22,11 +22,8 @@
         <span class="govuk-caption-l"> @Model.CompanyName</span>
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-        <form asp-route="AddOpportunity" asp-route-id="@Model.Id">
-            <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm">
-                Add another opportunity
-            </button>
-        </form>
+        <a class="govuk-button tl-button--grey" asp-route="Providers_Get" asp-route-id="@Model.OpportunityId" >Add another opportunity</a>
+        
         <form asp-route="SaveSelectedOpportunities" novalidate>
 
             @if (Model.ReferralCount > 0 || Model.ProvisionGapCount > 0)

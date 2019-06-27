@@ -38,16 +38,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("who-is-employer/{id}", Name = "LoadWhoIsEmployer")]
-        public async Task<IActionResult> GetOpportunityEmployerName(int id)
+        [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "LoadWhoIsEmployer")]
+        public async Task<IActionResult> GetOpportunityEmployerName(int opportunityId, int opportunityItemId)
         {
-            var viewModel = await _opportunityService.GetOpportunityEmployerAsync(id);
+            var viewModel = await _opportunityService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
 
             return View("FindEmployer", viewModel);
         }
 
         [HttpPost]
-        [Route("who-is-employer/{id}", Name = "SaveEmployerName")]
+        [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerName")]
         public async Task<IActionResult> SaveOpportunityEmployerName(FindEmployerViewModel viewModel)
         {
             var employerDto = viewModel.SelectedEmployerId != 0 &&
@@ -66,20 +66,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("GetEmployerDetails", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetEmployerDetails", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
 
         [HttpGet]
-        [Route("employer-details/{id?}", Name = "GetEmployerDetails")]
-        public async Task<IActionResult> GetOpportunityEmployerDetails(int id)
+        [Route("employer-details/{opportunityId}-{opportunityItemId}", Name = "GetEmployerDetails")]
+        public async Task<IActionResult> GetOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
         {
-            var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(id);
+            var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
 
             return View("Details", viewModel);
         }
 
         [HttpPost]
-        [Route("employer-details/{id?}", Name = "SaveEmployerDetails")]
+        [Route("employer-details/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerDetails")]
         public async Task<IActionResult> SaveOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
@@ -91,9 +91,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunity(employerDetailDto);
 
-            var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityId);
+            var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityItemId);
 
-            return RedirectToRoute(isReferralOpportunityItem ? "GetCheckAnswers" : "GetOpportunityBasket", new { id = viewModel.OpportunityId });
+            return isReferralOpportunityItem 
+                ? RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId }) 
+                : RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId });
         }
 
         private void Validate(EmployerDetailsViewModel viewModel)

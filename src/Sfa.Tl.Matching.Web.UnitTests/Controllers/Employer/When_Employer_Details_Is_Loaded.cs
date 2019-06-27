@@ -16,6 +16,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private readonly IActionResult _result;
 
         private const int OpportunityId = 12;
+        private const int OpportunityItemId = 34;
         private const string EmployerName = "EmployerName";
         private const string EmployerContact = "EmployerContact";
         private const string EmployerContactPhone = "EmployerContactPhone";
@@ -27,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var mapper = new Mapper(config);
 
             var employerService = Substitute.For<IEmployerService>();
-            employerService.GetOpportunityEmployerDetailAsync(Arg.Any<int>()).Returns(new EmployerDetailsViewModel
+            employerService.GetOpportunityEmployerDetailAsync(Arg.Any<int>(), Arg.Any<int>()).Returns(new EmployerDetailsViewModel
             {
                 OpportunityId = OpportunityId,
                 EmployerName = EmployerName,
@@ -38,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var employerController = new EmployerController(employerService, Substitute.For<IOpportunityService>(), mapper);
 
-            _result = employerController.GetOpportunityEmployerDetails(OpportunityId).GetAwaiter().GetResult();
+            _result = employerController.GetOpportunityEmployerDetails(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -61,6 +62,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
 
+            viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
             viewModel.OpportunityId.Should().Be(OpportunityId);
             viewModel.EmployerName.Should().Be(EmployerName);
             viewModel.EmployerContact.Should().Be(EmployerContact);

@@ -22,11 +22,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
-        private readonly CheckAnswersViewModel _viewModel = new CheckAnswersViewModel
-        {
-            OpportunityId = OpportunityId,
-            OpportunityItemId = OpportunityItemId
-        };
 
         public When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully()
         {
@@ -57,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.CheckAnswers(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveCheckAnswers(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }
         
         [Fact]
