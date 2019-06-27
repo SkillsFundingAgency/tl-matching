@@ -138,7 +138,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults)
                 },
                 SearchParameters = GetSearchParametersViewModelAsync(viewModel),
-                OpportunityId = viewModel.OpportunityId
+                OpportunityId = viewModel.OpportunityId,
+                OpportunityItemId = viewModel.OpportunityItemId
             };
 
             if (viewModel.OpportunityId == 0 && viewModel.OpportunityItemId == 0)
@@ -151,7 +152,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private SearchViewModel SetProviderIsSelected(SearchViewModel resultsViewModel)
         {
-            var referrals = _opportunityService.GetReferrals(resultsViewModel.SearchParameters.OpportunityId);
+            var referrals = _opportunityService.GetReferrals(resultsViewModel.SearchParameters.OpportunityItemId);
             foreach (var result in resultsViewModel.SearchResults.Results)
             {
                 if (referrals.Any(r => r.ProviderVenueId == result.ProviderVenueId))
