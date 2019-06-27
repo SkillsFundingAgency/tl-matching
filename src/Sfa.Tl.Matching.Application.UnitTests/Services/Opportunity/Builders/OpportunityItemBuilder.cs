@@ -1,27 +1,16 @@
-﻿using Sfa.Tl.Matching.Domain.Models;
+﻿using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
 {
     internal class OpportunityItemBuilder
     {
-        public OpportunityItem BuildWithEmployer() => new OpportunityItem
+        public FindEmployerViewModel BuildWithEmployer() => new FindEmployerViewModel
         {
-            Id = 1,
+            OpportunityItemId = 1,
             OpportunityId = 2,
-            Opportunity = new Domain.Models.Opportunity
-            {
-                Id = 2,
-                EmployerId = 3,
-                Employer = new Domain.Models.Employer
-                {
-                    Id = 3,
-                    CompanyName = "CompanyName",
-                    CreatedBy = "CreatedBy",
-                    ModifiedBy = "ModifiedBy"
-                },
-                CreatedBy = "CreatedBy"
-            },
-            CreatedBy = "CreatedBy"
+            SelectedEmployerId = 3,
+            CompanyName = "CompanyName",
+            PreviousCompanyName = "CompanyName",
         };
     }
 }

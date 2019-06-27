@@ -29,8 +29,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             _opportunityItemRepository.GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>())
+                    Arg.Any<Expression<Func<OpportunityItem, FindEmployerViewModel>>>())
                 .Returns(new OpportunityItemBuilder().BuildWithEmployer());
                 
             var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository);
@@ -45,8 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _opportunityItemRepository
                 .Received(1)
                 .GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>());
+                    Arg.Any<Expression<Func<OpportunityItem, FindEmployerViewModel>>>());
         }
 
         [Fact]
