@@ -29,6 +29,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
+                .ForMember(m => m.Referral, o => o.MapFrom(s => s.Referral))
                 .ForMember(m => m.Placements,
                     opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ?
                         src.Placements : null))
@@ -50,7 +51,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CreatedOn, o => o.Ignore())
                 .ForMember(m => m.ModifiedOn, o => o.Ignore())
                 .ForMember(m => m.ModifiedBy, o => o.Ignore())
-                .ForAllOtherMembers(config => config.Ignore())
                 ;
 
             CreateMap<EmployerDetailDto, Opportunity>()

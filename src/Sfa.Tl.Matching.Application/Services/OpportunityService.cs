@@ -246,9 +246,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static Expression<Func<Opportunity, bool>> FilterValidOpportunities()
         {
-            // TODO Should this be only IsCompleted records?
             return o => (o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString() &&
-                                                       oi.IsCompleted.HasValue && oi.IsCompleted.Value) > 0)
+                                                       oi.IsCompleted.HasValue && oi.IsCompleted.Value) > 0) 
                         ||
                         (o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.Referral.ToString() &&
                                                        oi.IsCompleted.HasValue && oi.IsCompleted.Value) > 0);
