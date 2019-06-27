@@ -23,6 +23,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId)
         {
+            // TODO FIX this
             throw new Exception("TODO: fix query below");
             /*
             return await (from op in _dbContext.Opportunity
@@ -62,6 +63,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
         {
+            // TODO FIX this
             throw new Exception("TODO: fix query below");
             /*
             return await (from op in _dbContext.Opportunity
