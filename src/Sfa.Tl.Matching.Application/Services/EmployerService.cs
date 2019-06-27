@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         o.OpportunityItem.Any(oi => oi.OpportunityType == OpportunityType.Referral.ToString() && oi.IsCompleted.HasValue && oi.IsCompleted.Value),
                     o => new EmployerDetailsViewModel
                     {
-                        OpportunityId = o.Id,
+                        OpportunityId = opportunityId,
                         EmployerName = o.Employer.CompanyName,
                         EmployerContact = o.EmployerContact,
                         EmployerContactEmail = o.EmployerContactEmail,
