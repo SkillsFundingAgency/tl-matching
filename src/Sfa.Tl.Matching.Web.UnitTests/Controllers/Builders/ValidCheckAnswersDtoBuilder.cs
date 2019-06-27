@@ -7,6 +7,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
         public CheckAnswersDto Build() => new CheckAnswersDto
         {
             OpportunityId = 1,
+            OpportunityItemId = 2,
             SearchRadius = 3,
             JobRole = "JobRole",
             PlacementsKnown = true,

@@ -64,14 +64,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_ViewModel_Properties_Are_Set()
         {
-            var viewModel = _result.GetViewModel<EmailsSentViewModel>();
+            var viewModel = _result.GetViewModel<SentViewModel>();
             viewModel.EmployerContact.Should().Be("EmployerContact");
-            viewModel.RouteId.Should().Be(1);
-            viewModel.SearchRadius.Should().Be(3);
-            viewModel.Postcode.Should().Be("AA1 1AA");
-            viewModel.UserEmail.Should().Be("email@address.com");
-            viewModel.JobRole.Should().Be("JobRole");
-            viewModel.Placements.Should().Be(2);
+            //viewModel.RouteId.Should().Be(1);
+            //viewModel.SearchRadius.Should().Be(3);
+            //viewModel.Postcode.Should().Be("AA1 1AA");
+            //viewModel.UserEmail.Should().Be("email@address.com");
+            //viewModel.JobRole.Should().Be("JobRole");
+            //viewModel.Placements.Should().Be(2);
             viewModel.EmployerName.Should().Be("EmployerName");
             viewModel.EmployerCrmRecord.Should().Be($"https://esfa-cs-prod.crm4.dynamics.com/main.aspx?pagetype=entityrecord&etc=1&id=%7b{_employerCrmId}%7d&extraqs=&newWindow=true");
         }

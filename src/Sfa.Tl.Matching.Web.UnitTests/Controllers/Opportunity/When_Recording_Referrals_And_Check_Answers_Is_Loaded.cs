@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private const string CreatedBy = "CreatedBy";
         private readonly IActionResult _result;
 
-        private const int OpportunityItemId = 1;
+        private const int OpportunityItemId = 2;
 
         public When_Recording_Referrals_And_Check_Answers_Is_Loaded()
         {

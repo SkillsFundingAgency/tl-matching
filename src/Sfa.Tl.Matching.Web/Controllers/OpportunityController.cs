@@ -173,24 +173,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return RedirectToRoute("GetOpportunityBasket", new { id = dto.OpportunityId });
         }
-
+        
         [HttpGet]
-        [Route("placement-gap/{id?}", Name = "ProvisionGapSent_Get")]
-        public async Task<IActionResult> ProvisionGapSent(int id)
-        {
-            var dto = await _opportunityService.GetOpportunity(id);
-            var viewModel = _mapper.Map<ProvisionGapSentViewModel>(dto);
-            viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
-
-            return View(viewModel);
-        }
-
-        [HttpGet]
-        [Route("emails-sent/{id?}", Name = "EmailSentReferrals_Get")]
+        [Route("emails-sent/{id}", Name = "EmailSentReferrals_Get")]
         public async Task<IActionResult> ReferralEmailSent(int id)
         {
             var dto = await _opportunityService.GetOpportunity(id);
-            var viewModel = _mapper.Map<EmailsSentViewModel>(dto);
+            var viewModel = _mapper.Map<SentViewModel>(dto);
             viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
 
             return View(viewModel);

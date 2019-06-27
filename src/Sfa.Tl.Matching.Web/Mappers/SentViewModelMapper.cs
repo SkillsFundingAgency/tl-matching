@@ -8,17 +8,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
     {
         public SentViewModelMapper()
         {
-            CreateMap<OpportunityDto, ProvisionGapSentViewModel>()
-                //.ForMember(m => m.WithResults,
-                //    opt => opt.MapFrom(src => src.SearchResultProviderCount > 0))
-                //.ForMember(m => m.NoResults,
-                //    opt => opt.MapFrom(src => src.SearchResultProviderCount == 0))
-                .ForAllOtherMembers(config => config.Ignore())
-                ;
-
-            CreateMap<OpportunityDto, EmailsSentViewModel>()
+            CreateMap<OpportunityDto, SentViewModel>()
                 .ForMember(m => m.EmployerCrmRecord, opt => opt.Ignore())
-                .ForAllOtherMembers(config => config.Ignore())
                 ;
         }
     }
