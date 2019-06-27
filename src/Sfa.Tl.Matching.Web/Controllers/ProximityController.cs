@@ -45,6 +45,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var viewModel = new SearchParametersViewModel
             {
+                OpportunityId = id ?? 0,
                 SelectedRouteId = null,
                 Postcode = null,
                 SearchRadius = SearchParametersViewModel.DefaultSearchRadius
@@ -54,7 +55,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("find-providers", Name = "Providers_Post")]
+        [Route("find-providers/{id?}", Name = "Providers_Post")]
         public async Task<IActionResult> Index(SearchParametersViewModel viewModel)
         {
             viewModel.SearchRadius = SearchParametersViewModel.DefaultSearchRadius;
