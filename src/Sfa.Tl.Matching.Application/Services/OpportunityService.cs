@@ -18,14 +18,14 @@ namespace Sfa.Tl.Matching.Application.Services
     public class OpportunityService : IOpportunityService
     {
         private readonly IMapper _mapper;
-        private readonly IRepository<Opportunity> _opportunityRepository;
+        private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly IRepository<ProvisionGap> _provisionGapRepository;
         private readonly IRepository<Referral> _referralRepository;
 
         public OpportunityService(
             IMapper mapper,
-            IRepository<Opportunity> opportunityRepository,
+            IOpportunityRepository opportunityRepository,
             IRepository<OpportunityItem> opportunityItemRepository,
             IRepository<ProvisionGap> provisionGapRepository,
             IRepository<Referral> referralRepository)
@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.Services
             //      The ProvisionGapMapper might not want to take OpportunityDto
             //      Should be able to do all of the below as part of the mapping from Dto above
             //      Make sure this functionality is covered by tests
-            
+
             if (dto.OpportunityType == OpportunityType.ProvisionGap)
             {
                 var provisionGap = _mapper.Map<ProvisionGap>(dto);
@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await _provisionGapRepository.Create(provisionGap);
             }
-            
+
             return opportunityItemId;
         }
 
@@ -107,7 +107,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return dto;
         }
-        
+
         public async Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId)
         {
             var opportunityItem = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId);
@@ -117,37 +117,16 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public OpportunityDto GetLatestCompletedOpportunity(int employerId)
-        {
-            var latestOpportunity = _opportunityRepository.GetMany(o => o.EmployerId == employerId)
-                .Where(FilterValidOpportunities())
-                .OrderByDescending(o => o.CreatedOn)
-                .Take(1).SingleOrDefault();
-
-            if (latestOpportunity == null)
-                return null;
-
-            //latestOpportunity.Referral?.Clear();
-            //latestOpportunity.ProvisionGap?.Clear();
-
-            var dto = _mapper.Map<OpportunityDto>(latestOpportunity);
-
-            return dto;
-        }
-
         public async Task<bool> IsReferralOpportunityItemAsync(int opportunityItemId)
         {
-            return await _opportunityItemRepository.GetMany(
-                o => o.Id == opportunityItemId 
-                     && o.Referral.Any()
-                     ).AnyAsync();
+            return await _opportunityItemRepository.GetMany(o => o.Id == opportunityItemId && o.Referral.Any()).AnyAsync();
         }
 
         public async Task<PlacementInformationSaveDto> GetPlacementInformationSaveAsync(int opportunityItemId)
         {
             var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
-                oi => oi.Opportunity,
-                 oi => oi.Opportunity.Employer);
+                (Expression<Func<OpportunityItem, object>>)(oi => oi.Opportunity),
+                oi => oi.Opportunity.Employer);
 
             var dto = _mapper.Map<OpportunityItem, PlacementInformationSaveDto>(placementInformation);
 
@@ -156,8 +135,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<CheckAnswersDto> GetCheckAnswers(int opportunityItemId)
         {
-            var checkAnswers = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
-                opp => opp.Route);
+            var checkAnswers = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId);
 
             var dto = _mapper.Map<OpportunityItem, CheckAnswersDto>(checkAnswers);
 
@@ -167,6 +145,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto
         {
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
+
             trackedEntity = _mapper.Map(dto, trackedEntity);
 
             await _opportunityRepository.Update(trackedEntity);
@@ -236,7 +215,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int id)
         {
-            var viewModel = await ((IOpportunityRepository) _opportunityRepository).GetOpportunityBasket(id);
+            var viewModel = await _opportunityRepository.GetOpportunityBasket(id);
+
             viewModel.Type = GetOpportunityBasketType(viewModel);
 
             return viewModel;
@@ -244,22 +224,15 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityItemId)
         {
-            var opportunityItem = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
-                oi => oi.Opportunity,
-                oi => oi.Opportunity.Employer);
-
-            var viewModel = _mapper.Map<OpportunityItem, FindEmployerViewModel>(opportunityItem);
-
-            return viewModel;
-        }
-
-        private static Expression<Func<Opportunity, bool>> FilterValidOpportunities()
-        {
-            return o => (o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString() &&
-                                                       oi.IsCompleted.HasValue && oi.IsCompleted.Value) > 0) 
-                        ||
-                        (o.OpportunityItem.Count(oi => oi.OpportunityType == OpportunityType.Referral.ToString() &&
-                                                       oi.IsCompleted.HasValue && oi.IsCompleted.Value) > 0);
+            return await _opportunityItemRepository.GetSingleOrDefault(
+                o => o.Id == opportunityItemId,
+                oi => new FindEmployerViewModel
+                {
+                    OpportunityItemId = opportunityItemId,
+                    OpportunityId = oi.OpportunityId,
+                    CompanyName = oi.Opportunity.Employer.CompanyName,
+                    SelectedEmployerId = oi.Opportunity.EmployerId ?? 0 
+                });
         }
 
         private static OpportunityBasketType GetOpportunityBasketType(OpportunityBasketViewModel viewModel)

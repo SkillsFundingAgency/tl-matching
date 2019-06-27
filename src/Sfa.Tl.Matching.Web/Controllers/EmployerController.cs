@@ -62,7 +62,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             var dto = _mapper.Map<EmployerNameDto>(viewModel);
-            dto.EmployerCrmId = employerDto.CrmId;
             dto.CompanyName = employerDto.CompanyNameWithAka;
 
             await _opportunityService.UpdateOpportunity(dto);
@@ -72,22 +71,21 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-details/{id?}", Name = "GetEmployerDetails")]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> GetOpportunityEmployerDetails(int id)
         {
-            var dto = await _opportunityService.GetOpportunity(id);
-            var viewModel = await GetEmployerDetailsViewModel(dto);
+            var viewModel = await _employerService.GetOpportunityEmployerDetails(id);
 
-            return View(viewModel);
+            return View("Details", viewModel);
         }
 
         [HttpPost]
         [Route("employer-details/{id?}", Name = "SaveEmployerDetails")]
-        public async Task<IActionResult> Details(EmployerDetailsViewModel viewModel)
+        public async Task<IActionResult> SaveOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
 
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View("Details", viewModel);
 
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
@@ -95,8 +93,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityId);
 
-            return RedirectToRoute(isReferralOpportunityItem ? "GetCheckAnswers" : 
-                "GetOpportunityBasket", new { id = viewModel.OpportunityId });
+            return RedirectToRoute(isReferralOpportunityItem ? "GetCheckAnswers" : "GetOpportunityBasket", new { id = viewModel.OpportunityId });
         }
 
         private void Validate(EmployerDetailsViewModel viewModel)
@@ -108,31 +105,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a number");
             else if (!Regex.IsMatch(viewModel.EmployerContactPhone, @"^(?:.*\d.*){7,}$"))
                 ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a telephone number that has 7 or more numbers");
-        }
-
-        private async Task<EmployerDetailsViewModel> GetEmployerDetailsViewModel(OpportunityDto dto)
-        {
-            if (IsEmployerPopulated(dto))
-                return _mapper.Map<EmployerDetailsViewModel>(dto);
-
-            var latestOpportunity = _opportunityService.GetLatestCompletedOpportunity(dto.EmployerId.Value);
-            if (latestOpportunity != null && IsEmployerPopulated(latestOpportunity))
-            {
-                var viewModel = _mapper.Map<EmployerDetailsViewModel>(latestOpportunity);
-                viewModel.OpportunityId = dto.Id;
-                return viewModel;
-            }
-
-            var employerDto = await _employerService.GetEmployer(dto.EmployerId ?? 0);
-
-            return _mapper.Map(employerDto, new EmployerDetailsViewModel { OpportunityId = dto.Id });
-        }
-
-        private static bool IsEmployerPopulated(OpportunityDto dto)
-        {
-            return !string.IsNullOrEmpty(dto.EmployerContact) &&
-                   !string.IsNullOrEmpty(dto.EmployerContactEmail) &&
-                   !string.IsNullOrEmpty(dto.EmployerContactPhone);
         }
     }
 }

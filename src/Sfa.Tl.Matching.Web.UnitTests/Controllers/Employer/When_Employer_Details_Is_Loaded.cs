@@ -3,7 +3,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
@@ -12,54 +11,43 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Details_Is_Loaded_With_Existing_Details
+    public class When_Employer_Details_Is_Loaded
     {
         private readonly IActionResult _result;
-        private readonly IOpportunityService _opportunityService;
-        private readonly IEmployerService _employerService;
 
         private const int OpportunityId = 12;
-        private const string CompanyName = "CompanyName";
+        private const string EmployerName = "EmployerName";
         private const string EmployerContact = "EmployerContact";
         private const string EmployerContactPhone = "EmployerContactPhone";
         private const string EmployerContactEmail = "EmployerContactEmail";
 
-        public When_Employer_Details_Is_Loaded_With_Existing_Details()
+        public When_Employer_Details_Is_Loaded()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
-            _employerService = Substitute.For<IEmployerService>();
-            _employerService.GetEmployer(Arg.Any<int>()).Returns(new EmployerStagingDto
+            var employerService = Substitute.For<IEmployerService>();
+            employerService.GetOpportunityEmployerDetails(Arg.Any<int>()).Returns(new EmployerDetailsViewModel
             {
-                CompanyName = CompanyName
-            });
-            _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
-            {
-                Id = OpportunityId,
-                //EmployerName = EmployerName,
+                OpportunityId = OpportunityId,
+                EmployerName = EmployerName,
                 EmployerContact = EmployerContact,
                 EmployerContactPhone = EmployerContactPhone,
                 EmployerContactEmail = EmployerContactEmail
             });
 
-            var employerController = new EmployerController(_employerService, _opportunityService, mapper);
+            var employerController = new EmployerController(employerService, Substitute.For<IOpportunityService>(), mapper);
 
-            _result = employerController.Details(OpportunityId).GetAwaiter().GetResult();
+            _result = employerController.GetOpportunityEmployerDetails(OpportunityId).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
+        public void Then_Result_Is_Not_Null() =>
             _result.Should().NotBeNull();
-        }
 
         [Fact]
-        public void Then_View_Result_Is_Returned()
-        {
+        public void Then_View_Result_Is_Returned() =>
             _result.Should().BeAssignableTo<ViewResult>();
-        }
 
         [Fact]
         public void Then_Model_Is_Not_Null()
@@ -69,26 +57,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_EmployerDetailsViewModel_Has_All_Data_Item_Set_Correctly()
+        public void Then_EmployerDetailsViewModel_Is_Populated_Correctly()
         {
             var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
 
             viewModel.OpportunityId.Should().Be(OpportunityId);
-            viewModel.EmployerName.Should().Be(CompanyName);
+            viewModel.EmployerName.Should().Be(EmployerName);
+            viewModel.EmployerContact.Should().Be(EmployerContact);
             viewModel.EmployerContactPhone.Should().Be(EmployerContactPhone);
             viewModel.EmployerContactEmail.Should().Be(EmployerContactEmail);
         }
 
-        [Fact]
-        public void Then_GetOpportunity_Is_Called_Exactly_Once()
-        {
-            _opportunityService.Received(1).GetOpportunity(OpportunityId);
-        }
-
-        [Fact]
-        public void Then_GetEmployer_Is_Not_Called()
-        {
-            _employerService.DidNotReceive().GetEmployer(Arg.Any<int>());
-        }
     }
 }

@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
     public class When_OpportunityService_Is_Called_To_Update_Opportunity
     {
-        private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
+        private readonly IOpportunityRepository _opportunityRepository;
 
         private const int OpportunityId = 1;
 
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
 
-            _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            _opportunityRepository = Substitute.For<IOpportunityRepository>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();

@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private readonly int _result;
         private const int OpportunityId = 1;
 
-        private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
+        private readonly IOpportunityRepository _opportunityRepository;
 
         public When_OpportunityService_Is_Called_To_Create_Opportunity()
         {
@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             });
             var mapper = new Mapper(config);
             
-            _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            _opportunityRepository = Substitute.For<IOpportunityRepository>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();

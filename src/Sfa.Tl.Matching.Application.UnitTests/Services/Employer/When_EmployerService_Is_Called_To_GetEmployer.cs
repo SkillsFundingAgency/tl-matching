@@ -25,13 +25,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var mapper = new Mapper(config);
 
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
+            var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
             var employer = new ValidEmployerBuilder().Build();
 
             _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(employer);
 
-            var employerService = new EmployerService(mapper, _employerRepository);
+            var employerService = new EmployerService(mapper, _employerRepository, opportunityRepository);
 
             _employerStagingResult = employerService.GetEmployer(EmployerId).GetAwaiter().GetResult();
         }

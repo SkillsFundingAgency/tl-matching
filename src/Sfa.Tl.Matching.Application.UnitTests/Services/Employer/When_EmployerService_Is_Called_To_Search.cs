@@ -27,12 +27,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
-            var repository = Substitute.For<IRepository<Domain.Models.Employer>>();
+            var employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
+            var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            repository.GetMany(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
+            employerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new SearchResultsBuilder().Build().AsQueryable());
 
-            var employerService = new EmployerService(mapper, repository);
+            var employerService = new EmployerService(mapper, employerRepository, opportunityRepository);
 
             const string employerName = "Co";
 

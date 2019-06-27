@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             _employerController = new EmployerController(employerService, opportunityService, mapper);
 
-            _result = _employerController.Details(viewModel).GetAwaiter().GetResult();
+            _result = _employerController.SaveOpportunityEmployerDetails(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

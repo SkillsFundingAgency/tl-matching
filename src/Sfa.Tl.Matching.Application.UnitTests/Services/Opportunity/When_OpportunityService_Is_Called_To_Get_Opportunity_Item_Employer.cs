@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            var opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();

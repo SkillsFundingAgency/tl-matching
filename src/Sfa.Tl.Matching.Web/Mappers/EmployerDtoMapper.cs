@@ -13,7 +13,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<FindEmployerViewModel, EmployerNameDto>>())
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<FindEmployerViewModel, EmployerNameDto>>())
                 .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.SelectedEmployerId))
-                .ForMember(m => m.EmployerCrmId, o => o.Ignore())
                 .ForMember(m => m.HasChanged, o => o.MapFrom(src => src.CompanyName != src.PreviousCompanyName))
                 ;
 
@@ -32,8 +31,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 ;
 
             CreateMap<OpportunityDto, EmployerDetailsViewModel>()
-                .ForMember(m => m.OpportunityId,
-                    o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.EmployerName, o => o.Ignore())
                 ;
         }

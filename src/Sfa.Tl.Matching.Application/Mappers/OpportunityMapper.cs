@@ -172,7 +172,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<ProviderSearchDto, OpportunityItem>()
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityItemId))
-                //.ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))

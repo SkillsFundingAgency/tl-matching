@@ -13,7 +13,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId);
         Task<PlacementInformationSaveDto> GetPlacementInformationSaveAsync(int opportunityItemId);
         List<ReferralDto> GetReferrals(int opportunityItemId);
-        OpportunityDto GetLatestCompletedOpportunity(int employerId);
         Task<bool> IsReferralOpportunityItemAsync(int id);
         Task<CheckAnswersDto> GetCheckAnswers(int id);
         Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto;

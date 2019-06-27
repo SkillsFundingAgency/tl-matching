@@ -14,14 +14,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     public class When_OpportunityService_Is_Called_To_Get_Opportunity_Item_Count
     {
         private readonly int _result;
-        private readonly IRepository<Domain.Models.Opportunity> _opportunityRepository;
+        private readonly IOpportunityRepository _opportunityRepository;
 
         public When_OpportunityService_Is_Called_To_Get_Opportunity_Item_Count()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
             
-            _opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            _opportunityRepository = Substitute.For<IOpportunityRepository>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();

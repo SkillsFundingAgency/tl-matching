@@ -56,11 +56,16 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<QualificationSearchResultViewModel> GetQualificationByIdAsync(int id)
         {
-            var qualification = await _qualificationRepository
-                .GetSingleOrDefault(p => p.Id == id,
-                    q => q.QualificationRouteMapping);
-
-            return _mapper.Map<Qualification, QualificationSearchResultViewModel>(qualification);
+            return await _qualificationRepository.GetSingleOrDefault(
+                p => p.Id == id,
+                q => new QualificationSearchResultViewModel
+                {
+                    QualificationId = q.Id,
+                    LarId = q.LarsId,
+                    ShortTitle = q.ShortTitle,
+                    Title = q.Title,
+                    RouteIds = q.QualificationRouteMapping.Select(m => m.Id).ToList()
+                });
         }
 
         public async Task<QualificationDetailViewModel> GetQualificationAsync(string larId)
