@@ -38,17 +38,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("who-is-employer/{id?}", Name = "LoadWhoIsEmployer")]
+        [Route("who-is-employer/{id}", Name = "LoadWhoIsEmployer")]
         public async Task<IActionResult> GetOpportunityEmployerName(int id)
         {
             var dto = await _opportunityService.GetOpportunity(id);
             var viewModel = _mapper.Map<FindEmployerViewModel>(dto);
 
-            return View(viewModel);
+            return View("FindEmployer", viewModel);
         }
 
         [HttpPost]
-        [Route("who-is-employer/{id?}", Name = "SaveEmployerName")]
+        [Route("who-is-employer/{id}", Name = "SaveEmployerName")]
         public async Task<IActionResult> SaveOpportunityEmployerName(FindEmployerViewModel viewModel)
         {
             var employerDto = viewModel.SelectedEmployerId != 0 &&
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (employerDto == null || viewModel.CompanyName != employerDto.CompanyNameWithAka)
             {
                 ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
-                return View(viewModel);
+                return View("FindEmployer", viewModel);
             }
 
             var dto = _mapper.Map<EmployerNameDto>(viewModel);
