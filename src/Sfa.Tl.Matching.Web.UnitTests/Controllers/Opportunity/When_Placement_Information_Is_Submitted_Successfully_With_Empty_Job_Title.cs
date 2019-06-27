@@ -86,7 +86,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_FindEmployer()
+        public void Then_Result_Is_Redirect_To_GetOpportunityEmployerName()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
