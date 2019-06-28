@@ -1,25 +1,23 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.BasketProvisionGapItemViewModel
-<form asp-route="ReportProvisionGap" novalidate>
-    <table class="govuk-table">
-        <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="col">Workplace</th>
-                <th class="govuk-table__header" scope="col">Job role</th>
-                <th class="govuk-table__header" scope="col">Students wanted</th>
-                <th class="govuk-table__header" scope="col">Reason no providers chosen</th>
-            </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-                <td class="govuk-table__cell">
-                    <input type="hidden" asp-for="@Model.OpportunityItemId" name="SelectedOpportunity[0].Id" />
-                    @Model.Workplace
-                </td>
-                <td class="govuk-table__cell">@Model.JobRole</td>
-                <td class="govuk-table__cell">@Model.StudentsWanted</td>
-                <td class="govuk-table__cell">@Model.Reason</td>
-            </tr>
-        </tbody>
-    </table>
-    <button class="govuk-button">Finish</button>
-</form>
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Workplace</th>
+            <th class="govuk-table__header" scope="col">Job role</th>
+            <th class="govuk-table__header" scope="col">Students wanted</th>
+            <th class="govuk-table__header" scope="col">Reason no providers chosen</th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+                <input type="hidden" asp-for="@Model.OpportunityItemId" name="SelectedOpportunity[0].Id" />
+                @Model.Workplace
+            </td>
+            <td class="govuk-table__cell">@Model.JobRole</td>
+            <td class="govuk-table__cell">@Model.StudentsWanted</td>
+            <td class="govuk-table__cell">@Model.Reason</td>
+        </tr>
+    </tbody>
+</table>
+<button class="govuk-button" name="SubmitAction" value="Finish">Finish</button>

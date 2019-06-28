@@ -217,6 +217,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
         public IActionResult SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
+            if (viewModel.SubmitAction == "Finish")
+                return RedirectToRoute("Start");
+
             return View("EmployerConsent");
         }
 

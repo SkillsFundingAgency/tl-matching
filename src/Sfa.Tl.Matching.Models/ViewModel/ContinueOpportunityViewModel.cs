@@ -2,6 +2,7 @@
 {
     public class ContinueOpportunityViewModel
     {
+        public string SubmitAction { get; set; }
         public SelectedOpportunityItemViewModel[] SelectedOpportunity { get; set; }
     }
 }
