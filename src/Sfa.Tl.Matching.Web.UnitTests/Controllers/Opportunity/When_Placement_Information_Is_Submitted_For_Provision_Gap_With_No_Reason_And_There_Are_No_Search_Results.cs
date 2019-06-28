@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
-                OpportunityItemId = 1,
+                OpportunityItemId = 2,
                 OpportunityType = OpportunityType.ProvisionGap,
                 SearchResultProviderCount = 0,
                 JobRole = "Junior Tester",
@@ -103,7 +103,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("LoadWhoIsEmployer");
-            result?.RouteValues["id"].Should().Be(1);
+            result?.RouteValues["opportunityId"].Should().Be(1);
+            result?.RouteValues["opportunityItemId"].Should().Be(2);
         }
     }
 }

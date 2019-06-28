@@ -24,13 +24,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         
         private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel
         {
-            OpportunityId = OpportunityItemId,
+            OpportunityItemId = OpportunityItemId,
+            OpportunityId = OpportunityId,
             EmployerContact = Contact,
             EmployerContactEmail = ContactEmail,
             EmployerContactPhone = ContactPhone
         };
 
         private const int OpportunityItemId = 1;
+        private const int OpportunityId = 2;
 
         private readonly IActionResult _result;
 

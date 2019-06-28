@@ -50,19 +50,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerName")]
         public async Task<IActionResult> SaveOpportunityEmployerName(FindEmployerViewModel viewModel)
         {
-            var employerDto = viewModel.SelectedEmployerId != 0 &&
-                !string.IsNullOrEmpty(viewModel.CompanyName) ?
-                await _employerService.GetEmployer(viewModel.SelectedEmployerId) :
-                null;
+            var isValidEmployer = await _employerService.ValidateEmployerNameAndId(viewModel.SelectedEmployerId, viewModel.CompanyName);
 
-            if (employerDto == null || viewModel.CompanyName != employerDto.CompanyNameWithAka)
+            if (!isValidEmployer)
             {
                 ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
                 return View("FindEmployer", viewModel);
             }
 
             var dto = _mapper.Map<EmployerNameDto>(viewModel);
-            dto.CompanyName = employerDto.CompanyNameWithAka;
 
             await _opportunityService.UpdateOpportunity(dto);
 

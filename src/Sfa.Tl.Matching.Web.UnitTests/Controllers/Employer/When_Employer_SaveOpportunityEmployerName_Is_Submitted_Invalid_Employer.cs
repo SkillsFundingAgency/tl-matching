@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -19,8 +18,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_SaveOpportunityEmployerName_Is_Submitted_Invalid_Employer()
         {
             var employerService = Substitute.For<IEmployerService>();
-            employerService.GetEmployer(Arg.Any<int>())
-                .ReturnsNull();
+            employerService.ValidateEmployerNameAndId(Arg.Any<int>(), Arg.Any<string>())
+                .Returns(false);
             var opportunityService = Substitute.For<IOpportunityService>();
 
             var viewModel = new FindEmployerViewModel

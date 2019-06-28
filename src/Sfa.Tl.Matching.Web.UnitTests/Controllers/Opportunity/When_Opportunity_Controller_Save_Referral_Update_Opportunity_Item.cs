@@ -119,7 +119,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("GetPlacementInformation");
-            result?.RouteValues["id"].Should().Be(2);
+            result?.RouteValues["opportunityItemId"].Should().Be(2);
         }
     }
 }

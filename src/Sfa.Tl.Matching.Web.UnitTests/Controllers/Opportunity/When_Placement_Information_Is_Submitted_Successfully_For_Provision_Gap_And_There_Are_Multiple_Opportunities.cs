@@ -25,6 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
+                OpportunityItemId = 2,
                 OpportunityType = OpportunityType.ProvisionGap,
                 JobRole = "Junior Tester",
                 PlacementsKnown = true,
@@ -83,7 +84,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _opportunityService
                 .Received(1)
-                .IsReferralOpportunityItemAsync(1);
+                .IsReferralOpportunityItemAsync(2);
         }
 
         [Fact]
@@ -101,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("GetOpportunityBasket");
-            result?.RouteValues["id"].Should().Be(1);
+            result?.RouteValues["opportunityId"].Should().Be(1);
         }
     }
 }
