@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -127,12 +128,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        JobRole = oi.JobRole,
                                                        StudentsWanted = oi.Placements.ToString(),
                                                        Workplace = $"London {e.Postcode}",
-                                                       Reason = oi.ProvisionGap.First().HadBadExperience.HasValue
-                                                                    && oi.ProvisionGap.First().HadBadExperience.Value ? "Had Bad Experience" :
-                                                                oi.ProvisionGap.First().NoSuitableStudent.HasValue
-                                                                    && oi.ProvisionGap.First().NoSuitableStudent.Value ? "No Suitable Student" :
-                                                                oi.ProvisionGap.First().ProvidersTooFarAway.HasValue
-                                                                    && oi.ProvisionGap.First().ProvidersTooFarAway.Value ? "Providers Too Far Away" : "",
+                                                       Reason = GetReasons(oi.ProvisionGap.First())
                                                    }).ToList(),
                                                ReferralItems = o.OpportunityItem
                                                    .Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString())
@@ -147,6 +143,21 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                            }).SingleOrDefaultAsync();
 
             return opportunityBasket;
+        }
+
+        private static string GetReasons(ProvisionGap provisionGap)
+        {
+            var reasons = new List<string>();
+            if (provisionGap.HadBadExperience.HasValue && provisionGap.HadBadExperience.Value)
+                reasons.Add("Had Bad Experience");
+
+            if (provisionGap.NoSuitableStudent.HasValue && provisionGap.NoSuitableStudent.Value)
+                reasons.Add("No Suitable Student");
+
+            if (provisionGap.ProvidersTooFarAway.HasValue && provisionGap.ProvidersTooFarAway.Value)
+                reasons.Add("Providers Too Far Away");
+
+            return string.Join(", ", reasons);
         }
     }
 }
