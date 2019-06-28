@@ -31,6 +31,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             employerService.GetOpportunityEmployerDetailAsync(Arg.Any<int>(), Arg.Any<int>()).Returns(new EmployerDetailsViewModel
             {
                 OpportunityId = OpportunityId,
+                OpportunityItemId = OpportunityItemId,
                 EmployerName = EmployerName,
                 EmployerContact = EmployerContact,
                 EmployerContactPhone = EmployerContactPhone,
