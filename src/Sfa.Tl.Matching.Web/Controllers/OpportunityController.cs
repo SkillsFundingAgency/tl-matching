@@ -1,5 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -215,12 +216,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
-        public IActionResult SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
+        public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
             if (viewModel.SubmitAction == "Finish")
                 return RedirectToRoute("Start");
 
-            return View("EmployerConsent");
+            if (viewModel.SelectedOpportunity.Any(p => p.IsSelected))
+                return View("EmployerConsent");
+
+            ModelState.AddModelError("Model.ReferralItems[0].IsSelected", "You must select an opportunity to continue");
+
+            var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
+
+            return View(nameof(OpportunityBasket), opportunityBasketViewModel);
         }
 
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)

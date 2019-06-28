@@ -17,14 +17,20 @@
                 <h2 class="govuk-error-summary__title" id="error-summary-title">
                     There is a problem
                 </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a href="#tl-continue" sfa-validation-for="@Model.ReferralItems[0].IsSelected"></a></li>
+                    </ul>
+                </div>
             </div>
         }
         <span class="govuk-caption-l"> @Model.CompanyName</span>
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-        <a class="govuk-button tl-button--grey" asp-route="Providers_Get" asp-route-id="@Model.OpportunityId" >Add another opportunity</a>
-        
+        <a class="govuk-button tl-button--grey" asp-route="Providers_Get" asp-route-id="@Model.OpportunityId">Add another opportunity</a>
+
         <form asp-route="SaveSelectedOpportunities" novalidate>
+            <input type="hidden" asp-for="OpportunityId" />
 
             @if (Model.ReferralCount > 0 || Model.ProvisionGapCount > 0)
             {
