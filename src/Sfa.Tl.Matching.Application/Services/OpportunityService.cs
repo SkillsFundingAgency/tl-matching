@@ -152,7 +152,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return viewModel;
         }
 
-
         public async Task<bool> IsReferralOpportunityItemAsync(int opportunityItemId)
         {
             return await _referralRepository.GetMany(o => o.OpportunityItemId == opportunityItemId).AnyAsync();

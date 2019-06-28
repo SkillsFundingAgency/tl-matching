@@ -6,6 +6,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     public class OpportunityBasketViewModel
     {
         public int OpportunityId { get; set; }
+        public int OpportunityItemId { get; set; }
         public string CompanyName { get; set; }
 
         public int ReferralCount => ReferralItems?.Count ?? 0;
