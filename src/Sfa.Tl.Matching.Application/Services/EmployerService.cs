@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.Services
             if (employerId == 0 || string.IsNullOrEmpty(companyName)) return false;
             
             var employer = await _employerRepository.GetSingleOrDefault(
-                e => e.Id == employerId && $"{e.CompanyName} ({e.AlsoKnownAs})" == companyName,
+                e => e.Id == employerId && companyName.ToLetterOrDigit() == e.CompanyNameSearch,
                 e => e.Id);
             
             return employer > 0;
