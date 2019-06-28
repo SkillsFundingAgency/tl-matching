@@ -136,7 +136,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                    {
                                                        OpportunityItemId = oi.Id,
                                                        JobRole = oi.JobRole,
-                                                       Workplace = $"London {e.Postcode}",
+                                                       Workplace = $"London {oi.Postcode}",
                                                        StudentsWanted = oi.Placements.ToString(),
                                                        Providers = oi.Referral.Count
                                                    }).ToList(),
