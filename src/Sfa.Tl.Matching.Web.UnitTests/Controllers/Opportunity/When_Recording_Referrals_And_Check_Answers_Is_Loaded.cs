@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -20,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private const string CreatedBy = "CreatedBy";
         private readonly IActionResult _result;
 
-        private const int OpportunityItemId = 1;
+        private const int OpportunityItemId = 2;
 
         public When_Recording_Referrals_And_Check_Answers_Is_Loaded()
         {
@@ -29,16 +28,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var dto = new ValidCheckAnswersDtoBuilder().Build();
 
-            var providers = new List<ReferralDto>
-            {
-                new ReferralDto { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
-                new ReferralDto { Name = "Provider2", DistanceFromEmployer = 31.6m, Postcode = "BB1 1BB" }
-            };
-
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetCheckAnswers(OpportunityItemId).Returns(dto);
-
-            _opportunityService.GetReferrals(OpportunityItemId).Returns(providers);
 
             var referralService = Substitute.For<IReferralService>();
 
@@ -47,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(CreatedBy)
                 .Build();
 
-            _result = controllerWithClaims.CheckAnswers(OpportunityItemId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.GetCheckAnswers(OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -76,13 +67,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
             viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
-            viewModel.PlacementInformation.EmployerName.Should().Be("EmployerName");
-            viewModel.PlacementInformation.JobRole.Should().Be("JobRole");
-            viewModel.PlacementInformation.SearchRadius.Should().Be(3);
-            viewModel.PlacementInformation.PlacementsKnown.Should().BeTrue();
-            viewModel.PlacementInformation.Placements.Should().Be(2);
-            viewModel.PlacementInformation.Postcode.Should().Be("AA1 1AA");
-            viewModel.PlacementInformation.RouteName.Should().Be("RouteName");
+            viewModel.EmployerName.Should().Be("EmployerName");
+            viewModel.JobRole.Should().Be("JobRole");
+            viewModel.SearchRadius.Should().Be(3);
+            viewModel.PlacementsKnown.Should().BeTrue();
+            viewModel.Placements.Should().Be(2);
+            viewModel.Postcode.Should().Be("AA1 1AA");
+            viewModel.RouteName.Should().Be("RouteName");
             
             viewModel.Providers.Count.Should().Be(2);
 

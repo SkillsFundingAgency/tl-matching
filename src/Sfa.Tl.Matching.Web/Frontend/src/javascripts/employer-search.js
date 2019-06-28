@@ -5,7 +5,7 @@ var employer = (function () {
     var timeoutId;
 
     accessibleAutocomplete.enhanceSelectElement({
-        defaultValue: "",
+        defaultValue: $("#companyNameHidden").val(),
         autoSelect: true,
         selectElement: document.querySelector("#CompanyName"),
         minLength: queryMinLength,
@@ -13,9 +13,6 @@ var employer = (function () {
         name: "CompanyName",
         onConfirm: setSelectedEmployerId
     });
-
-    $("#SelectedEmployerId").val("");
-    $("#CompanyName").val($("#companyNameHidden").val());
 
     function search(query, populateResults) {
         if (query.trim().length < queryMinLength) return;

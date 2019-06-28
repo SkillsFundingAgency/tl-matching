@@ -3,7 +3,6 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
@@ -12,31 +11,44 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_FindEmployer_Is_Loaded
+    public class When_Employer_GetOpportunityEmployerName_Is_Loaded
     {
         private readonly IActionResult _result;
-        private const int OpportunityId = 12;
+        private readonly IOpportunityService _opportunityService;
+        private const int OpportunityId = 1;
+        private const int OpportunityItemId = 12;
         private const int EmployerId = 1;
 
         private const string CompanyName = "CompanyName";
 
-        public When_Employer_FindEmployer_Is_Loaded()
+        public When_Employer_GetOpportunityEmployerName_Is_Loaded()
         {
             var employerService = Substitute.For<IEmployerService>();
-            var opportunityService = Substitute.For<IOpportunityService>();
-            opportunityService.GetOpportunity(OpportunityId).Returns(new OpportunityDto
-            {
-                Id = OpportunityId,
-                //TODO: Get company name from opportunity
-                //EmployerName = CompanyName,
-                EmployerId = EmployerId
-            });
+            _opportunityService = Substitute.For<IOpportunityService>();
+            
+            _opportunityService.GetOpportunityEmployerAsync(OpportunityId, OpportunityItemId)
+                .Returns(new FindEmployerViewModel
+                {
+                    OpportunityId = OpportunityId,
+                    OpportunityItemId = OpportunityItemId,
+                    SelectedEmployerId = EmployerId,
+                    CompanyName = CompanyName,
+                });
+
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var employerController = new EmployerController(employerService, opportunityService, mapper);
+            var employerController = new EmployerController(employerService, _opportunityService, mapper);
 
-            _result = employerController.FindEmployer(OpportunityId).GetAwaiter().GetResult();
+            _result = employerController.GetOpportunityEmployerName(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
+        }
+
+        [Fact]
+        public void Then_GetOpportunityEmployer_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .GetOpportunityEmployerAsync(OpportunityId, OpportunityItemId);
         }
 
         [Fact]
@@ -58,6 +70,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_FindEmployerViewModel_Has_All_Data_Item_Set_Correctly()
         {
             var viewModel = _result.GetViewModel<FindEmployerViewModel>();
+            viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
             viewModel.OpportunityId.Should().Be(OpportunityId);
             viewModel.SelectedEmployerId.Should().Be(EmployerId);
             viewModel.CompanyName.Should().Be(CompanyName);

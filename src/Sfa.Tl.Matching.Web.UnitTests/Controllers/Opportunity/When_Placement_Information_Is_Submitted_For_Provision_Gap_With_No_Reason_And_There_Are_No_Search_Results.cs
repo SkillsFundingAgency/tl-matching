@@ -23,15 +23,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Placement_Information_Is_Submitted_For_Provision_Gap_With_No_Reason_And_There_Are_No_Search_Results()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsReferralOpportunityItemAsync(1).Returns(false);
-            _opportunityService.GetOpportunityItemCountAsync(1).Returns(1);
+            _opportunityService.GetOpportunityItemCountAsync(1).Returns(0);
 
             var referralService = Substitute.For<IReferralService>();
 
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
-                OpportunityItemId = 1,
+                OpportunityItemId = 2,
                 OpportunityType = OpportunityType.ProvisionGap,
                 SearchResultProviderCount = 0,
                 JobRole = "Junior Tester",
@@ -59,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             
             _opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
 
-            _result = _opportunityController.PlacementInformationSave(viewModel).GetAwaiter().GetResult();
+            _result = _opportunityController.SavePlacementInformation(viewModel).GetAwaiter().GetResult();
         }
         
         [Fact]
@@ -81,30 +80,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_IsReferralOpportunity_Is_Called_Exactly_Once()
-        {
-            _opportunityService
-                .Received(1)
-                .IsReferralOpportunityItemAsync(1);
-        }
-
-        [Fact]
         public void Then_GetOpportunityItemCountAsync_Is_Called_Exactly_Once()
         {
             _opportunityService
                 .Received(1)
                 .GetOpportunityItemCountAsync(1);
         }
-
-
+        
         [Fact]
-        public void Then_Result_Is_Redirect_To_FindEmployer()
+        public void Then_Result_Is_Redirect_To_GetOpportunityEmployerName()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("LoadWhoIsEmployer");
-            result?.RouteValues["id"].Should().Be(1);
+            result?.RouteValues["opportunityId"].Should().Be(1);
+            result?.RouteValues["opportunityItemId"].Should().Be(2);
         }
     }
 }

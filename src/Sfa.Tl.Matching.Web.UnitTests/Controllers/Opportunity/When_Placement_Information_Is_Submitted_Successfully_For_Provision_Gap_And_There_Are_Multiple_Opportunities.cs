@@ -25,6 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
+                OpportunityItemId = 2,
                 OpportunityType = OpportunityType.ProvisionGap,
                 JobRole = "Junior Tester",
                 PlacementsKnown = true,
@@ -49,7 +50,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsReferralOpportunityItemAsync(1).Returns(false);
             _opportunityService.GetOpportunityItemCountAsync(1).Returns(2);
 
             var referralService = Substitute.For<IReferralService>();
@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.PlacementInformationSave(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SavePlacementInformation(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -79,14 +79,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_IsReferralOpportunity_Is_Called_Exactly_Once()
-        {
-            _opportunityService
-                .Received(1)
-                .IsReferralOpportunityItemAsync(1);
-        }
-
-        [Fact]
         public void Then_GetOpportunityItemCountAsync_Is_Called_Exactly_Once()
         {
             _opportunityService
@@ -101,7 +93,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("GetOpportunityBasket");
-            result?.RouteValues["id"].Should().Be(1);
+            result?.RouteValues["opportunityId"].Should().Be(1);
         }
     }
 }

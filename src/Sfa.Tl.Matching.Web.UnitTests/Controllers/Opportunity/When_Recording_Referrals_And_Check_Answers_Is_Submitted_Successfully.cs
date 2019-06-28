@@ -17,15 +17,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     public class When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully
     {
         private const string ModifiedBy = "ModifiedBy";
+        private const int OpportunityId = 1;
         private const int OpportunityItemId = 1;
 
         private readonly IOpportunityService _opportunityService;
-        private readonly IReferralService _referralService;
         private readonly IActionResult _result;
-        private readonly CheckAnswersViewModel _viewModel = new CheckAnswersViewModel
-        {
-            OpportunityItemId = OpportunityItemId
-        };
 
         public When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully()
         {
@@ -47,16 +43,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _referralService = Substitute.For<IReferralService>();
+            var referralService = Substitute.For<IReferralService>();
 
-            var opportunityController = new OpportunityController(_opportunityService, _referralService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(ModifiedBy)
                 .Build();
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.CheckAnswers(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveCheckAnswers(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }
         
         [Fact]
@@ -65,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
             result?.RouteName.Should().Be("GetOpportunityBasket");
-            result?.RouteValues["id"].Should().Be(1);
+            result?.RouteValues["opportunityId"].Should().Be(1);
         }
 
         [Fact]
@@ -73,18 +69,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             // TODO Assert args
             _opportunityService.Received(1).UpdateOpportunityItemAsync(Arg.Any<CheckAnswersDto>());
-        }
-
-        [Fact]
-        public void Then_SendProviderReferralEmail_Is_Called_Exactly_Once()
-        {
-            _referralService.Received(1).SendProviderReferralEmail(OpportunityItemId);
-        }
-
-        [Fact]
-        public void Then_SendEmployerReferralEmail_Is_Called_Exactly_Once()
-        {
-            _referralService.Received(1).SendEmployerReferralEmail(OpportunityItemId);
         }
     }
 }

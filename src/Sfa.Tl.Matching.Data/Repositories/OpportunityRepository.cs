@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -21,8 +22,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId)
+        public Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId)
         {
+            // TODO FIX this
             throw new Exception("TODO: fix query below");
             /*
             return await (from op in _dbContext.Opportunity
@@ -60,8 +62,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
             */
         }
 
-        public async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
+        public Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
         {
+            // TODO FIX this
             throw new Exception("TODO: fix query below");
             /*
             return await (from op in _dbContext.Opportunity
@@ -115,7 +118,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                            where o.Id == opportunityId
                                            select new OpportunityBasketViewModel
                                            {
-                                               Id = o.Id,
+                                               OpportunityId = o.Id,
                                                CompanyName = e.CompanyName,
                                                ProvisionGapItems = o.OpportunityItem
                                                    .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString())
@@ -124,13 +127,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        OpportunityItemId = oi.Id,
                                                        JobRole = oi.JobRole,
                                                        StudentsWanted = oi.Placements.ToString(),
-                                                       Workplace = $"London {e.Postcode}",
-                                                       Reason = oi.ProvisionGap.First().HadBadExperience.HasValue
-                                                                    && oi.ProvisionGap.First().HadBadExperience.Value ? "Had Bad Experience" :
-                                                                oi.ProvisionGap.First().NoSuitableStudent.HasValue
-                                                                    && oi.ProvisionGap.First().NoSuitableStudent.Value ? "No Suitable Student" :
-                                                                oi.ProvisionGap.First().ProvidersTooFarAway.HasValue
-                                                                    && oi.ProvisionGap.First().ProvidersTooFarAway.Value ? "Providers Too Far Away" : "",
+                                                       Workplace = $"London {oi.Postcode}",
+                                                       Reason = GetReasons(oi.ProvisionGap.First())
                                                    }).ToList(),
                                                ReferralItems = o.OpportunityItem
                                                    .Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString())
@@ -138,13 +136,28 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                    {
                                                        OpportunityItemId = oi.Id,
                                                        JobRole = oi.JobRole,
-                                                       Workplace = $"London {e.Postcode}",
+                                                       Workplace = $"London {oi.Postcode}",
                                                        StudentsWanted = oi.Placements.ToString(),
                                                        Providers = oi.Referral.Count
                                                    }).ToList(),
                                            }).SingleOrDefaultAsync();
 
             return opportunityBasket;
+        }
+
+        private static string GetReasons(ProvisionGap provisionGap)
+        {
+            var reasons = new List<string>();
+            if (provisionGap.HadBadExperience.HasValue && provisionGap.HadBadExperience.Value)
+                reasons.Add("Had Bad Experience");
+
+            if (provisionGap.NoSuitableStudent.HasValue && provisionGap.NoSuitableStudent.Value)
+                reasons.Add("No Suitable Student");
+
+            if (provisionGap.ProvidersTooFarAway.HasValue && provisionGap.ProvidersTooFarAway.Value)
+                reasons.Add("Providers Too Far Away");
+
+            return string.Join(", ", reasons);
         }
     }
 }

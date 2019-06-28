@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Mvc.ModelBinding.Validation
-@using Sfa.Tl.Matching.Models.Enums
+﻿@using Sfa.Tl.Matching.Models.Enums
 @model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketViewModel
 
 @{
@@ -7,7 +6,7 @@
 }
 
 @section backButton{
-    <a asp-route="Providers_Get" class="govuk-back-link">Back</a>
+    <a asp-route="GetCheckAnswers" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>
 }
 
 <div class="govuk-grid-row">
@@ -18,17 +17,20 @@
                 <h2 class="govuk-error-summary__title" id="error-summary-title">
                     There is a problem
                 </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a href="#tl-continue" sfa-validation-for="@Model.ReferralItems[0].IsSelected"></a></li>
+                    </ul>
+                </div>
             </div>
         }
         <span class="govuk-caption-l"> @Model.CompanyName</span>
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-        <form asp-route="AddOpportunity">
-            <button type="submit" class="govuk-button tl-button--grey" id="tl-confirm">
-                Add another opportunity
-            </button>
-        </form>
+        <a class="govuk-button tl-button--grey" asp-route="FindProviders" asp-route-opportunityId="@Model.OpportunityId">Add another opportunity</a>
+
         <form asp-route="SaveSelectedOpportunities" novalidate>
+            <input type="hidden" asp-for="OpportunityId" />
 
             @if (Model.ReferralCount > 0 || Model.ProvisionGapCount > 0)
             {
@@ -38,7 +40,7 @@
                         <partial name="_basketReferralSingle" , model="Model.ReferralItems[0]" />
                         break;
                     case OpportunityBasketType.ProvisionGapSingle:
-                        <partial name="_basketProvisionGapSingle" , model="Model.ProvisionGapItems" />
+                        <partial name="_basketProvisionGapSingle" , model="Model.ProvisionGapItems[0]" />
                         break;
                     case OpportunityBasketType.ReferralMultipl:
                         <partial name="_basketReferralMultiple" , model="Model.ReferralItems" />

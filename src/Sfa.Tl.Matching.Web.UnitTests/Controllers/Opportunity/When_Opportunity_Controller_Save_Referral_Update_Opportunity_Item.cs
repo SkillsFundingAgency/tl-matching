@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Opportunity_Controller_Save_Referral_Update_Opportunity()
         {
             const int opportunityId = 1;
-            const int opportunityItemId = 1;
+            const int opportunityItemId = 2;
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.IsNewReferralAsync(opportunityItemId).Returns(false);
 
@@ -65,6 +65,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 Postcode = "cv12wt",
                 SearchRadius = 10,
                 OpportunityId = opportunityId,
+                OpportunityItemId = opportunityItemId,
                 SelectedProvider = new[]
                 {
                     new SelectedProviderViewModel
@@ -112,12 +113,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_PlacementInformationSave_Get()
+        public void Then_Result_Is_Redirect_To_GetPlacementInformation()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("PlacementInformationSave_Get");
+            result?.RouteName.Should().Be("GetPlacementInformation");
+            result?.RouteValues["opportunityItemId"].Should().Be(2);
         }
     }
 }

@@ -2,9 +2,13 @@
 {
     public class FindEmployerViewModel
     {
-        public int SelectedEmployerId { get; set; }
         public int OpportunityId { get; set; }
+        public int OpportunityItemId { get; set; }
+        public int SelectedEmployerId { get; set; }
         public string CompanyName { get; set; }
+        public string AlsoKnownAs { get; set; }
         public string PreviousCompanyName { get; set; }
+        public string CompanyNameWithAka => !string.IsNullOrWhiteSpace(AlsoKnownAs) ?
+            $"{CompanyName} ({AlsoKnownAs})" : CompanyName;
     }
 }

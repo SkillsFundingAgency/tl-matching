@@ -83,19 +83,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                         .ToList();
                 })
                 ;
-
-            CreateMap<Qualification, QualificationSearchResultViewModel>()
-                .ForMember(m => m.QualificationId, config => config.MapFrom(s => s.Id))
-                .ForMember(m => m.LarId, config => config.MapFrom(s => s.LarsId))
-                .ForMember(m => m.Title, config => config.MapFrom(s => s.Title))
-                .ForMember(m => m.ShortTitle, config => config.MapFrom(s => s.ShortTitle))
-                .ForMember(m => m.RouteIds, config => config.Ignore())
-                .ForMember(m => m.Routes, config => config.Ignore())
-                .AfterMap((m, o) =>
-                {
-                    o.RouteIds = m.QualificationRouteMapping.Select(r => r.RouteId).ToList();
-                })
-                ;
         }
 
         private static string GetSearchTerm(params string[] searchTerms)

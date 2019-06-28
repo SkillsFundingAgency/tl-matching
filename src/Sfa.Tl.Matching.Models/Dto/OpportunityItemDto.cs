@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Models.Dto
 {
     public class OpportunityItemDto
     {
-        public int Id { get; set; }
+        public int OpportunityItemId { get; set; }
         public int OpportunityId { get; set; }
         public int RouteId { get; set; }
         public string RouteName { get; set; }
@@ -23,10 +23,8 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string CreatedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
-
+        public virtual ICollection<ProvisionGapDto> ProvisionGap { get; set; }
         public virtual ICollection<ReferralDto> Referral { get; set; }
-        public int ReferralCount { get; set; }
-        public int ProvisionGapCount { get; set; }
         public OpportunityType OpportunityType { get; set; }
     }
 }

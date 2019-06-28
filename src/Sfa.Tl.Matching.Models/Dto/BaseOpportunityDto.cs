@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class BaseOpportunityUpdateDto
+    public class BaseOpportunityDto
     {
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }

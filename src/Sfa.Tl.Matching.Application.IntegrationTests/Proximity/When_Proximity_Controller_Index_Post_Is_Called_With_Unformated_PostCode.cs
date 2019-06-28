@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
         public void Then_Result_Is_Redirect_To_Results()
         {
             var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("ProviderResults_Get");
+            redirect?.RouteName.Should().BeEquivalentTo("GetProviderResults");
         }
 
         [Fact]

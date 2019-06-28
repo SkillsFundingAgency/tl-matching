@@ -82,12 +82,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_PlacementInformationSave_Get()
+        public void Then_Result_Is_Redirect_To_GetPlacementInformation()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("PlacementInformationSave_Get");
+            result?.RouteName.Should().Be("GetPlacementInformation");
         }
     }
 }

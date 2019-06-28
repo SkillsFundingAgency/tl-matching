@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunityBasket(1).Returns(new OpportunityBasketViewModel
             {
-                Id = 1,
+                OpportunityId = 1,
                 CompanyName = "Company Name"
             });
 
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("CreatedBy")
                 .Build();
 
-            _result = controllerWithClaims.OpportunityBasket(1).GetAwaiter().GetResult();
+            _result = controllerWithClaims.OpportunityBasket(1, 1).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -40,11 +40,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("find-providers", Name = "Providers_Get")]
-        public IActionResult Index()
+        [Route("find-providers/{opportunityId?}", Name = "FindProviders")]
+        public IActionResult Index(int? opportunityId = null)
         {
             var viewModel = new SearchParametersViewModel
             {
+                OpportunityId = opportunityId ?? 0,
                 SelectedRouteId = null,
                 Postcode = null,
                 SearchRadius = SearchParametersViewModel.DefaultSearchRadius
@@ -54,7 +55,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("find-providers", Name = "Providers_Post")]
+        [Route("find-providers/{opportunityId?}", Name = "Providers_Post")]
         public async Task<IActionResult> Index(SearchParametersViewModel viewModel)
         {
             viewModel.SearchRadius = SearchParametersViewModel.DefaultSearchRadius;
@@ -63,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(nameof(Index), GetSearchParametersViewModelAsync(viewModel));
             }
 
-            return RedirectToRoute("ProviderResults_Get", new SearchParametersViewModel
+            return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
             {
                 SelectedRouteId = viewModel.SelectedRouteId,
                 Postcode = viewModel.Postcode,
@@ -73,7 +74,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "ProviderResults_Get")]
+        [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetProviderResults")]
         public async Task<IActionResult> Results(SearchParametersViewModel searchParametersViewModel)
         {
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
@@ -95,7 +96,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 });
             }
 
-            return RedirectToRoute("ProviderResults_Get", viewModel);
+            return RedirectToRoute("GetProviderResults", viewModel);
         }
 
         [HttpPost]
@@ -138,7 +139,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults)
                 },
                 SearchParameters = GetSearchParametersViewModelAsync(viewModel),
-                OpportunityId = viewModel.OpportunityId
+                OpportunityId = viewModel.OpportunityId,
+                OpportunityItemId = viewModel.OpportunityItemId
             };
 
             if (viewModel.OpportunityId == 0 && viewModel.OpportunityItemId == 0)
@@ -151,7 +153,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private SearchViewModel SetProviderIsSelected(SearchViewModel resultsViewModel)
         {
-            var referrals = _opportunityService.GetReferrals(resultsViewModel.SearchParameters.OpportunityId);
+            var referrals = _opportunityService.GetReferrals(resultsViewModel.SearchParameters.OpportunityItemId);
             foreach (var result in resultsViewModel.SearchResults.Results)
             {
                 if (referrals.Any(r => r.ProviderVenueId == result.ProviderVenueId))

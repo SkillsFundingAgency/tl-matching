@@ -5,15 +5,15 @@
 
 @section backButton{
     <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link">Back</a>
-    @if(@Model.OpportunityId == 0)
-   {
-       <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Cancel opportunity and start again </a>
-   }
-   else
-   {
-       <a asp-route="GetOpportunityBasket" asp-route-id="@Model.OpportunityId" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel this opportunity</a>   
-   }
-    
+    @if (@Model.OpportunityItemId == 0)
+    {
+        <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Cancel opportunity and start again </a>
+    }
+    else
+    {
+        <a asp-route="GetOpportunityBasket" asp-route-id="@Model.OpportunityId" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel this opportunity</a>
+    }
+
 }
 
 @if (!ViewData.ModelState.IsValid)
@@ -35,6 +35,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
         <form class="form" asp-controller="Proximity" asp-action="Index" novalidate>
+            <input type="hidden" asp-for="OpportunityId" />
             <h2 class="govuk-heading-m">What skill is the employer looking for?</h2>
             <div class="govuk-form-group">
                 <label class="govuk-label" asp-for="SelectedRouteId">

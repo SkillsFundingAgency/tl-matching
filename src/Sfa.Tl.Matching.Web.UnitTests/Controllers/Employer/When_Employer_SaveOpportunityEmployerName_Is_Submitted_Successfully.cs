@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_FindEmployer_Is_Submitted_Successfully
+    public class When_Employer_SaveOpportunityEmployerName_Is_Submitted_Successfully
     {
         private readonly IEmployerService _employerService;
         private readonly IOpportunityService _opportunityService;
@@ -23,14 +23,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private const int OpportunityId = 1;
         private const int EmployerId = 2;
 
-        public When_Employer_FindEmployer_Is_Submitted_Successfully()
+        public When_Employer_SaveOpportunityEmployerName_Is_Submitted_Successfully()
         {
             _viewModel.OpportunityId = OpportunityId;
             _viewModel.CompanyName = EmployerName;
             _viewModel.SelectedEmployerId = 2;
 
             _employerService = Substitute.For<IEmployerService>();
-            _employerService.GetEmployer(EmployerId).Returns(new ValidEmployerDtoBuilder().Build());
+            _employerService.ValidateEmployerNameAndId(EmployerId, EmployerName).Returns(true);
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
@@ -58,13 +58,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
             
-            controllerWithClaims.FindEmployer(_viewModel).GetAwaiter().GetResult();
+            controllerWithClaims.SaveOpportunityEmployerName(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetEmployer_Is_Called_Exactly_Once()
         {
-            _employerService.Received(1).GetEmployer(EmployerId);
+            _employerService.Received(1).ValidateEmployerNameAndId(EmployerId, EmployerName);
         }
 
         [Fact]

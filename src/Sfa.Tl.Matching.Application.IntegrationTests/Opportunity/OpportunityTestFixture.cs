@@ -25,14 +25,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 
         public OpportunityTestFixture()
         {
-            var loggerRepository = new Logger<GenericRepository<Domain.Models.Opportunity>>(new NullLoggerFactory());
+            var loggerRepository = new Logger<OpportunityRepository>(new NullLoggerFactory());
             var loggerOpportunityItemRepository = new Logger<GenericRepository<OpportunityItem>>(new NullLoggerFactory());
             var loggerProvisionGapRepository = new Logger<GenericRepository<ProvisionGap>>(new NullLoggerFactory());
             var loggerReferralRepository = new Logger<GenericRepository<Referral>>(new NullLoggerFactory());
 
             MatchingDbContext = new TestConfiguration().GetDbContext();
 
-            var opportunityRepository = new GenericRepository<Domain.Models.Opportunity>(loggerRepository, MatchingDbContext);
+            var opportunityRepository = new OpportunityRepository(loggerRepository, MatchingDbContext);
             var opportunityItemRepository = new GenericRepository<OpportunityItem>(loggerOpportunityItemRepository, MatchingDbContext);
             var provisionGapRepository = new GenericRepository<ProvisionGap>(loggerProvisionGapRepository, MatchingDbContext);
             var referralRepository = new GenericRepository<Referral>(loggerReferralRepository, MatchingDbContext);

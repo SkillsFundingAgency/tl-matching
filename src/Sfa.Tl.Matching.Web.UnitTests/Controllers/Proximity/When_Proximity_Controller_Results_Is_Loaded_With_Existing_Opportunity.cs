@@ -22,6 +22,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         private readonly IOpportunityService _opportunityService;
 
         private const int OpportunityId = 1;
+        private const int OpportunityItemId = 1;
+
         private const int RouteId = 1;
         private const int ProviderVenueId = 11;
 
@@ -61,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             routePathService.GetRoutes().Returns(routes);
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetReferrals(OpportunityId).Returns(new List<ReferralDto>
+            _opportunityService.GetReferrals(OpportunityItemId).Returns(new List<ReferralDto>
             {
                 new ReferralDto
                 {
@@ -77,7 +79,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 SelectedRouteId = RouteId,
                 Postcode = Postcode,
                 SearchRadius = SearchRadius,
-                OpportunityId = OpportunityId
+                OpportunityId = OpportunityId,
+                OpportunityItemId = OpportunityItemId
             }).GetAwaiter().GetResult();
         }
 
@@ -156,7 +159,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         [Fact]
         public void Then_GetReferrals_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetReferrals(OpportunityId);
+            _opportunityService.Received(1).GetReferrals(OpportunityItemId);
         }
 
         [Fact]

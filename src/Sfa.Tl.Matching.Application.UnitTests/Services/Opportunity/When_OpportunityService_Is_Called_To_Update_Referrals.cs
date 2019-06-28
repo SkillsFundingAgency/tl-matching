@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -18,10 +21,31 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
         public When_OpportunityService_Is_Called_To_Update_Referrals()
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
+            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.GivenName, "adminUserName")
+                }))
+            });
+
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver") ?
+                        new LoggedInUserEmailResolver<ReferralDto, Domain.Models.Referral>(httpcontextAccesor) :
+                        type.Name.Contains("LoggedInUserNameResolver") ?
+                            (object)new LoggedInUserNameResolver<ReferralDto, Domain.Models.Referral>(httpcontextAccesor) :
+                            type.Name.Contains("UtcNowResolver") ?
+                                new UtcNowResolver<ReferralDto, Domain.Models.Referral>(new DateTimeProvider()) :
+                                null);
+            });
+
             var mapper = new Mapper(config);
 
-            var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            var opportunityRepository = Substitute.For<IOpportunityRepository>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
@@ -31,17 +55,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, provisionGapRepository, _referralRepository);
 
-            var dto = new OpportunityDto
+            var dto = new OpportunityItemDto
             {
-                EmployerContact = "EmployerContact",
-                //Referral = new List<ReferralDto>
-                //{
-                //    new ReferralDto
-                //    {
-                //        ProviderVenueId = 1,
-                //        DistanceFromEmployer = 3.5M
-                //    }
-                //}
+                Referral = new List<ReferralDto>
+                {
+                    new ReferralDto
+                    {
+                        ProviderVenueId = 1,
+                        DistanceFromEmployer = 3.5M
+                    }
+                }
             };
 
             opportunityService.UpdateReferrals(dto).GetAwaiter().GetResult();

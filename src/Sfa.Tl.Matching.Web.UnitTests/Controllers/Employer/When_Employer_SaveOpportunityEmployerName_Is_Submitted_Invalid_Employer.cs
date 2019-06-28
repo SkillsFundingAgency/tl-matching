@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -11,16 +10,16 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_FindEmployer_Is_Submitted_Invalid_Employer
+    public class When_Employer_SaveOpportunityEmployerName_Is_Submitted_Invalid_Employer
     {
         private readonly IActionResult _result;
         private readonly EmployerController _employerController;
 
-        public When_Employer_FindEmployer_Is_Submitted_Invalid_Employer()
+        public When_Employer_SaveOpportunityEmployerName_Is_Submitted_Invalid_Employer()
         {
             var employerService = Substitute.For<IEmployerService>();
-            employerService.GetEmployer(Arg.Any<int>())
-                .ReturnsNull();
+            employerService.ValidateEmployerNameAndId(Arg.Any<int>(), Arg.Any<string>())
+                .Returns(false);
             var opportunityService = Substitute.For<IOpportunityService>();
 
             var viewModel = new FindEmployerViewModel
@@ -33,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             _employerController = new EmployerController(employerService, opportunityService, mapper);
 
-            _result = _employerController.FindEmployer(viewModel).GetAwaiter().GetResult();
+            _result = _employerController.SaveOpportunityEmployerName(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

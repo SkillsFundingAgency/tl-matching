@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class EmployerDetailDto : BaseOpportunityUpdateDto
+    public class EmployerDetailDto : BaseOpportunityDto
     {
         public string EmployerContact { get; set; }
         public string EmployerContactEmail { get; set; }

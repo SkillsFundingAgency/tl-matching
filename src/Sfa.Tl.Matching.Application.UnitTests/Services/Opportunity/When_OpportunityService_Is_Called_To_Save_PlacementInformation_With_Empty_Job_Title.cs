@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const string JobRole = null;
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
-        private const int OpportunityId = 1;
+        private const int OpportunityItemId = 1;
         private const string Postcode = "AA1 1AA";
         private const int Distance = 10;
         private const int RouteId = 1;
@@ -28,11 +28,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var mapper = new Mapper(config);
 
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
-            var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            var opportunityRepository = Substitute.For<IOpportunityRepository>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            var opportunityItem = new OpportunityItem { Id = OpportunityId, Postcode = Postcode, SearchRadius = Distance, RouteId = RouteId };
+            var opportunityItem = new OpportunityItem { Id = OpportunityItemId, Postcode = Postcode, SearchRadius = Distance, RouteId = RouteId };
 
             _opportunityItemRepository.GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(opportunityItem);
 
@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var dto = new PlacementInformationSaveDto
             {
-                OpportunityId = OpportunityId,
+                OpportunityItemId = OpportunityItemId,
                 JobRole = JobRole,
                 PlacementsKnown = PlacementsKnown,
                 Placements = Placements
@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         public void Then_Update_Is_Called_Exactly_Once_With_1_Placement()
         {
             _opportunityItemRepository.Received(1).Update(Arg.Is<OpportunityItem>(opportunityItem => 
-                opportunityItem.Id == OpportunityId &&
+                opportunityItem.Id == OpportunityItemId &&
                 opportunityItem.JobRole == "None given" &&
                 opportunityItem.PlacementsKnown == PlacementsKnown &&
                 opportunityItem.Placements == Placements &&
