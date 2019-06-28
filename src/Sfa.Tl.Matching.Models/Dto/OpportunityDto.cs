@@ -16,7 +16,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
 
-        public virtual ICollection<OpportunityItemDto> OpportunityItem { get; set; }
         public int OpportunityItemCount { get; set; }
     }
 }
