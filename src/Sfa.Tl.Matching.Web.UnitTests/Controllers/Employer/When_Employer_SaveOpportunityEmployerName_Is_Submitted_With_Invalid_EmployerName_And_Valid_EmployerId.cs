@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var opportunityService = Substitute.For<IOpportunityService>();
 
             var employerService = Substitute.For<IEmployerService>();
-            employerService.GetEmployer(1).Returns(new ValidEmployerDtoBuilder().Build());
+            employerService.ValidateEmployerNameAndId(1, "").Returns(false);
 
             _employerController = new EmployerController(employerService, opportunityService, mapper);
         }

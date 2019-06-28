@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _viewModel.SelectedEmployerId = 2;
 
             _employerService = Substitute.For<IEmployerService>();
-            _employerService.GetEmployer(EmployerId).Returns(new ValidEmployerDtoBuilder().Build());
+            _employerService.ValidateEmployerNameAndId(EmployerId, EmployerName).Returns(true);
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_GetEmployer_Is_Called_Exactly_Once()
         {
-            _employerService.Received(1).GetEmployer(EmployerId);
+            _employerService.Received(1).ValidateEmployerNameAndId(EmployerId, EmployerName);
         }
 
         [Fact]

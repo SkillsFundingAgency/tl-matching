@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -16,27 +15,25 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class EmployerService : IEmployerService
     {
-        private readonly IMapper _mapper;
         private readonly IRepository<Employer> _employerRepository;
         private readonly IOpportunityRepository _opportunityRepository;
 
-        public EmployerService(
-            IMapper mapper,
-            IRepository<Employer> employerRepository,
+        public EmployerService(IRepository<Employer> employerRepository,
             IOpportunityRepository opportunityRepository)
         {
-            _mapper = mapper;
             _employerRepository = employerRepository;
             _opportunityRepository = opportunityRepository;
         }
 
-        public async Task<EmployerStagingDto> GetEmployer(int id)
+        public async Task<bool> ValidateEmployerNameAndId(int employerId, string companyName)
         {
-            var employer = await _employerRepository.GetSingleOrDefault(e => e.Id == id);
-
-            var dto = _mapper.Map<Employer, EmployerStagingDto>(employer);
-
-            return dto;
+            if (employerId == 0 || string.IsNullOrEmpty(companyName)) return false;
+            
+            var employer = await _employerRepository.GetSingleOrDefault(
+                e => e.Id == employerId && $"{e.CompanyName} ({e.AlsoKnownAs})" == companyName,
+                e => e.Id);
+            
+            return employer > 0;
         }
 
         public IEnumerable<EmployerSearchResultDto> Search(string employerName)
@@ -70,15 +67,15 @@ namespace Sfa.Tl.Matching.Application.Services
                          !string.IsNullOrEmpty(o.EmployerContactEmail) &&
                          !string.IsNullOrEmpty(o.EmployerContactPhone),
                     o => new EmployerDetailsViewModel
-                            {
-                                OpportunityItemId = opportunityItemId,
-                                OpportunityId = o.Id,
-                                EmployerName = o.Employer.CompanyName,
-                                EmployerContact = o.EmployerContact,
-                                EmployerContactEmail = o.EmployerContactEmail,
-                                EmployerContactPhone = o.EmployerContactPhone
-                            }, 
-                    o => o.CreatedOn, 
+                    {
+                        OpportunityItemId = opportunityItemId,
+                        OpportunityId = o.Id,
+                        EmployerName = o.Employer.CompanyName,
+                        EmployerContact = o.EmployerContact,
+                        EmployerContactEmail = o.EmployerContactEmail,
+                        EmployerContactPhone = o.EmployerContactPhone
+                    },
+                    o => o.CreatedOn,
                     false);
 
             if (employerDetails != null) return employerDetails;
