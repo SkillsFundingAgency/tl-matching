@@ -253,7 +253,7 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        public async Task RemoveOpportunityItemASync(int opportunityId, int opportunityItemId)
+        public async Task RemoveOpportunityItemAsync(int opportunityId, int opportunityItemId)
         {
             var referralItems = _referralRepository.GetMany(referral => referral.OpportunityItemId == opportunityItemId);
             var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId);
