@@ -1,4 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -37,10 +39,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (await _opportunityService.IsNewProvisionGapAsync(viewModel.OpportunityItemId))
             {
-                opportunityItemDto.OpportunityId = viewModel.OpportunityId;
-
                 if (opportunityItemDto.OpportunityId == 0)
                 {
+                    opportunityItemDto.ProvisionGap = new List<ProvisionGapDto>
+                    {
+                        new ProvisionGapDto()
+                    };
+                    opportunityItemDto.OpportunityId = viewModel.OpportunityId;
                     opportunityItemDto.OpportunityId = await CreateOpportunityAsync(opportunityDto);
                 }
 
@@ -60,7 +65,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             };
             await _opportunityService.UpdateOpportunityItemAsync(providerSearchDto);
 
-            return RedirectToRoute("GetPlacementInformation", new { id = opportunityItemDto.OpportunityItemId });
+            return RedirectToRoute("GetPlacementInformation", new { opportunityItemDto.OpportunityItemId });
         }
 
         [Route("referral-create", Name = "SaveReferral")]
