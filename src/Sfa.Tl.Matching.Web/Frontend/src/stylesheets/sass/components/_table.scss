@@ -61,3 +61,56 @@
         }
     }
 }
+
+.tl-table-responsive {
+
+    @include govuk-media-query($until: tablet) {
+        thead {
+            border: none;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+        tr {
+            border-bottom: 3px solid #ddd;
+            display: block;
+            overflow: auto;
+            padding: 15px 5px 5px 5px;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+            display: block;
+            text-align: right;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        td::before {
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+        }
+
+        .tl-table-responsive-link {
+            float: left;
+            border-bottom: none;
+        }
+
+        .tl-table-responsive-check {
+            float: left;
+            min-height: 200px;
+            border: none;
+            background-color: white;
+            padding: 0;
+            margin: 0;
+        }
+    }
+}

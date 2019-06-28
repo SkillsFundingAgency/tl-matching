@@ -1,8 +1,11 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.BasketReferralItemViewModel
 
 <input type="hidden" asp-for="OpportunityItemId" name="SelectedOpportunity[0].Id" />
-
-<table class="govuk-table">
+<h2 class="govuk-heading-l tl-hidden-desktop">
+    With providers
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+</h2>
+<table class="govuk-table tl-table-responsive">
     <thead class="govuk-table__head">
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Workplace</th>
@@ -15,12 +18,12 @@
     </thead>
     <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-            <td class="govuk-table__cell">@Model.Workplace</td>
-            <td class="govuk-table__cell">@Model.JobRole</td>
-            <td class="govuk-table__cell">@Model.StudentsWanted</td>
-            <td class="govuk-table__cell">@Model.Providers</td>
-            <td class="govuk-table__cell"><a href="#" class="govuk-link">Edit</a></td>
-            <td class="govuk-table__cell"><a href="#" class="govuk-link">Delete</a></td>
+            <td class="govuk-table__cell" data-label="Workplace">@Model.Workplace</td>
+            <td class="govuk-table__cell" data-label="Job role">@Model.JobRole</td>
+            <td class="govuk-table__cell" data-label="Students wanted">@Model.StudentsWanted</td>
+            <td class="govuk-table__cell" data-label="Providers">@Model.Providers</td>
+            <td class="govuk-table__cell tl-table-responsive-link"><a href="#" class="govuk-link">Edit</a></td>
+            <td class="govuk-table__cell tl-table-responsive-link"><a href="#" class="govuk-link">Delete</a></td>
         </tr>
     </tbody>
 </table>
