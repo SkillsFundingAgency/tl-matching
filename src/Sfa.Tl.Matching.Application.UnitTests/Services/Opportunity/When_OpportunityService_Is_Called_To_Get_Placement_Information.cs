@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository,
                 provisionGapRepository, referralRepository);
 
-            _result = opportunityService.GetPlacementInformationSaveAsync(1)
+            _result = opportunityService.GetPlacementInformationAsync(1)
                 .GetAwaiter().GetResult();
         }
 
