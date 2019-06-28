@@ -96,7 +96,7 @@
             <hr class="govuk-section-break govuk-section-break--m ">
         }
 
-        <form asp-action="SaveCheckAnswers" asp-route-OpportunityId="@Model.OpportunityId" asp-route-OpportunityItemId="OpportunityItemId" novalidate>
+        <form asp-action="SaveCheckAnswers" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="OpportunityItemId" type="hidden" />
 
