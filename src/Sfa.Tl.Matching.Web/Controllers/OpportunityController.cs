@@ -219,6 +219,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 : RedirectToRoute("GetOpportunityBasket", new {id = opportunityId});
         }
 
+        [HttpGet]
+        [Route("get-placement-or-employer/{opportunityId}/{opportunityItemId}", Name = "GetPlacementOrEmployer")]
+        public async Task<IActionResult> GetPlacementOrEmployer(int opportunityId, int opportunityItemId)
+        {
+            var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
+
+            return opportunityItemCount == 0
+                ? RedirectToRoute("GetEmployerDetails", new { opportunityId = opportunityId, opportunityItemId = opportunityItemId })
+                : RedirectToRoute("GetPlacementInformation", new { opportunityItemId = opportunityItemId });
+        }
+
         [HttpPost]
         [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
