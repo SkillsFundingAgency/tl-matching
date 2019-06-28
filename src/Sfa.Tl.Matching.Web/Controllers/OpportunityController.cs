@@ -129,14 +129,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 await _opportunityService.UpdateProvisionGapAsync(dto);
             }
 
-            var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityItemId);
+            var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(viewModel.OpportunityId);
 
-            var opportunityCount = await _opportunityService.GetOpportunityItemCountAsync(viewModel.OpportunityId);
-
-            //if First Opp then LoadWhoIsEmployer else if referral then check answer of if provisiongap then OpportunityBasket
-            return opportunityCount == 0 ? 
+            //if First Opp (saved opportunity items == 0) then LoadWhoIsEmployer else if referral then check answer of if provisiongap then OpportunityBasket
+            return opportunityItemCount == 0 ? 
                 RedirectToRoute("LoadWhoIsEmployer", new { viewModel.OpportunityId, viewModel.OpportunityItemId }) 
-                : isReferralOpportunityItem ? 
+                : viewModel.OpportunityType == OpportunityType.Referral ? 
                     RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId }) 
                     : RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId });
         }

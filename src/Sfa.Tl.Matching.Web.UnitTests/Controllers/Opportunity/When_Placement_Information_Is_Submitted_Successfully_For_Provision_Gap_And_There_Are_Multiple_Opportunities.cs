@@ -50,7 +50,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsReferralOpportunityItemAsync(1).Returns(false);
             _opportunityService.GetOpportunityItemCountAsync(1).Returns(2);
 
             var referralService = Substitute.For<IReferralService>();
@@ -77,14 +76,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                     p.PlacementsKnown.Value &&
                     p.Placements == 3
             ));
-        }
-
-        [Fact]
-        public void Then_IsReferralOpportunity_Is_Called_Exactly_Once()
-        {
-            _opportunityService
-                .Received(1)
-                .IsReferralOpportunityItemAsync(2);
         }
 
         [Fact]
