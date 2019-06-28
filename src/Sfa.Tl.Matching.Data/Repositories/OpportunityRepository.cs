@@ -127,7 +127,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        OpportunityItemId = oi.Id,
                                                        JobRole = oi.JobRole,
                                                        StudentsWanted = oi.Placements.ToString(),
-                                                       Workplace = $"London {e.Postcode}",
+                                                       Workplace = $"London {oi.Postcode}",
                                                        Reason = GetReasons(oi.ProvisionGap.First())
                                                    }).ToList(),
                                                ReferralItems = o.OpportunityItem
