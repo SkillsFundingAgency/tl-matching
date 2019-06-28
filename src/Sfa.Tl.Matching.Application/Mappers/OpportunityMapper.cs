@@ -169,12 +169,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                             ? s.Placements
                             : 1))
                 .ForAllOtherMembers(config => config.Ignore());
-
-            //TODO: Probably don't need this map any more
-            CreateMap<ProviderSearchDto, Opportunity>()
-                .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
-                .ForAllOtherMembers(config => config.Ignore());
-
+            
             CreateMap<ProviderSearchDto, OpportunityItem>()
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityItemId))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
