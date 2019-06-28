@@ -226,6 +226,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 : RedirectToRoute("GetPlacementInformation", new { opportunityItemId = opportunityItemId });
         }
 
+        [HttpGet]
+        [Route("check-answers-or-edit-employer/{opportunityItemId}", Name = "GetCheckAnswersOrEditEmployer")]
+        public async Task<IActionResult> GetCheckAnswersOrEditEmployer(int opportunityItemId)
+        {
+            var checkAnswersViewModel = await GetCheckAnswersViewModel(opportunityItemId);
+            var opportunities = await _opportunityService.GetOpportunityBasket(checkAnswersViewModel.OpportunityId);
+
+            if (opportunities.ReferralCount == 0 && opportunities.ProvisionGapCount == 1)
+            {
+                return RedirectToRoute("GetEmployerDetails",
+                    new { opportunityId = checkAnswersViewModel.OpportunityId, opportunityItemId = opportunityItemId });
+            }
+
+            return View("CheckAnswers", checkAnswersViewModel);
+        }
+
         [HttpPost]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
@@ -282,6 +298,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private async Task<CheckAnswersViewModel> GetCheckAnswersViewModel(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
+
+            var referralCount = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
 
             return viewModel;
         }
