@@ -14,8 +14,6 @@ var employer = (function () {
         onConfirm: setSelectedEmployerId
     });
 
-    $("#SelectedEmployerId").val("");
-
     function search(query, populateResults) {
         if (query.trim().length < queryMinLength) return;
 
