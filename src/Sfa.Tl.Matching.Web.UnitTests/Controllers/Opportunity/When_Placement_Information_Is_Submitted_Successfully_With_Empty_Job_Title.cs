@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _opportunityService
                 .Received(1)
-                .IsReferralOpportunityItemAsync(1);
+                .IsReferralOpportunityItemAsync(2);
         }
 
         [Fact]

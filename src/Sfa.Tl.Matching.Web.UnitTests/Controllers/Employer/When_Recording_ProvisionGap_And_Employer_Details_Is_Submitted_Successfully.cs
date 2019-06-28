@@ -24,6 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel
         {
+            OpportunityItemId = OpportunityItemId,
             OpportunityId = OpportunityId,
             EmployerContact = Contact,
             EmployerContactEmail = ContactEmail,
@@ -31,6 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         };
 
         private const int OpportunityId = 1;
+        private const int OpportunityItemId = 2;
 
         private readonly IActionResult _result;
 
@@ -69,7 +71,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).IsReferralOpportunityItemAsync(OpportunityId);
+            _opportunityService.Received(1).IsReferralOpportunityItemAsync(OpportunityItemId);
         }
 
         [Fact]
@@ -91,7 +93,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteName.Should().BeEquivalentTo("GetOpportunityBasket");
-            redirect?.RouteValues["id"].Should().Be(1);
+            redirect?.RouteValues["opportunityId"].Should().Be(1);
         }
     }
 }

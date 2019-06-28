@@ -25,6 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
+                OpportunityItemId = 2,
                 OpportunityType = OpportunityType.Referral,
                 JobRole = "Junior Tester",
                 PlacementsKnown = true,
@@ -82,7 +83,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _opportunityService
                 .Received(1)
-                .IsReferralOpportunityItemAsync(1);
+                .IsReferralOpportunityItemAsync(2);
         }
 
         [Fact]
