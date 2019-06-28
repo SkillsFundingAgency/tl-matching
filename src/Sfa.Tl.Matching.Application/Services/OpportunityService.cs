@@ -94,6 +94,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(
                 o => o.Id == opportunityItemId,
+                oi => oi.ProvisionGap,
 (Expression<Func<OpportunityItem, object>>)(oi => oi.Opportunity), oi => oi.Opportunity.Employer);
 
             var dto = _mapper.Map<OpportunityItem, PlacementInformationSaveDto>(placementInformation);
@@ -224,7 +225,6 @@ namespace Sfa.Tl.Matching.Application.Services
             await _referralRepository.UpdateMany(updateReferrals);
         }
 
-                oi => oi.ProvisionGap, 
         public async Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityDto
         {
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
