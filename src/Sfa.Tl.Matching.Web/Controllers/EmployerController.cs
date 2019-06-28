@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "LoadWhoIsEmployer")]
         public async Task<IActionResult> GetOpportunityEmployerName(int opportunityId, int opportunityItemId)
         {
-            var viewModel = await _opportunityService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
+            var viewModel = await _employerService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
 
             return View("FindEmployer", viewModel);
         }

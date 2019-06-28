@@ -168,7 +168,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("employer-opportunities/{opportunityId}/{opportunityItemId}", Name = "GetOpportunityBasket")]
+        [Route("employer-opportunities/{opportunityId}-{opportunityItemId}", Name = "GetOpportunityBasket")]
         public async Task<IActionResult> OpportunityBasket(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetOpportunityBasket(opportunityId);
@@ -204,7 +204,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("remove-opportunityItem/{opportunityId}/{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
+        [Route("remove-opportunityItem/{opportunityId}-{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
         public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasket(int opportunityId, int opportunityItemId)
         {
             await _opportunityService.RemoveOpportunityItemAsync(opportunityId, opportunityItemId);
@@ -216,7 +216,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("get-placement-or-employer/{opportunityId}/{opportunityItemId}", Name = "GetPlacementOrEmployer")]
+        [Route("get-placement-or-employer/{opportunityId}-{opportunityItemId}", Name = "GetPlacementOrEmployer")]
         public async Task<IActionResult> GetPlacementOrEmployer(int opportunityId, int opportunityItemId)
         {
             var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);

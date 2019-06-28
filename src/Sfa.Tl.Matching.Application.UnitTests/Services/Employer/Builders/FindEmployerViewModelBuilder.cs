@@ -1,6 +1,6 @@
 ﻿using Sfa.Tl.Matching.Models.ViewModel;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
 {
     internal class FindEmployerViewModelBuilder
     {

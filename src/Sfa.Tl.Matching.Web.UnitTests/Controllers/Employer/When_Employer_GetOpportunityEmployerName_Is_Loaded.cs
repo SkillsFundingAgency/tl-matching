@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
     public class When_Employer_GetOpportunityEmployerName_Is_Loaded
     {
         private readonly IActionResult _result;
-        private readonly IOpportunityService _opportunityService;
+        private readonly IEmployerService _employerService;
         private const int OpportunityId = 1;
         private const int OpportunityItemId = 12;
         private const int EmployerId = 1;
@@ -23,10 +23,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         public When_Employer_GetOpportunityEmployerName_Is_Loaded()
         {
-            var employerService = Substitute.For<IEmployerService>();
-            _opportunityService = Substitute.For<IOpportunityService>();
+            _employerService = Substitute.For<IEmployerService>();
+            var opportunityService = Substitute.For<IOpportunityService>();
             
-            _opportunityService.GetOpportunityEmployerAsync(OpportunityId, OpportunityItemId)
+            _employerService.GetOpportunityEmployerAsync(OpportunityId, OpportunityItemId)
                 .Returns(new FindEmployerViewModel
                 {
                     OpportunityId = OpportunityId,
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var employerController = new EmployerController(employerService, _opportunityService, mapper);
+            var employerController = new EmployerController(_employerService, opportunityService, mapper);
 
             _result = employerController.GetOpportunityEmployerName(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }
@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_GetOpportunityEmployer_Is_Called_Exactly_Once()
         {
-            _opportunityService
+            _employerService
                 .Received(1)
                 .GetOpportunityEmployerAsync(OpportunityId, OpportunityItemId);
         }

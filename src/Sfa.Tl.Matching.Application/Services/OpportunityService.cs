@@ -87,20 +87,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityId, int opportunityItemId)
-        {
-            return await _opportunityItemRepository.GetSingleOrDefault(
-                o => o.Id == opportunityItemId,
-                oi => new FindEmployerViewModel
-                {
-                    OpportunityItemId = opportunityItemId,
-                    OpportunityId = opportunityId,
-                    CompanyName = oi.Opportunity.Employer.CompanyName,
-                    AlsoKnownAs = oi.Opportunity.Employer.AlsoKnownAs,
-                    SelectedEmployerId = oi.Opportunity.EmployerId ?? 0
-                });
-        }
-
         public async Task<CheckAnswersViewModel> GetCheckAnswers(int opportunityItemId)
         {
             var dto = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,

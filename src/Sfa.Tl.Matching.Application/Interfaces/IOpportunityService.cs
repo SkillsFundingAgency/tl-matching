@@ -9,21 +9,24 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task<int> CreateOpportunityAsync(OpportunityDto opportunityDto);
         Task<int> CreateOpportunityItemAsync(OpportunityItemDto opportunityItemDto);
+
+        Task<int> GetOpportunityItemCountAsync(int opportunityId);
         Task<OpportunityDto> GetOpportunity(int opportunityId);
         Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId);
         Task<PlacementInformationSaveDto> GetPlacementInformationAsync(int opportunityItemId);
         List<ReferralDto> GetReferrals(int opportunityItemId);
-        Task<bool> IsReferralOpportunityItemAsync(int id);
         Task<CheckAnswersViewModel> GetCheckAnswers(int id);
+        Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
+
+        Task<bool> IsReferralOpportunityItemAsync(int id);
+        Task<bool> IsNewReferralAsync(int opportunityItemId);
+        Task<bool> IsNewProvisionGapAsync(int opportunityItemId);
+
         Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityDto;
         Task UpdateOpportunityItemAsync<T>(T dto) where T : BaseOpportunityDto;
         Task UpdateProvisionGapAsync(PlacementInformationSaveDto dto);
         Task UpdateReferrals(OpportunityItemDto opportunityItemDto);
-        Task<bool> IsNewReferralAsync(int opportunityItemId);
-        Task<bool> IsNewProvisionGapAsync(int opportunityItemId);
-        Task<int> GetOpportunityItemCountAsync(int opportunityId);
-        Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
-        Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityId, int opportunityItemId);
+
         Task RemoveOpportunityItemAsync(int opportunityId, int opportunityItemId);
     }
 }

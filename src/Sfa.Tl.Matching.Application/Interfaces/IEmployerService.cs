@@ -10,5 +10,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<bool> ValidateEmployerNameAndId(int employerId, string companyName);
         IEnumerable<EmployerSearchResultDto> Search(string employerName);
         Task<EmployerDetailsViewModel> GetOpportunityEmployerDetailAsync(int opportunityId, int opportunityItemId);
+        Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityId, int opportunityItemId);
     }
 }
