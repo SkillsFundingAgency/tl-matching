@@ -31,9 +31,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, provisionGapRepository, _referralRepository);
 
-            var dto = new OpportunityDto
+            var dto = new OpportunityItemDto
             {
-                EmployerContact = "EmployerContact",
+                //EmployerContact = "EmployerContact",
                 //Referral = new List<ReferralDto>
                 //{
                 //    new ReferralDto
