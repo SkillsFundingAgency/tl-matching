@@ -128,45 +128,45 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
-                .ForMember(m => m.OpportunityType, config => 
+                .ForMember(m => m.OpportunityType, config =>
                     config.MapFrom(s => ((OpportunityType)Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
-                .ForMember(m => m.Placements, opt => 
-                    opt.MapFrom(src => 
-                        src.PlacementsKnown.HasValue && src.PlacementsKnown.Value 
-                        ?  src.Placements 
+                .ForMember(m => m.Placements, opt =>
+                    opt.MapFrom(src =>
+                        src.PlacementsKnown.HasValue && src.PlacementsKnown.Value
+                        ? src.Placements
                         : null))
-                .ForPath(m => m.CompanyName, opt => 
-                    opt.MapFrom(source => 
+                .ForPath(m => m.CompanyName, opt =>
+                    opt.MapFrom(source =>
                         source.Opportunity.Employer != null
-                        ? source.Opportunity.Employer.CompanyName 
+                            ? source.Opportunity.Employer.CompanyName
                             : null))
+                .ForPath(m => m.NoSuitableStudent, o => o.MapFrom(s =>
+                    s.ProvisionGap != null && s.ProvisionGap.Any()
+                        ? s.ProvisionGap.First().NoSuitableStudent
+                        : null))
+                .ForPath(m => m.HadBadExperience, o => o.MapFrom(s =>
+                    s.ProvisionGap != null && s.ProvisionGap.Any()
+                        ? s.ProvisionGap.First().HadBadExperience
+                        : null))
+                .ForPath(m => m.ProvidersTooFarAway, o => o.MapFrom(s =>
+                    s.ProvisionGap != null && s.ProvisionGap.Any()
+                        ? s.ProvisionGap.First().ProvidersTooFarAway
+                        : null))
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<PlacementInformationSaveDto, OpportunityItem>()
                 .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
-                .ForPath(m => m.NoSuitableStudent, o => o.MapFrom(s =>
-                    s.ProvisionGap != null && s.ProvisionGap.Any()
-                    ? s.ProvisionGap.First().NoSuitableStudent
-                    : null))
-                .ForPath(m => m.HadBadExperience, o => o.MapFrom(s =>
-                    s.ProvisionGap != null && s.ProvisionGap.Any()
-                    ? s.ProvisionGap.First().HadBadExperience
-                    : null))
-                .ForPath(m => m.ProvidersTooFarAway, o => o.MapFrom(s =>
-                    s.ProvisionGap != null && s.ProvisionGap.Any()
-                    ? s.ProvisionGap.First().ProvidersTooFarAway
-                    : null))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
-                .ForMember(m => m.JobRole, 
-                    o => o.MapFrom(s => 
-                        string.IsNullOrEmpty(s.JobRole) 
-                            ? "None given" 
+                .ForMember(m => m.JobRole,
+                    o => o.MapFrom(s =>
+                        string.IsNullOrEmpty(s.JobRole)
+                            ? "None given"
                             : s.JobRole))
-                .ForMember(m => m.Placements, 
-                    opt => opt.MapFrom(s => 
-                        s.PlacementsKnown.HasValue && s.PlacementsKnown.Value 
-                            ? s.Placements 
+                .ForMember(m => m.Placements,
+                    opt => opt.MapFrom(s =>
+                        s.PlacementsKnown.HasValue && s.PlacementsKnown.Value
+                            ? s.Placements
                             : 1))
                 .ForAllOtherMembers(config => config.Ignore());
 
