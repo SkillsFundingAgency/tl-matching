@@ -71,6 +71,131 @@ namespace Sfa.Tl.Matching.Application.Services
             return opportunityItemId;
         }
 
+
+        public async Task<OpportunityDto> GetOpportunity(int opportunityId)
+        {
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == opportunityId);
+
+            var dto = _mapper.Map<OpportunityDto>(opportunity);
+
+            return dto;
+        }
+
+        public async Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId)
+        {
+            var opportunityItem = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId);
+
+            var dto = _mapper.Map<OpportunityItemDto>(opportunityItem);
+
+            return dto;
+        }
+
+        public async Task<PlacementInformationSaveDto> GetPlacementInformationAsync(int opportunityItemId)
+        {
+            var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(
+                o => o.Id == opportunityItemId,
+(Expression<Func<OpportunityItem, object>>)(oi => oi.Opportunity), oi => oi.Opportunity.Employer);
+
+            var dto = _mapper.Map<OpportunityItem, PlacementInformationSaveDto>(placementInformation);
+
+            return dto;
+        }
+
+        public async Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityId, int opportunityItemId)
+        {
+            return await _opportunityItemRepository.GetSingleOrDefault(
+                o => o.Id == opportunityItemId,
+                oi => new FindEmployerViewModel
+                {
+                    OpportunityItemId = opportunityItemId,
+                    OpportunityId = opportunityId,
+                    CompanyName = oi.Opportunity.Employer.CompanyName,
+                    SelectedEmployerId = oi.Opportunity.EmployerId ?? 0
+                });
+        }
+
+        public async Task<CheckAnswersViewModel> GetCheckAnswers(int opportunityItemId)
+        {
+            var dto = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
+                o => new CheckAnswersViewModel
+                {
+                    OpportunityItemId = o.Id,
+                    OpportunityId = o.OpportunityId,
+                    Postcode = o.Postcode,
+                    JobRole = o.JobRole,
+                    Placements = o.Placements,
+                    PlacementsKnown = o.PlacementsKnown,
+                    RouteId = o.RouteId,
+                    SearchRadius = o.SearchRadius,
+                    RouteName = o.Route.Name,
+                    EmployerName = o.Opportunity.Employer.CompanyName,
+                    Providers = o.Referral.Select(r => new ReferralsViewModel
+                    {
+                        Postcode = r.ProviderVenue.Postcode,
+                        DistanceFromEmployer = r.DistanceFromEmployer,
+                        Name = r.ProviderVenue.Provider.Name
+                    }).ToList()
+                });
+
+            return dto;
+        }
+
+        public List<ReferralDto> GetReferrals(int opportunityItemId)
+        {
+            var referrals = _referralRepository.GetMany(r => r.OpportunityItemId == opportunityItemId)
+                .OrderBy(r => r.DistanceFromEmployer)
+                .Select(r => new ReferralDto
+                {
+                    Name = r.ProviderVenue.Provider.Name,
+                    Postcode = r.ProviderVenue.Postcode,
+                    DistanceFromEmployer = r.DistanceFromEmployer,
+                    ProviderVenueId = r.ProviderVenueId
+                })
+                .ToList();
+
+            return referrals;
+        }
+
+        public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId)
+        {
+            var viewModel = await _opportunityRepository.GetOpportunityBasket(opportunityId);
+
+            viewModel.Type = GetOpportunityBasketType(viewModel);
+
+            return viewModel;
+        }
+
+
+        public async Task<bool> IsReferralOpportunityItemAsync(int opportunityItemId)
+        {
+            return await _referralRepository.GetMany(o => o.OpportunityItemId == opportunityItemId).AnyAsync();
+        }
+
+        public async Task<bool> IsNewReferralAsync(int opportunityItemId)
+        {
+            if (opportunityItemId == 0)
+                return true;
+
+            var isReferral = await IsReferralOpportunityItemAsync(opportunityItemId);
+
+            return !isReferral;
+        }
+
+        public async Task<bool> IsNewProvisionGapAsync(int opportunityItemId)
+        {
+            if (opportunityItemId == 0)
+                return true;
+
+            var isReferral = await IsReferralOpportunityItemAsync(opportunityItemId);
+            return isReferral;
+        }
+
+        public async Task<int> GetOpportunityItemCountAsync(int opportunityId)
+        {
+            return await _opportunityItemRepository.GetMany(o => o.OpportunityId == opportunityId && o.IsSaved == true).CountAsync();
+        }
+
+
         public async Task UpdateReferrals(OpportunityDto dto)
         {
             // TODO Id should be OpportunityItemId
@@ -99,51 +224,8 @@ namespace Sfa.Tl.Matching.Application.Services
             await _referralRepository.UpdateMany(updateReferrals);
         }
 
-        public async Task<OpportunityDto> GetOpportunity(int opportunityId)
-        {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == opportunityId);
-
-            var dto = _mapper.Map<OpportunityDto>(opportunity);
-
-            return dto;
-        }
-
-        public async Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId)
-        {
-            var opportunityItem = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId);
-
-            var dto = _mapper.Map<OpportunityItemDto>(opportunityItem);
-
-            return dto;
-        }
-
-        public async Task<bool> IsReferralOpportunityItemAsync(int opportunityItemId)
-        {
-            return await _opportunityItemRepository.GetMany(o => o.Id == opportunityItemId && o.Referral.Any()).AnyAsync();
-        }
-
-        public async Task<PlacementInformationSaveDto> GetPlacementInformationSaveAsync(int opportunityItemId)
-        {
-            var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
-                (Expression<Func<OpportunityItem, object>>)(oi => oi.Opportunity),
                 oi => oi.ProvisionGap, 
-                oi => oi.Opportunity.Employer);
-
-            var dto = _mapper.Map<OpportunityItem, PlacementInformationSaveDto>(placementInformation);
-
-            return dto;
-        }
-
-        public async Task<CheckAnswersDto> GetCheckAnswers(int opportunityItemId)
-        {
-            var checkAnswers = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId);
-
-            var dto = _mapper.Map<OpportunityItem, CheckAnswersDto>(checkAnswers);
-
-            return dto;
-        }
-
-        public async Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto
+        public async Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityDto
         {
             var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
 
@@ -152,7 +234,7 @@ namespace Sfa.Tl.Matching.Application.Services
             await _opportunityRepository.Update(trackedEntity);
         }
 
-        public async Task UpdateOpportunityItemAsync<T>(T dto) where T : BaseOpportunityUpdateDto
+        public async Task UpdateOpportunityItemAsync<T>(T dto) where T : BaseOpportunityDto
         {
             var trackedEntity = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityItemId);
             trackedEntity = _mapper.Map(dto, trackedEntity);
@@ -171,69 +253,11 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        public List<ReferralDto> GetReferrals(int opportunityItemId)
+        public async Task RemoveOpportunityItemASync(int opportunityItemId)
         {
-            var referrals = _referralRepository.GetMany(r => r.OpportunityItemId == opportunityItemId)
-                .OrderBy(r => r.DistanceFromEmployer)
-                .Select(r => new ReferralDto
-                {
-                    Name = r.ProviderVenue.Provider.Name,
-                    Postcode = r.ProviderVenue.Postcode,
-                    DistanceFromEmployer = r.DistanceFromEmployer,
-                    ProviderVenueId = r.ProviderVenueId
-                })
-                .ToList();
-
-            return referrals;
-        }
-
-        public async Task<bool> IsNewReferralAsync(int opportunityItemId)
-        {
-            if (opportunityItemId == 0)
-                return true;
-
-            var isReferral = await IsReferralOpportunityItemAsync(opportunityItemId);
-
-            return !isReferral;
-        }
-
-        public async Task<bool> IsNewProvisionGapAsync(int opportunityItemId)
-        {
-            if (opportunityItemId == 0)
-                return true;
-
-            var isReferral = await IsReferralOpportunityItemAsync(opportunityItemId);
-            return isReferral;
-        }
-
-        public async Task<int> GetOpportunityItemCountAsync(int opportunityId)
-        {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == opportunityId);
-            //TODO: Return the actual count
-            //return opportunity.Count;
-            return 1;
-        }
-
-        public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int id)
-        {
-            var viewModel = await _opportunityRepository.GetOpportunityBasket(id);
-
-            viewModel.Type = GetOpportunityBasketType(viewModel);
-
-            return viewModel;
-        }
-
-        public async Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityItemId)
-        {
-            return await _opportunityItemRepository.GetSingleOrDefault(
-                o => o.Id == opportunityItemId,
-                oi => new FindEmployerViewModel
-                {
-                    OpportunityItemId = opportunityItemId,
-                    OpportunityId = oi.OpportunityId,
-                    CompanyName = oi.Opportunity.Employer.CompanyName,
-                    SelectedEmployerId = oi.Opportunity.EmployerId ?? 0 
-                });
+            var referralItems = _referralRepository.GetMany(referral => referral.OpportunityItemId == opportunityItemId);
+            await _referralRepository.DeleteMany(referralItems.ToList());
+            await _opportunityItemRepository.Delete(opportunityItemId);
         }
 
         private static OpportunityBasketType GetOpportunityBasketType(OpportunityBasketViewModel viewModel)

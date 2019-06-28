@@ -9,6 +9,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task<EmployerStagingDto> GetEmployer(int id);
         IEnumerable<EmployerSearchResultDto> Search(string employerName);
-        Task<EmployerDetailsViewModel> GetOpportunityEmployerDetails(int opportunityId);
+        Task<EmployerDetailsViewModel> GetOpportunityEmployerDetailAsync(int opportunityId, int opportunityItemId);
     }
 }

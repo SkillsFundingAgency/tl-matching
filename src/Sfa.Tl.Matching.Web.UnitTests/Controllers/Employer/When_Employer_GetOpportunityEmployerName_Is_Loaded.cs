@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var employerService = Substitute.For<IEmployerService>();
             _opportunityService = Substitute.For<IOpportunityService>();
             
-            _opportunityService.GetOpportunityEmployerAsync(OpportunityItemId)
+            _opportunityService.GetOpportunityEmployerAsync(OpportunityId, OpportunityItemId)
                 .Returns(new FindEmployerViewModel
                 {
                     OpportunityId = OpportunityId,
@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var employerController = new EmployerController(employerService, _opportunityService, mapper);
 
-            _result = employerController.GetOpportunityEmployerName(OpportunityItemId).GetAwaiter().GetResult();
+            _result = employerController.GetOpportunityEmployerName(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             _opportunityService
                 .Received(1)
-                .GetOpportunityEmployerAsync(OpportunityItemId);
+                .GetOpportunityEmployerAsync(OpportunityId, OpportunityItemId);
         }
 
         [Fact]
@@ -70,6 +70,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_FindEmployerViewModel_Has_All_Data_Item_Set_Correctly()
         {
             var viewModel = _result.GetViewModel<FindEmployerViewModel>();
+            viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
             viewModel.OpportunityId.Should().Be(OpportunityId);
             viewModel.SelectedEmployerId.Should().Be(EmployerId);
             viewModel.CompanyName.Should().Be(CompanyName);

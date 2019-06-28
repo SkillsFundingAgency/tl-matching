@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class PlacementInformationSaveDto : BaseOpportunityUpdateDto
+    public class PlacementInformationSaveDto : BaseOpportunityDto
     {
         public int RouteId { get; set; }
         public string Postcode { get; set; }

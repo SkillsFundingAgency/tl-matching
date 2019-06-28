@@ -32,13 +32,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             var opportunityService = Substitute.For<IOpportunityService>();
-            opportunityService.GetPlacementInformationSaveAsync(Arg.Any<int>()).Returns(_dto);
+            opportunityService.GetPlacementInformationAsync(Arg.Any<int>()).Returns(_dto);
 
             var referralService = Substitute.For<IReferralService>();
 
             var opportunityController = new OpportunityController(opportunityService, referralService, mapper);
 
-            _result = opportunityController.PlacementInformationSave(OpportunityItemId).GetAwaiter().GetResult();
+            _result = opportunityController.GetPlacementInformation(OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]

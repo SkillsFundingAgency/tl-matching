@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             
             _opportunityController = new OpportunityController(opportunityService, referralService, mapper);
 
-            _result = _opportunityController.PlacementInformationSave(viewModel).GetAwaiter().GetResult();
+            _result = _opportunityController.SavePlacementInformation(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

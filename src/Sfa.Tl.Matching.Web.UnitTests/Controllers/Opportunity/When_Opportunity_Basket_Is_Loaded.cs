@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunityBasket(1).Returns(new OpportunityBasketViewModel
             {
-                Id = 1,
+                OpportunityId = 1,
                 CompanyName = "Company Name"
             });
 

@@ -117,7 +117,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                            where o.Id == opportunityId
                                            select new OpportunityBasketViewModel
                                            {
-                                               Id = o.Id,
+                                               OpportunityId = o.Id,
                                                CompanyName = e.CompanyName,
                                                ProvisionGapItems = o.OpportunityItem
                                                    .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString())
