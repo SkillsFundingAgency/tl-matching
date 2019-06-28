@@ -40,12 +40,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("find-providers/{id?}", Name = "Providers_Get")]
-        public IActionResult Index(int? id = null)
+        [Route("find-providers/{opportunityId?}", Name = "FindProviders")]
+        public IActionResult Index(int? opportunityId = null)
         {
             var viewModel = new SearchParametersViewModel
             {
-                OpportunityId = id ?? 0,
+                OpportunityId = opportunityId ?? 0,
                 SelectedRouteId = null,
                 Postcode = null,
                 SearchRadius = SearchParametersViewModel.DefaultSearchRadius
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("find-providers/{id?}", Name = "Providers_Post")]
+        [Route("find-providers/{opportunityId?}", Name = "Providers_Post")]
         public async Task<IActionResult> Index(SearchParametersViewModel viewModel)
         {
             viewModel.SearchRadius = SearchParametersViewModel.DefaultSearchRadius;
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(nameof(Index), GetSearchParametersViewModelAsync(viewModel));
             }
 
-            return RedirectToRoute("ProviderResults_Get", new SearchParametersViewModel
+            return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
             {
                 SelectedRouteId = viewModel.SelectedRouteId,
                 Postcode = viewModel.Postcode,
@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "ProviderResults_Get")]
+        [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetProviderResults")]
         public async Task<IActionResult> Results(SearchParametersViewModel searchParametersViewModel)
         {
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 });
             }
 
-            return RedirectToRoute("ProviderResults_Get", viewModel);
+            return RedirectToRoute("GetProviderResults", viewModel);
         }
 
         [HttpPost]

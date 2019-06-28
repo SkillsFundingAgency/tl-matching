@@ -27,7 +27,7 @@
         <span class="govuk-caption-l"> @Model.CompanyName</span>
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-        <a class="govuk-button tl-button--grey" asp-route="Providers_Get" asp-route-id="@Model.OpportunityId">Add another opportunity</a>
+        <a class="govuk-button tl-button--grey" asp-route="FindProviders" asp-route-opportunityId="@Model.OpportunityId">Add another opportunity</a>
 
         <form asp-route="SaveSelectedOpportunities" novalidate>
             <input type="hidden" asp-for="OpportunityId" />
