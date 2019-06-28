@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<OpportunityItem, OpportunityItemDto>()
-                .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.OpportunityItemId, o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.OpportunityType, config => config.MapFrom(s => ((OpportunityType)Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))

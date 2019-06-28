@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Models.Dto
 {
     public class OpportunityItemDto
     {
-        public int Id { get; set; }
+        public int OpportunityItemId { get; set; }
         public int OpportunityId { get; set; }
         public int RouteId { get; set; }
         public string RouteName { get; set; }

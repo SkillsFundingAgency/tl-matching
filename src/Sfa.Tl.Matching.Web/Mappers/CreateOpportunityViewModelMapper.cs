@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 ;
 
             CreateMap<SaveProvisionGapViewModel, OpportunityItemDto>()
-                .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityItemId))
+                .ForMember(m => m.OpportunityItemId, o => o.MapFrom(s => s.OpportunityItemId))
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 ;
 
             CreateMap<SaveReferralViewModel, OpportunityItemDto>()
-                .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityItemId))
+                .ForMember(m => m.OpportunityItemId, o => o.MapFrom(s => s.OpportunityItemId))
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))

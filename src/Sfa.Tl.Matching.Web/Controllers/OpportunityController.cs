@@ -1,5 +1,4 @@
 ﻿// ReSharper disable RedundantUsingDirective
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -53,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var providerSearchDto = new ProviderSearchDto
             {
                 OpportunityId = opportunityItemDto.OpportunityId,
-                OpportunityItemId = opportunityItemDto.Id,
+                OpportunityItemId = opportunityItemDto.OpportunityItemId,
                 SearchRadius = viewModel.SearchRadius,
                 Postcode = viewModel.Postcode,
                 RouteId = viewModel.SelectedRouteId ?? 0,
@@ -61,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             };
             await _opportunityService.UpdateOpportunityItemAsync(providerSearchDto);
 
-            return RedirectToRoute("GetPlacementInformation", new { id = opportunityItemDto.Id });
+            return RedirectToRoute("GetPlacementInformation", new { id = opportunityItemDto.OpportunityItemId });
         }
 
         [Route("referral-create", Name = "SaveReferral")]

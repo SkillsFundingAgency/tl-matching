@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> CreateOpportunityItemAsync(OpportunityItemDto dto)
         {
-            dto.Id = 0;
+            dto.OpportunityItemId = 0;
             var opportunityItem = _mapper.Map<OpportunityItem>(dto);
 
             var opportunityItemId = await _opportunityItemRepository.Create(opportunityItem);
@@ -198,12 +198,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task UpdateReferrals(OpportunityItemDto dto)
         {
-            var existingReferrals = _referralRepository.GetMany(r => r.OpportunityItemId == dto.Id)
+            var existingReferrals = _referralRepository.GetMany(r => r.OpportunityItemId == dto.OpportunityItemId)
                 .ToList();
 
             var newReferrals = _mapper.Map<List<Referral>>(dto.Referral);
             foreach (var nr in newReferrals)
-                nr.OpportunityItemId = dto.Id;
+                nr.OpportunityItemId = dto.OpportunityItemId;
 
             var comparer = new ReferralEqualityComparer();
             var toBeAdded = newReferrals.Except(existingReferrals, comparer).ToList();

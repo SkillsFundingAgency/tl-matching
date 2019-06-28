@@ -1,5 +1,4 @@
-﻿using System;
-using Sfa.Tl.Matching.Models.Dto;
+﻿using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
 {
@@ -7,7 +6,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
     {
         public OpportunityItemDto Build() => new OpportunityItemDto
         {
-            Id = 1,
+            OpportunityItemId = 1,
             OpportunityId = 1,
             SearchRadius = 3,
             RouteId = 1,
