@@ -196,18 +196,14 @@ namespace Sfa.Tl.Matching.Application.Services
             return await _opportunityItemRepository.GetMany(o => o.OpportunityId == opportunityId && o.IsSaved == true).CountAsync();
         }
 
-
-        public async Task UpdateReferrals(OpportunityDto dto)
+        public async Task UpdateReferrals(OpportunityItemDto dto)
         {
-            // TODO Id should be OpportunityItemId
             var existingReferrals = _referralRepository.GetMany(r => r.OpportunityItemId == dto.Id)
                 .ToList();
 
-            //TODO: Use OpportunityItemDto here
-            //var newReferrals = _mapper.Map<List<Referral>>(dto.Referral);
-            var newReferrals = new List<Referral>();
+            var newReferrals = _mapper.Map<List<Referral>>(dto.Referral);
             foreach (var nr in newReferrals)
-                nr.OpportunityItemId = dto.Id; // TODO Id should be OpportunityItemId
+                nr.OpportunityItemId = dto.Id;
 
             var comparer = new ReferralEqualityComparer();
             var toBeAdded = newReferrals.Except(existingReferrals, comparer).ToList();

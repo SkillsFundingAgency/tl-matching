@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchResultProviderCount = saveReferralViewModel.SearchResultProviderCount
             };
             await _opportunityService.UpdateOpportunityItemAsync(providerSearchDto);
-            await _opportunityService.UpdateReferrals(opportunityDto);
+            await _opportunityService.UpdateReferrals(opportunityItemDto);
 
             return RedirectToRoute("GetPlacementInformation", new { saveReferralViewModel.OpportunityItemId });
         }
