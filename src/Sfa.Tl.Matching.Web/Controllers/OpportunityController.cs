@@ -42,13 +42,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 opportunityItemDto.OpportunityId = viewModel.OpportunityId;
 
                 if (opportunityItemDto.OpportunityId == 0)
-                {
-                    opportunityItemDto.ProvisionGap = new List<ProvisionGapDto>
-                    {
-                        new ProvisionGapDto()
-                    };
                     opportunityItemDto.OpportunityId = await CreateOpportunityAsync(opportunityDto);
-                }
+
+                opportunityItemDto.ProvisionGap = new List<ProvisionGapDto>
+                {
+                    new ProvisionGapDto()
+                };
 
                 var opportunityItemId = await _opportunityService.CreateOpportunityItemAsync(opportunityItemDto);
 
@@ -287,10 +286,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private async Task<CheckAnswersViewModel> GetCheckAnswersViewModel(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-            //var providersForReferral = _opportunityService.GetReferrals(opportunityItemId);
-
-            //var viewModel = _mapper.Map<CheckAnswersViewModel>(dto);
-            //viewModel.Providers = _mapper.Map<List<ReferralsViewModel>>(providersForReferral);
 
             return viewModel;
         }
