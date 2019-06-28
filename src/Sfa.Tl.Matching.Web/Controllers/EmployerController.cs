@@ -47,7 +47,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerName")]
         public async Task<IActionResult> SaveOpportunityEmployerName(FindEmployerViewModel viewModel)
         {
             var isValidEmployer = await _employerService.ValidateEmployerNameAndId(viewModel.SelectedEmployerId, viewModel.CompanyName);
@@ -75,7 +74,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("employer-details/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerDetails")]
         public async Task<IActionResult> SaveOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
@@ -91,7 +89,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return isReferralOpportunityItem 
                 ? RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId }) 
-                : RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId });
+                : RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
 
         private void Validate(EmployerDetailsViewModel viewModel)

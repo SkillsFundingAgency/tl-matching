@@ -117,7 +117,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("placement-information/{opportunityItemId}", Name = "SavePlacementInformation")]
         public async Task<IActionResult> SavePlacementInformation(PlacementInformationSaveViewModel viewModel)
         {
             await Validate(viewModel);
@@ -140,7 +139,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 RedirectToRoute("LoadWhoIsEmployer", new { viewModel.OpportunityId, viewModel.OpportunityItemId }) 
                 : viewModel.OpportunityType == OpportunityType.Referral ? 
                     RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId }) 
-                    : RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId });
+                    : RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
 
         [HttpGet]
@@ -153,7 +152,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        //[Route("check-answers/{opportunityId}-{opportunityItemId}", Name = "SaveCheckAnswers")]
         public async Task<IActionResult> SaveCheckAnswers(int opportunityId, int opportunityItemId)
         {
             if (!ModelState.IsValid)
@@ -166,7 +164,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 IsSaved = true
             });
 
-            return RedirectToRoute("GetOpportunityBasket", new { opportunityId = opportunityId, opportunityItemId= opportunityItemId });
+            return RedirectToRoute("GetOpportunityBasket", new { opportunityId, opportunityItemId });
         }
 
         [HttpGet]
@@ -180,7 +178,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         // TODO FIX reuse this method later
         [HttpPost]
-        [Route("send-emails/{opportunityItemId}", Name = "SendEmails")]
         public async Task<IActionResult> SendEmails(CheckAnswersViewModel viewModel)
         {
             //if (!ModelState.IsValid)
@@ -192,7 +189,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
             await _referralService.SendProviderReferralEmail(dto.OpportunityId);
 
-            return RedirectToRoute("GetOpportunityBasket", new { id = dto.OpportunityId });
+            return RedirectToRoute("GetOpportunityBasket", new { dto.OpportunityId, dto.OpportunityItemId });
         }
 
         [HttpGet]
@@ -215,7 +212,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return opportunityItemCount == 0
                 ? RedirectToRoute("Start")
-                : RedirectToRoute("GetOpportunityBasket", new {id = opportunityId});
+                : RedirectToRoute("GetOpportunityBasket", new { opportunityId, opportunityItemId });
         }
 
         [HttpGet]
@@ -230,7 +227,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
             if (viewModel.SubmitAction == "Finish")

@@ -30,8 +30,9 @@
             <label asp-for="EmployerName">@Model.EmployerName</label>
         </h2>
 
-        <form asp-route="SaveEmployerDetails" novalidate>
+        <form asp-action="SaveOpportunityEmployerDetails" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
+            <input asp-for="OpportunityItemId" type="hidden" />
             <input asp-for="EmployerName" type="hidden" />
 
             <p class="govuk-body">
