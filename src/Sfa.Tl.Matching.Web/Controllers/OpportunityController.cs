@@ -39,13 +39,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (await _opportunityService.IsNewProvisionGapAsync(viewModel.OpportunityItemId))
             {
+                opportunityItemDto.OpportunityId = viewModel.OpportunityId;
+
                 if (opportunityItemDto.OpportunityId == 0)
                 {
                     opportunityItemDto.ProvisionGap = new List<ProvisionGapDto>
                     {
                         new ProvisionGapDto()
                     };
-                    opportunityItemDto.OpportunityId = viewModel.OpportunityId;
                     opportunityItemDto.OpportunityId = await CreateOpportunityAsync(opportunityDto);
                 }
 
