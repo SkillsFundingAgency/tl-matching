@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -220,7 +221,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return routesList;
         }
 
-        private IList<RouteViewModel> GetRoutesForQualificationSearchItem(QualificationSearchResultViewModel viewModel, IList<Domain.Models.Route> routes)
+        private IList<RouteViewModel> GetRoutesForQualificationSearchItem(QualificationSearchResultViewModel viewModel, IList<Route> routes)
         {
             var routesList = _mapper.Map<RouteViewModel[]>(routes);
 

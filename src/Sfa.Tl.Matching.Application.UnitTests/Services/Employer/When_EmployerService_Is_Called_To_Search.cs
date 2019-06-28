@@ -25,8 +25,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 
         public When_EmployerService_Is_Called_To_Search()
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
-            var mapper = new Mapper(config);
             var employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 

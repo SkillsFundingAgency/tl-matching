@@ -1,9 +1,9 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Sfa.Tl.Matching.Api.Clients.Extensions;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Api.Clients.Extensions;
 
 namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
 {

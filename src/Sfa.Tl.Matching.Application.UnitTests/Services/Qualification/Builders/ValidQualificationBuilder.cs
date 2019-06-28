@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders
 {
@@ -27,17 +28,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders
             CreatedBy = "CreatedBy",
             ModifiedBy = "ModifiedBy",
             QualificationRouteMapping =
-                new List<Domain.Models.QualificationRouteMapping>
+                new List<QualificationRouteMapping>
                 { 
-                    new Domain.Models.QualificationRouteMapping
+                    new QualificationRouteMapping
                     {
                         Id = 1,
-                        RouteId = 1,
+                        RouteId = 1
                     },
-                    new Domain.Models.QualificationRouteMapping
+                    new QualificationRouteMapping
                     {
                         Id = 2,
-                        RouteId = 2,
+                        RouteId = 2
                     }
                 }
         };

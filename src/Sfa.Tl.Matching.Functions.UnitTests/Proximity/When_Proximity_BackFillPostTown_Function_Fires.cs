@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
                 .Returns(new List<ProviderVenue>{ new ProviderVenue
                 {
                     Postcode = "CV1 2WT",
-                    Town = null,
+                    Town = null
                 }}.AsQueryable());
 
             _googleMapsApiClient = Substitute.For<IGoogleMapApiClient>();

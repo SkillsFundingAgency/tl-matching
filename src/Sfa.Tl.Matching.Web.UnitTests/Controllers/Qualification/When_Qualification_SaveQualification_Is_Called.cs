@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var routePathService = Substitute.For<IRoutePathService>();
             var routes = new List<Route>
             {
-                new Route {Id = 1, Name = "Route 1", Summary = "Route Summary 1"},
+                new Route {Id = 1, Name = "Route 1", Summary = "Route Summary 1"}
             }.AsQueryable();
             routePathService.GetRoutes().Returns(routes);
 

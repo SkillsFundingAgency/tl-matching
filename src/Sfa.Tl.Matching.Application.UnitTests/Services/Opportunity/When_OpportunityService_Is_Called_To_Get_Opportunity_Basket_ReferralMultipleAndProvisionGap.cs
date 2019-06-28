@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;

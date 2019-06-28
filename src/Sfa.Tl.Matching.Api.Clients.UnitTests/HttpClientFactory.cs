@@ -1,9 +1,9 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
-using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Sfa.Tl.Matching.Models.Dto
+﻿namespace Sfa.Tl.Matching.Models.Dto
 {
     public class EmployerNameDto : BaseOpportunityDto
     {

@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
             OpportunityId = 2,
             SelectedEmployerId = 3,
             CompanyName = "CompanyName",
-            PreviousCompanyName = "CompanyName",
+            PreviousCompanyName = "CompanyName"
         };
     }
 }

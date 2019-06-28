@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sfa.Tl.Matching.Api.Clients.ProviderReference;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
-using Sfa.Tl.Matching.Api.Clients.ProviderReference;
 
 namespace Sfa.Tl.Matching.Application.Services
 {

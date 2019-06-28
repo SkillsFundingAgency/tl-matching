@@ -6,7 +6,7 @@ $('.tl-selectall').click(function () {
 
 
 $(".tl-checkbox").change(function () {
-    if ($('.tl-checkbox:checked').length == $('.tl-checkbox').length) {
+    if ($('.tl-checkbox:checked').length === $('.tl-checkbox').length) {
         $('.tl-selectall').prop('checked', true);
     }
 

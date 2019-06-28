@@ -135,10 +135,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(viewModel.OpportunityId);
 
             //if First Opp (saved opportunity items == 0) then LoadWhoIsEmployer else if referral then check answer of if provisiongap then OpportunityBasket
-            return opportunityItemCount == 0 ? 
-                RedirectToRoute("LoadWhoIsEmployer", new { viewModel.OpportunityId, viewModel.OpportunityItemId }) 
-                : viewModel.OpportunityType == OpportunityType.Referral ? 
-                    RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId }) 
+            return opportunityItemCount == 0 ?
+                RedirectToRoute("LoadWhoIsEmployer", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
+                : viewModel.OpportunityType == OpportunityType.Referral ?
+                    RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId })
                     : RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
 
@@ -159,8 +159,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _opportunityService.UpdateOpportunityItemAsync(new CheckAnswersDto
             {
-                OpportunityItemId = opportunityItemId, 
-                OpportunityId = opportunityId, 
+                OpportunityItemId = opportunityItemId,
+                OpportunityId = opportunityId,
                 IsSaved = true
             });
 
@@ -222,8 +222,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
 
             return opportunityItemCount == 0
-                ? RedirectToRoute("GetEmployerDetails", new { opportunityId = opportunityId, opportunityItemId = opportunityItemId })
-                : RedirectToRoute("GetPlacementInformation", new { opportunityItemId = opportunityItemId });
+                ? RedirectToRoute("GetEmployerDetails", new { opportunityId, opportunityItemId })
+                : RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
         }
 
         [HttpGet]

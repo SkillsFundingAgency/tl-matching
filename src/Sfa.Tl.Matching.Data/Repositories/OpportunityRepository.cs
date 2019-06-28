@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -139,7 +138,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        Workplace = $"London {oi.Postcode}",
                                                        StudentsWanted = oi.Placements.ToString(),
                                                        Providers = oi.Referral.Count
-                                                   }).ToList(),
+                                                   }).ToList()
                                            }).SingleOrDefaultAsync();
 
             return opportunityBasket;

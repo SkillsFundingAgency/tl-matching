@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                     OpportunityId = OpportunityId,
                     OpportunityItemId = OpportunityItemId,
                     SelectedEmployerId = EmployerId,
-                    CompanyName = CompanyName,
+                    CompanyName = CompanyName
                 });
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));

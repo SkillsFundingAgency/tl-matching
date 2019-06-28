@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
     public class When_OpportunityService_Is_Called_To_Update_Opportunity_Item
     {
-        private readonly IRepository<Domain.Models.OpportunityItem> _opportunityItemRepository;
+        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
 
         private const int OpportunityId = 1;
         private const int OpportunityItemId = 1;
@@ -49,13 +49,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         public void Then_Update_Is_Called_Exactly_Once()
         {
             _opportunityItemRepository.Received(1)
-                .Update(Arg.Any<Domain.Models.OpportunityItem>());
+                .Update(Arg.Any<OpportunityItem>());
         }
 
         [Fact]
         public void Then_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _opportunityItemRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.OpportunityItem, bool>>>());
+            _opportunityItemRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
         }
     }
 }

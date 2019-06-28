@@ -19,7 +19,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private readonly List<ReferralDto> _referralDtos;
         private readonly IRepository<Domain.Models.Referral> _referralRepository;
 
-        private const int OpportunityId = 1;
         private const int OpportunityItemId = 1;
 
         public When_OpportunityService_Is_Called_To_Get_Referrals()

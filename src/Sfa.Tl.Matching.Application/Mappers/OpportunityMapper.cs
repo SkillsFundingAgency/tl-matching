@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
-using System.Linq;
-using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Mappers
