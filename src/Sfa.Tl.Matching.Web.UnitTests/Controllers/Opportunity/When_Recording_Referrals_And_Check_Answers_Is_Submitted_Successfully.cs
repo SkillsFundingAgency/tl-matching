@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     {
         private const string ModifiedBy = "ModifiedBy";
         private const int OpportunityId = 1;
-        private const int OpportunityItemId = 1;
+        private const int OpportunityItemId = 2;
 
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
@@ -62,6 +62,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
             result?.RouteName.Should().Be("GetOpportunityBasket");
             result?.RouteValues["opportunityId"].Should().Be(1);
+            result?.RouteValues["opportunityItemId"].Should().Be(2);
         }
 
         [Fact]

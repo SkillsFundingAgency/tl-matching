@@ -87,13 +87,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_GetCheckAnswers()
+        public void Then_Result_Is_Redirect_To_GetOpportunityBasket()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("GetOpportunityBasket");
             result?.RouteValues["opportunityId"].Should().Be(1);
+            result?.RouteValues["opportunityItemId"].Should().Be(2);
         }
     }
 }
