@@ -154,9 +154,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveCheckAnswers(int opportunityId, int opportunityItemId)
         {
-            if (!ModelState.IsValid)
-                return View("CheckAnswers", await GetCheckAnswersViewModel(opportunityItemId));
-
             await _opportunityService.UpdateOpportunityItemAsync(new CheckAnswersDto
             {
                 OpportunityItemId = opportunityItemId,
