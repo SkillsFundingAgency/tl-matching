@@ -158,6 +158,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
             if (provisionGap.ProvidersTooFarAway.HasValue && provisionGap.ProvidersTooFarAway.Value)
                 reasons.Add("Providers Too Far Away");
 
+            if (reasons.Count == 0)
+                reasons.Add("None available");
+
             return string.Join(", ", reasons);
         }
     }
