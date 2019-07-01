@@ -243,7 +243,7 @@ namespace Sfa.Tl.Matching.Application.Services
             if (viewModel.ReferralCount == 0 && viewModel.ProvisionGapCount > 0)
                 return OpportunityBasketType.ProvisionGapSingle;
             if (viewModel.ReferralCount > 0 && viewModel.ProvisionGapCount == 0)
-                return OpportunityBasketType.ReferralMultipl;
+                return OpportunityBasketType.ReferralMultiple;
             if (viewModel.ReferralCount == 1 && viewModel.ProvisionGapCount > 0)
                 return OpportunityBasketType.SingleReferralAndProvisionGap;
             if (viewModel.ReferralCount > 1 && viewModel.ProvisionGapCount > 0)

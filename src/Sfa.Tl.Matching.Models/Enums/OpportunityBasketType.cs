@@ -3,7 +3,7 @@
     public enum OpportunityBasketType
     {
         ReferralSingle,
-        ReferralMultipl,
+        ReferralMultiple,
         ProvisionGapSingle,
         SingleReferralAndProvisionGap,
         MultipleReferralAndProvisionGap
