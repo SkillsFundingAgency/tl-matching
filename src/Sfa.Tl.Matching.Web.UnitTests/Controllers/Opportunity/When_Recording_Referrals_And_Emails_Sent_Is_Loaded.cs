@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
         private readonly Guid _employerCrmId;
+
         public When_Recording_Referrals_And_Emails_Sent_Is_Loaded()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(SentViewModelMapper).Assembly));
