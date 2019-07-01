@@ -125,7 +125,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                    {
                                                        OpportunityItemId = oi.Id,
                                                        JobRole = oi.JobRole,
-                                                       StudentsWanted = oi.Placements.ToString(),
+                                                       Placements = oi.Placements,
+                                                       PlacementsKnown = oi.PlacementsKnown,
                                                        Workplace = $"London {oi.Postcode}",
                                                        Reason = GetReasons(oi.ProvisionGap.First())
                                                    }).ToList(),
@@ -136,7 +137,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        OpportunityItemId = oi.Id,
                                                        JobRole = oi.JobRole,
                                                        Workplace = $"London {oi.Postcode}",
-                                                       StudentsWanted = oi.Placements.ToString(),
+                                                       PlacementsKnown = oi.PlacementsKnown,
+                                                       Placements = oi.Placements,
                                                        Providers = oi.Referral.Count
                                                    }).ToList()
                                            }).SingleOrDefaultAsync();
