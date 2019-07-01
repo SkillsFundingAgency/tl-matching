@@ -46,24 +46,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers-or-edit-employer/{opportunityItemId}", Name = "GetCheckAnswersOrEditEmployer")]
         public async Task<IActionResult> GetCheckAnswersOrEditEmployer(int opportunityItemId)
         {
-            var checkAnswersViewModel = await GetCheckAnswersViewModel(opportunityItemId);
-            var opportunities = await _opportunityService.GetOpportunityBasket(checkAnswersViewModel.OpportunityId);
+            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
+            var opportunities = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
 
             if (opportunities.ReferralCount == 0 && opportunities.ProvisionGapCount == 1)
             {
                 return RedirectToRoute("GetEmployerDetails",
-                    new { opportunityId = checkAnswersViewModel.OpportunityId, opportunityItemId });
+                    new { opportunityId = viewModel.OpportunityId, opportunityItemId });
             }
 
-            return RedirectToRoute("GetCheckAnswers", new { checkAnswersViewModel .OpportunityItemId});
-
-        }
-
-        private async Task<CheckAnswersViewModel> GetCheckAnswersViewModel(int opportunityItemId)
-        {
-            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-
-            return viewModel;
+            return RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId});
         }
     }
 }

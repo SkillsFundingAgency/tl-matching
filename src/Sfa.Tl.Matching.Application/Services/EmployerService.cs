@@ -114,7 +114,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (employerDetails != null) return employerDetails;
 
-            //3 Finally we cant find employer details in existing Opportunitise so now try to load it from Employer Table 
+            //3 Finally we cant find employer details in existing Opportunities so now try to load it from Employer Table 
             return await _employerRepository.GetSingleOrDefault(
                     e => e.Id == employerId,
                     e => new EmployerDetailsViewModel

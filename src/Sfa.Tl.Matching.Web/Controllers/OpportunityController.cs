@@ -146,7 +146,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers/{opportunityItemId}", Name = "GetCheckAnswers")]
         public async Task<IActionResult> GetCheckAnswers(int opportunityItemId)
         {
-            var viewModel = await GetCheckAnswersViewModel(opportunityItemId);
+            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
 
             return View("CheckAnswers", viewModel);
         }
@@ -251,12 +251,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 1 or more");
             else if (viewModel.Placements > 999)
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 999 or less");
-        }
-
-        private async Task<CheckAnswersViewModel> GetCheckAnswersViewModel(int opportunityItemId)
-        {
-            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-            return viewModel;
         }
     }
 }
