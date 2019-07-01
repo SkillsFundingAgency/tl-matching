@@ -9,18 +9,18 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_Model_Errors
+    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_No_Venues
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
+        private readonly ProviderController _providerController;
 
-        public When_Provider_Controller_SaveProviderDetail_Is_Called_With_Model_Errors()
+        public When_Provider_Controller_SaveProviderDetail_Is_Called_With_No_Venues()
         {
             _providerService = Substitute.For<IProviderService>();
+            _providerController = new ProviderController(_providerService, new MatchingConfiguration());
 
-            var providerController = new ProviderController(_providerService, new MatchingConfiguration());
-
-            _result = providerController.SaveProviderDetail(new ProviderDetailViewModel()).GetAwaiter().GetResult();
+            _result = _providerController.SaveProviderDetail(new ProviderDetailViewModel()).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -35,34 +35,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         public void Then_ProviderService_Is_Not_Called() =>
             _providerService.DidNotReceiveWithAnyArgs();
 
-        //[Fact]
-        //public void Then_Model_Is_Not_Null()
-        //{
-        //    var viewResult = _result as ViewResult;
-        //    viewResult?.Model.Should().NotBeNull();
-        //}
-
-        //[Fact]
-        //public void Then_Model_Is_Of_Type_ProviderDetailViewModel()
-        //{
-        //    var viewResult = _result as ViewResult;
-        //    viewResult?.Model.Should().BeOfType<ProviderDetailViewModel>();
-        //}
-
-        //[Fact]
-        //public void Then_ModelState_Is_Not_Valid()
-        //{
-        //    _providerController.ViewData.ModelState.IsValid.Should().BeFalse();
-        //}
-
-        //[Fact]
-        //public void Then_ModelState_Contains_Errors()
-        //{
-        //    _providerController.ViewData.ModelState["DisplayName"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must enter a provider name that is 400 characters or fewer");
-        //    _providerController.ViewData.ModelState["PrimaryContact"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must tell us who the primary contact is for industry placements");
-        //    _providerController.ViewData.ModelState["PrimaryContactEmail"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must enter an email for the primary contact");
-        //    _providerController.ViewData.ModelState["PrimaryContactPhone"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must enter a telephone number for the primary contact number");
-        //    _providerController.ViewData.ModelState["IsEnabledForReferral"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must tell us whether the provider should receive referrals");
-        //}
+        [Fact]
+        public void Then_ModelState_Is_Not_Valid()
+        {
+            _providerController.ViewData.ModelState.IsValid.Should().BeFalse();
+            _providerController.ViewData.ModelState.Count.Should().Be(1);
+            _providerController.ViewData.ModelState["ProviderVenue"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must add a venue for this provider");
+        }
     }
 }

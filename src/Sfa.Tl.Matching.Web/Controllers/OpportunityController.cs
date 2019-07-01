@@ -154,9 +154,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         //[HttpPost] //Removed because there is a redirect from SaveOpportunityEmployerDetails
         public async Task<IActionResult> SaveCheckAnswers(int opportunityId, int opportunityItemId)
         {
-            if (!ModelState.IsValid)
-                return View("CheckAnswers", await GetCheckAnswersViewModel(opportunityItemId));
-
             await _opportunityService.UpdateOpportunityItemAsync(new CheckAnswersDto
             {
                 OpportunityItemId = opportunityItemId,
@@ -202,46 +199,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return View(viewModel);
         }
-
-        [HttpGet]
-        [Route("remove-opportunityItem/{opportunityId}-{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
-        public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasket(int opportunityId, int opportunityItemId)
-        {
-            await _opportunityService.RemoveOpportunityItemAsync(opportunityId, opportunityItemId);
-            var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
-
-            return opportunityItemCount == 0
-                ? RedirectToRoute("Start")
-                : RedirectToRoute("GetOpportunityBasket", new { opportunityId, opportunityItemId });
-        }
-
-        [HttpGet]
-        [Route("get-placement-or-employer/{opportunityId}-{opportunityItemId}", Name = "GetPlacementOrEmployer")]
-        public async Task<IActionResult> GetPlacementOrEmployer(int opportunityId, int opportunityItemId)
-        {
-            var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
-
-            return opportunityItemCount == 0
-                ? RedirectToRoute("GetEmployerDetails", new { opportunityId, opportunityItemId })
-                : RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
-        }
-
-        [HttpGet]
-        [Route("check-answers-or-edit-employer/{opportunityItemId}", Name = "GetCheckAnswersOrEditEmployer")]
-        public async Task<IActionResult> GetCheckAnswersOrEditEmployer(int opportunityItemId)
-        {
-            var checkAnswersViewModel = await GetCheckAnswersViewModel(opportunityItemId);
-            var opportunities = await _opportunityService.GetOpportunityBasket(checkAnswersViewModel.OpportunityId);
-
-            if (opportunities.ReferralCount == 0 && opportunities.ProvisionGapCount == 1)
-            {
-                return RedirectToRoute("GetEmployerDetails",
-                    new { opportunityId = checkAnswersViewModel.OpportunityId, opportunityItemId });
-            }
-
-            return View("CheckAnswers", checkAnswersViewModel);
-        }
-
+        
         [HttpPost]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
