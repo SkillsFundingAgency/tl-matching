@@ -14,11 +14,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 {
-    public class When_Proximity_Controller_Index_Post_Is_Called
+    public class When_Proximity_Controller_FindProviders_Is_Called
     {
         private readonly IActionResult _result;
 
-        public When_Proximity_Controller_Index_Post_Is_Called()
+        public When_Proximity_Controller_FindProviders_Is_Called()
         {
             var routes = new List<Route>
             {
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 SelectedRouteId = selectedRouteId,
                 Postcode = postcode
             };
-            _result = proximityController.Index(viewModel).GetAwaiter().GetResult();
+            _result = proximityController.FindProviders(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

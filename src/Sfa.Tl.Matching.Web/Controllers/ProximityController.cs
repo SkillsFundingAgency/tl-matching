@@ -55,8 +55,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("find-providers/{opportunityId?}", Name = "Providers_Post")]
-        public async Task<IActionResult> Index(SearchParametersViewModel viewModel)
+        public async Task<IActionResult> FindProviders(SearchParametersViewModel viewModel)
         {
             viewModel.SearchRadius = SearchParametersViewModel.DefaultSearchRadius;
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
@@ -83,7 +82,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("provider-results", Name = "ProviderResults_Post")]
         public async Task<IActionResult> RefineSearchResults(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))

@@ -18,11 +18,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
-    public class When_Proximity_Controller_Index_Post_Is_Called_With_Unformated_PostCode
+    public class When_Proximity_Controller_FindProviders_Is_Called_With_Unformated_PostCode
     {
         private readonly IActionResult _result;
 
-        public When_Proximity_Controller_Index_Post_Is_Called_With_Unformated_PostCode()
+        public When_Proximity_Controller_FindProviders_Is_Called_With_Unformated_PostCode()
         {
             const string requestPostcode = "cV12 Wt";
             var httpClient = new PostcodesIoHttpClient().Get(requestPostcode);
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
                 SelectedRouteId = selectedRouteId,
                 Postcode = postcode
             };
-            _result = proximityController.Index(viewModel).GetAwaiter().GetResult();
+            _result = proximityController.FindProviders(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -19,12 +19,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
-    public class When_Proximity_Controller_Index_Post_Is_Called_With_Invalid_PostCode
+    public class When_Proximity_Controller_FindProviders_Is_Called_With_Invalid_PostCode
     {
         private readonly IActionResult _result;
         private readonly ProximityController _proximityController;
 
-        public When_Proximity_Controller_Index_Post_Is_Called_With_Invalid_PostCode()
+        public When_Proximity_Controller_FindProviders_Is_Called_With_Invalid_PostCode()
         {
             var routes = new List<Route>
             {
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
                 SelectedRouteId = selectedRouteId,
                 Postcode = postcode
             };
-            _result = _proximityController.Index(viewModel).GetAwaiter().GetResult();
+            _result = _proximityController.FindProviders(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
