@@ -138,8 +138,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return opportunityItemCount == 0 ?
                 RedirectToRoute("LoadWhoIsEmployer", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
                 : viewModel.OpportunityType == OpportunityType.Referral ?
-                    RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId })
-                    : RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
+                    await GetCheckAnswers(viewModel.OpportunityItemId)
+                    : await SaveCheckAnswers(viewModel.OpportunityId, viewModel.OpportunityItemId);
         }
 
         [HttpGet]
@@ -151,7 +151,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View("CheckAnswers", viewModel);
         }
 
-        [HttpPost]
+        //[HttpPost] //Removed because there is a redirect from SaveOpportunityEmployerDetails
         public async Task<IActionResult> SaveCheckAnswers(int opportunityId, int opportunityItemId)
         {
             if (!ModelState.IsValid)
@@ -236,7 +236,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (opportunities.ReferralCount == 0 && opportunities.ProvisionGapCount == 1)
             {
                 return RedirectToRoute("GetEmployerDetails",
-                    new { opportunityId = checkAnswersViewModel.OpportunityId, opportunityItemId = opportunityItemId });
+                    new { opportunityId = checkAnswersViewModel.OpportunityId, opportunityItemId });
             }
 
             return View("CheckAnswers", checkAnswersViewModel);
@@ -298,9 +298,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private async Task<CheckAnswersViewModel> GetCheckAnswersViewModel(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-
-            var referralCount = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
-
             return viewModel;
         }
     }

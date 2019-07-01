@@ -86,13 +86,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         [Fact]
         public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToRouteResult>();
+            _result.Should().BeOfType<RedirectToActionResult>();
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_GetOpportunityBasket()
+        public void Then_Result_Is_Redirect_To_SaveCheckAnswers()
         {
-            var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("GetOpportunityBasket");
+            var redirect = _result as RedirectToActionResult;
+            redirect?.ControllerName.Should().BeEquivalentTo("Opportunity");
+            redirect?.ActionName.Should().BeEquivalentTo("SaveCheckAnswers");
             redirect?.RouteValues["opportunityId"].Should().Be(1);
             redirect?.RouteValues["opportunityItemId"].Should().Be(2);
         }
