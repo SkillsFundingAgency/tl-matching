@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (opportunities.ReferralCount == 0 && opportunities.ProvisionGapCount == 1)
             {
                 return RedirectToRoute("GetEmployerDetails",
-                    new { opportunityId = checkAnswersViewModel.OpportunityId, opportunityItemId = opportunityItemId });
+                    new { opportunityId = checkAnswersViewModel.OpportunityId, opportunityItemId });
             }
 
             return RedirectToRoute("GetCheckAnswers", new { checkAnswersViewModel .OpportunityItemId});
