@@ -113,7 +113,6 @@ namespace Sfa.Tl.Matching.Application.FileReader
                 ErrorMessage = errorMessage.ToString()
             }).ToList());
 
-            //TODO Logic to check if its a warning or error
             _logger.LogError($"Row Number={rowIndex} failed with the following errors: \n\t{string.Join("\n\t", validationResult.Errors)}");
         }
     }

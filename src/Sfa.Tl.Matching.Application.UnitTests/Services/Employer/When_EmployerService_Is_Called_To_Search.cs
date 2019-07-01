@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
