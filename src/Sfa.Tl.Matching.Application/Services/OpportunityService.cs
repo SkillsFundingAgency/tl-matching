@@ -241,7 +241,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId)
         {
             var opportunityItemsToBeReset = _opportunityItemRepository.GetMany(
-                op => op.IsSelectedForReferral == true
+                op => op.IsSelectedForReferral
                       && op.IsCompleted == false)
                 .Select(op => new OpportunityItemIsSelectedForReferralDto
                 {
