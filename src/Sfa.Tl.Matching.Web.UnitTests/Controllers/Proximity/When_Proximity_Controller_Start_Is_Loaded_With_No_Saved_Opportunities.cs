@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            employerService.GetOpportunityEmployerInProgressCountAsync("username").Returns(0);
+            employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(0);
             var proximityController = new ProximityController(mapper, routePathService, proximityService,
                 opportunityService, employerService);
 

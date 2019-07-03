@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> Start()
         {
             var username = HttpContext.User.GetUserName();
-            var savedOpportunitiesCount = await _employerService.GetOpportunityEmployerInProgressCountAsync(username);
+            var savedOpportunitiesCount = await _employerService.GetInProgressEmployerOpportunityCountAsync(username);
 
             return View(new DashboardViewModel
             {

@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IMapper _mapper;
 
         public EmployerController(IEmployerService employerService, IOpportunityService opportunityService, IMapper mapper)
-        {
+        {   
             _employerService = employerService;
             _opportunityService = opportunityService;
             _mapper = mapper;
