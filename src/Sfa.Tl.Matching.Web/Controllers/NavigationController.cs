@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
 
-            return opportunityItemCount == 1
+            return opportunityItemCount == 1 || opportunityItemCount == 0
                 ? RedirectToRoute("GetEmployerDetails", new { opportunityId, opportunityItemId })
                 : RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
         }
