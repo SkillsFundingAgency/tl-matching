@@ -1,6 +1,9 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.BasketReferralItemViewModel
 
 <input type="hidden" asp-for="OpportunityItemId" name="SelectedOpportunity[0].Id" />
+<input type="hidden" asp-for="OpportunityType" name="SelectedOpportunity[0].OpportunityType" />
+<input type="hidden" value="true" name="SelectedOpportunity[0].IsSelected" />
+
 <h2 class="govuk-heading-l tl-hidden-desktop">
     With providers
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">

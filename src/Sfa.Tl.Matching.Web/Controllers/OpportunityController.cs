@@ -209,7 +209,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return RedirectToRoute("Start");
 
             if (viewModel.SelectedOpportunity.Any(p => p.IsSelected))
-                return View("EmployerConsent");
+                return RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
 
             ModelState.AddModelError("ReferralItems[0].IsSelected", "You must select an opportunity to continue");
 
@@ -242,7 +242,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("confirm-employer-permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
         public IActionResult EmployerConsent(int opportunityId, int opportunityItemId)
         {
-            //TODO: Redirect to here from method above, and make sure view model is loaded correctly
             var viewModel = new EmployerConsentViewModel
             {
                 OpportunityId = opportunityId, OpportunityItemId = opportunityItemId

@@ -32,6 +32,7 @@
 
         <form asp-route="SaveSelectedOpportunities" novalidate>
             <input type="hidden" asp-for="OpportunityId" />
+            <input type="hidden" asp-for="OpportunityItemId" />
 
             @if (Model.ReferralCount > 0 || Model.ProvisionGapCount > 0)
             {

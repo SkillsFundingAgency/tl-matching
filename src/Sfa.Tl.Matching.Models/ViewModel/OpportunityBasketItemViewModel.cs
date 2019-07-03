@@ -8,6 +8,7 @@
         public string JobRole { get; set; }
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
+        public string OpportunityType { get; set; }
 
         public string StudentsWanted =>
             PlacementsKnown.GetValueOrDefault()

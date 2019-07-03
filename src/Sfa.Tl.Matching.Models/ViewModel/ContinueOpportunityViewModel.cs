@@ -3,6 +3,7 @@
     public class ContinueOpportunityViewModel
     {
         public int OpportunityId { get; set; }
+        public int OpportunityItemId { get; set; }
         public string SubmitAction { get; set; }
         public SelectedOpportunityItemViewModel[] SelectedOpportunity { get; set; }
     }
