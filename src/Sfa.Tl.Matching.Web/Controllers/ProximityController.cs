@@ -195,8 +195,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var viewModel = new NavigationViewModel
             {
-                CancelText = "Cancel opportunity and start again",
-                CancelRouteName = "Start"
+                CancelText = "Cancel opportunity and start again"
             };
 
             if (opportunityId == 0) return viewModel;
@@ -205,7 +204,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (opportunityItemCount == 0)
                 return viewModel;
 
-            viewModel.CancelRouteName = "RemoveAndGetOpportunityBasket";
             viewModel.CancelText = "Cancel this opportunity";
             viewModel.OpportunityId = opportunityId;
             viewModel.OpportunityItemId = opportunityItemId;
