@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -172,8 +173,36 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchRadius = viewModel.SearchRadius != 0 ? viewModel.SearchRadius : SearchParametersViewModel.DefaultSearchRadius,
                 Postcode = viewModel.Postcode?.Trim(),
                 OpportunityId = viewModel.OpportunityId,
-                OpportunityItemId = viewModel.OpportunityItemId
+                OpportunityItemId = viewModel.OpportunityItemId,
+                Navigation = LoadBackAndCancelLink(viewModel.OpportunityId)
             };
+        }
+
+        private NavigationViewModel LoadBackAndCancelLink(int opportunityId)
+        {
+            if (opportunityId == 0) return new NavigationViewModel
+            {
+                CancelText = "Cancel opportunity and start again",
+                RouteName = "Start"
+            };
+
+            var viewModel = new NavigationViewModel();
+            var basketItems = _opportunityService.GetOpportunityBasket(opportunityId).GetAwaiter().GetResult();
+            if (basketItems.ReferralCount == 0)
+            {
+                viewModel.RouteName = "Start";
+                viewModel.CancelText = "Cancel opportunity and start again";
+                viewModel.OpportunityBasket = new OpportunityBasketViewModel();
+            }
+            else
+            {
+                viewModel.RouteName = "GetOpportunityBasket";
+                viewModel.CancelText = "Cancel this opportunity";
+                viewModel.OpportunityBasket = basketItems;
+                viewModel.OpportunityId = opportunityId;
+            }
+
+            return viewModel;
         }
 
         private async Task<bool> IsSearchParametersValidAsync(SearchParametersViewModel viewModel)

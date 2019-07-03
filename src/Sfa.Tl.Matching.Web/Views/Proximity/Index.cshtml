@@ -4,15 +4,7 @@
 }
 
 @section backButton{
-    <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link">Back</a>
-    @if (@Model.OpportunityId == 0)
-    {
-        <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Cancel opportunity and start again </a>
-    }
-    else
-    {
-        <a asp-route="GetOpportunityBasket" asp-route-opportunityId="@Model.OpportunityId" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel this opportunity</a>
-    }
+    <a asp-route="GetOpportunityBasket" asp-route-opportunityId="@Model.OpportunityId" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Hello</a>
 
 }
 

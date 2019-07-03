@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
@@ -14,5 +15,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
         public IList<SelectListItem> RoutesSelectList { get; set; }
+        public NavigationViewModel Navigation { get; set; }
     }
 }
