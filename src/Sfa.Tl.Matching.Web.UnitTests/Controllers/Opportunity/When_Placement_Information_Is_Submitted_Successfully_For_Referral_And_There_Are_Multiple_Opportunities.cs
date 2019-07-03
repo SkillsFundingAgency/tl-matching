@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_GetOpportunityItemCountAsync_Is_Called_Exactly_Once()
         {
             _opportunityService
-                .Received(1)
+                .Received(2)
                 .GetOpportunityItemCountAsync(1);
         }
 
