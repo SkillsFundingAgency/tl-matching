@@ -193,20 +193,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
         {
-            var viewModel = new NavigationViewModel{
+            var viewModel = new NavigationViewModel
+            {
                 CancelText = "Cancel opportunity and start again",
                 CancelRouteName = "Start"
             };
 
             if (opportunityId == 0) return viewModel;
-            
-            var basketItems = _opportunityService.GetOpportunityBasket(opportunityId).GetAwaiter().GetResult();
-            if (basketItems.ReferralCount == 0 && basketItems.ProvisionGapCount == 0)
+
+            var opportunityItemCount = _opportunityService.GetOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
+            if (opportunityItemCount == 0)
                 return viewModel;
 
             viewModel.CancelRouteName = "RemoveAndGetOpportunityBasket";
             viewModel.CancelText = "Cancel this opportunity";
-            viewModel.OpportunityBasket = basketItems;
             viewModel.OpportunityId = opportunityId;
             viewModel.OpportunityItemId = opportunityItemId;
 

@@ -112,6 +112,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = await _opportunityService.GetPlacementInformationAsync(opportunityItemId);
 
             var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
+            viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, opportunityItemId);
 
             return View("PlacementInformation", viewModel);
         }
@@ -147,7 +148,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetCheckAnswers(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-
+            viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, opportunityItemId);
             return View("CheckAnswers", viewModel);
         }
 
@@ -214,6 +215,28 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
 
             return View(nameof(OpportunityBasket), opportunityBasketViewModel);
+        }
+
+        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = new NavigationViewModel
+            {
+                CancelText = "Cancel opportunity and start again",
+                CancelRouteName = "Start"
+            };
+
+            if (opportunityId == 0) return viewModel;
+
+            var opportunityItemCount = _opportunityService.GetOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
+            if (opportunityItemCount == 0)
+                return viewModel;
+
+            viewModel.CancelRouteName = "RemoveAndGetOpportunityBasket";
+            viewModel.CancelText = "Cancel this opportunity";
+            viewModel.OpportunityId = opportunityId;
+            viewModel.OpportunityItemId = opportunityItemId;
+
+            return viewModel;
         }
 
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)

@@ -4,7 +4,6 @@
     {
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
-        public OpportunityBasketViewModel OpportunityBasket { get; set; }
         public string CancelRouteName { get; set; }
         public string CancelText { get; set; }
     }
