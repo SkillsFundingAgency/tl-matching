@@ -57,9 +57,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 .GetSingleOrDefault(Arg.Any<Expression<Func<ProvisionGap, bool>>>())
                 .Returns(new ValidProvisionGapBuilder().Build());
 
-            opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
-                .Returns(OpportunityId);
-
             var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, _provisionGapRepository, referralRepository);
 
             var dto = new PlacementInformationSaveDto

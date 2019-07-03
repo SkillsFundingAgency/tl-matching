@@ -17,9 +17,9 @@ namespace Sfa.Tl.Matching.Models.Dto
         public bool? IsReferral { get; set; }
         public int? Placements { get; set; }
         public int? SearchResultProviderCount { get; set; }
-        public bool? IsSaved { get; set; }
-        public bool? IsSelectedForReferral { get; set; }
-        public bool? IsCompleted { get; set; }
+        public bool IsSaved { get; set; }
+        public bool IsSelectedForReferral { get; set; }
+        public bool IsCompleted { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }

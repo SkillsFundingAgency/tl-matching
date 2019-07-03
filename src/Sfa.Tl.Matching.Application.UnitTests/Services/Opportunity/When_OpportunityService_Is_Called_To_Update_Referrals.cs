@@ -50,9 +50,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
-                .Returns(OpportunityId);
-
             var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, provisionGapRepository, _referralRepository);
 
             var dto = new OpportunityItemDto

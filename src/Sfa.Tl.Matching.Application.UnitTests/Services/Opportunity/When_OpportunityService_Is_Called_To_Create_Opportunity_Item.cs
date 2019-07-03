@@ -92,12 +92,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     opportunity.PlacementsKnown.Value &&
                     opportunity.Placements == 3 &&
                     opportunity.SearchResultProviderCount == 15 &&
-                    opportunity.IsSaved.HasValue &&
-                    opportunity.IsSaved.Value &&
-                    opportunity.IsSelectedForReferral.HasValue &&
-                    opportunity.IsSelectedForReferral.Value &&
-                    opportunity.IsCompleted.HasValue &&
-                    opportunity.IsCompleted.Value &&
+                    opportunity.IsSaved &&
+                    opportunity.IsSelectedForReferral &&
+                    opportunity.IsCompleted &&
                     opportunity.CreatedBy == "adminUserName"
             ));
         }

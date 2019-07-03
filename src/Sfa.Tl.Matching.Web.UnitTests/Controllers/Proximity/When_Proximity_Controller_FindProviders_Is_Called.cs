@@ -38,8 +38,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             routePathService.GetRoutes().Returns(routes);
 
             var opportunityService = Substitute.For<IOpportunityService>();
+            var employerService = Substitute.For<IEmployerService>();
 
-            var proximityController = new ProximityController(mapper, routePathService, proximityService, opportunityService);
+            var proximityController = new ProximityController(mapper, routePathService, proximityService, opportunityService,
+                employerService);
 
             var selectedRouteId = routes.First().Id;
             const int searchRadius = 5;
