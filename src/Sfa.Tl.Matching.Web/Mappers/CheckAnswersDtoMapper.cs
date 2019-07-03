@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
         {
             CreateMap<CheckAnswersDto, CheckAnswersViewModel>()
                 .ForMember(m => m.Providers, opt => opt.Ignore())
+                .ForMember(m => m.Navigation, o => o.Ignore())
                 ;
 
             CreateMap<CheckAnswersViewModel, CheckAnswersDto>()
