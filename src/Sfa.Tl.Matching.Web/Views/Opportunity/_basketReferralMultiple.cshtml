@@ -39,7 +39,7 @@
 
                     <div class="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input tl-checkbox" id="referral1" name="referral1" type="checkbox" value="referral1">
+                            <input class="govuk-checkboxes__input" asp-for="@Model[i].IsSelected" name="SelectedOpportunity[@i].IsSelected" type="checkbox">
                             <label class="govuk-label govuk-checkboxes__label" asp-for="@Model[i].IsSelected">
                                 <span class="govuk-visually-hidden">Select this opportunity</span>
                             </label>
