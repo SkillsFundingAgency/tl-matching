@@ -140,6 +140,22 @@ namespace Sfa.Tl.Matching.Application.Services
             return viewModel;
         }
 
+        public async Task<ConfirmDeleteOpportunityItemViewModel> GetConfirmDeleteOpportunityItemAsync(int opportunityItemId)
+        {
+            return await _opportunityItemRepository.GetSingleOrDefault(
+                 oi => oi.Id == opportunityItemId,
+                 oi => new ConfirmDeleteOpportunityItemViewModel
+                 {
+                     OpportunityItemId = oi.Id,
+                     OpportunityId = oi.OpportunityId,
+                     CompanyName = oi.Opportunity.Employer.CompanyName,
+                     JobRole = oi.JobRole,
+                     Postcode = oi.Postcode,
+                     Placements = oi.Placements,
+                     BasketItemCount = oi.Opportunity.OpportunityItem.Count(item => item.IsSaved)
+                 });
+        }
+
         public async Task<bool> IsReferralOpportunityItemAsync(int opportunityItemId)
         {
             return await _referralRepository.GetMany(o => o.OpportunityItemId == opportunityItemId).AnyAsync();
@@ -235,19 +251,23 @@ namespace Sfa.Tl.Matching.Application.Services
             var referralItems = _referralRepository.GetMany(referral => referral.OpportunityItemId == opportunityItemId);
             var provisionGaps = _provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opportunityItemId);
 
-            await _referralRepository.DeleteMany(referralItems
-                .Where(referral => referral.OpportunityItemId == opportunityItemId &&
-                                   referral.OpportunityItem.IsSaved == false).ToList());
-
-            await _provisionGapRepository.DeleteMany(provisionGaps.Where(gap =>
-                gap.OpportunityItemId == opportunityItemId && gap.OpportunityItem.IsSaved == false).ToList());
+            await _referralRepository.DeleteMany(referralItems.ToList());
+            await _provisionGapRepository.DeleteMany(provisionGaps.ToList());
+            await _opportunityItemRepository.Delete(opportunityItemId);
 
             var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId);
-
-            await _opportunityItemRepository.DeleteMany(opportunityItems.Where(item => item.IsSaved == false).ToList());
-
-            if (!opportunityItems.Any(item => item.OpportunityId == opportunityId && item.IsSaved))
+            if (!opportunityItems.Any(item => item.IsSaved))
             {
+                opportunityItems
+                    .Where(item => item.IsSaved == false)
+                    .ToList()
+                    .ForEach(async opitem =>
+                    {
+                        await _referralRepository.DeleteMany(_referralRepository.GetMany(rf => rf.OpportunityItemId == opitem.Id).ToList());
+                        await _provisionGapRepository.DeleteMany(_provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opitem.Id).ToList());
+                        await _opportunityItemRepository.Delete(opitem);
+                    });
+
                 await _opportunityRepository.Delete(opportunityId);
             }
         }
@@ -286,8 +306,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            var referralIds = viewModel.SelectedOpportunity.Where(oi => oi.IsSelected
-                                                                        && oi.OpportunityType == OpportunityType.Referral.ToString())
+            var referralIds = viewModel.SelectedOpportunity.Where(oi => oi.IsSelected && oi.OpportunityType == OpportunityType.Referral.ToString())
                 .Select(oi => oi.Id).ToList();
 
             if (referralIds.Any())

@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         List<ReferralDto> GetReferrals(int opportunityItemId);
         Task<CheckAnswersViewModel> GetCheckAnswers(int id);
         Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
+        Task<ConfirmDeleteOpportunityItemViewModel> GetConfirmDeleteOpportunityItemAsync(int opportunityItemId);
 
         Task<bool> IsReferralOpportunityItemAsync(int id);
         Task<bool> IsNewReferralAsync(int opportunityItemId);

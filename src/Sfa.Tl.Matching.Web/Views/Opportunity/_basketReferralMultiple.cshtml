@@ -52,7 +52,7 @@
                 <td class="govuk-table__cell" data-label="Students wanted">@basketItem.StudentsWanted</td>
                 <td class="govuk-table__cell" data-label="Providers">@basketItem.Providers</td>
                 <td class="govuk-table__cell tl-table-responsive-link" data-label=""><a asp-route="GetCheckAnswers" asp-route-opportunityItemId="@basketItem.OpportunityItemId" class="govuk-link">Edit</a></td>
-                <td class="govuk-table__cell tl-table-responsive-link" data-label=""><a href="#" class="govuk-link">Delete</a></td>
+                <td class="govuk-table__cell tl-table-responsive-link" data-label=""><a asp-route="GetConfirmDeleteOpportunityItem" asp-route-opportunityItemId="@basketItem.OpportunityItemId" class="govuk-link">Delete</a></td>
             </tr>
         }
     </tbody>

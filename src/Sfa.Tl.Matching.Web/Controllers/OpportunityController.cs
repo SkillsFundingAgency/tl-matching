@@ -173,7 +173,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
             var viewModel = await _opportunityService.GetOpportunityBasket(opportunityId);
-            viewModel.OpportunityItemId = opportunityItemId;
+
+            viewModel.OpportunityItemId = opportunityItemId != 0 ? opportunityItemId
+                : viewModel.OpportunityItemId =
+                    (viewModel.ReferralItems.LastOrDefault()?.OpportunityItemId != 0
+                        ? viewModel.ReferralItems.LastOrDefault()?.OpportunityItemId :
+                        viewModel.ProvisionGapItems.LastOrDefault()?.OpportunityItemId) ?? 0;
 
             return View(viewModel);
         }
@@ -206,14 +211,27 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (viewModel.SubmitAction == "Finish")
                 return RedirectToRoute("Start");
-            
+
             return RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
-        
-        [Route("remove-opportunity", Name = "ConfirmDelete")]
-        public IActionResult ConfirmDelete()
+
+        [HttpGet]
+        [Route("remove-opportunity/{opportunityItemId}", Name = "GetConfirmDeleteOpportunityItem")]
+        public async Task<IActionResult> ConfirmDeleteOpportunityItem(int opportunityItemId)
         {
-            return View();
+            var viewModel = await _opportunityService.GetConfirmDeleteOpportunityItemAsync(opportunityItemId);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOpportunityItem(DeleteOpportunityItemViewModel viewModel)
+        {
+            await _opportunityService.DeleteOpportunityItemAsync(viewModel.OpportunityId, viewModel.OpportunityItemId);
+
+            return viewModel.BasketItemCount == 1 ?
+                RedirectToRoute("Start") :
+                RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId, OpportunityItemId = 0 });
         }
 
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)

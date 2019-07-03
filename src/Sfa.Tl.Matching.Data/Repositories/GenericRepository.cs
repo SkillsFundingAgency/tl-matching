@@ -73,6 +73,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public virtual async Task UpdateMany(IList<T> entities)
         {
+            if (entities.Count == 0) return;
+
             _dbContext.UpdateRange(entities);
 
             try
@@ -165,6 +167,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public virtual async Task DeleteMany(IList<T> entities)
         {
+            if (entities.Count == 0) return;
+             
             _dbContext.RemoveRange(entities);
 
             try
