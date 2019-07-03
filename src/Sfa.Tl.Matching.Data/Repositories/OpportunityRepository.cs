@@ -120,7 +120,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                OpportunityId = o.Id,
                                                CompanyName = e.CompanyName,
                                                ProvisionGapItems = o.OpportunityItem
-                                                   .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString())
+                                                   .Where(oi => IsValidBasketState(oi, OpportunityType.ProvisionGap))
                                                    .Select(oi => new BasketProvisionGapItemViewModel
                                                    {
                                                        OpportunityItemId = oi.Id,
@@ -131,7 +131,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        Reason = GetReasons(oi.ProvisionGap.First())
                                                    }).ToList(),
                                                ReferralItems = o.OpportunityItem
-                                                   .Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString())
+                                                   .Where(oi => IsValidBasketState(oi, OpportunityType.Referral))
                                                    .Select(oi => new BasketReferralItemViewModel
                                                    {
                                                        OpportunityItemId = oi.Id,
@@ -144,6 +144,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                            }).SingleOrDefaultAsync();
 
             return opportunityBasket;
+        }
+
+        private static bool IsValidBasketState(OpportunityItem oi, OpportunityType type)
+        {
+            return oi.OpportunityType == type.ToString()
+                   && oi.IsSaved && !oi.IsCompleted;
         }
 
         private static string GetReasons(ProvisionGap provisionGap)

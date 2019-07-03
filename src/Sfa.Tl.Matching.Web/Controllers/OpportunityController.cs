@@ -201,6 +201,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
             if (viewModel.SubmitAction == "Finish")
@@ -209,7 +210,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (viewModel.SelectedOpportunity.Any(p => p.IsSelected))
                 return View("EmployerConsent");
 
-            ModelState.AddModelError("Model.ReferralItems[0].IsSelected", "You must select an opportunity to continue");
+            ModelState.AddModelError("ReferralItems[0].IsSelected", "You must select an opportunity to continue");
 
             var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
 
