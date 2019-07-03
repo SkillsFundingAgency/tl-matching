@@ -199,7 +199,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return View(viewModel);
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
@@ -251,6 +251,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 1 or more");
             else if (viewModel.Placements > 999)
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 999 or less");
+        }
+
+        [Route("remove-opportunity", Name = "ConfirmDelete")]
+        public IActionResult ConfirmDelete()
+        {
+            return View();
         }
     }
 }

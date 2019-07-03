@@ -94,6 +94,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
                new {viewModel.OpportunityId, viewModel.OpportunityItemId});
         }
 
+        [HttpGet]
+        [Route("saved-opportunities/{opportunityId}-{opportunityItemId}", Name = "GetSavedEmployerOpportunity")]
+        public IActionResult SavedEmployerOpportunity(int opportunityId, int opportunityItemId)
+        {
+            return View();
+        }
+
         private void Validate(EmployerDetailsViewModel viewModel)
         {
             if (string.IsNullOrEmpty(viewModel.EmployerContactPhone))

@@ -1,0 +1,25 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.ConfirmDeleteViewModel
+@{
+    ViewData["Title"] = "Confirm you want to delete this opportunity";
+}
+
+@section backButton{
+    @*<a asp-route="GetPlacementOrEmployer" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>
+        @if (@Model.OpportunityId == 0)
+        {
+        <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel opportunity and start again</a>
+        }
+        else
+        {
+        <a asp-route="RemoveAndGetOpportunityBasket" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel this opportunity</a>
+        }*@
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l"> Employer name here @*@Model.CompanyName*@</span>
+
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+
+    </div>
+</div>
