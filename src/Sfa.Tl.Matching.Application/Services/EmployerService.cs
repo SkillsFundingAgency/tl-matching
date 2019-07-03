@@ -101,7 +101,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         !string.IsNullOrEmpty(o.EmployerContact) &&
                         !string.IsNullOrEmpty(o.EmployerContactEmail) &&
                         !string.IsNullOrEmpty(o.EmployerContactPhone) &&
-                        o.OpportunityItem.Any(oi => oi.OpportunityType == OpportunityType.Referral.ToString() && oi.IsCompleted.HasValue && oi.IsCompleted.Value),
+                        o.OpportunityItem.Any(oi => oi.OpportunityType == OpportunityType.Referral.ToString() && oi.IsCompleted && oi.IsCompleted),
                     o => new EmployerDetailsViewModel
                     {
                         OpportunityItemId = opportunityItemId,
@@ -126,6 +126,15 @@ namespace Sfa.Tl.Matching.Application.Services
                         EmployerContactEmail = e.Email,
                         EmployerContactPhone = e.Phone
                     });
+        }
+
+        public async Task<int> GetInProgressEmployerOpportunityCountAsync(string username)
+        {
+            var savedCount = await _opportunityRepository.Count(o => o.OpportunityItem.Any(oi => oi.IsSaved && 
+                                                                                             !oi.IsCompleted) 
+                                                                 && o.CreatedBy == username);
+
+            return savedCount;
         }
     }
 }

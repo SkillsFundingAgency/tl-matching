@@ -25,5 +25,7 @@ namespace Sfa.Tl.Matching.Data.Interfaces
 
         Task<T> GetSingleOrDefault(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationPropertyPath);
         Task<TDto> GetSingleOrDefault<TDto>(Expression<Func<T, bool>> predicate, Expression<Func<T, TDto>> selector, Expression<Func<T, object>> orderBy = null, bool asendingorder = true, params Expression<Func<T, object>>[] navigationPropertyPath);
+
+        Task<int> Count(Expression<Func<T, bool>> predicate = null);
     }
 }

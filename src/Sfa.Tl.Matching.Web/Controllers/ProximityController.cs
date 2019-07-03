@@ -28,20 +28,28 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IProximityService _proximityService;
         private readonly IRoutePathService _routePathService;
         private readonly IOpportunityService _opportunityService;
+        private readonly IEmployerService _employerService;
 
         public ProximityController(IMapper mapper, IRoutePathService routePathService, IProximityService proximityService,
-            IOpportunityService opportunityService)
+            IOpportunityService opportunityService, IEmployerService employerService)
         {
             _mapper = mapper;
             _proximityService = proximityService;
             _routePathService = routePathService;
             _opportunityService = opportunityService;
+            _employerService = employerService;
         }
 
         [Route("Start", Name = "Start")]
-        public IActionResult Start()
+        public async Task<IActionResult> Start()
         {
-            return View();
+            var username = HttpContext.User.GetUserName();
+            var savedOpportunitiesCount = await _employerService.GetInProgressEmployerOpportunityCountAsync(username);
+
+            return View(new DashboardViewModel
+            {
+                HasSavedOppportunities = savedOpportunitiesCount > 0
+            });
         }
 
         [HttpGet]

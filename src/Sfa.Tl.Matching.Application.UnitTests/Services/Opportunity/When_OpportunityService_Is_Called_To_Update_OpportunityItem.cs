@@ -4,6 +4,7 @@ using AutoMapper;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -28,8 +29,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
-                .Returns(OpportunityId);
+            _opportunityItemRepository
+                .GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+                .Returns(new OpportunityItemBuilder().Build());
 
             var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository);
 

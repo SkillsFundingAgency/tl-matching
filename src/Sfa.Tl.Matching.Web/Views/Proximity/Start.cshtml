@@ -1,4 +1,6 @@
 ﻿@using Sfa.Tl.Matching.Application.Extensions
+@model Sfa.Tl.Matching.Models.ViewModel.DashboardViewModel
+
 @{
     ViewData["Title"] = "Match employers with providers for industry placements";
 }
@@ -13,9 +15,12 @@
             <li>talk to providers about these opportunities</li>
             <li>tell us if there are not enough providers to fill their opportunities</li>
         </ul>
-        <p class="govuk-body">
-            <a class="govuk-link" href="saved-opportunities">View saved opportunities</a>
-        </p>
+        @if (Model.HasSavedOppportunities)
+        {
+            <p class="govuk-body">
+                <a asp-route="GetSavedEmployerOpportunity" class="govuk-link" id="tl-view-opportunities-link">View saved opportunities</a>
+            </p>
+        }
         <div>
             <a asp-action="Index" asp-controller="Proximity" id="tl-start-now" class="govuk-button govuk-button--start">Start a new opportunity</a>
         </div>
