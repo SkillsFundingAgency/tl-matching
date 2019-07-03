@@ -128,7 +128,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        Placements = oi.Placements,
                                                        PlacementsKnown = oi.PlacementsKnown,
                                                        Workplace = $"London {oi.Postcode}",
-                                                       Reason = GetReasons(oi.ProvisionGap.First())
+                                                       Reason = GetReasons(oi.ProvisionGap.First()),
+                                                       OpportunityType = oi.OpportunityType
                                                    }).ToList(),
                                                ReferralItems = o.OpportunityItem
                                                    .Where(oi => IsValidBasketState(oi, OpportunityType.Referral))
@@ -139,7 +140,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        Workplace = $"London {oi.Postcode}",
                                                        PlacementsKnown = oi.PlacementsKnown,
                                                        Placements = oi.Placements,
-                                                       Providers = oi.Referral.Count
+                                                       Providers = oi.Referral.Count,
+                                                       OpportunityType = oi.OpportunityType
                                                    }).ToList()
                                            }).SingleOrDefaultAsync();
 
