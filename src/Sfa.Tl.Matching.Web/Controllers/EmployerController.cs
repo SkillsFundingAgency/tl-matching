@@ -95,8 +95,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("saved-opportunities/{opportunityId}-{opportunityItemId}", Name = "GetSavedEmployerOpportunity")]
-        public IActionResult SavedEmployerOpportunity(int opportunityId, int opportunityItemId)
+        [Route("saved-opportunities", Name = "GetSavedEmployerOpportunity")]
+        public IActionResult SavedEmployerOpportunity()
         {
             return View();
         }
