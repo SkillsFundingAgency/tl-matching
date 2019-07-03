@@ -11,5 +11,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         IEnumerable<EmployerSearchResultDto> Search(string employerName);
         Task<EmployerDetailsViewModel> GetOpportunityEmployerDetailAsync(int opportunityId, int opportunityItemId);
         Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityId, int opportunityItemId);
+        Task<int> GetOpportunityEmployerInProgressCountAsync(string username);
     }
 }
