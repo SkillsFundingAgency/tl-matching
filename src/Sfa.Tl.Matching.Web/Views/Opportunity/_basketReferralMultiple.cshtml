@@ -36,7 +36,7 @@
             <tr class="govuk-table__row">
                 <td class="govuk-table__cell tl-table-responsive-check">
                     <input type="hidden" asp-for="@basketItem.OpportunityItemId" name="SelectedOpportunity[@i].Id" />
-                    <input type="hidden" asp-for="@basketItem.OpportunityType" name="SelectedOpportunity[0].OpportunityType" />
+                    <input type="hidden" asp-for="@basketItem.OpportunityType" name="SelectedOpportunity[@i].OpportunityType" />
 
                     <div class="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
