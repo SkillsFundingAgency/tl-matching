@@ -52,9 +52,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void GetOpportunityBasketAsync_Is_Called_Exactly_Once()
+        public void Clear_And_Load_Is_Called_Exactly_Once_In_Correct_Order()
         {
-            _opportunityService.Received(1).GetOpportunityBasket(1);
+            Received.InOrder(() =>
+                {
+                    _opportunityService.Received(1).ClearOpportunityItemsSelectedForReferralAsync(1);
+                    _opportunityService.Received(1).GetOpportunityBasket(1);
+
+                });
         }
     }
 }

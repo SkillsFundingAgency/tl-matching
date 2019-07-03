@@ -240,7 +240,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var opportunityItemsToBeReset = _opportunityItemRepository.GetMany(
                 op => op.IsSelectedForReferral
-                      && op.IsCompleted == false)
+                      && !op.IsCompleted)
                 .Select(op => new OpportunityItemIsSelectedForReferralDto
                 {
                     Id = op.Id,

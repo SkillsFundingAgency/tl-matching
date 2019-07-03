@@ -168,8 +168,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("employer-opportunities/{opportunityId}-{opportunityItemId}", Name = "GetOpportunityBasket")]
         public async Task<IActionResult> OpportunityBasket(int opportunityId, int opportunityItemId)
         {
+            await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
+
             var viewModel = await _opportunityService.GetOpportunityBasket(opportunityId);
             viewModel.OpportunityItemId = opportunityItemId;
+
             return View(viewModel);
         }
 
