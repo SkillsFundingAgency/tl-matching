@@ -164,7 +164,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> GetOpportunityItemCountAsync(int opportunityId)
         {
-            return await _opportunityItemRepository.GetMany(o => o.OpportunityId == opportunityId && o.IsSaved == true).CountAsync();
+            return await _opportunityItemRepository.GetMany(o => o.OpportunityId == opportunityId && o.IsSaved).CountAsync();
         }
 
         public async Task UpdateReferrals(OpportunityItemDto dto)
@@ -239,7 +239,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId)
         {
             var opportunityItemsToBeReset = _opportunityItemRepository.GetMany(
-                op => op.IsSelectedForReferral == true
+                op => op.IsSelectedForReferral
                       && op.IsCompleted == false)
                 .Select(op => new OpportunityItemIsSelectedForReferralDto
                 {
