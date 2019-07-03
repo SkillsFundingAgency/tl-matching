@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("remove-opportunityItem/{opportunityId}-{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
         public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasket(int opportunityId, int opportunityItemId)
         {
-            await _opportunityService.RemoveOpportunityItemAsync(opportunityId, opportunityItemId);
+            await _opportunityService.DeleteOpportunityItemAsync(opportunityId, opportunityItemId);
             var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
 
             return opportunityItemCount == 0

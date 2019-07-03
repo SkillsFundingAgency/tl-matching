@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task UpdateProvisionGapAsync(PlacementInformationSaveDto dto);
         Task UpdateReferrals(OpportunityItemDto opportunityItemDto);
 
-        Task RemoveOpportunityItemAsync(int opportunityId, int opportunityItemId);
+        Task DeleteOpportunityItemAsync(int opportunityId, int opportunityItemId);
         Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId);
     }
 }
