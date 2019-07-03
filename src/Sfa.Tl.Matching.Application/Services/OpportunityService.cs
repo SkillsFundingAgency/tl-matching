@@ -236,6 +236,43 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
+        public async Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId)
+        {
+            var opportunityItemsToBeReset = _opportunityItemRepository.GetMany(
+                op => op.IsSelectedForReferral == true
+                      && op.IsCompleted == false)
+                .Select(op => new OpportunityItemIsSelectedForReferralDto
+                {
+                    Id = op.Id,
+                    IsSelectedForReferral = false
+                })
+                .ToList();
+
+            var updates = _mapper.Map<List<OpportunityItem>>(opportunityItemsToBeReset);
+
+            await _opportunityItemRepository.UpdateMany(updates);
+
+            /*
+               var oppsTobeReset = (await _opportunityItemRepository
+               .GetMany(op => op.IsSelectedForReferral == true && op.IsCompleted == false).ToListAsync())
+               .Select(op =>
+               {
+                   op.IsSelectedForReferral = false;
+                   op.ModifiedBy = "System";
+                   op.ModifiedOn = DateTime.UtcNow;
+                   return op;
+               });
+             */
+
+            //foreach (var selectedItem in opportunityItemsToBeReset)
+            //{
+            //await _opportunityItemRepository.UpdateWithSpecifedColumnsOnly(selectedItem,
+            //    x => x.IsSelectedForReferral,
+            //    x => x.ModifiedOn,
+            //    x => x.ModifiedBy);
+            //}
+        }
+
         private static OpportunityBasketType GetOpportunityBasketType(OpportunityBasketViewModel viewModel)
         {
             if (viewModel.ReferralCount == 1 && viewModel.ProvisionGapCount == 0)

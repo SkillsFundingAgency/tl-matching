@@ -217,6 +217,18 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View(nameof(OpportunityBasket), opportunityBasketViewModel);
         }
 
+        [HttpGet]
+        [Route("confirm-employer-permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
+        public IActionResult EmployerConsent(int opportunityId, int opportunityItemId)
+        {
+            //TODO: Redirect to here from method above, and make sure view model is loaded correctly
+            var viewModel = new EmployerConsentViewModel
+            {
+                OpportunityId = opportunityId, OpportunityItemId = opportunityItemId
+            };
+            return View(viewModel);
+        }
+
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)
         {
             var opportunityId = await _opportunityService.CreateOpportunityAsync(dto);

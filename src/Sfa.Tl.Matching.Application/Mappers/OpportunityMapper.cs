@@ -204,6 +204,13 @@ namespace Sfa.Tl.Matching.Application.Mappers
                             ? source.Opportunity.Employer.CompanyName
                             : null))
                 .ForAllOtherMembers(config => config.Ignore());
+
+            CreateMap<OpportunityItemIsSelectedForReferralDto, OpportunityItem>()
+                .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.IsSelectedForReferral, o => o.MapFrom(s => s.IsSelectedForReferral))
+                .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityItemIsSelectedForReferralDto, OpportunityItem>>())
+                .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<OpportunityItemIsSelectedForReferralDto, OpportunityItem>>())
+                .ForAllOtherMembers(config => config.Ignore());
         }
     }
 }
