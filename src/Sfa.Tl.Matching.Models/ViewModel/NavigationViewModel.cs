@@ -3,8 +3,9 @@
     public class NavigationViewModel
     {
         public int OpportunityId { get; set; }
+        public int OpportunityItemId { get; set; }
         public OpportunityBasketViewModel OpportunityBasket { get; set; }
-        public string RouteName { get; set; }
+        public string CancelRouteName { get; set; }
         public string CancelText { get; set; }
     }
 }

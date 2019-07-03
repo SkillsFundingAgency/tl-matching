@@ -133,6 +133,8 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var viewModel = await _opportunityRepository.GetOpportunityBasket(opportunityId);
 
+            if (viewModel==null) return new OpportunityBasketViewModel();
+
             viewModel.Type = GetOpportunityBasketType(viewModel);
 
             return viewModel;

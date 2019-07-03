@@ -1,9 +1,13 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -139,7 +143,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 },
                 SearchParameters = GetSearchParametersViewModelAsync(viewModel),
                 OpportunityId = viewModel.OpportunityId,
-                OpportunityItemId = viewModel.OpportunityItemId
+                OpportunityItemId = viewModel.OpportunityItemId,
+                Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
             };
 
             if (viewModel.OpportunityId == 0 && viewModel.OpportunityItemId == 0)
@@ -174,33 +179,28 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 Postcode = viewModel.Postcode?.Trim(),
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId,
-                Navigation = LoadBackAndCancelLink(viewModel.OpportunityId)
+                Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
             };
         }
 
-        private NavigationViewModel LoadBackAndCancelLink(int opportunityId)
+        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
         {
-            if (opportunityId == 0) return new NavigationViewModel
-            {
+            var viewModel = new NavigationViewModel{
                 CancelText = "Cancel opportunity and start again",
-                RouteName = "Start"
+                CancelRouteName = "Start"
             };
 
-            var viewModel = new NavigationViewModel();
+            if (opportunityId == 0) return viewModel;
+            
             var basketItems = _opportunityService.GetOpportunityBasket(opportunityId).GetAwaiter().GetResult();
-            if (basketItems.ReferralCount == 0)
-            {
-                viewModel.RouteName = "Start";
-                viewModel.CancelText = "Cancel opportunity and start again";
-                viewModel.OpportunityBasket = new OpportunityBasketViewModel();
-            }
-            else
-            {
-                viewModel.RouteName = "GetOpportunityBasket";
-                viewModel.CancelText = "Cancel this opportunity";
-                viewModel.OpportunityBasket = basketItems;
-                viewModel.OpportunityId = opportunityId;
-            }
+            if (basketItems.ReferralCount == 0 && basketItems.ProvisionGapCount == 0)
+                return viewModel;
+
+            viewModel.CancelRouteName = "RemoveAndGetOpportunityBasket";
+            viewModel.CancelText = "Cancel this opportunity";
+            viewModel.OpportunityBasket = basketItems;
+            viewModel.OpportunityId = opportunityId;
+            viewModel.OpportunityItemId = opportunityItemId;
 
             return viewModel;
         }
