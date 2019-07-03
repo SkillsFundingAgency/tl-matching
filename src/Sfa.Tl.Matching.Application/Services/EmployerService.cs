@@ -131,7 +131,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<int> GetOpportunityEmployerInProgressCountAsync(string username)
         {
             var savedCount = await _opportunityRepository.Count(o => o.OpportunityItem.Any(oi => oi.IsSaved && 
-                                                                                             !oi.IsCompleted == false) 
+                                                                                             !oi.IsCompleted) 
                                                                  && o.CreatedBy == username);
 
             return savedCount;
