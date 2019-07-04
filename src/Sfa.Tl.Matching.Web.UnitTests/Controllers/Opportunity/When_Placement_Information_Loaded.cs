@@ -47,9 +47,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetPlacementInformationAsync(OpportunityItemId).Returns(dto);
 
-            var referralService = Substitute.For<IReferralService>();
-
-            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService,  mapper);
 
             _result = opportunityController.GetPlacementInformation(OpportunityItemId).GetAwaiter().GetResult();
         }

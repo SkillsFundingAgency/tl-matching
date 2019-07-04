@@ -20,12 +20,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _opportunityService = Substitute.For<IOpportunityService>();
 
-            var referralService = Substitute.For<IReferralService>();
-
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController).Build();
 
             _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel

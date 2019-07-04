@@ -25,8 +25,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetSavedOpportunityItemCountAsync(1).Returns(0);
 
-            var referralService = Substitute.For<IReferralService>();
-
             var viewModel = new PlacementInformationSaveViewModel
             {
                 OpportunityId = 1,
@@ -56,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             });
             var mapper = new Mapper(config);
             
-            _opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
+            _opportunityController = new OpportunityController(_opportunityService, mapper);
 
             _result = _opportunityController.SavePlacementInformation(viewModel).GetAwaiter().GetResult();
         }

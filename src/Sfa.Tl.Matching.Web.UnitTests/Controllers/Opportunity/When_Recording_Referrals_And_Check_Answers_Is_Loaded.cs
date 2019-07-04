@@ -30,9 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetCheckAnswers(OpportunityItemId).Returns(dto);
 
-            var referralService = Substitute.For<IReferralService>();
-
-            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService,  mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(CreatedBy)
                 .Build();

@@ -21,13 +21,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly IReferralService _referralService;
         private readonly IMapper _mapper;
 
-        public OpportunityController(IOpportunityService opportunityService, IReferralService referralService, IMapper mapper)
+        public OpportunityController(IOpportunityService opportunityService, IMapper mapper)
         {
             _opportunityService = opportunityService;
-            _referralService = referralService;
             _mapper = mapper;
         }
 
@@ -208,56 +206,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
             
             return RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
-
-        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
+        
+        [Route("remove-opportunity", Name = "ConfirmDelete")]
+        public IActionResult ConfirmDelete()
         {
-            var viewModel = new NavigationViewModel
-            {
-                CancelText = "Cancel opportunity and start again"
-            };
-            if (opportunityId == 0) return viewModel;
-
-            var opportunityItemCount = _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
-            if (opportunityItemCount == 0)
-            {
-                viewModel.OpportunityId = opportunityId;
-                viewModel.OpportunityItemId = opportunityItemId;
-                return viewModel;
-            }
-
-            viewModel.CancelText = "Cancel this opportunity";
-            viewModel.OpportunityId = opportunityId;
-            viewModel.OpportunityItemId = opportunityItemId;
-
-            return viewModel;
-        }
-
-        [HttpGet]
-        [Route("permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
-        public async Task<IActionResult> EmployerConsent(int opportunityId, int opportunityItemId)
-        {
-            var viewModel = new EmployerConsentViewModel
-            {
-                OpportunityId = opportunityId,
-                OpportunityItemId = opportunityItemId,
-                OpportunityItemCount = await _opportunityService.GetReferredOpportunityItemCountAsync(opportunityId)
-            };
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [Route("permission/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerConsent")]
-        public IActionResult EmployerConsent(EmployerConsentViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-                return View(viewModel);
-
-            // TODO Send emails
-            // await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
-            // await _referralService.SendProviderReferralEmail(dto.OpportunityId);
-
-            return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
+            return View();
         }
 
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)
@@ -297,10 +250,27 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 999 or less");
         }
 
-        [Route("remove-opportunity", Name = "ConfirmDelete")]
-        public IActionResult ConfirmDelete()
+        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
         {
-            return View();
+            var viewModel = new NavigationViewModel
+            {
+                CancelText = "Cancel opportunity and start again"
+            };
+            if (opportunityId == 0) return viewModel;
+
+            var opportunityItemCount = _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
+            if (opportunityItemCount == 0)
+            {
+                viewModel.OpportunityId = opportunityId;
+                viewModel.OpportunityItemId = opportunityItemId;
+                return viewModel;
+            }
+
+            viewModel.CancelText = "Cancel this opportunity";
+            viewModel.OpportunityId = opportunityId;
+            viewModel.OpportunityItemId = opportunityItemId;
+
+            return viewModel;
         }
     }
 }

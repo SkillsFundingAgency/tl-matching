@@ -28,8 +28,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.IsNewProvisionGapAsync(opportunityId).Returns(false);
 
-            var referralService = Substitute.For<IReferralService>();
-
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c =>
@@ -46,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             });
             var mapper = new Mapper(config);
 
-            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(UserName)
                 .AddEmail(Email)

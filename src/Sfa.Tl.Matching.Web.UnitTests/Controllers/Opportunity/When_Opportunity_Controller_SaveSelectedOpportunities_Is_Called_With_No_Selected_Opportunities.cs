@@ -19,14 +19,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Opportunities()
         {
-            var referralService = Substitute.For<IReferralService>();
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunityBasket(1);
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
-            _opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
+            _opportunityController = new OpportunityController(_opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(_opportunityController).Build();
 
             _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel()).GetAwaiter().GetResult();

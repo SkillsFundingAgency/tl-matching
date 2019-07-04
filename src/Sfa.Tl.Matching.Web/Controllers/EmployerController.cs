@@ -127,6 +127,34 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Route("permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
+        public async Task<IActionResult> EmployerConsent(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = new EmployerConsentViewModel
+            {
+                OpportunityId = opportunityId,
+                OpportunityItemId = opportunityItemId,
+                OpportunityItemCount = await _opportunityService.GetReferredOpportunityItemCountAsync(opportunityId)
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("permission/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerConsent")]
+        public IActionResult EmployerConsent(EmployerConsentViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            // TODO Send emails
+            // await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
+            // await _referralService.SendProviderReferralEmail(dto.OpportunityId);
+
+            return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
+        }
+
         private void Validate(EmployerDetailsViewModel viewModel)
         {
             if (string.IsNullOrEmpty(viewModel.EmployerContactPhone))
