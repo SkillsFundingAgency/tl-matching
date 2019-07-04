@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Recording_Referrals_And_Employer_Details_Is_Submitted_Successfully
+    public class When_Employer_Check_Details_Is_Submitted_Successfully
     {
         private readonly IOpportunityService _opportunityService;
         private const string Contact = "EmployerContact";
@@ -31,12 +31,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             EmployerContactPhone = ContactPhone
         };
 
-        private const int OpportunityItemId = 1;
-        private const int OpportunityId = 2;
+        private const int OpportunityId = 1;
+        private const int OpportunityItemId = 2;
 
         private readonly IActionResult _result;
 
-        public When_Recording_Referrals_And_Employer_Details_Is_Submitted_Successfully()
+        public When_Employer_Check_Details_Is_Submitted_Successfully()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.IsReferralOpportunityItemAsync(OpportunityItemId).Returns(true);
@@ -65,13 +65,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.SaveOpportunityEmployerDetails(_viewModel).GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_GetOpportunity_Is_Called_Exactly_Once()
-        {
-            _opportunityService.Received(1).IsReferralOpportunityItemAsync(OpportunityItemId);
+            _result = controllerWithClaims.SaveCheckOpportunityEmployerDetails(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -92,8 +86,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_Result_Is_Redirect_To_Results()
         {
             var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("GetCheckAnswers");
+            redirect?.RouteName.Should().BeEquivalentTo("GetEmployerConsent");
             redirect?.RouteValues["opportunityId"].Should().Be(1);
+            redirect?.RouteValues["opportunityItemId"].Should().Be(2);
         }
     }
 }

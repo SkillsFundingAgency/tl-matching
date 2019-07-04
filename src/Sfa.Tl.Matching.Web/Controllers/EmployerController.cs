@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IMapper _mapper;
 
         public EmployerController(IEmployerService employerService, IOpportunityService opportunityService, IMapper mapper)
-        {   
+        {
             _employerService = employerService;
             _opportunityService = opportunityService;
             _mapper = mapper;
@@ -88,10 +88,34 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityItemId);
 
             if (isReferralOpportunityItem)
-                return RedirectToRoute("GetCheckAnswers", new {viewModel.OpportunityItemId});
-           
+                return RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId });
+
             return RedirectToAction("SaveCheckAnswers", "Opportunity",
-               new {viewModel.OpportunityId, viewModel.OpportunityItemId});
+               new { viewModel.OpportunityId, viewModel.OpportunityItemId });
+        }
+
+        [HttpGet]
+        [Route("check-employer-details/{opportunityId}-{opportunityItemId}", Name = "CheckEmployerDetails")]
+        public async Task<IActionResult> GetCheckOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
+
+            return View("CheckDetails", viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveCheckOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
+        {
+            Validate(viewModel);
+
+            if (!ModelState.IsValid)
+                return View("CheckDetails", viewModel);
+
+            var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
+
+            await _opportunityService.UpdateOpportunity(employerDetailDto);
+
+            return RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
 
         [HttpGet]
