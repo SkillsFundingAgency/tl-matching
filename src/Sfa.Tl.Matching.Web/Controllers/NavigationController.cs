@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -23,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("remove-opportunityItem/{opportunityId}-{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
         public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasket(int opportunityId, int opportunityItemId)
         {
-            await _opportunityService.RemoveOpportunityItemAsync(opportunityId, opportunityItemId);
+            await _opportunityService.DeleteOpportunityItemAsync(opportunityId, opportunityItemId);
             var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
 
             return opportunityItemCount == 0
@@ -36,10 +35,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetPlacementOrEmployer(int opportunityId, int opportunityItemId)
         {
             var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
+            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
+            var opportunities = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
 
-            return opportunityItemCount == 0
-                ? RedirectToRoute("GetEmployerDetails", new { opportunityId, opportunityItemId })
-                : RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
+            switch (opportunities.ReferralCount)
+            {
+                case 0 when opportunityItemCount >= 1:
+                    return RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
+                case 0 when opportunities.ProvisionGapCount == 1:
+                    return RedirectToRoute("GetEmployerDetails",
+                        new { opportunityId = viewModel.OpportunityId, opportunityItemId });
+                case 0 when opportunities.ProvisionGapCount == 0:
+                    return RedirectToRoute("GetEmployerDetails",
+                        new { opportunityId = viewModel.OpportunityId, opportunityItemId });
+                default:
+                    return RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
+            }
         }
 
         [HttpGet]

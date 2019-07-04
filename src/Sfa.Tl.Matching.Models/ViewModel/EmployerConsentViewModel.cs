@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
@@ -8,6 +8,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int OpportunityItemId { get; set; }
         public string EmployerName { get; set; }
         public string CompanyName { get; set; }
-
+        [Range(typeof(bool), "true", "true", ErrorMessage = "You must confirm that we can share the employer’s details with the selected providers")]
+        public bool ConfirmationSelected { get; set; }
     }
 }

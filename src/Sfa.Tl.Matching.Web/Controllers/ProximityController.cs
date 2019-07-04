@@ -1,11 +1,16 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -146,7 +151,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 },
                 SearchParameters = GetSearchParametersViewModelAsync(viewModel),
                 OpportunityId = viewModel.OpportunityId,
-                OpportunityItemId = viewModel.OpportunityItemId
+                OpportunityItemId = viewModel.OpportunityItemId,
+                Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
             };
 
             if (viewModel.OpportunityId == 0 && viewModel.OpportunityItemId == 0)
@@ -180,8 +186,29 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchRadius = viewModel.SearchRadius != 0 ? viewModel.SearchRadius : SearchParametersViewModel.DefaultSearchRadius,
                 Postcode = viewModel.Postcode?.Trim(),
                 OpportunityId = viewModel.OpportunityId,
-                OpportunityItemId = viewModel.OpportunityItemId
+                OpportunityItemId = viewModel.OpportunityItemId,
+                Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
             };
+        }
+
+        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = new NavigationViewModel
+            {
+                CancelText = "Cancel opportunity and start again"
+            };
+
+            if (opportunityId == 0) return viewModel;
+
+            var opportunityItemCount = _opportunityService.GetOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
+            if (opportunityItemCount == 0)
+                return viewModel;
+
+            viewModel.CancelText = "Cancel this opportunity";
+            viewModel.OpportunityId = opportunityId;
+            viewModel.OpportunityItemId = opportunityItemId;
+
+            return viewModel;
         }
 
         private async Task<bool> IsSearchParametersValidAsync(SearchParametersViewModel viewModel)

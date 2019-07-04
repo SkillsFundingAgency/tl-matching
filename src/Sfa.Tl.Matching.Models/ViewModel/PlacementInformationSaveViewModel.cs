@@ -28,5 +28,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         public OpportunityType OpportunityType { get; set; }
         public string CompanyName { get; set; }
+        public NavigationViewModel Navigation { get; set; }
     }
 }

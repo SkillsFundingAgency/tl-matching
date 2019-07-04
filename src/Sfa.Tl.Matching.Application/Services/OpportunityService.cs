@@ -133,6 +133,8 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var viewModel = await _opportunityRepository.GetOpportunityBasket(opportunityId);
 
+            if (viewModel==null) return new OpportunityBasketViewModel();
+
             viewModel.Type = GetOpportunityBasketType(viewModel);
 
             return viewModel;
@@ -220,17 +222,20 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        public async Task RemoveOpportunityItemAsync(int opportunityId, int opportunityItemId)
+        public async Task DeleteOpportunityItemAsync(int opportunityId, int opportunityItemId)
         {
             var referralItems = _referralRepository.GetMany(referral => referral.OpportunityItemId == opportunityItemId);
             var provisionGaps = _provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opportunityItemId);
-            var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId);
 
             await _referralRepository.DeleteMany(referralItems.ToList());
             await _provisionGapRepository.DeleteMany(provisionGaps.ToList());
             await _opportunityItemRepository.Delete(opportunityItemId);
 
-            if (!opportunityItems.Any(item => item.OpportunityId == opportunityId))
+            var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId);
+
+            await _opportunityItemRepository.DeleteMany(opportunityItems.Where(item => item.IsSaved == false).ToList());
+
+            if (!opportunityItems.Any(item => item.OpportunityId == opportunityId && item.IsSaved))
             {
                 await _opportunityRepository.Delete(opportunityId);
             }
@@ -252,6 +257,59 @@ namespace Sfa.Tl.Matching.Application.Services
             var opportunityItemsToBeUpdated = _mapper.Map<List<OpportunityItem>>(opportunityItemsToBeReset);
 
             await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(opportunityItemsToBeUpdated,
+                x => x.IsSelectedForReferral,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
+        }
+
+        public async Task ContinueWithOpportunities(ContinueOpportunityViewModel viewModel)
+        {
+            var allProvisionGaps =
+                viewModel.SelectedOpportunity.All(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString());
+
+            if (allProvisionGaps)
+            {
+                var ids = viewModel.SelectedOpportunity.Select(oi => oi.Id);
+
+                await SetOpportunityItemsAsCompleted(ids);
+                return;
+            }
+
+            var referralIds = viewModel.SelectedOpportunity.Where(oi => oi.IsSelected 
+                                                                        && oi.OpportunityType == OpportunityType.Referral.ToString())
+                .Select(oi => oi.Id).ToList();
+
+            if (referralIds.Any())
+                await SetOpportunityItemsAsReferral(referralIds);
+        }
+
+        private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds)
+        {
+            var itemsToBeCompleted = opportunityItemIds.Select(id => new OpportunityItemIsSelectedForCompleteDto
+            {
+                Id = id,
+                IsCompleted = true
+            });
+
+            var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
+
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+                x => x.IsCompleted,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
+        }
+
+        private async Task SetOpportunityItemsAsReferral(IEnumerable<int> opportunityItemIds)
+        {
+            var itemsForReferral = opportunityItemIds.Select(id => new OpportunityItemIsSelectedForReferralDto
+            {
+                Id = id,
+                IsSelectedForReferral = true
+            });
+
+            var updates = _mapper.Map<List<OpportunityItem>>(itemsForReferral);
+
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
                 x => x.IsSelectedForReferral,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);

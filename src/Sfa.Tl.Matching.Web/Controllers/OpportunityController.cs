@@ -112,6 +112,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = await _opportunityService.GetPlacementInformationAsync(opportunityItemId);
 
             var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
+            viewModel.Navigation = LoadCancelLink(dto.OpportunityId, opportunityItemId);
 
             return View("PlacementInformation", viewModel);
         }
@@ -147,7 +148,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetCheckAnswers(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-
+            viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, opportunityItemId);
             return View("CheckAnswers", viewModel);
         }
 
@@ -176,22 +177,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View(viewModel);
         }
 
-        // TODO FIX reuse this method later
-        [HttpPost]
-        public async Task<IActionResult> SendEmails(CheckAnswersViewModel viewModel)
-        {
-            //if (!ModelState.IsValid)
-            //    return View(await GetCheckAnswersViewModel(viewModel.OpportunityItemId));
-
-            var dto = _mapper.Map<CheckAnswersDto>(viewModel);
-            await _opportunityService.UpdateOpportunityItemAsync(dto);
-
-            await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
-            await _referralService.SendProviderReferralEmail(dto.OpportunityId);
-
-            return RedirectToRoute("GetOpportunityBasket", new { dto.OpportunityId, dto.OpportunityItemId });
-        }
-
         [HttpGet]
         [Route("emails-sent/{id}", Name = "EmailSentReferrals_Get")]
         public async Task<IActionResult> ReferralEmailSent(int id)
@@ -207,28 +192,71 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
+            if (!viewModel.SelectedOpportunity.Any(p => p.IsSelected))
+            {
+                ModelState.AddModelError("ReferralItems[0].IsSelected", "You must select an opportunity to continue");
+
+                var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
+
+                return View(nameof(OpportunityBasket), opportunityBasketViewModel);
+            }
+
+            await _opportunityService.ContinueWithOpportunities(viewModel);
+
             if (viewModel.SubmitAction == "Finish")
                 return RedirectToRoute("Start");
+            
+            return RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
+        }
 
-            if (viewModel.SelectedOpportunity.Any(p => p.IsSelected))
-                return RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
+        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = new NavigationViewModel
+            {
+                CancelText = "Cancel opportunity and start again"
+            };
+            if (opportunityId == 0) return viewModel;
 
-            ModelState.AddModelError("ReferralItems[0].IsSelected", "You must select an opportunity to continue");
+            var opportunityItemCount = _opportunityService.GetOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
+            if (opportunityItemCount == 0)
+            {
+                viewModel.OpportunityId = opportunityId;
+                viewModel.OpportunityItemId = opportunityItemId;
+                return viewModel;
+            }
 
-            var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
+            viewModel.CancelText = "Cancel this opportunity";
+            viewModel.OpportunityId = opportunityId;
+            viewModel.OpportunityItemId = opportunityItemId;
 
-            return View(nameof(OpportunityBasket), opportunityBasketViewModel);
+            return viewModel;
         }
 
         [HttpGet]
-        [Route("confirm-employer-permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
+        [Route("permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
         public IActionResult EmployerConsent(int opportunityId, int opportunityItemId)
         {
             var viewModel = new EmployerConsentViewModel
             {
-                OpportunityId = opportunityId, OpportunityItemId = opportunityItemId
+                OpportunityId = opportunityId,
+                OpportunityItemId = opportunityItemId
             };
+
             return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("permission/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerConsent")]
+        public IActionResult EmployerConsent(EmployerConsentViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            // TODO Send emails
+            // await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
+            // await _referralService.SendProviderReferralEmail(dto.OpportunityId);
+
+            return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }
 
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)
