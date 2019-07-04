@@ -117,7 +117,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             Validate(viewModel);
 
             if (!ModelState.IsValid)
+            {
+                viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("CheckDetails", viewModel);
+            }
 
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
