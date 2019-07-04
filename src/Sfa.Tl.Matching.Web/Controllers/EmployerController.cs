@@ -123,7 +123,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (opportunityId == 0) return viewModel;
 
-            var opportunityItemCount = _opportunityService.GetOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
+            var opportunityItemCount = _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
             if (opportunityItemCount == 0)
             {
                 viewModel.OpportunityId = opportunityId;
