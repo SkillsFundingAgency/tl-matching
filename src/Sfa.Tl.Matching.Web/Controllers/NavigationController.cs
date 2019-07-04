@@ -35,10 +35,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetPlacementOrEmployer(int opportunityId, int opportunityItemId)
         {
             var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
+            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
+            var opportunities = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
 
-            return opportunityItemCount == 1 || opportunityItemCount == 0
-                ? RedirectToRoute("GetEmployerDetails", new { opportunityId, opportunityItemId })
-                : RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
+            switch (opportunities.ReferralCount)
+            {
+                case 0 when opportunityItemCount >= 1:
+                    return RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
+                case 0 when opportunities.ProvisionGapCount == 1:
+                    return RedirectToRoute("GetEmployerDetails",
+                        new { opportunityId = viewModel.OpportunityId, opportunityItemId });
+                case 0 when opportunities.ProvisionGapCount == 0:
+                    return RedirectToRoute("GetEmployerDetails",
+                        new { opportunityId = viewModel.OpportunityId, opportunityItemId });
+                default:
+                    return RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
+            }
         }
 
         [HttpGet]
