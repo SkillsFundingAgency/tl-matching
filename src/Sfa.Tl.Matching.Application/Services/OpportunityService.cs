@@ -235,9 +235,12 @@ namespace Sfa.Tl.Matching.Application.Services
             var referralItems = _referralRepository.GetMany(referral => referral.OpportunityItemId == opportunityItemId);
             var provisionGaps = _provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opportunityItemId);
 
-            await _referralRepository.DeleteMany(referralItems.ToList());
-            await _provisionGapRepository.DeleteMany(provisionGaps.ToList());
-            await _opportunityItemRepository.Delete(opportunityItemId);
+            await _referralRepository.DeleteMany(referralItems
+                .Where(referral => referral.OpportunityItemId == opportunityItemId &&
+                                   referral.OpportunityItem.IsSaved == false).ToList());
+
+            await _provisionGapRepository.DeleteMany(provisionGaps.Where(gap =>
+                gap.OpportunityItemId == opportunityItemId && gap.OpportunityItem.IsSaved == false).ToList());
 
             var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId);
 
