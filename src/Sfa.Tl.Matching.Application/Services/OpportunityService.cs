@@ -262,6 +262,59 @@ namespace Sfa.Tl.Matching.Application.Services
                 x => x.ModifiedBy);
         }
 
+        public async Task ContinueWithOpportunities(ContinueOpportunityViewModel viewModel)
+        {
+            var allProvisionGaps =
+                viewModel.SelectedOpportunity.All(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString());
+
+            if (allProvisionGaps)
+            {
+                var ids = viewModel.SelectedOpportunity.Select(oi => oi.Id);
+
+                await SetOpportunityItemsAsCompleted(ids);
+                return;
+            }
+
+            var referralIds = viewModel.SelectedOpportunity.Where(oi => oi.IsSelected 
+                                                                        && oi.OpportunityType == OpportunityType.Referral.ToString())
+                .Select(oi => oi.Id).ToList();
+
+            if (referralIds.Any())
+                await SetOpportunityItemsAsReferral(referralIds);
+        }
+
+        private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds)
+        {
+            var itemsToBeCompleted = opportunityItemIds.Select(id => new OpportunityItemIsSelectedForCompleteDto
+            {
+                Id = id,
+                IsCompleted = true
+            });
+
+            var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
+
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+                x => x.IsCompleted,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
+        }
+
+        private async Task SetOpportunityItemsAsReferral(IEnumerable<int> opportunityItemIds)
+        {
+            var itemsForReferral = opportunityItemIds.Select(id => new OpportunityItemIsSelectedForReferralDto
+            {
+                Id = id,
+                IsSelectedForReferral = true
+            });
+
+            var updates = _mapper.Map<List<OpportunityItem>>(itemsForReferral);
+
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+                x => x.IsSelectedForReferral,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
+        }
+
         private static OpportunityBasketType GetOpportunityBasketType(OpportunityBasketViewModel viewModel)
         {
             if (viewModel.ReferralCount == 1 && viewModel.ProvisionGapCount == 0)
