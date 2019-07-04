@@ -3,6 +3,6 @@
     public class OpportunityItemIsSelectedForReferralDto
     {
         public int Id { get; set; }
-        public bool? IsSelectedForReferral { get; set; }
+        public bool IsSelectedForReferral { get; set; }
     }
 }
