@@ -50,12 +50,13 @@
                             Confirm we can share the employer’s details?
                         </h2>
                     </legend>
-                    
-                    <span class="govuk-error-message" asp-validation-for="ConfirmationSelected"></span>
-                    
+
+
                     <span id="waste-hint" class="govuk-hint">
                         Tick to confirm
                     </span>
+                    <span class="govuk-error-message" asp-validation-for="ConfirmationSelected"></span>
+
                     <div class="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input asp-for="ConfirmationSelected" class="govuk-checkboxes__input" type="checkbox"
