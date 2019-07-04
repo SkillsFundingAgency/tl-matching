@@ -55,6 +55,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!isValidEmployer)
             {
                 ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
+                viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
+
                 return View("FindEmployer", viewModel);
             }
 
@@ -81,7 +83,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             Validate(viewModel);
 
             if (!ModelState.IsValid)
+            {
+                viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("Details", viewModel);
+            }
 
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
