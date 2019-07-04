@@ -1,7 +1,7 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerConsentViewModel
 
 @{
-    ViewData["Title"] = "EmployerConsent";
+    ViewData["Title"] = "Confirm that we can share the employer’s contact details";
 }
 
 @section backButton{
@@ -9,7 +9,51 @@
     <a asp-route="SaveEmployerOpportunity" asp-route-opportunityId="@Model.OpportunityId" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-save">Save and return later</a>
 }
 
-<h1>EmployerConsent</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l"> Employer name here @*@Model.CompanyName*@</span>
+
+        <h1 class="govuk-heading-l">Before you send emails</h1>
+        <h2 class="govuk-heading-m">Check details for industry placements</h2>
+
+
+        <section>
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Contact name</h3>
+            <p class="govuk-body govuk-!-margin-bottom-2">Contact name here</p>
+
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Email</h3>
+            <p class="govuk-body govuk-!-margin-bottom-2">Contact name here</p>
+
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Telephone number</h3>
+            <p class="govuk-body govuk-!-margin-bottom-2">Contact name here</p>
+
+            <a href="#" class="govuk-link">Change contact details</a>
+        </section>
+
+        <div class="govuk-form-group govuk-!-margin-top-8">
+            <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                    <h2 class="govuk-fieldset__heading">
+                        Confirm we can share the employer’s details?
+                    </h2>
+                </legend>
+                <span id="waste-hint" class="govuk-hint">
+                    Tick to confirm
+                </span>
+                <div class="govuk-checkboxes">
+                    <div class="govuk-checkboxes__item">
+                        <input class="govuk-checkboxes__input" id="confirm-permission" name="confirm-permission" type="checkbox" value="confirm-permission">
+                        <label class="govuk-label govuk-checkboxes__label" for="confirm-permission">
+                            [Employer contact name] has confirmed that we can share their details with providers, and that these providers can contact them about industry placements.
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <button class="govuk-button">Confirm and send opportunity @*opportunities if more than one*@</button>
+
+    </div>
+</div>
 
 
 
