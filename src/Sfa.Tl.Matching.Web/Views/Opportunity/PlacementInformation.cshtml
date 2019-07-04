@@ -49,10 +49,10 @@
                 </div>
             }
 
-            @*@if (!String.IsNullOrEmpty(Model.CompanyName))
+            @if (!String.IsNullOrEmpty(Model.CompanyName))
                 {
                     <span class="govuk-caption-l">@Model.CompanyName</span>
-                }*@
+                }
             <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
             @if (Model.OpportunityType == OpportunityType.Referral)
