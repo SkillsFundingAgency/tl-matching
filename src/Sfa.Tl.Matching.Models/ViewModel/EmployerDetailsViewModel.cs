@@ -20,5 +20,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         [Required(ErrorMessage = "You must enter a contact telephone number for placements")]
         public string EmployerContactPhone { get; set; }
+        public NavigationViewModel Navigation { get; set; }
     }
 }

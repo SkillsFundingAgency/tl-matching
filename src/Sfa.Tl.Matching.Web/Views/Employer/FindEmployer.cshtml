@@ -5,7 +5,7 @@
 
 @section backButton{
     <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>
-    <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Cancel opportunity and start again </a>
+    <partial name="_navigation" model="Model.Navigation" />
 }
 
 <div class="govuk-grid-row">
