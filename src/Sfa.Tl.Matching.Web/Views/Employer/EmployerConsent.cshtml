@@ -40,9 +40,8 @@
             <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Telephone number</h3>
             <p class="govuk-body govuk-!-margin-bottom-2">@Model.EmployerContactPhone</p>
 
-            <a asp-route="GetEmployerDetails" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" 
+            <a asp-route="CheckEmployerDetails" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId"
                class="govuk-link" id="tl-change-employer">Change contact details</a>
-
         </section>
 
         <form asp-route="SaveEmployerConsent" novalidate>
