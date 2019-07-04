@@ -103,7 +103,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 {
                     SearchParameters = GetSearchParametersViewModelAsync(viewModel),
                     SearchResults = new SearchResultsViewModel(),
-                    IsValidSearch = false
+                    IsValidSearch = false,
+                    Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
                 });
             }
 
