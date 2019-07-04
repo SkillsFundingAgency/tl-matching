@@ -40,7 +40,9 @@
             <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Telephone number</h3>
             <p class="govuk-body govuk-!-margin-bottom-2">@Model.EmployerContactPhone</p>
 
-            <a asp-route="CheckEmployerDetails" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link">Change contact details</a>
+            <a asp-route="GetEmployerDetails" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" 
+               class="govuk-link" id="tl-change-employer">Change contact details</a>
+
         </section>
 
         <form asp-route="SaveEmployerConsent" novalidate>
@@ -63,7 +65,7 @@
                             <input asp-for="ConfirmationSelected" class="govuk-checkboxes__input" type="checkbox"
                                    sfa-validation-for="ConfirmationSelected" sfa-validationerror-class="govuk-input--error" />
                             <label class="govuk-label govuk-checkboxes__label" for="confirm-permission">
-                                [Employer contact name] has confirmed that we can share their details with providers, and that these providers can contact them about industry placements.
+                                @Model.EmployerContact has confirmed that we can share their details with providers, and that these providers can contact them about industry placements.
                             </label>
                         </div>
                     </div>

@@ -23,28 +23,28 @@
                 </div>
             </div>
         }
-    <form asp-action="SaveOpportunityEmployerName" id="findEmployer" novalidate>
-        <input asp-for="OpportunityId" type="hidden" />
-        <input asp-for="OpportunityItemId" type="hidden" />
-        <input asp-for="SelectedEmployerId" type="hidden" />
-        <div class="govuk-form-group" sfa-validation-for="CompanyName" sfa-validationerror-class="govuk-form-group--error">
-            <h1 class="govuk-label-wrapper">
-                <label class="govuk-label govuk-label--l" asp-for="CompanyName">
-                    @ViewData["Title"]
-                </label>
-                <span id="employer-name-hint" class="govuk-hint">
-                    Start typing their business name
-                </span>
-            </h1>
-            <span class="govuk-error-message" asp-validation-for="CompanyName"></span>
-            <select id="CompanyName" name="CompanyName" class="govuk-input" asp-for="CompanyName"></select>
-        </div>
+        <form asp-action="SaveOpportunityEmployerName" id="findEmployer" novalidate>
+            <input asp-for="OpportunityId" type="hidden" />
+            <input asp-for="OpportunityItemId" type="hidden" />
+            <input asp-for="SelectedEmployerId" type="hidden" />
+            <div class="govuk-form-group" sfa-validation-for="CompanyName" sfa-validationerror-class="govuk-form-group--error">
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--l" asp-for="CompanyName">
+                        @ViewData["Title"]
+                    </label>
+                    <span id="employer-name-hint" class="govuk-hint">
+                        Start typing their business name
+                    </span>
+                </h1>
+                <span class="govuk-error-message" asp-validation-for="CompanyName"></span>
+                <select id="CompanyName" name="CompanyName" class="govuk-input" asp-for="CompanyName"></select>
+            </div>
 
-        <input id="companyNameHidden" asp-for="CompanyNameWithAka" type="hidden" />
-        <input id="previousCompanyNameHidden" asp-for="PreviousCompanyName" type="hidden" />
+            <input id="companyNameHidden" asp-for="CompanyNameWithAka" type="hidden" />
+            <input id="previousCompanyNameHidden" asp-for="PreviousCompanyName" type="hidden" />
 
-        <button id="tl-continue" class="govuk-button" type="submit">Continue</button>
-    </form>
+            <button id="tl-continue" class="govuk-button" type="submit">Continue</button>
+        </form>
     </div>
 </div>
 @section jsfiles{
