@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IMapper _mapper;
 
         public EmployerController(IEmployerService employerService, IOpportunityService opportunityService, IMapper mapper)
-        {   
+        {
             _employerService = employerService;
             _opportunityService = opportunityService;
             _mapper = mapper;
@@ -42,6 +42,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetOpportunityEmployerName(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
+            viewModel.Navigation = LoadCancelLink(opportunityId, opportunityItemId);
 
             return View("FindEmployer", viewModel);
         }
@@ -69,6 +70,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
+            viewModel.Navigation = LoadCancelLink(opportunityId, opportunityItemId);
 
             return View("Details", viewModel);
         }
@@ -88,10 +90,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityItemId);
 
             if (isReferralOpportunityItem)
-                return RedirectToRoute("GetCheckAnswers", new {viewModel.OpportunityItemId});
-           
+                return RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId });
+
             return RedirectToAction("SaveCheckAnswers", "Opportunity",
-               new {viewModel.OpportunityId, viewModel.OpportunityItemId});
+               new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
 
         [HttpGet]
@@ -110,6 +112,30 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a number");
             else if (!Regex.IsMatch(viewModel.EmployerContactPhone, @"^(?:.*\d.*){7,}$"))
                 ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a telephone number that has 7 or more numbers");
+        }
+
+        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = new NavigationViewModel
+            {
+                CancelText = "Cancel opportunity and start again"
+            };
+
+            if (opportunityId == 0) return viewModel;
+
+            var opportunityItemCount = _opportunityService.GetOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
+            if (opportunityItemCount == 0)
+            {
+                viewModel.OpportunityId = opportunityId;
+                viewModel.OpportunityItemId = opportunityItemId;
+                return viewModel;
+            }
+
+            viewModel.CancelText = "Cancel this opportunity";
+            viewModel.OpportunityId = opportunityId;
+            viewModel.OpportunityItemId = opportunityItemId;
+
+            return viewModel;
         }
     }
 }
