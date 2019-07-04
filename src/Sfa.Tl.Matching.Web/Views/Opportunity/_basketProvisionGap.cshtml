@@ -23,6 +23,9 @@
 
                 <td class="govuk-table__cell" data-label="Workplace">
                     <input type="hidden" asp-for="@basketItem.OpportunityItemId" name="SelectedOpportunity[@i].Id" />
+                    <input type="hidden" asp-for="@basketItem.OpportunityType" name="SelectedOpportunity[@i].OpportunityType" />
+                    <input type="hidden" value="true" name="SelectedOpportunity[@i].IsSelected" />
+
                     @basketItem.Workplace
                 </td>
                 <td class="govuk-table__cell" data-label="Job role">@basketItem.JobRole</td>

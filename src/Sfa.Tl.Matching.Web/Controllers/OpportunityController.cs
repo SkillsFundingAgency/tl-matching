@@ -168,8 +168,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("employer-opportunities/{opportunityId}-{opportunityItemId}", Name = "GetOpportunityBasket")]
         public async Task<IActionResult> OpportunityBasket(int opportunityId, int opportunityItemId)
         {
+            await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
+
             var viewModel = await _opportunityService.GetOpportunityBasket(opportunityId);
             viewModel.OpportunityItemId = opportunityItemId;
+
             return View(viewModel);
         }
 
@@ -201,19 +204,31 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
             if (viewModel.SubmitAction == "Finish")
                 return RedirectToRoute("Start");
 
             if (viewModel.SelectedOpportunity.Any(p => p.IsSelected))
-                return View("EmployerConsent");
+                return RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
 
-            ModelState.AddModelError("Model.ReferralItems[0].IsSelected", "You must select an opportunity to continue");
+            ModelState.AddModelError("ReferralItems[0].IsSelected", "You must select an opportunity to continue");
 
             var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
 
             return View(nameof(OpportunityBasket), opportunityBasketViewModel);
+        }
+
+        [HttpGet]
+        [Route("confirm-employer-permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
+        public IActionResult EmployerConsent(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = new EmployerConsentViewModel
+            {
+                OpportunityId = opportunityId, OpportunityItemId = opportunityItemId
+            };
+            return View(viewModel);
         }
 
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)

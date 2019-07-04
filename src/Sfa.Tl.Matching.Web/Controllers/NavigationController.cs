@@ -57,5 +57,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId});
         }
+
+        [HttpGet]
+        [Route("save-employer-opportunity/{opportunityId}", Name = "SaveEmployerOpportunity")]
+        public async Task<IActionResult> SaveEmployerOpportunity(int opportunityId)
+        {
+            await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
+
+            return RedirectToRoute("GetSavedEmployerOpportunity");
+        }
     }
 }

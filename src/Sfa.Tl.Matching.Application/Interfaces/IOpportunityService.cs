@@ -28,5 +28,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task UpdateReferrals(OpportunityItemDto opportunityItemDto);
 
         Task RemoveOpportunityItemAsync(int opportunityId, int opportunityItemId);
+        Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId);
     }
 }

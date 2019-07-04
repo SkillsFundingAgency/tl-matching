@@ -164,7 +164,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> GetOpportunityItemCountAsync(int opportunityId)
         {
-            return await _opportunityItemRepository.GetMany(o => o.OpportunityId == opportunityId && o.IsSaved == true).CountAsync();
+            return await _opportunityItemRepository.GetMany(o => o.OpportunityId == opportunityId && o.IsSaved).CountAsync();
         }
 
         public async Task UpdateReferrals(OpportunityItemDto dto)
@@ -234,6 +234,27 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 await _opportunityRepository.Delete(opportunityId);
             }
+        }
+
+        public async Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId)
+        {
+            var opportunityItemsToBeReset = _opportunityItemRepository.GetMany(
+                        op => op.OpportunityId == opportunityId
+                              && op.IsSelectedForReferral
+                              && !op.IsCompleted)
+                    .Select(op => new OpportunityItemIsSelectedForReferralDto
+                    {
+                        Id = op.Id,
+                        IsSelectedForReferral = false
+                    })
+                    .ToList();
+
+            var opportunityItemsToBeUpdated = _mapper.Map<List<OpportunityItem>>(opportunityItemsToBeReset);
+
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(opportunityItemsToBeUpdated,
+                x => x.IsSelectedForReferral,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
         }
 
         private static OpportunityBasketType GetOpportunityBasketType(OpportunityBasketViewModel viewModel)
