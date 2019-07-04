@@ -91,6 +91,16 @@
             <hr class="govuk-section-break govuk-section-break--m ">
         }
 
+        <p>
+            <a class="govuk-link" id="tl-change-providers"
+               asp-route="GetProviderResults"
+               asp-route-opportunityId="@Model.OpportunityId"
+               asp-route-opportunityItemId="@Model.OpportunityItemId"
+               asp-route-searchRadius="@Model.SearchRadius"
+               asp-route-Postcode="@Model.Postcode"
+               asp-route-SelectedRouteId="@Model.RouteId">Change providers</a>
+        </p>
+
         <form asp-action="SaveCheckAnswers" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="OpportunityItemId" type="hidden" />
