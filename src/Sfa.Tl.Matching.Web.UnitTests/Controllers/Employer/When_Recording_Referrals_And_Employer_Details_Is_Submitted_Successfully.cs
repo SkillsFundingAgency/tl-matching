@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteName.Should().BeEquivalentTo("GetCheckAnswers");
-            redirect?.RouteValues["opportunityId"].Should().Be(1);
+            redirect?.RouteValues["opportunityItemId"].Should().Be(1);
         }
     }
 }
