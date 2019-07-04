@@ -121,7 +121,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await Validate(viewModel);
 
             if (!ModelState.IsValid)
+            {
+                viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("PlacementInformation", viewModel);
+            }
 
             var dto = _mapper.Map<PlacementInformationSaveDto>(viewModel);
             await _opportunityService.UpdateOpportunityItemAsync(dto);
