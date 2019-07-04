@@ -112,7 +112,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = await _opportunityService.GetPlacementInformationAsync(opportunityItemId);
 
             var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
-            viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, opportunityItemId);
+            viewModel.Navigation = LoadCancelLink(dto.OpportunityId, opportunityItemId);
 
             return View("PlacementInformation", viewModel);
         }
@@ -232,7 +232,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var opportunityItemCount = _opportunityService.GetOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
             if (opportunityItemCount == 0)
+            {
+                viewModel.OpportunityId = opportunityId;
+                viewModel.OpportunityItemId = opportunityItemId;
                 return viewModel;
+            }
 
             viewModel.CancelText = "Cancel this opportunity";
             viewModel.OpportunityId = opportunityId;
