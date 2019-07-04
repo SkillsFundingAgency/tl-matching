@@ -133,6 +133,8 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var viewModel = await _opportunityRepository.GetOpportunityBasket(opportunityId);
 
+            if (viewModel==null) return new OpportunityBasketViewModel();
+
             viewModel.Type = GetOpportunityBasketType(viewModel);
 
             return viewModel;
@@ -220,17 +222,20 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        public async Task RemoveOpportunityItemAsync(int opportunityId, int opportunityItemId)
+        public async Task DeleteOpportunityItemAsync(int opportunityId, int opportunityItemId)
         {
             var referralItems = _referralRepository.GetMany(referral => referral.OpportunityItemId == opportunityItemId);
             var provisionGaps = _provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opportunityItemId);
-            var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId);
 
             await _referralRepository.DeleteMany(referralItems.ToList());
             await _provisionGapRepository.DeleteMany(provisionGaps.ToList());
             await _opportunityItemRepository.Delete(opportunityItemId);
 
-            if (!opportunityItems.Any(item => item.OpportunityId == opportunityId))
+            var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId);
+
+            await _opportunityItemRepository.DeleteMany(opportunityItems.Where(item => item.IsSaved == false).ToList());
+
+            if (!opportunityItems.Any(item => item.OpportunityId == opportunityId && item.IsSaved))
             {
                 await _opportunityRepository.Delete(opportunityId);
             }

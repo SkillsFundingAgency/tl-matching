@@ -15,5 +15,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
         public List<ReferralsViewModel> Providers { get; set; }
+        public NavigationViewModel Navigation { get; set; }
     }
 }

@@ -3,11 +3,11 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 ProvidersTooFarAway = true
             };
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(PlacementInformationSaveDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
             _opportunityService = Substitute.For<IOpportunityService>();
