@@ -2,9 +2,9 @@
 @model Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel
 
 @if (!ViewData.ModelState.IsValid &&
-    (ViewData.ModelState.GetValidationState("Postcode") == ModelValidationState.Invalid ||
-    ViewData.ModelState.GetValidationState("SelectedRouteId") == ModelValidationState.Invalid ||
-    ViewData.ModelState.GetValidationState("SearchRadius") == ModelValidationState.Invalid))
+   (ViewData.ModelState.GetValidationState("Postcode") == ModelValidationState.Invalid ||
+   ViewData.ModelState.GetValidationState("SelectedRouteId") == ModelValidationState.Invalid ||
+   ViewData.ModelState.GetValidationState("SearchRadius") == ModelValidationState.Invalid))
 {
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
         <h2 class="govuk-error-summary__title" id="error-summary-title">
@@ -19,7 +19,10 @@
         </div>
     </div>
 }
-
+@*@if (!String.IsNullOrEmpty(Model.CompanyName))
+    {
+        <span class="govuk-caption-l">@Model.CompanyName</span>
+    }*@
 <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
 <form class="form" asp-action="RefineSearchResults" novalidate>

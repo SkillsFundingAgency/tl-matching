@@ -16,14 +16,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private readonly IActionResult _result;
         private readonly IOpportunityService _opportunityService;
 
-        private readonly ContinueOpportunityViewModel _viewModel = new ContinueOpportunityViewModel
-        {
-            SubmitAction = "Finish"
-        };
-
         public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_SubmitAction_Finish()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
+
             var referralService = Substitute.For<IReferralService>();
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
@@ -32,7 +28,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController).Build();
 
-            _result = controllerWithClaims.SaveSelectedOpportunities(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel
+            {
+                SubmitAction = "Finish"
+            }).GetAwaiter().GetResult();
         }
 
         [Fact]

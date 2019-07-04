@@ -27,6 +27,11 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+        @*@if (!String.IsNullOrEmpty(Model.CompanyName))
+        {
+            <span class="govuk-caption-l">@Model.CompanyName</span>
+        }*@
+
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
         <form class="form" asp-action="FindProviders" novalidate>
             <input type="hidden" asp-for="OpportunityId" />
