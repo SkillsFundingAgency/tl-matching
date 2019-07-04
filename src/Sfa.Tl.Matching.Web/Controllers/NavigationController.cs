@@ -59,26 +59,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("clear-opportunity-basket-is-selected-for-referral/{opportunityId}-{opportunityItemId}", Name = "ClearReferralsAndGoToOpportunityBasket")]
-        public async Task<IActionResult> ClearReferralsAndGoToOpportunityBasket(int opportunityId, int opportunityItemId)
-        {
-            await ResetIsSelectedForReferral(opportunityId);
-
-            return RedirectToRoute("GetOpportunityBasket", new { opportunityId, opportunityItemId });
-        }
-
-        [HttpGet]
         [Route("save-employer-opportunity/{opportunityId}", Name = "SaveEmployerOpportunity")]
         public async Task<IActionResult> SaveEmployerOpportunity(int opportunityId)
         {
-            await ResetIsSelectedForReferral(opportunityId);
+            await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
             return RedirectToRoute("GetSavedEmployerOpportunity");
-        }
-
-        private async Task ResetIsSelectedForReferral(int opportunityId)
-        {
-            await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
         }
     }
 }
