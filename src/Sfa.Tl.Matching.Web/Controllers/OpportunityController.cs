@@ -258,5 +258,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             return View();
         }
+
+        [Route("permission", Name = "EmployerConsent")]
+        public IActionResult EmployerConsent()
+        {
+            return View();
+        }
     }
 }
