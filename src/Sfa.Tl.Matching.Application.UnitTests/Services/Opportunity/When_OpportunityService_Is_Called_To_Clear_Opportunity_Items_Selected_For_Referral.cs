@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
 
         private const int OpportunityId = 1;
-        
+
         public When_OpportunityService_Is_Called_To_Clear_Opportunity_Items_Selected_For_Referral()
         {
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
@@ -73,24 +73,31 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 .Received(1)
                 .GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
         }
-        
+
         [Fact]
         public void Then_UpdateMany_Is_Called_Exactly_Once()
         {
             _opportunityItemRepository.Received(1)
-                .UpdateMany(Arg.Any<IList<OpportunityItem>>());
+                .UpdateManyWithSpecifedColumnsOnly(Arg.Any<IList<OpportunityItem>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>()
+                );
         }
 
         [Fact]
-        public void Then_UpdateMany_Is_Called_With_Two_Items_With_Expected_Values()
+        public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values()
         {
             _opportunityItemRepository.Received(1)
-                .UpdateMany(Arg.Is<IList<OpportunityItem>>(
+                .UpdateManyWithSpecifedColumnsOnly(Arg.Is<IList<OpportunityItem>>(
                     o => o.Count == 2
                          && o.All(x => x.IsSelectedForReferral == false)
                          && o.All(x => x.ModifiedBy == "TestUser")
                          && o.All(x => x.ModifiedOn == new DateTime(2019, 1, 1))
-                         ));
+                         ),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>());
         }
     }
 }

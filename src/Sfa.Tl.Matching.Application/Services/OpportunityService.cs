@@ -239,19 +239,22 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId)
         {
             var opportunityItemsToBeReset = _opportunityItemRepository.GetMany(
-                op => op.OpportunityId == opportunityId
-                      && op.IsSelectedForReferral
-                      && !op.IsCompleted)
-                .Select(op => new OpportunityItemIsSelectedForReferralDto
-                {
-                    Id = op.Id,
-                    IsSelectedForReferral = false
-                })
-                .ToList();
+                        op => op.OpportunityId == opportunityId
+                              && op.IsSelectedForReferral
+                              && !op.IsCompleted)
+                    .Select(op => new OpportunityItemIsSelectedForReferralDto
+                    {
+                        Id = op.Id,
+                        IsSelectedForReferral = false
+                    })
+                    .ToList();
 
-            var updates = _mapper.Map<List<OpportunityItem>>(opportunityItemsToBeReset);
+            var opportunityItemsToBeUpdated = _mapper.Map<List<OpportunityItem>>(opportunityItemsToBeReset);
 
-            await _opportunityItemRepository.UpdateMany(updates);
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(opportunityItemsToBeUpdated,
+                x => x.IsSelectedForReferral,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
         }
 
         private static OpportunityBasketType GetOpportunityBasketType(OpportunityBasketViewModel viewModel)
