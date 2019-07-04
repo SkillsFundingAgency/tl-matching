@@ -86,6 +86,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         OpportunityItemId = opportunityItemId,
                         OpportunityId = o.Id,
                         EmployerName = o.Employer.CompanyName,
+                        EmployerNameAka = o.Employer.AlsoKnownAs,
                         EmployerContact = o.EmployerContact,
                         EmployerContactEmail = o.EmployerContactEmail,
                         EmployerContactPhone = o.EmployerContactPhone
@@ -107,6 +108,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         OpportunityItemId = opportunityItemId,
                         OpportunityId = opportunityId,
                         EmployerName = o.Employer.CompanyName,
+                        EmployerNameAka = o.Employer.AlsoKnownAs,
                         EmployerContact = o.EmployerContact,
                         EmployerContactEmail = o.EmployerContactEmail,
                         EmployerContactPhone = o.EmployerContactPhone
@@ -122,6 +124,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         OpportunityItemId = opportunityItemId,
                         OpportunityId = opportunityId,
                         EmployerName = e.CompanyName,
+                        EmployerNameAka = e.AlsoKnownAs,
                         EmployerContact = e.PrimaryContact,
                         EmployerContactEmail = e.Email,
                         EmployerContactPhone = e.Phone

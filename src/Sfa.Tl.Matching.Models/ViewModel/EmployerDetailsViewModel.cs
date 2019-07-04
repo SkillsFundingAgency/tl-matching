@@ -7,6 +7,9 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
         public string EmployerName { get; set; }
+        public string EmployerNameAka { get; set; }
+        public string EmployerNameWithAka => !string.IsNullOrWhiteSpace(EmployerNameAka) ?
+            $"{EmployerName} ({EmployerNameAka})" : EmployerName;
 
         [Required(ErrorMessage = "You must enter a contact name for placements")]
         [MinLength(2, ErrorMessage = "You must enter a contact name using 2 or more characters")]

@@ -132,28 +132,37 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
         public async Task<IActionResult> EmployerConsent(int opportunityId, int opportunityItemId)
         {
-            var viewModel = new EmployerConsentViewModel
-            {
-                OpportunityId = opportunityId,
-                OpportunityItemId = opportunityItemId,
-                OpportunityItemCount = await _opportunityService.GetReferredOpportunityItemCountAsync(opportunityId)
-            };
+            var viewModel = await GetEmployerConsentViewModel(opportunityId, opportunityItemId);
 
             return View(viewModel);
         }
 
         [HttpPost]
         [Route("permission/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerConsent")]
-        public IActionResult EmployerConsent(EmployerConsentViewModel viewModel)
+        public async Task<IActionResult> EmployerConsent(EmployerConsentViewModel viewModel)
         {
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View(await GetEmployerConsentViewModel(viewModel.OpportunityId, viewModel.OpportunityItemId));
 
             // TODO Send emails
             // await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
             // await _referralService.SendProviderReferralEmail(dto.OpportunityId);
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
+        }
+
+        private async Task<EmployerConsentViewModel> GetEmployerConsentViewModel(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = new EmployerConsentViewModel
+            {
+                OpportunityId = opportunityId,
+                OpportunityItemId = opportunityItemId,
+                Details = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId),
+                OpportunityItemCount =
+                    await _opportunityService.GetReferredOpportunityItemCountAsync(opportunityId)
+            };
+
+            return viewModel;
         }
 
         private void Validate(EmployerDetailsViewModel viewModel)
