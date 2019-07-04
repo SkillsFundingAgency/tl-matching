@@ -164,9 +164,17 @@ namespace Sfa.Tl.Matching.Application.Services
             return isReferral;
         }
 
-        public async Task<int> GetOpportunityItemCountAsync(int opportunityId)
+        public async Task<int> GetSavedOpportunityItemCountAsync(int opportunityId)
         {
-            return await _opportunityItemRepository.GetMany(o => o.OpportunityId == opportunityId && o.IsSaved).CountAsync();
+            return await _opportunityItemRepository.Count(o => o.OpportunityId == opportunityId && o.IsSaved);
+        }
+
+        public async Task<int> GetReferredOpportunityItemCountAsync(int opportunityId)
+        {
+            return await _opportunityItemRepository.Count(o => o.OpportunityId == opportunityId 
+                                                               && o.IsSaved
+                                                               && o.IsSelectedForReferral
+                                                               && !o.IsCompleted);
         }
 
         public async Task UpdateReferrals(OpportunityItemDto dto)

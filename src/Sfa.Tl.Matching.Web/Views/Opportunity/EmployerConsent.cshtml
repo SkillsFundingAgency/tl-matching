@@ -1,6 +1,7 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerConsentViewModel
 
 @{
+    var opportunityText = Model.OpportunityItemCount == 1 ? "opportunity" : "opportunities";
     ViewData["Title"] = "Confirm that we can share the employer’s contact details";
 }
 
@@ -68,10 +69,7 @@
                     </div>
                 </fieldset>
             </div>
-            <button class="govuk-button">Confirm and send opportunity @*opportunities if more than one*@</button>
+            <button class="govuk-button">Confirm and send @opportunityText</button>
         </form>
     </div>
 </div>
-
-
-

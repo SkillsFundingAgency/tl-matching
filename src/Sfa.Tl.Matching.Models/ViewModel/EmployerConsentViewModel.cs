@@ -6,6 +6,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     {
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
+        public int OpportunityItemCount { get; set; }
         public string EmployerName { get; set; }
         public string CompanyName { get; set; }
         [Range(typeof(bool), "true", "true", ErrorMessage = "You must confirm that we can share the employer’s details with the selected providers")]

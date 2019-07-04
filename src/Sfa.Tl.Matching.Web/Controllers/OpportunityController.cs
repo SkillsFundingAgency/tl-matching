@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 await _opportunityService.UpdateProvisionGapAsync(dto);
             }
 
-            var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(viewModel.OpportunityId);
+            var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(viewModel.OpportunityId);
 
             //if First Opp (saved opportunity items == 0) then LoadWhoIsEmployer else if referral then check answer of if provisiongap then OpportunityBasket
             return opportunityItemCount == 0 ?
@@ -217,7 +217,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             };
             if (opportunityId == 0) return viewModel;
 
-            var opportunityItemCount = _opportunityService.GetOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
+            var opportunityItemCount = _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
             if (opportunityItemCount == 0)
             {
                 viewModel.OpportunityId = opportunityId;
@@ -234,12 +234,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
-        public IActionResult EmployerConsent(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> EmployerConsent(int opportunityId, int opportunityItemId)
         {
             var viewModel = new EmployerConsentViewModel
             {
                 OpportunityId = opportunityId,
-                OpportunityItemId = opportunityItemId
+                OpportunityItemId = opportunityItemId,
+                OpportunityItemCount = await _opportunityService.GetReferredOpportunityItemCountAsync(opportunityId)
             };
 
             return View(viewModel);

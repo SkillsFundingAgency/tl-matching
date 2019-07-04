@@ -10,7 +10,8 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<int> CreateOpportunityAsync(OpportunityDto opportunityDto);
         Task<int> CreateOpportunityItemAsync(OpportunityItemDto opportunityItemDto);
 
-        Task<int> GetOpportunityItemCountAsync(int opportunityId);
+        Task<int> GetSavedOpportunityItemCountAsync(int opportunityId);
+        Task<int> GetReferredOpportunityItemCountAsync(int opportunityId);
         Task<OpportunityDto> GetOpportunity(int opportunityId);
         Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId);
         Task<PlacementInformationSaveDto> GetPlacementInformationAsync(int opportunityItemId);

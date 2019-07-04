@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasket(int opportunityId, int opportunityItemId)
         {
             await _opportunityService.DeleteOpportunityItemAsync(opportunityId, opportunityItemId);
-            var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
+            var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
 
             return opportunityItemCount == 0
                 ? RedirectToRoute("Start")
@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("get-placement-or-employer/{opportunityId}-{opportunityItemId}", Name = "GetPlacementOrEmployer")]
         public async Task<IActionResult> GetPlacementOrEmployer(int opportunityId, int opportunityItemId)
         {
-            var opportunityItemCount = await _opportunityService.GetOpportunityItemCountAsync(opportunityId);
+            var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
             var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
             var opportunities = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
 
