@@ -5,6 +5,7 @@
 `
 @section backButton{
     <a asp-route="GetEmployerConsent" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>
+    <partial name="_navigation" model="Model.Navigation" />
 }
 
 <div class="govuk-grid-row">
@@ -33,8 +34,8 @@
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="OpportunityItemId" type="hidden" />
             <input asp-for="EmployerName" type="hidden" />
-            
-            <partial name="_employerDetailForm", model="Model" />
+
+            <partial name="_employerDetailForm" , model="Model" />
         </form>
     </div>
 </div>

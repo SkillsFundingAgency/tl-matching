@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 o => o.EmployerId);
 
             if (employerId == null || employerId <= 0)
-                throw new InvalidOperationException("Unable to Find any Employer Details for current Opportunity PLease Go Back to Find Employer Screen and Select an employer");
+                throw new InvalidOperationException("Unable to Find any Employer Details for current Opportunity. Please go back to Find Employer Screen and select an employer");
 
             //1 first try getting from current Opportunity if its not null
             var employerDetails = await _opportunityRepository.GetSingleOrDefault(

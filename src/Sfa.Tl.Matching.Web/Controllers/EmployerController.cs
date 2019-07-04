@@ -101,6 +101,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetCheckOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
+            viewModel.Navigation = LoadCancelLink(opportunityId, opportunityItemId);
 
             return View("CheckDetails", viewModel);
         }
