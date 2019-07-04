@@ -20,6 +20,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         private const string JobRole = "JobRole";
         private const string CompanyName = "CompanyName";
+        private const string CompanyNameAka = "AlsoKnownAs";
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
         private const int OpportunityId = 1;
@@ -34,6 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 JobRole = JobRole,
                 OpportunityType = OpportunityType.Referral,
                 CompanyName = CompanyName,
+                CompanyNameAka = CompanyNameAka,
                 PlacementsKnown = PlacementsKnown,
                 Placements = Placements,
                 NoSuitableStudent = true,
@@ -83,7 +85,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewModel.Placements.Should().Be(Placements);
             viewModel.OpportunityType.Should().Be(OpportunityType.Referral);
             viewModel.CompanyName.Should().Be(CompanyName);
-        }
+            viewModel.CompanyNameAka.Should().Be(CompanyNameAka);
+            viewModel.CompanyNameWithAka.Should().Be($"{CompanyName} ({CompanyNameAka})");
+
+       
+    }
 
         [Fact]
         public void Then_ViewModel_Provision_Gap_Flags_Are_Set()

@@ -28,6 +28,9 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         public OpportunityType OpportunityType { get; set; }
         public string CompanyName { get; set; }
+        public string CompanyNameAka { get; set; }
+        public string CompanyNameWithAka => !string.IsNullOrWhiteSpace(CompanyNameAka) ?
+            $"{CompanyName} ({CompanyNameAka})" : CompanyName;
         public NavigationViewModel Navigation { get; set; }
     }
 }

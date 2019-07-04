@@ -151,6 +151,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
                         source.Opportunity.Employer != null
                             ? source.Opportunity.Employer.CompanyName
                             : null))
+                .ForPath(m => m.CompanyNameAka, opt =>
+                    opt.MapFrom(source =>
+                        source.Opportunity.Employer != null
+                            ? source.Opportunity.Employer.AlsoKnownAs
+                            : null))
                 .ForPath(m => m.NoSuitableStudent, o => o.MapFrom(s =>
                     s.ProvisionGap != null && s.ProvisionGap.Any()
                         ? s.ProvisionGap.First().NoSuitableStudent

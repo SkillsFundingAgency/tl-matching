@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public int SearchResultProviderCount { get; set; }
         public OpportunityType OpportunityType { get; set; }
         public string CompanyName { get; set; }
+        public string CompanyNameAka { get; set; }
         public string JobRole { get; set; }
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
