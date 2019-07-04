@@ -39,17 +39,17 @@
                 switch (Model.Type)
                 {
                     case OpportunityBasketType.ReferralSingle:
-                        <partial name="_basketReferralSingle" , model="Model.ReferralItems[0]" />
+                        <partial name="_basketReferralSingle", model="Model.ReferralItems[0]" />
                         break;
                     case OpportunityBasketType.ProvisionGapSingle:
-                        <partial name="_basketProvisionGapSingle" , model="Model.ProvisionGapItems" />
+                        <partial name="_basketProvisionGapSingle", model="Model.ProvisionGapItems" />
                         break;
                     case OpportunityBasketType.ReferralMultiple:
-                        <partial name="_basketReferralMultiple" , model="Model.ReferralItems" />
+                        <partial name="_basketReferralMultiple", model="Model.ReferralItems" />
                         break;
                     case OpportunityBasketType.MultipleReferralAndProvisionGap:
                     case OpportunityBasketType.SingleReferralAndProvisionGap:
-                        <partial name="_basketTabs" , model="Model" />
+                        <partial name="_basketTabs", model="Model" />
                         break;
                     default:
                         throw new NotImplementedException("Selected Employer Opprtunity Scenario is not implemented");
