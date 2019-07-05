@@ -220,7 +220,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>()
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(m => m.IsCompleted, o => o.MapFrom(s => s.IsCompleted))
+                .ForMember(m => m.IsCompleted, o => o.MapFrom(s => true))
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>>())
                 .ForAllOtherMembers(config => config.Ignore());
