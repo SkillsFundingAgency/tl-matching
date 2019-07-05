@@ -317,42 +317,47 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task ConfirmOpportunities(int opportunityId)
         {
-            var basketItems = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
-                                                                          && oi.IsSaved
-                                                                          && !oi.IsCompleted);
+            await CompleteSelectedReferrals(opportunityId);
+            await CompleteRemainingItems(opportunityId);
+        }
 
-            var referralItems = basketItems.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString()).ToList();
-            var provisionItems = basketItems.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
-            var remainingItems = basketItems.Where(oi => !oi.IsSelectedForReferral).ToList();
+        private async Task CompleteSelectedReferrals(int opportunityId)
+        {
+            var selectedOpportunityIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+                                                                                  && oi.IsSaved
+                                                                                  && oi.IsSelectedForReferral
+                                                                                  && !oi.IsCompleted)
+                .Select(oi => oi.Id).ToList();
 
-            IEnumerable<int> opportunityItemIdsToComplete;
+            if (selectedOpportunityIds.Count > 0)
+                await SetOpportunityItemsAsCompleted(selectedOpportunityIds);
+        }
 
-            var isMultipleBasket = referralItems.Count > 0 && provisionItems.Count > 0;
-            if (isMultipleBasket && remainingItems.Count == 0)
+        private async Task CompleteRemainingItems(int opportunityId)
+        {
+            var remainingOpportunities = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+                                                                                  && oi.IsSaved
+                                                                                  && !oi.IsSelectedForReferral
+                                                                                  && !oi.IsCompleted);
+
+            var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString())
+                .ToList();
+            var provisionItems = remainingOpportunities
+                .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
+
+            if (provisionItems.Count > 0 && referralItems.Count == 0)
             {
-                opportunityItemIdsToComplete = basketItems.Select(oi => oi.Id);
-                await SetOpportunityItemsAsCompleted(opportunityItemIdsToComplete);
-                return;
+                var provisionIds = provisionItems.Select(oi => oi.Id).ToList();
+                if (provisionIds.Count > 0)
+                    await SetOpportunityItemsAsCompleted(provisionIds);
             }
-
-            var selectedReferralItems = referralItems.Where(oi => oi.IsSelectedForReferral).ToList();
-
-            var allReferralsSelected = referralItems.Count == selectedReferralItems.Count;
-            opportunityItemIdsToComplete = allReferralsSelected ?
-                referralItems.Select(oi => oi.Id) :
-                selectedReferralItems.Select(oi => oi.Id);
-
-            var opportunityItemIdsToCompleteList = opportunityItemIdsToComplete.ToList();
-            if (opportunityItemIdsToCompleteList.Any())
-                await SetOpportunityItemsAsCompleted(opportunityItemIdsToCompleteList);
         }
 
         private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds)
         {
             var itemsToBeCompleted = opportunityItemIds.Select(id => new OpportunityItemIsSelectedForCompleteDto
             {
-                Id = id,
-                IsCompleted = true
+                Id = id
             });
 
             var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
