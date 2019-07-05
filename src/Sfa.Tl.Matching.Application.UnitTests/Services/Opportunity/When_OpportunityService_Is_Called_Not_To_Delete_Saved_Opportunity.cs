@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
@@ -54,35 +50,27 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         [Fact]
-        public void Then_Do_Not_Delete_Opportunity_Item()
+        public void Then_Do_Not_Delete_Opportunity()
         {
             _opportunityRepository.DidNotReceive().Delete(Arg.Any<int>());
         }
 
         [Fact]
-        public void Then_Do_Not_Delete_Opportunity_Item_Is_Called_Twice()
+        public void Then_Do_Not_Delete_Opportunity_Item()
         {
             _opportunityItemRepository.DidNotReceive().Delete(Arg.Any<OpportunityItem>());
         }
 
         [Fact]
-        public void Then_Delete_Referral_Is_Called_Thrice()
+        public void Then_Delete_Referral_Is_Called_Once()
         {
             _referralRepository.Received(1).DeleteMany(Arg.Any<List<Domain.Models.Referral>>());
         }
 
         [Fact]
-        public void Then_Delete_Provision_Gap_Is_Called_Thrice()
+        public void Then_Delete_Provision_Gap_Is_Called_Once()
         {
             _provisionGapRepository.Received(1).DeleteMany(Arg.Any<List<ProvisionGap>>());
-        }
-
-        private static Domain.Models.Opportunity SetOpportunity()
-        {
-            return new Domain.Models.Opportunity
-            {
-                Id = OpportunityId
-            };
         }
 
         private static IEnumerable<OpportunityItem> SetOpportunityItem()
@@ -119,8 +107,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 new Domain.Models.Referral
                 {
                     Id = 1,
-                    OpportunityItemId = OpportunityItemId,
-                    //OpportunityItem = SetOpportunityItem().FirstOrDefault(item => item.OpportunityId == OpportunityId)
+                    OpportunityItemId = OpportunityItemId
                 }
             };
         }
@@ -131,7 +118,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             {
                 new ProvisionGap
                 {
-                    //OpportunityItem = SetOpportunityItem().FirstOrDefault(item => item.OpportunityId == OpportunityId),
                     Id = 1,
                     OpportunityItemId = OpportunityItemId
                 }
