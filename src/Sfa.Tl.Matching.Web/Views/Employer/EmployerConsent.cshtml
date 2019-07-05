@@ -63,7 +63,7 @@
                         <div class="govuk-checkboxes__item">
                             <input asp-for="ConfirmationSelected" class="govuk-checkboxes__input" type="checkbox"
                                    sfa-validation-for="ConfirmationSelected" sfa-validationerror-class="govuk-input--error" />
-                            <label class="govuk-label govuk-checkboxes__label" for="confirm-permission">
+                            <label class="govuk-label govuk-checkboxes__label" asp-for="ConfirmationSelected">
                                 @Model.Details.EmployerContact has confirmed that we can share their details with providers, and that these providers can contact them about industry placements.
                             </label>
                         </div>
