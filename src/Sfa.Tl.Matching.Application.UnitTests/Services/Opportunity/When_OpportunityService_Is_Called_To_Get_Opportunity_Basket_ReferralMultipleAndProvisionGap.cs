@@ -56,6 +56,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _result.Type.Should().Be(OpportunityBasketType.MultipleReferralAndProvisionGap);
             _result.CompanyName.Should().Be("CompanyName");
+            _result.CompanyNameAka.Should().Be("AlsoKnownAs");
+            _result.CompanyNameWithAka.Should().Be($"CompanyName (AlsoKnownAs)");
         }
     }
 }

@@ -27,7 +27,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService.GetOpportunityBasket(1).Returns(new OpportunityBasketViewModel
             {
                 OpportunityId = 1,
-                CompanyName = "Company Name"
+                CompanyName = "Company Name",
+                CompanyNameAka = "Also Known As"
             });
 
             var opportunityController = new OpportunityController(_opportunityService, mapper);
@@ -47,6 +48,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewResult?.Model.Should().NotBeNull();
             var viewModel = _result.GetViewModel<OpportunityBasketViewModel>();
             viewModel.CompanyName.Should().Be("Company Name");
+            viewModel.CompanyNameAka.Should().Be("Also Known As");
+            viewModel.CompanyNameWithAka.Should().Be($"Company Name (Also Known As)");
         }
 
         [Fact]

@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
             _viewModel = new OpportunityBasketViewModel
             {
                 CompanyName = "CompanyName",
+                CompanyNameAka = "AlsoKnownAs",
                 ReferralItems = new List<BasketReferralItemViewModel>(),
                 ProvisionGapItems = new List<BasketProvisionGapItemViewModel>()
             };

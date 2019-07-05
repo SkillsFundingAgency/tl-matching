@@ -119,6 +119,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                            {
                                                OpportunityId = o.Id,
                                                CompanyName = e.CompanyName,
+                                               CompanyNameAka = e.AlsoKnownAs,
                                                ProvisionGapItems = o.OpportunityItem
                                                    .Where(oi => IsValidBasketState(oi, OpportunityType.ProvisionGap))
                                                    .Select(oi => new BasketProvisionGapItemViewModel

@@ -102,6 +102,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     SearchRadius = o.SearchRadius,
                     RouteName = o.Route.Name,
                     EmployerName = o.Opportunity.Employer.CompanyName,
+                    CompanyNameAka = o.Opportunity.Employer.AlsoKnownAs,
                     Providers = o.Referral.Select(r => new ReferralsViewModel
                     {
                         Postcode = r.ProviderVenue.Postcode,
