@@ -69,6 +69,7 @@
                                 Select all that apply
                             </span>
                             <div class="govuk-checkboxes">
+                                <span class="govuk-error-message" asp-validation-for="NoSuitableStudent"></span>
                                 <div class="govuk-checkboxes__item">
                                     <input asp-for="NoSuitableStudent" class="govuk-checkboxes__input" type="checkbox"
                                            sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-input--error">
