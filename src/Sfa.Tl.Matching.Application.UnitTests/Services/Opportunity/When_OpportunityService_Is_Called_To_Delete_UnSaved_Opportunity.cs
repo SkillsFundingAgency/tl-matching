@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _provisionGapRepository.Received(1).DeleteMany(Arg.Any<List<ProvisionGap>>());
         }
-
+        
         private static IEnumerable<OpportunityItem> SetOpportunityItem()
         {
             return new List<OpportunityItem>
@@ -80,6 +80,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 new OpportunityItem
                 {
                     Id = 1,
+                    OpportunityId = OpportunityId,
+                    OpportunityType = OpportunityType.Referral.ToString(),
+                    IsSelectedForReferral = false,
+                    IsCompleted = false,
+                    CreatedBy = "CreatedBy",
+                    IsSaved = false
+                },
+                new OpportunityItem
+                {
+                    Id = 2,
                     OpportunityId = OpportunityId,
                     OpportunityType = OpportunityType.Referral.ToString(),
                     IsSelectedForReferral = false,
@@ -97,7 +107,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 new Domain.Models.Referral
                 {
                     Id = 1,
-                    OpportunityItemId = 1,
+                    OpportunityItemId = OpportunityItemId,
                     OpportunityItem = SetOpportunityItem().FirstOrDefault(item => item.OpportunityId == OpportunityId)
                 }
             };
