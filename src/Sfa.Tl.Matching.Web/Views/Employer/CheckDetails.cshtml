@@ -25,15 +25,16 @@
                 </div>
             </div>
         }
+
+        <span class="govuk-caption-l">@Model.EmployerNameWithAka</span>
+
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        <h2 class="govuk-heading-m">
-            <label asp-for="EmployerName">@Model.EmployerName</label>
-        </h2>
 
         <form asp-action="SaveCheckOpportunityEmployerDetails" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="OpportunityItemId" type="hidden" />
             <input asp-for="EmployerName" type="hidden" />
+            <input asp-for="EmployerNameAka" type="hidden" />
 
             <partial name="_employerDetailForm" , model="Model" />
         </form>

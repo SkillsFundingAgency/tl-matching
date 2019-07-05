@@ -25,23 +25,22 @@
                 </div>
             </div>
         }
-        @*<span class="govuk-caption-l">@Model.CompanyName</span>*@
+
+        <span class="govuk-caption-l">@Model.EmployerNameWithAka</span>
 
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        <h2 class="govuk-heading-m">
-            <label asp-for="EmployerName">@Model.EmployerName</label>
-        </h2>
 
         <form asp-action="SaveOpportunityEmployerDetails" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="OpportunityItemId" type="hidden" />
             <input asp-for="EmployerName" type="hidden" />
+            <input asp-for="EmployerNameAka" type="hidden" />
 
             <p class="govuk-body">
                 <a asp-route="LoadWhoIsEmployer" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link" id="tl-find-different">Find a different employer</a>
             </p>
 
-            <partial name="_employerDetailForm", model="Model" />
+            <partial name="_employerDetailForm" , model="Model" />
         </form>
     </div>
 </div>
