@@ -150,6 +150,7 @@ namespace Sfa.Tl.Matching.Application.Services
                      OpportunityItemId = oi.Id,
                      OpportunityId = oi.OpportunityId,
                      CompanyName = oi.Opportunity.Employer.CompanyName,
+                     CompanyNameAka = oi.Opportunity.Employer.AlsoKnownAs,
                      JobRole = oi.JobRole,
                      Postcode = oi.Postcode,
                      Placements = oi.Placements,

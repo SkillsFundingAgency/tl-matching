@@ -9,6 +9,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
             OpportunityId = 1,
             OpportunityItemId = 2,
             CompanyName = "CompanyName",
+            CompanyNameAka = "AlsoKnownAs",
             Postcode = "Postcode",
             JobRole = "JobRole",
             BasketItemCount = basketcount,

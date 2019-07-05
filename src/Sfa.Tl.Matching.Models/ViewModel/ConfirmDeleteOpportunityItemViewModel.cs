@@ -5,6 +5,9 @@
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
         public string CompanyName { get; set; }
+        public string CompanyNameAka { get; set; }
+        public string CompanyNameWithAka => !string.IsNullOrWhiteSpace(CompanyNameAka) ?
+            $"{CompanyName} ({CompanyNameAka})" : CompanyName;
         public string Postcode { get; set; }
         public string JobRole { get; set; }
         public int BasketItemCount { get; set; }
