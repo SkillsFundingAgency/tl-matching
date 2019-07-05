@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
@@ -17,44 +21,60 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const int OpportunityId = 101;
         private const int OpportunityItemId = 1;
 
-        private readonly int _opportunityItemCount;
+        private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
+        private readonly IRepository<Domain.Models.Referral> _referralRepository;
+        private readonly IRepository<ProvisionGap> _provisionGapRepository;
 
         public When_OpportunityService_Is_Called_Not_To_Delete_Saved_Opportunity()
         {
             var mapper = new Mapper(Substitute.For<IConfigurationProvider>());
 
-            var opportunitylogger = Substitute.For<ILogger<OpportunityRepository>>();
-            var opportunityItemlogger = Substitute.For<ILogger<GenericRepository<OpportunityItem>>>();
-            var referralLogger = Substitute.For<ILogger<GenericRepository<Domain.Models.Referral>>>();
-            var provisionGapLogger = Substitute.For<ILogger<GenericRepository<ProvisionGap>>>();
-            
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.Add(SetOpportunity());
-                dbContext.AddRange(SetOpportunityItem());
-                dbContext.AddRange(SetReferrals());
-                dbContext.AddRange(SetProvisionGaps());
-                dbContext.SaveChanges();
+            _opportunityRepository = Substitute.For<IOpportunityRepository>();
+            _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
+            _provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
+            _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-                var opportunityRepository = new OpportunityRepository(opportunitylogger, dbContext);
-                var opportunityItemRepository = new GenericRepository<OpportunityItem>(opportunityItemlogger, dbContext);
-                var referralRepository = new GenericRepository<Domain.Models.Referral>(referralLogger, dbContext);
-                var provisionGapRepository = new GenericRepository<ProvisionGap>(provisionGapLogger, dbContext);
+            _opportunityItemRepository
+                .GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+                .Returns(SetOpportunityItem().AsQueryable());
 
-                var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository);
+            _referralRepository
+                .GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>())
+                .Returns(SetReferrals().AsQueryable());
 
-                sut.DeleteOpportunityItemAsync(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
+            _provisionGapRepository
+                .GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>())
+                .Returns(SetProvisionGaps().AsQueryable());
 
-                _opportunityItemCount = sut.GetSavedOpportunityItemCountAsync(OpportunityId).GetAwaiter().GetResult();
-            }
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, _opportunityItemRepository, _provisionGapRepository, _referralRepository);
 
-            
+            opportunityService.DeleteOpportunityItemAsync(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
+
         }
 
         [Fact]
         public void Then_Do_Not_Delete_Opportunity_Item()
         {
-            _opportunityItemCount.Should().Be(2);
+            _opportunityRepository.DidNotReceive().Delete(Arg.Any<int>());
+        }
+
+        [Fact]
+        public void Then_Do_Not_Delete_Opportunity_Item_Is_Called_Twice()
+        {
+            _opportunityItemRepository.DidNotReceive().Delete(Arg.Any<OpportunityItem>());
+        }
+
+        [Fact]
+        public void Then_Delete_Referral_Is_Called_Thrice()
+        {
+            _referralRepository.Received(1).DeleteMany(Arg.Any<List<Domain.Models.Referral>>());
+        }
+
+        [Fact]
+        public void Then_Delete_Provision_Gap_Is_Called_Thrice()
+        {
+            _provisionGapRepository.Received(1).DeleteMany(Arg.Any<List<ProvisionGap>>());
         }
 
         private static Domain.Models.Opportunity SetOpportunity()
@@ -100,7 +120,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 {
                     Id = 1,
                     OpportunityItemId = OpportunityItemId,
-                    OpportunityItem = SetOpportunityItem().FirstOrDefault(item => item.OpportunityId == OpportunityId)
+                    //OpportunityItem = SetOpportunityItem().FirstOrDefault(item => item.OpportunityId == OpportunityId)
                 }
             };
         }
@@ -111,7 +131,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             {
                 new ProvisionGap
                 {
-                    OpportunityItem = SetOpportunityItem().FirstOrDefault(item => item.OpportunityId == OpportunityId),
+                    //OpportunityItem = SetOpportunityItem().FirstOrDefault(item => item.OpportunityId == OpportunityId),
                     Id = 1,
                     OpportunityItemId = OpportunityItemId
                 }
