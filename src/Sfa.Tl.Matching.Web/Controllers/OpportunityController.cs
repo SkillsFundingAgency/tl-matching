@@ -140,7 +140,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return opportunityItemCount == 0 ?
                 RedirectToRoute("LoadWhoIsEmployer", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
                 : viewModel.OpportunityType == OpportunityType.Referral ?
-                    await GetCheckAnswers(viewModel.OpportunityItemId)
+                    RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId })
                     : await SaveCheckAnswers(viewModel.OpportunityId, viewModel.OpportunityItemId);
         }
 
