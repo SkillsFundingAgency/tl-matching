@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = _result.GetViewModel<OpportunityBasketViewModel>();
             viewModel.CompanyName.Should().Be("Company Name");
             viewModel.CompanyNameAka.Should().Be("Also Known As");
-            viewModel.CompanyNameWithAka.Should().Be($"Company Name (Also Known As)");
+            viewModel.CompanyNameWithAka.Should().Be("Company Name (Also Known As)");
         }
 
         [Fact]

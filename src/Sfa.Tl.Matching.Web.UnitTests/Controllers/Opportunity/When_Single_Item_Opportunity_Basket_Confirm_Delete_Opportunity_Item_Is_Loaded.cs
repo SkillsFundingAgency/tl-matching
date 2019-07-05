@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewModel.OpportunityId.Should().Be(2);
             viewModel.CompanyName.Should().Be("Company Name");
             viewModel.CompanyNameAka.Should().Be("Also Known As");
-            viewModel.CompanyNameWithAka.Should().Be($"Company Name (Also Known As)");
+            viewModel.CompanyNameWithAka.Should().Be("Company Name (Also Known As)");
             viewModel.Postcode.Should().Be("PostCode");
             viewModel.JobRole.Should().Be("JobRole");
             viewModel.PlacementsDetail.Should().Be("1");
