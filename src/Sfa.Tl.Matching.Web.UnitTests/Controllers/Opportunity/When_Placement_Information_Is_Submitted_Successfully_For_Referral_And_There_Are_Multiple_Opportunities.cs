@@ -110,6 +110,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
             viewModel.OpportunityItemId.Should().Be(2);
             viewModel.EmployerName.Should().Be("EmployerName");
+            viewModel.CompanyNameAka.Should().Be("AlsoKnownAs");
+            viewModel.CompanyNameWithAka.Should().Be($"EmployerName (AlsoKnownAs)");
             viewModel.JobRole.Should().Be("JobRole");
             viewModel.SearchRadius.Should().Be(3);
             viewModel.PlacementsKnown.Should().BeTrue();

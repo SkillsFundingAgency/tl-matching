@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetPlacementInformationAsync(OpportunityItemId).Returns(dto);
 
-            var opportunityController = new OpportunityController(_opportunityService,  mapper);
+            var opportunityController = new OpportunityController(_opportunityService, mapper);
 
             _result = opportunityController.GetPlacementInformation(OpportunityItemId).GetAwaiter().GetResult();
         }
@@ -87,9 +87,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewModel.CompanyName.Should().Be(CompanyName);
             viewModel.CompanyNameAka.Should().Be(CompanyNameAka);
             viewModel.CompanyNameWithAka.Should().Be($"{CompanyName} ({CompanyNameAka})");
-
-       
-    }
+        }
 
         [Fact]
         public void Then_ViewModel_Provision_Gap_Flags_Are_Set()
