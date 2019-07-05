@@ -32,5 +32,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId);
 
         Task ContinueWithOpportunities(ContinueOpportunityViewModel viewModel);
+        Task ConfirmOpportunities(int opportunityId);
     }
 }

@@ -1,6 +1,6 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.BasketReferralItemViewModel
 
-<input type="hidden" asp-for="OpportunityItemId" name="SelectedOpportunity[0].Id" />
+<input type="hidden" value="@Model.OpportunityItemId" name="SelectedOpportunity[0].Id" />
 <input type="hidden" asp-for="OpportunityType" name="SelectedOpportunity[0].OpportunityType" />
 <input type="hidden" value="true" name="SelectedOpportunity[0].IsSelected" />
 

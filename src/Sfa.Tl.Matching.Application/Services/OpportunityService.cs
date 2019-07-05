@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var viewModel = await _opportunityRepository.GetOpportunityBasket(opportunityId);
 
-            if (viewModel==null) return new OpportunityBasketViewModel();
+            if (viewModel == null) return new OpportunityBasketViewModel();
 
             viewModel.Type = GetOpportunityBasketType(viewModel);
 
@@ -171,7 +171,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> GetReferredOpportunityItemCountAsync(int opportunityId)
         {
-            return await _opportunityItemRepository.Count(o => o.OpportunityId == opportunityId 
+            return await _opportunityItemRepository.Count(o => o.OpportunityId == opportunityId
                                                                && o.IsSaved
                                                                && o.IsSelectedForReferral
                                                                && !o.IsCompleted);
@@ -286,12 +286,44 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            var referralIds = viewModel.SelectedOpportunity.Where(oi => oi.IsSelected 
+            var referralIds = viewModel.SelectedOpportunity.Where(oi => oi.IsSelected
                                                                         && oi.OpportunityType == OpportunityType.Referral.ToString())
                 .Select(oi => oi.Id).ToList();
 
             if (referralIds.Any())
                 await SetOpportunityItemsAsReferral(referralIds);
+        }
+
+        public async Task ConfirmOpportunities(int opportunityId)
+        {
+            var basketItems = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+                                                                          && oi.IsSaved
+                                                                          && !oi.IsCompleted);
+
+            var referralItems = basketItems.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString()).ToList();
+            var provisionItems = basketItems.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
+            var remainingItems = basketItems.Where(oi => !oi.IsSelectedForReferral).ToList();
+
+            IEnumerable<int> opportunityItemIdsToComplete;
+
+            var isMultipleBasket = referralItems.Count > 0 && provisionItems.Count > 0;
+            if (isMultipleBasket && remainingItems.Count == 0)
+            {
+                opportunityItemIdsToComplete = basketItems.Select(oi => oi.Id);
+                await SetOpportunityItemsAsCompleted(opportunityItemIdsToComplete);
+                return;
+            }
+
+            var selectedReferralItems = referralItems.Where(oi => oi.IsSelectedForReferral).ToList();
+
+            var allReferralsSelected = referralItems.Count == selectedReferralItems.Count;
+            opportunityItemIdsToComplete = allReferralsSelected ?
+                referralItems.Select(oi => oi.Id) :
+                selectedReferralItems.Select(oi => oi.Id);
+
+            var opportunityItemIdsToCompleteList = opportunityItemIdsToComplete.ToList();
+            if (opportunityItemIdsToCompleteList.Any())
+                await SetOpportunityItemsAsCompleted(opportunityItemIdsToCompleteList);
         }
 
         private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds)
