@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests
         {
             var options = new DbContextOptionsBuilder<MatchingDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .EnableSensitiveDataLogging()
                 .Options;
             var context = new MatchingDbContext(options);
