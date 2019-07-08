@@ -260,15 +260,16 @@ namespace Sfa.Tl.Matching.Application.Services
             var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId);
             if (!opportunityItems.Any(item => item.IsSaved))
             {
-                opportunityItems
+                var items = opportunityItems
                     .Where(item => item.IsSaved == false)
-                    .ToList()
-                    .ForEach(async opitem =>
-                    {
-                        await _referralRepository.DeleteMany(_referralRepository.GetMany(rf => rf.OpportunityItemId == opitem.Id).ToList());
-                        await _provisionGapRepository.DeleteMany(_provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opitem.Id).ToList());
-                        await _opportunityItemRepository.Delete(opitem);
-                    });
+                    .ToList();
+
+                foreach (var opitem in items)
+                {
+                    await _referralRepository.DeleteMany(_referralRepository.GetMany(rf => rf.OpportunityItemId == opitem.Id).ToList());
+                    await _provisionGapRepository.DeleteMany(_provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opitem.Id).ToList());
+                    await _opportunityItemRepository.Delete(opitem);
+                }
 
                 await _opportunityRepository.Delete(opportunityId);
             }
