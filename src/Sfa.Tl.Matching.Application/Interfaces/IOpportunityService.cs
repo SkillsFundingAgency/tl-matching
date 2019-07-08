@@ -34,5 +34,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 
         Task ContinueWithOpportunities(ContinueOpportunityViewModel viewModel);
         Task ConfirmOpportunities(int opportunityId);
+        Task<string> GetCompanyNameWithAkaAsync(int? opportunityId);
     }
 }

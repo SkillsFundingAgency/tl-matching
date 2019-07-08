@@ -19,15 +19,16 @@
         </div>
     </div>
 }
-@*@if (!String.IsNullOrEmpty(Model.CompanyName))
+@if (!String.IsNullOrEmpty(Model.CompanyNameWithAka))
     {
-        <span class="govuk-caption-l">@Model.CompanyName</span>
-    }*@
+        <span class="govuk-caption-l">@Model.CompanyNameWithAka</span>
+    }
 <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
 <form class="form" asp-action="RefineSearchResults" novalidate>
     <input asp-for="OpportunityId" type="hidden" />
     <input asp-for="OpportunityItemId" type="hidden" />
+    <input asp-for="CompanyNameWithAka" type="hidden" />
 
     <div class="tl-pane tl-pane__inline-form">
         <div class="govuk-grid-row">

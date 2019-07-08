@@ -13,12 +13,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 {
-    public class When_Proximity_Controller_Index_Is_Loaded
+    public class When_Proximity_Controller_Index_Is_Loaded_With_Opportunity
     {
         private readonly IActionResult _result;
         private readonly IOpportunityService _opportunityService;
 
-        public When_Proximity_Controller_Index_Is_Loaded()
+        public When_Proximity_Controller_Index_Is_Loaded_With_Opportunity()
         {
             var routes = new List<Route>
             {
@@ -32,20 +32,23 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             routePathService.GetRoutes().Returns(routes);
 
             _opportunityService = Substitute.For<IOpportunityService>();
+            _opportunityService
+                .GetCompanyNameWithAkaAsync(1)
+                .Returns("CompanyName (AlsoKnownAs)");
+
             var employerService = Substitute.For<IEmployerService>();
 
             var proximityController = new ProximityController(mapper, routePathService, proximityService,
                 _opportunityService, employerService);
 
-            _result = proximityController.Index().GetAwaiter().GetResult();
+            _result = proximityController.Index(1).GetAwaiter().GetResult();
         }
 
-       
         [Fact]
-        public void Then_OpportunityService_GetCompanyNameWithAkaAsync_Is_Not_Called()
+        public void Then_OpportunityService_GetCompanyNameWithAkaAsync_Is_Called_Exactly_Once()
         {
             _opportunityService
-                .DidNotReceiveWithAnyArgs()
+                .Received(1)
                 .GetCompanyNameWithAkaAsync(Arg.Any<int>());
         }
 
@@ -72,10 +75,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_ViewModel_CompanyNameWithAka_Should_Not_Be_Set()
+        public void Then_ViewModel_CompanyNameWithAka_Should_Have_Expected_Value()
         {
             var viewModel = _result.GetViewModel<SearchParametersViewModel>();
-            viewModel.CompanyNameWithAka.Should().BeNull();
+            viewModel.CompanyNameWithAka.Should().Be("CompanyName (AlsoKnownAs)");
         }
     }
 }

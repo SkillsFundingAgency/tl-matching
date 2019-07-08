@@ -1,5 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.Dto
 {
+    // ReSharper disable once UnusedMember.Global
     public class ProvisionGapDto
     {
         public bool? NoSuitableStudent { get; set; }

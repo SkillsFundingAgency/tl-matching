@@ -80,7 +80,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(
                 o => o.Id == opportunityItemId,
                 oi => oi.ProvisionGap,
-(Expression<Func<OpportunityItem, object>>)(oi => oi.Opportunity), oi => oi.Opportunity.Employer);
+                (Expression<Func<OpportunityItem, object>>)(oi => oi.Opportunity), oi => oi.Opportunity.Employer);
 
             var dto = _mapper.Map<OpportunityItem, PlacementInformationSaveDto>(placementInformation);
 
@@ -351,6 +351,19 @@ namespace Sfa.Tl.Matching.Application.Services
                 if (provisionIds.Count > 0)
                     await SetOpportunityItemsAsCompleted(provisionIds);
             }
+        }
+
+        public async Task<string> GetCompanyNameWithAkaAsync(int? opportunityId)
+        {
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(
+                o => o.Id == opportunityId,
+                (Expression<Func<Opportunity, object>>)(o => o.Employer));
+
+            var companyName = opportunity?.Employer?.CompanyName;
+            var companyNameAka = opportunity?.Employer?.AlsoKnownAs;
+
+            return !string.IsNullOrWhiteSpace(companyNameAka) ?
+                $"{companyName} ({companyNameAka})" : companyName;
         }
 
         private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds)

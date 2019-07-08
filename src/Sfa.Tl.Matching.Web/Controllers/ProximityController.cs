@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("find-providers/{opportunityId?}", Name = "FindProviders")]
-        public IActionResult Index(int? opportunityId = null)
+        public async Task<IActionResult> Index(int? opportunityId = null)
         {
             var viewModel = new SearchParametersViewModel
             {
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchRadius = SearchParametersViewModel.DefaultSearchRadius
             };
 
-            return View(nameof(Index), GetSearchParametersViewModelAsync(viewModel));
+            return View(nameof(Index), await GetSearchParametersViewModelAsync(viewModel));
         }
 
         [HttpPost]
@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             viewModel.SearchRadius = SearchParametersViewModel.DefaultSearchRadius;
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
             {
-                return View(nameof(Index), GetSearchParametersViewModelAsync(viewModel));
+                return View(nameof(Index), await GetSearchParametersViewModelAsync(viewModel));
             }
 
             return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
@@ -82,7 +82,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 Postcode = viewModel.Postcode,
                 SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
                 OpportunityId = viewModel.OpportunityId,
-                OpportunityItemId = viewModel.OpportunityItemId
+                OpportunityItemId = viewModel.OpportunityItemId,
+                CompanyNameWithAka = viewModel.CompanyNameWithAka
             });
         }
 
@@ -101,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 return View(nameof(Results), new SearchViewModel
                 {
-                    SearchParameters = GetSearchParametersViewModelAsync(viewModel),
+                    SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
                     SearchResults = new SearchResultsViewModel(),
                     IsValidSearch = false,
                     Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
@@ -150,7 +151,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 {
                     Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults)
                 },
-                SearchParameters = GetSearchParametersViewModelAsync(viewModel),
+                SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId,
                 Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
@@ -176,9 +177,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return resultsViewModel;
         }
 
-        private SearchParametersViewModel GetSearchParametersViewModelAsync(SearchParametersViewModel viewModel)
+        private async Task<SearchParametersViewModel> GetSearchParametersViewModelAsync(SearchParametersViewModel viewModel)
         {
             var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
+
+            if (viewModel.OpportunityId > 0 && string.IsNullOrEmpty(viewModel.CompanyNameWithAka))
+            {
+                viewModel.CompanyNameWithAka = await _opportunityService.GetCompanyNameWithAkaAsync(viewModel.OpportunityId);
+            }
 
             return new SearchParametersViewModel
             {
@@ -188,6 +194,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 Postcode = viewModel.Postcode?.Trim(),
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId,
+                CompanyNameWithAka = viewModel.CompanyNameWithAka,
                 Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
             };
         }

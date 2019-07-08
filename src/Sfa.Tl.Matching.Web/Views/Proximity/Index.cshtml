@@ -27,14 +27,16 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        @*@if (!String.IsNullOrEmpty(Model.CompanyName))
+        @if (!String.IsNullOrEmpty(Model.CompanyNameWithAka))
         {
-            <span class="govuk-caption-l">@Model.CompanyName</span>
-        }*@
+            <span class="govuk-caption-l">@Model.CompanyNameWithAka</span>
+        }
 
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
         <form class="form" asp-action="FindProviders" novalidate>
             <input type="hidden" asp-for="OpportunityId" />
+            <input type="hidden" asp-for="CompanyNameWithAka" />
+
             <h2 class="govuk-heading-m">What skill is the employer looking for?</h2>
             <div class="govuk-form-group">
                 <label class="govuk-label" asp-for="SelectedRouteId">
