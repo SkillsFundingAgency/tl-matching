@@ -154,5 +154,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var viewModel = _result.GetViewModel<SearchViewModel>();
             viewModel.SearchResults.Results[0].IsSelected.Should().BeFalse();
         }
+
+        [Fact]
+        public void Then_OpportunityService_GetCompanyNameWithAkaAsync_Is_Not_Called()
+        {
+            _opportunityService
+                .DidNotReceiveWithAnyArgs()
+                .GetCompanyNameWithAkaAsync(Arg.Any<int>());
+        }
+
     }
 }

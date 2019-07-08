@@ -39,8 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
             _result = proximityController.Index().GetAwaiter().GetResult();
         }
-
-       
+        
         [Fact]
         public void Then_OpportunityService_GetCompanyNameWithAkaAsync_Is_Not_Called()
         {

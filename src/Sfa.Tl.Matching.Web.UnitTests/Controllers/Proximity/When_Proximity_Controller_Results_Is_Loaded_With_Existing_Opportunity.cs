@@ -71,6 +71,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                     Name = "Referral"
                 }
             });
+            _opportunityService
+                .GetCompanyNameWithAkaAsync(OpportunityId)
+                .Returns("CompanyName (AlsoKnownAs)");
 
             var employerService = Substitute.For<IEmployerService>();
 
@@ -170,6 +173,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         {
             var viewModel = _result.GetViewModel<SearchViewModel>();
             viewModel.SearchResults.Results[0].IsSelected.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Then_OpportunityService_GetCompanyNameWithAkaAsync_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .GetCompanyNameWithAkaAsync(Arg.Any<int>());
+        }
+
+        [Fact]
+        public void Then_ViewModel_CompanyNameWithAka_Should_Have_Expected_Value()
+        {
+            var viewModel = _result.GetViewModel<SearchViewModel>();
+            viewModel.SearchParameters.CompanyNameWithAka.Should().Be("CompanyName (AlsoKnownAs)");
         }
     }
 }
