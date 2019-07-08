@@ -20,8 +20,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     {
         private readonly IRepository<ProvisionGap> _provisionGapRepository;
 
-        private const int OpportunityId = 1;
-
         public When_OpportunityService_Is_Called_To_Update_ProvisionGap()
         {
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
