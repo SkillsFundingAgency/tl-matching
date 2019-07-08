@@ -114,3 +114,12 @@
         }
     }
 }
+
+.js-enabled .tl-table-clickable {
+    tbody tr {
+        &:hover {
+            background-color: govuk-colour("grey-4");
+            cursor: pointer;
+        }
+    }
+}
