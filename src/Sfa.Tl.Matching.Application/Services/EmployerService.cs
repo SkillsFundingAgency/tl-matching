@@ -142,20 +142,21 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<SavedEmployerOpportunityViewModel> GetSavedEmployerOpportunitiesAsync(string username)
         {
-            var viewModel = new SavedEmployerOpportunityViewModel
-            {
-                EmployerOpportunities = await _opportunityRepository.GetMany(o => o.OpportunityItem.Any(oi => oi.IsSaved 
+            var employerOpportunities = await _opportunityRepository.GetMany(o => o.OpportunityItem.Any(oi => oi.IsSaved
                                                                                                               && !oi.IsCompleted)
                                                                                   && o.CreatedBy == username)
-                    .Select(eo => new EmployerOpportunityViewModel
-                        {
-                            Name = eo.Employer.CompanyName,
-                            OpportunityId = eo.Id,
-                            LastUpdated = eo.ModifiedOn ?? eo.CreatedOn
-                        }
-                    ).ToListAsync()
+                .Select(eo => new EmployerOpportunityViewModel
+                {
+                    Name = eo.Employer.CompanyName,
+                    OpportunityId = eo.Id,
+                    LastUpdated = eo.ModifiedOn ?? eo.CreatedOn
+                }).ToListAsync();
+
+            var viewModel = new SavedEmployerOpportunityViewModel
+            {
+                EmployerOpportunities = employerOpportunities
             };
-            
+
             return viewModel;
         }
     }
