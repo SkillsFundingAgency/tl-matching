@@ -1,14 +1,15 @@
 ﻿// ReSharper disable RedundantUsingDirective
-
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
+using DocumentFormat.OpenXml.Presentation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -141,10 +142,25 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("remove-employer", Name = "ConfirmDelete")]
-        public IActionResult ConfirmDelete()
+        [Route("remove-employer/{opportunityId}", Name = "ConfirmDelete")]
+        public async  Task<IActionResult> ConfirmDelete(int opportunityId)
         {
-            return View();
+            var dto = await _employerService.GetConfirmDeleteEmployerOpportunity(opportunityId,
+                HttpContext.User.GetUserName());
+
+            var viewModel = new RemoveEmployerViewModel
+            {
+                OpportunityId = opportunityId,
+                Count = dto.OpportunityCount,
+                ConfirmDeleteText = dto.OpportunityCount == 1
+                    ? $"Confirm you want to delete {dto.OpportunityCount} opportunity created for {dto.EmployerName}?"
+                    : $"Confirm you want to delete {dto.OpportunityCount} opportunities created for {dto.EmployerName}?",
+                WarningDeleteText = dto.EmployerCount == 1
+                    ? "This cannot be undone and will mean you have no more employers with saved opportunities."
+                    : "This cannot be undone."
+            };
+            
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -196,5 +212,72 @@ namespace Sfa.Tl.Matching.Web.Controllers
             else if (!Regex.IsMatch(viewModel.EmployerContactPhone, @"^(?:.*\d.*){7,}$"))
                 ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a telephone number that has 7 or more numbers");
         }
+
+        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = new NavigationViewModel
+            {
+                CancelText = "Cancel opportunity and start again"
+            };
+
+            if (opportunityId == 0) return viewModel;
+
+            var opportunityItemCount = _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
+            if (opportunityItemCount == 0)
+            {
+                viewModel.OpportunityId = opportunityId;
+                viewModel.OpportunityItemId = opportunityItemId;
+                return viewModel;
+            }
+
+            viewModel.CancelText = "Cancel this opportunity";
+            viewModel.OpportunityId = opportunityId;
+            viewModel.OpportunityItemId = opportunityItemId;
+
+            return viewModel;
+        }
+
+        private static string GetWarningText(int referralCount, int provisionGapCount)
+        {
+            var warningDeleteText = string.Empty;
+
+            switch (referralCount)
+            {
+                case 1 when provisionGapCount == 0:
+                case 0 when provisionGapCount == 1:
+                    warningDeleteText = "This cannot be undone and will mean you have no more employers with saved opportunities.";
+                    break;
+                default:
+                {
+                    if (referralCount > 1 || provisionGapCount > 1)
+                        warningDeleteText = "This cannot be undone.";
+                    break;
+                }
+            }
+
+            return warningDeleteText;
+        }
+
+        private static string GetConfirmDeleteText(int referralCount, int provisionGapCount, string employerName)
+        {
+            var confirmDeleteText = string.Empty;
+
+            if (referralCount > 0 && provisionGapCount == 0)
+            {
+                confirmDeleteText = $"Confirm you want to delete {referralCount} opportunities created for {employerName}";
+            }
+            else if (referralCount == 0 && provisionGapCount > 0)
+            {
+                confirmDeleteText = $"Confirm you want to delete {provisionGapCount} referrals created for {employerName}";
+            }
+            else if (referralCount > 0 && provisionGapCount > 0)
+            {
+                confirmDeleteText =
+                    $"Confirm you want to delete {referralCount} opportunities and {provisionGapCount} referrals created for {employerName}";
+            }
+
+            return confirmDeleteText;
+        }
+
     }
 }
