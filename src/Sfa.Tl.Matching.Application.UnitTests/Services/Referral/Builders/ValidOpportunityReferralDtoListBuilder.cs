@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                 JobRole = "Testing Job Title",
                 ProviderVenuePostcode = "AA2 2AA",
                 PlacementsKnown = false,
-                Placements = 3,
+                Placements = 1,
                 RouteName = "Agriculture, environmental and animal care",
                 CreatedBy = "CreatedBy"
             }

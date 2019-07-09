@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
         {
-            return placementsKnown.GetValueOrDefault()
+            return placements.GetValueOrDefault() > 1
                 ? placements.ToString()
                 : "at least 1";
         }
