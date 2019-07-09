@@ -11,7 +11,7 @@
         public string OpportunityType { get; set; }
 
         public string PlacementsDetail =>
-            PlacementsKnown.GetValueOrDefault()
+            Placements.GetValueOrDefault() > 1
                 ? Placements.ToString()
                 : "at least 1";
     }
