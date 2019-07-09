@@ -3,13 +3,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
-using DocumentFormat.OpenXml.Presentation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -235,48 +233,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             viewModel.OpportunityItemId = opportunityItemId;
 
             return viewModel;
-        }
-
-        private static string GetWarningText(int referralCount, int provisionGapCount)
-        {
-            var warningDeleteText = string.Empty;
-
-            switch (referralCount)
-            {
-                case 1 when provisionGapCount == 0:
-                case 0 when provisionGapCount == 1:
-                    warningDeleteText = "This cannot be undone and will mean you have no more employers with saved opportunities.";
-                    break;
-                default:
-                {
-                    if (referralCount > 1 || provisionGapCount > 1)
-                        warningDeleteText = "This cannot be undone.";
-                    break;
-                }
-            }
-
-            return warningDeleteText;
-        }
-
-        private static string GetConfirmDeleteText(int referralCount, int provisionGapCount, string employerName)
-        {
-            var confirmDeleteText = string.Empty;
-
-            if (referralCount > 0 && provisionGapCount == 0)
-            {
-                confirmDeleteText = $"Confirm you want to delete {referralCount} opportunities created for {employerName}";
-            }
-            else if (referralCount == 0 && provisionGapCount > 0)
-            {
-                confirmDeleteText = $"Confirm you want to delete {provisionGapCount} referrals created for {employerName}";
-            }
-            else if (referralCount > 0 && provisionGapCount > 0)
-            {
-                confirmDeleteText =
-                    $"Confirm you want to delete {referralCount} opportunities and {provisionGapCount} referrals created for {employerName}";
-            }
-
-            return confirmDeleteText;
         }
 
     }
