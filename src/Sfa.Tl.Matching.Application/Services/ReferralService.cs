@@ -124,7 +124,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             return placementsKnown.GetValueOrDefault()
                 ? placements.ToString()
-                : "at least one";
+                : "at least 1";
         }
 
         private async Task SendEmail(EmailTemplateName template, int? opportunityId, 

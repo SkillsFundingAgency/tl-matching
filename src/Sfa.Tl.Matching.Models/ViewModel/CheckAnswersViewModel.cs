@@ -15,9 +15,9 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public short SearchRadius { get; set; }
         public int RouteId { get; set; }
         public string JobRole { get; set; }
-        public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
         public List<ReferralsViewModel> Providers { get; set; }
         public NavigationViewModel Navigation { get; set; }
+        public string PlacementsDetail => (Placements.GetValueOrDefault() > 0) ? Placements.ToString() : "at least 1";
     }
 }

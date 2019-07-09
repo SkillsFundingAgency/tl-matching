@@ -240,7 +240,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("number_of_placements")
-                                  && tokens["number_of_placements"] == "at least one"),
+                                  && tokens["number_of_placements"] == "at least 1"),
                     Arg.Any<string>());
         }
 

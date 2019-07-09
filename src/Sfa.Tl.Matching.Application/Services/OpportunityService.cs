@@ -97,7 +97,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     Postcode = o.Postcode,
                     JobRole = o.JobRole,
                     Placements = o.Placements,
-                    PlacementsKnown = o.PlacementsKnown,
                     RouteId = o.RouteId,
                     SearchRadius = o.SearchRadius,
                     RouteName = o.Route.Name,

@@ -116,7 +116,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CompanyNameAka, o => o.MapFrom(s => s.Opportunity.Employer.AlsoKnownAs))
                 .ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
                 .ForMember(m => m.Placements, o => o.MapFrom(s => s.Placements))
-                .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.RouteName, o => o.MapFrom(s => s.Route.Name))

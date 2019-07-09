@@ -10,9 +10,9 @@
         public int? Placements { get; set; }
         public string OpportunityType { get; set; }
 
-        public string StudentsWanted =>
+        public string PlacementsDetail =>
             PlacementsKnown.GetValueOrDefault()
                 ? Placements.ToString()
-                : "at least one";
+                : "at least 1";
     }
 }
