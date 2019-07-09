@@ -137,6 +137,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
+        [Route("remove-employer", Name = "ConfirmDelete")]
+        public IActionResult ConfirmDelete()
+        {
+            return View();
+        }
+
+        [HttpGet]
         [Route("permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
         public async Task<IActionResult> EmployerConsent(int opportunityId, int opportunityItemId)
         {
