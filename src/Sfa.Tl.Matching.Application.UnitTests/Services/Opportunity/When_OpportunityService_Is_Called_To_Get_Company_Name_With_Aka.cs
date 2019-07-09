@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -25,6 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
+            var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
 
             var opportunity = new Domain.Models.Opportunity
             {
@@ -40,8 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>())
                 .Returns(opportunity);
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository);
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient);
 
             _result = opportunityService.GetCompanyNameWithAkaAsync(1).GetAwaiter().GetResult();
         }

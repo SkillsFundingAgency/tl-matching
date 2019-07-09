@@ -7,6 +7,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public int OpportunityId { get; set; }
         public int RouteId { get; set; }
         public string OpportunityType { get; set; }
+        public string Town { get; set; }
         public string Postcode { get; set; }
         public short SearchRadius { get; set; }
         public string JobRole { get; set; }

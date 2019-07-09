@@ -6,6 +6,7 @@ using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
@@ -53,15 +54,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var mapper = new Mapper(config);
 
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
-            _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
+            _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             _opportunityItemRepository
                 .GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(new OpportunityItemListBuilder().Build().AsQueryable());
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository);
+            var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient);
 
             opportunityService.ClearOpportunityItemsSelectedForReferralAsync(OpportunityId).GetAwaiter().GetResult();
         }

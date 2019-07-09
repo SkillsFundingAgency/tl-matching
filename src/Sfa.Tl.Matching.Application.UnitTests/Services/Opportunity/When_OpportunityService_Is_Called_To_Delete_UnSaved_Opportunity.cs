@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using NSubstitute;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -43,7 +44,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 .GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>())
                 .Returns(SetProvisionGaps().AsQueryable());
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, _opportunityItemRepository, _provisionGapRepository, _referralRepository);
+            var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, _opportunityItemRepository, _provisionGapRepository, _referralRepository, googleMapApiClient);
 
             opportunityService.DeleteOpportunityItemAsync(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
 

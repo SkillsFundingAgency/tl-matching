@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.EqualityComparer;
@@ -22,19 +23,21 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly IRepository<ProvisionGap> _provisionGapRepository;
         private readonly IRepository<Referral> _referralRepository;
-
+        private readonly IGoogleMapApiClient _googleMapApiClient;
         public OpportunityService(
             IMapper mapper,
             IOpportunityRepository opportunityRepository,
             IRepository<OpportunityItem> opportunityItemRepository,
             IRepository<ProvisionGap> provisionGapRepository,
-            IRepository<Referral> referralRepository)
+            IRepository<Referral> referralRepository, 
+            IGoogleMapApiClient googleMapApiClient)
         {
             _mapper = mapper;
             _opportunityRepository = opportunityRepository;
             _opportunityItemRepository = opportunityItemRepository;
             _provisionGapRepository = provisionGapRepository;
             _referralRepository = referralRepository;
+            _googleMapApiClient = googleMapApiClient;
         }
 
         public async Task<int> CreateOpportunityAsync(OpportunityDto dto)
@@ -51,6 +54,8 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             dto.OpportunityItemId = 0;
             var opportunityItem = _mapper.Map<OpportunityItem>(dto);
+
+            opportunityItem.Town = await _googleMapApiClient.GetAddressDetails(opportunityItem.Postcode);
 
             var opportunityItemId = await _opportunityItemRepository.Create(opportunityItem);
 

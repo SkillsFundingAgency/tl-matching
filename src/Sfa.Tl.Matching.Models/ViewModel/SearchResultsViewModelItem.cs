@@ -6,6 +6,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     {
         public int ProviderVenueId { get; set; }
         public bool IsSelected { get; set; }
+        public string Town { get; set; }
         public string Postcode { get; set; }
         public double? Distance { get; set; }
         public string ProviderName { get; set; }

@@ -6,6 +6,7 @@ using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
@@ -55,8 +56,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
-            
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository);
+            var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient);
 
             var viewModel = new ContinueOpportunityViewModel
             {

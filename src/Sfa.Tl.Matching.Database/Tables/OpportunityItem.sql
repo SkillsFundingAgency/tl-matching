@@ -4,6 +4,7 @@
 	[OpportunityId]				INT NOT NULL, 
 	[RouteId]					INT NOT NULL, 
 	[OpportunityType]			NVARCHAR(50) NULL,
+	[Town]						VARCHAR(100) NULL, 
 	[Postcode]					VARCHAR(10) NOT NULL,
 	[SearchRadius]				SMALLINT NOT NULL,
 	[SearchResultProviderCount] INT NULL,

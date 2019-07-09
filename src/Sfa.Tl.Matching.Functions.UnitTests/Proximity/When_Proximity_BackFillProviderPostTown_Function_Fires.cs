@@ -13,12 +13,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 {
-    public class When_Proximity_BackFillPostTown_Function_Fires
+    public class When_Proximity_BackFillProviderPostTown_Function_Fires
     {
         private readonly IRepository<ProviderVenue> _providerVenueRepository;
         private readonly IGoogleMapApiClient _googleMapsApiClient;
 
-        public When_Proximity_BackFillPostTown_Function_Fires()
+        public When_Proximity_BackFillProviderPostTown_Function_Fires()
         {
             _providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
             _providerVenueRepository.GetMany(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
 
             var proximityfunctions = new Functions.Proximity();
 
-            proximityfunctions.BackFillPostTown(new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null), new ExecutionContext(), new NullLogger<Functions.Proximity>(), _googleMapsApiClient, _providerVenueRepository, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
+            proximityfunctions.BackFillProviderPostTown(new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null), new ExecutionContext(), new NullLogger<Functions.Proximity>(), _googleMapsApiClient, _providerVenueRepository, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
         }
 
         [Fact]

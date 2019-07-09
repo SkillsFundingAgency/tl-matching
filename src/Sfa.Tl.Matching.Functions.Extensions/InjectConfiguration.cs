@@ -153,6 +153,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
             services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
             services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
+            services.AddTransient<IRepository<OpportunityItem>, GenericRepository<OpportunityItem>>();
 
             services.AddTransient<IBulkInsertRepository<LearningAimReferenceStaging>, SqlBulkInsertRepository<LearningAimReferenceStaging>>();
             services.AddTransient<IBulkInsertRepository<ProviderReferenceStaging>, SqlBulkInsertRepository<ProviderReferenceStaging>>();

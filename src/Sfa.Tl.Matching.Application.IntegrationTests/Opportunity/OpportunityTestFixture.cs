@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
@@ -36,7 +37,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             var opportunityItemRepository = new GenericRepository<OpportunityItem>(loggerOpportunityItemRepository, MatchingDbContext);
             var provisionGapRepository = new GenericRepository<ProvisionGap>(loggerProvisionGapRepository, MatchingDbContext);
             var referralRepository = new GenericRepository<Referral>(loggerReferralRepository, MatchingDbContext);
-
+            
+            var googleMapsApiClient = Substitute.For<IGoogleMapApiClient>(); 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
             httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
             {
@@ -60,9 +62,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             });
             var mapper = new Mapper(config);
 
-            OpportunityService = new OpportunityService(mapper, 
-                opportunityRepository, opportunityItemRepository, 
-                provisionGapRepository, referralRepository);
+            OpportunityService = new OpportunityService(
+                mapper, 
+                opportunityRepository, 
+                opportunityItemRepository, 
+                provisionGapRepository, 
+                referralRepository,
+                googleMapsApiClient);
         }
 
         internal void ResetData(string employerContact)

@@ -41,7 +41,7 @@
                         <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected">
                             @searchResult.ProviderName
                             <ul class="tl-inline-list tl-inline-list--bar">
-                                <li>@searchResult.Postcode</li>
+                                <li>@searchResult.Town @searchResult.Postcode</li>
                                 <li>@($" {searchResult.Distance:#0.0}") miles</li>
                             </ul>
                             <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>

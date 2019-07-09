@@ -3,6 +3,7 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
@@ -21,6 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const int OpportunityItemId = 1;
 
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
+        private readonly IGoogleMapApiClient _googleMapApiClient;
 
         public When_OpportunityService_Is_Called_To_Create_Opportunity_Item()
         {
@@ -47,15 +49,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             });
             var mapper = new Mapper(config);
 
-            var opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
+            
+            _googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+            _googleMapApiClient.GetAddressDetails(Arg.Is<string>(s => s == "AA1 1AA")).Returns("Coventry");
+            
+            var opportunityRepository = Substitute.For<IOpportunityRepository>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             _opportunityItemRepository.Create(Arg.Any<OpportunityItem>())
                 .Returns(OpportunityItemId);
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository, _googleMapApiClient);
 
             var dto = new OpportunityItemDto
             {
@@ -81,21 +87,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityItemRepository
                 .Received(1)
-                .Create(Arg.Is<OpportunityItem>(opportunity =>
-                    opportunity.OpportunityId == OpportunityId &&
-                    opportunity.OpportunityType == OpportunityType.Referral.ToString() &&
-                    opportunity.RouteId == 5 &&
-                    opportunity.Postcode == "AA1 1AA" &&
-                    opportunity.SearchRadius == 10 &&
-                    opportunity.JobRole == "Test Title" &&
-                    opportunity.PlacementsKnown.HasValue &&
-                    opportunity.PlacementsKnown.Value &&
-                    opportunity.Placements == 3 &&
-                    opportunity.SearchResultProviderCount == 15 &&
-                    opportunity.IsSaved &&
-                    opportunity.IsSelectedForReferral &&
-                    opportunity.IsCompleted &&
-                    opportunity.CreatedBy == "adminUserName"
+                .Create(Arg.Is<OpportunityItem>(opportunityItem =>
+                    opportunityItem.OpportunityId == OpportunityId &&
+                    opportunityItem.OpportunityType == OpportunityType.Referral.ToString() &&
+                    opportunityItem.RouteId == 5 &&
+                    opportunityItem.Postcode == "AA1 1AA" &&
+                    opportunityItem.Town == "Coventry" &&
+                    opportunityItem.SearchRadius == 10 &&
+                    opportunityItem.JobRole == "Test Title" &&
+                    opportunityItem.PlacementsKnown.HasValue &&
+                    opportunityItem.PlacementsKnown.Value &&
+                    opportunityItem.Placements == 3 &&
+                    opportunityItem.SearchResultProviderCount == 15 &&
+                    opportunityItem.IsSaved &&
+                    opportunityItem.IsSelectedForReferral &&
+                    opportunityItem.IsCompleted &&
+                    opportunityItem.CreatedBy == "adminUserName"
             ));
         }
 
@@ -103,6 +110,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         public void Then_OpportunityItemId_Is_Created()
         {
             _result.Should().Be(OpportunityItemId);
+        }
+
+        [Fact]
+        public void Then_GoogleMapApiClient_GetAddressDetails_Is_Called_Exactly_Once()
+        {
+            _googleMapApiClient.Received(1).GetAddressDetails(Arg.Is<string>(s => s == "AA1 1AA"));
         }
     }
 }

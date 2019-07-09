@@ -14,14 +14,14 @@ using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
+// ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Functions
 {
     public class Proximity
     {
-        // ReSharper disable once UnusedMember.Global
-        [FunctionName("BackFillPostTown")]
-        public async Task BackFillPostTown(
+        [FunctionName("BackFillProviderPostTown")]
+        public async Task BackFillProviderPostTown(
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
             TimerInfo timer,
             ExecutionContext context,
@@ -58,21 +58,85 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error Back Filling Post Town Data. Internal Error Message {e}";
+                var errormessage = $"Error Back Filling Provider Post Town Data. Internal Error Message {e}";
 
                 logger.LogError(errormessage);
 
                 await functionlogRepository.Create(new FunctionLog
                 {
                     ErrorMessage = errormessage,
-                    FunctionName = nameof(BackFillPostTown),
+                    FunctionName = nameof(BackFillProviderPostTown),
                     RowNumber = -1
                 });
                 throw;
             }
         }
 
-        // ReSharper disable once UnusedMember.Global
+        [FunctionName("BackFillEmployerPostTown")]
+        public async Task BackFillEmployerPostTown(
+            [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
+            TimerInfo timer,
+            ExecutionContext context,
+            ILogger logger,
+            [Inject] ILocationApiClient locationApiClient,
+            [Inject] IGoogleMapApiClient googleMapApiClient,
+            [Inject] IRepository<OpportunityItem> opportunityItemRepository,
+            [Inject] IRepository<FunctionLog> functionlogRepository
+        )
+        {
+            try
+            {
+                var stopwatch = Stopwatch.StartNew();
+
+                logger.LogInformation($"Function {context.FunctionName} triggered");
+
+                var opportunityItems = new List<OpportunityItem>();
+
+                foreach (var opportunityItem in opportunityItemRepository.GetMany(io => io.Town == null || io.Town == "" || io.Town == " "))
+                {
+                    var (isValidPostCode, postcode) = await locationApiClient.IsValidPostCode(opportunityItem.Postcode);
+
+                    if (!isValidPostCode)
+                    {
+                        await functionlogRepository.Create(new FunctionLog
+                        {
+                            ErrorMessage = "Error Back Filling Employer Post Town Data. Invalid PostCode",
+                            FunctionName = nameof(BackFillEmployerPostTown),
+                            RowNumber = opportunityItem.Id
+                        });
+                    }
+                    var googleAddressdetail = await googleMapApiClient.GetAddressDetails(postcode);
+
+                    opportunityItem.Town = googleAddressdetail;
+
+                    opportunityItems.Add(opportunityItem);
+
+                }
+
+                await opportunityItemRepository.UpdateMany(opportunityItems);
+
+                stopwatch.Stop();
+
+                logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
+                                      $"\tRows saved: {opportunityItems.Count}\n" +
+                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
+            }
+            catch (Exception e)
+            {
+                var errormessage = $"Error Back Filling Employer Post Town Data. Internal Error Message {e}";
+
+                logger.LogError(errormessage);
+
+                await functionlogRepository.Create(new FunctionLog
+                {
+                    ErrorMessage = errormessage,
+                    FunctionName = nameof(BackFillEmployerPostTown),
+                    RowNumber = -1
+                });
+                throw;
+            }
+        }
+
         [FunctionName("BackFillProximityData")]
         public async Task BackFillProximityData(
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
@@ -120,7 +184,7 @@ namespace Sfa.Tl.Matching.Functions
                 await functionlogRepository.Create(new FunctionLog
                 {
                     ErrorMessage = errormessage,
-                    FunctionName = nameof(BackFillPostTown),
+                    FunctionName = nameof(BackFillProximityData),
                     RowNumber = -1
                 });
                 throw;
