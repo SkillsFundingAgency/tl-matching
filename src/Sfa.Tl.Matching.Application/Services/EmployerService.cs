@@ -28,11 +28,11 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<bool> ValidateCompanyNameAndId(int employerId, string companyName)
         {
             if (employerId == 0 || string.IsNullOrEmpty(companyName)) return false;
-            
+
             var employer = await _employerRepository.GetSingleOrDefault(
                 e => e.Id == employerId && companyName.ToLetterOrDigit() == e.CompanyNameSearch,
                 e => e.Id);
-            
+
             return employer > 0;
         }
 
@@ -133,11 +133,30 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> GetInProgressEmployerOpportunityCountAsync(string username)
         {
-            var savedCount = await _opportunityRepository.Count(o => o.OpportunityItem.Any(oi => oi.IsSaved && 
-                                                                                             !oi.IsCompleted) 
+            var savedCount = await _opportunityRepository.Count(o => o.OpportunityItem.Any(oi => oi.IsSaved &&
+                                                                                             !oi.IsCompleted)
                                                                  && o.CreatedBy == username);
 
             return savedCount;
+        }
+
+        public async Task<SavedEmployerOpportunityViewModel> GetSavedEmployerOpportunitiesAsync(string username)
+        {
+            var viewModel = new SavedEmployerOpportunityViewModel
+            {
+                EmployerOpportunities = await _opportunityRepository.GetMany(o => o.OpportunityItem.Any(oi => oi.IsSaved 
+                                                                                                              && !oi.IsCompleted)
+                                                                                  && o.CreatedBy == username)
+                    .Select(eo => new EmployerOpportunityViewModel
+                        {
+                            Name = eo.Employer.CompanyName,
+                            OpportunityId = eo.Id,
+                            LastUpdated = eo.ModifiedOn ?? eo.CreatedOn
+                        }
+                    ).ToListAsync()
+            };
+            
+            return viewModel;
         }
     }
 }

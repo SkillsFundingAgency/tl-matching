@@ -1,11 +1,11 @@
-﻿
+﻿@model Sfa.Tl.Matching.Models.ViewModel.SavedEmployerOpportunityViewModel
+
 @{
     ViewData["Title"] = "Saved opportunities";
 }
 
-
 @section backButton{
-<a class="govuk-back-link" href="#">Finish and return to start</a>
+    <a asp-controller="Proximity" asp-action="Start" id="tl-finish" class="govuk-back-link">Finish and return to start</a>
 }
 
 <div class="govuk-grid-row">
@@ -23,27 +23,20 @@
                 </tr>
             </thead>
             <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Marriot</th>
-                    <td class="govuk-table__cell">11:21 on 21 May 2019</td>
-                    <td class="govuk-table__cell"><a href="#" class="govuk-link">Edit <span class="govuk-visually-hidden">this employer’s opportunities</span></a></td>
-                    <td class="govuk-table__cell"><a href="#" class="govuk-link">Delete <span class="govuk-visually-hidden">this employer’s opportunities</span></a></td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Marriot</th>
-                    <td class="govuk-table__cell">11:21 on 21 May 2019</td>
-                    <td class="govuk-table__cell"><a href="#" class="govuk-link">Edit <span class="govuk-visually-hidden">this employer’s opportunities</span></a></td>
-                    <td class="govuk-table__cell"><a href="#" class="govuk-link">Delete <span class="govuk-visually-hidden">this employer’s opportunities</span></a></td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Marriot</th>
-                    <td class="govuk-table__cell">11:21 on 21 May 2019</td>
-                    <td class="govuk-table__cell"><a href="#" class="govuk-link">Edit <span class="govuk-visually-hidden">this employer’s opportunities</span></a></td>
-                    <td class="govuk-table__cell"><a href="#" class="govuk-link">Delete <span class="govuk-visually-hidden">this employer’s opportunities</span></a></td>
-                </tr>
-
+                @foreach (var employerOpportunity in Model.EmployerOpportunities)
+                {
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">@employerOpportunity.Name</th>
+                        <td class="govuk-table__cell">
+                            @employerOpportunity.LastUpdated.ToShortTimeString()@employerOpportunity.LastUpdated.ToString("tt").ToLower()
+                            on
+                            @employerOpportunity.LastUpdated.ToString("dd MMMM yyyy")
+                        </td>
+                        <td class="govuk-table__cell"><a asp-route="GetOpportunityBasket" asp-route-opportunityId="@employerOpportunity.OpportunityId" asp-route-opportunityItemId="0" class="govuk-link">Edit <span class="govuk-visually-hidden">this employer’s opportunities</span></a></td>
+                        <td class="govuk-table__cell"><a href="#" class="govuk-link">Delete <span class="govuk-visually-hidden">this employer’s opportunities</span></a></td>
+                    </tr>
+                }
             </tbody>
         </table>
-
     </div>
 </div>

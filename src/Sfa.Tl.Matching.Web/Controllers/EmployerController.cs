@@ -1,4 +1,5 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -131,9 +132,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("saved-opportunities", Name = "GetSavedEmployerOpportunity")]
-        public IActionResult SavedEmployerOpportunity()
+        public async Task<IActionResult> SavedEmployerOpportunity()
         {
-            return View();
+            var username = HttpContext.User.GetUserName();
+            var viewModel = await _employerService.GetSavedEmployerOpportunitiesAsync(username);
+
+            return View(viewModel);
         }
 
         [HttpGet]
