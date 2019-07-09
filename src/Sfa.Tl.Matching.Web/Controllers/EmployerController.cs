@@ -140,7 +140,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("remove-employer/{opportunityId}", Name = "ConfirmDelete")]
+        [Route("confirm-remove-employer/{opportunityId}", Name = "ConfirmDelete")]
         public async  Task<IActionResult> ConfirmDelete(int opportunityId)
         {
             var dto = await _employerService.GetConfirmDeleteEmployerOpportunity(opportunityId,
@@ -159,6 +159,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
             };
             
             return View(viewModel);
+        }
+
+        [HttpGet]
+        [Route("remove-employer/{opportunityId}", Name = "DeleteEmployer")]
+        public async Task<IActionResult> DeleteEmployer(int opportunityId)
+        {
+            var employerOpportunities =
+                await _employerService.GetSavedEmployerOpportunitiesAsync(HttpContext.User.GetUserName());
+
+            //TODO: Delete employer goes here...
+
+            var employerCount =  employerOpportunities.EmployerOpportunities.Count;
+
+            return employerCount == 0
+                ? RedirectToRoute("Start")
+                : RedirectToRoute("GetSavedEmployerOpportunity");
         }
 
         [HttpGet]
