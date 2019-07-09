@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
         public EmployerReferralDto Build() => new EmployerReferralDto
         {
             OpportunityId = 1,
-            EmployerName = "Employer",
+            CompanyName = "Employer",
             EmployerContact = "Employer Contact",
             EmployerContactPhone = "020 123 4567",
             EmployerContactEmail = "employer.contact@employer.co.uk",

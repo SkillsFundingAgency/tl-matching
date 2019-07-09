@@ -28,8 +28,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             {
                 OpportunityId = 1,
                 OpportunityItemId = 2,
-                EmployerName = "EmployerName",
-                EmployerNameAka = "EmployerNameAka",
+                CompanyName = "CompanyName",
+                CompanyNameAka = "CompanyNameAka",
                 EmployerContact = "EmployerContact",
                 EmployerContactPhone = "EmployerContactPhone",
                 EmployerContactEmail = "EmployerContactEmail"
@@ -68,9 +68,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             viewModel.OpportunityItemCount.Should().Be(10);
             viewModel.ConfirmationSelected.Should().BeFalse();
 
-            viewModel.Details.EmployerName.Should().Be("EmployerName");
-            viewModel.Details.EmployerNameAka.Should().Be("EmployerNameAka");
-            viewModel.Details.EmployerNameWithAka.Should().Be("EmployerName (EmployerNameAka)");
+            viewModel.Details.CompanyName.Should().Be("CompanyName");
+            viewModel.Details.CompanyNameAka.Should().Be("CompanyNameAka");
+            viewModel.Details.CompanyNameWithAka.Should().Be("CompanyName (CompanyNameAka)");
             viewModel.Details.EmployerContact.Should().Be("EmployerContact");
             viewModel.Details.EmployerContactEmail.Should().Be("EmployerContactEmail");
             viewModel.Details.EmployerContactPhone.Should().Be("EmployerContactPhone");

@@ -8,10 +8,10 @@ namespace Sfa.Tl.Matching.Web.Mappers
     {
         public EmployerDtoMapper()
         {
-            CreateMap<FindEmployerViewModel, EmployerNameDto>()
+            CreateMap<FindEmployerViewModel, CompanyNameDto>()
                 .ForMember(m => m.OpportunityItemId, opt => opt.Ignore())
-                .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<FindEmployerViewModel, EmployerNameDto>>())
-                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<FindEmployerViewModel, EmployerNameDto>>())
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<FindEmployerViewModel, CompanyNameDto>>())
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<FindEmployerViewModel, CompanyNameDto>>())
                 .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.SelectedEmployerId))
                 .ForMember(m => m.HasChanged, o => o.MapFrom(src => src.CompanyName != src.PreviousCompanyName))
                 ;
@@ -25,8 +25,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
             CreateMap<EmployerStagingDto, EmployerDetailsViewModel>()
                 .ForMember(m => m.OpportunityId, o => o.Ignore())
                 .ForMember(m => m.OpportunityItemId, o => o.Ignore())
-                .ForMember(m => m.EmployerName, o => o.MapFrom(s => s.CompanyName))
-                .ForMember(m => m.EmployerNameAka, o => o.MapFrom(s => s.AlsoKnownAs))
+                .ForMember(m => m.CompanyName, o => o.MapFrom(s => s.CompanyName))
+                .ForMember(m => m.CompanyNameAka, o => o.MapFrom(s => s.AlsoKnownAs))
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.PrimaryContact))
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.Email))
                 .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.Phone))
@@ -36,8 +36,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
             CreateMap<OpportunityDto, EmployerDetailsViewModel>()
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.OpportunityItemId, o => o.Ignore())
-                .ForMember(m => m.EmployerName, o => o.Ignore())
-                .ForMember(m => m.EmployerNameAka, o => o.Ignore())
+                .ForMember(m => m.CompanyName, o => o.Ignore())
+                .ForMember(m => m.CompanyNameAka, o => o.Ignore())
                 .ForMember(m => m.Navigation, o => o.Ignore())
                 ;
         }

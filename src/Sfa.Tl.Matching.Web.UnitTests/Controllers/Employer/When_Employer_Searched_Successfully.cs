@@ -24,12 +24,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             {
                 new EmployerSearchResultDto
                 {
-                    CompanyName = "EmployerName1",
+                    CompanyName = "CompanyName1",
                     AlsoKnownAs = "AlsoKnownAs1"
                 },
                 new EmployerSearchResultDto
                 {
-                    CompanyName = "EmployerName2",
+                    CompanyName = "CompanyName2",
                     AlsoKnownAs = "AlsoKnownAs2"
                 }
             });
@@ -57,10 +57,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_First_Item_EmployerName_Is_Correct()
+        public void Then_First_Item_CompanyName_Is_Correct()
         {
             var resultList = GetResultList();
-            resultList[0].CompanyName.Should().Be("EmployerName1");
+            resultList[0].CompanyName.Should().Be("CompanyName1");
         }
 
         [Fact]
@@ -71,10 +71,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_Second_Item_EmployerName_Is_Correct()
+        public void Then_Second_Item_CompanyName_Is_Correct()
         {
             var resultList = GetResultList();
-            resultList[1].CompanyName.Should().Be("EmployerName2");
+            resultList[1].CompanyName.Should().Be("CompanyName2");
         }
 
         [Fact]

@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             //viewModel.UserEmail.Should().Be("email@address.com");
             //viewModel.JobRole.Should().Be("JobRole");
             //viewModel.Placements.Should().Be(2);
-            //viewModel.EmployerName.Should().Be("EmployerName");
+            //viewModel.CompanyName.Should().Be("CompanyName");
             viewModel.EmployerCrmRecord.Should().Be($"https://esfa-cs-prod.crm4.dynamics.com/main.aspx?pagetype=entityrecord&etc=1&id=%7b{_employerCrmId}%7d&extraqs=&newWindow=true");
         }
     }

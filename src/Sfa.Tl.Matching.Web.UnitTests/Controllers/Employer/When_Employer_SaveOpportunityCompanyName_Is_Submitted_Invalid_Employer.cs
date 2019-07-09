@@ -10,15 +10,15 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_SaveOpportunityEmployerName_Is_Submitted_Invalid_Employer
+    public class When_Employer_SaveOpportunityCompanyName_Is_Submitted_Invalid_Employer
     {
         private readonly IActionResult _result;
         private readonly EmployerController _employerController;
 
-        public When_Employer_SaveOpportunityEmployerName_Is_Submitted_Invalid_Employer()
+        public When_Employer_SaveOpportunityCompanyName_Is_Submitted_Invalid_Employer()
         {
             var employerService = Substitute.For<IEmployerService>();
-            employerService.ValidateEmployerNameAndId(Arg.Any<int>(), Arg.Any<string>())
+            employerService.ValidateCompanyNameAndId(Arg.Any<int>(), Arg.Any<string>())
                 .Returns(false);
             var opportunityService = Substitute.For<IOpportunityService>();
 
@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             _employerController = new EmployerController(employerService, opportunityService, mapper);
 
-            _result = _employerController.SaveOpportunityEmployerName(viewModel).GetAwaiter().GetResult();
+            _result = _employerController.SaveOpportunityCompanyName(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

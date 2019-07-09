@@ -35,7 +35,7 @@
 //        {
 //            _result.OpportunityId.Should().Be(1);
 //            _result.ProviderReferralInfo.First().ReferralId.Should().Be(1);
-//            _result.EmployerName.Should().BeEquivalentTo("Employer");
+//            _result.CompanyName.Should().BeEquivalentTo("Company");
 //            _result.EmployerContact.Should().BeEquivalentTo("Employer Contact");
 //            _result.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
 //            _result.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");

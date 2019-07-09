@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "LoadWhoIsEmployer")]
-        public async Task<IActionResult> GetOpportunityEmployerName(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetOpportunityCompanyName(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
             viewModel.Navigation = LoadCancelLink(opportunityId, opportunityItemId);
@@ -48,9 +48,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveOpportunityEmployerName(FindEmployerViewModel viewModel)
+        public async Task<IActionResult> SaveOpportunityCompanyName(FindEmployerViewModel viewModel)
         {
-            var isValidEmployer = await _employerService.ValidateEmployerNameAndId(viewModel.SelectedEmployerId, viewModel.CompanyName);
+            var isValidEmployer = await _employerService.ValidateCompanyNameAndId(viewModel.SelectedEmployerId, viewModel.CompanyName);
 
             if (!isValidEmployer)
             {
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View("FindEmployer", viewModel);
             }
 
-            var dto = _mapper.Map<EmployerNameDto>(viewModel);
+            var dto = _mapper.Map<CompanyNameDto>(viewModel);
 
             await _opportunityService.UpdateOpportunity(dto);
 

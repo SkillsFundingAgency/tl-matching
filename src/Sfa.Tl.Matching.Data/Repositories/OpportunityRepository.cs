@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                               ProviderPrimaryContact = p.PrimaryContact,
                               ProviderPrimaryContactEmail = p.PrimaryContactEmail,
                               ProviderSecondaryContactEmail = p.SecondaryContactEmail,
-                              EmployerName = op.EmployerName,
+                              CompanyName = op.CompanyName,
                               EmployerContact = op.EmployerContact,
                               EmployerContactPhone = op.EmployerContactPhone,
                               EmployerContactEmail = op.EmployerContactEmail,
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                           select new EmployerReferralDto
                           {
                               OpportunityId = op.Id,
-                              EmployerName = op.EmployerName,
+                              CompanyName = op.CompanyName,
                               EmployerContact = op.EmployerContact,
                               EmployerContactPhone = op.EmployerContactPhone,
                               EmployerContactEmail = op.EmployerContactEmail,
