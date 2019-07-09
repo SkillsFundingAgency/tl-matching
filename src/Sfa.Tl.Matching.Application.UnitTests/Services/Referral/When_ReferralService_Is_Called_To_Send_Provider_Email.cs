@@ -203,7 +203,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("employer_business_name")
-                                  && tokens["employer_business_name"] == "Employer"),
+                                  && tokens["employer_business_name"] == "Company"),
                     Arg.Any<string>());
         }
 

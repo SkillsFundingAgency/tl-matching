@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                 ProviderPrimaryContact = "Provider Contact",
                 ProviderPrimaryContactEmail = "primary.contact@provider.co.uk",
                 ProviderSecondaryContactEmail = "secondary.contact@provider.co.uk",
-                EmployerName = "Employer",
+                CompanyName = "Company",
                 EmployerContact = "Employer Contact",
                 EmployerContactPhone = "020 123 4567",
                 EmployerContactEmail = "employer.contact@employer.co.uk",

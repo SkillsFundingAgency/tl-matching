@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         private const int OpportunityId = 12;
         private const int OpportunityItemId = 34;
-        private const string EmployerName = "EmployerName";
+        private const string CompanyName = "CompanyName";
         private const string EmployerContact = "EmployerContact";
         private const string EmployerContactPhone = "EmployerContactPhone";
         private const string EmployerContactEmail = "EmployerContactEmail";
@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             {
                 OpportunityId = OpportunityId,
                 OpportunityItemId = OpportunityItemId,
-                EmployerName = EmployerName,
+                CompanyName = CompanyName,
                 EmployerContact = EmployerContact,
                 EmployerContactPhone = EmployerContactPhone,
                 EmployerContactEmail = EmployerContactEmail
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
             viewModel.OpportunityId.Should().Be(OpportunityId);
-            viewModel.EmployerName.Should().Be(EmployerName);
+            viewModel.CompanyName.Should().Be(CompanyName);
             viewModel.EmployerContact.Should().Be(EmployerContact);
             viewModel.EmployerContactPhone.Should().Be(EmployerContactPhone);
             viewModel.EmployerContactEmail.Should().Be(EmployerContactEmail);

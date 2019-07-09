@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var tokens = new Dictionary<string, string>
             {
                 { "employer_contact_name", employerReferral.EmployerContact },
-                { "employer_business_name", employerReferral.EmployerName },
+                { "employer_business_name", employerReferral.CompanyName },
                 { "employer_contact_number", employerReferral.EmployerContactPhone },
                 { "employer_contact_email", employerReferral.EmployerContactEmail },
                 { "employer_postcode", employerReferral.Postcode },
@@ -97,7 +97,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     { "venue_postcode", referral.ProviderVenuePostcode },
                     { "search_radius", referral.SearchRadius.ToString() },
                     { "job_role", referral.JobRole },
-                    { "employer_business_name", referral.EmployerName },
+                    { "employer_business_name", referral.CompanyName },
                     { "employer_contact_name", referral.EmployerContact},
                     { "employer_contact_number", referral.EmployerContactPhone },
                     { "employer_contact_email", referral.EmployerContactEmail },

@@ -12,25 +12,25 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_SaveOpportunityEmployerName_Is_Submitted_Successfully
+    public class When_Employer_SaveOpportunityCompanyName_Is_Submitted_Successfully
     {
         private readonly IEmployerService _employerService;
         private readonly IOpportunityService _opportunityService;
-        private const string EmployerName = "EmployerName";
+        private const string CompanyName = "CompanyName";
         private const string ModifiedBy = "ModifiedBy";
         private readonly FindEmployerViewModel _viewModel = new FindEmployerViewModel();
 
         private const int OpportunityId = 1;
         private const int EmployerId = 2;
 
-        public When_Employer_SaveOpportunityEmployerName_Is_Submitted_Successfully()
+        public When_Employer_SaveOpportunityCompanyName_Is_Submitted_Successfully()
         {
             _viewModel.OpportunityId = OpportunityId;
-            _viewModel.CompanyName = EmployerName;
+            _viewModel.CompanyName = CompanyName;
             _viewModel.SelectedEmployerId = 2;
 
             _employerService = Substitute.For<IEmployerService>();
-            _employerService.ValidateEmployerNameAndId(EmployerId, EmployerName).Returns(true);
+            _employerService.ValidateCompanyNameAndId(EmployerId, CompanyName).Returns(true);
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
@@ -41,11 +41,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 c.AddMaps(typeof(EmployerDtoMapper).Assembly);
                 c.ConstructServicesUsing(type => 
                     type.Name.Contains("LoggedInUserEmailResolver") ? 
-                        new LoggedInUserEmailResolver<FindEmployerViewModel, EmployerNameDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<FindEmployerViewModel, CompanyNameDto>(httpcontextAccesor) :
                             type.Name.Contains("LoggedInUserNameResolver") ? 
-                                (object) new LoggedInUserNameResolver<FindEmployerViewModel, EmployerNameDto>(httpcontextAccesor) :
+                                (object) new LoggedInUserNameResolver<FindEmployerViewModel, CompanyNameDto>(httpcontextAccesor) :
                                     type.Name.Contains("UtcNowResolver") ? 
-                                        new UtcNowResolver<FindEmployerViewModel, EmployerNameDto>(new DateTimeProvider()) :
+                                        new UtcNowResolver<FindEmployerViewModel, CompanyNameDto>(new DateTimeProvider()) :
                                             null);
             });
 
@@ -58,19 +58,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
             
-            controllerWithClaims.SaveOpportunityEmployerName(_viewModel).GetAwaiter().GetResult();
+            controllerWithClaims.SaveOpportunityCompanyName(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetEmployer_Is_Called_Exactly_Once()
         {
-            _employerService.Received(1).ValidateEmployerNameAndId(EmployerId, EmployerName);
+            _employerService.Received(1).ValidateCompanyNameAndId(EmployerId, CompanyName);
         }
 
         [Fact]
         public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<EmployerNameDto>());
+            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<CompanyNameDto>());
         }
     }
 }

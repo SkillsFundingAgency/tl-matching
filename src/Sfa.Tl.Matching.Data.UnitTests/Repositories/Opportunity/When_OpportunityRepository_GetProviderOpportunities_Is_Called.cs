@@ -49,7 +49,7 @@
 //            dto.SearchRadius.Should().Be(10);
 //            dto.Postcode.Should().BeEquivalentTo("AA1 1AA");
 //            dto.JobRole.Should().BeEquivalentTo("Testing Job Title");
-//            dto.EmployerName.Should().BeEquivalentTo("Employer");
+//            dto.CompanyName.Should().BeEquivalentTo("Company");
 //            dto.EmployerContact.Should().BeEquivalentTo("Employer Contact");
 //            dto.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
 //            dto.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");

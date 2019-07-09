@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _opportunityRepository = opportunityRepository;
         }
 
-        public async Task<bool> ValidateEmployerNameAndId(int employerId, string companyName)
+        public async Task<bool> ValidateCompanyNameAndId(int employerId, string companyName)
         {
             if (employerId == 0 || string.IsNullOrEmpty(companyName)) return false;
             
@@ -36,10 +36,10 @@ namespace Sfa.Tl.Matching.Application.Services
             return employer > 0;
         }
 
-        public IEnumerable<EmployerSearchResultDto> Search(string employerName)
+        public IEnumerable<EmployerSearchResultDto> Search(string companyName)
         {
             var searchResults = _employerRepository
-                .GetMany(e => EF.Functions.Like(e.CompanyNameSearch, $"%{employerName.ToLetterOrDigit()}%"))
+                .GetMany(e => EF.Functions.Like(e.CompanyNameSearch, $"%{companyName.ToLetterOrDigit()}%"))
                 .OrderBy(e => e.CompanyName)
                 .Select(e => new EmployerSearchResultDto
                 {
@@ -85,8 +85,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     {
                         OpportunityItemId = opportunityItemId,
                         OpportunityId = o.Id,
-                        EmployerName = o.Employer.CompanyName,
-                        EmployerNameAka = o.Employer.AlsoKnownAs,
+                        CompanyName = o.Employer.CompanyName,
+                        CompanyNameAka = o.Employer.AlsoKnownAs,
                         EmployerContact = o.EmployerContact,
                         EmployerContactEmail = o.EmployerContactEmail,
                         EmployerContactPhone = o.EmployerContactPhone
@@ -107,8 +107,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     {
                         OpportunityItemId = opportunityItemId,
                         OpportunityId = opportunityId,
-                        EmployerName = o.Employer.CompanyName,
-                        EmployerNameAka = o.Employer.AlsoKnownAs,
+                        CompanyName = o.Employer.CompanyName,
+                        CompanyNameAka = o.Employer.AlsoKnownAs,
                         EmployerContact = o.EmployerContact,
                         EmployerContactEmail = o.EmployerContactEmail,
                         EmployerContactPhone = o.EmployerContactPhone
@@ -123,8 +123,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     {
                         OpportunityItemId = opportunityItemId,
                         OpportunityId = opportunityId,
-                        EmployerName = e.CompanyName,
-                        EmployerNameAka = e.AlsoKnownAs,
+                        CompanyName = e.CompanyName,
+                        CompanyNameAka = e.AlsoKnownAs,
                         EmployerContact = e.PrimaryContact,
                         EmployerContactEmail = e.Email,
                         EmployerContactPhone = e.Phone

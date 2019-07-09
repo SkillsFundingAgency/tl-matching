@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             PlacementsKnown = true,
             Placements = 2,
             Postcode = "AA1 1AA",
-            EmployerName = "EmployerName",
+            CompanyName = "CompanyName",
             CompanyNameAka = "AlsoKnownAs",
             RouteName = "RouteName",
             Providers = new List<ReferralsViewModel>

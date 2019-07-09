@@ -13,7 +13,7 @@
         public short SearchRadius { get; set; }
         public string JobRole { get; set; }
         public string Postcode { get; set; }
-        public string EmployerName { get; set; }
+        public string CompanyName { get; set; }
         public string EmployerContact { get; set; }
         public string EmployerContactPhone { get; set; }
         public string EmployerContactEmail { get; set; }

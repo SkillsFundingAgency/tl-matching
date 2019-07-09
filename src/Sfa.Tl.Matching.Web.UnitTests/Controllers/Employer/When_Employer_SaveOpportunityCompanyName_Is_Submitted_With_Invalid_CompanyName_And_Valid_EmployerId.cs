@@ -10,11 +10,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_SaveOpportunityEmployerName_Is_Submitted_With_Invalid_EmployerName_And_Valid_EmployerId
+    public class When_Employer_SaveOpportunityCompanyName_Is_Submitted_With_Invalid_CompanyName_And_Valid_EmployerId
     {
         private readonly EmployerController _employerController;
 
-        public When_Employer_SaveOpportunityEmployerName_Is_Submitted_With_Invalid_EmployerName_And_Valid_EmployerId()
+        public When_Employer_SaveOpportunityCompanyName_Is_Submitted_With_Invalid_CompanyName_And_Valid_EmployerId()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var opportunityService = Substitute.For<IOpportunityService>();
 
             var employerService = Substitute.For<IEmployerService>();
-            employerService.ValidateEmployerNameAndId(1, "").Returns(false);
+            employerService.ValidateCompanyNameAndId(1, "").Returns(false);
 
             _employerController = new EmployerController(employerService, opportunityService, mapper);
         }
@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [InlineData("Invalid Business Name")]
         public void Then_View_Result_Is_Returned_With_Model_State_Error_For_CompanyName(string companyName)
         {
-            var result = _employerController.SaveOpportunityEmployerName(new FindEmployerViewModel { CompanyName = companyName, SelectedEmployerId = 1 }).GetAwaiter().GetResult();
+            var result = _employerController.SaveOpportunityCompanyName(new FindEmployerViewModel { CompanyName = companyName, SelectedEmployerId = 1 }).GetAwaiter().GetResult();
 
             result.Should().BeAssignableTo<ViewResult>();
             _employerController.ViewData.ModelState.Should().ContainSingle();

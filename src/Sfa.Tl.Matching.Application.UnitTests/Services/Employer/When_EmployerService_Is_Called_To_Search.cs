@@ -31,9 +31,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 
             var employerService = new EmployerService(employerRepository, opportunityRepository);
 
-            const string employerName = "Co";
+            const string companyName = "Co";
 
-            _searchResults = employerService.Search(employerName).ToList();
+            _searchResults = employerService.Search(companyName).ToList();
 
             _firstEmployer = _searchResults[0];
             _secondEmployer = _searchResults[1];

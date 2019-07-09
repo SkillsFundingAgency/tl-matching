@@ -27,8 +27,8 @@ var employer = (function () {
                 contentType: "application/json",
                 data: { query: query },
                 success: function (employers) {
-                    var employerNames = $.map(employers, function (e) {
-                        return getEmployerNameWithAka(e);
+                    var companyNames = $.map(employers, function (e) {
+                        return getCompanyNameWithAka(e);
                     });
 
                     Searchresult = employers;
@@ -39,7 +39,7 @@ var employer = (function () {
                         }
                     }
 
-                    populateResults(employerNames);
+                    populateResults(companyNames);
                 },
                 timeout: 5000,
                 error: function () {
@@ -49,7 +49,7 @@ var employer = (function () {
         }, delayInMs);
     }
 
-    function getEmployerNameWithAka(e) {
+    function getCompanyNameWithAka(e) {
         if (!e.alsoKnownAs) {
             return e.companyName;
         }
@@ -58,7 +58,7 @@ var employer = (function () {
 
     function setSelectedEmployerId(confirmed) {
         $.each(Searchresult, function () {
-            if (getEmployerNameWithAka(this) === confirmed) {
+            if (getCompanyNameWithAka(this) === confirmed) {
                 $("#SelectedEmployerId").val(this.id);
             }
         });

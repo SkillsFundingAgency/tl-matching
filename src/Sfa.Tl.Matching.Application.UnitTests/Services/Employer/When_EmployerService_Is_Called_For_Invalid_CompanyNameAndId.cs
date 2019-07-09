@@ -8,26 +8,26 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 {
-    public class When_EmployerService_Is_Called_For_Valid_EmployerNameAndId
+    public class When_EmployerService_Is_Called_For_Invalid_CompanyNameAndId
     {
         private readonly IRepository<Domain.Models.Employer> _employerRepository;
         private readonly bool _employerResult;
 
         private const int EmployerId = 1;
-        private const string EmployerName = "EmployerName";
+        private const string CompanyName = "CompanyName";
 
-        public When_EmployerService_Is_Called_For_Valid_EmployerNameAndId()
+        public When_EmployerService_Is_Called_For_Invalid_CompanyNameAndId()
         {
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
             _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>(),
-                                                    Arg.Any<Expression<Func<Domain.Models.Employer, int>>>())
-                                .Returns(100);
+                    Arg.Any<Expression<Func<Domain.Models.Employer, int>>>())
+                .Returns(0);
 
             var employerService = new EmployerService(_employerRepository, opportunityRepository);
 
-            _employerResult = employerService.ValidateEmployerNameAndId(EmployerId, EmployerName).GetAwaiter().GetResult();
+            _employerResult = employerService.ValidateCompanyNameAndId(EmployerId, CompanyName).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -39,9 +39,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         }
 
         [Fact]
-        public void Then_The_Employer_Validation_Result_Is_True()
+        public void Then_The_Employer_Validation_Result_Is_False()
         {
-            _employerResult.Should().Be(true);
+            _employerResult.Should().Be(false);
         }
     }
 }
