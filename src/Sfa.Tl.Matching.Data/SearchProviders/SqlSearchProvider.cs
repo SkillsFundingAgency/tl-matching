@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using NetTopologySuite;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Data.SearchProviders
 {
@@ -24,7 +25,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             _matchingDbContext = matchingDbContext;
         }
 
-        public async Task<IList<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
+        public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
             _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
 
@@ -68,7 +69,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                                QualificationShortTitle = qualification.ShortTitle
                                            }).Distinct().ToListAsync();
 
-            return result.Select(r => new ProviderVenueSearchResultDto
+            return result.Select(r => new SearchResultsViewModelItem
             {
                 Town = r.Town,
                 Postcode = r.Postcode,

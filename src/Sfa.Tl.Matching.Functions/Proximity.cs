@@ -108,6 +108,7 @@ namespace Sfa.Tl.Matching.Functions
                     var googleAddressdetail = await googleMapApiClient.GetAddressDetails(postcode);
 
                     opportunityItem.Town = googleAddressdetail;
+                    opportunityItem.Postcode = postcode;
 
                     opportunityItems.Add(opportunityItem);
 

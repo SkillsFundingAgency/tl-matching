@@ -17,10 +17,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(dest => dest.Group, opt => opt.Ignore())
                 .ForMember(dest => dest.Selected, opt => opt.Ignore())
                 ;
-
-            CreateMap<ProviderVenueSearchResultDto, SearchResultsViewModelItem>()
-                .ForMember(dest => dest.IsSelected, opt => opt.Ignore())
-                ;
         }
     }
 }

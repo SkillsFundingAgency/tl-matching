@@ -7,6 +7,7 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
@@ -16,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         private const string Postcode = "SW1A 2AA";
         private const int SearchRadius = 5;
         private const int RouteId = 2;
-        private readonly IEnumerable<ProviderVenueSearchResultDto> _result;
+        private readonly IEnumerable<SearchResultsViewModelItem> _result;
         private readonly ILocationApiClient _locationApiClient;
         private readonly ISearchProvider _searchProvider;
 

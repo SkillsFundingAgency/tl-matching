@@ -148,7 +148,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 SearchResults = new SearchResultsViewModel
                 {
-                    Results = _mapper.Map<List<SearchResultsViewModelItem>>(searchResults)
+                    Results =  searchResults
                 },
                 SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
                 OpportunityId = viewModel.OpportunityId,

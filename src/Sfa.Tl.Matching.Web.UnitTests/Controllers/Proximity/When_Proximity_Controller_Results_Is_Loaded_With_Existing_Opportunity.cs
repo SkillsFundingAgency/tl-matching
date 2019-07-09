@@ -41,9 +41,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
             _selectedRouteId = routes.First().Id;
 
-            var providerSearchResultDto = new List<ProviderVenueSearchResultDto>
+            var providerSearchResultDto = new List<SearchResultsViewModelItem>
             {
-                new ProviderVenueSearchResultDto
+                new SearchResultsViewModelItem
                 {
                     Postcode = Postcode,
                     Distance = 1.5d,
