@@ -11,7 +11,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             OpportunityItemId = 2,
             SearchRadius = 3,
             JobRole = "JobRole",
-            PlacementsKnown = true,
             Placements = 2,
             Postcode = "AA1 1AA",
             CompanyName = "CompanyName",

@@ -57,14 +57,7 @@
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Students wanted</th>
                     <td class="govuk-table__cell">
-                        @if (Model.PlacementsKnown.HasValue && Model.PlacementsKnown.Value)
-                        {
-                            @Model.Placements
-                        }
-                        else
-                        {
-                            @:at least 1
-                        }
+                        @Model.PlacementsDetail
                     </td>
                     <td class="govuk-table__cell">
                         <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the number of placements</span></a>
@@ -87,7 +80,7 @@
 
             <h3 class="govuk-heading-s govuk-!-margin-0">Provider @(i + 1)</h3>
             <p class="govuk-body govuk-!-margin-0">@Model.Providers[i].Name</p>
-            <p class="govuk-body govuk-!-margin-0">@($"{distance:#0.0}") @milesText from <span style="text-transform: uppercase">@Model.Postcode</span></p>
+            <p class="govuk-body govuk-!-margin-0">@($"{distance:#0.0}") @milesText from @Model.Postcode</p>
             <hr class="govuk-section-break govuk-section-break--m ">
         }
 

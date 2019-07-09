@@ -1,24 +1,21 @@
-﻿
+﻿@model Sfa.Tl.Matching.Models.ViewModel.RemoveEmployerViewModel
+
 @{
-    ViewData["Title"] = "Confirm you want to delete [x] opportunities created for [employer business name]";
+    ViewData["Title"] = @Model.ConfirmDeleteText;
 }
 
 
 @section backButton{
-<a class="govuk-back-link" href="#">Finish and return to start</a>
+<a class="govuk-back-link" href="#">Back</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        @*IF removing employer leaves no more employers in employer basket*@
-        <p class="govuk-body">This cannot be undone and will mean you have no more employers with saved opportunities.</p>
 
-        @*ELSE*@
-        <p class="govuk-body">This cannot be undone.</p>
-
-
+        <p class="govuk-body">@Model.WarningDeleteText</p>
+        
         <button class="govuk-button tl-button--red">Confirm and continue</button>
         <p class="govuk-body"><a href="#" class="govuk-link">Cancel and go back</a></p>
     </div>

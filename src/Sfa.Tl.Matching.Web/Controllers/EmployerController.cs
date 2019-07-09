@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetOpportunityCompanyName(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
-            viewModel.Navigation = LoadCancelLink(opportunityId, opportunityItemId);
+            viewModel.Navigation = await _opportunityService.LoadCancelLink(opportunityId, opportunityItemId);
 
             return View("FindEmployer", viewModel);
         }
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
+                viewModel.Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("FindEmployer", viewModel);
             }
 
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
-            viewModel.Navigation = LoadCancelLink(opportunityId, opportunityItemId);
+            viewModel.Navigation = await _opportunityService.LoadCancelLink(opportunityId, opportunityItemId);
 
             return View("Details", viewModel);
         }
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
+                viewModel.Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("Details", viewModel);
             }
 
@@ -106,7 +106,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetCheckOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
-            viewModel.Navigation = LoadCancelLink(opportunityId, opportunityItemId);
+            viewModel.Navigation = await _opportunityService.LoadCancelLink(opportunityId, opportunityItemId);
 
             return View("CheckDetails", viewModel);
         }
@@ -118,7 +118,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
+                viewModel.Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("CheckDetails", viewModel);
             }
 
@@ -131,16 +131,34 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("saved-opportunities", Name = "GetSavedEmployerOpportunity")]
-        public IActionResult SavedEmployerOpportunity()
+        public async Task<IActionResult> SavedEmployerOpportunity()
         {
-            return View();
+            var username = HttpContext.User.GetUserName();
+            var viewModel = await _employerService.GetSavedEmployerOpportunitiesAsync(username);
+
+            return View(viewModel);
         }
 
         [HttpGet]
-        [Route("remove-employer", Name = "ConfirmDelete")]
-        public IActionResult ConfirmDelete()
+        [Route("remove-employer/{opportunityId}", Name = "ConfirmDelete")]
+        public async  Task<IActionResult> ConfirmDelete(int opportunityId)
         {
-            return View();
+            var dto = await _employerService.GetConfirmDeleteEmployerOpportunity(opportunityId,
+                HttpContext.User.GetUserName());
+
+            var viewModel = new RemoveEmployerViewModel
+            {
+                OpportunityId = opportunityId,
+                Count = dto.OpportunityCount,
+                ConfirmDeleteText = dto.OpportunityCount == 1
+                    ? $"Confirm you want to delete {dto.OpportunityCount} opportunity created for {dto.EmployerName}?"
+                    : $"Confirm you want to delete {dto.OpportunityCount} opportunities created for {dto.EmployerName}?",
+                WarningDeleteText = dto.EmployerCount == 1
+                    ? "This cannot be undone and will mean you have no more employers with saved opportunities."
+                    : "This cannot be undone."
+            };
+            
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -240,5 +258,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return viewModel;
         }
+
     }
 }

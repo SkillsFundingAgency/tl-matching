@@ -97,7 +97,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     Postcode = o.Postcode,
                     JobRole = o.JobRole,
                     Placements = o.Placements,
-                    PlacementsKnown = o.PlacementsKnown,
                     RouteId = o.RouteId,
                     SearchRadius = o.SearchRadius,
                     RouteName = o.Route.Name,
@@ -320,6 +319,22 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             await CompleteSelectedReferrals(opportunityId);
             await CompleteRemainingItems(opportunityId);
+        }
+
+        public async Task<NavigationViewModel> LoadCancelLink(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = new NavigationViewModel();
+            if (opportunityId == 0) return viewModel;
+
+            viewModel.OpportunityId = opportunityId;
+            viewModel.OpportunityItemId = opportunityItemId;
+
+            var opportunityItemCount = await GetSavedOpportunityItemCountAsync(opportunityId);
+            if (opportunityItemCount == 0) return viewModel;
+
+            viewModel.CancelText = "Cancel this opportunity";
+
+            return viewModel;
         }
 
         private async Task CompleteSelectedReferrals(int opportunityId)

@@ -110,7 +110,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = await _opportunityService.GetPlacementInformationAsync(opportunityItemId);
 
             var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
-            viewModel.Navigation = LoadCancelLink(dto.OpportunityId, opportunityItemId);
+            viewModel.Navigation = await _opportunityService.LoadCancelLink(dto.OpportunityId, opportunityItemId);
 
             return View("PlacementInformation", viewModel);
         }
@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
+                viewModel.Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("PlacementInformation", viewModel);
             }
 
@@ -149,7 +149,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetCheckAnswers(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-            viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, opportunityItemId);
+            viewModel.Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, opportunityItemId);
             return View("CheckAnswers", viewModel);
         }
 
@@ -269,29 +269,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 1 or more");
             else if (viewModel.Placements > 999)
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 999 or less");
-        }
-
-        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
-        {
-            var viewModel = new NavigationViewModel
-            {
-                CancelText = "Cancel opportunity and start again"
-            };
-            if (opportunityId == 0) return viewModel;
-
-            var opportunityItemCount = _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
-            if (opportunityItemCount == 0)
-            {
-                viewModel.OpportunityId = opportunityId;
-                viewModel.OpportunityItemId = opportunityItemId;
-                return viewModel;
-            }
-
-            viewModel.CancelText = "Cancel this opportunity";
-            viewModel.OpportunityId = opportunityId;
-            viewModel.OpportunityItemId = opportunityItemId;
-
-            return viewModel;
         }
     }
 }

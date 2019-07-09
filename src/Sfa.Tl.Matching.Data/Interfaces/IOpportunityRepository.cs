@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -11,5 +12,6 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId);
         Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId);
         Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
+        int GetEmployerOpportunityCount(int opportunityId);
     }
 }

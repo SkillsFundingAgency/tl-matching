@@ -105,7 +105,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
                     SearchResults = new SearchResultsViewModel(),
                     IsValidSearch = false,
-                    Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
+                    Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
                 });
             }
 
@@ -154,7 +154,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId,
-                Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
+                Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
             };
 
             if (viewModel.OpportunityId == 0 && viewModel.OpportunityItemId == 0)
@@ -195,28 +195,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId,
                 CompanyNameWithAka = viewModel.CompanyNameWithAka,
-                Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
+                Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
             };
-        }
-
-        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
-        {
-            var viewModel = new NavigationViewModel
-            {
-                CancelText = "Cancel opportunity and start again"
-            };
-
-            if (opportunityId == 0) return viewModel;
-
-            var opportunityItemCount = _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
-            if (opportunityItemCount == 0)
-                return viewModel;
-
-            viewModel.CancelText = "Cancel this opportunity";
-            viewModel.OpportunityId = opportunityId;
-            viewModel.OpportunityItemId = opportunityItemId;
-
-            return viewModel;
         }
 
         private async Task<bool> IsSearchParametersValidAsync(SearchParametersViewModel viewModel)

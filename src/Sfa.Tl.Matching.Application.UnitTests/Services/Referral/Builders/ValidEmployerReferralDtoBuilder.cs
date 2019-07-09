@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
             EmployerContactEmail = "employer.contact@employer.co.uk",
             JobRole = "Testing Job Title",
             PlacementsKnown = false,
-            Placements = 3,
+            Placements = 1,
             RouteName = "Agriculture, environmental and animal care",
             Postcode = "AA1 1AA",
             ProviderReferralInfo = new List<ProviderReferralInfoDto>
