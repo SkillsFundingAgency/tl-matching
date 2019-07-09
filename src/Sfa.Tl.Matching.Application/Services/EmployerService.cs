@@ -178,5 +178,14 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return viewModel;
         }
+
+        public async Task<string> GetEmployerOpportunityLockedByOwnerAsync(int employerId)
+        {
+            var opportunity = await _opportunityRepository.GetFirstOrDefault(
+                o => o.EmployerId == employerId
+                     && o.OpportunityItem.Any(oi => oi.IsSaved &&
+                                                    !oi.IsCompleted));
+            return opportunity?.CreatedBy;
+        }
     }
 }
