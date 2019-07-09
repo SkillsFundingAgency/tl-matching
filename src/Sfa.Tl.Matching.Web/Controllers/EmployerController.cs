@@ -212,7 +212,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             else
             {
                 var lockedByUser = await _employerService
-                    .GetEmployerOpportunityLockedByOwnerAsync(viewModel.SelectedEmployerId);
+                    .GetEmployerOpportunityOwnerAsync(viewModel.SelectedEmployerId);
 
                 if (!string.IsNullOrEmpty(lockedByUser) 
                     && lockedByUser != HttpContext.User.GetUserName())

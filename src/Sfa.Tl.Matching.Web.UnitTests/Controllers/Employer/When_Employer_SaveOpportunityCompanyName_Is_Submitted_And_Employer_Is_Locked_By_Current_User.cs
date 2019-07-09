@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var employerService = Substitute.For<IEmployerService>();
             employerService.ValidateCompanyNameAndId(Arg.Any<int>(), Arg.Any<string>())
                 .Returns(true);
-            employerService.GetEmployerOpportunityLockedByOwnerAsync(Arg.Any<int>())
+            employerService.GetEmployerOpportunityOwnerAsync(Arg.Any<int>())
                 .Returns("Current User");
             var opportunityService = Substitute.For<IOpportunityService>();
 

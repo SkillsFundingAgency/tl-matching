@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             _employerService = Substitute.For<IEmployerService>();
             _employerService.ValidateCompanyNameAndId(EmployerId, CompanyName).Returns(true);
-            _employerService.GetEmployerOpportunityLockedByOwnerAsync(Arg.Any<int>())
+            _employerService.GetEmployerOpportunityOwnerAsync(Arg.Any<int>())
                 .Returns((string)null);
 
             _opportunityService = Substitute.For<IOpportunityService>();

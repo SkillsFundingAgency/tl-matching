@@ -179,7 +179,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return viewModel;
         }
 
-        public async Task<string> GetEmployerOpportunityLockedByOwnerAsync(int employerId)
+        public async Task<string> GetEmployerOpportunityOwnerAsync(int employerId)
         {
             var opportunity = await _opportunityRepository.GetFirstOrDefault(
                 o => o.EmployerId == employerId

@@ -16,6 +16,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 
         Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunity(int opportunityId, string username);
 
-        Task<string> GetEmployerOpportunityLockedByOwnerAsync(int employerId);
+        Task<string> GetEmployerOpportunityOwnerAsync(int employerId);
     }
 }

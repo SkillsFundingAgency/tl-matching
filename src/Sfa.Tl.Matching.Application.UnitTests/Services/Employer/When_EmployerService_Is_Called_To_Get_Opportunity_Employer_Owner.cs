@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 
             var employerService = new EmployerService(employerRepository, _opportunityRepository);
 
-            _result = employerService.GetEmployerOpportunityLockedByOwnerAsync(1).GetAwaiter().GetResult();
+            _result = employerService.GetEmployerOpportunityOwnerAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]
