@@ -12,5 +12,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<EmployerDetailsViewModel> GetOpportunityEmployerDetailAsync(int opportunityId, int opportunityItemId);
         Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityId, int opportunityItemId);
         Task<int> GetInProgressEmployerOpportunityCountAsync(string username);
+        Task<string> GetEmployerOpportunityLockedByOwnerAsync(int employerId);
     }
 }

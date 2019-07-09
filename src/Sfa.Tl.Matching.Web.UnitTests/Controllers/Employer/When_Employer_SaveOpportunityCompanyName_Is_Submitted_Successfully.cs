@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
@@ -19,18 +21,23 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private const string CompanyName = "CompanyName";
         private const string ModifiedBy = "ModifiedBy";
         private readonly FindEmployerViewModel _viewModel = new FindEmployerViewModel();
+        private readonly IActionResult _result;
 
         private const int OpportunityId = 1;
-        private const int EmployerId = 2;
+        private const int OpportunityItemId = 2;
+        private const int EmployerId = 3;
 
         public When_Employer_SaveOpportunityCompanyName_Is_Submitted_Successfully()
         {
             _viewModel.OpportunityId = OpportunityId;
+            _viewModel.OpportunityItemId = OpportunityItemId;
             _viewModel.CompanyName = CompanyName;
-            _viewModel.SelectedEmployerId = 2;
+            _viewModel.SelectedEmployerId = 3;
 
             _employerService = Substitute.For<IEmployerService>();
             _employerService.ValidateCompanyNameAndId(EmployerId, CompanyName).Returns(true);
+            _employerService.GetEmployerOpportunityLockedByOwnerAsync(Arg.Any<int>())
+                .Returns((string)null);
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
@@ -39,12 +46,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(EmployerDtoMapper).Assembly);
-                c.ConstructServicesUsing(type => 
-                    type.Name.Contains("LoggedInUserEmailResolver") ? 
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<FindEmployerViewModel, CompanyNameDto>(httpcontextAccesor) :
-                            type.Name.Contains("LoggedInUserNameResolver") ? 
-                                (object) new LoggedInUserNameResolver<FindEmployerViewModel, CompanyNameDto>(httpcontextAccesor) :
-                                    type.Name.Contains("UtcNowResolver") ? 
+                            type.Name.Contains("LoggedInUserNameResolver") ?
+                                (object)new LoggedInUserNameResolver<FindEmployerViewModel, CompanyNameDto>(httpcontextAccesor) :
+                                    type.Name.Contains("UtcNowResolver") ?
                                         new UtcNowResolver<FindEmployerViewModel, CompanyNameDto>(new DateTimeProvider()) :
                                             null);
             });
@@ -57,8 +64,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 .Build();
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
-            
-            controllerWithClaims.SaveOpportunityCompanyName(_viewModel).GetAwaiter().GetResult();
+
+            _result = controllerWithClaims.SaveOpportunityCompanyName(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -71,6 +78,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).UpdateOpportunity(Arg.Any<CompanyNameDto>());
+        }
+
+        [Fact]
+        public void Then_Result_Is_RedirectResult() =>
+            _result.Should().BeOfType<RedirectToRouteResult>();
+
+        [Fact]
+        public void Then_Result_Is_Redirect_To_Results()
+        {
+            var redirect = _result as RedirectToRouteResult;
+            redirect?.RouteName.Should().BeEquivalentTo("GetEmployerDetails");
+            redirect?.RouteValues["opportunityId"].Should().Be(1);
+            redirect?.RouteValues["opportunityItemId"].Should().Be(2);
         }
     }
 }

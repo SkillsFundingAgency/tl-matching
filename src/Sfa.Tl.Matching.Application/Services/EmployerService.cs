@@ -133,11 +133,21 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> GetInProgressEmployerOpportunityCountAsync(string username)
         {
-            var savedCount = await _opportunityRepository.Count(o => o.OpportunityItem.Any(oi => oi.IsSaved && 
-                                                                                             !oi.IsCompleted) 
-                                                                 && o.CreatedBy == username);
+            var savedCount = await _opportunityRepository.Count(
+                o => o.OpportunityItem.Any(oi => oi.IsSaved && 
+                                                 !oi.IsCompleted) 
+                     && o.CreatedBy == username);
 
             return savedCount;
+        }
+
+        public async Task<string> GetEmployerOpportunityLockedByOwnerAsync(int employerId)
+        {
+            var opportunity = await _opportunityRepository.GetFirstOrDefault(
+                o => o.EmployerId == employerId
+                     && o.OpportunityItem.Any(oi => oi.IsSaved &&
+                                                    !oi.IsCompleted));
+            return opportunity?.CreatedBy;
         }
     }
 }

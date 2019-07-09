@@ -1,4 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -50,13 +52,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveOpportunityCompanyName(FindEmployerViewModel viewModel)
         {
-            var isValidEmployer = await _employerService.ValidateCompanyNameAndId(viewModel.SelectedEmployerId, viewModel.CompanyName);
+            await ValidateAsync(viewModel);
 
-            if (!isValidEmployer)
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
                 viewModel.Navigation = LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
-
                 return View("FindEmployer", viewModel);
             }
 
@@ -180,6 +180,30 @@ namespace Sfa.Tl.Matching.Web.Controllers
             };
 
             return viewModel;
+        }
+
+        private async Task ValidateAsync(FindEmployerViewModel viewModel)
+        {
+            var isValidEmployer =
+                await _employerService.ValidateCompanyNameAndId(viewModel.SelectedEmployerId, viewModel.CompanyName);
+
+            if (!isValidEmployer)
+            {
+                ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
+            }
+            else
+            {
+                var lockedByUser = await _employerService
+                    .GetEmployerOpportunityLockedByOwnerAsync(viewModel.SelectedEmployerId);
+
+                if (!string.IsNullOrEmpty(lockedByUser) 
+                    && lockedByUser != HttpContext.User.GetUserName())
+                {
+                    ModelState.AddModelError(nameof(viewModel.CompanyName),
+                        $"{lockedByUser} is already working on this employer’s opportunities. " +
+                        "Please choose a different employer.");
+                }
+            }
         }
 
         private void Validate(EmployerDetailsViewModel viewModel)
