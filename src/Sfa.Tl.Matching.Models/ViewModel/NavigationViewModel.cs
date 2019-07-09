@@ -4,6 +4,6 @@
     {
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
-        public string CancelText { get; set; }
+        public string CancelText { get; set; } = "Cancel opportunity and start again";
     }
 }
