@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.AutoDomain
             return new Fixture()
                 .Customize(new InMemoryDbContextCustomization())
                 .Customize(new OpportunityCustomization())
+                .Customize(new DomainCustomization())
                 .Customize(autoNSubstituteCustomization);
 
         }
