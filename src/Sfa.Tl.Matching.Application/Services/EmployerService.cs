@@ -159,5 +159,24 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return viewModel;
         }
+
+        public async Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunity(int opportunityId, string username)
+        {
+            var opportunityCount = _opportunityRepository.GetEmployerOpportunityCount(opportunityId);
+            var employerCount = _opportunityRepository.GetMany(o =>
+                o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted)
+                && o.CreatedBy == username).ToList();
+
+            var viewModel =
+                await _opportunityRepository.GetSingleOrDefault(op => op.Id == opportunityId,
+                    op => new RemoveEmployerDto()
+                    {
+                        OpportunityCount = opportunityCount,
+                        EmployerName = op.Employer.CompanyName,
+                        EmployerCount = employerCount.Count
+                    });
+
+            return viewModel;
+        }
     }
 }
