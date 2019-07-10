@@ -215,8 +215,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 var lockedByUser = await _employerService
                     .GetEmployerOpportunityOwnerAsync(viewModel.SelectedEmployerId);
 
-                if (!string.IsNullOrEmpty(lockedByUser) 
-                    && lockedByUser != HttpContext.User.GetUserName())
+                if (!string.IsNullOrEmpty(lockedByUser))
                 {
                     ModelState.AddModelError(nameof(viewModel.CompanyName),
                         $"{lockedByUser} is already working on this employer’s opportunities. " +

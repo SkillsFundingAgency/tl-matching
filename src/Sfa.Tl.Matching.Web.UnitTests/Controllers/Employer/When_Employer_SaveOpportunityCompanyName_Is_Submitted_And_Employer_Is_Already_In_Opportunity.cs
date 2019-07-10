@@ -13,12 +13,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_SaveOpportunityCompanyName_Is_Submitted_And_Employer_Is_Locked_By_Another_User
+    public class When_Employer_SaveOpportunityCompanyName_Is_Submitted_And_Employer_Is_Already_In_Opportunity
     {
         private readonly IActionResult _result;
         private readonly EmployerController _employerController;
 
-        public When_Employer_SaveOpportunityCompanyName_Is_Submitted_And_Employer_Is_Locked_By_Another_User()
+        public When_Employer_SaveOpportunityCompanyName_Is_Submitted_And_Employer_Is_Already_In_Opportunity()
         {
             var employerService = Substitute.For<IEmployerService>();
             employerService.ValidateCompanyNameAndId(Arg.Any<int>(), Arg.Any<string>())
