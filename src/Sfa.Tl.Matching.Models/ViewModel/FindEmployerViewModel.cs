@@ -10,7 +10,5 @@
         public string PreviousCompanyName { get; set; }
         public string CompanyNameWithAka => !string.IsNullOrWhiteSpace(AlsoKnownAs) ?
             $"{CompanyName} ({AlsoKnownAs})" : CompanyName;
-
-        public NavigationViewModel Navigation { get; set; }
     }
 }

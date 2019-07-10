@@ -31,6 +31,5 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string CompanyNameAka { get; set; }
         public string CompanyNameWithAka => !string.IsNullOrWhiteSpace(CompanyNameAka) ?
             $"{CompanyName} ({CompanyNameAka})" : CompanyName;
-        public NavigationViewModel Navigation { get; set; }
     }
 }

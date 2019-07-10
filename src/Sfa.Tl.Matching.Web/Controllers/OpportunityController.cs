@@ -110,7 +110,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var dto = await _opportunityService.GetPlacementInformationAsync(opportunityItemId);
 
             var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
-            viewModel.Navigation = await _opportunityService.LoadCancelLink(dto.OpportunityId, opportunityItemId);
 
             return View("PlacementInformation", viewModel);
         }
@@ -121,10 +120,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await Validate(viewModel);
 
             if (!ModelState.IsValid)
-            {
-                viewModel.Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("PlacementInformation", viewModel);
-            }
 
             var dto = _mapper.Map<PlacementInformationSaveDto>(viewModel);
             await _opportunityService.UpdateOpportunityItemAsync(dto);
@@ -149,7 +145,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetCheckAnswers(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-            viewModel.Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, opportunityItemId);
+
             return View("CheckAnswers", viewModel);
         }
 

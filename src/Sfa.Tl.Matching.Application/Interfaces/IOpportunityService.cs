@@ -35,7 +35,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task ContinueWithOpportunities(ContinueOpportunityViewModel viewModel);
         Task ConfirmOpportunities(int opportunityId);
         Task<string> GetCompanyNameWithAkaAsync(int? opportunityId);
-        Task<NavigationViewModel> LoadCancelLink(int opportunityId, int opportunityItemId);
         Task DeleteEmployerOpportunityItemAsync(int opportunityId);
     }
 }

@@ -12,9 +12,7 @@
        asp-route-searchRadius="@Model.SearchRadius"
        asp-route-Postcode="@Model.Postcode"
        asp-route-SelectedRouteId="@Model.RouteId">Back</a>
-
-    <partial name="_navigation" model="Model.Navigation" />
-
+    @await Component.InvokeAsync("Navigation", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 
 <form asp-action="SavePlacementInformation" novalidate>

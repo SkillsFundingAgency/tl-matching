@@ -15,6 +15,5 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int OpportunityItemId { get; set; }
         public string CompanyNameWithAka { get; set; }
         public IList<SelectListItem> RoutesSelectList { get; set; }
-        public NavigationViewModel Navigation { get; set; }
     }
 }

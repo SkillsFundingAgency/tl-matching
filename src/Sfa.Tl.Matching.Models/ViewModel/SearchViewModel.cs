@@ -7,6 +7,5 @@
         public bool IsValidSearch { get; set; } = true;
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
-        public NavigationViewModel Navigation { get; set; }
     }
 }

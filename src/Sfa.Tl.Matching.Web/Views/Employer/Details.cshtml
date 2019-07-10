@@ -5,7 +5,7 @@
 
 @section backButton{
     <a asp-route="LoadWhoIsEmployer" asp-route-opportunityId="@Model.OpportunityId" class="govuk-back-link">Back</a>
-    <partial name="_navigation" model="Model.Navigation" />
+    @await Component.InvokeAsync("Navigation", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 
 <div class="govuk-grid-row">

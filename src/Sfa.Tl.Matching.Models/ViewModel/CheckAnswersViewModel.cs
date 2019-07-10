@@ -17,7 +17,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string JobRole { get; set; }
         public int? Placements { get; set; }
         public List<ReferralsViewModel> Providers { get; set; }
-        public NavigationViewModel Navigation { get; set; }
         public string PlacementsDetail => (Placements.GetValueOrDefault() > 1) ? Placements.ToString() : "at least 1";
     }
 }

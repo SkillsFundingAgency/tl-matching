@@ -104,8 +104,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 {
                     SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
                     SearchResults = new SearchResultsViewModel(),
-                    IsValidSearch = false,
-                    Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
+                    IsValidSearch = false
                 });
             }
 
@@ -153,8 +152,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 },
                 SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
                 OpportunityId = viewModel.OpportunityId,
-                OpportunityItemId = viewModel.OpportunityItemId,
-                Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
+                OpportunityItemId = viewModel.OpportunityItemId
             };
 
             if (viewModel.OpportunityId == 0 && viewModel.OpportunityItemId == 0)
@@ -194,8 +192,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 Postcode = viewModel.Postcode?.Trim(),
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId,
-                CompanyNameWithAka = viewModel.CompanyNameWithAka,
-                Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId)
+                CompanyNameWithAka = viewModel.CompanyNameWithAka
             };
         }
 

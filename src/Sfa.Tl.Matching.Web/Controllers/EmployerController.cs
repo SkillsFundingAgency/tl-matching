@@ -44,7 +44,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetOpportunityCompanyName(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
-            viewModel.Navigation = await _opportunityService.LoadCancelLink(opportunityId, opportunityItemId);
 
             return View("FindEmployer", viewModel);
         }
@@ -55,10 +54,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await ValidateAsync(viewModel);
 
             if (!ModelState.IsValid)
-            {
-                viewModel.Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("FindEmployer", viewModel);
-            }
 
             var dto = _mapper.Map<CompanyNameDto>(viewModel);
 
@@ -72,8 +68,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
-            viewModel.Navigation = await _opportunityService.LoadCancelLink(opportunityId, opportunityItemId);
-
+            
             return View("Details", viewModel);
         }
 
@@ -83,11 +78,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             Validate(viewModel);
 
             if (!ModelState.IsValid)
-            {
-                viewModel.Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("Details", viewModel);
-            }
-
+            
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
             await _opportunityService.UpdateOpportunity(employerDetailDto);
@@ -106,7 +98,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetCheckOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
-            viewModel.Navigation = await _opportunityService.LoadCancelLink(opportunityId, opportunityItemId);
 
             return View("CheckDetails", viewModel);
         }
@@ -117,10 +108,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             Validate(viewModel);
 
             if (!ModelState.IsValid)
-            {
-                viewModel.Navigation = await _opportunityService.LoadCancelLink(viewModel.OpportunityId, viewModel.OpportunityItemId);
                 return View("CheckDetails", viewModel);
-            }
 
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
@@ -251,30 +239,5 @@ namespace Sfa.Tl.Matching.Web.Controllers
             else if (!Regex.IsMatch(viewModel.EmployerContactPhone, @"^(?:.*\d.*){7,}$"))
                 ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a telephone number that has 7 or more numbers");
         }
-
-        private NavigationViewModel LoadCancelLink(int opportunityId, int opportunityItemId)
-        {
-            var viewModel = new NavigationViewModel
-            {
-                CancelText = "Cancel opportunity and start again"
-            };
-
-            if (opportunityId == 0) return viewModel;
-
-            var opportunityItemCount = _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId).GetAwaiter().GetResult();
-            if (opportunityItemCount == 0)
-            {
-                viewModel.OpportunityId = opportunityId;
-                viewModel.OpportunityItemId = opportunityItemId;
-                return viewModel;
-            }
-
-            viewModel.CancelText = "Cancel this opportunity";
-            viewModel.OpportunityId = opportunityId;
-            viewModel.OpportunityItemId = opportunityItemId;
-
-            return viewModel;
-        }
-
     }
 }

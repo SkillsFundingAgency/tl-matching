@@ -30,7 +30,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.PrimaryContact))
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.Email))
                 .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.Phone))
-                .ForMember(m => m.Navigation, o => o.Ignore())
                 ;
 
             CreateMap<OpportunityDto, EmployerDetailsViewModel>()
@@ -38,7 +37,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.OpportunityItemId, o => o.Ignore())
                 .ForMember(m => m.CompanyName, o => o.Ignore())
                 .ForMember(m => m.CompanyNameAka, o => o.Ignore())
-                .ForMember(m => m.Navigation, o => o.Ignore())
                 ;
         }
     }
