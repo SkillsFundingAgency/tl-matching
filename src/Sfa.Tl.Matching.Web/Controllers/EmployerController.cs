@@ -165,10 +165,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("remove-employer/{opportunityId}", Name = "DeleteEmployer")]
         public async Task<IActionResult> DeleteEmployer(int opportunityId)
         {
+
+            await _opportunityService.DeleteEmployerOpportunityItemAsync(opportunityId);
+
             var employerOpportunities =
                 await _employerService.GetSavedEmployerOpportunitiesAsync(HttpContext.User.GetUserName());
-
-            //TODO: Delete employer goes here...
 
             var employerCount =  employerOpportunities.EmployerOpportunities.Count;
 

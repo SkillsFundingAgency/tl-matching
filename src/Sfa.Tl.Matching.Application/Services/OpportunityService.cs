@@ -274,6 +274,25 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
+        public async Task DeleteEmployerOpportunityItemAsync(int opportunityId)
+        {
+            var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
+
+            foreach (var opportunityItem in opportunityItems)
+            {
+                await _referralRepository.DeleteMany(_referralRepository.GetMany(rf => rf.OpportunityItemId == opportunityItem.Id).ToList());
+                await _provisionGapRepository.DeleteMany(_provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opportunityItem.Id).ToList());
+                await _opportunityItemRepository.Delete(opportunityItem);
+            }
+
+            var completedOpportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId && item.IsSaved && item.IsCompleted);
+
+            if (!completedOpportunityItems.Any())
+            {
+                await _opportunityRepository.Delete(opportunityId);
+            }
+        }
+
         public async Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId)
         {
             var opportunityItemsToBeReset = _opportunityItemRepository.GetMany(
