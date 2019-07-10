@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -46,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                     {
                         OpportunityId = 12,
                         Name = "Test A Company Name",
-                        LastUpdated = DateTime.Now
+                        LastUpdated = DateTime.Now.ToString(CultureInfo.InvariantCulture)
                     }
                 }
             });
