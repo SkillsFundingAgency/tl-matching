@@ -138,12 +138,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 OpportunityId = opportunityId,
                 Count = dto.OpportunityCount,
-                ConfirmDeleteText = dto.OpportunityCount == 1
-                    ? $"Confirm you want to delete {dto.OpportunityCount} opportunity created for {dto.EmployerName}?"
-                    : $"Confirm you want to delete {dto.OpportunityCount} opportunities created for {dto.EmployerName}?",
-                WarningDeleteText = dto.EmployerCount == 1
-                    ? "This cannot be undone and will mean you have no more employers with saved opportunities."
-                    : "This cannot be undone."
+                EmployerName = dto.EmployerName,
+                EmployerCount = dto.EmployerCount
             };
             
             return View(viewModel);
