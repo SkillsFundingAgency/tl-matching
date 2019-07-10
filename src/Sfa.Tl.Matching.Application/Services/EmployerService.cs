@@ -149,7 +149,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     Name = eo.Employer.CompanyName,
                     OpportunityId = eo.Id,
-                    LastUpdated = eo.ModifiedOn ?? eo.CreatedOn
+                    LastUpdated = eo.ModifiedOn != null ? eo.ModifiedOn.Value.GetTimeWithDate("on") : eo.CreatedOn.GetTimeWithDate("on")
                 }).ToListAsync();
 
             var viewModel = new SavedEmployerOpportunityViewModel
@@ -159,7 +159,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return viewModel;
         }
-
+        
         public async Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunity(int opportunityId, string username)
         {
             var opportunityCount = _opportunityRepository.GetEmployerOpportunityCount(opportunityId);
