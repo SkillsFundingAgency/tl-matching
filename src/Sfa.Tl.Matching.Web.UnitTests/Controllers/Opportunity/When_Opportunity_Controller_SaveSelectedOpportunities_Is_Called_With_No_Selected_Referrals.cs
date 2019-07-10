@@ -32,6 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel
             {
+                SubmitAction = "SaveSelectedOpportunities",
                 SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
                 {
                     new SelectedOpportunityItemViewModel

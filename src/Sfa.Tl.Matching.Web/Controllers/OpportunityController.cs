@@ -194,24 +194,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
-            var referrals =
-                viewModel.SelectedOpportunity.Where(o => o.OpportunityType == OpportunityType.Referral.ToString()).ToList();
-
-            if (referrals.Count > 0 && !referrals.Any(p => p.IsSelected))
+            if (viewModel.SubmitAction == "SaveSelectedOpportunities")
             {
-                ModelState.AddModelError("ReferralItems[0].IsSelected", "You must select an opportunity to continue");
+                Validate(viewModel);
+                if (!ModelState.IsValid)
+                {
+                    var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
 
-                var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
-
-                return View(nameof(OpportunityBasket), opportunityBasketViewModel);
+                    return View(nameof(OpportunityBasket), opportunityBasketViewModel);
+                }
             }
 
             await _opportunityService.ContinueWithOpportunities(viewModel);
 
-            if (viewModel.SubmitAction == "Finish")
-                return RedirectToRoute("Start");
-
-            return RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
+            return viewModel.SubmitAction == "CompleteProvisionGaps" ?
+                RedirectToRoute("Start") :
+                RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
 
         [HttpGet]
@@ -268,6 +266,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 1 or more");
             else if (viewModel.Placements > 999)
                 ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 999 or less");
+        }
+
+        private void Validate(ContinueOpportunityViewModel viewModel)
+        {
+            if (!viewModel.IsReferralSelected)
+                ModelState.AddModelError("ReferralItems[0].IsSelected", "You must select an opportunity to continue");
         }
     }
 }

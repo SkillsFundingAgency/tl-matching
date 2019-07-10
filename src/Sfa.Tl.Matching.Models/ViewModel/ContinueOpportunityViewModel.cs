@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
@@ -8,5 +10,15 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int OpportunityItemId { get; set; }
         public string SubmitAction { get; set; }
         public List<SelectedOpportunityItemViewModel> SelectedOpportunity { get; set; } = new List<SelectedOpportunityItemViewModel>();
+
+        public bool IsReferralSelected
+        {
+            get
+            {
+                var referrals = SelectedOpportunity.Where(o => o.OpportunityType == OpportunityType.Referral.ToString()).ToList();
+
+                return referrals.Count > 0 && referrals.Any(p => p.IsSelected);
+            }
+        }
     }
 }

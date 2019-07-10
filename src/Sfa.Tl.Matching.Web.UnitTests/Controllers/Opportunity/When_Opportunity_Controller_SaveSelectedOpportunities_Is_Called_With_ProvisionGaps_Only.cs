@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel
             {
-                SubmitAction = "Finish",
+                SubmitAction = "CompleteProvisionGaps",
                 SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
                 {
                     new SelectedOpportunityItemViewModel

@@ -11,13 +11,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_SubmitAction_Finish
+    public class When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_SubmitAction_CompleteProvisionGaps
     {
         private readonly IActionResult _result;
         private readonly IOpportunityService _opportunityService;
         private readonly OpportunityController _opportunityController;
 
-        public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_SubmitAction_Finish()
+        public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_SubmitAction_CompleteProvisionGaps()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
 
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel
             {
-                SubmitAction = "Finish"
+                SubmitAction = "CompleteProvisionGaps"
             }).GetAwaiter().GetResult();
         }
 
