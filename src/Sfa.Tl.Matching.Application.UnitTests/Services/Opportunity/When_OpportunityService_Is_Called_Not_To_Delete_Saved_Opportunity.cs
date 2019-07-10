@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             provisionGapRepo.GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(provisionGapItems.AsQueryable());
 
             //Act
-            await sut.DeleteOpportunityItemAsync(item.OpportunityId, item.Opportunity.Id);
+            await sut.DeleteOpportunityItemAsync(item.OpportunityId, item.OpportunityId);
 
             //Assert
             await opportunityRepo.DidNotReceive().Delete(Arg.Any<int>());
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             provisionGapRepo.GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(provisionGapItems.AsQueryable());
 
             //Act
-            await sut.DeleteOpportunityItemAsync(item.OpportunityId, item.Opportunity.Id);
+            await sut.DeleteOpportunityItemAsync(item.OpportunityId, item.OpportunityId);
 
             //Assert
             await opportunityRepo.DidNotReceive().Delete(Arg.Any<int>());
@@ -101,7 +101,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             provisionGapRepo.GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(provisionGapItems.AsQueryable());
 
             //Act
-            await sut.DeleteOpportunityItemAsync(item.OpportunityId, item.Opportunity.Id);
+            await sut.DeleteOpportunityItemAsync(item.OpportunityId, item.OpportunityId);
 
             //Assert
             await referralRepo.Received(1).DeleteMany(Arg.Any<List<Domain.Models.Referral>>());
@@ -131,7 +131,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             provisionGapRepo.GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(provisionGapItems.AsQueryable());
 
             //Act
-            await sut.DeleteOpportunityItemAsync(item.OpportunityId, item.Opportunity.Id);
+            await sut.DeleteOpportunityItemAsync(item.OpportunityId, item.OpportunityId);
             
             //Assert
             await provisionGapRepo.Received(1).DeleteMany(Arg.Any<List<ProvisionGap>>());

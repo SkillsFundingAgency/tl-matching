@@ -15,6 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.AutoDomain
                 foreach (var referral in item.Referral)
                 {
                     referral.OpportunityItem = item;
+                    referral.OpportunityItemId = item.Id;
                 }
             });
 
@@ -23,6 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.AutoDomain
                 foreach (var gap in item.ProvisionGap)
                 {
                     gap.OpportunityItem = item;
+                    gap.OpportunityItemId = item.Id;
                 }
             });
         }

@@ -137,7 +137,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var viewModel = new RemoveEmployerViewModel
             {
                 OpportunityId = opportunityId,
-                Count = dto.OpportunityCount,
+                OpportunityCount = dto.OpportunityCount,
                 EmployerName = dto.EmployerName,
                 EmployerCount = dto.EmployerCount
             };

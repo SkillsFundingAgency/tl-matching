@@ -167,16 +167,16 @@ namespace Sfa.Tl.Matching.Application.Services
                 o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted)
                 && o.CreatedBy == username).ToList();
 
-            var viewModel =
+            var removeEmployerDto =
                 await _opportunityRepository.GetSingleOrDefault(op => op.Id == opportunityId,
-                    op => new RemoveEmployerDto()
+                    op => new RemoveEmployerDto
                     {
                         OpportunityCount = opportunityCount,
                         EmployerName = op.Employer.CompanyName,
                         EmployerCount = employerCount.Count
                     });
 
-            return viewModel;
+            return removeEmployerDto;
         }
 
         public async Task<string> GetEmployerOpportunityOwnerAsync(int employerId)
