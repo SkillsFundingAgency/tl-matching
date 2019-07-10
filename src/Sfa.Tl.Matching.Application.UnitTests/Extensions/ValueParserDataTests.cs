@@ -22,7 +22,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
             searchTerm.ToQualificationSearch().Should().Be(result);
         }
 
-
         [Theory(DisplayName = "AllSpecialCharactersOrNumbers Data Tests")]
         [InlineData("Test", false)]
         [InlineData("Test2342423", false)]
