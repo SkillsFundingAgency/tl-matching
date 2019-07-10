@@ -194,7 +194,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
-            if (!viewModel.SelectedOpportunity.Any(p => p.IsSelected))
+            var referrals =
+                viewModel.SelectedOpportunity.Where(o => o.OpportunityType == OpportunityType.Referral.ToString()).ToList();
+
+            if (referrals.Count > 0 && !referrals.Any(p => p.IsSelected))
             {
                 ModelState.AddModelError("ReferralItems[0].IsSelected", "You must select an opportunity to continue");
 

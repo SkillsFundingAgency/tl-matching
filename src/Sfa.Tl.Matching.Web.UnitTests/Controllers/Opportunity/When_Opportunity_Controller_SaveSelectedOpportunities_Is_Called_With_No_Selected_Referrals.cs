@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
@@ -11,13 +13,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Opportunities
+    public class When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Referrals
     {
         private readonly IActionResult _result;
         private readonly IOpportunityService _opportunityService;
         private readonly OpportunityController _opportunityController;
 
-        public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Opportunities()
+        public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Referrals()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunityBasket(1);
@@ -28,7 +30,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityController = new OpportunityController(_opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(_opportunityController).Build();
 
-            _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel()).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel
+            {
+                SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
+                {
+                    new SelectedOpportunityItemViewModel
+                    {
+                        IsSelected = false,
+                        OpportunityType = OpportunityType.Referral.ToString()
+                    }
+                }
+            }).GetAwaiter().GetResult();
         }
 
         [Fact]

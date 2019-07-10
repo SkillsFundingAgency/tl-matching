@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
@@ -11,13 +13,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_SubmitAction_Finish
+    public class When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_ProvisionGaps_Only
     {
         private readonly IActionResult _result;
         private readonly IOpportunityService _opportunityService;
         private readonly OpportunityController _opportunityController;
 
-        public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_SubmitAction_Finish()
+        public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_ProvisionGaps_Only()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
 
@@ -29,15 +31,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel
             {
-                SubmitAction = "Finish"
+                SubmitAction = "Finish",
+                SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
+                {
+                    new SelectedOpportunityItemViewModel
+                    {
+                        IsSelected = false,
+                        OpportunityType = OpportunityType.ProvisionGap.ToString()
+                    }
+                }
             }).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
+        public void Then_Result_Is_Not_Null() =>
             _result.Should().NotBeNull();
-        }
 
         [Fact]
         public void Then_Result_Is_Redirect_To_Start()
@@ -47,7 +55,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_OpportunityService_GetOpportunityBasket_Is_Not_Called()
+        public void Then_OpportunityService_ContinueWithOpportunities_Is_Called_Exactly_Once()
+        {
+            _opportunityService.Received(1).ContinueWithOpportunities(Arg.Any<ContinueOpportunityViewModel>());
+        }
+
+        [Fact]
+        public void Then_OpportunityService_ContinueWithOpportunities_Is_Not_Called()
         {
             _opportunityService.DidNotReceive().GetOpportunityBasket(1);
         }
