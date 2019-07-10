@@ -28,7 +28,7 @@
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header" scope="row">@employerOpportunity.Name</th>
                         <td class="govuk-table__cell">
-                            @employerOpportunity.LastUpdated.ToShortTimeString()@employerOpportunity.LastUpdated.ToString("tt").ToLower()
+                            @employerOpportunity.LastUpdated.ToLocalTime().ToString("hh:mm")@employerOpportunity.LastUpdated.ToString("tt").ToLower()
                             on
                             @employerOpportunity.LastUpdated.ToString("dd MMMM yyyy")
                         </td>
