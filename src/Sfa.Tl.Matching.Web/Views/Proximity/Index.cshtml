@@ -4,8 +4,10 @@
 }
 
 @section backButton{
-    <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link">Back</a>
-    @await Component.InvokeAsync("Navigation", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
+    @await Component.InvokeAsync("Back",
+        new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
+    @await Component.InvokeAsync("Cancel",
+        new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 
 @if (!ViewData.ModelState.IsValid)

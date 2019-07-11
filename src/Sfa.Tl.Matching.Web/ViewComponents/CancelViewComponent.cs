@@ -5,27 +5,26 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.ViewComponents
 {
-    public class NavigationViewComponent : ViewComponent
+    public class CancelViewComponent : ViewComponent
     {
         private readonly IOpportunityService _opportunityService;
 
-        public NavigationViewComponent(IOpportunityService opportunityService)
+        public CancelViewComponent(IOpportunityService opportunityService)
         {
             _opportunityService = opportunityService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(
-            int opportunityId, int opportunityItemId)
+        public async Task<IViewComponentResult> InvokeAsync(int opportunityId, int opportunityItemId)
         {
-            const string viewName = "Navigation";
+            const string viewName = "Cancel";
             var viewModel = await GetViewModel(opportunityId, opportunityItemId);
 
             return View(viewName, viewModel);
         }
 
-        private async Task<NavigationViewModel> GetViewModel(int opportunityId, int opportunityItemId)
+        private async Task<CancelViewModel> GetViewModel(int opportunityId, int opportunityItemId)
         {
-            var viewModel = new NavigationViewModel();
+            var viewModel = new CancelViewModel();
             if (opportunityId == 0) return viewModel;
 
             viewModel.OpportunityId = opportunityId;
