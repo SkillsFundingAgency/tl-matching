@@ -153,7 +153,7 @@ namespace Sfa.Tl.Matching.Application.Services
                      JobRole = oi.JobRole,
                      Postcode = oi.Postcode,
                      Placements = oi.Placements,
-                     BasketItemCount = oi.Opportunity.OpportunityItem.Count(item => item.IsSaved)
+                     BasketItemCount = oi.Opportunity.OpportunityItem.Count(item => item.IsSaved && !item.IsCompleted)
                  });
         }
 
