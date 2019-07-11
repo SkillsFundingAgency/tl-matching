@@ -7,26 +7,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.AutoDomain
     {
         public void Customize(IFixture fixture)
         {
-            fixture.Customize<Referral>(composer => composer.Without(referral => referral.OpportunityItem));
-            fixture.Customize<ProvisionGap>(composer => composer.Without(gap => gap.OpportunityItem));
+            var opportunity = fixture.Create<Opportunity>();
+            var item = fixture.Create<OpportunityItem>();
 
-            fixture.PostprocessorFor<OpportunityItem>(item =>
-            {
-                foreach (var referral in item.Referral)
-                {
-                    referral.OpportunityItem = item;
-                    referral.OpportunityItemId = item.Id;
-                }
-            });
+            fixture.Customize<OpportunityItem>(composer => 
+                                                        composer.With(oi => oi.OpportunityId, opportunity.Id)
+                                                                .With(oi => oi.Opportunity, opportunity)
+                                                                .With(oi => oi.Id, item.Id));
+            
+            fixture.Customize<Referral>(composer => composer.With(referral => referral.OpportunityItemId, item.Id));
+            fixture.Customize<ProvisionGap>(composer => composer.With(gap => gap.OpportunityItemId, item.Id));
+            
+            fixture.RepeatCount = 2;
 
-            fixture.PostprocessorFor<OpportunityItem>(item =>
-            {
-                foreach (var gap in item.ProvisionGap)
-                {
-                    gap.OpportunityItem = item;
-                    gap.OpportunityItemId = item.Id;
-                }
-            });
         }
     }
 }
