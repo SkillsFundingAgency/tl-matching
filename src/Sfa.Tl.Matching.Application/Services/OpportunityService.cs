@@ -276,6 +276,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task DeleteEmployerOpportunityItemAsync(int opportunityId)
         {
+            var opportunity = await _opportunityRepository.GetFirstOrDefault(opp => opp.Id == opportunityId);
+
+            if (opportunity == null) return;
+
             var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
 
             foreach (var opportunityItem in opportunityItems)
@@ -289,7 +293,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (!completedOpportunityItems.Any())
             {
-                await _opportunityRepository.Delete(opportunityId);
+                await _opportunityRepository.Delete(opportunity);
             }
         }
 
