@@ -13,6 +13,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
     public class When_OpportunityService_Is_Called_To_Get_Opportunity_Item_Count
     {
+        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly int _result;
 
         public When_OpportunityService_Is_Called_To_Get_Opportunity_Item_Count()
@@ -21,40 +22,31 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var mapper = new Mapper(config);
 
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
-            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
+            _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(
-                new Domain.Models.Opportunity
-                {
-                    Id = 1
-                    //TODO: 
-                    //Count = 2
-                });
+            _opportunityItemRepository.Count(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+                .Returns(2);
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository);
 
-            //_result = opportunityService.GetSavedOpportunityItemCountAsync(1)
-            //    .GetAwaiter().GetResult();
-
-            //TODO
-            _result = 1;
+            _result = opportunityService.GetSavedOpportunityItemCountAsync(1)
+                .GetAwaiter().GetResult();
+        }
+        
+        [Fact]
+        public void Then_Count_Is_Called_Exactly_Once()
+        {
+            _opportunityItemRepository
+                .Received(1)
+                .Count(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
         }
 
         [Fact]
-        public void Then_GetSingleOrDefault_Is_Called_Exactly_Once()
+        public void Then_Result_Count_Is_2()
         {
-            //TODO: Fix Unit Test
-            //_opportunityRepository
-            //    .Received(1)
-            //    .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
-        }
-
-        [Fact]
-        public void Then_Result_Count_Is_1()
-        {
-            _result.Should().Be(1);
+            _result.Should().Be(2);
         }
     }
 }
