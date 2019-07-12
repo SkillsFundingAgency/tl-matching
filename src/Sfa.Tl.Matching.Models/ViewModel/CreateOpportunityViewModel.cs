@@ -10,5 +10,6 @@
 
         public int? SelectedRouteId { get; set; }
         public int? SearchResultProviderCount { get; set; }
+        public string CompanyNameWithAka { get; set; }
     }
 }
