@@ -8,8 +8,8 @@
         public int OpportunityCount { get; set; }
 
         public string ConfirmDeleteText => OpportunityCount == 1
-            ? $"Confirm you want to delete {OpportunityCount} opportunity created for {EmployerName}?"
-            : $"Confirm you want to delete {OpportunityCount} opportunities created for {EmployerName}?";
+            ? $"Confirm you want to delete {OpportunityCount} opportunity created for {EmployerName}"
+            : $"Confirm you want to delete {OpportunityCount} opportunities created for {EmployerName}";
 
         public string WarningDeleteText => EmployerCount == 1
             ? "This cannot be undone and will mean you have no more employers with saved opportunities."

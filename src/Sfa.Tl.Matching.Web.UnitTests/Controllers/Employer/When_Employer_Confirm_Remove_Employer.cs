@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             viewModel.OpportunityId.Should().Be(OpportunityId);
             viewModel.ConfirmDeleteText.Should()
-                .Be($"Confirm you want to delete {10} opportunities created for {CompanyName}?");
+                .Be($"Confirm you want to delete {10} opportunities created for {CompanyName}");
             viewModel.WarningDeleteText.Should().Be("This cannot be undone.");
             viewModel.EmployerCount.Should().Be(20);
         }
@@ -106,7 +106,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             viewModel.OpportunityId.Should().Be(OpportunityId);
             viewModel.ConfirmDeleteText.Should()
-                .Be($"Confirm you want to delete {1} opportunity created for {CompanyName}?");
+                .Be($"Confirm you want to delete {1} opportunity created for {CompanyName}");
             viewModel.WarningDeleteText.Should().Be("This cannot be undone and will mean you have no more employers with saved opportunities.");
             viewModel.EmployerCount.Should().Be(1);
         }
