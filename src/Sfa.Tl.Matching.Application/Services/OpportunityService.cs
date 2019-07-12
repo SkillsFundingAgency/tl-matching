@@ -107,6 +107,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     RouteName = o.Route.Name,
                     CompanyName = o.Opportunity.Employer.CompanyName,
                     CompanyNameAka = o.Opportunity.Employer.AlsoKnownAs,
+                    PlacementsKnown = o.PlacementsKnown,
                     Providers = o.Referral.Select(r => new ReferralsViewModel
                     {
                         Postcode = r.ProviderVenue.Postcode,
@@ -158,6 +159,7 @@ namespace Sfa.Tl.Matching.Application.Services
                      JobRole = oi.JobRole,
                      Postcode = oi.Postcode,
                      Placements = oi.Placements,
+                     PlacementsKnown = oi.PlacementsKnown,
                      BasketItemCount = oi.Opportunity.OpportunityItem.Count(item => item.IsSaved && !item.IsCompleted)
                  });
         }
