@@ -151,11 +151,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public int GetEmployerOpportunityCount(int opportunityId)
         {
-            return _dbContext.OpportunityItem.Where(item =>
-                    item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted)
-                .GroupBy(item => item.Placements)
-                .Select(group => group.Count()).SingleOrDefault();
-
+            return _dbContext.OpportunityItem.Count(item =>
+                item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
         }
 
         private static bool IsValidBasketState(OpportunityItem oi, OpportunityType type)

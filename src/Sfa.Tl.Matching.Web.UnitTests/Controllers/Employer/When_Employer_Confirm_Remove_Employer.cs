@@ -108,6 +108,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             viewModel.ConfirmDeleteText.Should()
                 .Be($"Confirm you want to delete {1} opportunity created for {CompanyName}");
             viewModel.WarningDeleteText.Should().Be("This cannot be undone and will mean you have no more employers with saved opportunities.");
+            viewModel.SubmitActionText.Should().Be("Confirm and finish");
             viewModel.EmployerCount.Should().Be(1);
         }
     }
