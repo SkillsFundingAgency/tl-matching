@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using Sfa.Tl.Matching.Domain.Models;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.AutoDomain
+namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
     public class DomainCustomization : ICustomization
     {
