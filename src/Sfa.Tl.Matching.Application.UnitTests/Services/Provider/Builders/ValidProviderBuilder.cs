@@ -1,24 +1,99 @@
-﻿namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
+﻿using System.Collections.Generic;
+
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
 {
     public class ValidProviderBuilder
     {
-        public Domain.Models.Provider Build() => new Domain.Models.Provider
+        private readonly Domain.Models.Provider _provider;
+
+        public ValidProviderBuilder()
         {
-            Id = 1,
-            UkPrn = 10000546,
-            Name = "Test Provider",
-            DisplayName = "Test Provider Display Name",
-            PrimaryContact = "Test",
-            PrimaryContactEmail = "Test@test.com",
-            PrimaryContactPhone = "0123456789",
-            SecondaryContact = "Test 2",
-            SecondaryContactEmail = "Test2@test.com",
-            SecondaryContactPhone = "0123456789",
-            IsCdfProvider = true,
-            IsEnabledForReferral = true,
-            Source = "Test",
-            CreatedBy = "CreatedBy",
-            ModifiedBy = "ModifiedBy"
-        };
+            _provider = new Domain.Models.Provider
+            {
+                Id = 1,
+                UkPrn = 10000546,
+                Name = "Test Provider",
+                DisplayName = "Test Provider Display Name",
+                PrimaryContact = "Test",
+                PrimaryContactEmail = "Test@test.com",
+                PrimaryContactPhone = "0123456789",
+                SecondaryContact = "Test 2",
+                SecondaryContactEmail = "Test2@test.com",
+                SecondaryContactPhone = "0123456789",
+                IsCdfProvider = true,
+                IsEnabledForReferral = true,
+                Source = "Test",
+                CreatedBy = "CreatedBy",
+                ModifiedBy = "ModifiedBy"
+            };
+        }
+
+        public ValidProviderBuilder AddProviderVenuesWithQualifications()
+        {
+            if (_provider.ProviderVenue == null)
+            {
+                _provider.ProviderVenue = new List<Domain.Models.ProviderVenue>();
+            }
+
+            _provider.ProviderVenue.Add(new Domain.Models.ProviderVenue
+            {
+                Id = 10,
+                ProviderId = _provider.Id,
+                Postcode = "CV1 1WT",
+                IsEnabledForReferral = true,
+                CreatedBy = "CreatedBy",
+                Provider = _provider,
+                ProviderQualification = new List<Domain.Models.ProviderQualification>
+                {
+                    new Domain.Models.ProviderQualification
+                    {
+                        Qualification = new Domain.Models.Qualification
+                        {
+                            Id = 1,
+                            LarsId = "12345678",
+                            Title = "Qualification 1",
+                            ShortTitle = "Qualification 1 Short Title"
+                        }
+                    }
+                }
+            });
+
+            _provider.ProviderVenue.Add(new Domain.Models.ProviderVenue
+            {
+                Id = 20,
+                ProviderId = _provider.Id,
+                Postcode = "CV1 2WT",
+                IsEnabledForReferral = true,
+                CreatedBy = "CreatedBy",
+                Provider = _provider,
+                ProviderQualification = new List<Domain.Models.ProviderQualification>
+                {
+                    new Domain.Models.ProviderQualification
+                    {
+                        Qualification = new Domain.Models.Qualification
+                        {
+                            Id = 2,
+                            LarsId = "00001234",
+                            Title = "Qualification 2",
+                            ShortTitle = "Qualification 2 Short Title"
+                        }
+                    },
+                    new Domain.Models.ProviderQualification
+                    {
+                        Qualification = new Domain.Models.Qualification
+                        {
+                            Id = 3,
+                            LarsId = "00005678",
+                            Title = "Qualification 3",
+                            ShortTitle = "Qualification 3 Short Title"
+                        }
+                    }
+                }
+            });
+
+            return this;
+        }
+
+        public Domain.Models.Provider Build() => _provider;
     }
 }
