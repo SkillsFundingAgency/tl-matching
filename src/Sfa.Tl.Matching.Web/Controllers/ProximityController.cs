@@ -129,7 +129,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 Postcode = viewModel.Postcode,
                 SelectedRouteId = viewModel.SelectedRouteId,
-                SearchRadius = viewModel.SearchRadius
+                SearchRadius = viewModel.SearchRadius,
+                OpportunityId = viewModel.OpportunityId,
+                OpportunityItemId = viewModel.OpportunityItemId,
+                CompanyNameWithAka = viewModel.CompanyNameWithAka
             });
 
             return View(nameof(Results), searchViewModel);
