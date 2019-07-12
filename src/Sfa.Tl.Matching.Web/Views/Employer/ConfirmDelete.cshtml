@@ -11,12 +11,12 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-
+        
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
         <p class="govuk-body">@Model.WarningDeleteText</p>
         
-        <a asp-route="DeleteEmployer" class="govuk-button tl-button--red">Confirm and continue</a>
+        <a asp-route="DeleteEmployer" class="govuk-button tl-button--red">@Model.SubmitActionText</a>
         <p class="govuk-body"><a asp-route="GetSavedEmployerOpportunity" class="govuk-link">Cancel and go back</a></p>
     </div>
 </div>
