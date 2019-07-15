@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using NSubstitute;
 using Sfa.Tl.Matching.Application.Extensions;
 using Xunit;
 

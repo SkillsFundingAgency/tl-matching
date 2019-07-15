@@ -7,7 +7,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.ViewComponents;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.ViewComponents.Navigation
+namespace Sfa.Tl.Matching.Web.UnitTests.ViewComponents.Cancel
 {
     public class When_Cancel_Component_Is_Loaded_With_No_Saved_Opportunities
     {

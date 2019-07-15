@@ -7,7 +7,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.ViewComponents;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.ViewComponents.Navigation
+namespace Sfa.Tl.Matching.Web.UnitTests.ViewComponents.Back
 {
     public class When_Back_Component_Is_Loaded_With_Saved_Opportunities
     {
