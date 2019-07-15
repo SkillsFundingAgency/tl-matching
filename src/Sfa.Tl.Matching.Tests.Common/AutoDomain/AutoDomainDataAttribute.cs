@@ -2,7 +2,8 @@
 using AutoFixture.AutoNSubstitute;
 using AutoFixture.Xunit2;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.AutoDomain
+
+namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
     public class AutoDomainDataAttribute : AutoDataAttribute
     {

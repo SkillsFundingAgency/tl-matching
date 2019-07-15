@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoFixture.Kernel;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.AutoDomain
+namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
     public class PostprocessorBehavior : ISpecimenBuilderTransformation
     {

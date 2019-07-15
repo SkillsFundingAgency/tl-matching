@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoFixture.Xunit2;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -15,101 +15,99 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
     public class When_Employer_Confirm_Remove_Employer
     {
-        private IActionResult _result;
 
-        private const int OpportunityId = 12;
-        private const string CompanyName = "CompanyName";
-        private readonly IEmployerService _employerService;
-        private readonly EmployerController _employerController;
-
-        public When_Employer_Confirm_Remove_Employer()
+        [Theory, AutoDomainData]
+        public async Task Then_Result_Is_Not_Null(
+                                            Domain.Models.Opportunity opportunity,
+                                            IEmployerService employerService,
+                                            EmployerController sut,
+                                            [Frozen] RemoveEmployerDto dto)
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
-            var mapper = new Mapper(config);
+            //Arrange
+            employerService.GetConfirmDeleteEmployerOpportunity(Arg.Any<int>(), Arg.Any<string>()).Returns(dto);
 
-            _employerService = Substitute.For<IEmployerService>();
+            //Act
+            var result = await sut.ConfirmDelete(opportunity.Id) as ViewResult;
 
-            _employerController = new EmployerController(_employerService, Substitute.For<IOpportunityService>(), mapper)
-            {
-                ControllerContext = new ControllerContext()
-            };
-
-            _employerController.ControllerContext.HttpContext = new DefaultHttpContext();
+            //Assert
+            result.Should().NotBeNull();
 
         }
 
-        [Fact]
-        public void Then_Result_Is_Not_Null()
+        [Theory, AutoDomainData]
+        public async Task Then_View_Result_Is_Returned(
+                                                Domain.Models.Opportunity opportunity,
+                                                IEmployerService employerService,
+                                                EmployerController sut,
+                                                [Frozen] RemoveEmployerDto dto
+                                                )
         {
-            _employerService.GetConfirmDeleteEmployerOpportunity(Arg.Any<int>(), Arg.Any<string>()).Returns(new RemoveEmployerDto
-            {
-                EmployerName = CompanyName,
-                OpportunityCount = 10,
-                EmployerCount = 20
-            });
+            //Arrange
+            employerService.GetConfirmDeleteEmployerOpportunity(Arg.Any<int>(), Arg.Any<string>()).Returns(dto);
 
-            _result = _employerController.ConfirmDelete(OpportunityId).GetAwaiter().GetResult();
+            //Act
+            var result = await sut.ConfirmDelete(opportunity.Id) as ViewResult;
 
-            _result.Should().NotBeNull();
+            //Assert
+            result?.Model.Should().BeOfType<RemoveEmployerViewModel>();
+
         }
 
-        [Fact]
-        public void Then_View_Result_Is_Returned()
+        [Theory, AutoDomainData]
+        public async Task Then_Confirm_Remove_Employer_Model_Is_Loaded(
+                                                Domain.Models.Opportunity opportunity,
+                                                IEmployerService employerService,
+                                                EmployerController sut,
+                                                [Frozen] RemoveEmployerDto dto
+                                                )
         {
-            _employerService.GetConfirmDeleteEmployerOpportunity(Arg.Any<int>(), Arg.Any<string>()).Returns(new RemoveEmployerDto
-            {
-                EmployerName = CompanyName,
-                OpportunityCount = 10,
-                EmployerCount = 20
-            });
+            //Arrange
+            employerService.GetConfirmDeleteEmployerOpportunity(Arg.Any<int>(), Arg.Any<string>()).Returns(dto);
 
-            _result = _employerController.ConfirmDelete(OpportunityId).GetAwaiter().GetResult();
+            //Act
+            var result = await sut.ConfirmDelete(opportunity.Id) as ViewResult;
 
-            var viewModel = _result as ViewResult;
+            //Assert
+            var viewModel = result?.Model as RemoveEmployerViewModel;
+
             viewModel.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Then_Confirm_Remove_Employer_Model_Is_Loaded()
-        {
-            _employerService.GetConfirmDeleteEmployerOpportunity(Arg.Any<int>(), Arg.Any<string>()).Returns(new RemoveEmployerDto
-            {
-                EmployerName = CompanyName,
-                OpportunityCount = 10,
-                EmployerCount = 20
-            });
-
-            _result = _employerController.ConfirmDelete(OpportunityId).GetAwaiter().GetResult();
-
-            var viewModel = _result.GetViewModel<RemoveEmployerViewModel>();
-
-            viewModel.OpportunityId.Should().Be(OpportunityId);
+            viewModel.OpportunityId.Should().Be(opportunity.Id);
             viewModel.ConfirmDeleteText.Should()
-                .Be($"Confirm you want to delete {10} opportunities created for {CompanyName}");
+                .Be($"Confirm you want to delete {dto.OpportunityCount} opportunities created for {dto.EmployerName}");
+
+            viewModel.ConfirmDeleteText.Should()
+                .NotBe($"Confirm you want to delete {dto.OpportunityCount} opportunity created for {dto.EmployerName}");
+
             viewModel.WarningDeleteText.Should().Be("This cannot be undone.");
-            viewModel.EmployerCount.Should().Be(20);
+            viewModel.EmployerCount.Should().Be(dto.EmployerCount);
         }
 
-        [Fact]
-        public void Then_Confirm_Remove_Employer_Model_Is_Loaded_With_No_Employer()
+        [Theory, AutoDomainData]
+        public async Task Then_Confirm_Remove_Employer_Model_Is_Loaded_With_No_Employer(
+                                                Domain.Models.Opportunity opportunity,
+                                                IEmployerService employerService,
+                                                EmployerController sut,
+                                                [Frozen] RemoveEmployerDto dto
+                                                )
         {
-            _employerService.GetConfirmDeleteEmployerOpportunity(Arg.Any<int>(), Arg.Any<string>()).Returns(new RemoveEmployerDto
-            {
-                EmployerName = CompanyName,
-                OpportunityCount = 1,
-                EmployerCount = 1
-            });
+            //Arrange
+            dto.OpportunityCount = 1;
+            dto.EmployerCount = 1;
 
-            _result = _employerController.ConfirmDelete(OpportunityId).GetAwaiter().GetResult();
+            employerService.GetConfirmDeleteEmployerOpportunity(Arg.Any<int>(), Arg.Any<string>()).Returns(dto);
+            
+            //Act
+            var result = await sut.ConfirmDelete(opportunity.Id) as ViewResult;
 
-            var viewModel = _result.GetViewModel<RemoveEmployerViewModel>();
+            //Assert
+            var viewModel = result.GetViewModel<RemoveEmployerViewModel>();
 
-            viewModel.OpportunityId.Should().Be(OpportunityId);
+            viewModel.OpportunityId.Should().Be(opportunity.Id);
             viewModel.ConfirmDeleteText.Should()
-                .Be($"Confirm you want to delete {1} opportunity created for {CompanyName}");
+                .Be($"Confirm you want to delete {dto.OpportunityCount} opportunity created for {dto.EmployerName}");
             viewModel.WarningDeleteText.Should().Be("This cannot be undone and will mean you have no more employers with saved opportunities.");
             viewModel.SubmitActionText.Should().Be("Confirm and finish");
-            viewModel.EmployerCount.Should().Be(1);
+            viewModel.EmployerCount.Should().Be(dto.EmployerCount);
         }
     }
 }

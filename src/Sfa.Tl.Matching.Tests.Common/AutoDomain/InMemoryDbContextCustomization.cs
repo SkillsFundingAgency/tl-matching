@@ -3,7 +3,7 @@ using AutoFixture;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.AutoDomain
+namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
     public class InMemoryDbContextCustomization : ICustomization
     {
