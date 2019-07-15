@@ -8,6 +8,12 @@
     float: right;
 }
 
+.tl-align-right {
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+}
+
 .tl-hidden {
     display: none !important;
 }
@@ -15,6 +21,7 @@
 .tl-visible {
     display: block !important;
 }
+
 
 
 /* Change case */
