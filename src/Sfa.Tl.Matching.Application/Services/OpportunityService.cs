@@ -287,29 +287,30 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (opportunity == null) return;
 
-            var savedOpportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
-
-            foreach (var opportunityItem in savedOpportunityItems)
-            {
-                await _referralRepository.DeleteMany(_referralRepository.GetMany(rf => rf.OpportunityItemId == opportunityItem.Id).ToList());
-                await _provisionGapRepository.DeleteMany(_provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opportunityItem.Id).ToList());
-                await _opportunityItemRepository.Delete(opportunityItem);
-            }
-
-            var unSavedOpportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId && !item.IsSaved && !item.IsCompleted);
-
-            foreach (var opportunityItem in unSavedOpportunityItems)
-            {
-                await _referralRepository.DeleteMany(_referralRepository.GetMany(rf => rf.OpportunityItemId == opportunityItem.Id).ToList());
-                await _provisionGapRepository.DeleteMany(_provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opportunityItem.Id).ToList());
-                await _opportunityItemRepository.Delete(opportunityItem);
-            }
+            await DeleteOpportunityItems(opportunityId, true);
+            await DeleteOpportunityItems(opportunityId, false);
 
             var completedOpportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId && item.IsSaved && item.IsCompleted);
 
             if (!completedOpportunityItems.Any())
             {
                 await _opportunityRepository.Delete(opportunity);
+            }
+        }
+
+        private async Task DeleteOpportunityItems(int opportunityId, bool isSaved)
+        {
+            var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId && item.IsSaved == isSaved && !item.IsCompleted);
+
+            foreach (var opportunityItem in opportunityItems)
+            {
+                await _referralRepository.DeleteMany(_referralRepository
+                    .GetMany(rf => rf.OpportunityItemId == opportunityItem.Id).ToList());
+
+                await _provisionGapRepository.DeleteMany(_provisionGapRepository
+                    .GetMany(gap => gap.OpportunityItemId == opportunityItem.Id).ToList());
+
+                await _opportunityItemRepository.Delete(opportunityItem);
             }
         }
 
