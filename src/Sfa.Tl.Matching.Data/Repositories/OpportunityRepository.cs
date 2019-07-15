@@ -165,13 +165,13 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             var reasons = new List<string>();
             if (provisionGap.HadBadExperience.HasValue && provisionGap.HadBadExperience.Value)
-                reasons.Add("Had bad experience");
+                reasons.Add("Employer had a bad experience with them");
 
             if (provisionGap.NoSuitableStudent.HasValue && provisionGap.NoSuitableStudent.Value)
-                reasons.Add("No suitable student");
+                reasons.Add("Providers do not have students doing the right course");
 
             if (provisionGap.ProvidersTooFarAway.HasValue && provisionGap.ProvidersTooFarAway.Value)
-                reasons.Add("Providers too far away");
+                reasons.Add("Providers were too far away");
 
             if (reasons.Count == 0)
                 reasons.Add("None available");
