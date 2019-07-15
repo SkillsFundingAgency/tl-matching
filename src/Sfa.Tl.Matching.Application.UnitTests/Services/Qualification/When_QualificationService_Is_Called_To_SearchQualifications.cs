@@ -13,12 +13,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 {
-    [Trait("QualificationService", "Search With No Results")]
-    public class When_QualificationService_Is_Called_To_Search_With_No_Results
+    [Trait("QualificationService", "Search Short Title")]
+    public class When_QualificationService_Is_Called_To_SearchQualifications
     {
-        private readonly QualificationSearchViewModel _searchResult;
+        private readonly QualificationSearchViewModel _searchResults;
 
-        public When_QualificationService_Is_Called_To_Search_With_No_Results()
+        public When_QualificationService_Is_Called_To_SearchQualifications()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(QualificationMapper).Assembly));
             var mapper = new Mapper(config);
@@ -39,16 +39,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 var service = new QualificationService(mapper, repository, qualificationRouteMappingRepository,
                     learningAimReferenceRepository);
 
-                _searchResult = service.SearchQualificationAsync("No Qualification Exists").GetAwaiter().GetResult();
+                _searchResults = service
+                    .SearchQualificationAsync("Scientific Reasoning")
+                    .GetAwaiter().GetResult();
             }
         }
 
         [Fact]
-        public void Then_No_Search_Results_Should_Be_Returned()
+        public void Then_The_Expected_Search_Results_Are_Returned()
         {
-            _searchResult.SearchTerms.Should().Be("No Qualification Exists");
-            _searchResult.Results.Count.Should().Be(0);
-            _searchResult.ResultCount.Should().Be(0);
+            _searchResults.ResultCount.Should().Be(1);
+
+            _searchResults.Results[0].QualificationId.Should().Be(3);
+            _searchResults.Results[0].LarId.Should().Be("60163239");
+            _searchResults.Results[0].Title.Should().Be("Level 2 in Applied Scientific Reasoning");
+            _searchResults.Results[0].ShortTitle.Should().Be("applied science and technology");
         }
     }
 }
