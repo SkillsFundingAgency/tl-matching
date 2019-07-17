@@ -17,6 +17,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
             Placements = 1,
             RouteName = "Agriculture, environmental and animal care",
             Postcode = "AA1 1AA",
+            ProviderReferrals = new List<ProviderReferralDto>
+            {
+                new ProviderReferralDto
+                {
+                    Placements = 2,
+                    ProviderVenueTown = "Town",
+                    JobRole = "Job Role",
+                    ProviderName = "Provider name",
+                    ProviderVenuePostCode = "AA1 1AA"
+                }
+            },
             ProviderReferralInfo = new List<ProviderReferralInfoDto>
             {
                 new ProviderReferralInfoDto
