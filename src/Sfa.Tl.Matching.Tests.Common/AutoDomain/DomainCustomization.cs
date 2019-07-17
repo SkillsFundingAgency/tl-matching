@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System.Collections.Generic;
+using AutoFixture;
 using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
@@ -21,7 +22,11 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.Customize<Referral>(composer => composer.With(referral => referral.OpportunityItemId, itemId));
             fixture.Customize<ProvisionGap>(composer => composer.With(gap => gap.OpportunityItemId, itemId));
 
-            fixture.Customize<Opportunity>(composer => composer.With(op => op.Id, opportunity.Id));
+            var items = fixture.Create<List<OpportunityItem>>();
+
+            fixture.Customize<Opportunity>(composer => composer.With(op => op.Id, opportunity.Id)
+                .With(op => op.OpportunityItem, items ));
+
 
         }
     }

@@ -11,6 +11,7 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
         {
             var options = new DbContextOptionsBuilder<MatchingDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .EnableSensitiveDataLogging()
                 .Options;
 
