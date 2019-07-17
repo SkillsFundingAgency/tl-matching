@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
@@ -24,7 +23,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunitySpreadsheetDataAsync(1).Returns(
-                new byte[] {01, 02});
+                new FileDownloadViewModel()
+                {
+                    FileName = "test_file.xlsx",
+                    ContentType = "application/file",
+                    FileContent = new byte[] { 01, 02 }
+                });
 
             var opportunityController = new OpportunityController(_opportunityService, mapper);
             _result = opportunityController.DownloadOpportunitySpreadsheet(1).GetAwaiter().GetResult();
@@ -37,28 +41,23 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _result.Should().BeAssignableTo<FileResult>();
             _result.Should().BeAssignableTo<FileContentResult>();
         }
-        
+
         [Fact]
         public void Then_Result_Has_Correct_File_Details()
         {
             var fileResult = _result as FileContentResult;
             fileResult.Should().NotBeNull();
-            fileResult?.ContentType.Should().Be("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-
-            Path.GetFileNameWithoutExtension(fileResult?.FileDownloadName)
-                .Should().Be($"employername_opportunities_{DateTime.Today:ddMMMyyyy}");
-            Path.GetExtension(fileResult?.FileDownloadName)
-                .Should().Be(".xlsx");
-
+            fileResult?.ContentType.Should().Be("application/file");
+            fileResult?.FileDownloadName.Should().Be($"test_file.xlsx");
             fileResult?.FileContents.Should().NotBeNull();
         }
 
         [Fact]
         public void Get_Opportunity_Spreadsheet_Data_Is_Called_Exactly_Once_In_Correct_Order()
         {
-                    _opportunityService
-                        .Received(1)
-                        .GetOpportunitySpreadsheetDataAsync(1);
+            _opportunityService
+                .Received(1)
+                .GetOpportunitySpreadsheetDataAsync(1);
         }
     }
 }

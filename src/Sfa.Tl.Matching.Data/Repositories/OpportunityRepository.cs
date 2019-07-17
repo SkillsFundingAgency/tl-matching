@@ -136,6 +136,46 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return opportunityBasket;
         }
 
+        public async Task<OpportunityPipelineDto> GetPipelineOpportunitiesAsync(int opportunityId)
+        {
+            var dto = await (from o in _dbContext.Opportunity.Include(o => o.OpportunityItem).ThenInclude(oi => oi.ProvisionGap)
+                                           join e in _dbContext.Employer
+                                               on o.EmployerId equals e.Id
+                                           where o.Id == opportunityId
+                                           select new OpportunityPipelineDto
+                                           {
+                                               CompanyName = e.CompanyName,
+                                               ProvisionGapItems = o.OpportunityItem
+                                                   .Where(oi => IsValidBasketState(oi, OpportunityType.ProvisionGap))
+                                                   .Select(oi => new ProvisionGapItemDto
+                                                   {
+                                                       JobRole = oi.JobRole,
+                                                       Placements = oi.Placements,
+                                                       PlacementsKnown = oi.PlacementsKnown,
+                                                       Workplace = $"{oi.Town} {oi.Postcode}",
+                                                       Reason = GetReasons(oi.ProvisionGap.First()),
+                                                   }).ToList(),
+                                               ReferralItems =
+                                                   (from oi in o.OpportunityItem
+                                                       join  re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
+                                                       join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                                                       join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                                                       where IsValidBasketState(oi, OpportunityType.Referral)
+                                                   select new ReferralItemDto
+                                                   {
+                                                       JobRole = oi.JobRole,
+                                                       Workplace = $"{oi.Town} {oi.Postcode}",
+                                                       DistanceFromEmployer = re.DistanceFromEmployer,
+                                                       PlacementsKnown = oi.PlacementsKnown,
+                                                       Placements = oi.Placements,
+                                                       ProviderName = p.Name,
+                                                       ProviderVenueTownAndPostcode = $"{pv.Town} {pv.Postcode}",
+                                                   }).ToList()
+                                           }).SingleOrDefaultAsync();
+
+            return dto;
+        }
+
         public int GetEmployerOpportunityCount(int opportunityId)
         {
             return _dbContext.OpportunityItem.Count(item =>

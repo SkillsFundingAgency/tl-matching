@@ -236,10 +236,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("download-opportunity/{opportunityId}", Name = "DownloadOpportunitySpreadsheet")]
         public async Task<IActionResult> DownloadOpportunitySpreadsheet(int opportunityId)
         {
-            var fileName = $"employername_opportunities_{DateTime.Today:ddMMMyyyy}.xlsx";
-            var fileBytes = await _opportunityService.GetOpportunitySpreadsheetDataAsync(opportunityId);
+            var downloadedFileInfo = await _opportunityService.GetOpportunitySpreadsheetDataAsync(opportunityId);
 
-            return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            return File(downloadedFileInfo.FileContent, 
+                downloadedFileInfo.ContentType,
+                downloadedFileInfo.FileName);
         }
 
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)

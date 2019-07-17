@@ -407,9 +407,9 @@ namespace Sfa.Tl.Matching.Application.Services
                 $"{companyName} ({companyNameAka})" : companyName;
         }
 
-        public async Task<byte[]> GetOpportunitySpreadsheetDataAsync(int opportunityId)
+        public async Task<FileDownloadViewModel> GetOpportunitySpreadsheetDataAsync(int opportunityId)
         {
-            //var dto = _opportunityRepository.
+            var dto = _opportunityRepository.GetPipelineOpportunitiesAsync(opportunityId);
             /*
             SELECT  e.CompanyName, --Need this for file name
 		            oi.OpportunityType,
@@ -461,8 +461,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
             //Might need a dto with FileName, FileBytes, 
             // since the file name is dynamically generated with employer name
-            
-            return new byte[0];
+
+            return new FileDownloadViewModel
+            {
+                FileName = $"employername_opportunities_{DateTime.Today:ddMMMyyyy}.xlsx",
+                ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                FileContent = new byte[0]
+            };
         }
 
         private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds)
