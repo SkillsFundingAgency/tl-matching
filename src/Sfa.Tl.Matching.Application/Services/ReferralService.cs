@@ -48,9 +48,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
             foreach (var data in employerReferral.ProviderReferrals)
             {
+                var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
+
                 sb.AppendLine($"# {data.ProviderVenueTown} {data.ProviderVenuePostCode}");
                 sb.AppendLine($"*Job role: {data.JobRole}");
-                sb.AppendLine($"*Students wanted: {data.Placements}");
+                sb.AppendLine($"*Students wanted: {placements}");
                 sb.AppendLine($"*Providers selected: {data.ProviderName}");
                 sb.AppendLine("");
             }
@@ -68,8 +70,7 @@ namespace Sfa.Tl.Matching.Application.Services
             foreach (var referral in referrals)
             {
                 var toAddress = referral.ProviderPrimaryContactEmail;
-
-                var numberOfPlacements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
+                var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
 
                 var tokens = new Dictionary<string, string>
                 {
@@ -84,7 +85,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     { "employer_contact_number", referral.EmployerContactPhone },
                     { "employer_contact_email", referral.EmployerContactEmail },
                     { "employer_postcode", referral.Postcode },
-                    { "number_of_placements", numberOfPlacements }
+                    { "number_of_placements", placements }
                 };
 
                 await SendEmail(EmailTemplateName.ProviderReferral, opportunityId, toAddress,
