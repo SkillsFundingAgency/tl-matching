@@ -57,8 +57,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
             tokens.Add("placements_list", sb.ToString());
 
-            //await SendEmail(EmailTemplateName.EmployerReferralComplex, opportunityId, employerReferral.EmployerContactEmail,
-            //    "Industry Placement Matching Referral", tokens, employerReferral.CreatedBy);
+            await SendEmail(EmailTemplateName.EmployerReferralComplex, opportunityId, employerReferral.EmployerContactEmail,
+                "Industry Placement Matching Referral", tokens, employerReferral.CreatedBy);
         }
 
         public async Task SendProviderReferralEmail(int opportunityId)
