@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Expressions;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -61,52 +62,38 @@ namespace Sfa.Tl.Matching.Data.Repositories
             */
         }
 
-        public Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
+        public async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
         {
-            // TODO FIX this
-            throw new Exception("TODO: fix query below");
-            /*
-            return await (from op in _dbContext.Opportunity
-                          join r in _dbContext.Route on op.RouteId equals r.Id
-                          where op.Id == opportunityId
-                          select new EmployerReferralDto
-                          {
-                              OpportunityId = op.Id,
-                              CompanyName = op.CompanyName,
-                              EmployerContact = op.EmployerContact,
-                              EmployerContactPhone = op.EmployerContactPhone,
-                              EmployerContactEmail = op.EmployerContactEmail,
-                              Postcode = op.Postcode,
-                              JobRole = op.JobRole,
-                              PlacementsKnown = op.PlacementsKnown,
-                              Placements = op.Placements,
-                              RouteName = r.Name,
-                              CreatedBy = op.CreatedBy,
-                              ProviderReferralInfo =  (from re in _dbContext.Referral
-                                  join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
-                                  join p in _dbContext.Provider on pv.ProviderId equals p.Id
-                                  where re.OpportunityId == opportunityId
-                                        && p.IsCdfProvider
-                                        && p.IsEnabledForReferral
-                                        && pv.IsEnabledForReferral
-                                        && !pv.IsRemoved
-                                  select new ProviderReferralInfoDto
-                                  {
-                                      ReferralId = re.Id,
-                                      ProviderName = p.Name,
-                                      ProviderPrimaryContact = p.PrimaryContact,
-                                      ProviderPrimaryContactEmail = p.PrimaryContactEmail,
-                                      ProviderPrimaryContactPhone = p.PrimaryContactPhone,
-                                      ProviderVenuePostcode = pv.Postcode,
-                                      QualificationShortTitles =
-                                          (from pq in _dbContext.ProviderQualification
-                                              join q in _dbContext.Qualification on pq.QualificationId equals q.Id
-                                              join qm in _dbContext.QualificationRouteMapping on q.Id equals qm.QualificationId
-                                              where pv.Id == pq.ProviderVenueId && qm.RouteId == op.RouteId
-                                              select q.ShortTitle).Distinct().ToList()
-                                  }).ToList()
-                          }).SingleOrDefaultAsync();
-            */
+            var data = await (from op in _dbContext.Opportunity
+                              join emp in _dbContext.Employer on op.EmployerId equals emp.Id
+                              where op.Id == opportunityId
+                              select new EmployerReferralDto
+                              {
+                                  OpportunityId = op.Id,
+                                  CompanyName = emp.CompanyName,
+                                  EmployerContact = op.EmployerContact,
+                                  EmployerContactEmail = op.EmployerContactEmail,
+                                  EmployerContactPhone = op.EmployerContactPhone,
+                                  Postcode = emp.Postcode,
+                                  CreatedBy = op.CreatedBy,
+                                  ProviderReferrals = (
+                                      from oi in _dbContext.OpportunityItem
+                                      join r in _dbContext.Referral on oi.Id equals r.OpportunityItemId
+                                      join pv in _dbContext.ProviderVenue on r.ProviderVenueId equals pv.Id
+                                      join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                                      where oi.OpportunityId == opportunityId && oi.IsSelectedForReferral && oi.IsSaved
+                                      select new ProviderReferralDto
+                                      {
+                                          Placements = oi.Placements.Value,
+                                          JobRole = oi.JobRole,
+                                          ProviderName = p.Name,
+                                          ProviderVenuePostCode = pv.Postcode,
+                                          ProviderVenueTown = pv.Town
+                                      })
+                              }
+                      ).SingleOrDefaultAsync();
+
+            return data;
         }
 
         public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId)

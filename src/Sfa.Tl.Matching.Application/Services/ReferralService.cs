@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Drawing;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -32,15 +33,9 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task SendEmployerReferralEmail(int opportunityId)
         {
             var employerReferral = await GetEmployerReferrals(opportunityId);
+            var sb = new StringBuilder();
 
-            if (employerReferral == null)
-            {
-                return;
-            }
-
-            var toAddress = employerReferral.EmployerContactEmail;
-
-            var numberOfPlacements = GetNumberOfPlacements(employerReferral.PlacementsKnown, employerReferral.Placements);
+            if (employerReferral == null) return;
 
             var tokens = new Dictionary<string, string>
             {
@@ -48,35 +43,22 @@ namespace Sfa.Tl.Matching.Application.Services
                 { "employer_business_name", employerReferral.CompanyName },
                 { "employer_contact_number", employerReferral.EmployerContactPhone },
                 { "employer_contact_email", employerReferral.EmployerContactEmail },
-                { "employer_postcode", employerReferral.Postcode },
-                { "number_of_placements", numberOfPlacements },
-                { "route", employerReferral.RouteName.ToLowerInvariant() },
-                { "job_role", employerReferral.JobRole }
+                { "employer_postcode", employerReferral.Postcode }
             };
 
-            var sb = new StringBuilder();
-
-            foreach (var providerReferral in employerReferral.ProviderReferralInfo)
+            foreach (var data in employerReferral.ProviderReferrals)
             {
-                sb.AppendLine($"# {providerReferral.ProviderName}");
-                sb.AppendLine($"{providerReferral.ProviderVenuePostcode}");
-                sb.AppendLine($"Contact name: {providerReferral.ProviderPrimaryContact}");
-                sb.AppendLine($"Telephone: {providerReferral.ProviderPrimaryContactPhone}");
-                sb.AppendLine($"Email: {providerReferral.ProviderPrimaryContactEmail}");
+                sb.AppendLine($"# {data.ProviderVenueTown} {data.ProviderVenuePostCode}");
+                sb.AppendLine($"*Job role: {data.JobRole}");
+                sb.AppendLine($"*Students wanted: {data.Placements}");
+                sb.AppendLine($"*Providers selected: {data.ProviderName}");
                 sb.AppendLine("");
-                sb.AppendLine("Has students learning: ");
-
-                foreach (var qualificationShortTitle in providerReferral.QualificationShortTitles)
-                {
-                    sb.AppendLine($"* {qualificationShortTitle}");
-                }
-                sb.AppendLine(""); //Need a blank line, otherwise the next heading won't be formatted
             }
 
-            tokens.Add("providers_list", sb.ToString());
+            tokens.Add("placements_list", sb.ToString());
 
-            await SendEmail(EmailTemplateName.EmployerReferral, opportunityId, toAddress,
-                "Industry Placement Matching Referral", tokens, employerReferral.CreatedBy);
+            //await SendEmail(EmailTemplateName.EmployerReferralComplex, opportunityId, employerReferral.EmployerContactEmail,
+            //    "Industry Placement Matching Referral", tokens, employerReferral.CreatedBy);
         }
 
         public async Task SendProviderReferralEmail(int opportunityId)
