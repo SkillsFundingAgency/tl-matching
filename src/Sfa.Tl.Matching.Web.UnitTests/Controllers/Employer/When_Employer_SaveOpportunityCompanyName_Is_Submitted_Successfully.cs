@@ -40,6 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 .Returns((string)null);
 
             _opportunityService = Substitute.For<IOpportunityService>();
+            var referralService = Substitute.For<IReferralService>();
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
@@ -58,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var mapper = new Mapper(config);
 
-            var employerController = new EmployerController(_employerService, _opportunityService, mapper);
+            var employerController = new EmployerController(_employerService, _opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
                 .AddUserName(ModifiedBy)
                 .Build();

@@ -42,6 +42,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService.IsReferralOpportunityItemAsync(OpportunityId).Returns(false);
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var referralService = Substitute.For<IReferralService>();
 
             var config = new MapperConfiguration(c =>
             {
@@ -57,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             });
             var mapper = new Mapper(config);
 
-            var employerController = new EmployerController(null, _opportunityService, mapper);
+            var employerController = new EmployerController(null, _opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
                 .AddStandardUser()
                 .AddUserName(ModifiedBy)

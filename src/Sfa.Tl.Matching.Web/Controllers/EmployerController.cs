@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
@@ -21,12 +23,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly IEmployerService _employerService;
         private readonly IOpportunityService _opportunityService;
+        private readonly IReferralService _referralService;
         private readonly IMapper _mapper;
 
-        public EmployerController(IEmployerService employerService, IOpportunityService opportunityService, IMapper mapper)
+        public EmployerController(IEmployerService employerService, 
+                                    IOpportunityService opportunityService,
+                                    IReferralService referralService, 
+                                    IMapper mapper)
         {
             _employerService = employerService;
             _opportunityService = opportunityService;
+            _referralService = referralService;
             _mapper = mapper;
         }
 
@@ -68,7 +75,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
-            
+
             return View("Details", viewModel);
         }
 
@@ -79,7 +86,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
                 return View("Details", viewModel);
-            
+
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
             await _opportunityService.UpdateOpportunity(employerDetailDto);
@@ -129,7 +136,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("confirm-remove-employer/{opportunityId}", Name = "ConfirmDelete")]
-        public async  Task<IActionResult> ConfirmDelete(int opportunityId)
+        public async Task<IActionResult> ConfirmDelete(int opportunityId)
         {
             var dto = await _employerService.GetConfirmDeleteEmployerOpportunity(opportunityId,
                 HttpContext.User.GetUserName());
@@ -141,7 +148,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 EmployerName = dto.EmployerName,
                 EmployerCount = dto.EmployerCount
             };
-            
+
             return View(viewModel);
         }
 
@@ -155,7 +162,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var employerOpportunities =
                 await _employerService.GetSavedEmployerOpportunitiesAsync(HttpContext.User.GetUserName());
 
-            var employerCount =  employerOpportunities.EmployerOpportunities.Count;
+            var employerCount = employerOpportunities.EmployerOpportunities.Count;
 
             return employerCount == 0
                 ? RedirectToRoute("Start")
@@ -181,8 +188,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.ConfirmOpportunities(viewModel.OpportunityId);
 
             // TODO Send emails
-            // await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
-            // await _referralService.SendProviderReferralEmail(dto.OpportunityId);
+            //await _referralService.SendEmployerReferralEmail(viewModel.OpportunityId);
+            //await _referralService.SendProviderReferralEmail(viewModel.OpportunityId);
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }

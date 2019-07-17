@@ -25,9 +25,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
+            var referralService = Substitute.For<IReferralService>();
             var mapper = new Mapper(config);
 
-            var employerController = new EmployerController(null, _opportunityService, mapper);
+            var employerController = new EmployerController(null, _opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
                 .AddStandardUser()
                 .AddUserName("username")

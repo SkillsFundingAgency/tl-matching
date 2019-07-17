@@ -20,6 +20,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             const string query = "Employer";
             _employerService = Substitute.For<IEmployerService>();
+            var referralService = Substitute.For<IReferralService>();
+
             _employerService.Search(query).Returns(new List<EmployerSearchResultDto>
             {
                 new EmployerSearchResultDto
@@ -36,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var employerController = new EmployerController(_employerService, null, mapper);
+            var employerController = new EmployerController(_employerService, null, referralService, mapper);
 
             _result = employerController.Search(query);
         }

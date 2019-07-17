@@ -25,6 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_Details_Is_Loaded()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
+            var referralService = Substitute.For<IReferralService>();
             var mapper = new Mapper(config);
 
             var employerService = Substitute.For<IEmployerService>();
@@ -38,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 EmployerContactEmail = EmployerContactEmail
             });
 
-            var employerController = new EmployerController(employerService, Substitute.For<IOpportunityService>(), mapper);
+            var employerController = new EmployerController(employerService, Substitute.For<IOpportunityService>(), referralService, mapper);
 
             _result = employerController.GetOpportunityEmployerDetails(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }

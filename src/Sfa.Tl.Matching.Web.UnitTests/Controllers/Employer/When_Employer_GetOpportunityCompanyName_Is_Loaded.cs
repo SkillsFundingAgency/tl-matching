@@ -25,7 +25,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             _employerService = Substitute.For<IEmployerService>();
             var opportunityService = Substitute.For<IOpportunityService>();
-            
+            var referralService = Substitute.For<IReferralService>();
+
             _employerService.GetOpportunityEmployerAsync(OpportunityId, OpportunityItemId)
                 .Returns(new FindEmployerViewModel
                 {
@@ -38,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var employerController = new EmployerController(_employerService, opportunityService, mapper);
+            var employerController = new EmployerController(_employerService, opportunityService, referralService, mapper);
 
             _result = employerController.GetOpportunityCompanyName(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }

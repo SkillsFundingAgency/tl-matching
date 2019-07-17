@@ -28,9 +28,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             };
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
+            var referralService = Substitute.For<IReferralService>();
             var mapper = new Mapper(config);
 
-            _employerController = new EmployerController(employerService, opportunityService, mapper);
+            _employerController = new EmployerController(employerService, opportunityService, referralService, mapper);
 
             _result = _employerController.SaveOpportunityCompanyName(viewModel).GetAwaiter().GetResult();
         }

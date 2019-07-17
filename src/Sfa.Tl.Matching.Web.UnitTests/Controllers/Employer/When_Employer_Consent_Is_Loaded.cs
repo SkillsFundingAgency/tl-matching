@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_Consent_Is_Loaded()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
+            var referralService = Substitute.For<IReferralService>();
             var mapper = new Mapper(config);
 
             _employerService = Substitute.For<IEmployerService>();
@@ -38,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetReferredOpportunityItemCountAsync(1).Returns(10);
 
-            var employerController = new EmployerController(_employerService, _opportunityService, mapper);
+            var employerController = new EmployerController(_employerService, _opportunityService, referralService, mapper);
 
             _result = employerController.EmployerConsent(1, 2).GetAwaiter().GetResult();
         }

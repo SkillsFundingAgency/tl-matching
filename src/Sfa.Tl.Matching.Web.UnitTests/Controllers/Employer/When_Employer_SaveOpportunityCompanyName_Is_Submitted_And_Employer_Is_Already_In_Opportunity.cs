@@ -26,6 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             employerService.GetEmployerOpportunityOwnerAsync(Arg.Any<int>())
                 .Returns("Another User");
             var opportunityService = Substitute.For<IOpportunityService>();
+            var referralService = Substitute.For<IReferralService>();
 
             var viewModel = new FindEmployerViewModel
             {
@@ -36,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
 
-            _employerController = new EmployerController(employerService, opportunityService, mapper);
+            _employerController = new EmployerController(employerService, opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<EmployerController>(_employerController)
                 .Add(ClaimTypes.Role, RolesExtensions.StandardUser)
                 .AddUserName("Current User")

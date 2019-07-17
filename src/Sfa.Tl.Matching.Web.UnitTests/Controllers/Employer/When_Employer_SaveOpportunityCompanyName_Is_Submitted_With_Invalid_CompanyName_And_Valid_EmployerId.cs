@@ -20,11 +20,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var mapper = new Mapper(config);
 
             var opportunityService = Substitute.For<IOpportunityService>();
-
             var employerService = Substitute.For<IEmployerService>();
+            var referralService = Substitute.For<IReferralService>();
+
             employerService.ValidateCompanyNameAndId(1, "").Returns(false);
 
-            _employerController = new EmployerController(employerService, opportunityService, mapper);
+            _employerController = new EmployerController(employerService, opportunityService, referralService, mapper);
         }
 
         [Theory]

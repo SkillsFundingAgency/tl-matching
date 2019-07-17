@@ -28,6 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var mapper = new Mapper(config);
 
             var employerService = Substitute.For<IEmployerService>();
+            var referralService = Substitute.For<IReferralService>();
             employerService.GetOpportunityEmployerDetailAsync(Arg.Any<int>(), Arg.Any<int>()).Returns(new EmployerDetailsViewModel
             {
                 OpportunityId = OpportunityId,
@@ -38,7 +39,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 EmployerContactEmail = EmployerContactEmail
             });
 
-            var employerController = new EmployerController(employerService, Substitute.For<IOpportunityService>(), mapper);
+            var employerController = new EmployerController(employerService, Substitute.For<IOpportunityService>(),
+                referralService, mapper);
 
             _result = employerController.GetCheckOpportunityEmployerDetails(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }
