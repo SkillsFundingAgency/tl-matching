@@ -1,5 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -229,6 +230,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return viewModel.BasketItemCount == 1 ?
                 RedirectToRoute("Start") :
                 RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId, OpportunityItemId = 0 });
+        }
+
+        [HttpGet]
+        [Route("download-opportunity/{opportunityId}", Name = "DownloadOpportunitySpreadsheet")]
+        public async Task<IActionResult> DownloadOpportunitySpreadsheet(int opportunityId)
+        {
+            var fileName = $"employername_opportunities_{DateTime.Today:ddMMMyyyy}.xlsx";
+            var fileBytes = await _opportunityService.GetOpportunitySpreadsheetDataAsync(opportunityId);
+
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
         }
 
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -404,6 +405,64 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return !string.IsNullOrWhiteSpace(companyNameAka) ?
                 $"{companyName} ({companyNameAka})" : companyName;
+        }
+
+        public async Task<byte[]> GetOpportunitySpreadsheetDataAsync(int opportunityId)
+        {
+            //var dto = _opportunityRepository.
+            /*
+            SELECT  e.CompanyName, --Need this for file name
+		            oi.OpportunityType,
+		            oi.Town,
+		            oi.Postcode,
+		            --oi.Postcode  as Employer_PostCode_Entered_In_Search, 
+		            oi.JobRole,
+		            oi.PlacementsKnown, --0 = not known
+		            oi.Placements, --if PlacementsKnown = 0, this defaults to 1
+		            p.[Name] as ProviderName, 
+		            pv.[Town] as Provider_Venue_Town,
+		            pv.[Postcode] as Provider_Venue_Postcode,
+		            r.[DistanceFromEmployer], 
+		            --For Provision gaps - Will need to join these into a string
+		            pg.NoSuitableStudent,
+		            pg.HadBadExperience,
+		            pg.ProvidersTooFarAway
+            FROM Opportunity as o
+            INNER JOIN OpportunityItem as oi on o.Id = oi.OpportunityId
+            INNER  JOIN Employer as e on  e.Id = o.EmployerId
+            LEFT JOIN Referral as r on oi.Id = r.OpportunityItemId
+            LEFT JOIN ProviderVenue as pv on r.ProviderVenueId = pv.Id
+            LEFT JOIN [Provider] as P on pv.ProviderId = p.Id
+            LEFT JOIN ProvisionGap as pg on oi.Id = pg.OpportunityItemId
+            WHERE (oi.IsCompleted = 0 AND oi.IsSaved = 1) --Pipeline opportunities
+            --Ordered to make it easy to see when querying all data
+            ORDER BY oi.OpportunityType DESC,
+		            CompanyName,
+		            oi.Town,
+		            oi.Postcode,
+		            ProviderName,
+		            Provider_Venue_Town,
+		            Provider_Venue_Postcode             */
+            //Data needed:
+            //Opportunities with providers
+            //  Workplace town and postcode
+            //  Job role
+            //  Number of students wanted
+            //  Provider name
+            //  Provider venue town and postcode
+            //  Distance from workplace
+
+            //Opportunities with no providers
+            //  Workplace town and postcode
+            //  Number of students wanted
+            //  Reason no providers chosen
+
+            //return _excelFileWriter.WriteReport(dto);
+
+            //Might need a dto with FileName, FileBytes, 
+            // since the file name is dynamically generated with employer name
+            
+            return new byte[0];
         }
 
         private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds)
