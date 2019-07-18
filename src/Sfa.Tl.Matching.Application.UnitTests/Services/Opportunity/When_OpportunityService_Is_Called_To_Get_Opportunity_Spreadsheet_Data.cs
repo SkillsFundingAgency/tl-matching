@@ -8,7 +8,7 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     {
         private readonly IOpportunityRepository _opportunityRepository;
 
-        private readonly FileDownloadViewModel _result;
+        private readonly FileDownloadDto _result;
 
         public When_OpportunityService_Is_Called_To_Get_Opportunity_Spreadsheet_Data()
         {
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _result.Should().NotBeNull();
             System.IO.Path.GetFileNameWithoutExtension(_result.FileName)
-                .Should().Be($"employername_opportunities_{DateTime.Today:ddMMMyyyy}");
+                .Should().Be($"CompanyName_opportunities_{DateTime.Today:ddMMMyyyy}");
             System.IO.Path.GetExtension(_result.FileName)
                 .Should().Be(".xlsx");
             _result.ContentType
