@@ -35,10 +35,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await SetTestData(dbContext, provider, venue, opportunity);
 
             var repo = new OpportunityRepository(logger, dbContext);
-            var service = new ReferralService(config, emailService, emailHistoryService, repo);
+            var sut = new ReferralService(config, emailService, emailHistoryService, repo);
 
             //Act
-            await service.SendEmployerReferralEmail(opportunity.Id);
+            await sut.SendEmployerReferralEmail(opportunity.Id);
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -61,12 +61,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await SetTestData(dbContext, provider, venue, opportunity);
 
             var repo = new OpportunityRepository(logger, dbContext);
-            var service = new ReferralService(config, emailService, emailHistoryService, repo);
+            var sut = new ReferralService(config, emailService, emailHistoryService, repo);
 
             var expectedResult = await GetExpectedResult(repo, opportunity.Id);
 
             //Act
-            await service.SendEmployerReferralEmail(opportunity.Id);
+            await sut.SendEmployerReferralEmail(opportunity.Id);
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -76,7 +76,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 Arg.Is<IDictionary<string, string>>(dic => dic.ContainsKey("placements_list")), Arg.Any<string>());
 
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic => dic.ContainsKey("placements_list") && dic["placements_list"] == expectedResult), Arg.Any<string>());
+                Arg.Is<IDictionary<string, string>>(dic =>
+                    dic.ContainsKey("placements_list") && dic["placements_list"] == expectedResult), Arg.Any<string>());
 
         }
 
@@ -96,10 +97,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await SetTestData(dbContext, provider, venue, opportunity);
 
             var repo = new OpportunityRepository(logger, dbContext);
-            var service = new ReferralService(config, emailService, emailHistoryService, repo);
+            var sut = new ReferralService(config, emailService, emailHistoryService, repo);
 
             //Act
-            await service.SendEmployerReferralEmail(opportunity.Id);
+            await sut.SendEmployerReferralEmail(opportunity.Id);
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -149,12 +150,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await SetTestData(dbContext, provider, venue, opportunity, false, false);
 
             var repo = new OpportunityRepository(logger, dbContext);
-            var service = new ReferralService(config, emailService, emailHistoryService, repo);
+            var sut = new ReferralService(config, emailService, emailHistoryService, repo);
 
             var expectedResult = await GetExpectedResult(repo, opportunity.Id);
 
             //Act
-            await service.SendEmployerReferralEmail(opportunity.Id);
+            await sut.SendEmployerReferralEmail(opportunity.Id);
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -182,12 +183,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await SetTestData(dbContext, provider, venue, opportunity, true, false);
 
             var repo = new OpportunityRepository(logger, dbContext);
-            var service = new ReferralService(config, emailService, emailHistoryService, repo);
+            var sut = new ReferralService(config, emailService, emailHistoryService, repo);
 
             var expectedResult = await GetExpectedResult(repo, opportunity.Id);
 
             //Act
-            await service.SendEmployerReferralEmail(opportunity.Id);
+            await sut.SendEmployerReferralEmail(opportunity.Id);
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),

@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     {
 
         [Theory, AutoDomainData]
-        public async Task Test(
+        public async Task Then_Reason_Should_Contain_The_Values(
                                 MatchingDbContext dbContext,
                                 OpportunityItem opportunityItem,
                                 IMapper mapper,
