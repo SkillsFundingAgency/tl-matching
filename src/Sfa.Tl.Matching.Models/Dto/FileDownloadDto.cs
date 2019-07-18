@@ -1,6 +1,6 @@
-﻿namespace Sfa.Tl.Matching.Models.ViewModel
+﻿namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class FileDownloadViewModel
+    public class FileDownloadDto
     {
         public string ContentType{ get; set; }
         public string FileName { get; set; }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
-using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetOpportunitySpreadsheetDataAsync(1).Returns(
-                new FileDownloadViewModel()
+                new FileDownloadDto()
                 {
                     FileName = "test_file.xlsx",
                     ContentType = "application/file",

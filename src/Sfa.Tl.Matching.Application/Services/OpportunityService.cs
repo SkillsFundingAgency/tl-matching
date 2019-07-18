@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -406,64 +407,36 @@ namespace Sfa.Tl.Matching.Application.Services
                 $"{companyName} ({companyNameAka})" : companyName;
         }
 
-        public async Task<FileDownloadViewModel> GetOpportunitySpreadsheetDataAsync(int opportunityId)
+        public async Task<FileDownloadDto> GetOpportunitySpreadsheetDataAsync(int opportunityId)
         {
-            var dto = _opportunityRepository.GetPipelineOpportunitiesAsync(opportunityId);
-            /*
-            SELECT  e.CompanyName, --Need this for file name
-		            oi.OpportunityType,
-		            oi.Town,
-		            oi.Postcode,
-		            --oi.Postcode  as Employer_PostCode_Entered_In_Search, 
-		            oi.JobRole,
-		            oi.PlacementsKnown, --0 = not known
-		            oi.Placements, --if PlacementsKnown = 0, this defaults to 1
-		            p.[Name] as ProviderName, 
-		            pv.[Town] as Provider_Venue_Town,
-		            pv.[Postcode] as Provider_Venue_Postcode,
-		            r.[DistanceFromEmployer], 
-		            --For Provision gaps - Will need to join these into a string
-		            pg.NoSuitableStudent,
-		            pg.HadBadExperience,
-		            pg.ProvidersTooFarAway
-            FROM Opportunity as o
-            INNER JOIN OpportunityItem as oi on o.Id = oi.OpportunityId
-            INNER  JOIN Employer as e on  e.Id = o.EmployerId
-            LEFT JOIN Referral as r on oi.Id = r.OpportunityItemId
-            LEFT JOIN ProviderVenue as pv on r.ProviderVenueId = pv.Id
-            LEFT JOIN [Provider] as P on pv.ProviderId = p.Id
-            LEFT JOIN ProvisionGap as pg on oi.Id = pg.OpportunityItemId
-            WHERE (oi.IsCompleted = 0 AND oi.IsSaved = 1) --Pipeline opportunities
-            --Ordered to make it easy to see when querying all data
-            ORDER BY oi.OpportunityType DESC,
-		            CompanyName,
-		            oi.Town,
-		            oi.Postcode,
-		            ProviderName,
-		            Provider_Venue_Town,
-		            Provider_Venue_Postcode             */
-            //Data needed:
-            //Opportunities with providers
-            //  Workplace town and postcode
-            //  Job role
-            //  Number of students wanted
-            //  Provider name
-            //  Provider venue town and postcode
-            //  Distance from workplace
+            var dto = await _opportunityRepository.GetPipelineOpportunitiesAsync(opportunityId);
 
-            //Opportunities with no providers
-            //  Workplace town and postcode
-            //  Number of students wanted
-            //  Reason no providers chosen
-
-            //return _excelFileWriter.WriteReport(dto);
-
-            //Might need a dto with FileName, FileBytes, 
-            // since the file name is dynamically generated with employer name
-
-            return new FileDownloadViewModel
+            ReferralItemDto previousReferral = null;
+            foreach (var referral in dto.ReferralItems)
             {
-                FileName = $"employername_opportunities_{DateTime.Today:ddMMMyyyy}.xlsx",
+                if (previousReferral == null ||
+                    (referral.Workplace != previousReferral.Workplace &&
+                    referral.JobRole != previousReferral.JobRole &&
+                    referral.PlacementsDetail != previousReferral.PlacementsDetail)
+                )
+                {
+                    Debug.WriteLine($"{referral.Workplace}\t{referral.JobRole}\t{referral.PlacementsDetail}");
+                }
+                Debug.WriteLine($"\t{referral.ProviderName}\t{referral.ProviderVenueTownAndPostcode}\t{referral.DistanceFromEmployer}");
+
+                previousReferral = referral;
+            }
+
+            foreach (var provisionGap in dto.ProvisionGapItems)
+            {
+                Debug.WriteLine($"{provisionGap.Workplace}\t{provisionGap.PlacementsDetail}\t{provisionGap.Reason}");
+            }
+
+            //var fileContent = await _excelFileWriter.WriteReportAsync(dto);
+            
+            return new FileDownloadDto
+            {
+                FileName = $"{dto.CompanyName}_opportunities_{DateTime.Today:ddMMMyyyy}.xlsx",
                 ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 FileContent = new byte[0]
             };
