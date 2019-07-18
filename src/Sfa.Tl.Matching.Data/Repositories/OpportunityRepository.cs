@@ -52,6 +52,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     EmployerContactEmail = op.EmployerContactEmail,
                     SearchRadius = oi.SearchRadius,
                     Postcode = emp.Postcode,
+                    Town = oi.Town,
                     JobRole = oi.JobRole,
                     ProviderVenuePostcode = pv.Postcode,
                     PlacementsKnown = oi.PlacementsKnown,
@@ -92,6 +93,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                       select new ProviderReferralDto
                                       {
                                           Placements = oi.Placements.Value,
+                                          PlacementsKnown = oi.PlacementsKnown,
                                           JobRole = oi.JobRole,
                                           ProviderName = p.Name,
                                           ProviderVenuePostCode = pv.Postcode,

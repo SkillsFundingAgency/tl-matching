@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<string>(
-                        subject => subject == "Industry Placement Matching Referral"),
+                        subject => subject == "Your industry placement referral – ESFA National Apprenticeship Service"),
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Any<string>());
         }

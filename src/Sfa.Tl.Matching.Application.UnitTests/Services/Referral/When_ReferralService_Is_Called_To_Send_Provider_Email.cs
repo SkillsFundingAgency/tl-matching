@@ -259,7 +259,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("employer_postcode")
-                                  && tokens["employer_postcode"] == "AA1 1AA"),
+                                  && tokens["employer_postcode"] == "Town AA1 1AA"),
                     Arg.Any<string>());
         }
 

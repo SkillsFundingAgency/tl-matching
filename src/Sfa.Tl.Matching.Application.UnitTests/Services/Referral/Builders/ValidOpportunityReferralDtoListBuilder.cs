@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                 EmployerContactEmail = "employer.contact@employer.co.uk",
                 SearchRadius = 10,
                 Postcode = "AA1 1AA",
+                Town = "Town",
                 JobRole = "Testing Job Title",
                 ProviderVenuePostcode = "AA2 2AA",
                 PlacementsKnown = false,

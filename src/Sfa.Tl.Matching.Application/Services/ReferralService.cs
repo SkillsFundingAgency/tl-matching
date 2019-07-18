@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.Services
             tokens.Add("placements_list", sb.ToString());
 
             await SendEmail(EmailTemplateName.EmployerReferralComplex, opportunityId, employerReferral.EmployerContactEmail,
-                "Industry Placement Matching Referral", tokens, employerReferral.CreatedBy);
+                "Your industry placement referral – ESFA National Apprenticeship Service", tokens, employerReferral.CreatedBy);
         }
 
         public async Task SendProviderReferralEmail(int opportunityId)
@@ -83,7 +83,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     { "employer_contact_name", referral.EmployerContact},
                     { "employer_contact_number", referral.EmployerContactPhone },
                     { "employer_contact_email", referral.EmployerContactEmail },
-                    { "employer_postcode", referral.Postcode },
+                    { "employer_postcode", $"{referral.Town} {referral.Postcode }" },
                     { "number_of_placements", placements }
                 };
 

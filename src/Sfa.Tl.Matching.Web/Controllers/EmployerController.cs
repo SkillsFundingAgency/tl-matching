@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Serialization;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
@@ -188,8 +186,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.ConfirmOpportunities(viewModel.OpportunityId);
 
             // TODO Send emails
-            //await _referralService.SendEmployerReferralEmail(viewModel.OpportunityId);
-            //await _referralService.SendProviderReferralEmail(viewModel.OpportunityId);
+            await _referralService.SendEmployerReferralEmail(viewModel.OpportunityId);
+            await _referralService.SendProviderReferralEmail(viewModel.OpportunityId);
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }
