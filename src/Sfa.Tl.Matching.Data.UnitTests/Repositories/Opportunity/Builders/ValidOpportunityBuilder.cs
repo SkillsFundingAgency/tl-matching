@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                     Postcode = "CV1 2WT",
                     IsSaved = true,
                     IsCompleted = false,
-                    Referral = new List<Domain.Models.Referral>
+                    Referral = new List<Referral>
                     {
                         new Referral()
                         {
