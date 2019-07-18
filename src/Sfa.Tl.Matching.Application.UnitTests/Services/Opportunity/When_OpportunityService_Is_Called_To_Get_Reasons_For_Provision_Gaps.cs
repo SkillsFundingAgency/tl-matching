@@ -33,12 +33,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             opportunityItem.IsSaved = true;
             opportunityItem.IsCompleted = false;
 
-            await dbContext.Employer.AddAsync(opportunityItem.Opportunity.Employer);
             await dbContext.OpportunityItem.AddAsync(opportunityItem);
-            await dbContext.Opportunity.AddAsync(opportunityItem.Opportunity);
-            await dbContext.Referral.AddRangeAsync(opportunityItem.Referral);
-            await dbContext.ProvisionGap.AddRangeAsync(opportunityItem.ProvisionGap);
-
             await dbContext.SaveChangesAsync();
 
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
