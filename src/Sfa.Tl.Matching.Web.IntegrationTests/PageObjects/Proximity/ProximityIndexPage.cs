@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
@@ -8,7 +7,9 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
     {
         private readonly By _skillAreaSelect = By.Id("SelectedRouteId");
         private readonly By _postcode = By.Id("Postcode");
-        private readonly By _searchButton = By.Id("Search");
+        private readonly By _searchButton = By.Id("tl-search");
+
+        private const string Title = "Set up placement opportunity";
 
         public ProximityIndexPage(IWebDriver driver) : base(driver)
         {
@@ -26,18 +27,23 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
             Driver.FindElement(_postcode).SendKeys(postcode);
         }
 
-        public StartPage ClickSearch()
+        public ProximityResultsPage ClickSearch()
         {
             Driver.FindElement(_searchButton).Click();
 
-            return new StartPage(Driver);
+            return new ProximityResultsPage(Driver);
         }
 
         public void AssertContent()
         {
-            var skillAreaDropdown = Driver.FindElement(_skillAreaSelect);
-            var skillAreaSelect = new SelectElement(skillAreaDropdown);
-            skillAreaSelect.AllSelectedOptions.Count.Should().BeGreaterThan(1);
+            AssertTitle(Title);
+            AssertHeader1(Title);
+            //Driver.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
+            //Driver.FindElement(_header1).Text.Should().Be(Title);
+
+            //var skillAreaDropdown = Driver.FindElement(_skillAreaSelect);
+            //var skillAreaSelect = new SelectElement(skillAreaDropdown);
+            //skillAreaSelect.AllSelectedOptions.Count.Should().BeGreaterThan(1);
         }
     }
 }

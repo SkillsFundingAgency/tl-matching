@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity;
 
@@ -12,7 +11,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
         private readonly By _postcode = By.Id("Postcode");
         private readonly By _searchRadiusSelect = By.Id("SearchRadius");
         private readonly By _searchButton = By.Id("tl-search");
+        private readonly By _firstProvider = By.Id("SearchResults_Results_0__IsSelected");
         private readonly By _continueButton = By.Id("tl-continue");
+
+        private const string Title = "Select providers for this opportunity";
 
         public ProximityResultsPage(IWebDriver driver) : base(driver)
         {
@@ -51,18 +53,28 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
             return new PlacementInformationPage(Driver);
         }
 
-        public ProximityResultsPage ClickContinue()
+        public PlacementInformationPage ClickContinue()
         {
             Driver.FindElement(_continueButton).Click();
 
-            return new ProximityResultsPage(Driver);
+            return new PlacementInformationPage(Driver);
+        }
+
+        public void SelectProvider()
+        {
+            Driver.FindElement(_firstProvider).Click();
         }
 
         public void AssertContent()
         {
-            var skillAreaDropdown = Driver.FindElement(_skillAreaSelect);
-            var skillAreaSelect = new SelectElement(skillAreaDropdown);
-            skillAreaSelect.AllSelectedOptions.Count.Should().BeGreaterThan(1);
+            AssertTitle(Title);
+            AssertHeader1(Title);
+            //Driver.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
+            //Driver.FindElement(_header1).Text.Should().Be(Title);
+
+            //var skillAreaDropdown = Driver.FindElement(_skillAreaSelect);
+            //var skillAreaSelect = new SelectElement(skillAreaDropdown);
+            //skillAreaSelect.AllSelectedOptions.Count.Should().BeGreaterThan(1);
         }
     }
 }

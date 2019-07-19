@@ -10,6 +10,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
         private readonly By _contactPhone= By.Id("EmployerContactPhone");
         private readonly By _confirmButton = By.Id("tl-confirm");
 
+        private const string Title = "Confirm contact details for industry placements";
+
         public DetailsPage(IWebDriver driver) : base(driver)
         {
         }
@@ -19,6 +21,19 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
             Driver.FindElement(_findDifferentLink).Click();
 
             return new FindEmployerPage(Driver);
+        }
+
+        public CheckAnswersPage ClickConfirm()
+        {
+            Driver.FindElement(_confirmButton).Click();
+
+            return new CheckAnswersPage(Driver);
+        }
+
+        public void AssertContent()
+        {
+            AssertTitle(Title);
+            AssertHeader1(Title);
         }
     }
 }

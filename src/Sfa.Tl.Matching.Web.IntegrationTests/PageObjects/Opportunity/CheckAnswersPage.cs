@@ -11,6 +11,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
         private readonly By _studentsWantedChangeLink = By.XPath("//*[@id='main-content']/div/div/table/tbody/tr[4]/td[2]/a");
         private readonly By _confirmButton = By.Id("tl-confirm");
 
+        private const string Title = "Check answers";
+
         public CheckAnswersPage(IWebDriver driver) : base(driver)
         {
         }
@@ -48,6 +50,12 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
             Driver.FindElement(_confirmButton).Click();
 
             return new OpportunityBasketPage(Driver);
+        }
+
+        public void AssertContent()
+        {
+            AssertTitle(Title);
+            AssertHeader1(Title);
         }
     }
 }

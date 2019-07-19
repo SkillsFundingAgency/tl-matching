@@ -10,8 +10,27 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
         private readonly By _placements = By.Id("Placements");
         private readonly By _continueButton = By.Id("tl-continue");
 
+        private const string Title = "Placement information";
+
         public PlacementInformationPage(IWebDriver driver) : base(driver)
         {
+        }
+
+        public void EnterJobRole(string jobRole)
+        {
+            Driver.FindElement(_jobRole).SendKeys(jobRole);
+        }
+
+        public PlacementInformationPage SelectPlacementsKnown(bool? value = false)
+        {
+            if (value.HasValue && value.Value)
+            {
+                Driver.FindElement(_placementsKnownYes).Click();
+                return this;
+            }
+
+            Driver.FindElement(_placementsKnownNo).Click();
+            return this;
         }
 
         public FindEmployerPage ClickContinue()
@@ -19,6 +38,12 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
             Driver.FindElement(_continueButton).Click();
 
             return new FindEmployerPage(Driver);
+        }
+
+        public void AssertContent()
+        {
+            AssertTitle(Title);
+            AssertHeader1(Title);
         }
     }
 }

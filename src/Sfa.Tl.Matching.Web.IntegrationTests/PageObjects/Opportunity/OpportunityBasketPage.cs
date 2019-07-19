@@ -7,6 +7,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
         private readonly By _addOpportunityLink = By.CssSelector("govuk-button tl-button--grey");
         private readonly By _continueButton = By.Id("tl-continue");
 
+        private const string Title = "All opportunities";
+
         public OpportunityBasketPage(IWebDriver driver) : base(driver)
         {
         }
@@ -16,12 +18,17 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
             Driver.FindElement(_addOpportunityLink).Click();
         }
 
-
         public EmployerConsentPage ClickContinue()
         {
             Driver.FindElement(_continueButton).Click();
 
             return new EmployerConsentPage(Driver);
+        }
+
+        public void AssertContent()
+        {
+            AssertTitle(Title);
+            AssertHeader1(Title);
         }
     }
 }

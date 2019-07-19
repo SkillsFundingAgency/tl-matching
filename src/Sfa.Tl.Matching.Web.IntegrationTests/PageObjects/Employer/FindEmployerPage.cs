@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System.Threading;
+using OpenQA.Selenium;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
 {
@@ -7,8 +8,18 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
         private readonly By _companyName = By.Id("CompanyName");
         private readonly By _continueButton = By.Id("tl-continue");
 
+        private const string Title = "Who is the employer?";
+
         public FindEmployerPage(IWebDriver driver) : base(driver)
         {
+        }
+
+        public FindEmployerPage EnterCompanyName(string companyName)
+        {
+            Driver.FindElement(_companyName).SendKeys(companyName);
+            Thread.Sleep(2000);
+            
+            return this;
         }
 
         public DetailsPage ClickContinue()
@@ -16,6 +27,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
             Driver.FindElement(_continueButton).Click();
 
             return new DetailsPage(Driver);
+        }
+
+        public void AssertContent()
+        {
+            //AssertHeaderAndTitle(Title);
         }
     }
 }
