@@ -5,9 +5,11 @@ using System.Linq.Expressions;
 using AutoMapper;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
@@ -45,8 +47,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 .Returns(SetProvisionGaps().AsQueryable());
 
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, _opportunityItemRepository, _provisionGapRepository, _referralRepository, googleMapApiClient);
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, _opportunityItemRepository, 
+                _provisionGapRepository, _referralRepository, googleMapApiClient,
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             opportunityService.DeleteOpportunityItemAsync(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
 

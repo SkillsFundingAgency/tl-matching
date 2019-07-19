@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.EqualityComparer;
@@ -25,13 +25,18 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IRepository<ProvisionGap> _provisionGapRepository;
         private readonly IRepository<Referral> _referralRepository;
         private readonly IGoogleMapApiClient _googleMapApiClient;
+        private readonly IFileWriter<OpportunityReportDto> _opportunityPipelineReportWriter;
+        private readonly IDateTimeProvider _dateTimeProvider;
+
         public OpportunityService(
             IMapper mapper,
             IOpportunityRepository opportunityRepository,
             IRepository<OpportunityItem> opportunityItemRepository,
             IRepository<ProvisionGap> provisionGapRepository,
-            IRepository<Referral> referralRepository, 
-            IGoogleMapApiClient googleMapApiClient)
+            IRepository<Referral> referralRepository,
+            IGoogleMapApiClient googleMapApiClient,
+            IFileWriter<OpportunityReportDto> opportunityPipelineReportWriter,
+            IDateTimeProvider dateTimeProvider)
         {
             _mapper = mapper;
             _opportunityRepository = opportunityRepository;
@@ -39,6 +44,8 @@ namespace Sfa.Tl.Matching.Application.Services
             _provisionGapRepository = provisionGapRepository;
             _referralRepository = referralRepository;
             _googleMapApiClient = googleMapApiClient;
+            _opportunityPipelineReportWriter = opportunityPipelineReportWriter;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<int> CreateOpportunityAsync(OpportunityDto dto)
@@ -411,34 +418,16 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var dto = await _opportunityRepository.GetPipelineOpportunitiesAsync(opportunityId);
 
-            ReferralItemDto previousReferral = null;
-            foreach (var referral in dto.ReferralItems)
-            {
-                if (previousReferral == null ||
-                    (referral.Workplace != previousReferral.Workplace &&
-                    referral.JobRole != previousReferral.JobRole &&
-                    referral.PlacementsDetail != previousReferral.PlacementsDetail)
-                )
-                {
-                    Debug.WriteLine($"{referral.Workplace}\t{referral.JobRole}\t{referral.PlacementsDetail}");
-                }
-                Debug.WriteLine($"\t{referral.ProviderName}\t{referral.ProviderVenueTownAndPostcode}\t{referral.DistanceFromEmployer}");
+            var fileContent = _opportunityPipelineReportWriter.WriteReport(dto);
 
-                previousReferral = referral;
-            }
+            var companyName = dto.CompanyName.ToLetterOrDigit();
+            var formattedDate = _dateTimeProvider.UtcNow().ToGmtStandardTime().ToString("ddMMMyyyy");
 
-            foreach (var provisionGap in dto.ProvisionGapItems)
-            {
-                Debug.WriteLine($"{provisionGap.Workplace}\t{provisionGap.PlacementsDetail}\t{provisionGap.Reason}");
-            }
-
-            //var fileContent = await _excelFileWriter.WriteReportAsync(dto);
-            
             return new FileDownloadDto
             {
-                FileName = $"{dto.CompanyName}_opportunities_{DateTime.Today:ddMMMyyyy}.xlsx",
+                FileName = $"{companyName}_opportunities_{formattedDate}.xlsx",
                 ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                FileContent = new byte[0]
+                FileContent = fileContent
             };
         }
 

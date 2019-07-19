@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 {
     public class When_OpportunityRepository_GetPipelineOpportunities_Is_Called
     {
-        private readonly OpportunityPipelineDto _result;
+        private readonly OpportunityReportDto _result;
 
         public When_OpportunityRepository_GetPipelineOpportunities_Is_Called()
         {

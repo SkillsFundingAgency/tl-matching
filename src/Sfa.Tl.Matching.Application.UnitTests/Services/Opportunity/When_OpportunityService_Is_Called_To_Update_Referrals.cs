@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
@@ -48,9 +49,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, provisionGapRepository, _referralRepository, googleMapApiClient);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, 
+                provisionGapRepository, _referralRepository, googleMapApiClient, 
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             var dto = new OpportunityItemDto
             {

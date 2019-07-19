@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoFixture;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
@@ -11,23 +12,15 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.RepeatCount = 2;
             fixture.Customizations.Add(new NumericSequenceGenerator());
 
-            var opportunity = fixture.Create<Opportunity>();
-            const int itemId = 100;
+            fixture.Customize<MatchingConfiguration>(composer =>
+                composer.With(config => config.SendEmailEnabled, true)
+                    .With(config => config.NotificationsSystemId, "TLevelsIndustryPlacement"));
 
-            fixture.Customize<OpportunityItem>(composer => 
-                                                        composer.With(oi => oi.OpportunityId, opportunity.Id)
-                                                                .With(oi => oi.Opportunity, opportunity)
-                                                                .With(oi => oi.Id, itemId));
+            fixture.Customize<Provider>(composer => composer.With(p => p.IsCdfProvider, true)
+                .With(p => p.IsEnabledForReferral, true));
 
-            fixture.Customize<Referral>(composer => composer.With(referral => referral.OpportunityItemId, itemId));
-            fixture.Customize<ProvisionGap>(composer => composer.With(gap => gap.OpportunityItemId, itemId));
-
-            var items = fixture.Create<List<OpportunityItem>>();
-
-            fixture.Customize<Opportunity>(composer => composer.With(op => op.Id, opportunity.Id)
-                .With(op => op.OpportunityItem, items ));
-
-
+            fixture.Customize<ProviderVenue>(composer => composer.With(pv => pv.IsRemoved, false)
+                .With(pv => pv.IsEnabledForReferral, true));
         }
     }
 }

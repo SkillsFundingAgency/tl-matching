@@ -34,6 +34,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 where op.Id == opportunityId
                       && oi.IsSelectedForReferral
                       && oi.IsSaved
+                      && !oi.IsCompleted
                       && p.IsCdfProvider
                       && p.IsEnabledForReferral
                       && pv.IsEnabledForReferral
@@ -86,6 +87,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                       where oi.OpportunityId == opportunityId 
                                             && oi.IsSelectedForReferral 
                                             && oi.IsSaved
+                                            && !oi.IsCompleted
                                             && !pv.IsRemoved
                                             && pv.IsEnabledForReferral
                                             && p.IsCdfProvider
@@ -145,13 +147,13 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return opportunityBasket;
         }
 
-        public async Task<OpportunityPipelineDto> GetPipelineOpportunitiesAsync(int opportunityId)
+        public async Task<OpportunityReportDto> GetPipelineOpportunitiesAsync(int opportunityId)
         {
             var dto = await (from o in _dbContext.Opportunity.Include(o => o.OpportunityItem).ThenInclude(oi => oi.ProvisionGap)
                                            join e in _dbContext.Employer
                                                on o.EmployerId equals e.Id
                                            where o.Id == opportunityId
-                                           select new OpportunityPipelineDto
+                                           select new OpportunityReportDto
                                            {
                                                CompanyName = e.CompanyName,
                                                ProvisionGapItems = o.OpportunityItem

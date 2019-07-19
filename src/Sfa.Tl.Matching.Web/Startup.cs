@@ -30,7 +30,9 @@ using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -236,6 +238,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
+
+            services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
         }
     }
 }

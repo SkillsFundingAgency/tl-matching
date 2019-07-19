@@ -38,7 +38,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             var provisionGapRepository = new GenericRepository<ProvisionGap>(loggerProvisionGapRepository, MatchingDbContext);
             var referralRepository = new GenericRepository<Referral>(loggerReferralRepository, MatchingDbContext);
             
-            var googleMapsApiClient = Substitute.For<IGoogleMapApiClient>(); 
+            var googleMapsApiClient = Substitute.For<IGoogleMapApiClient>();
+            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
+
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
             httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
             {
@@ -68,7 +71,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
                 opportunityItemRepository, 
                 provisionGapRepository, 
                 referralRepository,
-                googleMapsApiClient);
+                googleMapsApiClient,
+                opportunityPipelineReportWriter,
+                dateTimeProvider);
         }
 
         internal void ResetData(string employerContact)

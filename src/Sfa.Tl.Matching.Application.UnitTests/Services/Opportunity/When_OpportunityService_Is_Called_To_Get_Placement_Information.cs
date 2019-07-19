@@ -4,6 +4,7 @@ using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders;
@@ -30,6 +31,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             var dto = new OpportunityItemBuilder()
                 .Build();
@@ -40,7 +43,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     Arg.Any<Expression<Func<OpportunityItem, object>>>())
                 .Returns(dto);
             
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, 
+                provisionGapRepository, referralRepository, googleMapApiClient,
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             _result = opportunityService.GetPlacementInformationAsync(1)
                 .GetAwaiter().GetResult();
