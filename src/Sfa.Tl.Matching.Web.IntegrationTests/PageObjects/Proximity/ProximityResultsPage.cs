@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity;
@@ -8,6 +7,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
 {
     public class ProximityResultsPage : PageBase
     {
+        private readonly By _noSuitableProvidersLink = By.Id("tl-search-nosuitable");
         private readonly By _skillAreaSelect = By.Id("SelectedRouteId");
         private readonly By _postcode = By.Id("Postcode");
         private readonly By _searchRadiusSelect = By.Id("SearchRadius");
@@ -42,6 +42,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
             Driver.FindElement(_searchButton).Click();
 
             return new ProximityResultsPage(Driver);
+        }
+
+        public PlacementInformationPage ClickNoSuitableProvidersLink()
+        {
+            Driver.FindElement(_noSuitableProvidersLink).Click();
+
+            return new PlacementInformationPage(Driver);
         }
 
         public ProximityResultsPage ClickContinue()

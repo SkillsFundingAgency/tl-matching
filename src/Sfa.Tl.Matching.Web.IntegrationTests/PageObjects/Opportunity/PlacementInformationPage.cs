@@ -13,5 +13,12 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
         public PlacementInformationPage(IWebDriver driver) : base(driver)
         {
         }
+
+        public FindEmployerPage ClickContinue()
+        {
+            Driver.FindElement(_continueButton).Click();
+
+            return new FindEmployerPage(Driver);
+        }
     }
 }

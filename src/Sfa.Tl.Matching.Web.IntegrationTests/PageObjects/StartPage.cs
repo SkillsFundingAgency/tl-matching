@@ -7,6 +7,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects
 {
     public class StartPage : PageBase
     {
+        private readonly By _viewOpportunitiesLink = By.Id("tl-view-opportunities-link");
         private readonly By _uploadLink = By.Id("tl-upload-link");
         private readonly By _providerLink = By.Id("tl-Add-edit-provider-link");
         private readonly By _qualificationLink = By.Id("tl-edit-qualifications-link");
@@ -41,6 +42,26 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects
             Driver.FindElement(_startButton).Click();
 
             return new ProximityIndexPage(Driver);
+        }
+
+        public void ClickOpportunitiesLink()
+        {
+            Driver.FindElement(_viewOpportunitiesLink).Click();
+        }
+
+        public void ClickUploadLink()
+        {
+            Driver.FindElement(_uploadLink).Click();
+        }
+
+        public void ClickProviderLink()
+        {
+            Driver.FindElement(_providerLink).Click();
+        }
+
+        public void ClickQualificationLink()
+        {
+            Driver.FindElement(_qualificationLink).Click();
         }
     }
 }

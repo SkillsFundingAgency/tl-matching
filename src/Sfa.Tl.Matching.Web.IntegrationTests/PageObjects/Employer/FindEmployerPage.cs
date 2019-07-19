@@ -10,5 +10,12 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
         public FindEmployerPage(IWebDriver driver) : base(driver)
         {
         }
+
+        public DetailsPage ClickContinue()
+        {
+            Driver.FindElement(_continueButton).Click();
+
+            return new DetailsPage(Driver);
+        }
     }
 }
