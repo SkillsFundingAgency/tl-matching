@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Templates\PipelineOpportunitiesReportTemplate.xltx" />
+    <None Remove="Templates\PipelineOpportunitiesReportTemplate.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Templates\PipelineOpportunitiesReportTemplate.xltx" />
+    <EmbeddedResource Include="Templates\PipelineOpportunitiesReportTemplate.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
