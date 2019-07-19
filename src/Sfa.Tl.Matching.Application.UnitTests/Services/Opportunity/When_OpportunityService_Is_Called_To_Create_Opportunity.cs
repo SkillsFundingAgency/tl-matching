@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
-            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             _opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())

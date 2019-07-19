@@ -3,13 +3,13 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
 {
-    internal class OpportunityPipelineDtoBuilder
+    internal class OpportunityReportDtoBuilder
     {
-        private readonly OpportunityPipelineDto _dto;
+        private readonly OpportunityReportDto _dto;
 
-        public OpportunityPipelineDtoBuilder()
+        public OpportunityReportDtoBuilder()
         {
-            _dto = new OpportunityPipelineDto
+            _dto = new OpportunityReportDto
             {
                 CompanyName = "Company Name",
                 ReferralItems = new List<ReferralItemDto>(),
@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
             };
         }
 
-        internal OpportunityPipelineDtoBuilder AddReferralItem()
+        internal OpportunityReportDtoBuilder AddReferralItem()
         {
             _dto.ReferralItems.Add(new ReferralItemDto
             {
@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
             return this;
         }
 
-        internal OpportunityPipelineDtoBuilder AddProvisionGapItem()
+        internal OpportunityReportDtoBuilder AddProvisionGapItem()
         {
             _dto.ProvisionGapItems.Add(new ProvisionGapItemDto
             {
@@ -49,6 +49,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
             return this;
         }
 
-        public OpportunityPipelineDto Build() => _dto;
+        public OpportunityReportDto Build() => _dto;
     }
 }

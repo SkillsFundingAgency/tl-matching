@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     public class When_OpportunityService_Is_Called_To_Get_Opportunity_Spreadsheet_Data
     {
         private readonly IOpportunityRepository _opportunityRepository;
-        private readonly IFileWriter<OpportunityPipelineDto> _opportunityPipelineReportWriter;
+        private readonly IFileWriter<OpportunityReportDto> _opportunityPipelineReportWriter;
 
         private readonly FileDownloadDto _result;
 
@@ -31,13 +31,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
-            _opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            _opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
 
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             dateTimeProvider.UtcNow().Returns(new DateTime(2019, 03, 10));
 
             _opportunityRepository.GetPipelineOpportunitiesAsync(Arg.Any<int>())
-                .Returns(new OpportunityPipelineDtoBuilder()
+                .Returns(new OpportunityReportDtoBuilder()
                     .AddReferralItem()
                     .AddProvisionGapItem()
                     .Build());
@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityPipelineReportWriter
                 .Received(1)
-                .WriteReport(Arg.Any<OpportunityPipelineDto>());
+                .WriteReport(Arg.Any<OpportunityReportDto>());
         }
 
         [Fact]

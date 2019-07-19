@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                                 [Frozen] IRepository<ProvisionGap> provisionGapRepository,
                                 [Frozen] IRepository<Domain.Models.Referral> referralRepository,
                                 [Frozen] IGoogleMapApiClient googleMapApiClient,
-                                [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter,
+                                [Frozen] IFileWriter<OpportunityReportDto> opportunityPipelineReportWriter,
                                 [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IRepository<ProvisionGap> provisionGapRepository,
             [Frozen] IRepository<Domain.Models.Referral> referralRepository,
             [Frozen] IGoogleMapApiClient googleMapApiClient,
-            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter,
+            [Frozen] IFileWriter<OpportunityReportDto> opportunityPipelineReportWriter,
             [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
@@ -104,7 +104,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IRepository<ProvisionGap> provisionGapRepository,
             [Frozen] IRepository<Domain.Models.Referral> referralRepository,
             [Frozen] IGoogleMapApiClient googleMapApiClient,
-            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter,
+            [Frozen] IFileWriter<OpportunityReportDto> opportunityPipelineReportWriter,
             [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
@@ -143,7 +143,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IRepository<ProvisionGap> provisionGapRepository,
             [Frozen] IRepository<Domain.Models.Referral> referralRepository,
             [Frozen] IGoogleMapApiClient googleMapApiClient,
-            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter,
+            [Frozen] IFileWriter<OpportunityReportDto> opportunityPipelineReportWriter,
             [Frozen] IDateTimeProvider dateTimeProvider
         )
         {

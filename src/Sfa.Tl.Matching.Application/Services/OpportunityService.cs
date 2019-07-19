@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IRepository<ProvisionGap> _provisionGapRepository;
         private readonly IRepository<Referral> _referralRepository;
         private readonly IGoogleMapApiClient _googleMapApiClient;
-        private readonly IFileWriter<OpportunityPipelineDto> _opportunityPipelineReportWriter;
+        private readonly IFileWriter<OpportunityReportDto> _opportunityPipelineReportWriter;
         private readonly IDateTimeProvider _dateTimeProvider;
 
         public OpportunityService(
@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.Services
             IRepository<ProvisionGap> provisionGapRepository,
             IRepository<Referral> referralRepository,
             IGoogleMapApiClient googleMapApiClient,
-            IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter,
+            IFileWriter<OpportunityReportDto> opportunityPipelineReportWriter,
             IDateTimeProvider dateTimeProvider)
         {
             _mapper = mapper;
@@ -425,7 +425,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return new FileDownloadDto
             {
-                FileName = $"{companyName}_opportunities_{_dateTimeProvider.UtcNow().ToGmtStandardTime():ddMMMyyyy}.xlsx",
+                FileName = $"{companyName}_opportunities_{formattedDate}.xlsx",
                 ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 FileContent = fileContent
             };

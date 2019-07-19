@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class OpportunityPipelineDto
+    public class OpportunityReportDto
     {
         public string CompanyName { get; set; }
 

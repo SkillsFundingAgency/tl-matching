@@ -7,13 +7,13 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
 {
-    public class OpportunityPipelineReportWriter : ExcelFileWriter<OpportunityPipelineDto> 
+    public class OpportunityPipelineReportWriter : ExcelFileWriter<OpportunityReportDto> 
     {
         public OpportunityPipelineReportWriter()
         {
         }
 
-        public override byte[] WriteReport(OpportunityPipelineDto data)
+        public override byte[] WriteReport(OpportunityReportDto data)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = $"{assembly.GetName().Name}.Templates.PipelineOpportunitiesReportTemplate.xlsx";
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
             }
         }
 
-        private void WriteReferralsToSheet(OpportunityPipelineDto dto, SheetData sheetData)
+        private void WriteReferralsToSheet(OpportunityReportDto dto, SheetData sheetData)
         {
             var rowIndex = 2;
 
@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
             }
         }
 
-        private void WriteProvisionGapsToSheet(OpportunityPipelineDto dto, SheetData sheetData)
+        private void WriteProvisionGapsToSheet(OpportunityReportDto dto, SheetData sheetData)
         {
             var rowIndex = 2;
 

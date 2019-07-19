@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 .Returns(SetProvisionGaps().AsQueryable());
 
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
-            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             var opportunityService = new OpportunityService(mapper, _opportunityRepository, _opportunityItemRepository, 

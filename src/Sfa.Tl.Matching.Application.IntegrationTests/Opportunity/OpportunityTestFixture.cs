@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             var referralRepository = new GenericRepository<Referral>(loggerReferralRepository, MatchingDbContext);
             
             var googleMapsApiClient = Substitute.For<IGoogleMapApiClient>();
-            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();

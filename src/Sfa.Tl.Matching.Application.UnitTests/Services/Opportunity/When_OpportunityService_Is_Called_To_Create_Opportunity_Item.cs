@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             _googleMapApiClient.GetAddressDetails(Arg.Is<string>(s => s == "AA1 1AA")).Returns("Coventry");
 
-            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             var opportunityRepository = Substitute.For<IOpportunityRepository>();

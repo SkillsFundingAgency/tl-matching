@@ -239,7 +239,7 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
 
-            services.AddTransient<IFileWriter<OpportunityPipelineDto>, OpportunityPipelineReportWriter>();
+            services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
         }
     }
 }
