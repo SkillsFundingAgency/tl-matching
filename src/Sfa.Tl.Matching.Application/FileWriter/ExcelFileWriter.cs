@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
-using DocumentFormat.OpenXml;
+using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -18,6 +15,41 @@ namespace Sfa.Tl.Matching.Application.FileWriter
         public virtual byte[] WriteReport(TDto data)
         {
             return new byte[0];
+        }
+
+        public SheetData GetSheetData(SpreadsheetDocument spreadSheet, int index)
+        {
+            var workbookPart = spreadSheet.WorkbookPart;
+            var sheet = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>().ToArray()[index];
+            var worksheetPart = workbookPart.GetPartById(sheet.Id.Value) as WorksheetPart;
+            var worksheet = worksheetPart.Worksheet;
+            var sheetData = worksheet.GetFirstChild<SheetData>();
+            return sheetData;
+        }
+
+        public string GetSheetId(SpreadsheetDocument spreadSheet, int index)
+        {
+            var workbookPart = spreadSheet.WorkbookPart;
+            var sheet = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>().ToArray()[index];
+            return sheet.Id.Value;
+        }
+
+        public void DeleteSheet(SpreadsheetDocument spreadSheet, string sheetId)
+        {
+            var workbookPart = spreadSheet.WorkbookPart;
+
+            var sheet = workbookPart.Workbook.Descendants<Sheet>()
+                .FirstOrDefault(s => s.Id == sheetId);
+
+            if (sheet == null)
+            {
+                return;
+            }
+
+            var worksheetPart = (WorksheetPart)(workbookPart.GetPartById(sheetId));
+            sheet.Remove();
+
+            workbookPart.DeletePart(worksheetPart);
         }
 
         public static Cell CreateTextCell(int columnIndex, int rowIndex, object cellValue)

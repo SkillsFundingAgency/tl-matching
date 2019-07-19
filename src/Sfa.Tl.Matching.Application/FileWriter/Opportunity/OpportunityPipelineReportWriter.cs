@@ -1,18 +1,15 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
 {
-    public class OpportunityPipelineReportWriter : ExcelFileWriter<OpportunityReportDto> 
+    public class OpportunityPipelineReportWriter : ExcelFileWriter<OpportunityReportDto>
     {
-        public OpportunityPipelineReportWriter()
-        {
-        }
-
         public override byte[] WriteReport(OpportunityReportDto data)
         {
             var assembly = Assembly.GetExecutingAssembly();
@@ -25,21 +22,13 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
 
                 using (var spreadSheet = SpreadsheetDocument.Open(stream, true))
                 {
-                    var workbookPart = spreadSheet.WorkbookPart;
-                    var sheet = workbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
-                    var worksheetPart = workbookPart.GetPartById(sheet.Id.Value) as WorksheetPart;
-                    var worksheet = worksheetPart.Worksheet;
+                    var referralsSheetData = GetSheetData(spreadSheet, 0);
+                    WriteReferralsToSheet(data, referralsSheetData);
 
-                    var sheetData1 = worksheet.GetFirstChild<SheetData>();
+                    var provisionGapsheetData = GetSheetData(spreadSheet, 1);
+                    WriteProvisionGapsToSheet(data, provisionGapsheetData);
 
-                    WriteReferralsToSheet(data, sheetData1);
-
-                    var sheet2 = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>().Skip(1).First();
-                    var worksheetPart2 = workbookPart.GetPartById(sheet2.Id.Value) as WorksheetPart;
-                    var worksheet2 = worksheetPart2.Worksheet;
-                    var sheetData2 = worksheet2.GetFirstChild<SheetData>();
-
-                    WriteProvisionGapsToSheet(data, sheetData2);
+                    RemoveEmptySheets(spreadSheet, data);
 
                     spreadSheet.WorkbookPart.Workbook.Save();
                     spreadSheet.Close();
@@ -51,39 +40,49 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
             }
         }
 
-        private void WriteReferralsToSheet(OpportunityReportDto dto, SheetData sheetData)
+        private void RemoveEmptySheets(SpreadsheetDocument spreadSheet, OpportunityReportDto data)
         {
-            var rowIndex = 2;
+            var sheetIdsToRemove = new List<string>();
 
-            ReferralItemDto previousReferral = null;
+            if (data.ReferralItems.Count == 0)
+            {
+                sheetIdsToRemove.Add(GetSheetId(spreadSheet, 0));
+            }
+
+            if (data.ProvisionGapItems.Count == 0)
+            {
+                sheetIdsToRemove.Add(GetSheetId(spreadSheet, 1));
+            }
+
+            foreach (var sheetId in sheetIdsToRemove)
+            {
+                DeleteSheet(spreadSheet, sheetId);
+            }
+        }
+
+        private void WriteReferralsToSheet(OpportunityReportDto dto, OpenXmlElement sheetData)
+        {
+            var rowIndex = 3;
+
             foreach (var referral in dto.ReferralItems)
             {
                 var row = new Row { RowIndex = (uint)rowIndex };
 
-                if (previousReferral == null ||
-                    (referral.Workplace != previousReferral.Workplace &&
-                     referral.JobRole != previousReferral.JobRole &&
-                     referral.PlacementsDetail != previousReferral.PlacementsDetail)
-                )
-                {
-                    row.AppendChild(CreateTextCell(1, rowIndex, referral.Workplace));
-                    row.AppendChild(CreateTextCell(2, rowIndex, referral.JobRole));
-                    row.AppendChild(CreateTextCell(3, rowIndex, referral.PlacementsDetail));
-                }
-
+                row.AppendChild(CreateTextCell(1, rowIndex, referral.Workplace));
+                row.AppendChild(CreateTextCell(2, rowIndex, referral.JobRole));
+                row.AppendChild(CreateTextCell(3, rowIndex, referral.PlacementsDetail));
                 row.AppendChild(CreateTextCell(4, rowIndex, referral.ProviderName));
                 row.AppendChild(CreateTextCell(5, rowIndex, referral.ProviderVenueTownAndPostcode));
                 row.AppendChild(CreateTextCell(6, rowIndex, $"{referral.DistanceFromEmployer:#0.0} miles"));
 
                 sheetData.AppendChild(row);
                 rowIndex++;
-                previousReferral = referral;
             }
         }
 
-        private void WriteProvisionGapsToSheet(OpportunityReportDto dto, SheetData sheetData)
+        private void WriteProvisionGapsToSheet(OpportunityReportDto dto, OpenXmlElement sheetData)
         {
-            var rowIndex = 2;
+            var rowIndex = 3;
 
             foreach (var provisionGap in dto.ProvisionGapItems)
             {
