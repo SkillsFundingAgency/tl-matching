@@ -34,7 +34,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             _opportunityRepository.GetPipelineOpportunitiesAsync(Arg.Any<int>())
-                .Returns(new OpportunityPipelineDtoBuilder().Build());
+                .Returns(new OpportunityPipelineDtoBuilder()
+                    .AddReferralItem()
+                    .AddProvisionGapItem()
+                    .Build());
 
             var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient, _opportunityPipelineReportWriter);
 

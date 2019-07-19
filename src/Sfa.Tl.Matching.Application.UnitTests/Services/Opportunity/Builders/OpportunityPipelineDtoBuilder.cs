@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
         {
             _dto = new OpportunityPipelineDto
             {
-                CompanyName = "CompanyName",
+                CompanyName = "Company Name",
                 ReferralItems = new List<ReferralItemDto>(),
                 ProvisionGapItems = new List<ProvisionGapItemDto>()
             };

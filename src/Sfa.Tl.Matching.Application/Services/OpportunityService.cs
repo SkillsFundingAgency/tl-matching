@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
-using Sfa.Tl.Matching.Application.FileWriter;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.EqualityComparer;
@@ -421,8 +417,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var fileContent = _opportunityPipelineReportWriter.WriteReport(dto);
 
-            //TODO: Clean CompanyName so it has valid file name characters
-            var companyName = dto.CompanyName;
+            var companyName = dto.CompanyName.ToLetterOrDigit();
 
             return new FileDownloadDto
             {
