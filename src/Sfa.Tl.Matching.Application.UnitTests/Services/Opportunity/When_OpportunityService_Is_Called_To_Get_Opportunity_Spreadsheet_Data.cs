@@ -29,9 +29,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
+            var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             _opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
-            var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
+
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
+            dateTimeProvider.UtcNow().Returns(new DateTime(2019, 03, 10));
 
             _opportunityRepository.GetPipelineOpportunitiesAsync(Arg.Any<int>())
                 .Returns(new OpportunityPipelineDtoBuilder()
@@ -39,7 +42,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     .AddProvisionGapItem()
                     .Build());
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient, _opportunityPipelineReportWriter);
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, 
+                provisionGapRepository, referralRepository, googleMapApiClient,
+                _opportunityPipelineReportWriter, dateTimeProvider);
 
             _result = opportunityService.GetOpportunitySpreadsheetDataAsync(1)
                 .GetAwaiter().GetResult();
@@ -66,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _result.Should().NotBeNull();
             System.IO.Path.GetFileNameWithoutExtension(_result.FileName)
-                .Should().Be($"CompanyName_opportunities_{DateTime.Today:ddMMMyyyy}");
+                .Should().Be($"CompanyName_opportunities_10Mar2019");
             System.IO.Path.GetExtension(_result.FileName)
                 .Should().Be(".xlsx");
             _result.ContentType

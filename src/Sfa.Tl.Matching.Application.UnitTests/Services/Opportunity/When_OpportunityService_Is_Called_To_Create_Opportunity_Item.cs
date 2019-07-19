@@ -56,6 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _googleMapApiClient.GetAddressDetails(Arg.Is<string>(s => s == "AA1 1AA")).Returns("Coventry");
 
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
@@ -64,7 +65,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _opportunityItemRepository.Create(Arg.Any<OpportunityItem>())
                 .Returns(OpportunityItemId);
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository, _googleMapApiClient, opportunityPipelineReportWriter);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, 
+                provisionGapRepository, referralRepository, _googleMapApiClient,
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             var dto = new OpportunityItemDto
             {

@@ -29,12 +29,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             _opportunityItemRepository.Count(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(2);
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, 
+                provisionGapRepository, referralRepository, googleMapApiClient,
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             _result = opportunityService.GetSavedOpportunityItemCountAsync(1)
                 .GetAwaiter().GetResult();

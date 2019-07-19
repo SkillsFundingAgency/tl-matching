@@ -35,6 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             var opportunityItem = new OpportunityItem
             {
@@ -46,7 +47,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             _opportunityItemRepository.GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(opportunityItem);
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, 
+                referralRepository, googleMapApiClient,
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             var dto = new PlacementInformationSaveDto
             {

@@ -26,6 +26,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IRepository<Referral> _referralRepository;
         private readonly IGoogleMapApiClient _googleMapApiClient;
         private readonly IFileWriter<OpportunityPipelineDto> _opportunityPipelineReportWriter;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
         public OpportunityService(
             IMapper mapper,
@@ -34,7 +35,8 @@ namespace Sfa.Tl.Matching.Application.Services
             IRepository<ProvisionGap> provisionGapRepository,
             IRepository<Referral> referralRepository,
             IGoogleMapApiClient googleMapApiClient,
-            IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter)
+            IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter,
+            IDateTimeProvider dateTimeProvider)
         {
             _mapper = mapper;
             _opportunityRepository = opportunityRepository;
@@ -43,6 +45,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _referralRepository = referralRepository;
             _googleMapApiClient = googleMapApiClient;
             _opportunityPipelineReportWriter = opportunityPipelineReportWriter;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<int> CreateOpportunityAsync(OpportunityDto dto)
@@ -418,10 +421,11 @@ namespace Sfa.Tl.Matching.Application.Services
             var fileContent = _opportunityPipelineReportWriter.WriteReport(dto);
 
             var companyName = dto.CompanyName.ToLetterOrDigit();
+            var formattedDate = _dateTimeProvider.UtcNow().ToGmtStandardTime().ToString("ddMMMyyyy");
 
             return new FileDownloadDto
             {
-                FileName = $"{companyName}_opportunities_{DateTime.Today:ddMMMyyyy}.xlsx",
+                FileName = $"{companyName}_opportunities_{_dateTimeProvider.UtcNow().ToGmtStandardTime():ddMMMyyyy}.xlsx",
                 ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 FileContent = fileContent
             };

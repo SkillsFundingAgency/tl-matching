@@ -33,6 +33,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
@@ -52,7 +53,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     }
                 }.AsQueryable());
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, provisionGapRepository, _referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, 
+                provisionGapRepository, _referralRepository, googleMapApiClient,
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             _referralDtos = opportunityService.GetReferrals(OpportunityItemId);
         }

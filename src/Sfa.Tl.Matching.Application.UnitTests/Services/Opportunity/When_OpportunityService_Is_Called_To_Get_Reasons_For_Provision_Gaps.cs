@@ -20,7 +20,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
     public class When_OpportunityService_Is_Called_To_Get_Reasons_For_Provision_Gaps
     {
-
         [Theory, AutoDomainData]
         public async Task Then_Reason_Should_Contain_The_Values(
                                 MatchingDbContext dbContext,
@@ -31,7 +30,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                                 [Frozen] IRepository<ProvisionGap> provisionGapRepository,
                                 [Frozen] IRepository<Domain.Models.Referral> referralRepository,
                                 [Frozen] IGoogleMapApiClient googleMapApiClient,
-                                [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter
+                                [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter,
+                                [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
             opportunityItem.OpportunityType = "ProvisionGap";
@@ -46,14 +46,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
+                provisionGapRepository, referralRepository, googleMapApiClient, 
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
                 .Should().ContainAny("Employer had a bad experience with them",
                     "Providers do not have students doing the right course", "Providers were too far away");
-
         }
 
         [Theory, AutoDomainData]
@@ -66,7 +66,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IRepository<ProvisionGap> provisionGapRepository,
             [Frozen] IRepository<Domain.Models.Referral> referralRepository,
             [Frozen] IGoogleMapApiClient googleMapApiClient,
-            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter
+            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter,
+            [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
             opportunityItem.OpportunityType = "ProvisionGap";
@@ -81,7 +82,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
+                provisionGapRepository, referralRepository, googleMapApiClient, 
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
 
@@ -90,7 +92,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
                 .Should().NotContain("Providers were too far away");
-
         }
 
         [Theory, AutoDomainData]
@@ -103,7 +104,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IRepository<ProvisionGap> provisionGapRepository,
             [Frozen] IRepository<Domain.Models.Referral> referralRepository,
             [Frozen] IGoogleMapApiClient googleMapApiClient,
-            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter
+            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter,
+            [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
             opportunityItem.OpportunityType = "ProvisionGap";
@@ -118,7 +120,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
+                provisionGapRepository, referralRepository, googleMapApiClient, 
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
 
@@ -140,7 +143,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IRepository<ProvisionGap> provisionGapRepository,
             [Frozen] IRepository<Domain.Models.Referral> referralRepository,
             [Frozen] IGoogleMapApiClient googleMapApiClient,
-            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter
+            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter,
+            [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
             opportunityItem.OpportunityType = "ProvisionGap";
@@ -155,7 +159,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
+                provisionGapRepository, referralRepository, googleMapApiClient, 
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
 
@@ -167,7 +172,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
                 .Should().NotContain("Employer had a bad experience with them");
-
         }
 
         private static async Task SetProvisionGapData(
@@ -188,6 +192,5 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             await dbContext.SaveChangesAsync();
         }
-
     }
 }

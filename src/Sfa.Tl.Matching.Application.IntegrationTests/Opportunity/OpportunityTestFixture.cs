@@ -40,6 +40,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             
             var googleMapsApiClient = Substitute.For<IGoogleMapApiClient>();
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
             httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
@@ -71,7 +72,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
                 provisionGapRepository, 
                 referralRepository,
                 googleMapsApiClient,
-                opportunityPipelineReportWriter);
+                opportunityPipelineReportWriter,
+                dateTimeProvider);
         }
 
         internal void ResetData(string employerContact)

@@ -31,6 +31,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             var viewModel = new OpportunityBasketViewModelBuilder().AddReferralItem()
                 .AddReferralItem()
@@ -40,7 +41,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             _opportunityRepository.GetOpportunityBasket(1).Returns(viewModel);
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, 
+                provisionGapRepository, referralRepository, googleMapApiClient,
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             _result = opportunityService.GetOpportunityBasket(1)
                 .GetAwaiter().GetResult();

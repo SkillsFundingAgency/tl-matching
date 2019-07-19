@@ -30,6 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             var opportunity = new Domain.Models.Opportunity
             {
@@ -41,7 +42,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>())
                 .Returns(opportunity);
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, 
+                referralRepository, googleMapApiClient,
+                opportunityPipelineReportWriter, dateTimeProvider);
 
             _result = opportunityService.GetCompanyNameWithAkaAsync(1).GetAwaiter().GetResult();
         }
