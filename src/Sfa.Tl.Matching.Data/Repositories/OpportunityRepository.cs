@@ -34,6 +34,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 where op.Id == opportunityId
                       && oi.IsSelectedForReferral
                       && oi.IsSaved
+                      && !oi.IsCompleted
                       && p.IsCdfProvider
                       && p.IsEnabledForReferral
                       && pv.IsEnabledForReferral
@@ -86,6 +87,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                       where oi.OpportunityId == opportunityId 
                                             && oi.IsSelectedForReferral 
                                             && oi.IsSaved
+                                            && !oi.IsCompleted
                                             && !pv.IsRemoved
                                             && pv.IsEnabledForReferral
                                             && p.IsCdfProvider

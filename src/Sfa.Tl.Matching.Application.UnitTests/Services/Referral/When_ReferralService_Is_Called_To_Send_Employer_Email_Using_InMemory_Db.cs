@@ -73,11 +73,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic => dic.ContainsKey("placements_list")), Arg.Any<string>());
+                Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("placements_list")), Arg.Any<string>());
 
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic =>
-                    dic.ContainsKey("placements_list") && dic["placements_list"] == expectedResult), Arg.Any<string>());
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("placements_list") && tokens["placements_list"] == expectedResult), Arg.Any<string>());
 
         }
 
@@ -107,28 +107,28 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic =>
-                    dic.ContainsKey("employer_contact_name") && dic["employer_contact_name"] == opportunity.EmployerContact),
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("employer_contact_name") && tokens["employer_contact_name"] == opportunity.EmployerContact),
                 Arg.Any<string>());
 
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic =>
-                    dic.ContainsKey("employer_business_name") && dic["employer_business_name"] == opportunity.Employer.CompanyName),
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == opportunity.Employer.CompanyName),
                 Arg.Any<string>());
 
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic =>
-                    dic.ContainsKey("employer_contact_number") && dic["employer_contact_number"] == opportunity.EmployerContactPhone),
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("employer_contact_number") && tokens["employer_contact_number"] == opportunity.EmployerContactPhone),
                 Arg.Any<string>());
 
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic =>
-                    dic.ContainsKey("employer_contact_email") && dic["employer_contact_email"] == opportunity.EmployerContactEmail),
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("employer_contact_email") && tokens["employer_contact_email"] == opportunity.EmployerContactEmail),
                 Arg.Any<string>());
 
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic =>
-                    dic.ContainsKey("employer_postcode") && dic["employer_postcode"] == opportunity.Employer.Postcode),
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("employer_postcode") && tokens["employer_postcode"] == opportunity.Employer.Postcode),
                 Arg.Any<string>());
 
 
@@ -159,12 +159,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic =>
-                    dic.ContainsKey("placements_list") && dic["placements_list"] == string.Empty), Arg.Any<string>());
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("placements_list") && tokens["placements_list"] == string.Empty), Arg.Any<string>());
 
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic =>
-                    dic.ContainsKey("placements_list") && dic["placements_list"] == expectedResult), Arg.Any<string>());
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("placements_list") && tokens["placements_list"] == expectedResult), Arg.Any<string>());
         }
 
         [Theory, AutoDomainData]
@@ -192,12 +192,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic =>
-                    dic.ContainsKey("placements_list") && dic["placements_list"] == string.Empty), Arg.Any<string>());
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("placements_list") && tokens["placements_list"] == string.Empty), Arg.Any<string>());
 
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(dic =>
-                    dic.ContainsKey("placements_list") && dic["placements_list"] == expectedResult), Arg.Any<string>());
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("placements_list") && tokens["placements_list"] == expectedResult), Arg.Any<string>());
         }
 
         private static async Task SetTestData(MatchingDbContext dbContext,
@@ -216,9 +216,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             foreach (var opportunityItem in items)
             {
                 opportunityItem.IsSaved = isSaved;
+                opportunityItem.IsCompleted = false;
                 opportunityItem.IsSelectedForReferral = isSelectedForReferral;
                 
                 dbContext.Entry(opportunityItem).Property("IsSaved").IsModified = true;
+                dbContext.Entry(opportunityItem).Property("IsCompleted").IsModified = true;
                 dbContext.Entry(opportunityItem).Property("IsSelectedForReferral").IsModified = true;
             }
 
