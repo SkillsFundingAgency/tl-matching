@@ -3,6 +3,7 @@ using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders;
@@ -16,6 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     public class When_OpportunityService_Is_Called_To_Get_Opportunity_Spreadsheet_Data
     {
         private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IFileWriter<OpportunityPipelineDto> _opportunityPipelineReportWriter;
 
         private readonly FileDownloadDto _result;
 
@@ -28,12 +30,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+            _opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             _opportunityRepository.GetPipelineOpportunitiesAsync(Arg.Any<int>())
                 .Returns(new OpportunityPipelineDtoBuilder().Build());
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient);
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, provisionGapRepository, referralRepository, googleMapApiClient, _opportunityPipelineReportWriter);
 
             _result = opportunityService.GetOpportunitySpreadsheetDataAsync(1)
                 .GetAwaiter().GetResult();
@@ -45,6 +48,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _opportunityRepository
                 .Received(1)
                 .GetPipelineOpportunitiesAsync(1);
+        }
+        
+        [Fact]
+        public void Then_WriteReport_Is_Called_Exactly_Once()
+        {
+            _opportunityPipelineReportWriter
+                .Received(1)
+                .WriteReport(Arg.Any<OpportunityPipelineDto>());
         }
 
         [Fact]

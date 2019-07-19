@@ -6,11 +6,13 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
@@ -28,7 +30,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                                 [Frozen] IRepository<OpportunityItem> opportunityItemRepository,
                                 [Frozen] IRepository<ProvisionGap> provisionGapRepository,
                                 [Frozen] IRepository<Domain.Models.Referral> referralRepository,
-                                [Frozen] IGoogleMapApiClient googleMapApiClient
+                                [Frozen] IGoogleMapApiClient googleMapApiClient,
+                                [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter
         )
         {
             opportunityItem.OpportunityType = "ProvisionGap";
@@ -43,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient);
+                provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
 
             var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
 
@@ -62,7 +65,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IRepository<OpportunityItem> opportunityItemRepository,
             [Frozen] IRepository<ProvisionGap> provisionGapRepository,
             [Frozen] IRepository<Domain.Models.Referral> referralRepository,
-            [Frozen] IGoogleMapApiClient googleMapApiClient
+            [Frozen] IGoogleMapApiClient googleMapApiClient,
+            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter
         )
         {
             opportunityItem.OpportunityType = "ProvisionGap";
@@ -77,7 +81,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient);
+                provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
 
             var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
 
@@ -98,7 +102,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IRepository<OpportunityItem> opportunityItemRepository,
             [Frozen] IRepository<ProvisionGap> provisionGapRepository,
             [Frozen] IRepository<Domain.Models.Referral> referralRepository,
-            [Frozen] IGoogleMapApiClient googleMapApiClient
+            [Frozen] IGoogleMapApiClient googleMapApiClient,
+            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter
         )
         {
             opportunityItem.OpportunityType = "ProvisionGap";
@@ -113,7 +118,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient);
+                provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
 
             var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
 
@@ -134,7 +139,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IRepository<OpportunityItem> opportunityItemRepository,
             [Frozen] IRepository<ProvisionGap> provisionGapRepository,
             [Frozen] IRepository<Domain.Models.Referral> referralRepository,
-            [Frozen] IGoogleMapApiClient googleMapApiClient
+            [Frozen] IGoogleMapApiClient googleMapApiClient,
+            [Frozen] IFileWriter<OpportunityPipelineDto> opportunityPipelineReportWriter
         )
         {
             opportunityItem.OpportunityType = "ProvisionGap";
@@ -149,7 +155,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient);
+                provisionGapRepository, referralRepository, googleMapApiClient, opportunityPipelineReportWriter);
 
             var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
 

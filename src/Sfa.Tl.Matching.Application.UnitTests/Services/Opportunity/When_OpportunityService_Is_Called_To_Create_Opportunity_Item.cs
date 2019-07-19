@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
@@ -53,7 +54,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             
             _googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             _googleMapApiClient.GetAddressDetails(Arg.Is<string>(s => s == "AA1 1AA")).Returns("Coventry");
-            
+
+            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityPipelineDto>>();
+
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
@@ -61,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _opportunityItemRepository.Create(Arg.Any<OpportunityItem>())
                 .Returns(OpportunityItemId);
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository, _googleMapApiClient);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, referralRepository, _googleMapApiClient, opportunityPipelineReportWriter);
 
             var dto = new OpportunityItemDto
             {

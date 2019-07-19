@@ -13,18 +13,11 @@ namespace Sfa.Tl.Matching.Application.FileWriter
     {
         public ExcelFileWriter()
         {
-
         }
 
-        public async Task<Stream> WriteReport(TDto data)
+        public virtual byte[] WriteReport(TDto data)
         {
-            //Takes dto for report?
-
-            //Create spreadsheet in stream
-            var stream = new MemoryStream();
-            
-            //returns stream? Would need to rely on caller to dispose it
-            return stream;
+            return new byte[0];
         }
 
         public static Cell CreateTextCell(int columnIndex, int rowIndex, object cellValue)
@@ -57,21 +50,6 @@ namespace Sfa.Tl.Matching.Application.FileWriter
             }
 
             return columnName;
-        }
-
-        public static SpreadsheetDocument CreateSpreadsheetFromTemplateResource(string resourceName)
-        {
-            using (var templateStream = Assembly.GetCallingAssembly().GetManifestResourceStream(resourceName))
-            using (var spreadsheetDocument1 = SpreadsheetDocument.Open(templateStream, false))
-            {
-                var spreadsheetDocument2 = (SpreadsheetDocument)spreadsheetDocument1.Clone();
-                if (resourceName.EndsWith(".xlsx"))
-                    return spreadsheetDocument2;
-
-                spreadsheetDocument2.ChangeDocumentType(SpreadsheetDocumentType.Workbook);
-                spreadsheetDocument2.Save();
-                return spreadsheetDocument2;
-            }
         }
     }
 }
