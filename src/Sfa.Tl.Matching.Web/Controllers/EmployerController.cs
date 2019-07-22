@@ -183,11 +183,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(await GetEmployerConsentViewModel(viewModel.OpportunityId, viewModel.OpportunityItemId));
 
-            await _opportunityService.ConfirmOpportunities(viewModel.OpportunityId);
-
-            // TODO Send emails
             await _referralService.SendEmployerReferralEmail(viewModel.OpportunityId);
             await _referralService.SendProviderReferralEmail(viewModel.OpportunityId);
+
+            await _opportunityService.ConfirmOpportunities(viewModel.OpportunityId);
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }
