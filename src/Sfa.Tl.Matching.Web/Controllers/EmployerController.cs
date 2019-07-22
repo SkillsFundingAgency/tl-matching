@@ -54,6 +54,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("who-is-employer/{opportunityId}-{opportunityItemId}")]
         public async Task<IActionResult> SaveOpportunityCompanyName(FindEmployerViewModel viewModel)
         {
             await ValidateAsync(viewModel);
@@ -78,6 +79,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("employer-details/{opportunityId}-{opportunityItemId}")]
         public async Task<IActionResult> SaveOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);

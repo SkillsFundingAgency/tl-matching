@@ -116,6 +116,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("placement-information/{opportunityItemId}")]
         public async Task<IActionResult> SavePlacementInformation(PlacementInformationSaveViewModel viewModel)
         {
             await Validate(viewModel);
