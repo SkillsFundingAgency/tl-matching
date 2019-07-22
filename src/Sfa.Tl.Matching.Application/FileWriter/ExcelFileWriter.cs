@@ -69,6 +69,20 @@ namespace Sfa.Tl.Matching.Application.FileWriter
             return cell;
         }
 
+        public static Cell CreateNumberCell(int columnIndex, int rowIndex, int cellValue)
+        {
+            var cell = new Cell
+            {
+                DataType = CellValues.Number,
+                CellReference = GetColumnName(columnIndex) + rowIndex
+            };
+
+            var value = new CellValue { Text = cellValue.ToString() };
+
+            cell.AppendChild(value);
+            return cell;
+        }
+
         public static string GetColumnName(int columnIndex)
         {
             var dividend = columnIndex;
