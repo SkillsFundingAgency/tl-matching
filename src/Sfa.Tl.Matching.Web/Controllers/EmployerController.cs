@@ -110,6 +110,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("check-employer-details/{opportunityId}-{opportunityItemId}")]
         public async Task<IActionResult> SaveCheckOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);

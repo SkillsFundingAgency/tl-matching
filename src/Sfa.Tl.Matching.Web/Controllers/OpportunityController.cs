@@ -193,7 +193,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("continue-opportunity", Name = "SaveSelectedOpportunities")]
+        [Route("employer-opportunities/{opportunityId}-{opportunityItemId}", Name = "SaveSelectedOpportunities")]
         public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
             if (viewModel.SubmitAction == "SaveSelectedOpportunities")
