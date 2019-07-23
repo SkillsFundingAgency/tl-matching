@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -8,13 +10,37 @@ namespace Sfa.Tl.Matching.Application.FileWriter
 {
     public class ExcelFileWriter<TDto> : IFileWriter<TDto> where TDto : class, new()
     {
-        public ExcelFileWriter()
-        {
-        }
+        public UInt32Value LeftAlignedNumberFormatId;
 
         public virtual byte[] WriteReport(TDto data)
         {
             return new byte[0];
+        }
+
+        public void AddBasicStyles(SpreadsheetDocument spreadsheet)
+        {
+            var stylesheet = spreadsheet.WorkbookPart.WorkbookStylesPart.Stylesheet;
+
+            var cellFormats = stylesheet.GetFirstChild<CellFormats>();
+            var cellFormatIndex = cellFormats.ChildElements.OfType<CellFormat>().Count();
+            var last = cellFormats.ChildElements.OfType<CellFormat>().Last();
+
+            LeftAlignedNumberFormatId = (uint)cellFormatIndex;
+            cellFormats.InsertAfter(
+                    new CellFormat
+                    {
+                        FormatId = 0,
+                        NumberFormatId = 0,
+                        FontId = 0,
+                        ApplyAlignment = true
+                    }, last)
+                .Append(new List<Alignment>
+                {
+                        new Alignment
+                        {
+                            Horizontal = HorizontalAlignmentValues.Left
+                        }
+                });
         }
 
         public SheetData GetSheetData(SpreadsheetDocument spreadSheet, int index)
@@ -22,8 +48,8 @@ namespace Sfa.Tl.Matching.Application.FileWriter
             var workbookPart = spreadSheet.WorkbookPart;
             var sheet = workbookPart.Workbook.Sheets.ChildElements.OfType<Sheet>().ToArray()[index];
             var worksheetPart = workbookPart.GetPartById(sheet.Id.Value) as WorksheetPart;
-            var worksheet = worksheetPart.Worksheet;
-            var sheetData = worksheet.GetFirstChild<SheetData>();
+            var worksheet = worksheetPart?.Worksheet;
+            var sheetData = worksheet?.GetFirstChild<SheetData>();
             return sheetData;
         }
 
@@ -69,12 +95,28 @@ namespace Sfa.Tl.Matching.Application.FileWriter
             return cell;
         }
 
-        public static Cell CreateNumberCell(int columnIndex, int rowIndex, int cellValue)
+        public Cell CreateNumberCell(int columnIndex, int rowIndex, int cellValue)
         {
             var cell = new Cell
             {
                 DataType = CellValues.Number,
                 CellReference = GetColumnName(columnIndex) + rowIndex
+            };
+
+            var value = new CellValue { Text = cellValue.ToString() };
+
+            cell.AppendChild(value);
+            return cell;
+        }
+
+
+        public Cell CreateNumberCell(int columnIndex, int rowIndex, int cellValue, uint style)
+        {
+            var cell = new Cell
+            {
+                DataType = CellValues.Number,
+                CellReference = GetColumnName(columnIndex) + rowIndex,
+                StyleIndex = style
             };
 
             var value = new CellValue { Text = cellValue.ToString() };

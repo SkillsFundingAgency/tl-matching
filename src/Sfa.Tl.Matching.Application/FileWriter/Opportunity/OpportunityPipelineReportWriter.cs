@@ -22,6 +22,8 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
 
                 using (var spreadSheet = SpreadsheetDocument.Open(stream, true))
                 {
+                    AddBasicStyles(spreadSheet);
+
                     var referralsSheetData = GetSheetData(spreadSheet, 0);
                     WriteReferralsToSheet(data, referralsSheetData);
 
@@ -72,7 +74,7 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
                 row.AppendChild(CreateTextCell(2, rowIndex, referral.JobRole));
 
                 row.AppendChild(int.TryParse(referral.PlacementsDetail, out var placements)
-                    ? CreateNumberCell(3, rowIndex, placements)
+                    ? CreateNumberCell(3, rowIndex, placements, LeftAlignedNumberFormatId)
                     : CreateTextCell(3, rowIndex, referral.PlacementsDetail));
 
                 row.AppendChild(CreateTextCell(4, rowIndex, referral.ProviderName));
@@ -95,7 +97,7 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
                 row.AppendChild(CreateTextCell(1, rowIndex, provisionGap.Workplace));
 
                 row.AppendChild(int.TryParse(provisionGap.PlacementsDetail, out var placements)
-                    ? CreateNumberCell(2, rowIndex, placements)
+                    ? CreateNumberCell(2, rowIndex, placements, LeftAlignedNumberFormatId)
                     : CreateTextCell(2, rowIndex, provisionGap.PlacementsDetail));
 
                 row.AppendChild(CreateTextCell(3, rowIndex, provisionGap.Reason));
