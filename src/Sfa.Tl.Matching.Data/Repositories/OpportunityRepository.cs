@@ -22,7 +22,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId)
         {
-
             var data = await (from op in _dbContext.Opportunity
                 join oi in _dbContext.OpportunityItem on op.Id equals oi.OpportunityId
                 join emp in _dbContext.Employer on op.EmployerId equals  emp.Id
@@ -52,10 +51,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     EmployerContactPhone = op.EmployerContactPhone,
                     EmployerContactEmail = op.EmployerContactEmail,
                     SearchRadius = oi.SearchRadius,
-                    Postcode = emp.Postcode,
+                    Postcode = oi.Postcode,
                     Town = oi.Town,
                     JobRole = oi.JobRole,
                     ProviderVenuePostcode = pv.Postcode,
+                    ProviderVenueTown = pv.Town,
                     PlacementsKnown = oi.PlacementsKnown,
                     Placements = oi.Placements,
                     RouteName = r.Name,
