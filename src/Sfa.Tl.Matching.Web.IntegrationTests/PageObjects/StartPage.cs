@@ -26,15 +26,18 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects
 
             var uploadLink = Driver.FindElement(_uploadLink);
             uploadLink.Text.Should().Be("Upload employer and provider data");
-            uploadLink.GetAttribute("href").Should().Be("https://localhost:55229/DataImport");
+            var uploadPathAndQuery = new System.Uri(uploadLink.GetAttribute("href")).PathAndQuery;
+            uploadPathAndQuery.Should().Be("/DataImport");
 
             var providerLink = Driver.FindElement(_providerLink);
             providerLink.Text.Should().Be("Add or edit provider data");
-            providerLink.GetAttribute("href").Should().Be("https://localhost:55229/search-ukprn");
+            var providerPathAndQuery = new System.Uri(providerLink.GetAttribute("href")).PathAndQuery;
+            providerPathAndQuery.Should().Be("/search-ukprn");
 
             var qualificationLink = Driver.FindElement(_qualificationLink);
             qualificationLink.Text.Should().Be("Edit qualifications");
-            qualificationLink.GetAttribute("href").Should().Be("https://localhost:55229/edit-qualifications");
+            var qualificationPathAndQuery = new System.Uri(qualificationLink.GetAttribute("href")).PathAndQuery;
+            qualificationPathAndQuery.Should().Be("/edit-qualifications");
         }
 
         public ProximityIndexPage ClickStart()

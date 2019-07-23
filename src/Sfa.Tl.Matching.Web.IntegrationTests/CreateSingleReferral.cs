@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using OpenQA.Selenium;
 using Sfa.Tl.Matching.Web.IntegrationTests.PageObjects;
 using Xunit;
 

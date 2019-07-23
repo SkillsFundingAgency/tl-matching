@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
     public class TestConfiguration
     {
         public static MatchingConfiguration MatchingConfiguration { get; }
+        public static string ApplicationUrl;
 
         static TestConfiguration()
         {
@@ -24,6 +25,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
                 configuration["ConfigurationStorageConnectionString"],
                 configuration["Version"],
                 configuration["ServiceName"]);
+
+            ApplicationUrl = configuration["ApplicationUrl"];
         }
 
         public MatchingDbContext GetDbContext()

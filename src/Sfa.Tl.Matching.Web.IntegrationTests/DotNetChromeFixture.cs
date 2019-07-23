@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
@@ -8,13 +9,28 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
 {
     public class DotNetChromeFixture : IDisposable
     {
-        public readonly IWebDriver WebDriver;
-        private readonly Process _process;
-
-        private string _applicationUrl = "https://localhost:55229/Start";
-        private const string DotNetProcess = "dotnet.exe";
+        public IWebDriver WebDriver;
+        private Process _process;
 
         public DotNetChromeFixture()
+        {
+            var applicationUrl = TestConfiguration.ApplicationUrl;
+            if (applicationUrl.Contains("localhost"))
+                RunLocal();
+
+            WebDriver = CreateWebDriver();
+
+            WebDriver.Navigate().GoToUrl(applicationUrl + "/Start");
+        }
+
+        public void Dispose()
+        {
+            WebDriver.Dispose();
+            if (_process != null && _process.HasExited == false)
+                _process.Kill();
+        }
+
+        private void RunLocal()
         {
             var currentDirectory = Directory.GetCurrentDirectory();
             var parentDirectoryInfo = Directory.GetParent(currentDirectory);
@@ -25,37 +41,22 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
             {
                 StartInfo =
                 {
-                    FileName = DotNetProcess,
+                    FileName = "dotnet.exe",
                     Arguments = $"run --project={webProject}"
                 }
             };
             _process.Start();
-
-            var driverLocation = Environment.GetEnvironmentVariable("ChromeWebDriver");
-            var baseUrl = Environment.GetEnvironmentVariable("BaseUrl");
-
-            var chromeOptions = new ChromeOptions();
-
-            if (string.IsNullOrEmpty(driverLocation))
-            {
-                var localDriverPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-                WebDriver = new ChromeDriver(localDriverPath, chromeOptions);
-            }
-            else
-            {
-                WebDriver = new ChromeDriver(driverLocation, chromeOptions);
-            }
-
-            // chromeOptions.AddArguments("headless");
-
-            WebDriver.Navigate().GoToUrl(_applicationUrl);
         }
 
-        public void Dispose()
+        private IWebDriver CreateWebDriver()
         {
-            WebDriver.Dispose();
-            if (_process.HasExited == false)
-                _process.Kill();
+            var chromeOptions = new ChromeOptions();
+            // chromeOptions.AddArguments("headless");
+
+            WebDriver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                chromeOptions);
+
+            return WebDriver;
         }
     }
 }
