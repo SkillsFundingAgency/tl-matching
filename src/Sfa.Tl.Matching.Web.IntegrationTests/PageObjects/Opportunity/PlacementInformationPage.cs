@@ -33,6 +33,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
             return this;
         }
 
+        public void EnterPlacements(string placements)
+        {
+            Driver.FindElement(_placements).SendKeys(placements);
+        }
+
         public FindEmployerPage ClickContinue()
         {
             Driver.FindElement(_continueButton).Click();

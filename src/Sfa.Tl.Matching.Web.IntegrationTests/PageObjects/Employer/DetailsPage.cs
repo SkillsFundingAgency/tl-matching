@@ -23,6 +23,27 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
             return new FindEmployerPage(Driver);
         }
 
+        public DetailsPage EnterContactName(string contactName)
+        {
+            Driver.FindElement(_contactName).SendKeys(contactName);
+
+            return this;
+        }
+
+        public DetailsPage EnterEmail(string email)
+        {
+            Driver.FindElement(_contactEmail).SendKeys(email);
+
+            return this;
+        }
+
+        public DetailsPage EnterPhone(string phone)
+        {
+            Driver.FindElement(_contactPhone).SendKeys(phone);
+
+            return this;
+        }
+
         public CheckAnswersPage ClickConfirm()
         {
             Driver.FindElement(_confirmButton).Click();

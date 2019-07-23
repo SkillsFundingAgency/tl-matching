@@ -69,12 +69,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
         {
             AssertTitle(Title);
             AssertHeader1(Title);
-            //Driver.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
-            //Driver.FindElement(_header1).Text.Should().Be(Title);
-
-            //var skillAreaDropdown = Driver.FindElement(_skillAreaSelect);
-            //var skillAreaSelect = new SelectElement(skillAreaDropdown);
-            //skillAreaSelect.AllSelectedOptions.Count.Should().BeGreaterThan(1);
         }
     }
 }

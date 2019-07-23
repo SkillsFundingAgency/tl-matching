@@ -31,7 +31,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
 
         public void AssertContent()
         {
-            //AssertHeaderAndTitle(Title);
+            //AssertTitle(Title);
+            //AssertHeader1(Title);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System.Threading;
+using OpenQA.Selenium;
 using Sfa.Tl.Matching.Web.IntegrationTests.PageObjects;
 using Xunit;
 
@@ -11,11 +12,12 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
         public CreateSingleReferral(DotNetChromeFixture dotNetChromeFixture)
         {
             var idamsLogin = new IdamsLogin(dotNetChromeFixture.WebDriver);
+            Thread.Sleep(5000);
             _startPage = idamsLogin.ClickSignInAsAdmin();
         }
 
         [Fact(DisplayName = "Create Single Referral")]
-        public void CreateReferral1()
+        public void CreateReferral()
         {
             _startPage.AssertContent();
 
@@ -26,6 +28,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
             var proximityResultsPage = proximityIndexPage.ClickSearch();
             proximityResultsPage.AssertContent();
             proximityResultsPage.SelectProvider();
+            proximityResultsPage.EnterSearchRadius("25 miles");
 
             var placementInformationPage = proximityResultsPage.ClickContinue();
             placementInformationPage.AssertContent();
@@ -40,9 +43,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
 
             var checkAnswersPage = detailsPage.ClickConfirm();
             checkAnswersPage.AssertContent();
+            checkAnswersPage.AssertDatabase();
 
             var opportunityBasketPage = checkAnswersPage.ClickConfirm();
             opportunityBasketPage.AssertContent();
+            opportunityBasketPage.AssertDatabase();
 
             var employerConsentPage = opportunityBasketPage.ClickContinue();
             employerConsentPage.AssertContent();
