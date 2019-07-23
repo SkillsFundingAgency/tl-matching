@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("find-providers")]
+        [Route("find-providers/{opportunityId?}")]
         public async Task<IActionResult> FindProviders(SearchParametersViewModel viewModel)
         {
             viewModel.SearchRadius = SearchParametersViewModel.DefaultSearchRadius;
