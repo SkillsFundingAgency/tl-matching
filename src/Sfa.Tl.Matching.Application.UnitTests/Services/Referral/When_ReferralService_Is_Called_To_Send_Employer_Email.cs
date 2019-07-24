@@ -181,10 +181,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
         {
-            const string expectedProvidersList = "# Town AA1 1AA\r\n"
+            const string expectedProvidersList = "# WorkplaceTown WorkplacePostcode\r\n"
                                                  + "*Job role: Job Role\r\n"
-                                                 + "*Students wanted: at least 1\r\n"
-                                                 + "*Providers selected: Provider name\r\n"
+                                                 + "*Students wanted: 2\r\n"
+                                                 + "*Providers selected: Test Provider\r\n"
                                                  + "\r\n";
             _emailService
                 .Received(1)
