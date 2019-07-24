@@ -3,7 +3,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
@@ -15,13 +14,13 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly MatchingConfiguration _configuration;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
-        private readonly IRepository<Opportunity> _opportunityRepository;
-
+        private readonly IOpportunityRepository _opportunityRepository;
+        
         public ReferralService(
             MatchingConfiguration configuration,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
-            IRepository<Opportunity> opportunityRepository)
+            IOpportunityRepository opportunityRepository)
         {
             _configuration = configuration;
             _emailService = emailService;
@@ -94,12 +93,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
         {
-            return await ((IOpportunityRepository)_opportunityRepository).GetEmployerReferrals(opportunityId);
+            return await _opportunityRepository.GetEmployerReferrals(opportunityId);
         }
 
         private async Task<IList<OpportunityReferralDto>> GetOpportunityReferrals(int opportunityId)
         {
-            return await ((IOpportunityRepository)_opportunityRepository).GetProviderOpportunities(opportunityId);
+            return await _opportunityRepository.GetProviderOpportunities(opportunityId);
         }
 
         private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
