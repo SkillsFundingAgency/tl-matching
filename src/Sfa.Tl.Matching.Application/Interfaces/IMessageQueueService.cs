@@ -6,5 +6,8 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     public interface IMessageQueueService
     {
         Task PushProviderQuarterlyRequestMessageAsync(SendProviderFeedbackEmail providerRequest);
+        Task PushProviderReferralEmailMessageAsync(SendProviderReferralEmail providerReferralEmail);
+        Task PushEmployerReferralEmailMessageAsync(SendEmployerReferralEmail employerReferralEmail);
+
     }
 }

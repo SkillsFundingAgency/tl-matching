@@ -8,8 +8,8 @@ namespace Sfa.Tl.Matching.Data.Interfaces
 {
     public interface IOpportunityRepository : IRepository<Opportunity>
     {
-        Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId);
-        Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId);
+        Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId, IEnumerable<int> itemIds);
+        Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId, IEnumerable<int> itemIds);
         Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
         Task<OpportunityReportDto> GetPipelineOpportunitiesAsync(int opportunityId);
         int GetEmployerOpportunityCount(int opportunityId);

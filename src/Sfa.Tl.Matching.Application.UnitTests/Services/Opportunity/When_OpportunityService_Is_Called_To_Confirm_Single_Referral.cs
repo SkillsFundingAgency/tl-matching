@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
@@ -70,17 +71,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     }
                 }.AsQueryable());
 
-            var opportunityRepository = Substitute.For<IOpportunityRepository>();
-            var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
-            var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
-            var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
-            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
+            var messageQueueService = Substitute.For<IMessageQueueService>();
+            var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, 
-                provisionGapRepository, referralRepository, googleMapApiClient,
-                opportunityPipelineReportWriter, dateTimeProvider);
+            var referralService = new ReferralService(mapper, messageQueueService, _opportunityItemRepository, backgroundProcessHistoryRepo);
 
-            opportunityService.ConfirmOpportunities(1).GetAwaiter().GetResult();
+
+            referralService.ConfirmOpportunities(1, httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
         }
 
         [Fact]

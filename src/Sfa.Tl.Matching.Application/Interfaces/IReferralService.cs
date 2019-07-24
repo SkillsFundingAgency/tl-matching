@@ -4,8 +4,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IReferralService
     {
-        Task SendEmployerReferralEmail(int opportunityId);
-
-        Task SendProviderReferralEmail(int opportunityId);
+        Task ConfirmOpportunities(int opportunityId, string username);
     }
 }

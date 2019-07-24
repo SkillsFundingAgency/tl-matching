@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId)
+        public async Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId, IEnumerable<int> itemIds)
         {
             var data = await (from op in _dbContext.Opportunity
                 join oi in _dbContext.OpportunityItem on op.Id equals oi.OpportunityId
@@ -31,9 +31,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 join r in _dbContext.Route on oi.RouteId equals r.Id
                 orderby re.DistanceFromEmployer
                 where op.Id == opportunityId
+                      && itemIds.Contains(oi.Id)
                       && oi.IsSelectedForReferral
                       && oi.IsSaved
-                      && !oi.IsCompleted
                       && p.IsCdfProvider
                       && p.IsEnabledForReferral
                       && pv.IsEnabledForReferral
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return data;
         }
 
-        public async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
+        public async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId, IEnumerable<int> itemIds)
         {
             var data = await (from op in _dbContext.Opportunity
                               join emp in _dbContext.Employer on op.EmployerId equals emp.Id
@@ -85,9 +85,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                       join pv in _dbContext.ProviderVenue on r.ProviderVenueId equals pv.Id
                                       join p in _dbContext.Provider on pv.ProviderId equals p.Id
                                       where oi.OpportunityId == opportunityId 
+                                            && itemIds.Contains(oi.Id)
                                             && oi.IsSelectedForReferral 
                                             && oi.IsSaved
-                                            && !oi.IsCompleted
                                             && !pv.IsRemoved
                                             && pv.IsEnabledForReferral
                                             && p.IsCdfProvider

@@ -28,6 +28,20 @@ namespace Sfa.Tl.Matching.Application.Services
                 QueueName.ProviderQuarterlyRequestQueue);
         }
 
+        public async Task PushEmployerReferralEmailMessageAsync(SendEmployerReferralEmail employerReferralEmail)
+        {
+            await PushMessageAsync(
+                JsonConvert.SerializeObject(employerReferralEmail),
+                QueueName.ProviderQuarterlyRequestQueue);
+        }
+
+        public async Task PushProviderReferralEmailMessageAsync(SendProviderReferralEmail providerReferralEmail)
+        {
+            await PushMessageAsync(
+                JsonConvert.SerializeObject(providerReferralEmail),
+                QueueName.ProviderQuarterlyRequestQueue);
+        }
+
         private async Task PushMessageAsync(string message, string queueName)
         {
             var queue = await GetQueue(queueName);
