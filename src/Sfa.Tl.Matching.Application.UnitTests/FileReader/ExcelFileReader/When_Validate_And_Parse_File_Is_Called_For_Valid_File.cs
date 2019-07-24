@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         }
 
         [Fact]
-        public void Then_Data_Validator_Validate_Is_called_Exactly_Once()
+        public void Then_Data_Validator_Validate_Is_Called_Exactly_Once()
         {
             _dataValidator.Received(1).ValidateAsync(Arg.Is<EmployerStagingFileImportDto>(arg =>
                 arg.CompanyName == "Employer-Simple"));

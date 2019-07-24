@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Trim
         }
 
         [Fact]
-        public void Then_Data_Validator_Validate_Is_called_Exactly_Once_And_Leading_And_Trailing_Speaces_are_Trimmed()
+        public void Then_Data_Validator_Validate_Is_Called_Exactly_Once_And_Leading_And_Trailing_Speaces_are_Trimmed()
         {
             _fixture.DataValidator.Received(1).ValidateAsync(Arg.Is<EmployerStagingFileImportDto>(arg =>
                 arg.CrmId == "9082609f-9cf8-e811-80e0-000d3a214f60" && 

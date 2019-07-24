@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         }
 
         [Fact]
-        public void Then_Data_Validator_Validate_Is_called_Exactly_Twice()
+        public void Then_Data_Validator_Validate_Is_Called_Exactly_Twice()
         {
             _fixture.DataValidator.Received(2).ValidateAsync(Arg.Any<LearningAimReferenceStagingFileImportDto>());
         }
@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         }
 
         [Fact]
-        public void Then_Repository_Create_Many_Is_called_With_Only_One_Item()
+        public void Then_Repository_Create_Many_Is_Called_With_Only_One_Item()
         {
             _fixture.Repository.Received(1).BulkInsert(Arg.Is<IList<LearningAimReferenceStaging>>(arg => arg.Count == 1));
         }
