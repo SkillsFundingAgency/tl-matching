@@ -154,7 +154,8 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
             services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
             services.AddTransient<IRepository<OpportunityItem>, GenericRepository<OpportunityItem>>();
-
+            services.AddTransient<IOpportunityRepository, OpportunityRepository>();
+            
             services.AddTransient<IBulkInsertRepository<LearningAimReferenceStaging>, SqlBulkInsertRepository<LearningAimReferenceStaging>>();
             services.AddTransient<IBulkInsertRepository<ProviderReferenceStaging>, SqlBulkInsertRepository<ProviderReferenceStaging>>();
             services.AddTransient<IBulkInsertRepository<EmployerStaging>, SqlBulkInsertRepository<EmployerStaging>>();
@@ -170,6 +171,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
             services.AddTransient<IQualificationService, QualificationService>();
+            services.AddTransient<IReferralEmailService, ReferralEmailService>();
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

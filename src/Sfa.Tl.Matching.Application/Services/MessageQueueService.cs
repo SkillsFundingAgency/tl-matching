@@ -32,14 +32,14 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             await PushMessageAsync(
                 JsonConvert.SerializeObject(employerReferralEmail),
-                QueueName.ProviderQuarterlyRequestQueue);
+                QueueName.EmployerReferralEmailQueue);
         }
 
         public async Task PushProviderReferralEmailMessageAsync(SendProviderReferralEmail providerReferralEmail)
         {
             await PushMessageAsync(
                 JsonConvert.SerializeObject(providerReferralEmail),
-                QueueName.ProviderQuarterlyRequestQueue);
+                QueueName.ProviderReferralEmailQueue);
         }
 
         private async Task PushMessageAsync(string message, string queueName)
