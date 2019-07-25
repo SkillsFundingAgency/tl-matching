@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   EmployerContactPhone = op.EmployerContactPhone,
                                   EmployerContactEmail = op.EmployerContactEmail,
                                   SearchRadius = oi.SearchRadius,
-                                  DistanceFromEmployer = re.DistanceFromEmployer.ToString(CultureInfo.InvariantCulture),
+                                  DistanceFromEmployer = re.DistanceFromEmployer.ToString("0.0"),
                                   Postcode = oi.Postcode,
                                   Town = oi.Town,
                                   JobRole = oi.JobRole,
