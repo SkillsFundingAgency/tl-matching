@@ -154,7 +154,12 @@ namespace Sfa.Tl.Matching.Functions
                 var stopwatch = Stopwatch.StartNew();
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
-                var providerVenues = await providerVenueRepository.GetMany(venue => venue.Location == null || venue.Longitude == null || venue.Latitude == null).ToListAsync();
+                var providerVenues = await providerVenueRepository.GetMany(venue => venue.Location == null ||
+                                                                                    venue.Longitude == null ||
+                                                                                    venue.Latitude == null ||
+                                                                                    !EF.Functions.Like(venue.Postcode, "% %") ||
+                                                                                    venue.Postcode.ToUpper() != venue.Postcode)
+                                                                .ToListAsync();
 
                 if (!providerVenues.Any()) return;
 
