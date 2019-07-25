@@ -1,13 +1,13 @@
 ﻿using OpenQA.Selenium;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects
 {
     public class IdamsLogin
     {
-        private const string StandardUsername = "";
-        private const string StandardPassword = "";
-        private const string AdminUsername = "";
-        private const string AdminPassword = "";
+        private const string StandardUsername = "Tmatching1";
+        private const string StandardPassword = "Windmill1";
+        private const string AdminUsername = "Tmatching3";
+        private const string AdminPassword = "Windmill1";
 
         private readonly IWebDriver _driver;
 

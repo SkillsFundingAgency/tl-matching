@@ -1,4 +1,4 @@
-﻿namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
+﻿namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects
 {
     public interface IPage
     {

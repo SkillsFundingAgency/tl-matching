@@ -1,9 +1,9 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Proximity
 {
-    public class ProximityIndexPage : PageBase
+    public class ProximityIndexPage : PageBase, IPage
     {
         private readonly By _skillAreaSelect = By.Id("SelectedRouteId");
         private readonly By _postcode = By.Id("Postcode");
@@ -38,12 +38,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
         {
             AssertTitle(Title);
             AssertHeader1(Title);
-            //Driver.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
-            //Driver.FindElement(_header1).Text.Should().Be(Title);
+        }
 
-            //var skillAreaDropdown = Driver.FindElement(_skillAreaSelect);
-            //var skillAreaSelect = new SelectElement(skillAreaDropdown);
-            //skillAreaSelect.AllSelectedOptions.Count.Should().BeGreaterThan(1);
+        public void AssertDatabase()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

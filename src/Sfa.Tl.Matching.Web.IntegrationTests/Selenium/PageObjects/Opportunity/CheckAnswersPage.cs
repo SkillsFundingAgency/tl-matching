@@ -2,9 +2,9 @@
 using FluentAssertions;
 using OpenQA.Selenium;
 using Sfa.Tl.Matching.Web.IntegrationTests.Database;
-using Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity;
+using Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Proximity;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Opportunity
 {
     public class CheckAnswersPage : PageBase, IPage
     {

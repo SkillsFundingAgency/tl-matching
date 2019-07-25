@@ -1,8 +1,8 @@
 ﻿using OpenQA.Selenium;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Opportunity
 {
-    public class ReferralEmailSentPage : PageBase
+    public class ReferralEmailSentPage : PageBase, IPage
     {
         private const string Title = "Emails sent";
 
@@ -14,6 +14,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
         {
             AssertTitle(Title);
             AssertHeader1(Title);
+        }
+
+        public void AssertDatabase()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -181,10 +181,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("emails-sent/{id}", Name = "EmailSentReferrals_Get")]
-        public async Task<IActionResult> ReferralEmailSent(int id)
+        [Route("emails-sent/{opportunityId}", Name = "EmailSentReferrals_Get")]
+        public async Task<IActionResult> ReferralEmailSent(int opportunityId)
         {
-            var dto = await _opportunityService.GetOpportunity(id);
+            var dto = await _opportunityService.GetOpportunity(opportunityId);
             var viewModel = _mapper.Map<SentViewModel>(dto);
             viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
 

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using OpenQA.Selenium;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects
 {
     public class PageBase
     {

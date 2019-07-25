@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
+using Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Opportunity;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Employer
 {
     public class DetailsPage : PageBase
     {

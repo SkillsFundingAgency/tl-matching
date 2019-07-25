@@ -19,7 +19,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
                 RunLocal();
 
             WebDriver = CreateWebDriver();
-
             WebDriver.Navigate().GoToUrl(applicationUrl + "/Start");
         }
 

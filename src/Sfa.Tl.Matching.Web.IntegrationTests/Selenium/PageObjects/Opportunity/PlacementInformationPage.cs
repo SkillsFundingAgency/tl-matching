@@ -1,8 +1,9 @@
 ﻿using OpenQA.Selenium;
+using Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Employer;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Opportunity
 {
-    public class PlacementInformationPage : PageBase
+    public class PlacementInformationPage : PageBase, IPage
     {
         private readonly By _jobRole = By.Id("JobRole");
         private readonly By _placementsKnownYes = By.Id("placement-location-yes");
@@ -49,6 +50,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
         {
             AssertTitle(Title);
             AssertHeader1(Title);
+        }
+
+        public void AssertDatabase()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

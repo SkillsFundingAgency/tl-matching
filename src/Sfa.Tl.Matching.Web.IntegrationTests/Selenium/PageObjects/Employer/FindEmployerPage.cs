@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using OpenQA.Selenium;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Employer
 {
-    public class FindEmployerPage : PageBase
+    public class FindEmployerPage : PageBase, IPage
     {
         private readonly By _companyName = By.Id("CompanyName");
         private readonly By _continueButton = By.Id("tl-continue");
@@ -33,6 +33,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity
         {
             //AssertTitle(Title);
             //AssertHeader1(Title);
+        }
+
+        public void AssertDatabase()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

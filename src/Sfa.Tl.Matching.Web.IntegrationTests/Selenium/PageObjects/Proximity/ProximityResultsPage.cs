@@ -1,8 +1,8 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Opportunity;
+using Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Opportunity;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Proximity
 {
     public class ProximityResultsPage : PageBase
     {

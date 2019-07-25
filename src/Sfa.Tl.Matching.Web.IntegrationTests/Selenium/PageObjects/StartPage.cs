@@ -1,9 +1,8 @@
-﻿using System.Threading;
-using FluentAssertions;
+﻿using FluentAssertions;
 using OpenQA.Selenium;
-using Sfa.Tl.Matching.Web.IntegrationTests.PageObjects.Proximity;
+using Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Proximity;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects
 {
     public class StartPage : PageBase
     {
@@ -19,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.PageObjects
 
         public void AssertContent()
         {
-            Thread.Sleep(10000);
+            //Thread.Sleep(10000);
             Driver.Title.Should().Be("Match employers with providers for industry placements - GOV.UK");
 
             //var uploadLink = _wait.Until(d => d.FindElement(_uploadLink));
