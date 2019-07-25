@@ -20,6 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                 EmployerContactPhone = "020 123 4567",
                 EmployerContactEmail = "employer.contact@employer.co.uk",
                 SearchRadius = 10,
+                DistanceFromEmployer = "3.5",
                 Postcode = "AA1 1AA",
                 Town = "Town",
                 JobRole = "Testing Job Title",
