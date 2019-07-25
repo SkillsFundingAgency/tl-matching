@@ -35,11 +35,11 @@ namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
 
         public async Task<PostCodeLookupResultDto> GetGeoLocationData(string postCode)
         {
-            //POstCodes.io Returns 404 for "CV12 wt" so I have removed all special characters to get best possible result
+            //Postcodes.io Returns 404 for "CV12 wt" so I have removed all special characters to get best possible result
             var lookupUrl = $"{_matchingConfiguration.PostcodeRetrieverBaseUrl}/{postCode.ToLetterOrDigit()}";
 
             var responseMessage = await _httpClient.GetAsync(lookupUrl);
-
+            
             responseMessage.EnsureSuccessStatusCode();
 
             var response = await responseMessage.Content.ReadAsAsync<PostCodeLookupResponse>();
