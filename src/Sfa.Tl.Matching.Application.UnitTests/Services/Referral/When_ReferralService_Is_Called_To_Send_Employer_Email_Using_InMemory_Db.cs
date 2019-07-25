@@ -232,16 +232,18 @@
 //            var employerReferral = await repo.GetEmployerReferrals(opportunityId);
 //            var sb = new StringBuilder();
 
-//            foreach (var data in employerReferral.ProviderReferrals)
-//            {
-//                var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
+            foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
+            {
+                var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
+                var providers = string.Join(", ", data.ProviderDetails.Select(dto => dto.ProviderName));
 
-//                sb.AppendLine($"# {data.ProviderVenueTown} {data.ProviderVenuePostCode}");
-//                sb.AppendLine($"*Job role: {data.JobRole}");
-//                sb.AppendLine($"*Students wanted: {placements}");
-//                sb.AppendLine($"*Providers selected: {data.ProviderName}");
-//                sb.AppendLine("");
-//            }
+                sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
+                sb.AppendLine($"*Job role: {data.JobRole}");
+                sb.AppendLine($"*Students wanted: {placements}");
+                sb.AppendLine($"*Providers selected: {providers}");
+                sb.AppendLine("");
+
+            }
 
 //            return sb.ToString();
 //        }

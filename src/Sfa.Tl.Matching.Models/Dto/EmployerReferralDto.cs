@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
         public string RouteName { get; set; }
-        public IEnumerable<ProviderReferralDto> ProviderReferrals { get; set; }
+        public IEnumerable<WorkplaceDto> WorkplaceDetails { get; set; }
         public string CreatedBy { get; set; }
     }
 }

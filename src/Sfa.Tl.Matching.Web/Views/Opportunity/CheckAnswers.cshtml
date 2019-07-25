@@ -28,7 +28,7 @@
                            asp-route-searchRadius="@Model.SearchRadius"
                            asp-route-postcode="@Model.Postcode"
                            asp-route-selectedRouteId="@Model.RouteId"
-                           class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the type of placement</span></a>
+                           class="govuk-link tl-float-right" id="tl-changle-link">Change<span class="govuk-visually-hidden"> the type of placement</span></a>
                     </td>
                 </tr>
                 <tr class="govuk-table__row">
@@ -42,7 +42,7 @@
                            asp-route-searchRadius="@Model.SearchRadius"
                            asp-route-postcode="@Model.Postcode"
                            asp-route-selectedRouteId="@Model.RouteId"
-                           class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the postcode of the workplace</span></a>
+                           class="govuk-link tl-float-right" id="tl-changle-link">Change<span class="govuk-visually-hidden"> the postcode of the workplace</span></a>
                     </td>
                 </tr>
                 <tr class="govuk-table__row">
@@ -51,7 +51,7 @@
                         @Model.JobRole
                     </td>
                     <td class="govuk-table__cell">
-                        <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the job role</span></a>
+                        <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right" id="tl-changle-link">Change<span class="govuk-visually-hidden"> the job role</span></a>
                     </td>
                 </tr>
                 <tr class="govuk-table__row">
@@ -60,7 +60,7 @@
                         @Model.PlacementsDetail
                     </td>
                     <td class="govuk-table__cell">
-                        <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right">Change<span class="govuk-visually-hidden"> the number of placements</span></a>
+                        <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right" id="tl-changle-link">Change<span class="govuk-visually-hidden"> the number of placements</span></a>
                     </td>
                 </tr>
             </tbody>

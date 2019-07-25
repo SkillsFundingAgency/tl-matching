@@ -178,24 +178,24 @@
 //                    Arg.Any<string>());
 //        }
 
-//        [Fact]
-//        public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
-//        {
-//            const string expectedProvidersList = "# Town AA1 1AA\r\n"
-//                                                 + "*Job role: Job Role\r\n"
-//                                                 + "*Students wanted: at least 1\r\n"
-//                                                 + "*Providers selected: Provider name\r\n"
-//                                                 + "\r\n";
-//            _emailService
-//                .Received(1)
-//                .SendEmail(Arg.Any<string>(),
-//                    Arg.Any<string>(),
-//                    Arg.Any<string>(),
-//                    Arg.Is<IDictionary<string, string>>(
-//                        tokens => tokens.ContainsKey("placements_list")
-//                                  && tokens["placements_list"] == expectedProvidersList),
-//                    Arg.Any<string>());
-//        }
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
+        {
+            const string expectedProvidersList = "# WorkplaceTown WorkplacePostcode\r\n"
+                                                 + "*Job role: Job Role\r\n"
+                                                 + "*Students wanted: 2\r\n"
+                                                 + "*Providers selected: Test Provider\r\n"
+                                                 + "\r\n";
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => tokens.ContainsKey("placements_list")
+                                  && tokens["placements_list"] == expectedProvidersList),
+                    Arg.Any<string>());
+        }
 
 //        [Fact]
 //        public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
