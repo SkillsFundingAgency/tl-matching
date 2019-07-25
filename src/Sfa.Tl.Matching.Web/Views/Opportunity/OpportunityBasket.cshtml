@@ -7,7 +7,9 @@
 
 @section backButton{
     @*<a asp-route="GetCheckAnswersOrEditEmployer" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>*@
-    <a asp-route="GetSavedEmployerOpportunity" class="govuk-link tl-align-right govuk-!-margin-top-3" id="tl-save">Save and come back later</a>
+    <p class="tl-align-right">
+        <a asp-route="GetSavedEmployerOpportunity" class="govuk-link govuk-!-margin-top-3" id="tl-save">Save and come back later</a>
+    </p>
 }
 
 <div class="govuk-grid-row">
