@@ -128,7 +128,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "provider_name", referral.ProviderName },
                         { "route", referral.RouteName.ToLowerInvariant() },
                         { "venue_postcode", $"{referral.ProviderVenueTown} {referral.ProviderVenuePostcode}" },
-                        { "search_radius", referral.SearchRadius.ToString() },
+                        { "search_radius", referral.DistanceFromEmployer },
                         { "job_role", referral.JobRole },
                         { "employer_business_name", referral.CompanyName },
                         { "employer_contact_name", referral.EmployerContact},

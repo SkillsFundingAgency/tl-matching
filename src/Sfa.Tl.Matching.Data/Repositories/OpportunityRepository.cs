@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +52,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   EmployerContactPhone = op.EmployerContactPhone,
                                   EmployerContactEmail = op.EmployerContactEmail,
                                   SearchRadius = oi.SearchRadius,
+                                  DistanceFromEmployer = re.DistanceFromEmployer.ToString(CultureInfo.InvariantCulture),
                                   Postcode = oi.Postcode,
                                   Town = oi.Town,
                                   JobRole = oi.JobRole,
