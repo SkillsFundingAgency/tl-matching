@@ -1,18 +1,31 @@
-﻿using System.Threading;
-using Sfa.Tl.Matching.Web.IntegrationTests.PageObjects;
+﻿using System;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Remote;
+using Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
 {
-    public class CreateSingleReferral : IClassFixture<DotNetChromeFixture>
+    public class CreateSingleReferral : IClassFixture<SeleniumServerFactory<Startup>>, IDisposable
     {
-        private readonly StartPage _startPage;
+        private readonly SeleniumServerFactory<Startup> _server;
 
-        public CreateSingleReferral(DotNetChromeFixture dotNetChromeFixture)
+        private readonly StartPage _startPage;
+        public IWebDriver Driver { get; }
+
+        public CreateSingleReferral(SeleniumServerFactory<Startup> server) //DotNetChromeFixture dotNetChromeFixture)
         {
-            var idamsLogin = new IdamsLogin(dotNetChromeFixture.WebDriver);
-            Thread.Sleep(5000);
-            _startPage = idamsLogin.ClickSignInAsAdmin();
+            _server = server;
+            _server.CreateClient();
+            var opts = new ChromeOptions();
+            //opts.AddArgument("--headless");
+            //opts.SetLoggingPreference(OpenQA.Selenium.LogType.Browser, LogLevel.All);
+            var driver = new RemoteWebDriver(opts);
+            driver.Navigate().GoToUrl(_server.RootUri + "/Start");
+            _startPage = new StartPage(driver);
+
+            Driver = driver;
         }
 
         [Fact(DisplayName = "Create Single Referral")]
@@ -54,6 +67,12 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
 
             var referralEmailSentPage = employerConsentPage.ClickConfirm();
             referralEmailSentPage.AssertContent();
+        }
+
+        public void Dispose()
+        {
+            Driver.Dispose();
+            Driver.Quit();
         }
     }
 }
