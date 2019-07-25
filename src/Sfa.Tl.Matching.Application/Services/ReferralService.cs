@@ -74,37 +74,22 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task RequestEmployerReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, string username)
         {
-            var backgroundProcessHistoryId = await _backgroundProcessHistoryRepository.Create(
-                new BackgroundProcessHistory
-                {
-                    ProcessType = BackgroundProcessType.EmployerReferralEmail.ToString(),
-                    Status = BackgroundProcessHistoryStatus.Pending.ToString(),
-                    CreatedBy = username
-                });
-
             await _messageQueueService.PushEmployerReferralEmailMessageAsync(new SendEmployerReferralEmail
             {
                 OpportunityId = opportunityId,
                 OpportunityItemIds = itemIds,
-                BackgroundProcessHistoryId = backgroundProcessHistoryId
+                BackgroundProcessHistoryId = await GetBackgroundProcessId(BackgroundProcessType.EmployerReferralEmail, username)
             });
         }
 
         private async Task RequestProviderReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, string username)
         {
-            var backgroundProcessHistoryId = await _backgroundProcessHistoryRepository.Create(
-                new BackgroundProcessHistory
-                {
-                    ProcessType = BackgroundProcessType.ProviderReferralEmail.ToString(),
-                    Status = BackgroundProcessHistoryStatus.Pending.ToString(),
-                    CreatedBy = username
-                });
 
             await _messageQueueService.PushProviderReferralEmailMessageAsync(new SendProviderReferralEmail
             {
                 OpportunityId = opportunityId,
                 OpportunityItemIds = itemIds,
-                BackgroundProcessHistoryId = backgroundProcessHistoryId
+                BackgroundProcessHistoryId = await GetBackgroundProcessId(BackgroundProcessType.ProviderReferralEmail, username)
             });
         }
 
@@ -122,5 +107,17 @@ namespace Sfa.Tl.Matching.Application.Services
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
+
+        private async Task<int> GetBackgroundProcessId(BackgroundProcessType processType, string username)
+        {
+            return await _backgroundProcessHistoryRepository.Create(
+                new BackgroundProcessHistory
+                {
+                    ProcessType = processType.ToString(),
+                    Status = BackgroundProcessHistoryStatus.Pending.ToString(),
+                    CreatedBy = username
+                });
+        }
+
     }
 }
