@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 OpportunityId = opportunityId,
                 OpportunityItemIds = itemIds,
-                BackgroundProcessHistoryId = await GetBackgroundProcessId(BackgroundProcessType.EmployerReferralEmail, username)
+                BackgroundProcessHistoryId = await CreateAndGetBackgroundProcessId(BackgroundProcessType.EmployerReferralEmail, username)
             });
         }
 
@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 OpportunityId = opportunityId,
                 OpportunityItemIds = itemIds,
-                BackgroundProcessHistoryId = await GetBackgroundProcessId(BackgroundProcessType.ProviderReferralEmail, username)
+                BackgroundProcessHistoryId = await CreateAndGetBackgroundProcessId(BackgroundProcessType.ProviderReferralEmail, username)
             });
         }
 
@@ -108,7 +108,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 x => x.ModifiedBy);
         }
 
-        private async Task<int> GetBackgroundProcessId(BackgroundProcessType processType, string username)
+        private async Task<int> CreateAndGetBackgroundProcessId(BackgroundProcessType processType, string username)
         {
             return await _backgroundProcessHistoryRepository.Create(
                 new BackgroundProcessHistory
