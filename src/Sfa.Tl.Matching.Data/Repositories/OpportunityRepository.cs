@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +33,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                               where op.Id == opportunityId
                                     && oi.IsSelectedForReferral
                                     && oi.IsSaved
-                                    && !oi.IsCompleted
                                     && p.IsCdfProvider
                                     && p.IsEnabledForReferral
                                     && pv.IsEnabledForReferral
@@ -86,7 +84,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                       where oi.OpportunityId == opportunityId
                                             && oi.IsSelectedForReferral
                                             && oi.IsSaved
-                                            && !oi.IsCompleted
                                       select new WorkplaceDto
                                       {
                                           PlacementsKnown = oi.PlacementsKnown,
@@ -95,20 +92,20 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                           WorkplacePostcode = oi.Postcode,
                                           WorkplaceTown = oi.Town,
                                           ProviderDetails = (
-                                                  from r in _dbContext.Referral
-                                                  join pv in _dbContext.ProviderVenue on r.ProviderVenueId equals pv.Id
-                                                  join p in _dbContext.Provider on pv.ProviderId equals p.Id
-                                                  where r.OpportunityItemId == oi.Id
-                                                            && !pv.IsRemoved
-                                                            && pv.IsEnabledForReferral
-                                                            && p.IsCdfProvider
-                                                            && p.IsEnabledForReferral
-                                                  select new ProviderReferralDto
-                                                  {
-                                                      ProviderName = p.Name,
-                                                      ProviderVenueTown = pv.Town,
-                                                      ProviderVenuePostCode = pv.Postcode
-                                                  })
+                                            from r in _dbContext.Referral
+                                            join pv in _dbContext.ProviderVenue on r.ProviderVenueId equals pv.Id
+                                            join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                                            where r.OpportunityItemId == oi.Id
+                                                      && !pv.IsRemoved
+                                                      && pv.IsEnabledForReferral
+                                                      && p.IsCdfProvider
+                                                      && p.IsEnabledForReferral
+                                            select new ProviderReferralDto
+                                            {
+                                                ProviderName = p.Name,
+                                                ProviderVenueTown = pv.Town,
+                                                ProviderVenuePostCode = pv.Postcode
+                                            })
                                       })
                               }
                       ).SingleOrDefaultAsync();
