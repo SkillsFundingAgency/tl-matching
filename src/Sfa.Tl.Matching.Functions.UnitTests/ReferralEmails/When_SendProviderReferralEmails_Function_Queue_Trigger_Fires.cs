@@ -13,8 +13,6 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ReferralEmails
 {
     public class When_SendProviderReferralEmails_Function_Queue_Trigger_Fires
     {
-
-
         [Theory, AutoDomainData]
         public async void Should_Send_Referral_Emails_To_Provider(
                         IReferralEmailService referralEmailService, 
