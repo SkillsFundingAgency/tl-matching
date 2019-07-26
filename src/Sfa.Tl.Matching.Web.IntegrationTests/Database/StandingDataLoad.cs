@@ -8,8 +8,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Database
     {
         internal static void Load(MatchingDbContext context)
         {
-            context.AddRange(EmployerLoad.Create().ToList());
-            context.AddRange(RouteLoad.Create().ToList());
+            context.AddRange(EmailTemplateData.Create().ToList());
+            context.AddRange(EmployerData.Create().ToList());
+            context.AddRange(RouteAndPathData.Create().ToList());
+            context.AddRange(ProviderVenueData.Create());
+            context.AddRange(OpportunityData.Create());
 
             context.SaveChanges();
         }

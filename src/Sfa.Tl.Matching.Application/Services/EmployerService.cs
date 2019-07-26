@@ -55,14 +55,14 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             return await _opportunityRepository.GetSingleOrDefault(
                 o => o.Id == opportunityId,
-                oi => new FindEmployerViewModel
+                o => new FindEmployerViewModel
                 {
                     OpportunityItemId = opportunityItemId,
                     OpportunityId = opportunityId,
-                    CompanyName = oi.Employer.CompanyName,
-                    PreviousCompanyName = oi.Employer.CompanyName,
-                    AlsoKnownAs = oi.Employer.AlsoKnownAs,
-                    SelectedEmployerId = oi.EmployerId ?? 0,
+                    CompanyName = o.Employer.CompanyName,
+                    PreviousCompanyName = o.Employer.CompanyName,
+                    AlsoKnownAs = o.Employer.AlsoKnownAs,
+                    SelectedEmployerId = o.EmployerId ?? 0,
                 });
         }
 

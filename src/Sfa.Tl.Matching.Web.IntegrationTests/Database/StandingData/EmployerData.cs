@@ -3,9 +3,9 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Database.StandingData
 {
-    internal class EmployerLoad
+    internal class EmployerData
     {
-        public static Employer[] Create()
+        internal static Employer[] Create()
         {
             var employers = new[]
             {
@@ -23,7 +23,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Database.StandingData
                     Email = "email@address.com",
                     Postcode = "CV1 2WT",
                     Owner = "Owner",
-                    CreatedOn = new DateTime(2019, 1, 1)
+                    CreatedOn = new DateTime(2019, 1, 1),
+                    CreatedBy = "IntegrationTests"
                 }
             };
 

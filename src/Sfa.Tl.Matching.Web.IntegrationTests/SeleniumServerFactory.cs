@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
-using Sfa.Tl.Matching.Web.IntegrationTests.Specflow.Helpers;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
 {

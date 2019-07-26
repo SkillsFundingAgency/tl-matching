@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Web.IntegrationTests.Database;
 

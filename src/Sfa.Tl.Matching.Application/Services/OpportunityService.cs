@@ -102,21 +102,21 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<CheckAnswersViewModel> GetCheckAnswers(int opportunityItemId)
         {
-            var dto = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
-                o => new CheckAnswersViewModel
+            var dto = await _opportunityItemRepository.GetSingleOrDefault(oi => oi.Id == opportunityItemId,
+                oi => new CheckAnswersViewModel
                 {
-                    OpportunityItemId = o.Id,
-                    OpportunityId = o.OpportunityId,
-                    Postcode = o.Postcode,
-                    JobRole = o.JobRole,
-                    Placements = o.Placements,
-                    RouteId = o.RouteId,
-                    SearchRadius = o.SearchRadius,
-                    RouteName = o.Route.Name,
-                    CompanyName = o.Opportunity.Employer.CompanyName,
-                    CompanyNameAka = o.Opportunity.Employer.AlsoKnownAs,
-                    PlacementsKnown = o.PlacementsKnown,
-                    Providers = o.Referral.Select(r => new ReferralsViewModel
+                    OpportunityItemId = oi.Id,
+                    OpportunityId = oi.OpportunityId,
+                    Postcode = oi.Postcode,
+                    JobRole = oi.JobRole,
+                    Placements = oi.Placements,
+                    RouteId = oi.RouteId,
+                    SearchRadius = oi.SearchRadius,
+                    RouteName = oi.Route.Name,
+                    CompanyName = oi.Opportunity.Employer.CompanyName,
+                    CompanyNameAka = oi.Opportunity.Employer.AlsoKnownAs,
+                    PlacementsKnown = oi.PlacementsKnown,
+                    Providers = oi.Referral.Select(r => new ReferralsViewModel
                     {
                         Postcode = r.ProviderVenue.Postcode,
                         DistanceFromEmployer = r.DistanceFromEmployer,

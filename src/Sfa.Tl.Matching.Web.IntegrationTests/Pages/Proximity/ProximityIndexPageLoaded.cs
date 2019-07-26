@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AngleSharp.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
@@ -12,23 +11,25 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
     {
         private const string Title = "Set up placement opportunity";
 
-        private readonly HttpResponseMessage _response;
+        private readonly CustomWebApplicationFactory<Startup> _factory;
 
         public ProximityIndexPageLoaded(CustomWebApplicationFactory<Startup> factory)
         {
-            var client = factory.CreateClient();
-
-            _response = client.GetAsync("/find-providers").GetAwaiter().GetResult();
+            _factory = factory;
         }
 
         [Fact]
         public async Task ReturnsCorrectResponse()
         {
-            _response.EnsureSuccessStatusCode();
-            Assert.Equal("text/html; charset=utf-8",
-                _response.Content.Headers.ContentType.ToString());
+            var client = _factory.CreateClient();
 
-            var indexViewHtml = await HtmlHelpers.GetDocumentAsync(_response);
+            var response = await client.GetAsync("/find-providers");
+
+            response.EnsureSuccessStatusCode();
+            Assert.Equal("text/html; charset=utf-8",
+                response.Content.Headers.ContentType.ToString());
+
+            var indexViewHtml = await HtmlHelpers.GetDocumentAsync(response);
 
             indexViewHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
 
@@ -37,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 
             var routeList = indexViewHtml.GetElementById("SelectedRouteId");
             routeList.Children.Length.Should().Be(2);
-            routeList.Text().Should().Be("Route 1\nRoute 2\n");
+            routeList.Text().Should().Be("Agriculture, environmental and animal care\nBusiness and administration\n");
 
             var postcode = indexViewHtml.GetElementById("Postcode");
             postcode.Should().NotBeNull();

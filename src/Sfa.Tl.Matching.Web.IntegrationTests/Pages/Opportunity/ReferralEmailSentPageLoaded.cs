@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using AngleSharp.Dom;
+﻿using System.Threading.Tasks;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Sfa.Tl.Matching.Web.IntegrationTests.Specflow.Helpers;
@@ -13,37 +11,29 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         private const string Title = "Emails sent";
         private const int OpportunityId = 1;
 
-        private readonly HttpResponseMessage _response;
+        private readonly CustomWebApplicationFactory<Startup> _factory;
 
         public ReferralEmailSentPageLoaded(CustomWebApplicationFactory<Startup> factory)
         {
-            var client = factory.CreateClient();
-
-            _response = client.GetAsync($"emails-sent/{OpportunityId}").GetAwaiter().GetResult();
+            _factory = factory;
         }
 
         [Fact]
         public async Task ReturnsCorrectResponse()
         {
-            _response.EnsureSuccessStatusCode();
-            Assert.Equal("text/html; charset=utf-8",
-                _response.Content.Headers.ContentType.ToString());
+            var client = _factory.CreateClient();
+            var response = await client.GetAsync($"emails-sent/{OpportunityId}");
 
-            var indexViewHtml = await HtmlHelpers.GetDocumentAsync(_response);
+            response.EnsureSuccessStatusCode();
+            Assert.Equal("text/html; charset=utf-8",
+                response.Content.Headers.ContentType.ToString());
+
+            var indexViewHtml = await HtmlHelpers.GetDocumentAsync(response);
 
             indexViewHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
 
-            var header1 = indexViewHtml.QuerySelector(".govuk-heading-l");
+            var header1 = indexViewHtml.QuerySelector(".govuk-panel__title");
             header1.TextContent.Should().Be(Title);
-
-
-
-
-
-
-
-
-
         }
     }
 }

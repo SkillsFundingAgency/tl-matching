@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Database
             var testConfig = new TestConfiguration();
             var matchingDbContext = testConfig.GetDbContext();
 
-            var opportuinity =matchingDbContext.Opportunity
+            var opportuinity = matchingDbContext.Opportunity
                     .Include(o => o.OpportunityItem)
                         .ThenInclude(oi => oi.Referral)
                         .ThenInclude(r => r.ProviderVenue)
