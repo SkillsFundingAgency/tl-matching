@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
     public class PlacementInformationPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private const string Title = "Placement information";
-        private const int OpportunityItemId = 2;
+        private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<Startup> _factory;
 

@@ -9,8 +9,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
     public class DetailsPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private const string Title = "Confirm contact details for industry placements";
-        private const int OpportunityId = 1;
-        private const int OpportunityItemId = 2;
+        private const int OpportunityId = 1000;
+        private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<Startup> _factory;
 

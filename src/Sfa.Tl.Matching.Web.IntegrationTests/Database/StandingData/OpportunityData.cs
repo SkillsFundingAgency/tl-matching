@@ -6,13 +6,19 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Database.StandingData
 {
     internal class OpportunityData
     {
+        private const int Opportunity1Id = 1000;
+        private const int OpportunityItem1Id = 2000;
+        private const int OpportunityItem2Id = 2001;
+        private const int Referral1Id = 3000;
+        private const int Referral2Id = 3001;
+
         internal static IList<Opportunity> Create()
         {
             return new List<Opportunity>
             {
                 new Opportunity
                 {
-                    Id = 1,
+                    Id = Opportunity1Id,
                     EmployerId = 1,
                     EmployerContact = "Employer Contact",
                     EmployerContactEmail = "employer-contact@email.com",
@@ -23,8 +29,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Database.StandingData
                     {
                         new OpportunityItem
                         {
-                            Id = 1,
-                            OpportunityId = 1,
+                            Id = OpportunityItem1Id,
+                            OpportunityId = Opportunity1Id,
                             OpportunityType = "Referral",
                             Town = "London",
                             Postcode = "SW1A 2AA",
@@ -43,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Database.StandingData
                             {
                                 new Referral
                                 {
-                                    Id = 1,
+                                    Id = Referral1Id,
                                     ProviderVenueId = 1,
                                     DistanceFromEmployer = 1.23m,
                                     CreatedOn = new DateTime(2019, 1, 1),
@@ -53,8 +59,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Database.StandingData
                         },
                         new OpportunityItem
                         {
-                            Id = 2,
-                            OpportunityId = 1,
+                            Id = OpportunityItem2Id,
+                            OpportunityId = Opportunity1Id,
                             OpportunityType = "Referral",
                             Town = "London",
                             Postcode = "SW1A 2AA",
@@ -73,7 +79,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Database.StandingData
                             {
                                 new Referral
                                 {
-                                    Id = 2,
+                                    Id = Referral2Id,
                                     ProviderVenueId = 1,
                                     DistanceFromEmployer = 1.23m,
                                     CreatedOn = new DateTime(2019, 1, 1),

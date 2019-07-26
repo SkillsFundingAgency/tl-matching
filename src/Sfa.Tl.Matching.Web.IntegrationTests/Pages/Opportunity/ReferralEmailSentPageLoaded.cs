@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
     public class ReferralEmailSentPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private const string Title = "Emails sent";
-        private const int OpportunityId = 1;
+        private const int OpportunityId = 1000;
 
         private readonly CustomWebApplicationFactory<Startup> _factory;
 

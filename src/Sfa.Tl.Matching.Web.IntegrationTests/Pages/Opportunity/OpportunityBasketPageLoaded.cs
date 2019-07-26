@@ -9,8 +9,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
     public class OpportunityBasketPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private const string Title = "All opportunities";
-        private const int OpportunityId = 1;
-        private const int OpportunityItemId = 2;
+        private const int OpportunityId = 1000;
+        private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<Startup> _factory;
 

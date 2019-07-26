@@ -9,8 +9,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
     public class EmployerConsentPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
         private const string Title = "Confirm that we can share the employer’s contact details";
-        private const int OpportunityId = 1;
-        private const int OpportunityItemId = 2;
+        private const int OpportunityId = 1000;
+        private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<Startup> _factory;
 

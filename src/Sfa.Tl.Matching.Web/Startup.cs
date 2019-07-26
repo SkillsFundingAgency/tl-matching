@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Web
 {
     public class Startup
     {
-        protected MatchingConfiguration _configuration;
+        protected MatchingConfiguration MatchingConfiguration;
         private readonly ILoggerFactory _loggerFactory;
 
         public IConfiguration Configuration { get; }
@@ -137,7 +137,7 @@ namespace Sfa.Tl.Matching.Web
 
         protected virtual void ConfigureConfiguration(IServiceCollection services)
         {
-            _configuration = ConfigurationLoader.Load(
+            MatchingConfiguration = ConfigurationLoader.Load(
                 Configuration[Constants.EnvironmentNameConfigKey],
                 Configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
                 Configuration[Constants.VersionConfigKey],
@@ -155,8 +155,8 @@ namespace Sfa.Tl.Matching.Web
                 sharedOptions.DefaultSignOutScheme = WsFederationDefaults.AuthenticationScheme;
             }).AddWsFederation(options =>
             {
-                options.Wtrealm = _configuration.Authentication.WtRealm;
-                options.MetadataAddress = _configuration.Authentication.MetaDataEndpoint;
+                options.Wtrealm = MatchingConfiguration.Authentication.WtRealm;
+                options.MetadataAddress = MatchingConfiguration.Authentication.MetaDataEndpoint;
                 options.TokenValidationParameters.RoleClaimType = RolesExtensions.IdamsUserRole;
             }).AddCookie(options =>
             {
@@ -175,12 +175,12 @@ namespace Sfa.Tl.Matching.Web
 
             //Inject DbContext
             services.AddDbContext<MatchingDbContext>(options =>
-                options.UseSqlServer(_configuration.SqlConnectionString,
+                options.UseSqlServer(MatchingConfiguration.SqlConnectionString,
                     builder => builder.UseNetTopologySuite()
                                       .EnableRetryOnFailure()));
 
             //Inject services
-            services.AddSingleton(_configuration);
+            services.AddSingleton(MatchingConfiguration);
 
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
@@ -188,7 +188,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
-            RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
+            RegisterNotificationsApi(services, MatchingConfiguration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }

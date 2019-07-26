@@ -11,8 +11,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         private readonly CustomWebApplicationFactory<Startup> _factory;
 
         private const string Title = "Who is the employer?";
-        private const int OpportunityId = 1;
-        private const int OpportunityItemId = 2;
+        private const int OpportunityId = 1000;
+        private const int OpportunityItemId = 2000;
 
         public FindEmployerPageLoaded(CustomWebApplicationFactory<Startup> factory)
         {

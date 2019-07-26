@@ -16,8 +16,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
 
         protected override void ConfigureConfiguration(IServiceCollection services)
         {
-            // TODO AU Where to get the configuration from??
-            _configuration = new MatchingConfiguration
+            MatchingConfiguration = new MatchingConfiguration
             {
                 PostcodeRetrieverBaseUrl = "https://postcodes.io/postcodes",
                 NotificationsApiClientConfiguration = new NotificationsApiClientConfiguration
