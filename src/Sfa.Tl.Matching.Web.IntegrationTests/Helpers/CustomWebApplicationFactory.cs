@@ -1,6 +1,5 @@
 using System;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,7 +9,7 @@ using Sfa.Tl.Matching.Web.IntegrationTests.Database;
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Helpers
 {
     public class CustomWebApplicationFactory<TStartup>
-        : WebApplicationFactory<TStartup> where TStartup : class
+        : CustomWebApplicationFactoryBase<TestStartup>
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {

@@ -38,23 +38,22 @@ namespace Sfa.Tl.Matching.Web
 {
     public class Startup
     {
-        private readonly MatchingConfiguration _configuration;
+        protected MatchingConfiguration _configuration;
         private readonly ILoggerFactory _loggerFactory;
+
+        public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
-            _configuration = ConfigurationLoader.Load(
-                configuration[Constants.EnvironmentNameConfigKey],
-                configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
-                configuration[Constants.VersionConfigKey],
-                configuration[Constants.ServiceNameConfigKey]);
+            Configuration = configuration;
             _loggerFactory = loggerFactory;
-
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureConfiguration(services);
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -91,7 +90,7 @@ namespace Sfa.Tl.Matching.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             var cultureInfo = new CultureInfo("en-GB");
 
@@ -136,6 +135,15 @@ namespace Sfa.Tl.Matching.Web
             app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
         }
 
+        protected virtual void ConfigureConfiguration(IServiceCollection services)
+        {
+            _configuration = ConfigurationLoader.Load(
+                Configuration[Constants.EnvironmentNameConfigKey],
+                Configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
+                Configuration[Constants.VersionConfigKey],
+                Configuration[Constants.ServiceNameConfigKey]);
+        }
+
         // ReSharper disable once UnusedMember.Local
         private void AddAuthentication(IServiceCollection services)
         {
@@ -173,10 +181,10 @@ namespace Sfa.Tl.Matching.Web
 
             //Inject services
             services.AddSingleton(_configuration);
-            
+
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
-            
+
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
@@ -216,8 +224,8 @@ namespace Sfa.Tl.Matching.Web
                 ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(apiConfiguration)).Build()
                 : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(apiConfiguration)).Build();
 
-           services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
-               new NotificationsApi(httpClient, apiConfiguration));
+            services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
+                new NotificationsApi(httpClient, apiConfiguration));
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -234,7 +242,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
-            
+
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
