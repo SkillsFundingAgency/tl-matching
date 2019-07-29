@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -18,7 +19,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 {
-    public class When_ReferralService_Is_Called_To_Send_Employer_Email_Using_InMemory_Db
+    public class When_ReferralEmailService_Is_Called_To_Send_Employer_Email_Using_InMemory_Db
     {
 
         [Theory, AutoDomainData]
@@ -45,6 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
+
             var sut = new ReferralEmailService(config, dateTimeProvider, emailService, emailHistoryService, repo, backgroundRepo);
 
             var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
@@ -52,10 +54,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  && oi.IsSelectedForReferral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
 
-            var backgroundProcessId = dbContext.BackgroundProcessHistory.FirstOrDefault()?.Id;
-
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessId.GetValueOrDefault(), "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -93,12 +93,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  && oi.IsSelectedForReferral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
 
-            var backgroundProcessId = dbContext.BackgroundProcessHistory.FirstOrDefault()?.Id;
-
             var expectedResult = await GetExpectedResult(repo, opportunity.Id, itemIds);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessId.GetValueOrDefault(), "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -144,10 +142,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  && oi.IsSelectedForReferral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
 
-            var backgroundProcessId = dbContext.BackgroundProcessHistory.FirstOrDefault()?.Id;
-
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessId.GetValueOrDefault(), "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -212,11 +208,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  && oi.IsSelectedForReferral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
 
-            var backgroundProcessId = dbContext.BackgroundProcessHistory.FirstOrDefault()?.Id;
             var expectedResult = await GetExpectedResult(repo, opportunity.Id, itemIds);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessId.GetValueOrDefault(), "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -259,11 +254,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  && oi.IsSelectedForReferral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
 
-            var backgroundProcessId = dbContext.BackgroundProcessHistory.FirstOrDefault()?.Id;
             var expectedResult = await GetExpectedResult(repo, opportunity.Id, itemIds);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessId.GetValueOrDefault(), "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -273,6 +267,55 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("placements_list") && tokens["placements_list"] == expectedResult), Arg.Any<string>());
+        }
+
+        [Theory, AutoDomainData]
+        public async Task Then_Background_Process_History_Status_Is_Completed(
+                        MatchingDbContext dbContext,
+                        IDateTimeProvider dateTimeProvider,
+                        MatchingConfiguration config,
+                        [Frozen] Domain.Models.Opportunity opportunity,
+                        [Frozen] Domain.Models.Provider provider,
+                        [Frozen] Domain.Models.ProviderVenue venue,
+                        [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+                        [Frozen] IEmailService emailService,
+                        [Frozen] IEmailHistoryService emailHistoryService,
+                        ILogger<OpportunityRepository> logger,
+                        ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
+                        ILogger<GenericRepository<OpportunityItem>> itemLogger
+                        )
+        {
+            //Arrange
+            backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
+
+            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+
+            var repo = new OpportunityRepository(logger, dbContext);
+            var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
+            var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
+
+            var sut = new ReferralEmailService(config, dateTimeProvider, emailService, emailHistoryService, repo, backgroundRepo);
+
+            var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
+                                                 && oi.IsSaved
+                                                 && oi.IsSelectedForReferral
+                                                 && !oi.IsCompleted).Select(oi => oi.Id);
+
+            //Act
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessHistory.Id, "System");
+
+            //Assert
+            await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+
+            var processStatus = dbContext.BackgroundProcessHistory
+                .FirstOrDefault(history => history.Id == backgroundProcessHistory.Id)
+                ?.Status;
+
+            processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Pending.ToString());
+            processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Processing.ToString());
+            processStatus.Should().Be(BackgroundProcessHistoryStatus.Complete.ToString());
+
         }
 
         private static async Task<string> GetExpectedResult(OpportunityRepository repo, int opportunityId, IEnumerable<int> itemIds)
