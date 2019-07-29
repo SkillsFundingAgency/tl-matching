@@ -15,7 +15,7 @@ We have the following information about you:
 * E-mail: ((employer_contact_email))
 
 # If any of this is wrong
-Please email [support.industryplacementmatching@education.gov.uk](mailto:support.industryplacementmatching@education.gov.uk?subject=Update+from+employer) so we can update our records.
+Please email [support.industryplacementmatching@education.gov.uk](mailto:support.industryplacementmatching@education.gov.uk?subject=Update+from+employer) so that we can update our records.
 
 
 Industry Placements – Employer Support Team

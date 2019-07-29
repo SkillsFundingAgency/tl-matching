@@ -121,5 +121,9 @@
             background-color: govuk-colour("grey-4");
             cursor: pointer;
         }
+
+        &.checked {
+            background-color: govuk-colour("grey-4");
+        }
     }
 }
