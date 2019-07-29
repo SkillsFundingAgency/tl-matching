@@ -30,7 +30,9 @@ using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -185,14 +187,18 @@ namespace Sfa.Tl.Matching.Web
 
         private static void RegisterRepositories(IServiceCollection services)
         {
+            services.AddTransient<OpportunityRepository>();
+            services.AddTransient<IOpportunityRepository>(x => x.GetRequiredService<OpportunityRepository>());
+            services.AddTransient<IRepository<Opportunity>>(x => x.GetRequiredService<OpportunityRepository>());
+
             services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
             services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
             services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
-            services.AddTransient<IRepository<Opportunity>, OpportunityRepository>();
+            services.AddTransient<IRepository<OpportunityItem>, GenericRepository<OpportunityItem>>();
             services.AddTransient<IRepository<Qualification>, GenericRepository<Qualification>>();
             services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
-            services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
+            services.AddTransient<IRepository<QualificationRouteMapping>, QualificationRouteMappingRepository>();
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
@@ -232,6 +238,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
+
+            services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
         }
     }
 }

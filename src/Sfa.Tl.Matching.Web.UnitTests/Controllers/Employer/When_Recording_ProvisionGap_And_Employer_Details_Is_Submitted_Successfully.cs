@@ -24,6 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel
         {
+            OpportunityItemId = OpportunityItemId,
             OpportunityId = OpportunityId,
             EmployerContact = Contact,
             EmployerContactEmail = ContactEmail,
@@ -31,15 +32,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         };
 
         private const int OpportunityId = 1;
+        private const int OpportunityItemId = 2;
 
         private readonly IActionResult _result;
 
         public When_Recording_ProvisionGap_And_Employer_Details_Is_Submitted_Successfully()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsReferralOpportunity(OpportunityId).Returns(false);
+            _opportunityService.IsReferralOpportunityItemAsync(OpportunityId).Returns(false);
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var referralService = Substitute.For<IReferralService>();
 
             var config = new MapperConfiguration(c =>
             {
@@ -55,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             });
             var mapper = new Mapper(config);
 
-            var employerController = new EmployerController(null, _opportunityService, mapper);
+            var employerController = new EmployerController(null, _opportunityService, referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
                 .AddStandardUser()
                 .AddUserName(ModifiedBy)
@@ -63,13 +66,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.Details(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveOpportunityEmployerDetails(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).IsReferralOpportunity(OpportunityId);
+            _opportunityService.Received(1).IsReferralOpportunityItemAsync(OpportunityItemId);
         }
 
         [Fact]
@@ -84,13 +87,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         [Fact]
         public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToRouteResult>();
+            _result.Should().BeOfType<RedirectToActionResult>();
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_Results()
+        public void Then_Result_Is_Redirect_To_SaveCheckAnswers()
         {
-            var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("GetCheckAnswersProvisionGap");
+            var redirect = _result as RedirectToActionResult;
+            redirect?.ControllerName.Should().BeEquivalentTo("Opportunity");
+            redirect?.ActionName.Should().BeEquivalentTo("SaveCheckAnswers");
+            redirect?.RouteValues["opportunityId"].Should().Be(1);
+            redirect?.RouteValues["opportunityItemId"].Should().Be(2);
         }
     }
 }

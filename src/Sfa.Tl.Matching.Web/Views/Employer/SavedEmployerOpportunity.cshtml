@@ -1,0 +1,38 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.SavedEmployerOpportunityViewModel
+
+@{
+    ViewData["Title"] = "Saved opportunities";
+}
+
+@section backButton{
+    <a asp-controller="Proximity" asp-action="Start" id="tl-finish" class="govuk-back-link">Finish and return to start</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="col">Employer name</th>
+                    <th class="govuk-table__header" scope="col">Last updated</th>
+                    <th class="govuk-table__header" scope="col"></th>
+                    <th class="govuk-table__header" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                @foreach (var employerOpportunity in Model.EmployerOpportunities)
+                {
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">@employerOpportunity.Name</th>
+                        <td class="govuk-table__cell">@employerOpportunity.LastUpdated</td>
+                        <td class="govuk-table__cell"><a asp-route="GetOpportunityBasket" asp-route-opportunityId="@employerOpportunity.OpportunityId" asp-route-opportunityItemId="0" class="govuk-link" id="tl-edit">Edit <span class="govuk-visually-hidden">this employer’s opportunities</span></a></td>
+                        <td class="govuk-table__cell"><a asp-route="ConfirmDelete" asp-route-opportunityId="@employerOpportunity.OpportunityId" class="govuk-link" id="tl-delete">Delete <span class="govuk-visually-hidden">this employer’s opportunities</span></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

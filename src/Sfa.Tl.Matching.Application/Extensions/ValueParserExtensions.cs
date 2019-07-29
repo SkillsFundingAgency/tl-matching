@@ -137,7 +137,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
         private static string RemovePhrases(string value)
         {
             var termsWithMoreThanOneWord = QualificationTerms.Ignored
-                .GroupBy(t => t.Split(" ").Count())
+                .GroupBy(t => t.Split(" ").Length)
                 .Where(i => i.Key > 1)
                 .OrderByDescending(t => t.Key)
                 .SelectMany(g => g);

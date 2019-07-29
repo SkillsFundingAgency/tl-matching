@@ -8,13 +8,14 @@ using Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProv
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider
 {
     public class When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters_With_One_Venue_Enabled : IDisposable
     {
-        private readonly IEnumerable<ProviderVenueSearchResultDto> _results;
+        private readonly IEnumerable<SearchResultsViewModelItem> _results;
         private readonly MatchingDbContext _dbContext;
         private readonly IList<ProviderVenue> _providerVenues;
 
@@ -49,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         {
             var providerQualifications = _providerVenues.SelectMany(p => p.ProviderQualification).ToList();
 
-            var qualificationMappings = providerQualifications.SelectMany(q => q.Qualification.QualificationRoutePathMapping).ToList();
+            var qualificationMappings = providerQualifications.SelectMany(q => q.Qualification.QualificationRouteMapping).ToList();
             var qualifications = providerQualifications.Select(p => p.Qualification).ToList();
 
             _dbContext.RemoveRange(providerQualifications);

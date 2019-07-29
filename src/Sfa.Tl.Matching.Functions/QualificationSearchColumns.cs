@@ -1,7 +1,10 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -12,9 +15,10 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class QualificationSearchColumns
     {
-        [FunctionName("QualificationSearchColumns")]
-        public async Task ImportQualificationSearchColumns(
-            [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)] TimerInfo timer,
+        // ReSharper disable once UnusedMember.Global
+        [FunctionName("ManualUpdateQualificationSearchColumns")]
+        public async Task<IActionResult> ManualUpdateQualificationSearchColumns(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
             [Inject] IQualificationService qualificationService,
@@ -31,6 +35,8 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
                                       $"\tRows saved: {updatedRecords}\n" +
                                       $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
+
+                return new OkObjectResult($"{updatedRecords} records updated.");
             }
             catch (Exception e)
             {

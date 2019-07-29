@@ -1,0 +1,74 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.ConfirmDeleteViewModel
+@{
+    ViewData["Title"] = "Confirm you want to delete this opportunity";
+}
+
+@section backButton{
+    @*<a asp-route="GetPlacementOrEmployer" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>
+        @if (@Model.OpportunityId == 0)
+        {
+        <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel opportunity and start again</a>
+        }
+        else
+        {
+        <a asp-route="RemoveAndGetOpportunityBasket" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish">Cancel this opportunity</a>
+        }*@
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @*<span class="govuk-caption-l"> @Model.CompanyName</span>*@
+
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+
+        <table class="govuk-table">
+            <caption class="govuk-table__caption govuk-heading-m">Placement information</caption>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Postcode of workplace</th>
+                    <td class="govuk-table__cell">
+                        @*@Model.Postcode*@
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Job role</th>
+                    <td class="govuk-table__cell">
+                        @*@Model.JobRole*@
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Students wanted</th>
+                    <td class="govuk-table__cell">
+                        @*@if (Model.PlacementsKnown.HasValue && Model.PlacementsKnown.Value)
+                        {
+                        @Model.Placements
+                        }
+                        else
+                        {
+                        @:at least 1
+                        }*@
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="govuk-body">
+            @* Basket item count = 1 *@
+            This cannot be undone and will mean this employer has no more saved opportunities.
+            @* Else *@
+            This cannot be undone.
+        </p>
+
+        <form>
+
+            <button class="govuk-button" type="submit">
+                @* Basket item count = 1 *@
+                Confirm and finish
+                @* Else *@
+                Confirm and continue
+            </button>
+           
+
+        </form>
+        <p class="govuk-body"><a href="#" class="govuk-link">Cancel and go back</a></p>
+    </div>
+</div>

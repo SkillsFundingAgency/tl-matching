@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using FluentAssertions;
-using Sfa.Tl.Matching.Application.Configuration;
+﻿using FluentAssertions;
 using Sfa.Tl.Matching.Application.Extensions;
 using Xunit;
 
@@ -23,7 +21,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
         {
             searchTerm.ToQualificationSearch().Should().Be(result);
         }
-
 
         [Theory(DisplayName = "AllSpecialCharactersOrNumbers Data Tests")]
         [InlineData("Test", false)]

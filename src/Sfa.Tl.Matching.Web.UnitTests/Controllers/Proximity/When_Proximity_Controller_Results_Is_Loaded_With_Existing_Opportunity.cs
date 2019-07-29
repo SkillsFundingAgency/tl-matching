@@ -22,6 +22,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         private readonly IOpportunityService _opportunityService;
 
         private const int OpportunityId = 1;
+        private const int OpportunityItemId = 1;
+
         private const int RouteId = 1;
         private const int ProviderVenueId = 11;
 
@@ -39,9 +41,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
             _selectedRouteId = routes.First().Id;
 
-            var providerSearchResultDto = new List<ProviderVenueSearchResultDto>
+            var providerSearchResultDto = new List<SearchResultsViewModelItem>
             {
-                new ProviderVenueSearchResultDto
+                new SearchResultsViewModelItem
                 {
                     Postcode = Postcode,
                     Distance = 1.5d,
@@ -61,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             routePathService.GetRoutes().Returns(routes);
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetReferrals(OpportunityId).Returns(new List<ReferralDto>
+            _opportunityService.GetReferrals(OpportunityItemId).Returns(new List<ReferralDto>
             {
                 new ReferralDto
                 {
@@ -69,15 +71,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                     Name = "Referral"
                 }
             });
+            _opportunityService
+                .GetCompanyNameWithAkaAsync(OpportunityId)
+                .Returns("CompanyName (AlsoKnownAs)");
 
-            var proximityController = new ProximityController(mapper, routePathService, _proximityService, _opportunityService);
+            var employerService = Substitute.For<IEmployerService>();
+
+            var proximityController = new ProximityController(mapper, routePathService, _proximityService, _opportunityService,
+                employerService);
 
             _result = proximityController.Results(new SearchParametersViewModel
             {
                 SelectedRouteId = RouteId,
                 Postcode = Postcode,
                 SearchRadius = SearchRadius,
-                OpportunityId = OpportunityId
+                OpportunityId = OpportunityId,
+                OpportunityItemId = OpportunityItemId
             }).GetAwaiter().GetResult();
         }
 
@@ -104,23 +113,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_SearchViewModel_SearchParameters_Postcode_Should_Be_Input_Postcode()
+        public void Then_SearchViewModel_SearchParameters_Values_Should_Match_Input_Values()
         {
             var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
             searchParametersViewModel.Postcode.Should().Be(Postcode);
-        }
-
-        [Fact]
-        public void Then_SearchViewModel_SearchParameters_SearchRadius_Should_Be_Input_SearchRadius()
-        {
-            var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
             searchParametersViewModel.SearchRadius.Should().Be(SearchRadius);
-        }
-
-        [Fact]
-        public void Then_SearchViewModel_SearchParameters_SelectedRouteIds_Should_Be_Input_SelectedRouteId()
-        {
-            var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
             searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
         }
 
@@ -132,12 +129,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
+        public void Then_Result_Is_Not_Null()
+        {
             _result.Should().NotBeNull();
+        }
 
         [Fact]
-        public void Then_View_Result_Is_Returned() =>
+        public void Then_View_Result_Is_Returned()
+        {
             _result.Should().BeAssignableTo<ViewResult>();
+        }
 
         [Fact]
         public void Then_Model_Is_Not_Null()
@@ -156,7 +157,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         [Fact]
         public void Then_GetReferrals_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetReferrals(OpportunityId);
+            _opportunityService.Received(1).GetReferrals(OpportunityItemId);
         }
 
         [Fact]
@@ -164,6 +165,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         {
             var viewModel = _result.GetViewModel<SearchViewModel>();
             viewModel.SearchResults.Results[0].IsSelected.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Then_OpportunityService_GetCompanyNameWithAkaAsync_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .GetCompanyNameWithAkaAsync(Arg.Any<int>());
+        }
+
+        [Fact]
+        public void Then_ViewModel_CompanyNameWithAka_Should_Have_Expected_Value()
+        {
+            var viewModel = _result.GetViewModel<SearchViewModel>();
+            viewModel.SearchParameters.CompanyNameWithAka.Should().Be("CompanyName (AlsoKnownAs)");
         }
     }
 }

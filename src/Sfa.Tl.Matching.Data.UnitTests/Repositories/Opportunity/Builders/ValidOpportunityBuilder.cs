@@ -1,31 +1,145 @@
-﻿using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
+﻿using System.Collections.Generic;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
+using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 {
     public class ValidOpportunityBuilder
     {
-        public Domain.Models.Opportunity Build() => new Domain.Models.Opportunity
+        private readonly Domain.Models.Opportunity _opportunity;
+
+        public ValidOpportunityBuilder()
         {
-            Id = 1,
-            RouteId = 1,
-            Postcode = "AA1 1AA",
-            SearchRadius = 10,
-            JobTitle = "Testing Job Title",
-            DropOffStage = 9,
-            PlacementsKnown = true,
-            Placements = 3,
-            SearchResultProviderCount = 12,
-            EmployerId = 5,
-            EmployerName = "Employer",
-            EmployerContact = "Employer Contact",
-            EmployerContactPhone = "020 123 4567",
-            EmployerContactEmail = "employer.contact@employer.co.uk",
-            UserEmail = "employer.contact@employer.co.uk",
-            ConfirmationSelected = true,
-            CreatedBy = EntityCreationConstants.CreatedByUser,
-            CreatedOn = EntityCreationConstants.CreatedOn,
-            ModifiedBy = EntityCreationConstants.ModifiedByUser,
-            ModifiedOn = EntityCreationConstants.ModifiedOn
-        };
+            _opportunity = new Domain.Models.Opportunity
+            {
+                Id = 1,
+                EmployerId = 5,
+                EmployerContact = "Employer Contact",
+                EmployerContactPhone = "020 123 4567",
+                EmployerContactEmail = "employer.contact@employer.co.uk",
+                CreatedBy = EntityCreationConstants.CreatedByUser,
+                CreatedOn = EntityCreationConstants.CreatedOn,
+                ModifiedBy = EntityCreationConstants.ModifiedByUser,
+                ModifiedOn = EntityCreationConstants.ModifiedOn
+            };
+        }
+
+        public ValidOpportunityBuilder AddEmployer()
+        {
+            _opportunity.Employer = new Employer
+            {
+                Id = 5,
+                CompanyName = "Company",
+                AlsoKnownAs = "Also Known As",
+                Postcode = "CV1 2WT"
+            };
+
+            return this;
+        }
+
+        public ValidOpportunityBuilder AddReferrals()
+        {
+            if (_opportunity.OpportunityItem == null)
+            {
+                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
+            }
+
+            _opportunity.OpportunityItem.Add(
+                new Domain.Models.OpportunityItem
+                {
+                    //Id = _opportunity.OpportunityItem.Count + 1,
+                    OpportunityId = 1,
+                    OpportunityType = "Referral",
+                    JobRole = "Automation Tester",
+                    PlacementsKnown = true,
+                    Placements = 5,
+                    Town = "Coventry",
+                    Postcode = "CV1 2WT",
+                    IsSaved = true,
+                    IsCompleted = false,
+                    Referral = new List<Referral>
+                    {
+                        new Referral()
+                        {
+                            //Id = 1,
+                            ProviderVenueId = 1,
+                            DistanceFromEmployer = 3.5M,
+                            ProviderVenue = new Domain.Models.ProviderVenue
+                            {
+                                Id = 1,
+                                ProviderId = 1,
+                                Postcode = "AA1 1AA",
+                                Town = "Town",
+                                County = "County",
+                                Latitude = 52.648869M,
+                                Longitude = 2.095574M,
+                                IsEnabledForReferral = true,
+                                IsRemoved = false,
+                                Source = "Test",
+                                CreatedBy = EntityCreationConstants.CreatedByUser,
+                                CreatedOn = EntityCreationConstants.CreatedOn,
+                                Provider = new Domain.Models.Provider
+                                {
+                                    Id = 1,
+                                    UkPrn = 10000546,
+                                    Name = "ProviderName",
+                                    OfstedRating = 1,
+                                    PrimaryContact = "PrimaryContact",
+                                    PrimaryContactEmail = "primary@contact.co.uk",
+                                    PrimaryContactPhone = "01777757777",
+                                    SecondaryContact = "SecondaryContact",
+                                    SecondaryContactEmail = "secondary@contact.co.uk",
+                                    SecondaryContactPhone = "01777757777",
+                                    IsCdfProvider = true,
+                                    IsEnabledForReferral = true,
+                                    Source = "PMF_1018",
+                                    CreatedBy = EntityCreationConstants.CreatedByUser,
+                                    CreatedOn = EntityCreationConstants.CreatedOn
+                                },
+                            }
+                        }
+                    }
+                });
+
+            return this;
+        }
+
+        public ValidOpportunityBuilder AddProvisionGaps()
+        {
+            if (_opportunity.OpportunityItem == null)
+            {
+                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
+            }
+
+            _opportunity.OpportunityItem.Add(
+                new Domain.Models.OpportunityItem
+                {
+                    //Id = _opportunity.OpportunityItem.Count + 1,
+                    OpportunityId = 1,
+                    OpportunityType = "ProvisionGap",
+                    JobRole = "Unknown job role",
+                    Town = "London",
+                    Postcode = "SW1 1AA",
+                    PlacementsKnown = true,
+                    Placements = 2,
+                    IsSaved = true,
+                    IsCompleted = false,
+                    ProvisionGap = new List<Domain.Models.ProvisionGap>
+                    {
+                        new Domain.Models.ProvisionGap
+                        {
+                            Id = 1,
+                            
+                            HadBadExperience = true,
+                            NoSuitableStudent = true,
+                            ProvidersTooFarAway = true
+                        }
+                    }
+                });
+
+            return this;
+        }
+
+        public Domain.Models.Opportunity Build() => _opportunity;
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using AutoMapper;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Web.Mappers
@@ -11,57 +13,43 @@ namespace Sfa.Tl.Matching.Web.Mappers
         public CreateOpportunityViewModelMapper()
         {
             CreateMap<SaveProvisionGapViewModel, OpportunityDto>()
-                .ForMember(m => m.CreatedBy, o => o.MapFrom<LoggedInUserNameResolver<SaveProvisionGapViewModel, OpportunityDto>>())
-                .ForMember(m => m.UserEmail, o => o.MapFrom<LoggedInUserEmailResolver<SaveProvisionGapViewModel, OpportunityDto>>())
-                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
+                //.ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
-                .ForMember(m => m.DropOffStage, o => o.Ignore())
-                .ForMember(m => m.EmployerId, o => o.Ignore())
-                .ForMember(m => m.EmployerCrmId, o => o.Ignore())
-                .ForMember(m => m.EmployerName, o => o.Ignore())
-                .ForMember(m => m.EmployerContact, o => o.Ignore())
-                .ForMember(m => m.EmployerContactEmail, o => o.Ignore())
-                .ForMember(m => m.EmployerContactPhone, o => o.Ignore())
-                .ForMember(m => m.ConfirmationSelected, o => o.Ignore())
-                .ForMember(m => m.EmployerName, o => o.Ignore())
-                .ForMember(m => m.IsReferral, o => o.Ignore())
-                .ForMember(m => m.JobTitle, o => o.Ignore())
-                .ForMember(m => m.ModifiedBy, o => o.Ignore())
-                .ForMember(m => m.ModifiedOn, o => o.Ignore())
-                .ForMember(m => m.Referral, o => o.Ignore())
-                .ForMember(m => m.Placements, o => o.Ignore())
-                .ForMember(m => m.PlacementsKnown, o => o.Ignore())
-                .ForMember(m => m.RouteName, o => o.Ignore())
+                .ForAllOtherMembers(config => config.Ignore())
+                ;
+
+            CreateMap<SaveProvisionGapViewModel, OpportunityItemDto>()
+                .ForMember(m => m.OpportunityItemId, o => o.MapFrom(s => s.OpportunityItemId))
+                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
+                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
+                .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
+                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
+                .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
+                .ForPath(o => o.OpportunityType, opt => opt.MapFrom(x => OpportunityType.ProvisionGap))
+                .ForAllOtherMembers(config => config.Ignore())
                 ;
 
             CreateMap<SaveReferralViewModel, OpportunityDto>()
-                .ForMember(m => m.CreatedBy, o => o.MapFrom<LoggedInUserNameResolver<SaveReferralViewModel, OpportunityDto>>())
-                .ForMember(m => m.UserEmail, o => o.MapFrom<LoggedInUserEmailResolver<SaveReferralViewModel, OpportunityDto>>())
-                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
-                .ForMember(m => m.Referral, o => o.MapFrom(s => s.SelectedProvider.Where(p => p.IsSelected)))
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityId))
-                .ForMember(m => m.DropOffStage, o => o.Ignore())
-                .ForMember(m => m.EmployerId, o => o.Ignore())
-                .ForMember(m => m.EmployerCrmId, o => o.Ignore())
-                .ForMember(m => m.EmployerContact, o => o.Ignore())
-                .ForMember(m => m.EmployerContactEmail, o => o.Ignore())
-                .ForMember(m => m.EmployerContactPhone, o => o.Ignore())
-                .ForMember(m => m.ConfirmationSelected, o => o.Ignore())
-                .ForMember(m => m.EmployerName, o => o.Ignore())
-                .ForMember(m => m.IsReferral, o => o.Ignore())
-                .ForMember(m => m.JobTitle, o => o.Ignore())
-                .ForMember(m => m.ModifiedBy, o => o.Ignore())
-                .ForMember(m => m.ModifiedOn, o => o.Ignore())
-                .ForMember(m => m.Placements, o => o.Ignore())
-                .ForMember(m => m.PlacementsKnown, o => o.Ignore())
-                .ForMember(m => m.RouteName, o => o.Ignore())
+                .ForAllOtherMembers(config => config.Ignore())
+                ;
+
+            CreateMap<SaveReferralViewModel, OpportunityItemDto>()
+                .ForMember(m => m.OpportunityItemId, o => o.MapFrom(s => s.OpportunityItemId))
+                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
+                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
+                .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
+                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
+                .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
+                .ForPath(o => o.OpportunityType, opt => opt.MapFrom(x => OpportunityType.Referral))
+                .ForMember(m => m.Referral, o => o.MapFrom(s => s.SelectedProvider.Where(p => p.IsSelected)))
+                .ForAllOtherMembers(config => config.Ignore())
                 ;
 
             CreateMap<SelectedProviderViewModel, ReferralDto>()
-                .ForMember(m => m.CreatedBy,
-                    o => o.MapFrom<LoggedInUserNameResolver<SelectedProviderViewModel, ReferralDto>>())
-                .ForMember(m => m.Name, o => o.Ignore())
-                .ForMember(m => m.Postcode, o => o.Ignore())
+                .ForMember(m => m.ProviderVenueId, o => o.MapFrom(x => x.ProviderVenueId))
+                .ForMember(m => m.DistanceFromEmployer, o => o.MapFrom(x => x.DistanceFromEmployer))
+                .ForAllOtherMembers(config => config.Ignore())
                 ;
         }
     }

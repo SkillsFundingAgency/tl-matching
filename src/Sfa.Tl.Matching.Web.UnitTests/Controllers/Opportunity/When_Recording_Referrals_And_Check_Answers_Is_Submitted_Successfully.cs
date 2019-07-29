@@ -18,13 +18,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
     {
         private const string ModifiedBy = "ModifiedBy";
         private const int OpportunityId = 1;
+        private const int OpportunityItemId = 2;
 
-        private readonly IReferralService _referralService;
+        private readonly IOpportunityService _opportunityService;
         private readonly IActionResult _result;
-        private readonly CheckAnswersReferralViewModel _viewModel = new CheckAnswersReferralViewModel
-        {
-            OpportunityId = OpportunityId
-        };
 
         public When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully()
         {
@@ -35,48 +32,43 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 c.AddMaps(typeof(CheckAnswersDtoMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<CheckAnswersReferralViewModel, CheckAnswersDto>(httpcontextAccesor) :
+                        new LoggedInUserEmailResolver<CheckAnswersViewModel, CheckAnswersDto>(httpcontextAccesor) :
                         type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<CheckAnswersReferralViewModel, CheckAnswersDto>(httpcontextAccesor) :
+                            (object)new LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>(httpcontextAccesor) :
                             type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<CheckAnswersReferralViewModel, CheckAnswersDto>(new DateTimeProvider()) :
+                                new UtcNowResolver<CheckAnswersViewModel, CheckAnswersDto>(new DateTimeProvider()) :
                                 null);
             });
 
             var mapper = new Mapper(config);
 
-            var opportunityService = Substitute.For<IOpportunityService>();
-            _referralService = Substitute.For<IReferralService>();
+            _opportunityService = Substitute.For<IOpportunityService>();
 
-            var opportunityController = new OpportunityController(opportunityService, _referralService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService,  mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(ModifiedBy)
                 .Build();
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.CheckAnswersReferrals(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveCheckAnswers(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }
         
         [Fact]
-        public void Then_Result_Is_Redirect_To_EmailsSent()
+        public void Then_Result_Is_Redirect_To_GetOpportunityBasket()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
-
-            result?.RouteName.Should().Be("EmailSentReferrals_Get");
-        }
-        
-        [Fact]
-        public void Then_SendProviderReferralEmail_Is_Called_Exactly_Once()
-        {
-            _referralService.Received(1).SendProviderReferralEmail(OpportunityId);
+            result?.RouteName.Should().Be("GetOpportunityBasket");
+            result?.RouteValues["opportunityId"].Should().Be(1);
+            result?.RouteValues["opportunityItemId"].Should().Be(2);
         }
 
         [Fact]
-        public void Then_SendEmployerReferralEmail_Is_Called_Exactly_Once()
+        public void Then_UpdateOpportunityItemAsync_Is_Called_Exactly_Once()
         {
-            _referralService.Received(1).SendEmployerReferralEmail(OpportunityId);
+            // TODO Assert args
+            _opportunityService.Received(1).UpdateOpportunityItemAsync(Arg.Any<CheckAnswersDto>());
         }
     }
 }

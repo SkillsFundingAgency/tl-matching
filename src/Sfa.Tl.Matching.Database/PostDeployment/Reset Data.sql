@@ -6,7 +6,7 @@ DELETE FROM [ProviderQualification]
 DELETE FROM [Referral]
 DELETE FROM [ProviderVenue]
 DELETE FROM [Provider]
-DELETE FROM [QualificationRoutePathMapping]
+DELETE FROM [QualificationRouteMapping]
 DELETE FROM [Qualification]
 DELETE FROM [ProvisionGap]
 DELETE FROM [Opportunity]
@@ -20,7 +20,7 @@ DBCC CHECKIDENT ('[ProviderQualification]', RESEED, 0)
 DBCC CHECKIDENT ('[Referral]', RESEED, 0)
 DBCC CHECKIDENT ('[ProviderVenue]', RESEED, 0)
 DBCC CHECKIDENT ('[Provider]', RESEED, 0)
-DBCC CHECKIDENT ('[QualificationRoutePathMapping]', RESEED, 0)
+DBCC CHECKIDENT ('[QualificationRouteMapping]', RESEED, 0)
 DBCC CHECKIDENT ('[Qualification]', RESEED, 0)
 DBCC CHECKIDENT ('[Opportunity]', RESEED, 0)
 DBCC CHECKIDENT ('[ProvisionGap]', RESEED, 0)

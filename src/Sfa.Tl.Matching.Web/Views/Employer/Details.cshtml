@@ -1,11 +1,11 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerDetailsViewModel
 @{
-    ViewData["Title"] = "Check employer’s details";
+    ViewData["Title"] = "Confirm contact details for industry placements";
 }
 
 @section backButton{
-    <a asp-controller="Employer" asp-action="FindEmployer" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
-    <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Finish and start again </a>
+    <a asp-route="LoadWhoIsEmployer" asp-route-opportunityId="@Model.OpportunityId" class="govuk-back-link">Back</a>
+    @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 
 <div class="govuk-grid-row">
@@ -25,45 +25,22 @@
                 </div>
             </div>
         }
-        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        <h2 class="govuk-heading-m">
-            <label asp-for="EmployerName">@Model.EmployerName</label>
-        </h2>
 
-        <form asp-controller="Employer" asp-action="Details" novalidate>
+        <span class="govuk-caption-l">@Model.CompanyNameWithAka</span>
+
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+
+        <form asp-action="SaveOpportunityEmployerDetails" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
-            <input asp-for="EmployerName" type="hidden" />
+            <input asp-for="OpportunityItemId" type="hidden" />
+            <input asp-for="CompanyName" type="hidden" />
+            <input asp-for="CompanyNameAka" type="hidden" />
 
             <p class="govuk-body">
-                <a asp-controller="Employer" asp-action="FindEmployer" asp-route-id="@Model.OpportunityId" class="govuk-link" id="tl-find-different">Find a different employer</a>
+                <a asp-route="LoadWhoIsEmployer" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link" id="tl-find-different">Find a different employer</a>
             </p>
 
-            <div class="govuk-inset-text">
-                Make sure the employer confirms the most accurate and up-to-date contact name, email and telephone number for industry placements.
-            </div>
-
-            <div class="govuk-form-group" sfa-validation-for="EmployerContact" sfa-validationerror-class="govuk-form-group--error">
-                <label class="govuk-label" asp-for="EmployerContact">
-                    Contact name for placements
-                </label>
-                <span class="govuk-error-message" asp-validation-for="EmployerContact"></span>
-                <input asp-for="EmployerContact" class="govuk-input govuk-input--width-20" sfa-validation-for="EmployerContact" sfa-validationerror-class="govuk-input--error" />
-            </div>
-            <div class="govuk-form-group" sfa-validation-for="EmployerContactEmail" sfa-validationerror-class="govuk-form-group--error">
-                <label class="govuk-label" asp-for="EmployerContactEmail">
-                    Email
-                </label>
-                <span class="govuk-error-message" asp-validation-for="EmployerContactEmail"></span>
-                <input asp-for="EmployerContactEmail" class="govuk-input govuk-input--width-20" sfa-validation-for="EmployerContactEmail" sfa-validationerror-class="govuk-input--error" align` />
-            </div>
-            <div class="govuk-form-group" sfa-validation-for="EmployerContactPhone" sfa-validationerror-class="govuk-form-group--error">
-                <label class="govuk-label" asp-for="EmployerContactPhone">
-                    Phone number
-                </label>
-                <span class="govuk-error-message" asp-validation-for="EmployerContactPhone"></span>
-                <input asp-for="EmployerContactPhone" class="govuk-input govuk-input--width-20" type="tel" sfa-validation-for="EmployerContactPhone" sfa-validationerror-class="govuk-input--error" />
-            </div>
-            <button type="submit" class="govuk-button" id="tl-confirm">Confirm and continue</button>
+            <partial name="_employerDetailForm" , model="Model" />
         </form>
     </div>
 </div>

@@ -24,11 +24,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
         public When_Opportunity_Controller_Save_Referral_New_Opportunity()
         {
-            const int opportunityId = 1;
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsNewReferral(opportunityId).Returns(true);
+            _opportunityService
+                .IsNewReferralAsync(Arg.Any<int>())
+                .Returns(true);
 
-            var referralService = Substitute.For<IReferralService>();
+            _opportunityService.CreateOpportunityItemAsync(Arg.Any<OpportunityItemDto>()).Returns(2);
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
@@ -49,7 +50,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             });
             var mapper = new Mapper(config);
 
-            var opportunityController = new OpportunityController(_opportunityService, referralService, mapper);
+            var opportunityController = new OpportunityController(_opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
                 .AddUserName(UserName)
                 .AddEmail(Email)
@@ -63,7 +64,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 SelectedRouteId = 1,
                 Postcode = "cv12wt",
                 SearchRadius = 10,
-                OpportunityId = opportunityId,
+                OpportunityId = 0,
+                OpportunityItemId = 0,
                 SelectedProvider = new[]
                 {
                     new SelectedProviderViewModel
@@ -89,22 +91,43 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_UpdateOpportunity_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().UpdateOpportunity(Arg.Any<ProviderSearchDto>());
+            _opportunityService
+                .DidNotReceive()
+                .UpdateOpportunity(Arg.Any<ProviderSearchDto>());
+        }
+
+        [Fact]
+        public void Then_UpdateOpportunityItem_Is_Not_Called()
+        {
+            _opportunityService
+                .DidNotReceive()
+                .UpdateOpportunityItemAsync(Arg.Any<ProviderSearchDto>());
         }
 
         [Fact]
         public void Then_CreateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).CreateOpportunity(Arg.Any<OpportunityDto>());
+            _opportunityService
+                .Received(1)
+                .CreateOpportunityAsync(Arg.Any<OpportunityDto>());
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_to_PlacementInformationSave_Get()
+        public void Then_CreateOpportunityItem_Is_Called_Exactly_Once()
+        {
+            _opportunityService
+                .Received(1)
+                .CreateOpportunityItemAsync(Arg.Any<OpportunityItemDto>());
+        }
+
+        [Fact]
+        public void Then_Result_Is_Redirect_to_GetPlacementInformation()
         {
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("PlacementInformationSave_Get");
+            result?.RouteName.Should().Be("GetPlacementInformation");
+            result?.RouteValues["opportunityItemId"].Should().Be(2);
         }
     }
 }

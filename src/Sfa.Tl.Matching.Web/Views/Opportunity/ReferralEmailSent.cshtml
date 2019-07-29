@@ -1,4 +1,4 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.EmailsSentViewModel
+﻿@model Sfa.Tl.Matching.Models.ViewModel.SentViewModel
 @{
     ViewData["Title"] = "Emails sent";
 }
@@ -16,21 +16,21 @@
 
         <h2 class="govuk-heading-m">What happens next</h2>
 
-        <p class="govuk-body">We expect the provider will contact @Model.EmployerContact within 2 to 3 working days. The provider will work with @Model.EmployerName to arrange the terms and details of each placement.</p>
+        <p class="govuk-body">We expect the providers will contact within 2 to 3 working days. The providers will work with to arrange the terms and details of each placement.</p>
 
-        <p class="govuk-body"><a asp-controller="Proximity" asp-action="Start" class="govuk-button govuk-!-margin-bottom-0" id="tl-finish">Finish</a></p>
-        <p class="govuk-body js-visible"><a class="govuk-link" href="/feedback">Give us feedback</a></p>
+        <p class="govuk-body"><a asp-controller="Proximity" asp-action="Start" class="govuk-button govuk-!-margin-bottom-0" id="tl-end">Finish</a></p>
+        <p class="govuk-body js-visible"><a class="govuk-link" id="tl-feedback-survey" href="/feedback">Give us feedback</a></p>
 
 
         <input asp-for="EmployerCrmRecord" type="hidden" />
         <input asp-for="EmployerContact" type="hidden" />
-        <input asp-for="RouteId" type="hidden" />
+        @*<input asp-for="RouteId" type="hidden" />
         <input asp-for="SearchRadius" type="hidden" />
         <input asp-for="Postcode" type="hidden" />
         <input asp-for="UserEmail" type="hidden" />
-        <input asp-for="JobTitle" type="hidden" />
+        <input asp-for="JobRole" type="hidden" />
         <input asp-for="Placements" type="hidden" />
-        <input asp-for="EmployerName" type="hidden" />
+        <input asp-for="CompanyName" type="hidden" />*@
 
     </div>
 </div>

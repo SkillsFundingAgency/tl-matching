@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailService
                 .Received(1)
                 .SendEmail(Arg.Is<string>(
-                        templateName => templateName == "EmployerReferral"),
+                        templateName => templateName == "EmployerReferralComplex"),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<string>(
-                        subject => subject == "Industry Placement Matching Referral"),
+                        subject => subject == "Your industry placement referral – ESFA National Apprenticeship Service"),
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Any<string>());
         }
@@ -179,31 +179,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Route_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("route")
-                                  && tokens["route"] == "agriculture, environmental and animal care"),
-                    Arg.Any<string>());
-        }
-
-        [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
         {
-            const string expectedProvidersList = "# Provider\r\n"
-                                                 + "AA2 2AA\r\n"
-                                                 + "Contact name: Provider Contact\r\n"
-                                                 + "Telephone: 01777757777\r\n"
-                                                 + "Email: primary.contact@provider.co.uk\r\n"
-                                                 + "\r\n"
-                                                 + "Has students learning: \r\n"
-                                                 + "* Qualification 1\r\n"
-                                                 + "* Qualification 2\r\n"
+            const string expectedProvidersList = "# WorkplaceTown WorkplacePostcode\r\n"
+                                                 + "*Job role: Job Role\r\n"
+                                                 + "*Students wanted: 2\r\n"
+                                                 + "*Providers selected: Test Provider\r\n"
                                                  + "\r\n";
             _emailService
                 .Received(1)
@@ -211,36 +192,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("providers_list")
-                                  && tokens["providers_list"] == expectedProvidersList),
-                    Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Job_Role_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("job_role")
-                                  && tokens["job_role"] == "Testing Job Title"),
-                    Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Number_Of_Placements_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("number_of_placements")
-                                  && tokens["number_of_placements"] == "at least one"),
+                        tokens => tokens.ContainsKey("placements_list")
+                                  && tokens["placements_list"] == expectedProvidersList),
                     Arg.Any<string>());
         }
 

@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using NSubstitute;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -14,25 +19,46 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     {
         private readonly IRepository<Domain.Models.Referral> _referralRepository;
 
-        private const int OpportunityId = 1;
-
         public When_OpportunityService_Is_Called_To_Update_Referrals()
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
+            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.GivenName, "adminUserName")
+                }))
+            });
+
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver") ?
+                        new LoggedInUserEmailResolver<ReferralDto, Domain.Models.Referral>(httpcontextAccesor) :
+                        type.Name.Contains("LoggedInUserNameResolver") ?
+                            (object)new LoggedInUserNameResolver<ReferralDto, Domain.Models.Referral>(httpcontextAccesor) :
+                            type.Name.Contains("UtcNowResolver") ?
+                                new UtcNowResolver<ReferralDto, Domain.Models.Referral>(new DateTimeProvider()) :
+                                null);
+            });
+
             var mapper = new Mapper(config);
 
-            var opportunityRepository = Substitute.For<IRepository<Domain.Models.Opportunity>>();
+            var opportunityRepository = Substitute.For<IOpportunityRepository>();
+            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
+            var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
+            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
-                .Returns(OpportunityId);
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, 
+                provisionGapRepository, _referralRepository, googleMapApiClient, 
+                opportunityPipelineReportWriter, dateTimeProvider);
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, provisionGapRepository, _referralRepository);
-
-            var dto = new OpportunityDto
+            var dto = new OpportunityItemDto
             {
-                EmployerContact = "EmployerContact",
                 Referral = new List<ReferralDto>
                 {
                     new ReferralDto

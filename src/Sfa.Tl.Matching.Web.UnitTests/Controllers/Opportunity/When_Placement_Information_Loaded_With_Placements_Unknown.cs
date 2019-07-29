@@ -19,7 +19,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         private readonly PlacementInformationSaveDto _dto = new PlacementInformationSaveDto();
         private const bool PlacementsKnown = false;
         private const int Placements = 5;
-        private const int OpportunityId = 12;
+        private const int OpportunityId = 1;
+        private const int OpportunityItemId = 12;
 
         public When_Placement_Information_Loaded_With_Placements_Unknown()
         {
@@ -31,13 +32,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
             
             var opportunityService = Substitute.For<IOpportunityService>();
-            opportunityService.GetPlacementInformationSave(Arg.Any<int>()).Returns(_dto);
+            opportunityService.GetPlacementInformationAsync(Arg.Any<int>()).Returns(_dto);
 
-            var referralService = Substitute.For<IReferralService>();
+            var opportunityController = new OpportunityController(opportunityService,  mapper);
 
-            var opportunityController = new OpportunityController(opportunityService, referralService, mapper);
-
-            _result = opportunityController.PlacementInformationSave(OpportunityId).GetAwaiter().GetResult();
+            _result = opportunityController.GetPlacementInformation(OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]

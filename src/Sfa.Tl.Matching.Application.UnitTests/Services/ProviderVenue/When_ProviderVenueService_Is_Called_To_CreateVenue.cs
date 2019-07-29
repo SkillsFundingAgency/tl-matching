@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             });
 
             _googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
-            _googleMapApiClient.GetAddressDetails(Arg.Any<string>()).Returns("Coventry");
+            _googleMapApiClient.GetAddressDetails(Arg.Is<string>(s => s == FormatedPostcode)).Returns("Coventry");
 
             var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository, _locationApiClient, _googleMapApiClient);
 
@@ -76,7 +76,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         [Fact]
         public void Then_GoogleMapApiClient_GetAddressDetails_Is_Called_Exactly_Once()
         {
-            _googleMapApiClient.Received(1).GetAddressDetails("CV1 2WT");
+            _googleMapApiClient.Received(1).GetAddressDetails(FormatedPostcode);
         }
 
         [Fact]

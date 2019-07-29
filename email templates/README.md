@@ -7,6 +7,11 @@ Subject - **Your industry placement referral – ESFA National Apprenticeship Serv
 
 Template Id - `4918d3d5-6694-4f11-975f-e91c255dd583`
 
+## EmployerReferralComplex
+Subject - **Your industry placement referral – ESFA National Apprenticeship Service**
+
+Template Id - `fed633ff-cf62-4060-9816-df036c89ba03`
+
 ## ProviderReferral
 Subject - **Industry placement opportunity  - ESFA National Apprenticeship Service**
 

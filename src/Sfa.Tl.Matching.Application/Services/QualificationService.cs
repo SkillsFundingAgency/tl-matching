@@ -18,17 +18,17 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Qualification> _qualificationRepository;
-        private readonly IRepository<QualificationRoutePathMapping> _qualificationRoutePathMappingRepository;
+        private readonly IRepository<QualificationRouteMapping> _qualificationRouteMappingRepository;
         private readonly IRepository<LearningAimReference> _learningAimReferenceRepository;
 
         public QualificationService(IMapper mapper,
             IRepository<Qualification> qualificationRepository,
-            IRepository<QualificationRoutePathMapping> qualificationRoutePathMappingRepository,
+            IRepository<QualificationRouteMapping> qualificationRouteMappingRepository,
             IRepository<LearningAimReference> learningAimReferenceRepository)
         {
             _mapper = mapper;
             _qualificationRepository = qualificationRepository;
-            _qualificationRoutePathMappingRepository = qualificationRoutePathMappingRepository;
+            _qualificationRouteMappingRepository = qualificationRouteMappingRepository;
             _learningAimReferenceRepository = learningAimReferenceRepository;
         }
 
@@ -36,19 +36,19 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var qualification = _mapper.Map<Qualification>(viewModel);
 
-            var qualificationRoutePathMappings = viewModel
+            var qualificationRouteMappings = viewModel
                 .Routes?
                 .Where(r => r.IsSelected)
-                .Select(route => new QualificationRoutePathMapping
+                .Select(route => new QualificationRouteMapping
                 {
                     RouteId = route.Id,
                     Source = viewModel.Source,
                     Qualification = qualification
                 }).ToList();
 
-            if (qualificationRoutePathMappings?.Count > 0)
+            if (qualificationRouteMappings?.Count > 0)
             {
-                await _qualificationRoutePathMappingRepository.CreateMany(qualificationRoutePathMappings);
+                await _qualificationRouteMappingRepository.CreateMany(qualificationRouteMappings);
             }
 
             return qualification.Id;
@@ -56,11 +56,16 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<QualificationSearchResultViewModel> GetQualificationByIdAsync(int id)
         {
-            var qualification = await _qualificationRepository
-                .GetSingleOrDefault(p => p.Id == id,
-                    q => q.QualificationRoutePathMapping);
-
-            return _mapper.Map<Qualification, QualificationSearchResultViewModel>(qualification);
+            return await _qualificationRepository.GetSingleOrDefault(
+                p => p.Id == id,
+                q => new QualificationSearchResultViewModel
+                {
+                    QualificationId = q.Id,
+                    LarId = q.LarsId,
+                    ShortTitle = q.ShortTitle,
+                    Title = q.Title,
+                    RouteIds = q.QualificationRouteMapping.Select(m => m.Id).ToList()
+                });
         }
 
         public async Task<QualificationDetailViewModel> GetQualificationAsync(string larId)
@@ -94,7 +99,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     Title = q.Title,
                     ShortTitle = q.ShortTitle,
                     LarId = q.LarsId,
-                    RouteIds = q.QualificationRoutePathMapping.Select(r => r.RouteId).ToList()
+                    RouteIds = q.QualificationRouteMapping.Select(r => r.RouteId).ToList()
                 })
                 .Take(51)
                 .OrderBy(q => q.Title.IndexOf(qualificationSearch, StringComparison.Ordinal))
@@ -135,27 +140,27 @@ namespace Sfa.Tl.Matching.Application.Services
             qualification = _mapper.Map(viewModel, qualification);
             await _qualificationRepository.Update(qualification);
 
-            var existingMappings = _qualificationRoutePathMappingRepository
+            var existingMappings = _qualificationRouteMappingRepository
                 .GetMany(r => r.QualificationId == viewModel.QualificationId)
                 .ToList();
 
-            var comparer = new QualificationRoutePathMappingEqualityComparer();
-            var newMappings = _mapper.Map<IList<QualificationRoutePathMapping>>(viewModel);
+            var comparer = new QualificationRouteMappingEqualityComparer();
+            var newMappings = _mapper.Map<IList<QualificationRouteMapping>>(viewModel);
 
             var toBeAdded = newMappings.Except(existingMappings, comparer).ToList();
 
             var same = existingMappings.Intersect(newMappings, comparer).ToList();
             var toBeDeleted = existingMappings.Except(same).ToList();
 
-            QualificationRoutePathMapping Find(QualificationRoutePathMapping qrpm) =>
+            QualificationRouteMapping Find(QualificationRouteMapping qrpm) =>
                 existingMappings.First(r => r.Id == qrpm.Id);
 
             var deleteMappings = toBeDeleted.Select(Find).ToList();
-            await _qualificationRoutePathMappingRepository.DeleteMany(deleteMappings);
+            await _qualificationRouteMappingRepository.DeleteMany(deleteMappings);
 
             foreach (var toBeAddedItem in toBeAdded)
             {
-                await _qualificationRoutePathMappingRepository.Create(toBeAddedItem);
+                await _qualificationRouteMappingRepository.Create(toBeAddedItem);
             }
         }
 
@@ -170,8 +175,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return await Task.FromResult(larId?.Length == 8);
         }
 
-        #region TODO DELETE AFTER SPRINT 10
-        // TODO DELETE AFTER SPRINT 10
         public async Task<int> UpdateQualificationsSearchColumns()
         {
             var qualificationsFromDb = _qualificationRepository.GetMany()
@@ -202,6 +205,5 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return searchTerm.ToString();
         }
-        #endregion
     }
 }

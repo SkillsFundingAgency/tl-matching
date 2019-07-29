@@ -19,7 +19,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
             CreateMap<PlacementInformationSaveDto, PlacementInformationSaveViewModel>()
                 .ForMember(m => m.Placements,
                     opt => opt.MapFrom(src => src.PlacementsKnown.HasValue && src.PlacementsKnown.Value ? 
-                        src.Placements : default));
+                        src.Placements : default))
+                ;
         }
     }
 }

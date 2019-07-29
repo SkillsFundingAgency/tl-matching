@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sfa.Tl.Matching.Domain.Models
@@ -21,5 +22,6 @@ namespace Sfa.Tl.Matching.Domain.Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int ChecksumCol { get; set; }
+        public virtual ICollection<Opportunity> Opportunity { get; set; }
     }
 }

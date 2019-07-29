@@ -21,9 +21,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
 
             var qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
-            var qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRoutePathMapping>>();
+            var qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
 
-            var qualificationService = new QualificationService(mapper, qualificationRepository, qualificationRoutePathMappingRepository, learningAimReferenceRepository);
+            var qualificationService = new QualificationService(mapper, qualificationRepository, qualificationRouteMappingRepository, learningAimReferenceRepository);
 
             _result = qualificationService.IsValidLarIdAsync("12345").GetAwaiter().GetResult();
         }

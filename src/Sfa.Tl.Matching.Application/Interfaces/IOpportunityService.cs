@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -8,17 +7,35 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IOpportunityService
     {
-        Task<int> CreateOpportunity(OpportunityDto opportunityDto);
-        Task<OpportunityDto> GetOpportunity(int id);
-        Task<int> CreateProvisionGap(CheckAnswersProvisionGapViewModel dto);
-        Task<PlacementInformationSaveDto> GetPlacementInformationSave(int id);
-        List<ReferralDto> GetReferrals(int opportunityId);
-        OpportunityDto GetLatestCompletedOpportunity(Guid crmId);
-        Task<bool> IsReferralOpportunity(int id);
-        Task<CheckAnswersDto> GetCheckAnswers(int id);
-        Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityUpdateDto;
-        Task UpdateReferrals(OpportunityDto dto);
-        Task<bool> IsNewReferral(int opportunityId);
-        Task<bool> IsNewProvisionGap(int opportunityId);
+        Task<int> CreateOpportunityAsync(OpportunityDto opportunityDto);
+        Task<int> CreateOpportunityItemAsync(OpportunityItemDto opportunityItemDto);
+
+        Task<int> GetSavedOpportunityItemCountAsync(int opportunityId);
+        Task<int> GetReferredOpportunityItemCountAsync(int opportunityId);
+        Task<OpportunityDto> GetOpportunity(int opportunityId);
+        Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId);
+        Task<PlacementInformationSaveDto> GetPlacementInformationAsync(int opportunityItemId);
+        List<ReferralDto> GetReferrals(int opportunityItemId);
+        Task<CheckAnswersViewModel> GetCheckAnswers(int id);
+        Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
+        Task<ConfirmDeleteOpportunityItemViewModel> GetConfirmDeleteOpportunityItemAsync(int opportunityItemId);
+
+        Task<bool> IsReferralOpportunityItemAsync(int id);
+        Task<bool> IsNewReferralAsync(int opportunityItemId);
+        Task<bool> IsNewProvisionGapAsync(int opportunityItemId);
+
+        Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityDto;
+        Task UpdateOpportunityItemAsync<T>(T dto) where T : BaseOpportunityDto;
+        Task UpdateProvisionGapAsync(PlacementInformationSaveDto dto);
+        Task UpdateReferrals(OpportunityItemDto opportunityItemDto);
+
+        Task DeleteOpportunityItemAsync(int opportunityId, int opportunityItemId);
+        Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId);
+
+        Task ContinueWithOpportunities(ContinueOpportunityViewModel viewModel);
+        Task ConfirmOpportunities(int opportunityId);
+        Task<string> GetCompanyNameWithAkaAsync(int? opportunityId);
+        Task DeleteEmployerOpportunityItemAsync(int opportunityId);
+        Task<FileDownloadDto> GetOpportunitySpreadsheetDataAsync(int opportunityId);
     }
 }

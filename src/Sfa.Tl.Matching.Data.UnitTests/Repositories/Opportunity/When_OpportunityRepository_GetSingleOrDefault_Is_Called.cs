@@ -28,79 +28,17 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
         }
 
         [Fact]
-        public void Then_Opportunity_Id_Is_Returned() =>
+        public void Then_Fields_Are_As_Expected()
+        {
             _result.Id.Should().Be(1);
-        
-        [Fact]
-        public void Then_Opportunity_RouteId_Is_Returned() =>
-            _result.RouteId.Should().Be(1);
-
-        [Fact]
-        public void Then_Opportunity_Postcode_Is_Returned() =>
-            _result.Postcode.Should().BeEquivalentTo("AA1 1AA");
-
-        [Fact]
-        public void Then_Opportunity_SearchRadius_Is_Returned()
-            => _result.SearchRadius.Should().Be(10);
-
-        [Fact]
-        public void Then_Opportunity_JobTitle_Is_Returned() =>
-            _result.JobTitle.Should().BeEquivalentTo("Testing Job Title");
-
-        [Fact]
-        public void Then_Opportunity_DropOffStage_Is_Returned()
-            => _result.DropOffStage.Should().Be(9);
-
-        [Fact]
-        public void Then_Opportunity_PlacementsKnown_Is_Returned()
-            => _result.PlacementsKnown.Should().BeTrue();
-
-        [Fact]
-        public void Then_Opportunity_SearchResultProviderCount_Is_Returned()
-            => _result.SearchResultProviderCount.Should().Be(12);
-
-        [Fact]
-        public void Then_Opportunity_EmployerId_Is_Returned()
-            => _result.EmployerId.Should().Be(5);
-
-        [Fact]
-        public void Then_Opportunity_EmployerName_Is_Returned()
-            => _result.EmployerName.Should().BeEquivalentTo("Employer");
-        
-        [Fact]
-        public void Then_Opportunity_EmployerContact_Is_Returned()
-            => _result.EmployerContact.Should().BeEquivalentTo("Employer Contact");
-
-        [Fact]
-        public void Then_Opportunity_EmployerContactPhone_Is_Returned()
-            => _result.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
-
-        [Fact]
-        public void Then_Opportunity_EmployerContactEmail_Is_Returned()
-            => _result.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
-
-        [Fact]
-        public void Then_Opportunity_UserEmail_Is_Returned()
-            => _result.UserEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
-
-        [Fact]
-        public void Then_Opportunity_ConfirmationSelected_Is_Returned()
-            => _result.ConfirmationSelected.Should().BeTrue();
-                
-        [Fact]
-        public void Then_Opportunity_CreatedBy_Is_Returned() =>
+            _result.EmployerId.Should().Be(5);
+            _result.EmployerContact.Should().BeEquivalentTo("Employer Contact");
+            _result.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
+            _result.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-        [Fact]
-        public void Then_Opportunity_CreatedOn_Is_Returned() =>
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
-
-        [Fact]
-        public void Then_Opportunity_ModifiedBy_Is_Returned() =>
             _result.ModifiedBy.Should().Be(EntityCreationConstants.ModifiedByUser);
-        
-        [Fact]
-        public void Then_Opportunity_ModifiedOn_Is_Returned() =>
             _result.ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
+        }
     }
 }

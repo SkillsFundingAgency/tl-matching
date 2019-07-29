@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             var employerService = Substitute.For<IEmployerService>();
             var opportunityService = Substitute.For<IOpportunityService>();
+            var referralService = Substitute.For<IReferralService>();
 
             var viewModel = new EmployerDetailsViewModel
             {
@@ -28,9 +29,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
 
-            _employerController = new EmployerController(employerService, opportunityService, mapper);
+            _employerController = new EmployerController(employerService, opportunityService, referralService, mapper);
 
-            _result = _employerController.Details(viewModel).GetAwaiter().GetResult();
+            _result = _employerController.SaveOpportunityEmployerDetails(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

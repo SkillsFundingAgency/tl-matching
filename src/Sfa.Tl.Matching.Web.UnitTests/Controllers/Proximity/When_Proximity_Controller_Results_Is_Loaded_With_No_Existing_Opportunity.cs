@@ -36,9 +36,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
             _selectedRouteId = routes.First().Id;
 
-            var providerSearchResultDto = new List<ProviderVenueSearchResultDto>
+            var providerSearchResultDto = new List<SearchResultsViewModelItem>
             {
-                new ProviderVenueSearchResultDto
+                new SearchResultsViewModelItem
                 {
                     Postcode = Postcode,
                     Distance = 1.5d
@@ -57,7 +57,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             routePathService.GetRoutes().Returns(routes);
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            var proximityController = new ProximityController(mapper, routePathService, _proximityService, _opportunityService);
+            var employerService = Substitute.For<IEmployerService>();
+
+            var proximityController = new ProximityController(mapper, routePathService, _proximityService, _opportunityService,
+                employerService);
 
             _result = proximityController.Results(new SearchParametersViewModel
             {
@@ -151,5 +154,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var viewModel = _result.GetViewModel<SearchViewModel>();
             viewModel.SearchResults.Results[0].IsSelected.Should().BeFalse();
         }
+
+        [Fact]
+        public void Then_OpportunityService_GetCompanyNameWithAkaAsync_Is_Not_Called()
+        {
+            _opportunityService
+                .DidNotReceiveWithAnyArgs()
+                .GetCompanyNameWithAkaAsync(Arg.Any<int>());
+        }
+
     }
 }

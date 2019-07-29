@@ -8,29 +8,32 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
         public EmployerReferralDto Build() => new EmployerReferralDto
         {
             OpportunityId = 1,
-            EmployerName = "Employer",
+            CompanyName = "Employer",
             EmployerContact = "Employer Contact",
             EmployerContactPhone = "020 123 4567",
             EmployerContactEmail = "employer.contact@employer.co.uk",
-            JobTitle = "Testing Job Title",
+            JobRole = "Testing Job Title",
             PlacementsKnown = false,
-            Placements = 3,
+            Placements = 1,
             RouteName = "Agriculture, environmental and animal care",
             Postcode = "AA1 1AA",
-            ProviderReferralInfo = new List<ProviderReferralInfoDto>
+            WorkplaceDetails = new List<WorkplaceDto>
             {
-                new ProviderReferralInfoDto
+                new WorkplaceDto
                 {
-                    ReferralId = 1,
-                    ProviderName = "Provider",
-                    ProviderPrimaryContact = "Provider Contact",
-                    ProviderPrimaryContactEmail = "primary.contact@provider.co.uk",
-                    ProviderPrimaryContactPhone = "01777757777",
-                    ProviderVenuePostcode = "AA2 2AA",
-                    QualificationShortTitles = new List<string>
+                    Placements = 2,
+                    JobRole = "Job Role",
+                    PlacementsKnown = true,
+                    WorkplaceTown = "WorkplaceTown",
+                    WorkplacePostcode = "WorkplacePostcode",
+                    ProviderDetails = new List<ProviderReferralDto>
                     {
-                        "Qualification 1",
-                        "Qualification 2"
+                        new ProviderReferralDto
+                        {
+                            ProviderName = "Test Provider",
+                            ProviderVenueTown = "ProviderTown",
+                            ProviderVenuePostCode = "ProviderPostcode"
+                        }
                     }
                 }
             },

@@ -1,0 +1,28 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerDetailsViewModel
+
+<div class="govuk-inset-text">
+    Make sure the employer confirms the most accurate and up-to-date contact name, email and telephone number for industry placements.
+</div>
+
+<div class="govuk-form-group" sfa-validation-for="EmployerContact" sfa-validationerror-class="govuk-form-group--error">
+    <label class="govuk-label" asp-for="EmployerContact">
+        Contact name
+    </label>
+    <span class="govuk-error-message" asp-validation-for="EmployerContact"></span>
+    <input asp-for="EmployerContact" class="govuk-input govuk-input--width-20" sfa-validation-for="EmployerContact" sfa-validationerror-class="govuk-input--error" />
+</div>
+<div class="govuk-form-group" sfa-validation-for="EmployerContactEmail" sfa-validationerror-class="govuk-form-group--error">
+    <label class="govuk-label" asp-for="EmployerContactEmail">
+        Email
+    </label>
+    <span class="govuk-error-message" asp-validation-for="EmployerContactEmail"></span>
+    <input asp-for="EmployerContactEmail" class="govuk-input govuk-input--width-20" sfa-validation-for="EmployerContactEmail" sfa-validationerror-class="govuk-input--error" />
+</div>
+<div class="govuk-form-group" sfa-validation-for="EmployerContactPhone" sfa-validationerror-class="govuk-form-group--error">
+    <label class="govuk-label" asp-for="EmployerContactPhone">
+        Phone number
+    </label>
+    <span class="govuk-error-message" asp-validation-for="EmployerContactPhone"></span>
+    <input asp-for="EmployerContactPhone" class="govuk-input govuk-input--width-20" type="tel" sfa-validation-for="EmployerContactPhone" sfa-validationerror-class="govuk-input--error" />
+</div>
+<button type="submit" class="govuk-button" id="tl-confirm">Confirm and continue</button>

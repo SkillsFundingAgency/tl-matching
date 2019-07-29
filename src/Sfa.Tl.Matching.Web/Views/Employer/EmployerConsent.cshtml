@@ -1,0 +1,78 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.EmployerConsentViewModel
+
+@{
+    var opportunityText = Model.OpportunityItemCount == 1 ? "opportunity" : "opportunities";
+    ViewData["Title"] = "Confirm that we can share the employer’s contact details";
+}
+
+@section backButton{
+    <a asp-route="GetOpportunityBasket" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>
+    <a asp-route="SaveEmployerOpportunity" asp-route-opportunityId="@Model.OpportunityId" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-save">Save and come back later</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a sfa-validation-for="ConfirmationSelected"></a></li>
+                    </ul>
+                </div>
+            </div>
+        }
+        <span class="govuk-caption-l"> @Model.Details.CompanyNameWithAka</span>
+
+        <h1 class="govuk-heading-l">Before you send emails</h1>
+        <h2 class="govuk-heading-m">Check details for industry placements</h2>
+
+        <section>
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Contact name</h3>
+            <p class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContact</p>
+
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Email</h3>
+            <p class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContactEmail</p>
+
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Telephone number</h3>
+            <p class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContactPhone</p>
+
+            <p class="govuk-body">
+                <a asp-route="CheckEmployerDetails" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId"
+                   class="govuk-link" id="tl-change">Change contact details</a>
+            </p>
+        </section>
+
+        <form asp-route="SaveEmployerConsent" novalidate>
+            <div class="govuk-form-group govuk-!-margin-top-8" sfa-validation-for="ConfirmationSelected" sfa-validationerror-class="govuk-form-group--error">
+                <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h2 class="govuk-fieldset__heading">
+                            Confirm we can share the employer’s details
+                        </h2>
+                    </legend>
+
+
+                    <span id="waste-hint" class="govuk-hint">
+                        Tick to confirm
+                    </span>
+                    <span class="govuk-error-message" asp-validation-for="ConfirmationSelected"></span>
+
+                    <div class="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input asp-for="ConfirmationSelected" class="govuk-checkboxes__input" type="checkbox"
+                                   sfa-validation-for="ConfirmationSelected" sfa-validationerror-class="govuk-input--error" />
+                            <label class="govuk-label govuk-checkboxes__label" asp-for="ConfirmationSelected">
+                                @Model.Details.EmployerContact has confirmed that we can share their details with providers, and that these providers can contact them about industry placements.
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <button class="govuk-button" id="tl-continue">Confirm and send @opportunityText</button>
+        </form>
+    </div>
+</div>

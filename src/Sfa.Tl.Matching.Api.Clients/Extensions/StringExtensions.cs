@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Sfa.Tl.Matching.Api.Clients.Extensions
 {
     public static class StringExtensions

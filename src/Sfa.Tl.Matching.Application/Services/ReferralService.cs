@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -32,51 +33,35 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task SendEmployerReferralEmail(int opportunityId)
         {
             var employerReferral = await GetEmployerReferrals(opportunityId);
+            var sb = new StringBuilder();
 
-            if (employerReferral == null)
-            {
-                return;
-            }
-
-            var toAddress = employerReferral.EmployerContactEmail;
-
-            var numberOfPlacements = GetNumberOfPlacements(employerReferral.PlacementsKnown, employerReferral.Placements);
+            if (employerReferral == null) return;
 
             var tokens = new Dictionary<string, string>
             {
                 { "employer_contact_name", employerReferral.EmployerContact },
-                { "employer_business_name", employerReferral.EmployerName },
+                { "employer_business_name", employerReferral.CompanyName },
                 { "employer_contact_number", employerReferral.EmployerContactPhone },
                 { "employer_contact_email", employerReferral.EmployerContactEmail },
-                { "employer_postcode", employerReferral.Postcode },
-                { "number_of_placements", numberOfPlacements },
-                { "route", employerReferral.RouteName.ToLowerInvariant() },
-                { "job_role", employerReferral.JobTitle }
+                { "employer_postcode", employerReferral.Postcode }
             };
 
-            var sb = new StringBuilder();
-
-            foreach (var providerReferral in employerReferral.ProviderReferralInfo)
+            foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
             {
-                sb.AppendLine($"# {providerReferral.ProviderName}");
-                sb.AppendLine($"{providerReferral.ProviderVenuePostcode}");
-                sb.AppendLine($"Contact name: {providerReferral.ProviderPrimaryContact}");
-                sb.AppendLine($"Telephone: {providerReferral.ProviderPrimaryContactPhone}");
-                sb.AppendLine($"Email: {providerReferral.ProviderPrimaryContactEmail}");
-                sb.AppendLine("");
-                sb.AppendLine("Has students learning: ");
+                var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
+                var providers = string.Join(", ", data.ProviderDetails.Select(dto => dto.ProviderName));
 
-                foreach (var qualificationShortTitle in providerReferral.QualificationShortTitles)
-                {
-                    sb.AppendLine($"* {qualificationShortTitle}");
-                }
-                sb.AppendLine(""); //Need a blank line, otherwise the next heading won't be formatted
+                sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
+                sb.AppendLine($"*Job role: {data.JobRole}");
+                sb.AppendLine($"*Students wanted: {placements}");
+                sb.AppendLine($"*Providers selected: {providers}");
+                sb.AppendLine("");
             }
 
-            tokens.Add("providers_list", sb.ToString());
+            tokens.Add("placements_list", sb.ToString());
 
-            await SendEmail(EmailTemplateName.EmployerReferral, opportunityId, toAddress,
-                "Industry Placement Matching Referral", tokens, employerReferral.CreatedBy);
+            await SendEmail(EmailTemplateName.EmployerReferralComplex, opportunityId, employerReferral.EmployerContactEmail,
+                "Your industry placement referral – ESFA National Apprenticeship Service", tokens, employerReferral.CreatedBy);
         }
 
         public async Task SendProviderReferralEmail(int opportunityId)
@@ -86,23 +71,22 @@ namespace Sfa.Tl.Matching.Application.Services
             foreach (var referral in referrals)
             {
                 var toAddress = referral.ProviderPrimaryContactEmail;
-
-                var numberOfPlacements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
+                var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
 
                 var tokens = new Dictionary<string, string>
                 {
                     { "primary_contact_name", referral.ProviderPrimaryContact },
                     { "provider_name", referral.ProviderName },
                     { "route", referral.RouteName.ToLowerInvariant() },
-                    { "venue_postcode", referral.ProviderVenuePostcode },
-                    { "search_radius", referral.SearchRadius.ToString() },
-                    { "job_role", referral.JobTitle },
-                    { "employer_business_name", referral.EmployerName },
+                    { "venue_postcode", $"{referral.ProviderVenueTown} {referral.ProviderVenuePostcode}" },
+                    { "search_radius", referral.DistanceFromEmployer },
+                    { "job_role", referral.JobRole },
+                    { "employer_business_name", referral.CompanyName },
                     { "employer_contact_name", referral.EmployerContact},
                     { "employer_contact_number", referral.EmployerContactPhone },
                     { "employer_contact_email", referral.EmployerContactEmail },
-                    { "employer_postcode", referral.Postcode },
-                    { "number_of_placements", numberOfPlacements }
+                    { "employer_postcode", $"{referral.Town} {referral.Postcode }" },
+                    { "number_of_placements", placements }
                 };
 
                 await SendEmail(EmailTemplateName.ProviderReferral, opportunityId, toAddress,
@@ -122,9 +106,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
         {
-            return placementsKnown.GetValueOrDefault()
+            return placementsKnown.GetValueOrDefault() 
                 ? placements.ToString()
-                : "at least one";
+                : "at least 1";
         }
 
         private async Task SendEmail(EmailTemplateName template, int? opportunityId, 

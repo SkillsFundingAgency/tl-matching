@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="c64b74aa-334d-4e37-b2aa-ebccce57db0c" ChangeDateTime="06/19/2019 10:30:56">
+    <Property Name="ElementName" Value="[dbo].[Opportunity]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[OLDOpportunity]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8fa421a6-4de9-416f-992e-131aa847d395" ChangeDateTime="06/19/2019 11:44:59">
+    <Property Name="ElementName" Value="[dbo].[ProvisionGap].[OpportunityId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ProvisionGap]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[OpportunityItemId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="09ae61b8-4c3d-4083-8363-3145fdd9673c" ChangeDateTime="06/19/2019 11:45:28">
+    <Property Name="ElementName" Value="[dbo].[Referral].[OpportunityId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Referral]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[OpportunityItemId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3fa82daa-0f62-480d-a6f3-d78523bb6074" ChangeDateTime="06/23/2019 10:28:04">
+    <Property Name="ElementName" Value="[dbo].[OpportunityItem].[IsCanceled]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OpportunityItem]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsSaved" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="019e0d91-c8b9-4e33-b0c5-0a51cc7b140f" ChangeDateTime="06/23/2019 10:44:28">
+    <Property Name="ElementName" Value="[dbo].[OpportunityItem].[IsReferred]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OpportunityItem]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsCompleted" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="13476822-99b4-4b36-ba68-df5663a2a528" ChangeDateTime="06/25/2019 08:41:02">
+    <Property Name="ElementName" Value="[dbo].[QualificationRoutePathMapping]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[QualificationRouteMapping]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9dc063c8-2094-4e49-b77f-ae07c19c98bd" ChangeDateTime="06/26/2019 08:38:30">
+    <Property Name="ElementName" Value="[dbo].[OpportunityItem].[JobTitle]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OpportunityItem]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="JobRole" />
+  </Operation>
+</Operations>

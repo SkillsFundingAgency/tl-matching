@@ -18,8 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Placement_Information_Is_Submitted_Above_Max_Placements()
         {
             var opportunityService = Substitute.For<IOpportunityService>();
-            var referralService = Substitute.For<IReferralService>();
-            
+
             var viewModel = new PlacementInformationSaveViewModel
             {
                 PlacementsKnown = true,
@@ -29,8 +28,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
             var mapper = new Mapper(config);
             
-            _opportunityController = new OpportunityController(opportunityService, referralService, mapper);
-            _result = _opportunityController.PlacementInformationSave(viewModel).GetAwaiter().GetResult();
+            _opportunityController = new OpportunityController(opportunityService, mapper);
+            _result = _opportunityController.SavePlacementInformation(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -50,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_Model_State_Has_Max_Error()
         {
             var modelStateEntry = _opportunityController.ViewData.ModelState[nameof(PlacementInformationSaveViewModel.Placements)];
-            modelStateEntry.Errors[0].ErrorMessage.Should().Be("The number of placements must be 999 or less");
+            modelStateEntry.Errors[0].ErrorMessage.Should().Be("The number of students must be 999 or less");
         }
     }
 }

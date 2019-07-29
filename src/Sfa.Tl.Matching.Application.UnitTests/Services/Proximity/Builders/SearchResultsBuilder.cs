@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
-using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
 {
     public class SearchResultsBuilder
     {
-        private readonly IList<ProviderVenueSearchResultDto> _searchResults;
+        private readonly IList<SearchResultsViewModelItem> _searchResults;
 
         public SearchResultsBuilder()
         {
-            _searchResults = new List<ProviderVenueSearchResultDto>
+            _searchResults = new List<SearchResultsViewModelItem>
             {
-                new ProviderVenueSearchResultDto
+                new SearchResultsViewModelItem
                 {
                     ProviderVenueId = 1,
                     ProviderName = "The WKCIC Group",
@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
                         "health and physiotherapy"
                     }
                 },
-                new ProviderVenueSearchResultDto
+                new SearchResultsViewModelItem
                 {
                     ProviderVenueId = 2,
                     ProviderName = "Lambeth College",
@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
             };
         }
 
-        public IList<ProviderVenueSearchResultDto> Build() =>
+        public IList<SearchResultsViewModelItem> Build() =>
             _searchResults;
     }
 }

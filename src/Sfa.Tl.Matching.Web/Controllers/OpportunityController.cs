@@ -1,5 +1,8 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +11,7 @@ using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -18,35 +22,49 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly IReferralService _referralService;
         private readonly IMapper _mapper;
 
-        public OpportunityController(IOpportunityService opportunityService, IReferralService referralService, IMapper mapper)
+        public OpportunityController(IOpportunityService opportunityService, IMapper mapper)
         {
             _opportunityService = opportunityService;
-            _referralService = referralService;
             _mapper = mapper;
         }
 
         [Route("{SearchResultProviderCount}-provisiongap-opportunities-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "SaveProvisionGap")]
         public async Task<IActionResult> SaveProvisionGap(SaveProvisionGapViewModel viewModel)
         {
-            var dto = _mapper.Map<OpportunityDto>(viewModel);
+            var opportunityDto = _mapper.Map<OpportunityDto>(viewModel);
+            var opportunityItemDto = _mapper.Map<OpportunityItemDto>(viewModel);
 
-            if (await _opportunityService.IsNewProvisionGap(viewModel.OpportunityId))
-                return await CreateOpportunity(dto);
+            if (await _opportunityService.IsNewProvisionGapAsync(viewModel.OpportunityItemId))
+            {
+                opportunityItemDto.OpportunityId = viewModel.OpportunityId;
+
+                if (opportunityItemDto.OpportunityId == 0)
+                    opportunityItemDto.OpportunityId = await CreateOpportunityAsync(opportunityDto);
+
+                opportunityItemDto.ProvisionGap = new List<ProvisionGapDto>
+                {
+                    new ProvisionGapDto()
+                };
+
+                var opportunityItemId = await _opportunityService.CreateOpportunityItemAsync(opportunityItemDto);
+
+                return RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
+            }
 
             var providerSearchDto = new ProviderSearchDto
             {
-                OpportunityId = dto.Id,
+                OpportunityId = opportunityItemDto.OpportunityId,
+                OpportunityItemId = opportunityItemDto.OpportunityItemId,
                 SearchRadius = viewModel.SearchRadius,
                 Postcode = viewModel.Postcode,
                 RouteId = viewModel.SelectedRouteId ?? 0,
                 SearchResultProviderCount = viewModel.SearchResultProviderCount
             };
-            await _opportunityService.UpdateOpportunity(providerSearchDto);
+            await _opportunityService.UpdateOpportunityItemAsync(providerSearchDto);
 
-            return RedirectToRoute("PlacementInformationSave_Get", new { id = dto.Id });
+            return RedirectToRoute("GetPlacementInformation", new { opportunityItemDto.OpportunityItemId });
         }
 
         [Route("referral-create", Name = "SaveReferral")]
@@ -54,154 +72,219 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(viewModel);
 
-            var dto = _mapper.Map<OpportunityDto>(saveReferralViewModel);
-            if (await _opportunityService.IsNewReferral(saveReferralViewModel.OpportunityId))
-                return await CreateOpportunity(dto);
+            var opportunityDto = _mapper.Map<OpportunityDto>(saveReferralViewModel);
+            var opportunityItemDto = _mapper.Map<OpportunityItemDto>(saveReferralViewModel);
+
+            if (await _opportunityService.IsNewReferralAsync(saveReferralViewModel.OpportunityItemId))
+            {
+                opportunityItemDto.OpportunityId = saveReferralViewModel.OpportunityId;
+
+                if (opportunityItemDto.OpportunityId == 0)
+                {
+                    opportunityItemDto.OpportunityId = await CreateOpportunityAsync(opportunityDto);
+                }
+
+                var opportunityItemId = await _opportunityService.CreateOpportunityItemAsync(opportunityItemDto);
+
+                return RedirectToRoute("GetPlacementInformation", new { opportunityItemId });
+            }
 
             var providerSearchDto = new ProviderSearchDto
             {
                 OpportunityId = saveReferralViewModel.OpportunityId,
+                OpportunityItemId = saveReferralViewModel.OpportunityItemId,
                 SearchRadius = saveReferralViewModel.SearchRadius,
                 Postcode = saveReferralViewModel.Postcode,
                 RouteId = saveReferralViewModel.SelectedRouteId ?? 0,
                 SearchResultProviderCount = saveReferralViewModel.SearchResultProviderCount
             };
-            await _opportunityService.UpdateOpportunity(providerSearchDto);
-            await _opportunityService.UpdateReferrals(dto);
+            await _opportunityService.UpdateOpportunityItemAsync(providerSearchDto);
+            await _opportunityService.UpdateReferrals(opportunityItemDto);
 
-            return RedirectToRoute("PlacementInformationSave_Get", new { id = saveReferralViewModel.OpportunityId });
+            return RedirectToRoute("GetPlacementInformation", new { saveReferralViewModel.OpportunityItemId });
         }
 
         [HttpGet]
-        [Route("placement-information/{id?}", Name = "PlacementInformationSave_Get")]
-        public async Task<IActionResult> PlacementInformationSave(int id)
+        [Route("placement-information/{opportunityItemId}", Name = "GetPlacementInformation")]
+        public async Task<IActionResult> GetPlacementInformation(int opportunityItemId)
         {
-            var dto = await _opportunityService.GetPlacementInformationSave(id);
+            var dto = await _opportunityService.GetPlacementInformationAsync(opportunityItemId);
 
             var viewModel = _mapper.Map<PlacementInformationSaveViewModel>(dto);
 
-            return View(viewModel);
+            return View("PlacementInformation", viewModel);
         }
 
         [HttpPost]
-        [Route("placement-information/{id?}", Name = "PlacementInformationSave_Post")]
-        public async Task<IActionResult> PlacementInformationSave(PlacementInformationSaveViewModel viewModel)
+        [Route("placement-information/{opportunityItemId}")]
+        public async Task<IActionResult> SavePlacementInformation(PlacementInformationSaveViewModel viewModel)
         {
             await Validate(viewModel);
 
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View("PlacementInformation", viewModel);
 
             var dto = _mapper.Map<PlacementInformationSaveDto>(viewModel);
-            await _opportunityService.UpdateOpportunity(dto);
+            await _opportunityService.UpdateOpportunityItemAsync(dto);
 
-            return RedirectToRoute("LoadWhoIsEmployer", new { id = viewModel.OpportunityId });
+            if (viewModel.OpportunityType == OpportunityType.ProvisionGap)
+            {
+                await _opportunityService.UpdateProvisionGapAsync(dto);
+            }
+
+            var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(viewModel.OpportunityId);
+
+            //if First Opp (saved opportunity items == 0) then LoadWhoIsEmployer else if referral then check answer of if provisiongap then OpportunityBasket
+            return opportunityItemCount == 0 ?
+                RedirectToRoute("LoadWhoIsEmployer", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
+                : viewModel.OpportunityType == OpportunityType.Referral ?
+                    RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId })
+                    : await SaveCheckAnswers(viewModel.OpportunityId, viewModel.OpportunityItemId);
         }
 
         [HttpGet]
-        [Route("check-answers/{id?}", Name = "GetCheckAnswersReferrals")]
-        public async Task<IActionResult> CheckAnswersReferrals(int id)
+        [Route("check-answers/{opportunityItemId}", Name = "GetCheckAnswers")]
+        public async Task<IActionResult> GetCheckAnswers(int opportunityItemId)
         {
-            var viewModel = await GetCheckAnswersReferralViewModel(id);
+            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
 
-            return View(viewModel);
+            return View("CheckAnswers", viewModel);
         }
 
-        [HttpPost]
-        [Route("check-answers/{id?}", Name = "SaveCheckAnswersReferrals")]
-        public async Task<IActionResult> CheckAnswersReferrals(CheckAnswersReferralViewModel viewModel)
+        //[HttpPost] //Removed because there is a redirect from SaveOpportunityEmployerDetails
+        public async Task<IActionResult> SaveCheckAnswers(int opportunityId, int opportunityItemId)
         {
-            if (!ModelState.IsValid)
-                return View(await GetCheckAnswersReferralViewModel(viewModel.OpportunityId));
+            await _opportunityService.UpdateOpportunityItemAsync(new CheckAnswersDto
+            {
+                OpportunityItemId = opportunityItemId,
+                OpportunityId = opportunityId,
+                IsSaved = true
+            });
 
-            var dto = _mapper.Map<CheckAnswersDto>(viewModel);
-            await _opportunityService.UpdateOpportunity(dto);
-
-            await _referralService.SendEmployerReferralEmail(dto.OpportunityId);
-            await _referralService.SendProviderReferralEmail(dto.OpportunityId);
-
-            return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetOpportunityBasket", new { opportunityId, opportunityItemId });
         }
 
         [HttpGet]
-        [Route("check-answers-gap/{id?}", Name = "GetCheckAnswersProvisionGap")]
-        public async Task<IActionResult> CheckAnswersProvisionGap(int id)
+        [Route("employer-opportunities/{opportunityId}-{opportunityItemId}", Name = "GetOpportunityBasket")]
+        public async Task<IActionResult> OpportunityBasket(int opportunityId, int opportunityItemId)
         {
-            var dto = await _opportunityService.GetCheckAnswers(id);
+            await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
-            var viewModel = _mapper.Map<CheckAnswersProvisionGapViewModel>(dto);
+            var viewModel = await _opportunityService.GetOpportunityBasket(opportunityId);
 
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [Route("check-answers-gap/{id?}", Name = "SaveCheckAnswersProvisionGap")]
-        public async Task<IActionResult> CheckAnswersProvisionGap(CheckAnswersProvisionGapViewModel viewModel)
-        {
-            var dto = _mapper.Map<CheckAnswersDto>(viewModel);
-
-            await _opportunityService.UpdateOpportunity(dto);
-            await _opportunityService.CreateProvisionGap(viewModel);
-
-            return RedirectToRoute("ProvisionGapSent_Get", new { id = viewModel.OpportunityId });
-        }
-
-        [HttpGet]
-        [Route("placement-gap/{id?}", Name = "ProvisionGapSent_Get")]
-        public async Task<IActionResult> ProvisionGapSent(int id)
-        {
-            var dto = await _opportunityService.GetOpportunity(id);
-            var viewModel = _mapper.Map<ProvisionGapSentViewModel>(dto);
-            viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
+            viewModel.OpportunityItemId = opportunityItemId != 0 ? opportunityItemId
+                : viewModel.OpportunityItemId =
+                    (viewModel.ReferralItems.LastOrDefault()?.OpportunityItemId != 0
+                        ? viewModel.ReferralItems.LastOrDefault()?.OpportunityItemId :
+                        viewModel.ProvisionGapItems.LastOrDefault()?.OpportunityItemId) ?? 0;
 
             return View(viewModel);
         }
 
         [HttpGet]
-        [Route("emails-sent/{id?}", Name = "EmailSentReferrals_Get")]
+        [Route("emails-sent/{id}", Name = "EmailSentReferrals_Get")]
         public async Task<IActionResult> ReferralEmailSent(int id)
         {
             var dto = await _opportunityService.GetOpportunity(id);
-            var viewModel = _mapper.Map<EmailsSentViewModel>(dto);
+            var viewModel = _mapper.Map<SentViewModel>(dto);
             viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
-            
+
             return View(viewModel);
         }
 
-        private async Task<IActionResult> CreateOpportunity(OpportunityDto dto)
+        [HttpPost]
+        [Route("employer-opportunities/{opportunityId}-{opportunityItemId}", Name = "SaveSelectedOpportunities")]
+        public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
         {
-            var id = await _opportunityService.CreateOpportunity(dto);
-            return RedirectToRoute("PlacementInformationSave_Get", new { id });
+            if (viewModel.SubmitAction == "SaveSelectedOpportunities")
+            {
+                Validate(viewModel);
+                if (!ModelState.IsValid)
+                {
+                    var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
+
+                    return View(nameof(OpportunityBasket), opportunityBasketViewModel);
+                }
+            }
+
+            await _opportunityService.ContinueWithOpportunities(viewModel);
+
+            return viewModel.SubmitAction == "CompleteProvisionGaps" ?
+                RedirectToRoute("Start") :
+                RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
+        }
+
+        [HttpGet]
+        [Route("remove-opportunity/{opportunityItemId}", Name = "GetConfirmDeleteOpportunityItem")]
+        public async Task<IActionResult> ConfirmDeleteOpportunityItem(int opportunityItemId)
+        {
+            var viewModel = await _opportunityService.GetConfirmDeleteOpportunityItemAsync(opportunityItemId);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOpportunityItem(DeleteOpportunityItemViewModel viewModel)
+        {
+            await _opportunityService.DeleteOpportunityItemAsync(viewModel.OpportunityId, viewModel.OpportunityItemId);
+
+            return viewModel.BasketItemCount == 1 ?
+                RedirectToRoute("Start") :
+                RedirectToRoute("GetOpportunityBasket", new { viewModel.OpportunityId, OpportunityItemId = 0 });
+        }
+
+        [HttpGet]
+        [Route("download-opportunity/{opportunityId}", Name = "DownloadOpportunitySpreadsheet")]
+        public async Task<IActionResult> DownloadOpportunitySpreadsheet(int opportunityId)
+        {
+            var downloadedFileInfo = await _opportunityService.GetOpportunitySpreadsheetDataAsync(opportunityId);
+
+            return File(downloadedFileInfo.FileContent, 
+                downloadedFileInfo.ContentType,
+                downloadedFileInfo.FileName);
+        }
+
+        private async Task<int> CreateOpportunityAsync(OpportunityDto dto)
+        {
+            var opportunityId = await _opportunityService.CreateOpportunityAsync(dto);
+            return opportunityId;
         }
 
         private async Task Validate(PlacementInformationSaveViewModel viewModel)
         {
-            var opportunity = await _opportunityService.GetOpportunity(viewModel.OpportunityId);
-            if (opportunity != null)
+            var opportunityItem = await _opportunityService.GetOpportunityItem(viewModel.OpportunityItemId);
+            if (opportunityItem != null)
             {
-                viewModel.Postcode = opportunity.Postcode;
-                viewModel.SearchRadius = opportunity.SearchRadius;
-                viewModel.RouteId = opportunity.RouteId;
+                viewModel.Postcode = opportunityItem.Postcode;
+                viewModel.SearchRadius = opportunityItem.SearchRadius;
+                viewModel.RouteId = opportunityItem.RouteId;
+            }
+
+            if (viewModel.SearchResultProviderCount > 0 &&
+                viewModel.OpportunityType == OpportunityType.ProvisionGap)
+            {
+                if (!viewModel.NoSuitableStudent &&
+                    !viewModel.HadBadExperience &&
+                    !viewModel.ProvidersTooFarAway)
+                {
+                    ModelState.AddModelError(nameof(viewModel.NoSuitableStudent),
+                        "You must tell us why the employer did not choose a provider");
+                }
             }
 
             if (!viewModel.PlacementsKnown.HasValue || !viewModel.PlacementsKnown.Value) return;
             if (!viewModel.Placements.HasValue)
-                ModelState.AddModelError(nameof(viewModel.Placements), "You must estimate how many placements the employer wants at this location");
+                ModelState.AddModelError(nameof(viewModel.Placements), "You must estimate how many students the employer wants for this job at this location");
             else if (viewModel.Placements < 1)
-                ModelState.AddModelError(nameof(viewModel.Placements), "The number of placements must be 1 or more");
+                ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 1 or more");
             else if (viewModel.Placements > 999)
-                ModelState.AddModelError(nameof(viewModel.Placements), "The number of placements must be 999 or less");
+                ModelState.AddModelError(nameof(viewModel.Placements), "The number of students must be 999 or less");
         }
 
-        private async Task<CheckAnswersReferralViewModel> GetCheckAnswersReferralViewModel(int id)
+        private void Validate(ContinueOpportunityViewModel viewModel)
         {
-            var dto = await _opportunityService.GetCheckAnswers(id);
-            var providersForReferral = _opportunityService.GetReferrals(id);
-
-            var viewModel = _mapper.Map<CheckAnswersReferralViewModel>(dto);
-            viewModel.Providers = _mapper.Map<List<ReferralsViewModel>>(providersForReferral);
-
-            return viewModel;
+            if (!viewModel.IsReferralSelected)
+                ModelState.AddModelError("ReferralItems[0].IsSelected", "You must select an opportunity to continue");
         }
     }
 }

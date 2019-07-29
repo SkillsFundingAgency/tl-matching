@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => GetSearchTerm(s.Title, s.ShortTitle.ToLower())))
                 .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => GetSearchTerm(s.ShortTitle.ToLower())))
                 .ForMember(m => m.ProviderQualification, config => config.Ignore())
-                .ForMember(m => m.QualificationRoutePathMapping, config => config.Ignore())
+                .ForMember(m => m.QualificationRouteMapping, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.QualificationSearch, config => config.Ignore())
                 .ForMember(m => m.ShortTitleSearch, config => config.Ignore())
                 .ForMember(m => m.ProviderQualification, config => config.Ignore())
-                .ForMember(m => m.QualificationRoutePathMapping, config => config.Ignore())
+                .ForMember(m => m.QualificationRouteMapping, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<AddQualificationViewModel, Qualification>>())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => GetSearchTerm(s.Title, s.ShortTitle.ToLower())))
                 .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => GetSearchTerm(s.ShortTitle.ToLower())))
                 .ForMember(m => m.ProviderQualification, config => config.Ignore())
-                .ForMember(m => m.QualificationRoutePathMapping, config => config.Ignore())
+                .ForMember(m => m.QualificationRouteMapping, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<MissingQualificationViewModel, Qualification>>())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
@@ -64,16 +64,16 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForAllOtherMembers(o => o.Ignore())
                 ;
 
-            CreateMap<SaveQualificationViewModel, IList<QualificationRoutePathMapping>>()
+            CreateMap<SaveQualificationViewModel, IList<QualificationRouteMapping>>()
                 .ConstructUsing((m, context) =>
                 {
                     var userNameResolver = context.Mapper.ServiceCtor(typeof(LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>))
                         as LoggedInUserNameResolver<SaveQualificationViewModel, Qualification>;
 
                     return m.Routes == null ? 
-                        new List<QualificationRoutePathMapping>() :
+                        new List<QualificationRouteMapping>() :
                         m.Routes.Where(r => r.IsSelected)
-                        .Select(route => new QualificationRoutePathMapping
+                        .Select(route => new QualificationRouteMapping
                         {
                             QualificationId = m.QualificationId,
                             RouteId = route.Id,
@@ -81,19 +81,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                             CreatedBy = userNameResolver?.Resolve(m, null, "CreatedBy", context)
                         })
                         .ToList();
-                })
-                ;
-
-            CreateMap<Qualification, QualificationSearchResultViewModel>()
-                .ForMember(m => m.QualificationId, config => config.MapFrom(s => s.Id))
-                .ForMember(m => m.LarId, config => config.MapFrom(s => s.LarsId))
-                .ForMember(m => m.Title, config => config.MapFrom(s => s.Title))
-                .ForMember(m => m.ShortTitle, config => config.MapFrom(s => s.ShortTitle))
-                .ForMember(m => m.RouteIds, config => config.Ignore())
-                .ForMember(m => m.Routes, config => config.Ignore())
-                .AfterMap((m, o) =>
-                {
-                    o.RouteIds = m.QualificationRoutePathMapping.Select(r => r.RouteId).ToList();
                 })
                 ;
         }

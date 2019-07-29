@@ -1,0 +1,34 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.BasketReferralItemViewModel
+
+<input type="hidden" value="@Model.OpportunityItemId" name="SelectedOpportunity[0].Id" />
+<input type="hidden" asp-for="OpportunityType" name="SelectedOpportunity[0].OpportunityType" />
+<input type="hidden" value="true" name="SelectedOpportunity[0].IsSelected" />
+
+<h2 class="govuk-heading-l tl-hidden-desktop">
+    With providers
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+</h2>
+<table class="govuk-table tl-table-responsive">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Workplace</th>
+            <th class="govuk-table__header" scope="col">Job role</th>
+            <th class="govuk-table__header" scope="col">Students wanted</th>
+            <th class="govuk-table__header" scope="col">Providers</th>
+            <th class="govuk-table__header" scope="col"></th>
+            <th class="govuk-table__header" scope="col"></th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell" data-label="Workplace">@Model.Workplace</td>
+            <td class="govuk-table__cell" data-label="Job role">@Model.JobRole</td>
+            <td class="govuk-table__cell" data-label="Students wanted">@Model.PlacementsDetail</td>
+            <td class="govuk-table__cell" data-label="Providers">@Model.Providers</td>
+            <td class="govuk-table__cell tl-table-responsive-link"><a asp-route="GetCheckAnswers" asp-route-opportunityItemId="@Model.OpportunityItemId" id="tl-edit" class="govuk-link">Edit</a></td>
+            <td class="govuk-table__cell tl-table-responsive-link"><a asp-route="GetConfirmDeleteOpportunityItem" asp-route-opportunityItemId="@Model.OpportunityItemId" id="tl-delete" class="govuk-link">Delete</a></td>
+        </tr>
+    </tbody>
+</table>
+
+<button id="tl-continue" class="govuk-button" type="submit" name="SubmitAction" value="SaveSelectedOpportunities">Continue with opportunity</button>

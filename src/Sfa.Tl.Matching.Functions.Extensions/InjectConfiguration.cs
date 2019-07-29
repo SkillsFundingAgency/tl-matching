@@ -11,6 +11,9 @@ using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Api.Clients.ProviderReference;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
@@ -22,11 +25,8 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Api.Clients.ProviderReference;
-using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
@@ -83,12 +83,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
 
             RegisterApiClient(services);
-
-            #region TODO DELETE AFTER SPRINT 10
-            // TODO DELETE AFTER SPRINT 10
-            services.AddTransient<IQualificationService, QualificationService>();
-            services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
-            #endregion
         }
 
         private static void RegisterFileReaders(IServiceCollection services)
@@ -152,13 +146,15 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
             services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
             services.AddTransient<IRepository<Qualification>, GenericRepository<Qualification>>();
-            services.AddTransient<IRepository<QualificationRoutePathMapping>, QualificationRoutePathMappingRepository>();
+            services.AddTransient<IRepository<QualificationRouteMapping>, QualificationRouteMappingRepository>();
             services.AddTransient<IRepository<Provider>, ProviderRepository>();
             services.AddTransient<IRepository<BackgroundProcessHistory>, GenericRepository<BackgroundProcessHistory>>();
             services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
             services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
             services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
-            
+            services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
+            services.AddTransient<IRepository<OpportunityItem>, GenericRepository<OpportunityItem>>();
+
             services.AddTransient<IBulkInsertRepository<LearningAimReferenceStaging>, SqlBulkInsertRepository<LearningAimReferenceStaging>>();
             services.AddTransient<IBulkInsertRepository<ProviderReferenceStaging>, SqlBulkInsertRepository<ProviderReferenceStaging>>();
             services.AddTransient<IBulkInsertRepository<EmployerStaging>, SqlBulkInsertRepository<EmployerStaging>>();
@@ -173,6 +169,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
+            services.AddTransient<IQualificationService, QualificationService>();
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

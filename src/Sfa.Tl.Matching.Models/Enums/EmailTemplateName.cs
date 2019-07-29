@@ -5,6 +5,7 @@ namespace Sfa.Tl.Matching.Models.Enums
     {
         EmployerReferral,
         ProviderReferral,
-        ProviderQuarterlyUpdate
+        ProviderQuarterlyUpdate,
+        EmployerReferralComplex
     }
 }

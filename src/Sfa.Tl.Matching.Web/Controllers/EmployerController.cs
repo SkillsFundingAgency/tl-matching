@@ -1,4 +1,6 @@
 ﻿// ReSharper disable RedundantUsingDirective
+
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -19,12 +21,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly IEmployerService _employerService;
         private readonly IOpportunityService _opportunityService;
+        private readonly IReferralService _referralService;
         private readonly IMapper _mapper;
 
-        public EmployerController(IEmployerService employerService, IOpportunityService opportunityService, IMapper mapper)
+        public EmployerController(IEmployerService employerService, 
+                                    IOpportunityService opportunityService,
+                                    IReferralService referralService, 
+                                    IMapper mapper)
         {
             _employerService = employerService;
             _opportunityService = opportunityService;
+            _referralService = referralService;
             _mapper = mapper;
         }
 
@@ -38,65 +45,190 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("who-is-employer/{id?}", Name = "LoadWhoIsEmployer")]
-        public async Task<IActionResult> FindEmployer(int id)
+        [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "LoadWhoIsEmployer")]
+        public async Task<IActionResult> GetOpportunityCompanyName(int opportunityId, int opportunityItemId)
         {
-            var dto = await _opportunityService.GetOpportunity(id);
-            var viewModel = _mapper.Map<FindEmployerViewModel>(dto);
+            var viewModel = await _employerService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
 
-            return View(viewModel);
+            return View("FindEmployer", viewModel);
         }
 
         [HttpPost]
-        [Route("who-is-employer/{id?}", Name = "SaveEmployerName")]
-        public async Task<IActionResult> FindEmployer(FindEmployerViewModel viewModel)
+        [Route("who-is-employer/{opportunityId}-{opportunityItemId}")]
+        public async Task<IActionResult> SaveOpportunityCompanyName(FindEmployerViewModel viewModel)
         {
-            var employerDto = viewModel.SelectedEmployerId != 0 &&
-                !string.IsNullOrEmpty(viewModel.CompanyName) ?
-                await _employerService.GetEmployer(viewModel.SelectedEmployerId) :
-                null;
+            await ValidateAsync(viewModel);
 
-            if (employerDto == null || viewModel.CompanyName != employerDto.CompanyNameWithAka)
-            {
-                ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
-                return View(viewModel);
-            }
+            if (!ModelState.IsValid)
+                return View("FindEmployer", viewModel);
 
-            var dto = _mapper.Map<EmployerNameDto>(viewModel);
-            dto.EmployerCrmId = employerDto.CrmId;
-            dto.CompanyName = employerDto.CompanyNameWithAka;
+            var dto = _mapper.Map<CompanyNameDto>(viewModel);
 
             await _opportunityService.UpdateOpportunity(dto);
 
-            return RedirectToRoute("GetEmployerDetails", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetEmployerDetails", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
 
         [HttpGet]
-        [Route("employer-details/{id?}", Name = "GetEmployerDetails")]
-        public async Task<IActionResult> Details(int id)
+        [Route("employer-details/{opportunityId}-{opportunityItemId}", Name = "GetEmployerDetails")]
+        public async Task<IActionResult> GetOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
         {
-            var dto = await _opportunityService.GetOpportunity(id);
-            var viewModel = await GetEmployerDetailsViewModel(dto);
+            var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
 
-            return View(viewModel);
+            return View("Details", viewModel);
         }
 
         [HttpPost]
-        [Route("employer-details/{id?}", Name = "SaveEmployerDetails")]
-        public async Task<IActionResult> Details(EmployerDetailsViewModel viewModel)
+        [Route("employer-details/{opportunityId}-{opportunityItemId}")]
+        public async Task<IActionResult> SaveOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
 
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View("Details", viewModel);
 
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
             await _opportunityService.UpdateOpportunity(employerDetailDto);
 
-            var isReferralOpportunity = await _opportunityService.IsReferralOpportunity(viewModel.OpportunityId);
+            var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityItemId);
 
-            return RedirectToRoute(isReferralOpportunity ? "GetCheckAnswersReferrals" : "GetCheckAnswersProvisionGap");
+            if (isReferralOpportunityItem)
+                return RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId });
+
+            return RedirectToAction("SaveCheckAnswers", "Opportunity",
+               new { viewModel.OpportunityId, viewModel.OpportunityItemId });
+        }
+
+        [HttpGet]
+        [Route("check-employer-details/{opportunityId}-{opportunityItemId}", Name = "CheckEmployerDetails")]
+        public async Task<IActionResult> GetCheckOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
+
+            return View("CheckDetails", viewModel);
+        }
+
+        [HttpPost]
+        [Route("check-employer-details/{opportunityId}-{opportunityItemId}")]
+        public async Task<IActionResult> SaveCheckOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
+        {
+            Validate(viewModel);
+
+            if (!ModelState.IsValid)
+                return View("CheckDetails", viewModel);
+
+            var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
+
+            await _opportunityService.UpdateOpportunity(employerDetailDto);
+
+            return RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
+        }
+
+        [HttpGet]
+        [Route("saved-opportunities", Name = "GetSavedEmployerOpportunity")]
+        public async Task<IActionResult> SavedEmployerOpportunity()
+        {
+            var username = HttpContext.User.GetUserName();
+            var viewModel = await _employerService.GetSavedEmployerOpportunitiesAsync(username);
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        [Route("confirm-remove-employer/{opportunityId}", Name = "ConfirmDelete")]
+        public async Task<IActionResult> ConfirmDelete(int opportunityId)
+        {
+            var dto = await _employerService.GetConfirmDeleteEmployerOpportunity(opportunityId,
+                HttpContext.User.GetUserName());
+
+            var viewModel = new RemoveEmployerViewModel
+            {
+                OpportunityId = opportunityId,
+                OpportunityCount = dto.OpportunityCount,
+                EmployerName = dto.EmployerName,
+                EmployerCount = dto.EmployerCount
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        [Route("remove-employer/{opportunityId}", Name = "DeleteEmployer")]
+        public async Task<IActionResult> DeleteEmployer(int opportunityId)
+        {
+
+            await _opportunityService.DeleteEmployerOpportunityItemAsync(opportunityId);
+
+            var employerOpportunities =
+                await _employerService.GetSavedEmployerOpportunitiesAsync(HttpContext.User.GetUserName());
+
+            var employerCount = employerOpportunities.EmployerOpportunities.Count;
+
+            return employerCount == 0
+                ? RedirectToRoute("Start")
+                : RedirectToRoute("GetSavedEmployerOpportunity");
+        }
+
+        [HttpGet]
+        [Route("permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
+        public async Task<IActionResult> EmployerConsent(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = await GetEmployerConsentViewModel(opportunityId, opportunityItemId);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("permission/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerConsent")]
+        public async Task<IActionResult> EmployerConsent(EmployerConsentViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(await GetEmployerConsentViewModel(viewModel.OpportunityId, viewModel.OpportunityItemId));
+
+            await _referralService.SendEmployerReferralEmail(viewModel.OpportunityId);
+            await _referralService.SendProviderReferralEmail(viewModel.OpportunityId);
+
+            await _opportunityService.ConfirmOpportunities(viewModel.OpportunityId);
+
+            return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
+        }
+
+        private async Task<EmployerConsentViewModel> GetEmployerConsentViewModel(int opportunityId, int opportunityItemId)
+        {
+            var viewModel = new EmployerConsentViewModel
+            {
+                OpportunityId = opportunityId,
+                OpportunityItemId = opportunityItemId,
+                Details = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId),
+                OpportunityItemCount =
+                    await _opportunityService.GetReferredOpportunityItemCountAsync(opportunityId)
+            };
+
+            return viewModel;
+        }
+
+        private async Task ValidateAsync(FindEmployerViewModel viewModel)
+        {
+            var isValidEmployer =
+                await _employerService.ValidateCompanyNameAndId(viewModel.SelectedEmployerId, viewModel.CompanyName);
+
+            if (!isValidEmployer)
+            {
+                ModelState.AddModelError(nameof(viewModel.CompanyName), "You must find and choose an employer");
+            }
+            else
+            {
+                var lockedByUser = await _employerService
+                    .GetEmployerOpportunityOwnerAsync(viewModel.SelectedEmployerId);
+
+                if (!string.IsNullOrEmpty(lockedByUser))
+                {
+                    ModelState.AddModelError(nameof(viewModel.CompanyName),
+                        $"{lockedByUser} is already working on this employer’s opportunities. " +
+                        "Please choose a different employer.");
+                }
+            }
         }
 
         private void Validate(EmployerDetailsViewModel viewModel)
@@ -108,31 +240,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a number");
             else if (!Regex.IsMatch(viewModel.EmployerContactPhone, @"^(?:.*\d.*){7,}$"))
                 ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a telephone number that has 7 or more numbers");
-        }
-
-        private async Task<EmployerDetailsViewModel> GetEmployerDetailsViewModel(OpportunityDto dto)
-        {
-            if (IsEmployerPopulated(dto))
-                return _mapper.Map<EmployerDetailsViewModel>(dto);
-
-            var latestOpportunity = _opportunityService.GetLatestCompletedOpportunity(dto.EmployerCrmId);
-            if (latestOpportunity != null && IsEmployerPopulated(latestOpportunity))
-            {
-                var viewModel = _mapper.Map<EmployerDetailsViewModel>(latestOpportunity);
-                viewModel.OpportunityId = dto.Id;
-                return viewModel;
-            }
-
-            var employerDto = await _employerService.GetEmployer(dto.EmployerId ?? 0);
-
-            return _mapper.Map(employerDto, new EmployerDetailsViewModel { OpportunityId = dto.Id });
-        }
-
-        private static bool IsEmployerPopulated(OpportunityDto dto)
-        {
-            return !string.IsNullOrEmpty(dto.EmployerContact) &&
-                   !string.IsNullOrEmpty(dto.EmployerContactEmail) &&
-                   !string.IsNullOrEmpty(dto.EmployerContactPhone);
         }
     }
 }

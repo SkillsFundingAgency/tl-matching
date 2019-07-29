@@ -33,7 +33,8 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleMaps
             responseMessage.EnsureSuccessStatusCode();
 
             var response = await responseMessage.Content.ReadAsAsync<GooglePlacesResult>();
-
+            
+            //Google return "StreetName, Town PostCode" therefore below , Please note this will not work if input postcode is in lowercase and or does not have Space between segments
             return response.Status != "OK" ? string.Empty : response.Results.First().FormattedAddress.Split(",").Last().Replace(postCode, string.Empty).Trim();
         }
 

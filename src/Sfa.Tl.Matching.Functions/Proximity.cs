@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
+using GeoAPI.Geometries;
 using Microsoft.Azure.WebJobs;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NetTopologySuite;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
+// ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Functions
 {
     public class Proximity
     {
-        // ReSharper disable once UnusedMember.Global
-        [FunctionName("BackFillPostTown")]
-        public async Task BackFillPostTown(
+        [FunctionName("BackFillProviderPostTown")]
+        public async Task BackFillProviderPostTown(
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
             TimerInfo timer,
             ExecutionContext context,
@@ -52,14 +58,160 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing BackFillPostTown Data. Internal Error Message {e}";
+                var errormessage = $"Error Back Filling Provider Post Town Data. Internal Error Message {e}";
 
                 logger.LogError(errormessage);
 
                 await functionlogRepository.Create(new FunctionLog
                 {
                     ErrorMessage = errormessage,
-                    FunctionName = nameof(QualificationSearchColumns),
+                    FunctionName = nameof(BackFillProviderPostTown),
+                    RowNumber = -1
+                });
+                throw;
+            }
+        }
+
+        [FunctionName("BackFillEmployerPostTown")]
+        public async Task BackFillEmployerPostTown(
+            [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
+            TimerInfo timer,
+            ExecutionContext context,
+            ILogger logger,
+            [Inject] ILocationApiClient locationApiClient,
+            [Inject] IGoogleMapApiClient googleMapApiClient,
+            [Inject] IRepository<OpportunityItem> opportunityItemRepository,
+            [Inject] IRepository<FunctionLog> functionlogRepository
+        )
+        {
+            try
+            {
+                var stopwatch = Stopwatch.StartNew();
+
+                logger.LogInformation($"Function {context.FunctionName} triggered");
+
+                var opportunityItems = new List<OpportunityItem>();
+
+                foreach (var opportunityItem in opportunityItemRepository.GetMany(io => io.Town == null || io.Town == "" || io.Town == " "))
+                {
+                    var (isValidPostCode, postcode) = await locationApiClient.IsValidPostCode(opportunityItem.Postcode);
+
+                    if (!isValidPostCode)
+                    {
+                        var errormessage = "Error Back Filling Employer Post Town Data. Invalid PostCode";
+
+                        logger.LogError(errormessage);
+
+                        await functionlogRepository.Create(new FunctionLog
+                        {
+                            ErrorMessage = errormessage,
+                            FunctionName = nameof(BackFillEmployerPostTown),
+                            RowNumber = opportunityItem.Id
+                        });
+                    }
+                    var googleAddressdetail = await googleMapApiClient.GetAddressDetails(postcode);
+
+                    opportunityItem.Town = googleAddressdetail;
+                    opportunityItem.Postcode = postcode;
+
+                    opportunityItems.Add(opportunityItem);
+
+                }
+
+                await opportunityItemRepository.UpdateMany(opportunityItems);
+
+                stopwatch.Stop();
+
+                logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
+                                      $"\tRows saved: {opportunityItems.Count}\n" +
+                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
+            }
+            catch (Exception e)
+            {
+                var errormessage = $"Error Back Filling Employer Post Town Data. Internal Error Message {e}";
+
+                logger.LogError(errormessage);
+
+                await functionlogRepository.Create(new FunctionLog
+                {
+                    ErrorMessage = errormessage,
+                    FunctionName = nameof(BackFillEmployerPostTown),
+                    RowNumber = -1
+                });
+                throw;
+            }
+        }
+
+        [FunctionName("BackFillProximityData")]
+        public async Task BackFillProximityData(
+            [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
+            TimerInfo timer,
+            ExecutionContext context,
+            ILogger logger,
+            [Inject] ILocationApiClient locationApiClient,
+            [Inject] IRepository<ProviderVenue> providerVenueRepository,
+            [Inject] IRepository<FunctionLog> functionlogRepository
+        )
+        {
+            try
+            {
+                var stopwatch = Stopwatch.StartNew();
+
+                logger.LogInformation($"Function {context.FunctionName} triggered");
+                var providerVenues = await providerVenueRepository.GetMany(venue => venue.Location == null ||
+                                                                                    venue.Longitude == null ||
+                                                                                    venue.Latitude == null ||
+                                                                                    !EF.Functions.Like(venue.Postcode, "% %") ||
+                                                                                    venue.Postcode.ToUpper() != venue.Postcode)
+                                                                .ToListAsync();
+
+                if (!providerVenues.Any()) return;
+
+                foreach (var venue in providerVenues)
+                {
+                    try
+                    {
+                        var geoLocationData = await locationApiClient.GetGeoLocationData(venue.Postcode);
+
+                        venue.Postcode = geoLocationData.Postcode;
+                        venue.Latitude = geoLocationData.Latitude.ToDecimal();
+                        venue.Longitude = geoLocationData.Longitude.ToDecimal();
+
+                        var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
+                        venue.Location = geometryFactory.CreatePoint(new Coordinate(double.Parse(geoLocationData.Longitude), double.Parse(geoLocationData.Latitude)));
+                    }
+                    catch (Exception e)
+                    {
+                        var errormessage = $"Error Back Filling Provider Venue Data. Invalid PostCode. Internal Error Message {e}";
+
+                        logger.LogError(errormessage);
+
+                        await functionlogRepository.Create(new FunctionLog
+                        {
+                            ErrorMessage = errormessage,
+                            FunctionName = nameof(BackFillProximityData),
+                            RowNumber = venue.Id
+                        });
+                    }
+                }
+
+                await providerVenueRepository.UpdateMany(providerVenues);
+                stopwatch.Stop();
+
+                logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
+                                      $"\tRows saved: {providerVenues.Count}\n" +
+                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
+            }
+            catch (Exception e)
+            {
+                var errormessage = $"Error Back Filling Proximity Data. Internal Error Message {e}";
+
+                logger.LogError(errormessage);
+
+                await functionlogRepository.Create(new FunctionLog
+                {
+                    ErrorMessage = errormessage,
+                    FunctionName = nameof(BackFillProximityData),
                     RowNumber = -1
                 });
                 throw;

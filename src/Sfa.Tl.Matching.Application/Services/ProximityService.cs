@@ -5,6 +5,7 @@ using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -19,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _locationApiClient = locationApiClient;
         }
 
-        public async Task<IList<ProviderVenueSearchResultDto>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
+        public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
             var geoLocationData = await _locationApiClient.GetGeoLocationData(dto.Postcode);
             dto.Latitude = geoLocationData.Latitude;
@@ -27,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var searchResults = await _searchProvider.SearchProvidersByPostcodeProximity(dto);
 
-            var results = searchResults.Any() ? searchResults : new List<ProviderVenueSearchResultDto>();
+            var results = searchResults.Any() ? searchResults : new List<SearchResultsViewModelItem>();
 
             return results;
         }

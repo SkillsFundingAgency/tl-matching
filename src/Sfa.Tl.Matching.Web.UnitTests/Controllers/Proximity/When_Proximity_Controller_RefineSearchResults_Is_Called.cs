@@ -32,13 +32,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             routePathService.GetRoutes().Returns(routes);
 
             var opportunityService = Substitute.For<IOpportunityService>();
-            var proximityController = new ProximityController(mapper, routePathService, proximityService, opportunityService);
+            var employerService = Substitute.For<IEmployerService>();
+
+            var proximityController = new ProximityController(mapper, routePathService, proximityService, opportunityService,
+                employerService);
 
             var viewModel = new SearchParametersViewModel
             {
                 Postcode = "CV12WT",
                 SelectedRouteId = 1,
-                SearchRadius = 10
+                SearchRadius = 10,
+                CompanyNameWithAka = "CompanyName (AlsoKnownAs)"
             };
 
             _result = proximityController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
@@ -51,19 +55,5 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         [Fact]
         public void Then_RedirectToRoute_Result_Is_Returned() =>
             _result.Should().BeAssignableTo<RedirectToRouteResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Then_Model_Is_Of_Type_SearchViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().BeOfType<SearchViewModel>();
-        }
     }
 }

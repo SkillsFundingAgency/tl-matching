@@ -18,7 +18,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.LearningAimReference.
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        //[InlineData(null)]
         public void Then_Validation_Result_Is_Not_Valid(string larId)
         {
             _fixture.Dto.LarId = larId;

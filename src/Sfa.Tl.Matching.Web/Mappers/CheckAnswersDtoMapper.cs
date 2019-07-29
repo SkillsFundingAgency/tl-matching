@@ -8,43 +8,20 @@ namespace Sfa.Tl.Matching.Web.Mappers
     {
         public CheckAnswersDtoMapper()
         {
-            CreateMap<CheckAnswersPlacementViewModel, CheckAnswersDto>()
-                .ForMember(m => m.ConfirmationSelected, opt => opt.Ignore())
-                .ForMember(m => m.OpportunityId, opt => opt.Ignore())
-                .ForMember(m => m.ModifiedBy, o => o.Ignore())
-                .ForMember(m => m.ModifiedOn, o => o.Ignore())
-                ;
-
-            // Provision Gap
-            CreateMap<CheckAnswersDto, CheckAnswersProvisionGapViewModel>()
-                .ForMember(m => m.PlacementInformation, opt => opt.MapFrom(s => s))
-                ;
-
-            CreateMap<CheckAnswersProvisionGapViewModel, CheckAnswersDto>()
-                .ForMember(m => m.OpportunityId,
-                    o => o.MapFrom(s => s.OpportunityId))
-                .ForMember(m => m.ConfirmationSelected,
-                    o => o.MapFrom(s => s.ConfirmationSelected))
-                .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>>())
-                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<CheckAnswersProvisionGapViewModel, CheckAnswersDto>>())
-                .ForAllOtherMembers(config => config.Ignore())
-                ;
-
-            // Referrals
-            CreateMap<CheckAnswersDto, CheckAnswersReferralViewModel>()
-                .ForMember(m => m.PlacementInformation, opt => opt.MapFrom(s => s))
+            CreateMap<CheckAnswersDto, CheckAnswersViewModel>()
                 .ForMember(m => m.Providers, opt => opt.Ignore())
+                .ForMember(m => m.CompanyNameAka, o => o.Ignore())
                 ;
 
-            CreateMap<CheckAnswersReferralViewModel, CheckAnswersDto>()
-                .ForMember(m => m.OpportunityId,
-                    o => o.MapFrom(s => s.OpportunityId))
+            CreateMap<CheckAnswersViewModel, CheckAnswersDto>()
+                .ForMember(m => m.OpportunityItemId,
+                    o => o.MapFrom(s => s.OpportunityItemId))
                 .ForMember(m => m.Postcode,
                     o => o.MapFrom(s => s.Postcode))
-                .ForMember(m => m.ConfirmationSelected,
-                    o => o.MapFrom(s => s.ConfirmationSelected))
-                .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<CheckAnswersReferralViewModel, CheckAnswersDto>>())
-                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<CheckAnswersReferralViewModel, CheckAnswersDto>>())
+                .ForMember(m => m.IsSaved,
+                    o => o.MapFrom(s => true))
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>>())
+                .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<CheckAnswersViewModel, CheckAnswersDto>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 

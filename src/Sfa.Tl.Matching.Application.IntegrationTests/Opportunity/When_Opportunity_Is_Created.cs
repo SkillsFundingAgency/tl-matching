@@ -7,22 +7,21 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
     public class When_Opportunity_Is_Created : IClassFixture<OpportunityTestFixture>
     {
         private readonly OpportunityTestFixture _testFixture;
-        private const string Postcode = "OP1 1CR";
+        private const string EmployerContact = "Contact for Opportunity Test";
         private readonly int _opportunityId;
 
         public When_Opportunity_Is_Created(OpportunityTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testFixture.ResetData(Postcode);
+            _testFixture.ResetData(EmployerContact);
 
             var opportunityDto = new OpportunityDto
             {
-                RouteId = 1,
-                Postcode = Postcode,
-                SearchRadius = 4
+                EmployerId = null,
+                EmployerContact = EmployerContact
             };
 
-            _opportunityId = _testFixture.OpportunityService.CreateOpportunity(opportunityDto).GetAwaiter().GetResult();
+            _opportunityId = _testFixture.OpportunityService.CreateOpportunityAsync(opportunityDto).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -33,6 +32,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 
         [Fact]
         public void Then_Record_Does_Exist() =>
-            _testFixture.GetCountBy(Postcode).Should().Be(1);
+            _testFixture.GetCountBy(EmployerContact).Should().Be(1);
     }
 }

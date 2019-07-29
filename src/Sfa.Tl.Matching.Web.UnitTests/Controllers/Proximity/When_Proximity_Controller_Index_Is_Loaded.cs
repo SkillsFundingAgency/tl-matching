@@ -16,6 +16,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
     public class When_Proximity_Controller_Index_Is_Loaded
     {
         private readonly IActionResult _result;
+        private readonly IOpportunityService _opportunityService;
 
         public When_Proximity_Controller_Index_Is_Loaded()
         {
@@ -30,11 +31,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
 
-            var opportunityService = Substitute.For<IOpportunityService>();
-            var proximityController = new ProximityController(mapper, routePathService, proximityService,
-                opportunityService);
+            _opportunityService = Substitute.For<IOpportunityService>();
+            var employerService = Substitute.For<IEmployerService>();
 
-            _result = proximityController.Index();
+            var proximityController = new ProximityController(mapper, routePathService, proximityService,
+                _opportunityService, employerService);
+
+            _result = proximityController.Index().GetAwaiter().GetResult();
+        }
+        
+        [Fact]
+        public void Then_OpportunityService_GetCompanyNameWithAkaAsync_Is_Not_Called()
+        {
+            _opportunityService
+                .DidNotReceiveWithAnyArgs()
+                .GetCompanyNameWithAkaAsync(Arg.Any<int>());
         }
 
         [Fact]
@@ -57,6 +68,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         {
             var viewModel = _result.GetViewModel<SearchParametersViewModel>();
             viewModel.SearchRadius.Should().Be(SearchParametersViewModel.DefaultSearchRadius);
+        }
+
+        [Fact]
+        public void Then_ViewModel_CompanyNameWithAka_Should_Not_Be_Set()
+        {
+            var viewModel = _result.GetViewModel<SearchParametersViewModel>();
+            viewModel.CompanyNameWithAka.Should().BeNull();
         }
     }
 }

@@ -4,8 +4,8 @@
 }
 
 @section backButton{
-    <a asp-route="PlacementInformationSave_Get" asp-route-id="@Model.OpportunityId" class="govuk-back-link">Back</a>
-    <a asp-controller="Proximity" asp-action="Start" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-finish"> Finish and start again </a>
+    <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>
+    @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 
 <div class="govuk-grid-row">
@@ -23,8 +23,9 @@
                 </div>
             </div>
         }
-        <form asp-action="FindEmployer" id="findEmployer" novalidate>
+        <form asp-action="SaveOpportunityCompanyName" id="findEmployer" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
+            <input asp-for="OpportunityItemId" type="hidden" />
             <input asp-for="SelectedEmployerId" type="hidden" />
             <div class="govuk-form-group" sfa-validation-for="CompanyName" sfa-validationerror-class="govuk-form-group--error">
                 <h1 class="govuk-label-wrapper">
@@ -39,7 +40,7 @@
                 <select id="CompanyName" name="CompanyName" class="govuk-input" asp-for="CompanyName"></select>
             </div>
 
-            <input id="companyNameHidden" asp-for="CompanyName" type="hidden" />
+            <input id="companyNameHidden" asp-for="CompanyNameWithAka" type="hidden" />
             <input id="previousCompanyNameHidden" asp-for="PreviousCompanyName" type="hidden" />
 
             <button id="tl-continue" class="govuk-button" type="submit">Continue</button>

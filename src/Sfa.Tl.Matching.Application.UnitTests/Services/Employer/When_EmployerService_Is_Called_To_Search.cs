@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -25,18 +23,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 
         public When_EmployerService_Is_Called_To_Search()
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
-            var mapper = new Mapper(config);
-            var repository = Substitute.For<IRepository<Domain.Models.Employer>>();
+            var employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
+            var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            repository.GetMany(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
+            employerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new SearchResultsBuilder().Build().AsQueryable());
 
-            var employerService = new EmployerService(mapper, repository);
+            var employerService = new EmployerService(employerRepository, opportunityRepository);
 
-            const string employerName = "Co";
+            const string companyName = "Co";
 
-            _searchResults = employerService.Search(employerName).ToList();
+            _searchResults = employerService.Search(companyName).ToList();
 
             _firstEmployer = _searchResults[0];
             _secondEmployer = _searchResults[1];

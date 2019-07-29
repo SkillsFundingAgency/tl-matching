@@ -1,0 +1,61 @@
+﻿@model List<Sfa.Tl.Matching.Models.ViewModel.BasketReferralItemViewModel>
+<h2 class="govuk-heading-l tl-hidden-desktop">
+    With providers
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+</h2>
+<div class="govuk-form-group js-visible">
+    <fieldset class="govuk-fieldset">
+        <div class="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input tl-selectall" id="selectall" name="selectall" type="checkbox" value="selectall">
+                <label class="govuk-label govuk-checkboxes__label" for="selectall">
+                    Select all
+                </label>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+<table class="govuk-table tl-table-responsive tl-table-clickable">
+    <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col"></th>
+            <th class="govuk-table__header" scope="col">Workplace</th>
+            <th class="govuk-table__header" scope="col">Job role</th>
+            <th class="govuk-table__header" scope="col">Students wanted</th>
+            <th class="govuk-table__header" scope="col">Providers</th>
+            <th class="govuk-table__header" scope="col"></th>
+            <th class="govuk-table__header" scope="col"></th>
+        </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            var basketItem = Model[i];
+
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell tl-table-responsive-check">
+                    <input type="hidden" asp-for="@basketItem.OpportunityItemId" name="SelectedOpportunity[@i].Id" />
+                    <input type="hidden" asp-for="@basketItem.OpportunityType" name="SelectedOpportunity[@i].OpportunityType" />
+
+                    <div class="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input tl-checkbox" asp-for="@Model[i].IsSelected" name="SelectedOpportunity[@i].IsSelected" />
+                            <label class="govuk-label govuk-checkboxes__label" asp-for="@Model[i].IsSelected">
+                                <span class="govuk-visually-hidden">Select this opportunity</span>
+                            </label>
+                        </div>
+                    </div>
+                </td>
+                <td class="govuk-table__cell" data-label="Workplace">@basketItem.Workplace</td>
+                <td class="govuk-table__cell" data-label="Job role">@basketItem.JobRole</td>
+                <td class="govuk-table__cell" data-label="Students wanted">@basketItem.PlacementsDetail</td>
+                <td class="govuk-table__cell" data-label="Providers">@basketItem.Providers</td>
+                <td class="govuk-table__cell tl-table-responsive-link" data-label=""><a asp-route="GetCheckAnswers" asp-route-opportunityItemId="@basketItem.OpportunityItemId" id="tl-edit" class="govuk-link">Edit</a></td>
+                <td class="govuk-table__cell tl-table-responsive-link" data-label=""><a asp-route="GetConfirmDeleteOpportunityItem" asp-route-opportunityItemId="@basketItem.OpportunityItemId" id="tl-delete" class="govuk-link">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button id="tl-continue" class="govuk-button" type="submit" name="SubmitAction" value="SaveSelectedOpportunities">Continue with selected opportunities</button>

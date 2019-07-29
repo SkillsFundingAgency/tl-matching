@@ -33,6 +33,20 @@ gulp.task('copy-js', function () {
         .pipe(gulp.dest(paths.dist.defaultJs));
 });
 
+gulp.task('copy-opportunity-basket-js', function () {
+    return gulp.src([
+        'Frontend/src/javascripts/opportunity-basket.js'
+    ])
+        .pipe(concat('opportunity-basket.js'))
+        .pipe(minify({
+            noSource: true,
+            ext: {
+                min: '.min.js'
+            }
+        }))
+        .pipe(gulp.dest(paths.dist.defaultJs));
+});
+
 gulp.task('copy-editquals-js', function () {
     return gulp.src([
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',

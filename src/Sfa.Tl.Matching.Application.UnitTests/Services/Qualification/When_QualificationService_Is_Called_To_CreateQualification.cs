@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 {
     public class When_QualificationService_Is_Called_To_CreateQualification
     {
-        private readonly IRepository<QualificationRoutePathMapping>  _qualificationRoutePathMappingRepository;
+        private readonly IRepository<QualificationRouteMapping>  _qualificationRouteMappingRepository;
         private readonly  int _result;
 
         public When_QualificationService_Is_Called_To_CreateQualification()
@@ -49,13 +49,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             qualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
                 .Returns(new Domain.Models.Qualification());
             
-            _qualificationRoutePathMappingRepository = Substitute.For<IRepository<QualificationRoutePathMapping>>();
-            _qualificationRoutePathMappingRepository
-                .CreateMany(Arg.Do<IList<QualificationRoutePathMapping>>(
+            _qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
+            _qualificationRouteMappingRepository
+                .CreateMany(Arg.Do<IList<QualificationRouteMapping>>(
                         qrpm => qrpm.First().Qualification.Id = 1))
                 .Returns(1);
 
-            var qualificationService = new QualificationService(mapper, qualificationRepository, _qualificationRoutePathMappingRepository, learningAimReferenceRepository);
+            var qualificationService = new QualificationService(mapper, qualificationRepository, _qualificationRouteMappingRepository, learningAimReferenceRepository);
 
             var viewModel = new MissingQualificationViewModel
             {
@@ -80,19 +80,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         }
 
         [Fact]
-        public void Then_QualificationRoutePathMappingRepository_CreateMany_Is_Called_Exactly_Once()
+        public void Then_QualificationRouteMappingRepository_CreateMany_Is_Called_Exactly_Once()
         {
-            _qualificationRoutePathMappingRepository
+            _qualificationRouteMappingRepository
                 .Received(1)
-                .CreateMany(Arg.Any<IList<QualificationRoutePathMapping>>());
+                .CreateMany(Arg.Any<IList<QualificationRouteMapping>>());
         }
 
         [Fact]
-        public void Then_QualificationRoutePathMappingRepository_CreateMany_Is_Called_With_Expected_Values()
+        public void Then_QualificationRouteMappingRepository_CreateMany_Is_Called_With_Expected_Values()
         {
-            _qualificationRoutePathMappingRepository
+            _qualificationRouteMappingRepository
                 .Received(1)
-                .CreateMany(Arg.Is<IList<QualificationRoutePathMapping>>(
+                .CreateMany(Arg.Is<IList<QualificationRouteMapping>>(
                     qrpm => qrpm.Count == 1 && 
                             qrpm.First().Qualification.LarsId == "10042982" &&
                             qrpm.First().Qualification.ShortTitle == "short title" &&

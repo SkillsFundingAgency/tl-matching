@@ -2,7 +2,10 @@
 {
     public class ProvisionGap : BaseEntity
     {
-        public int OpportunityId { get; set; }
-        public virtual Opportunity Opportunity { get; set; }
+        public int OpportunityItemId { get; set; }
+        public bool? NoSuitableStudent { get; set; }
+        public bool? HadBadExperience { get; set; }
+        public bool? ProvidersTooFarAway { get; set; }
+        public virtual OpportunityItem OpportunityItem { get; set; }
     }
 }

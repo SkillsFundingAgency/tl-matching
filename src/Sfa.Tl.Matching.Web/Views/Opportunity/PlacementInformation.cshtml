@@ -1,0 +1,150 @@
+@using Sfa.Tl.Matching.Models.Enums
+@model Sfa.Tl.Matching.Models.ViewModel.PlacementInformationSaveViewModel
+@{
+    ViewData["Title"] = "Placement information";
+}
+
+@section backButton{
+    <a class="govuk-back-link"
+       asp-route="GetProviderResults"
+       asp-route-opportunityId="@Model.OpportunityId"
+       asp-route-opportunityItemId="@Model.OpportunityItemId"
+       asp-route-searchRadius="@Model.SearchRadius"
+       asp-route-Postcode="@Model.Postcode"
+       asp-route-SelectedRouteId="@Model.RouteId">Back</a>
+    @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
+}
+
+<form asp-action="SavePlacementInformation" novalidate>
+    <input asp-for="OpportunityId" type="hidden" />
+    <input asp-for="OpportunityItemId" type="hidden" />
+    <input asp-for="OpportunityType" type="hidden" />
+    <input asp-for="SearchResultProviderCount" type="hidden" />
+    <input asp-for=" CompanyName" type="hidden" />
+    <input asp-for=" CompanyNameAka" type="hidden" />
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+                    <h2 class="govuk-error-summary__title" id="error-summary-title">
+                        There is a problem
+                    </h2>
+                    <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__list">
+                            <li><a sfa-validation-for="NoSuitableStudent"></a></li>
+                            <li><a sfa-validation-for="JobRole"></a></li>
+                            <li><a href="#placement-location-yes" sfa-validation-for="PlacementsKnown"></a></li>
+                            <li><a sfa-validation-for="Placements"></a></li>
+                        </ul>
+                    </div>
+                </div>
+            }
+
+            @if (!String.IsNullOrEmpty(Model.CompanyNameWithAka))
+            {
+                <span class="govuk-caption-l">@Model.CompanyNameWithAka</span>
+            }
+            <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+
+            @if (Model.OpportunityType == OpportunityType.Referral)
+            {
+                <p class="govuk-body">This information will go in an email to the selected providers.</p>
+            }
+            else
+            {
+                @if (Model.SearchResultProviderCount > 0)
+                {
+                    <div class="govuk-form-group" sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-form-group--error">
+                        <fieldset class="govuk-fieldset">
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                <h1 class="govuk-fieldset__heading">
+                                    Why did the employer not choose a provider?
+                                </h1>
+                            </legend>
+                            <span class="govuk-hint">
+                                Select all that apply
+                            </span>
+                            <div class="govuk-checkboxes">
+                                <span class="govuk-error-message" asp-validation-for="NoSuitableStudent"></span>
+                                <div class="govuk-checkboxes__item">
+                                    <input asp-for="NoSuitableStudent" class="govuk-checkboxes__input" type="checkbox"
+                                           sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-input--error">
+                                    <label class="govuk-label govuk-checkboxes__label" asp-for="NoSuitableStudent">
+                                        Providers do not have students doing the right course
+                                    </label>
+                                </div>
+                                <div class="govuk-checkboxes__item">
+                                    <input asp-for="HadBadExperience" class="govuk-checkboxes__input" type="checkbox"
+                                           sfa-validation-for="HadBadExperience" sfa-validationerror-class="govuk-input--error">
+                                    <label class="govuk-label govuk-checkboxes__label" asp-for="HadBadExperience">
+                                        Employer had a bad experience with them
+                                    </label>
+                                </div>
+                                <div class="govuk-checkboxes__item">
+                                    <input asp-for="ProvidersTooFarAway" class="govuk-checkboxes__input" type="checkbox"
+                                           sfa-validation-for="ProvidersTooFarAway" sfa-validationerror-class="govuk-input--error">
+                                    <label class="govuk-label govuk-checkboxes__label" asp-for="ProvidersTooFarAway">
+                                        Providers were too far away
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                }
+            }
+
+            <div class="govuk-form-group" sfa-validation-for="JobRole" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label govuk-label--m" asp-for="JobRole">
+                    What specific job would the placement student do? (optional)
+                </label>
+                <span id="placement-role-hint" class="govuk-hint">
+                    For example, admin assistant, care worker, bricklayer
+                </span>
+                <span class="govuk-error-message" asp-validation-for="JobRole"></span>
+                <input asp-for="JobRole" class="govuk-input govuk-!-width-one-half" sfa-validation-for="JobRole" sfa-validationerror-class="govuk-input--error" />
+            </div>
+
+            <div class="govuk-form-group" sfa-validation-for="PlacementsKnown" sfa-validationerror-class="govuk-form-group--error">
+                <fieldset class="govuk-fieldset" aria-describedby="placement-location-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m" id="PlacementsKnown" name="PlacementsKnown">
+                        Does the employer know how many students they want for this job at @Model.Postcode?
+                    </legend>
+                    <span id="placement-location-hint" class="govuk-hint">
+                        This can be an estimate
+                    </span>
+                    <span class="govuk-error-message" asp-validation-for="PlacementsKnown"></span>
+                    <div class="govuk-radios govuk-radios--conditional" data-module="radios" sfa-validation-for="Placements" sfa-validationerror-class="govuk-form-group--error">
+                        <div class="govuk-radios__item">
+                            <input asp-for="PlacementsKnown" class="govuk-radios__input" id="placement-location-yes" type="radio" value="true" data-aria-controls="conditional-placement-location">
+                            <label class="govuk-label govuk-radios__label" for="placement-location-yes">
+                                Yes
+                            </label>
+                        </div>
+
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-placement-location">
+                            <div class="govuk-form-group" sfa-validation-for="Placements" sfa-validationerror-class="govuk-form-group--error">
+                                <label class="govuk-label" asp-for="Placements">
+                                    Number of students
+                                </label>
+                                <span class="govuk-error-message" asp-validation-for="Placements"></span>
+                                <input asp-for="Placements" class="govuk-input govuk-input--width-3"
+                                       sfa-validation-for="Placements" sfa-validationerror-class="govuk-input--error" />
+                            </div>
+                        </div>
+
+                        <div class="govuk-radios__item">
+                            <input asp-for="PlacementsKnown" class="govuk-radios__input" id="placement-location-no" type="radio" value="false">
+                            <label class="govuk-label govuk-radios__label" for="placement-location-no">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <button class="govuk-button" id="tl-continue">Continue</button>
+        </div>
+    </div>
+</form>

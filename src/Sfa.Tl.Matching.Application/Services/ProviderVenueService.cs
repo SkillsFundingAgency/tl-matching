@@ -4,11 +4,11 @@ using GeoAPI.Geometries;
 using NetTopologySuite;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Application.Extensions;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
