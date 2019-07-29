@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
-using Sfa.Tl.Matching.Web.IntegrationTests.Specflow.Helpers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer

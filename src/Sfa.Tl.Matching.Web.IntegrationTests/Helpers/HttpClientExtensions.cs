@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AngleSharp.Html.Dom;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.Specflow.Helpers
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Helpers
 {
     public static class HttpClientExtensions
     {
@@ -36,8 +36,22 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Specflow.Helpers
         {
             foreach (var kvp in formValues)
             {
-                var element = Assert.IsAssignableFrom<IHtmlInputElement>(form[kvp.Key]);
-                element.Value = kvp.Value;
+                switch (form[kvp.Key])
+                {
+                    case IHtmlInputElement input:
+                        input.Value = kvp.Value;
+                        if (bool.TryParse(kvp.Value, out var isChecked))
+                        {
+                            input.IsChecked = isChecked;
+                        }
+
+                        break;
+                    case IHtmlSelectElement select:
+                        select.Value = kvp.Value;
+                        break;
+                    default:
+                        throw new Exception($"Unknown form element: '{kvp.Key}'");
+                }
             }
 
             var submit = form.GetSubmission(submitButton);

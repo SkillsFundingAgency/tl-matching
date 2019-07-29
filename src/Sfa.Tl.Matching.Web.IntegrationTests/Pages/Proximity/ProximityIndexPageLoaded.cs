@@ -2,7 +2,6 @@
 using AngleSharp.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
-using Sfa.Tl.Matching.Web.IntegrationTests.Specflow.Helpers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
