@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Database.StandingData
 {
@@ -31,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Database.StandingData
                         {
                             Id = OpportunityItem1Id,
                             OpportunityId = Opportunity1Id,
-                            OpportunityType = "Referral",
+                            OpportunityType = OpportunityType.ProvisionGap.ToString(),
                             Town = "London",
                             Postcode = "SW1A 2AA",
                             SearchRadius = 10,
@@ -61,7 +62,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Database.StandingData
                         {
                             Id = OpportunityItem2Id,
                             OpportunityId = Opportunity1Id,
-                            OpportunityType = "Referral",
+                            OpportunityType = OpportunityType.Referral.ToString(),
                             Town = "London",
                             Postcode = "SW1A 2AA",
                             SearchRadius = 10,

@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         [InlineData("EmployerContactPhone", "", "You must enter a contact telephone number for placements", 2)]
         [InlineData("EmployerContactPhone", "A", "You must enter a number", 2)]
         [InlineData("EmployerContactPhone", "123", "You must enter a telephone number that has 7 or more numbers", 2)]
-        public async Task CorrectErrorMessageDisplayed(string field, string value, string errorMessage, int index)
+        public async Task CorrectErrorMessageDisplayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();
             var pageResponse = await client.GetAsync($"employer-details/{OpportunityId}-{OpportunityItemId}");
@@ -44,14 +44,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
                     [field] = value
                 });
 
-
             Assert.Equal(HttpStatusCode.OK, pageResponse.StatusCode);
             
             response.EnsureSuccessStatusCode();
 
             var responseContent = await HtmlHelpers.GetDocumentAsync(response);
             var errorSummaryList = responseContent.QuerySelector(".govuk-error-summary div ul");
-            errorSummaryList.Children[index].TextContent.Should().Be(errorMessage);
+            errorSummaryList.Children[errorSummaryIndex].TextContent.Should().Be(errorMessage);
 
             AssertError(responseContent, field, errorMessage);
 

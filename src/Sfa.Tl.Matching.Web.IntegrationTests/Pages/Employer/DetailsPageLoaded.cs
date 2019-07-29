@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
+﻿using System.Threading.Tasks;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Xunit;

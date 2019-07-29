@@ -6,31 +6,30 @@ using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 {
-    public class PlacementInformationSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class ProximityIndexSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<Startup>>
     {
-        private const int OpportunityItemId = 2000;
+        private const int OpportunityId = 1000;
 
         private readonly CustomWebApplicationFactory<Startup> _factory;
 
-        public PlacementInformationSubmittedWithValidationErrors(CustomWebApplicationFactory<Startup> factory)
+        public ProximityIndexSubmittedWithValidationErrors(CustomWebApplicationFactory<Startup> factory)
         {
             _factory = factory;
         }
 
         [Theory]
-        // TODO FIX [InlineData("NoSuitableStudent", "", "You must tell us why the employer did not choose a provider", 0)]
-        [InlineData("PlacementsKnown", "", "You must tell us whether the employer knows how many students they want for this job at this location", 2)]
+        [InlineData("Postcode", "", "You must enter a postcode", 0)]
         public async Task CorrectErrorMessageDisplayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();
-            var pageResponse = await client.GetAsync($"placement-information/{OpportunityItemId}");
+            var pageResponse = await client.GetAsync($"find-providers/{OpportunityId}");
             var pageContent = await HtmlHelpers.GetDocumentAsync(pageResponse);
 
             var response = await client.SendAsync(
                 (IHtmlFormElement)pageContent.QuerySelector("form"),
-                (IHtmlButtonElement)pageContent.QuerySelector("button[id='tl-continue']"),
+                (IHtmlButtonElement)pageContent.QuerySelector("button[id='tl-search']"),
                 new Dictionary<string, string>
                 {
                     [field] = value
@@ -51,10 +50,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 
         private static void AssertError(IHtmlDocument responseContent, string field, string errorMessage)
         {
-            var placementsKnown = responseContent.QuerySelector($"#{field}");
-            var placementsKnownDiv = placementsKnown.ParentElement.ParentElement;
-            placementsKnownDiv.ClassName.Should().Be("govuk-form-group govuk-form-group--error");
-            placementsKnownDiv.QuerySelector(".govuk-error-message").TextContent.Should()
+            var input = responseContent.QuerySelector($"#{field}");
+            var div = input.ParentElement;
+            div.ClassName.Should().Be("govuk-form-group govuk-form-group--error");
+            div.QuerySelector(".govuk-error-message").TextContent.Should()
                 .Be(errorMessage);
         }
     }

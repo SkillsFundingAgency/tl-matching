@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium
             _server = server;
             _server.CreateClient();
             var opts = new ChromeOptions();
-            //opts.AddArgument("--headless");
+            opts.AddArgument("--headless");
             //opts.SetLoggingPreference(OpenQA.Selenium.LogType.Browser, LogLevel.All);
             var driver = new RemoteWebDriver(opts);
             driver.Navigate().GoToUrl(_server.RootUri + "/Start");

@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         [Theory]
         [InlineData("CompanyName", "", "You must find and choose an employer", 0)]
         // TODO FIX [InlineData("CompanyName", "A", "{lockedByUser} is already working on this employer’s opportunities. Please choose a different employer.", 0)]
-        public async Task CorrectErrorMessageDisplayed(string field, string value, string errorMessage, int index)
+        public async Task CorrectErrorMessageDisplayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();
             var pageResponse = await client.GetAsync($"who-is-employer/{OpportunityId}-{OpportunityItemId}");
@@ -37,14 +37,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
                     [field] = value
                 });
 
-
             Assert.Equal(HttpStatusCode.OK, pageResponse.StatusCode);
             
             response.EnsureSuccessStatusCode();
 
             var responseContent = await HtmlHelpers.GetDocumentAsync(response);
             var errorSummaryList = responseContent.QuerySelector(".govuk-error-summary div ul");
-            errorSummaryList.Children[index].TextContent.Should().Be(errorMessage);
+            errorSummaryList.Children[errorSummaryIndex].TextContent.Should().Be(errorMessage);
 
             AssertError(responseContent, errorMessage);
 
