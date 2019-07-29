@@ -3,11 +3,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-            await SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-            await SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
@@ -132,7 +132,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-            await SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
@@ -200,7 +200,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-            await SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory, false, false);
+            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory, false, false);
 
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
@@ -247,7 +247,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-            await SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory, false, false);
+            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory, false, false);
 
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
@@ -273,36 +273,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("placements_list") && tokens["placements_list"] == expectedResult), Arg.Any<string>());
-        }
-
-        private static async Task SetTestData(MatchingDbContext dbContext,
-                                    Domain.Models.Provider provider,
-                                    Domain.Models.ProviderVenue venue,
-                                    Domain.Models.Opportunity opportunity, 
-                                    BackgroundProcessHistory backgroundProcessHistory,
-                                    bool isSaved = true, bool isSelectedForReferral = true)
-        {
-            await dbContext.AddAsync(provider);
-            await dbContext.AddAsync(venue);
-            await dbContext.AddAsync(opportunity);
-            await dbContext.AddAsync(backgroundProcessHistory);
-            await dbContext.SaveChangesAsync();
-
-            var items = dbContext.OpportunityItem.Where(oi => oi.OpportunityId == opportunity.Id).AsNoTracking()
-                .ToList();
-
-            foreach (var opportunityItem in items)
-            {
-                opportunityItem.IsSaved = isSaved;
-                opportunityItem.IsCompleted = false;
-                opportunityItem.IsSelectedForReferral = isSelectedForReferral;
-
-                dbContext.Entry(opportunityItem).Property("IsSaved").IsModified = true;
-                dbContext.Entry(opportunityItem).Property("IsCompleted").IsModified = true;
-                dbContext.Entry(opportunityItem).Property("IsSelectedForReferral").IsModified = true;
-            }
-
-            await dbContext.SaveChangesAsync();
         }
 
         private static async Task<string> GetExpectedResult(OpportunityRepository repo, int opportunityId, IEnumerable<int> itemIds)
