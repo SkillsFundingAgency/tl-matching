@@ -33,40 +33,40 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium
         {
             _startPage.AssertContent();
 
-            //var proximityIndexPage = _startPage.ClickStart();
-            //proximityIndexPage.AssertContent();
-            //proximityIndexPage.EnterPostcode("SW1A 2AA");
+            var proximityIndexPage = _startPage.ClickStart();
+            proximityIndexPage.AssertContent();
+            proximityIndexPage.EnterPostcode("SW1A 2AA");
 
-            //var proximityResultsPage = proximityIndexPage.ClickSearch();
-            //proximityResultsPage.AssertContent();
-            //proximityResultsPage.SelectProvider();
-            //proximityResultsPage.EnterSearchRadius("25 miles");
+            var proximityResultsPage = proximityIndexPage.ClickSearch();
+            proximityResultsPage.AssertContent();
+            proximityResultsPage.SelectProvider();
+            proximityResultsPage.EnterSearchRadius("25 miles");
 
-            //var placementInformationPage = proximityResultsPage.ClickContinue();
-            //placementInformationPage.AssertContent();
-            //placementInformationPage = placementInformationPage.SelectPlacementsKnown();
+            var placementInformationPage = proximityResultsPage.ClickContinue();
+            placementInformationPage.AssertContent();
+            placementInformationPage = placementInformationPage.SelectPlacementsKnown();
 
-            //var findEmployerPage = placementInformationPage.ClickContinue();
-            //findEmployerPage.AssertContent();
-            //findEmployerPage = findEmployerPage.EnterCompanyName("Company Name");
+            var findEmployerPage = placementInformationPage.ClickContinue();
+            findEmployerPage.AssertContent();
+            findEmployerPage = findEmployerPage.EnterCompanyName("Company Name");
 
-            //var detailsPage = findEmployerPage.ClickContinue();
-            //detailsPage.AssertContent();
+            var detailsPage = findEmployerPage.ClickContinue();
+            detailsPage.AssertContent();
 
-            //var checkAnswersPage = detailsPage.ClickConfirm();
-            //checkAnswersPage.AssertContent();
+            var checkAnswersPage = detailsPage.ClickConfirm();
+            checkAnswersPage.AssertContent();
             //checkAnswersPage.AssertDatabase();
 
-            //var opportunityBasketPage = checkAnswersPage.ClickConfirm();
-            //opportunityBasketPage.AssertContent();
+            var opportunityBasketPage = checkAnswersPage.ClickConfirm();
+            opportunityBasketPage.AssertContent();
             //opportunityBasketPage.AssertDatabase();
 
-            //var employerConsentPage = opportunityBasketPage.ClickContinue();
-            //employerConsentPage.AssertContent();
-            //employerConsentPage = employerConsentPage.SelectConfirmationSelected();
+            var employerConsentPage = opportunityBasketPage.ClickContinue();
+            employerConsentPage.AssertContent();
+            employerConsentPage = employerConsentPage.SelectConfirmationSelected();
 
-            //var referralEmailSentPage = employerConsentPage.ClickConfirm();
-            //referralEmailSentPage.AssertContent();
+            var referralEmailSentPage = employerConsentPage.ClickConfirm();
+            referralEmailSentPage.AssertContent();
         }
 
         public void Dispose()
