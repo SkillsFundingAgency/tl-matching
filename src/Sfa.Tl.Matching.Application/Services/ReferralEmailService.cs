@@ -196,7 +196,12 @@ namespace Sfa.Tl.Matching.Application.Services
             backgroundProcessHistory.ModifiedBy = userName;
             backgroundProcessHistory.ModifiedOn = _dateTimeProvider.UtcNow();
 
-            await _backgroundProcessHistoryRepository.Update(backgroundProcessHistory);
+            await _backgroundProcessHistoryRepository.UpdateWithSpecifedColumnsOnly(backgroundProcessHistory, 
+                history => history.RecordCount,
+                history => history.Status,
+                history => history.StatusMessage,
+                history => history.ModifiedBy,
+                history => history.ModifiedOn);
         }
 
         private Func<int, Task<BackgroundProcessHistory>> GetBackgroundProcessHistoryData =>  BackgroundProcessHistoryData;
