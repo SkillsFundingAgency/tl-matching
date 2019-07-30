@@ -161,8 +161,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("venue_postcode")
-                                  && tokens["venue_postcode"] == "AA2 2AA"),
+                                  && tokens["venue_postcode"] == "Venuetown AA2 2AA"),
                     Arg.Any<string>());
+
         }
 
         [Fact]
@@ -175,7 +176,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("search_radius")
-                                  && tokens["search_radius"] == "10"),
+                                  && tokens["search_radius"] == "3.5"),
                     Arg.Any<string>());
         }
 

@@ -54,6 +54,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("who-is-employer/{opportunityId}-{opportunityItemId}")]
         public async Task<IActionResult> SaveOpportunityCompanyName(FindEmployerViewModel viewModel)
         {
             await ValidateAsync(viewModel);
@@ -78,6 +79,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("employer-details/{opportunityId}-{opportunityItemId}")]
         public async Task<IActionResult> SaveOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
@@ -108,6 +110,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
+        [Route("check-employer-details/{opportunityId}-{opportunityItemId}")]
         public async Task<IActionResult> SaveCheckOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
@@ -183,11 +186,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(await GetEmployerConsentViewModel(viewModel.OpportunityId, viewModel.OpportunityItemId));
 
-            await _opportunityService.ConfirmOpportunities(viewModel.OpportunityId);
-
-            // TODO Send emails
             await _referralService.SendEmployerReferralEmail(viewModel.OpportunityId);
             await _referralService.SendProviderReferralEmail(viewModel.OpportunityId);
+
+            await _opportunityService.ConfirmOpportunities(viewModel.OpportunityId);
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }

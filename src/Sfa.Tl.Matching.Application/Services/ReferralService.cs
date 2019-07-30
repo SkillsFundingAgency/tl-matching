@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -45,14 +46,15 @@ namespace Sfa.Tl.Matching.Application.Services
                 { "employer_postcode", employerReferral.Postcode }
             };
 
-            foreach (var data in employerReferral.ProviderReferrals)
+            foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
             {
                 var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
+                var providers = string.Join(", ", data.ProviderDetails.Select(dto => dto.ProviderName));
 
-                sb.AppendLine($"# {data.ProviderVenueTown} {data.ProviderVenuePostCode}");
+                sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
                 sb.AppendLine($"*Job role: {data.JobRole}");
                 sb.AppendLine($"*Students wanted: {placements}");
-                sb.AppendLine($"*Providers selected: {data.ProviderName}");
+                sb.AppendLine($"*Providers selected: {providers}");
                 sb.AppendLine("");
             }
 
@@ -76,8 +78,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     { "primary_contact_name", referral.ProviderPrimaryContact },
                     { "provider_name", referral.ProviderName },
                     { "route", referral.RouteName.ToLowerInvariant() },
-                    { "venue_postcode", referral.ProviderVenuePostcode },
-                    { "search_radius", referral.SearchRadius.ToString() },
+                    { "venue_postcode", $"{referral.ProviderVenueTown} {referral.ProviderVenuePostcode}" },
+                    { "search_radius", referral.DistanceFromEmployer },
                     { "job_role", referral.JobRole },
                     { "employer_business_name", referral.CompanyName },
                     { "employer_contact_name", referral.EmployerContact},

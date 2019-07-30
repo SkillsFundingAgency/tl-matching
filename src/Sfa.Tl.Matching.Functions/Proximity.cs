@@ -98,9 +98,13 @@ namespace Sfa.Tl.Matching.Functions
 
                     if (!isValidPostCode)
                     {
+                        var errormessage = "Error Back Filling Employer Post Town Data. Invalid PostCode";
+
+                        logger.LogError(errormessage);
+
                         await functionlogRepository.Create(new FunctionLog
                         {
-                            ErrorMessage = "Error Back Filling Employer Post Town Data. Invalid PostCode",
+                            ErrorMessage = errormessage,
                             FunctionName = nameof(BackFillEmployerPostTown),
                             RowNumber = opportunityItem.Id
                         });
@@ -154,19 +158,41 @@ namespace Sfa.Tl.Matching.Functions
                 var stopwatch = Stopwatch.StartNew();
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
-                var providerVenues = await providerVenueRepository.GetMany(venue => venue.Location == null || venue.Longitude == null || venue.Latitude == null).ToListAsync();
+                var providerVenues = await providerVenueRepository.GetMany(venue => venue.Location == null ||
+                                                                                    venue.Longitude == null ||
+                                                                                    venue.Latitude == null ||
+                                                                                    !EF.Functions.Like(venue.Postcode, "% %") ||
+                                                                                    venue.Postcode.ToUpper() != venue.Postcode)
+                                                                .ToListAsync();
 
                 if (!providerVenues.Any()) return;
 
                 foreach (var venue in providerVenues)
                 {
-                    var geoLocationData = await locationApiClient.GetGeoLocationData(venue.Postcode);
-                    venue.Postcode = geoLocationData.Postcode;
-                    venue.Latitude = geoLocationData.Latitude.ToDecimal();
-                    venue.Longitude = geoLocationData.Longitude.ToDecimal();
+                    try
+                    {
+                        var geoLocationData = await locationApiClient.GetGeoLocationData(venue.Postcode);
 
-                    var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-                    venue.Location = geometryFactory.CreatePoint(new Coordinate(double.Parse(geoLocationData.Longitude), double.Parse(geoLocationData.Latitude)));
+                        venue.Postcode = geoLocationData.Postcode;
+                        venue.Latitude = geoLocationData.Latitude.ToDecimal();
+                        venue.Longitude = geoLocationData.Longitude.ToDecimal();
+
+                        var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
+                        venue.Location = geometryFactory.CreatePoint(new Coordinate(double.Parse(geoLocationData.Longitude), double.Parse(geoLocationData.Latitude)));
+                    }
+                    catch (Exception e)
+                    {
+                        var errormessage = $"Error Back Filling Provider Venue Data. Invalid PostCode. Internal Error Message {e}";
+
+                        logger.LogError(errormessage);
+
+                        await functionlogRepository.Create(new FunctionLog
+                        {
+                            ErrorMessage = errormessage,
+                            FunctionName = nameof(BackFillProximityData),
+                            RowNumber = venue.Id
+                        });
+                    }
                 }
 
                 await providerVenueRepository.UpdateMany(providerVenues);

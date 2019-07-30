@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
-            
+
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     .AddProvisionGapItem()
                     .Build());
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, 
+            var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository,
                 provisionGapRepository, referralRepository, googleMapApiClient,
                 _opportunityPipelineReportWriter, dateTimeProvider);
 
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 .Received(1)
                 .GetPipelineOpportunitiesAsync(1);
         }
-        
+
         [Fact]
         public void Then_WriteReport_Is_Called_Exactly_Once()
         {
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _result.Should().NotBeNull();
             System.IO.Path.GetFileNameWithoutExtension(_result.FileName)
-                .Should().Be($"CompanyName_opportunities_10Mar2019");
+                .Should().Be("CompanyName_opportunities_10Mar2019");
             System.IO.Path.GetExtension(_result.FileName)
                 .Should().Be(".xlsx");
             _result.ContentType

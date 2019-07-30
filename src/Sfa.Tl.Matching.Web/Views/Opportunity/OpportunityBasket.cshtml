@@ -7,7 +7,9 @@
 
 @section backButton{
     @*<a asp-route="GetCheckAnswersOrEditEmployer" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>*@
-    <a asp-route="GetSavedEmployerOpportunity" class="govuk-link tl-align-right govuk-!-margin-top-3" id="tl-save">Save and come back later</a>
+    <p class="tl-align-right">
+        <a asp-route="GetSavedEmployerOpportunity" class="govuk-link govuk-!-margin-top-3" id="tl-save">Save and come back later</a>
+    </p>
 }
 
 <div class="govuk-grid-row">
@@ -32,7 +34,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
-        <a class="govuk-button tl-button--grey" asp-route="FindProviders" asp-route-opportunityId="@Model.OpportunityId">Add another opportunity</a>
+        <a class="govuk-button tl-button--grey" id="tl-add-another-opportunity" asp-route="FindProviders" asp-route-opportunityId="@Model.OpportunityId">Add another opportunity</a>
 
         <form asp-route="SaveSelectedOpportunities" novalidate>
             <input type="hidden" asp-for="OpportunityId" />
