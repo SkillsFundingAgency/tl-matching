@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Employer
     {
         private readonly By _contactDetailsChangeLink = By.XPath("//*[@id='tl-change-employer']");
         private readonly By _confirmationCheckBox = By.Id("ConfirmationSelected");
-        private readonly By _confirmButton = By.Id("tl-confirm");
+        private readonly By _continueButton = By.Id("tl-continue");
 
         private readonly By _contactNameValue = By.XPath("//*[@id='main-content']/div/div/section/p[1]");
         private readonly By _contactEmailValue = By.XPath("//*[@id='main-content']/div/div/section/p[2]");
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium.PageObjects.Employer
 
         public ReferralEmailSentPage ClickConfirm()
         {
-            Driver.FindElement(_confirmButton).Click();
+            Driver.FindElement(_continueButton).Click();
 
             return new ReferralEmailSentPage(Driver);
         }
