@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Xunit;
@@ -34,6 +35,9 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 
             var header1 = indexViewHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
+
+            var employerName = indexViewHtml.QuerySelector(".govuk-caption-l");
+            employerName.TextContent.Should().Be("Company Name");
         }
     }
 }
