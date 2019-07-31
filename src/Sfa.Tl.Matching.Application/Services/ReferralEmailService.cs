@@ -133,9 +133,10 @@ namespace Sfa.Tl.Matching.Application.Services
                     await SendEmail(EmailTemplateName.ProviderReferral, opportunityId, toAddress,
                         "Industry Placement Matching Referral", tokens, referral.CreatedBy);
 
+                    await CompleteSelectedReferrals(opportunityId, referral.OpportunityItemId, username);
+
                 }
 
-                await CompleteSelectedReferrals(opportunityId, username);
                 await CompleteRemainingItems(opportunityId, username);
 
                 await UpdatebackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
@@ -164,9 +165,10 @@ namespace Sfa.Tl.Matching.Application.Services
             return itemIds;
         }
 
-        private async Task CompleteSelectedReferrals(int opportunityId, string username)
+        private async Task CompleteSelectedReferrals(int opportunityId, int itemId, string username)
         {
             var selectedOpportunityItemIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+                                                                                      && oi.Id == itemId
                                                                                       && oi.IsSaved
                                                                                       && oi.IsSelectedForReferral
                                                                                       && !oi.IsCompleted)
