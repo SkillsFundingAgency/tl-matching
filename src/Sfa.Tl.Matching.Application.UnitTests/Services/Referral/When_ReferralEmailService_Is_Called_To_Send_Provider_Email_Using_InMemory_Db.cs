@@ -2,10 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
+using AutoMapper;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
 using Sfa.Tl.Matching.Data;
@@ -13,6 +17,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
@@ -24,9 +29,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
         [Theory, AutoDomainData]
         public async Task Then_Send_Email_To_Providers(
-            MatchingDbContext dbContext,
+            [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
             MatchingConfiguration config,
+            [Frozen] IHttpContextAccessor httpContextAccessor,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
@@ -47,28 +53,66 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-            var sut = new ReferralEmailService(config, dateTimeProvider, emailService, emailHistoryService, repo, backgroundRepo);
+            var mapperConfig = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver")
+                        ?
+                        new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
+                            httpContextAccessor)
+                        : type.Name.Contains("LoggedInUserNameResolver")
+                            ? (object)new
+                                LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
+                                    httpContextAccessor)
+                            : type.Name.Contains("UtcNowResolver")
+                                ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(
+                                    dateTimeProvider)
+                                :
+                                null);
+            });
+            var mapper = new Mapper(mapperConfig);
+
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
+
+            //Act
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+
 
             var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
-                                                 && oi.IsSelectedForReferral
-                                                 && !oi.IsCompleted).Select(oi => oi.Id);
-
-            var referrals = await repo.GetProviderOpportunities(opportunity.Id, itemIds);
-
-            //Act
-            await sut.SendProviderReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessHistory.Id, "System");
+                                                 && oi.IsSelectedForReferral).Select(oi => oi.Id);
 
             //Assert
-            await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            var data = (from op in dbContext.Opportunity
+                        join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
+                        join emp in dbContext.Employer on op.EmployerId equals emp.Id
+                        join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
+                        join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                        join p in dbContext.Provider on pv.ProviderId equals p.Id
+                        join r in dbContext.Route on oi.RouteId equals r.Id
+                        orderby re.DistanceFromEmployer
+                        where op.Id == opportunity.Id
+                              && itemIds.Contains(oi.Id)
+                              && oi.IsSelectedForReferral
+                              && oi.IsSaved
+                              && p.IsCdfProvider
+                              && p.IsEnabledForReferral
+                              && pv.IsEnabledForReferral
+                              && !pv.IsRemoved
+                        select oi.Id
+                ).ToList();
+
+            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Theory, AutoDomainData]
         public async Task Then_Send_Email_Is_Called_With_Placements_List(
-            MatchingDbContext dbContext,
+            [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
             MatchingConfiguration config,
+            [Frozen] IHttpContextAccessor httpContextAccessor,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
@@ -88,39 +132,70 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-            var sut = new ReferralEmailService(config, dateTimeProvider, emailService, emailHistoryService, repo, backgroundRepo);
+            var mapperConfig = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver")
+                        ?
+                        new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
+                            httpContextAccessor)
+                        : type.Name.Contains("LoggedInUserNameResolver")
+                            ? (object)new
+                                LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
+                                    httpContextAccessor)
+                            : type.Name.Contains("UtcNowResolver")
+                                ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(
+                                    dateTimeProvider)
+                                :
+                                null);
+            });
+            var mapper = new Mapper(mapperConfig);
+
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
+
+            //Act
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+
 
             var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
-                                                 && oi.IsSelectedForReferral
-                                                 && !oi.IsCompleted).Select(oi => oi.Id);
+                                                 && oi.IsSelectedForReferral).Select(oi => oi.Id);
 
-            var referrals = await repo.GetProviderOpportunities(opportunity.Id, itemIds);
-            var expectedResult = await GetExpectedResult(repo, opportunity.Id, itemIds);
-
-            var expectedToken = expectedResult.FirstOrDefault(tokens => tokens["opportunity_id"] == opportunity.Id.ToString());
-
-            //Act
-            await sut.SendProviderReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessHistory.Id, "System");
+            var data = (from op in dbContext.Opportunity
+                        join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
+                        join emp in dbContext.Employer on op.EmployerId equals emp.Id
+                        join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
+                        join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                        join p in dbContext.Provider on pv.ProviderId equals p.Id
+                        join r in dbContext.Route on oi.RouteId equals r.Id
+                        orderby re.DistanceFromEmployer
+                        where op.Id == opportunity.Id
+                              && itemIds.Contains(oi.Id)
+                              && oi.IsSelectedForReferral
+                              && oi.IsSaved
+                              && p.IsCdfProvider
+                              && p.IsEnabledForReferral
+                              && pv.IsEnabledForReferral
+                              && !pv.IsRemoved
+                        select oi.Id
+                ).ToList();
 
             //Assert
-            await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
-            await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("employer_business_name")), Arg.Any<string>());
-
-            await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == expectedToken["employer_business_name"]), Arg.Any<string>());
 
         }
 
         [Theory, AutoDomainData]
         public async Task Then_Send_Email_Is_Called_With_Employer_Details(
-            MatchingDbContext dbContext,
+            [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
             MatchingConfiguration config,
+            [Frozen] IHttpContextAccessor httpContextAccessor,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
@@ -140,38 +215,74 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-            var sut = new ReferralEmailService(config, dateTimeProvider, emailService, emailHistoryService, repo, backgroundRepo);
+            var mapperConfig = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver")
+                        ?
+                        new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
+                            httpContextAccessor)
+                        : type.Name.Contains("LoggedInUserNameResolver")
+                            ? (object)new
+                                LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
+                                    httpContextAccessor)
+                            : type.Name.Contains("UtcNowResolver")
+                                ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(
+                                    dateTimeProvider)
+                                :
+                                null);
+            });
+            var mapper = new Mapper(mapperConfig);
+
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
             var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
-                                                 && oi.IsSelectedForReferral
-                                                 && !oi.IsCompleted).Select(oi => oi.Id);
+                                                 && oi.IsSelectedForReferral).Select(oi => oi.Id);
 
-            var referrals = await repo.GetProviderOpportunities(opportunity.Id, itemIds);
-            
             //Act
-            await sut.SendProviderReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessHistory.Id, "System");
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
 
             //Assert
-            await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            var data = (from op in dbContext.Opportunity
+                        join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
+                        join emp in dbContext.Employer on op.EmployerId equals emp.Id
+                        join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
+                        join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                        join p in dbContext.Provider on pv.ProviderId equals p.Id
+                        join r in dbContext.Route on oi.RouteId equals r.Id
+                        orderby re.DistanceFromEmployer
+                        where op.Id == opportunity.Id
+                              && itemIds.Contains(oi.Id)
+                              && oi.IsSelectedForReferral
+                              && oi.IsSaved
+                              && p.IsCdfProvider
+                              && p.IsEnabledForReferral
+                              && pv.IsEnabledForReferral
+                              && !pv.IsRemoved
+                        select oi.Id
+                ).ToList();
+
+            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
-            await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == opportunity.Employer.CompanyName),
                 Arg.Any<string>());
 
-            await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_name") && tokens["employer_contact_name"] == opportunity.EmployerContact),
                 Arg.Any<string>());
 
-            await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_number") && tokens["employer_contact_number"] == opportunity.EmployerContactPhone),
                 Arg.Any<string>());
 
-            await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_email") && tokens["employer_contact_email"] == opportunity.EmployerContactEmail),
                 Arg.Any<string>());
@@ -180,18 +291,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
         [Theory, AutoDomainData]
         public async Task Then_Background_Process_History_Status_Is_Completed(
-                        MatchingDbContext dbContext,
-                        IDateTimeProvider dateTimeProvider,
-                        MatchingConfiguration config,
-                        [Frozen] Domain.Models.Opportunity opportunity,
-                        [Frozen] Domain.Models.Provider provider,
-                        [Frozen] Domain.Models.ProviderVenue venue,
-                        [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-                        [Frozen] IEmailService emailService,
-                        [Frozen] IEmailHistoryService emailHistoryService,
-                        ILogger<OpportunityRepository> logger,
-                        ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
-                        ILogger<GenericRepository<OpportunityItem>> itemLogger
+            [Frozen] MatchingDbContext dbContext,
+            IDateTimeProvider dateTimeProvider,
+            MatchingConfiguration config,
+            [Frozen] IHttpContextAccessor httpContextAccessor,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            [Frozen] IEmailService emailService,
+            [Frozen] IEmailHistoryService emailHistoryService,
+            ILogger<OpportunityRepository> logger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
+            ILogger<GenericRepository<OpportunityItem>> itemLogger
                         )
         {
             //Arrange
@@ -203,17 +315,54 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-            var sut = new ReferralEmailService(config, dateTimeProvider, emailService, emailHistoryService, repo, backgroundRepo);
+            var mapperConfig = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver")
+                        ?
+                        new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
+                            httpContextAccessor)
+                        : type.Name.Contains("LoggedInUserNameResolver")
+                            ? (object)new
+                                LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
+                                    httpContextAccessor)
+                            : type.Name.Contains("UtcNowResolver")
+                                ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(
+                                    dateTimeProvider)
+                                :
+                                null);
+            });
+            var mapper = new Mapper(mapperConfig);
+
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
             var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
                                                  && oi.IsSelectedForReferral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
 
-            var referrals = await repo.GetProviderOpportunities(opportunity.Id, itemIds);
+            var referrals = (from op in dbContext.Opportunity
+                    join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
+                    join emp in dbContext.Employer on op.EmployerId equals emp.Id
+                    join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
+                    join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                    join p in dbContext.Provider on pv.ProviderId equals p.Id
+                    join r in dbContext.Route on oi.RouteId equals r.Id
+                    orderby re.DistanceFromEmployer
+                    where op.Id == opportunity.Id
+                          && itemIds.Contains(oi.Id)
+                          && oi.IsSelectedForReferral
+                          && oi.IsSaved
+                          && p.IsCdfProvider
+                          && p.IsEnabledForReferral
+                          && pv.IsEnabledForReferral
+                          && !pv.IsRemoved
+                    select oi.Id
+                ).ToList();
 
             //Act
-            await sut.SendProviderReferralEmailAsync(opportunity.Id, itemIds, backgroundProcessHistory.Id, "System");
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),

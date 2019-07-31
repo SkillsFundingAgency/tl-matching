@@ -1,16 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
-using AutoMapper;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
@@ -28,10 +25,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-            MapperConfiguration config,
             IMessageQueueService messageQueueService,
-            IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository,
-            ILogger<GenericRepository<OpportunityItem>> logger
+            IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository
         )
         {
             //Arrange
@@ -39,24 +34,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
-            var mapper = new Mapper(config);
-            var repo = new GenericRepository<OpportunityItem>(logger, dbContext);
-
-            var sut = new ReferralService(mapper, messageQueueService, repo, backgroundProcessHistoryRepository);
+            var sut = new ReferralService(messageQueueService, backgroundProcessHistoryRepository);
 
             //Act
             await sut.ConfirmOpportunities(opportunity.Id, "username");
 
             //Assert
-            var itemIds = repo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
-                                             && oi.IsSaved
-                                             && oi.IsSelectedForReferral
-                                             && oi.IsCompleted).Select(oi => oi.Id);
-
+            
             var backgroundProcessData =
                 dbContext.BackgroundProcessHistory.FirstOrDefault(x => x.Id == backgroundProcessHistory.Id);
-
-            var data = dbContext.OpportunityItem.Where(x => x.OpportunityId == opportunity.Id && itemIds.Contains(x.Id));
 
             await messageQueueService.Received(1)
                 .PushEmployerReferralEmailMessageAsync(Arg.Any<SendEmployerReferralEmail>());
@@ -65,11 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .PushProviderReferralEmailMessageAsync(Arg.Any<SendProviderReferralEmail>());
 
             backgroundProcessData?.Status.Should().Be(BackgroundProcessHistoryStatus.Pending.ToString());
-
-            data.Should().NotBeNull().And.HaveCount(itemIds.Count());
-            data.Select(x => x.IsSelectedForReferral).Should().NotBeNull().And.NotContain(x => false);
-            data.Select(x => x.IsSelectedForReferral).Should().NotBeNull().And.NotContain(x => true);
-
+            
         }
     }
 }

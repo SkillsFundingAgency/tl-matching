@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IReferralEmailService
     {
-        Task SendEmployerReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username);
-        Task SendProviderReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username);
+        Task SendEmployerReferralEmailAsync(int opportunityId, int backgroundProcessHistoryId, string username);
+        Task SendProviderReferralEmailAsync(int opportunityId, int backgroundProcessHistoryId, string username);
     }
 }

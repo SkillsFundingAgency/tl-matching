@@ -31,6 +31,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                               join r in _dbContext.Route on oi.RouteId equals r.Id
                               orderby re.DistanceFromEmployer
                               where op.Id == opportunityId
+                                    && itemIds.Contains(oi.Id)
                                     && oi.IsSelectedForReferral
                                     && oi.IsSaved
                                     && p.IsCdfProvider
@@ -40,6 +41,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                               select new OpportunityReferralDto
                               {
                                   OpportunityId = op.Id,
+                                  OpportunityItemId = oi.Id,
                                   ReferralId = re.Id,
                                   ProviderName = p.Name,
                                   ProviderPrimaryContact = p.PrimaryContact,
@@ -82,6 +84,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   WorkplaceDetails = (
                                       from oi in _dbContext.OpportunityItem
                                       where oi.OpportunityId == opportunityId
+                                            && itemIds.Contains(oi.Id)
                                             && oi.IsSelectedForReferral
                                             && oi.IsSaved
                                       select new WorkplaceDto

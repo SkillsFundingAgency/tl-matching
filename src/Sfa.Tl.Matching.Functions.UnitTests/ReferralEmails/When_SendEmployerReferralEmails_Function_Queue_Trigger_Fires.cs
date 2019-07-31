@@ -23,15 +23,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ReferralEmails
         )
         {
             //Arrange
-            var employerReferralEmailFunctions = new EmployerReferralEmail();
+            var employerReferralEmailFunctions = new Functions.ReferralEmails();
 
             //Act
             await employerReferralEmailFunctions.SendEmployerReferralEmails(data, context, logger, referralEmailService,
                 functionLogRepo);
 
             //Assert
-            await referralEmailService.Received(1).SendEmployerReferralEmailAsync(Arg.Any<int>(),
-                Arg.Any<IEnumerable<int>>(), Arg.Any<int>(), Arg.Any<string>());
+            await referralEmailService.Received(1).SendEmployerReferralEmailAsync(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<string>());
 
         }
     }

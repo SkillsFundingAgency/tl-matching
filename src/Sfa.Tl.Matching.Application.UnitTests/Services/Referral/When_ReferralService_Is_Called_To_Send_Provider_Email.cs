@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
+using AutoMapper;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
@@ -30,9 +30,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 NotificationsSystemId = "TLevelsIndustryPlacement"
             };
 
+            var mapper = Substitute.For<IMapper>();
+            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
+
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
+            
 
             backgroundProcessHistoryRepo.GetSingleOrDefault(
                 Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
@@ -47,10 +51,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new ValidOpportunityReferralDtoListBuilder().Build());
 
-            var referralEmailService = new ReferralEmailService(configuration, datetimeProvider, _emailService,
-                _emailHistoryService, _opportunityRepository, backgroundProcessHistoryRepo);
+            var referralEmailService = new ReferralEmailService(mapper, configuration, datetimeProvider, _emailService,
+                _emailHistoryService, _opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo);
 
-            referralEmailService.SendProviderReferralEmailAsync(1, new[] { 1, 2 }.ToList(), 1, "system").GetAwaiter().GetResult();
+            referralEmailService.SendProviderReferralEmailAsync(1, 1, "system").GetAwaiter().GetResult();
         }
 
         [Fact]

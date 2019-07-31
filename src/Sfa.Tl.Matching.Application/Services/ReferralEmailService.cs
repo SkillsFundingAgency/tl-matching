@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -14,37 +15,43 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class ReferralEmailService : IReferralEmailService
     {
+        private readonly IMapper _mapper;
         private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         public ReferralEmailService(
+                    IMapper mapper,
                     MatchingConfiguration configuration,
                     IDateTimeProvider dateTimeProvider,
                     IEmailService emailService,
                     IEmailHistoryService emailHistoryService,
                     IOpportunityRepository opportunityRepository,
+                    IRepository<OpportunityItem> opportunityItemRepository,
                     IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
         {
+            _mapper = mapper;
             _configuration = configuration;
             _dateTimeProvider = dateTimeProvider;
             _emailService = emailService;
             _emailHistoryService = emailHistoryService;
             _opportunityRepository = opportunityRepository;
+            _opportunityItemRepository = opportunityItemRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
         }
 
         
-       public async Task SendEmployerReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
+       public async Task SendEmployerReferralEmailAsync(int opportunityId, int backgroundProcessHistoryId, string username)
         {
             if (await GetBackgroundProcessHistoryData(backgroundProcessHistoryId) == null) return;
 
             try
             {
-                var employerReferral = await GetEmployerReferrals(opportunityId, itemIds);
+                var employerReferral = await GetEmployerReferrals(opportunityId, GetOpportunityItemIds(opportunityId));
                 var sb = new StringBuilder();
 
                 if (employerReferral == null) return;
@@ -94,11 +101,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
         }
 
-        public async Task SendProviderReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
+        public async Task SendProviderReferralEmailAsync(int opportunityId, int backgroundProcessHistoryId, string username)
         {
             if (await GetBackgroundProcessHistoryData(backgroundProcessHistoryId) == null) return;
 
-            var referrals = await GetOpportunityReferrals(opportunityId, itemIds);
+            var referrals = await GetOpportunityReferrals(opportunityId, GetOpportunityItemIds(opportunityId));
 
             try
             {
@@ -128,6 +135,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 }
 
+                await CompleteSelectedReferrals(opportunityId, username);
+                await CompleteRemainingItems(opportunityId, username);
+
                 await UpdatebackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
                     BackgroundProcessHistoryStatus.Complete, username);
 
@@ -141,6 +151,69 @@ namespace Sfa.Tl.Matching.Application.Services
                     BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
 
+        }
+
+        private IEnumerable<int> GetOpportunityItemIds(int opportunityId)
+        {
+            var itemIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+                                                                   && oi.IsSaved
+                                                                   && oi.IsSelectedForReferral
+                                                                   && !oi.IsCompleted)
+                .Select(oi => oi.Id).ToList();
+
+            return itemIds;
+        }
+
+        private async Task CompleteSelectedReferrals(int opportunityId, string username)
+        {
+            var selectedOpportunityItemIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+                                                                                      && oi.IsSaved
+                                                                                      && oi.IsSelectedForReferral
+                                                                                      && !oi.IsCompleted)
+                .Select(oi => oi.Id).ToList();
+
+            if (selectedOpportunityItemIds.Count > 0)
+            {
+                await SetOpportunityItemsAsCompleted(selectedOpportunityItemIds, username);
+            }
+        }
+
+        private async Task CompleteRemainingItems(int opportunityId, string username)
+        {
+            var remainingOpportunities = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+                                                                                  && oi.IsSaved
+                                                                                  && !oi.IsSelectedForReferral
+                                                                                  && !oi.IsCompleted);
+
+            var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString())
+                .ToList();
+
+            var provisionItems = remainingOpportunities
+                .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
+
+            if (provisionItems.Count > 0 && referralItems.Count == 0)
+            {
+                var provisionIds = provisionItems.Select(oi => oi.Id).ToList();
+
+                if (provisionIds.Count > 0)
+                    await SetOpportunityItemsAsCompleted(provisionIds, username);
+            }
+        }
+
+        private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds, string username)
+        {
+            var itemsToBeCompleted = opportunityItemIds.Select(id => new OpportunityItemIsSelectedWithUsernameForCompleteDto
+            {
+                Id = id,
+                Username = username
+            });
+
+            var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
+
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+                x => x.IsCompleted,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
         }
 
         private async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId, IEnumerable<int> itemIds)
