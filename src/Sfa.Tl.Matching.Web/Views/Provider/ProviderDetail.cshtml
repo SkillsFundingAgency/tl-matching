@@ -93,6 +93,30 @@
                     </div>
                 </fieldset>
             </div>
+            <div class="govuk-form-group">
+
+                <fieldset class="govuk-fieldset" aria-describedby="changed-name-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        <h1 class="govuk-fieldset__heading">
+                            Has @Model.Name been selected to deliver T Levels?
+                        </h1>
+                    </legend>
+                    <div class="govuk-radios govuk-radios--inline">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="placements-yes" type="radio" value="true">
+                            <label class="govuk-label govuk-radios__label">
+                                Yes
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="placements-no" type="radio" value="false">
+                            <label class="govuk-label govuk-radios__label">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
 
             <div class="govuk-form-group" sfa-validation-for="DisplayName" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-heading-s" asp-for="DisplayName">

@@ -5,6 +5,10 @@
   & p {
     margin-bottom: 5px;
   }
+
+  label {
+      min-width: 100%;
+  }
 }
 
 .tl-search-results__list-item {
@@ -48,4 +52,14 @@
   right: 0;
   bottom: 0;
   display: block;
+}
+
+.tl-search-results-flag {
+    background-color: govuk-colour("blue");
+    color: govuk-colour("white");
+    display: block;
+    @include govuk-font($size: 16, $weight: bold);
+    text-transform: uppercase;
+    padding: 2px 5px;
+    float: right;
 }
