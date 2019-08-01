@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -59,10 +62,20 @@ namespace Sfa.Tl.Matching.Functions
         {
             try
             {
+                JObject payLoad;
+
+                using (var streamReader = new StreamReader(req.Body))
+                {
+                    using (var jsonReader = new JsonTextReader(streamReader))
+                    {
+                        payLoad = await JObject.LoadAsync(jsonReader);
+                    }
+                }
+
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var updatedRecords = 0;//await employerService.ValidateAndAddEmployer();
+                var updatedRecords = await employerService.HandleEmployerCreatedAsync(payLoad);
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -23,6 +24,16 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _employerRepository = employerRepository;
             _opportunityRepository = opportunityRepository;
+        }
+
+        public async Task<int> HandleEmployerCreatedAsync(JObject payload)
+        {
+            return await Task.FromResult(1);
+        }
+
+        public async Task<int> HandleEmployerUpdatedAsync(JObject payload)
+        {
+            return await Task.FromResult(1);
         }
 
         public async Task<bool> ValidateCompanyNameAndId(int employerId, string companyName)
