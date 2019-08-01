@@ -139,7 +139,7 @@ namespace Sfa.Tl.Matching.Functions
         }
 
 
-        [FunctionName("EmployerCreatedHandler")]
+        [FunctionName("ContactCreatedHandler")]
         public static async Task<IActionResult> ContactCreatedHandler(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ExecutionContext context,
@@ -177,7 +177,7 @@ namespace Sfa.Tl.Matching.Functions
             }
         }
 
-        [FunctionName("EmployerUpdatedHandler")]
+        [FunctionName("ContactUpdatedHandler")]
         public static async Task<IActionResult> ContactUpdatedHandler(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ExecutionContext context,
