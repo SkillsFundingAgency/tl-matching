@@ -1,7 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
-
-using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,15 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-#if !NoAuth
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
-#endif
     public class EmployerController : Controller
     {
         private readonly IEmployerService _employerService;
@@ -25,9 +19,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IReferralService _referralService;
         private readonly IMapper _mapper;
 
-        public EmployerController(IEmployerService employerService, 
+        public EmployerController(IEmployerService employerService,
                                     IOpportunityService opportunityService,
-                                    IReferralService referralService, 
+                                    IReferralService referralService,
                                     IMapper mapper)
         {
             _employerService = employerService;

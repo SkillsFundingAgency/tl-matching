@@ -6,9 +6,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-#if !NoAuth
     [Authorize(Roles = RolesExtensions.AdminUser + "," + RolesExtensions.StandardUser)]
-#endif
     public class NavigationController : Controller
     {
         private readonly IOpportunityService _opportunityService;

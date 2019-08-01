@@ -33,6 +33,7 @@ using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Web.Controllers;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -54,6 +55,8 @@ namespace Sfa.Tl.Matching.Web
         {
             ConfigureConfiguration(services);
 
+            var isConfigLocalOrDev = ConfigurationIsLocalOrDev();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -70,22 +73,29 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddMvc(config =>
             {
-#if !NoAuth
+                if (!isConfigLocalOrDev)
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    config.Filters.Add(new AuthorizeFilter(policy));
+                }
 
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                config.Filters.Add(new AuthorizeFilter(policy));
-#endif
                 config.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 config.Filters.Add(new CustomExceptionFilterAttribute(_loggerFactory));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-#if !NoAuth
-            AddAuthentication(services);
-#endif
-
+            if (!isConfigLocalOrDev)
+                AddAuthentication(services);
+            else
+            {
+                services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = "Local Scheme";
+                    options.DefaultChallengeScheme = "Local Scheme";
+                }).AddTestAuth(o => { });
+            }
             RegisterDependencies(services);
         }
 
@@ -126,10 +136,9 @@ namespace Sfa.Tl.Matching.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-#if !NoAuth
 
             app.UseAuthentication();
-#endif
+
             app.UseMvcWithDefaultRoute();
             app.UseCookiePolicy();
             app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
@@ -144,7 +153,6 @@ namespace Sfa.Tl.Matching.Web
                 Configuration[Constants.ServiceNameConfigKey]);
         }
 
-        // ReSharper disable once UnusedMember.Local
         private void AddAuthentication(IServiceCollection services)
         {
             services.AddAuthentication(sharedOptions =>
@@ -248,6 +256,12 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
 
             services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
+        }
+
+        private bool ConfigurationIsLocalOrDev()
+        {
+            return Configuration["EnvironmentName"].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
+                   Configuration["EnvironmentName"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }
