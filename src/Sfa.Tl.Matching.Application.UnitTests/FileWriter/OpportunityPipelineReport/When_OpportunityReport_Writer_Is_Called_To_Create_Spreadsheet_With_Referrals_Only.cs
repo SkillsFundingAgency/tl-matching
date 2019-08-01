@@ -56,10 +56,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
                     sheetData.Should().NotBeNull();
 
                     var rows = sheetData.Descendants<Row>().ToList();
-                    rows.Count().Should().Be(2);
+                    rows.Count.Should().Be(2);
 
                     var cells = rows[1].Descendants<Cell>().ToList();
-                    cells.Count().Should().Be(6);
+                    cells.Count.Should().Be(6);
 
                     cells[0].InnerText.Should().Be("London SW1 1AA");
                     cells[1].InnerText.Should().Be("Referral Role");
