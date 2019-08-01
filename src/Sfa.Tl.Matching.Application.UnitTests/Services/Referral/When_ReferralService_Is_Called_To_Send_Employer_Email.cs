@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using AutoMapper;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
@@ -17,28 +22,38 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
         public When_ReferralService_Is_Called_To_Send_Employer_Email()
         {
+            var datetimeProvider = Substitute.For<IDateTimeProvider>();
+            var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
             var configuration = new MatchingConfiguration
             {
                 SendEmailEnabled = true,
                 NotificationsSystemId = "TLevelsIndustryPlacement"
             };
 
+            var mapper = Substitute.For<IMapper>();
+            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
+
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
-
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
+            
+            backgroundProcessHistoryRepo.GetSingleOrDefault(
+                Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
+                {
+                    Id = 1,
+                    ProcessType = BackgroundProcessType.EmployerReferralEmail.ToString(),
+                    Status = BackgroundProcessHistoryStatus.Pending.ToString()
+                });
 
             _opportunityRepository
                 .GetEmployerReferrals(
-                    Arg.Any<int>())
+                    Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new ValidEmployerReferralDtoBuilder().Build());
 
-            var referralService = new ReferralService(
-                configuration, 
-                _emailService, _emailHistoryService,
-                _opportunityRepository);
+            var referralEmailService = new ReferralEmailService(mapper, configuration, datetimeProvider, _emailService,
+                _emailHistoryService, _opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo);
 
-            referralService.SendEmployerReferralEmail(1).GetAwaiter().GetResult();
+            referralEmailService.SendEmployerReferralEmailAsync(1, 1, "system").GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -46,7 +61,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         {
             _opportunityRepository
                 .Received(1)
-                .GetEmployerReferrals(Arg.Any<int>());
+                .GetEmployerReferrals(
+                    Arg.Any<int>(), Arg.Any<IEnumerable<int>>());
         }
 
         [Fact]
