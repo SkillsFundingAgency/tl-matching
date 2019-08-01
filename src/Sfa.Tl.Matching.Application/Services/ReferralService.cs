@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -13,124 +9,49 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class ReferralService : IReferralService
     {
-        private readonly MatchingConfiguration _configuration;
-        private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
-        private readonly IRepository<Opportunity> _opportunityRepository;
+        private readonly IMessageQueueService _messageQueueService;
+        private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         public ReferralService(
-            MatchingConfiguration configuration,
-            IEmailService emailService,
-            IEmailHistoryService emailHistoryService,
-            IRepository<Opportunity> opportunityRepository)
+                            IMessageQueueService messageQueueService,
+                            IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
         {
-            _configuration = configuration;
-            _emailService = emailService;
-            _emailHistoryService = emailHistoryService;
-            _opportunityRepository = opportunityRepository;
+            _messageQueueService = messageQueueService;
+            _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
         }
 
-        public async Task SendEmployerReferralEmail(int opportunityId)
+
+        public async Task ConfirmOpportunities(int opportunityId, string username)
         {
-            var employerReferral = await GetEmployerReferrals(opportunityId);
-            var sb = new StringBuilder();
-
-            if (employerReferral == null) return;
-
-            var tokens = new Dictionary<string, string>
-            {
-                { "employer_contact_name", employerReferral.EmployerContact },
-                { "employer_business_name", employerReferral.CompanyName },
-                { "employer_contact_number", employerReferral.EmployerContactPhone },
-                { "employer_contact_email", employerReferral.EmployerContactEmail },
-                { "employer_postcode", employerReferral.Postcode }
-            };
-
-            foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
-            {
-                var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
-                var providers = string.Join(", ", data.ProviderDetails.Select(dto => dto.ProviderName));
-
-                sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
-                sb.AppendLine($"*Job role: {data.JobRole}");
-                sb.AppendLine($"*Students wanted: {placements}");
-                sb.AppendLine($"*Providers selected: {providers}");
-                sb.AppendLine("");
-            }
-
-            tokens.Add("placements_list", sb.ToString());
-
-            await SendEmail(EmailTemplateName.EmployerReferralComplex, opportunityId, employerReferral.EmployerContactEmail,
-                "Your industry placement referral – ESFA National Apprenticeship Service", tokens, employerReferral.CreatedBy);
+            await RequestReferralEmailsAsync(opportunityId, username);
         }
 
-        public async Task SendProviderReferralEmail(int opportunityId)
+        private async Task RequestReferralEmailsAsync(int opportunityId, string username)
         {
-            var referrals = await GetOpportunityReferrals(opportunityId);
-
-            foreach (var referral in referrals)
+            await _messageQueueService.PushEmployerReferralEmailMessageAsync(new SendEmployerReferralEmail
             {
-                var toAddress = referral.ProviderPrimaryContactEmail;
-                var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
+                OpportunityId = opportunityId,
+                BackgroundProcessHistoryId = await CreateAndGetBackgroundProcessId(BackgroundProcessType.EmployerReferralEmail, username)
+            });
 
-                var tokens = new Dictionary<string, string>
+            await _messageQueueService.PushProviderReferralEmailMessageAsync(new SendProviderReferralEmail
+            {
+                OpportunityId = opportunityId,
+                BackgroundProcessHistoryId = await CreateAndGetBackgroundProcessId(BackgroundProcessType.ProviderReferralEmail, username)
+            });
+        }
+
+
+        private async Task<int> CreateAndGetBackgroundProcessId(BackgroundProcessType processType, string username)
+        {
+            return await _backgroundProcessHistoryRepository.Create(
+                new BackgroundProcessHistory
                 {
-                    { "primary_contact_name", referral.ProviderPrimaryContact },
-                    { "provider_name", referral.ProviderName },
-                    { "route", referral.RouteName.ToLowerInvariant() },
-                    { "venue_postcode", $"{referral.ProviderVenueTown} {referral.ProviderVenuePostcode}" },
-                    { "search_radius", referral.DistanceFromEmployer },
-                    { "job_role", referral.JobRole },
-                    { "employer_business_name", referral.CompanyName },
-                    { "employer_contact_name", referral.EmployerContact},
-                    { "employer_contact_number", referral.EmployerContactPhone },
-                    { "employer_contact_email", referral.EmployerContactEmail },
-                    { "employer_postcode", $"{referral.Town} {referral.Postcode }" },
-                    { "number_of_placements", placements }
-                };
-
-                await SendEmail(EmailTemplateName.ProviderReferral, opportunityId, toAddress,
-                    "Industry Placement Matching Referral", tokens, referral.CreatedBy);
-            }
+                    ProcessType = processType.ToString(),
+                    Status = BackgroundProcessHistoryStatus.Pending.ToString(),
+                    CreatedBy = username
+                });
         }
 
-        private async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId)
-        {
-            return await ((IOpportunityRepository)_opportunityRepository).GetEmployerReferrals(opportunityId);
-        }
-
-        private async Task<IList<OpportunityReferralDto>> GetOpportunityReferrals(int opportunityId)
-        {
-            return await ((IOpportunityRepository)_opportunityRepository).GetProviderOpportunities(opportunityId);
-        }
-
-        private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
-        {
-            return placementsKnown.GetValueOrDefault() 
-                ? placements.ToString()
-                : "at least 1";
-        }
-
-        private async Task SendEmail(EmailTemplateName template, int? opportunityId, 
-            string toAddress, string subject, 
-            IDictionary<string, string> tokens, string createdBy)
-        {
-            if (!_configuration.SendEmailEnabled)
-            {
-                return;
-            }
-
-            await _emailService.SendEmail(template.ToString(),
-                    toAddress,
-                    subject,
-                    tokens,
-                    "");
-
-            await _emailHistoryService.SaveEmailHistory(template.ToString(),
-                tokens,
-                opportunityId,
-                toAddress,
-                createdBy);
-        }
     }
 }

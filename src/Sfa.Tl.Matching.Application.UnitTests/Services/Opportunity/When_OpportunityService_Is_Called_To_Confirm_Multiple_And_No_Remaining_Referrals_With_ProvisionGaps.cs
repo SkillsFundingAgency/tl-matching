@@ -6,13 +6,14 @@ using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
-using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
@@ -37,6 +38,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             dateTimeProvider.UtcNow().Returns(new DateTime(2019, 1, 1));
 
+            var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
+            var emailService = Substitute.For<IEmailService>();
+            var emailHistoryService = Substitute.For<IEmailHistoryService>();
+            var opportunityRepo = Substitute.For<IOpportunityRepository>();
+
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(OpportunityMapper).Assembly);
@@ -50,12 +56,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                                 LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
                                     httpcontextAccesor)
                             : type.Name.Contains("UtcNowResolver")
-                                ? new UtcNowResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
+                                ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(
                                     dateTimeProvider)
                                 :
                                 null);
             });
             var mapper = new Mapper(config);
+
+            var configuration = new MatchingConfiguration
+            {
+                SendEmailEnabled = true,
+                NotificationsSystemId = "TLevelsIndustryPlacement"
+            };
 
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             _opportunityItemRepository.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
@@ -91,17 +103,40 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     }
                 }.AsQueryable());
 
-            var opportunityRepository = Substitute.For<IOpportunityRepository>();
-            var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
-            var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
-            var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
-            var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
+            opportunityRepo.GetProviderOpportunities(Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
+                .Returns(new List<OpportunityReferralDto>
+                {
+                    new OpportunityReferralDto
+                    {
+                        OpportunityId = 1,
+                        OpportunityItemId = 1,
+                        ProviderPrimaryContact = "contact",
+                        ProviderName = "Name",
+                        RouteName = "Routename",
+                        ProviderVenueTown = "Provider town",
+                        ProviderVenuePostcode = "Provider postcode",
+                        DistanceFromEmployer = "3.5",
+                        JobRole = "Job role",
+                        CompanyName = "Companyname",
+                        EmployerContact = "Employer contact",
+                        EmployerContactPhone = "Employer phone",
+                        EmployerContactEmail = "Employer email",
+                        Town = "Town",
+                        Postcode =  "Postcode",
+                        Placements =  1
+                    }
+                });
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, 
-                provisionGapRepository, referralRepository, googleMapApiClient,
-                opportunityPipelineReportWriter, dateTimeProvider);
+            backgroundProcessHistoryRepo.GetSingleOrDefault(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
+            {
+                Id = 1,
+                Status = BackgroundProcessHistoryStatus.Pending.ToString()
+            });
 
-            opportunityService.ConfirmOpportunities(1).GetAwaiter().GetResult();
+            var referralService = new ReferralEmailService(mapper, configuration, dateTimeProvider, emailService,
+                emailHistoryService, opportunityRepo, _opportunityItemRepository, backgroundProcessHistoryRepo);
+
+            referralService.SendProviderReferralEmailAsync(1, 1, httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
         }
 
         [Fact]

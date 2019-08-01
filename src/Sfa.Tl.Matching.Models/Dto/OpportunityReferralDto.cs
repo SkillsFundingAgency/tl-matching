@@ -3,6 +3,7 @@
     public class OpportunityReferralDto
     {
         public int OpportunityId { get; set; }
+        public int OpportunityItemId { get; set; }
         public int ReferralId { get; set; }
         public string ProviderName { get; set; }
         public string ProviderPrimaryContact { get; set; }

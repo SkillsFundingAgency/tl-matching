@@ -187,7 +187,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                             ? s.Placements
                             : 1))
                 .ForAllOtherMembers(config => config.Ignore());
-            
+
             CreateMap<ProviderSearchDto, OpportunityItem>()
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.OpportunityItemId))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
@@ -225,6 +225,14 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>>())
                 .ForAllOtherMembers(config => config.Ignore());
+
+            CreateMap<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>()
+                .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.IsCompleted, o => o.MapFrom(s => true))
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.Username))
+                .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>>())
+                .ForAllOtherMembers(config => config.Ignore());
+
         }
     }
 }

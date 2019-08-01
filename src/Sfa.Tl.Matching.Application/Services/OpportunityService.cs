@@ -363,44 +363,6 @@ namespace Sfa.Tl.Matching.Application.Services
                 await SetOpportunityItemsAsReferral(referralIds);
         }
 
-        public async Task ConfirmOpportunities(int opportunityId)
-        {
-            await CompleteSelectedReferrals(opportunityId);
-            await CompleteRemainingItems(opportunityId);
-        }
-
-        private async Task CompleteSelectedReferrals(int opportunityId)
-        {
-            var selectedOpportunityIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
-                                                                                  && oi.IsSaved
-                                                                                  && oi.IsSelectedForReferral
-                                                                                  && !oi.IsCompleted)
-                .Select(oi => oi.Id).ToList();
-
-            if (selectedOpportunityIds.Count > 0)
-                await SetOpportunityItemsAsCompleted(selectedOpportunityIds);
-        }
-
-        private async Task CompleteRemainingItems(int opportunityId)
-        {
-            var remainingOpportunities = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
-                                                                                  && oi.IsSaved
-                                                                                  && !oi.IsSelectedForReferral
-                                                                                  && !oi.IsCompleted);
-
-            var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString())
-                .ToList();
-            var provisionItems = remainingOpportunities
-                .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
-
-            if (provisionItems.Count > 0 && referralItems.Count == 0)
-            {
-                var provisionIds = provisionItems.Select(oi => oi.Id).ToList();
-                if (provisionIds.Count > 0)
-                    await SetOpportunityItemsAsCompleted(provisionIds);
-            }
-        }
-
         public async Task<string> GetCompanyNameWithAkaAsync(int? opportunityId)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(

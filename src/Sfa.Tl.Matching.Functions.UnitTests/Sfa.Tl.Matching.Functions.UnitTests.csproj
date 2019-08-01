@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Functions\Sfa.Tl.Matching.Functions.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.Tests.Common\Sfa.Tl.Matching.Tests.Common.csproj" />
   </ItemGroup>
 
 </Project>
