@@ -8,7 +8,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
+namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderReference
 {
     public class When_ImportProviderReference_Function_Timer_Trigger_Fires
     {
@@ -24,11 +24,11 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
 
             var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            var providerReference = new ProviderReference();
+            var providerReference = new Functions.ProviderReference();
             providerReference.ImportProviderReference(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
-                new NullLogger<ProviderReference>(),
+                new NullLogger<Functions.ProviderReference>(),
                 _referenceDataService,
                 dateTimeProvider,
                 functionLogRepository).GetAwaiter().GetResult();
