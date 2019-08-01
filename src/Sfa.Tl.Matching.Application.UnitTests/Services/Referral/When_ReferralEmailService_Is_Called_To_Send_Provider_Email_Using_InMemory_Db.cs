@@ -378,31 +378,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
         }
 
-        private static async Task<List<IDictionary<string, string>>> GetExpectedResult(IOpportunityRepository repo, int opportunityId, IEnumerable<int> itemIds)
-        {
-            var providers = await repo.GetProviderOpportunities(opportunityId, itemIds);
-
-            return (from referral in providers
-                    let placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements)
-                    select new Dictionary<string, string>
-                    {
-                        {"opportunity_id", referral.OpportunityId.ToString()},
-                        {"primary_contact_name", referral.ProviderPrimaryContact},
-                        {"provider_name", referral.ProviderName},
-                        {"route", referral.RouteName.ToLowerInvariant()},
-                        {"venue_postcode", referral.ProviderVenuePostcode},
-                        {"search_radius", referral.SearchRadius.ToString()},
-                        {"job_role", referral.JobRole},
-                        {"employer_business_name", referral.CompanyName},
-                        {"employer_contact_name", referral.EmployerContact},
-                        {"employer_contact_number", referral.EmployerContactPhone},
-                        {"employer_contact_email", referral.EmployerContactEmail},
-                        {"employer_postcode", $"{referral.Town} {referral.Postcode}"},
-                        {"number_of_placements", placements}
-                    }).Cast<IDictionary<string, string>>()
-                .ToList();
-        }
-
         private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
         {
             return placementsKnown.GetValueOrDefault()
