@@ -34,6 +34,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.Tests.Common\Sfa.Tl.Matching.Tests.Common.csproj" />
   </ItemGroup>
 
 </Project>

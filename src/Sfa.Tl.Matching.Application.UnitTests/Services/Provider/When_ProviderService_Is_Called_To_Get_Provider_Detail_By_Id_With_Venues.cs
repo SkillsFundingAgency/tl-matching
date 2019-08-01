@@ -9,6 +9,7 @@ using Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider

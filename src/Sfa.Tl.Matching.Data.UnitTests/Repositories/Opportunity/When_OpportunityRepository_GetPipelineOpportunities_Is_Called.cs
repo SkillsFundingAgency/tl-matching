@@ -5,6 +5,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
