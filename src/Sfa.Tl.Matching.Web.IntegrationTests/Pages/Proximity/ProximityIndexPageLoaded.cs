@@ -28,21 +28,21 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             Assert.Equal("text/html; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
 
-            var indexViewHtml = await HtmlHelpers.GetDocumentAsync(response);
+            var documentHtml = await HtmlHelpers.GetDocumentAsync(response);
 
-            indexViewHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
+            documentHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
 
-            var header1 = indexViewHtml.QuerySelector(".govuk-heading-l");
+            var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
 
-            var routeList = indexViewHtml.GetElementById("SelectedRouteId");
+            var routeList = documentHtml.GetElementById("SelectedRouteId");
             routeList.Children.Length.Should().Be(2);
             routeList.Text().Should().Be("Agriculture, environmental and animal care\nBusiness and administration\n");
 
-            var postcode = indexViewHtml.GetElementById("Postcode");
+            var postcode = documentHtml.GetElementById("Postcode");
             postcode.Should().NotBeNull();
 
-            var search = indexViewHtml.GetElementById("tl-search");
+            var search = documentHtml.GetElementById("tl-search");
             search.Should().NotBeNull();
         }
     }

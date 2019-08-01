@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Xunit;
@@ -28,9 +29,15 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             Assert.Equal("text/html; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
 
-            var indexViewHtml = await HtmlHelpers.GetDocumentAsync(response);
+            var documentHtml = await HtmlHelpers.GetDocumentAsync(response);
 
-            indexViewHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
+            documentHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
+
+            // TODO FIX var companyName = documentHtml.QuerySelector("#CompanyName") as IHtmlSelectElement;
+            //companyName.Value.Should().Be("Company Name");
+
+            var continueButton = documentHtml.QuerySelector("#tl-continue") as IHtmlButtonElement;
+            continueButton.TextContent.Should().Be("Continue");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Xunit;
@@ -28,12 +29,28 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             Assert.Equal("text/html; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
 
-            var indexViewHtml = await HtmlHelpers.GetDocumentAsync(response);
+            var documentHtml = await HtmlHelpers.GetDocumentAsync(response);
 
-            indexViewHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
+            documentHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
 
-            var header1 = indexViewHtml.QuerySelector(".govuk-heading-l");
+            var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
+
+            var findAnotherLink = documentHtml.QuerySelector("#tl-find-different") as IHtmlAnchorElement;
+            findAnotherLink.Text.Should().Be("Find a different employer");
+            findAnotherLink.PathName.Should().Be($"/who-is-employer/{OpportunityId}-{OpportunityItemId}");
+
+            var employerContact = documentHtml.QuerySelector("#EmployerContact") as IHtmlInputElement;
+            employerContact.Value.Should().Be("Employer Contact");
+
+            var employerContactEmail = documentHtml.QuerySelector("#EmployerContactEmail") as IHtmlInputElement;
+            employerContactEmail.Value.Should().Be("employer-contact@email.com");
+
+            var employerContactPhone = documentHtml.QuerySelector("#EmployerContactPhone") as IHtmlInputElement;
+            employerContactPhone.Value.Should().Be("01474 787878");
+
+            var confirmButton = documentHtml.QuerySelector("#tl-confirm") as IHtmlButtonElement;
+            confirmButton.TextContent.Should().Be("Confirm and continue");
         }
     }
 }

@@ -27,11 +27,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             Assert.Equal("text/html; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
 
-            var indexViewHtml = await HtmlHelpers.GetDocumentAsync(response);
+            var documentHtml = await HtmlHelpers.GetDocumentAsync(response);
 
-            indexViewHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
+            documentHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
 
-            var header1 = indexViewHtml.QuerySelector(".govuk-heading-l");
+            var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
         }
     }

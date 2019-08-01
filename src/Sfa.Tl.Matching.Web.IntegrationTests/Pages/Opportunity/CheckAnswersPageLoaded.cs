@@ -29,20 +29,20 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             Assert.Equal("text/html; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
 
-            var indexViewHtml = await HtmlHelpers.GetDocumentAsync(response);
+            var documentHtml = await HtmlHelpers.GetDocumentAsync(response);
 
-            indexViewHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
+            documentHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
 
-            var header1 = indexViewHtml.QuerySelector(".govuk-heading-l");
+            var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
 
-            var employerName = indexViewHtml.QuerySelector(".govuk-caption-l");
+            var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
 
             var providerResultsUrl =
                 $"/provider-results-for-opportunity-1000-item-{OpportunityItemId}-within-10-miles-of-SW1A%202AA-for-route-1";
 
-            var placementInformationTable = indexViewHtml.QuerySelector(".govuk-table") as IHtmlTableElement;
+            var placementInformationTable = documentHtml.QuerySelector(".govuk-table") as IHtmlTableElement;
             var skillAreaRow = placementInformationTable.Rows[0];
             skillAreaRow.Cells[1].TextContent.Should().Be("\n                        Agriculture, environmental and animal care\n                    ");
             var skillAreaChangeCell = skillAreaRow.Cells[2].Children[0] as IHtmlAnchorElement;
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 
             // TODO Assert Provider Information -- Change UI
 
-            var changeProvidersLink = indexViewHtml.QuerySelector("#tl-change-providers") as IHtmlAnchorElement;
+            var changeProvidersLink = documentHtml.QuerySelector("#tl-change-providers") as IHtmlAnchorElement;
             changeProvidersLink.TextContent.Should().Be("Change providers");
             changeProvidersLink.PathName.Should().Be(providerResultsUrl);
         }

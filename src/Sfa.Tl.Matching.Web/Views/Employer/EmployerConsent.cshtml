@@ -32,13 +32,13 @@
 
         <section>
             <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Contact name</h3>
-            <p class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContact</p>
+            <p id="tl-name" class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContact</p>
 
             <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Email</h3>
-            <p class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContactEmail</p>
+            <p id="tl-email" class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContactEmail</p>
 
             <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Telephone number</h3>
-            <p class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContactPhone</p>
+            <p id="tl-phone" class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContactPhone</p>
 
             <p class="govuk-body">
                 <a asp-route="CheckEmployerDetails" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId"

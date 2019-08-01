@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Xunit;
@@ -28,12 +29,28 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             Assert.Equal("text/html; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
 
-            var indexViewHtml = await HtmlHelpers.GetDocumentAsync(response);
+            var documentHtml = await HtmlHelpers.GetDocumentAsync(response);
 
-            indexViewHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
+            documentHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
 
-            var header1 = indexViewHtml.QuerySelector(".govuk-heading-l");
+            var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be("Before you send emails");
+
+            var name = documentHtml.QuerySelector("#tl-name") as IHtmlParagraphElement;
+            name.TextContent.Should().Be("Employer Contact");
+
+            var email = documentHtml.QuerySelector("#tl-email") as IHtmlParagraphElement;
+            email.TextContent.Should().Be("employer-contact@email.com");
+
+            var phone = documentHtml.QuerySelector("#tl-phone") as IHtmlParagraphElement;
+            phone.TextContent.Should().Be("01474 787878");
+
+            var changeLink = documentHtml.QuerySelector("#tl-change") as IHtmlAnchorElement;
+            changeLink.Text.Should().Be("Change contact details");
+            changeLink.PathName.Should().Be($"/check-employer-details/{OpportunityId}-{OpportunityItemId}");
+
+            var confirmationLabel = documentHtml.QuerySelector("label[for='ConfirmationSelected']");
+            confirmationLabel.TextContent.Should().Be("\n                                Employer Contact has confirmed that we can share their details with providers, and that these providers can contact them about industry placements.\n                            ");
         }
     }
 }
