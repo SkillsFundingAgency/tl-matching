@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         public virtual ClaimsIdentity Identity { get; } = new ClaimsIdentity(new Claim[]
         {
-            new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", RolesExtensions.AdminUser),
+            new Claim(ClaimTypes.Role, RolesExtensions.AdminUser),
         }, "test");
     }
 }
