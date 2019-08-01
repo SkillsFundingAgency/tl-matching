@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Authentication;
 
-namespace Sfa.Tl.Matching.Web.Controllers
+namespace Sfa.Tl.Matching.Web.Authorisation
 {
     public static class TestAuthenticationExtensions
     {

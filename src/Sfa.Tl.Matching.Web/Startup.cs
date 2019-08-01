@@ -1,5 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
-using System;
+﻿using System;
 using System.Globalization;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -33,7 +32,7 @@ using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Authorisation;
 
 namespace Sfa.Tl.Matching.Web
 {
