@@ -81,16 +81,7 @@
                     }
 
                     <tr class="govuk-table__row">
-
-                        @if (@Model.Providers[i].ProviderVenueName == @Model.Providers[i].Postcode)
-                        {
-                            <th class="govuk-table__header" scope="row">@Model.Providers[i].ProviderDisplayName</th>
-                        }
-                        else
-                        {
-                            <th class="govuk-table__header" scope="row">@Model.Providers[i].ProviderVenueName (part of @Model.Providers[i].ProviderDisplayName)</th>
-                        }
-
+                        <th class="govuk-table__header" scope="row">@Model.Providers[i].DisplayText</th>
                         <td class="govuk-table__cell">
                             @($"{distance:#0.0}") @milesText from @Model.Postcode
                         </td>

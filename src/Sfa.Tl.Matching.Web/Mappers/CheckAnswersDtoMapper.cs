@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 
-            CreateMap<ReferralDto, ReferralsViewModel>();
+            CreateMap<ReferralDto, ReferralsViewModel>().ForMember(dest => dest.DisplayText, opt => opt.Ignore());
         }
     }
 }
