@@ -29,11 +29,13 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
                 {
                     new ProviderVenue
                     {
+                        Id = 1,
                         Postcode = "CV1 2WT",
                         Name = null
                     },
                     new ProviderVenue
                     {
+                        Id = 2,
                         Postcode = "CV2 1AA",
                         Name = "Venue Name"
                     }
@@ -57,8 +59,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
         public void ProviderVenueRepository_Results_Should_Have_Expected_Values()
         {
             _results.Count.Should().Be(2);
-            _results[0].Name.Should().Be("CV1 2WT");
-            _results[1].Name.Should().Be("Venue Name");
+            _results.Single(p => p.Id == 1).Name.Should().Be("CV1 2WT");
+            _results.Single(p => p.Id == 2).Name.Should().Be("Venue Name");
         }
     }
 }
