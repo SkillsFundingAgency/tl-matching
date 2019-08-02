@@ -6,14 +6,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class ReferralEmailSentPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class ReferralEmailSentPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Emails sent";
         private const int OpportunityId = 1000;
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ReferralEmailSentPageLoaded(CustomWebApplicationFactory<Startup> factory)
+        public ReferralEmailSentPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

@@ -6,15 +6,15 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class OpportunityBasketPageReferralMultipleLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class OpportunityBasketPageReferralMultipleLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "All opportunities";
         private const int OpportunityId = 1030;
         private const int OpportunityItemId = 1031;
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public OpportunityBasketPageReferralMultipleLoaded(CustomWebApplicationFactory<Startup> factory)
+        public OpportunityBasketPageReferralMultipleLoaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

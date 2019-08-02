@@ -8,14 +8,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 {
-    public class FindEmployerSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class FindEmployerSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public FindEmployerSubmittedWithValidationErrors(CustomWebApplicationFactory<Startup> factory)
+        public FindEmployerSubmittedWithValidationErrors(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

@@ -5,13 +5,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 {
-    public class ProximityResultsPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class ProximityResultsPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Select providers for this opportunity";
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ProximityResultsPageLoaded(CustomWebApplicationFactory<Startup> factory)
+        public ProximityResultsPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

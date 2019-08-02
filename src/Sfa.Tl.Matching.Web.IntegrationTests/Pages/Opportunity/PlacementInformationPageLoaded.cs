@@ -6,14 +6,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class PlacementInformationPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class PlacementInformationPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Placement information";
         private const int OpportunityItemId = 2000;
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public PlacementInformationPageLoaded(CustomWebApplicationFactory<Startup> factory)
+        public PlacementInformationPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
