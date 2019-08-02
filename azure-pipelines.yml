@@ -55,6 +55,13 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: IntegrationTests
+  inputs:
+    command: test
+    projects: '**/*.Web.IntegrationTests.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
   displayName: 'Publish Website'
   inputs:
     command: publish
