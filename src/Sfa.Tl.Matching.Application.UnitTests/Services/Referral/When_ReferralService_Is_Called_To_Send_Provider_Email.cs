@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailService
                 .Received(1)
                 .SendEmail(Arg.Is<string>(
-                        templateName => templateName == "ProviderReferral"),
+                        templateName => templateName == "ProviderReferralComplex"),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
@@ -176,8 +176,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("venue_postcode")
-                                  && tokens["venue_postcode"] == "Venuetown AA2 2AA"),
+                        tokens => tokens.ContainsKey("venue_text")
+                                  && tokens["venue_text"] == "at Venue name in Venuetown AA2 2AA"),
                     Arg.Any<string>());
 
         }

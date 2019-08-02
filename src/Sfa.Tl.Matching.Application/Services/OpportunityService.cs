@@ -118,9 +118,9 @@ namespace Sfa.Tl.Matching.Application.Services
                     PlacementsKnown = oi.PlacementsKnown,
                     Providers = oi.Referral.Select(r => new ReferralsViewModel
                     {
-                        ProviderVenuePostcode = r.ProviderVenue.Postcode,
+                        Postcode = r.ProviderVenue.Postcode,
                         DistanceFromEmployer = r.DistanceFromEmployer,
-                        ProviderName = r.ProviderVenue.Provider.Name,
+                        Name = r.ProviderVenue.Provider.Name,
                         ProviderDisplayName = r.ProviderVenue.Provider.DisplayName,
                         ProviderVenueName = r.ProviderVenue.Name
                     }).ToList()
@@ -138,7 +138,9 @@ namespace Sfa.Tl.Matching.Application.Services
                     Name = r.ProviderVenue.Provider.Name,
                     Postcode = r.ProviderVenue.Postcode,
                     DistanceFromEmployer = r.DistanceFromEmployer,
-                    ProviderVenueId = r.ProviderVenueId
+                    ProviderVenueId = r.ProviderVenueId,
+                    ProviderDisplayName = r.ProviderVenue.Provider.DisplayName,
+                    ProviderVenueName = r.ProviderVenue.Name
                 })
                 .ToList();
 

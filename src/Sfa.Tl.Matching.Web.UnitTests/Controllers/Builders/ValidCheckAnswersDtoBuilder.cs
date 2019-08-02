@@ -18,8 +18,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             RouteName = "RouteName",
             Providers = new List<ReferralsViewModel>
             {                 
-                new ReferralsViewModel { ProviderName = "Provider1", DistanceFromEmployer = 1.3m, ProviderVenuePostcode = "AA1 1AA" },
-                new ReferralsViewModel { ProviderName = "Provider2", DistanceFromEmployer = 31.6m, ProviderVenuePostcode = "BB1 1BB" }
+                new ReferralsViewModel { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
+                new ReferralsViewModel { Name = "Provider2", DistanceFromEmployer = 31.6m, Postcode = "BB1 1BB" }
             }
         };
     }

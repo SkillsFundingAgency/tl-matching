@@ -31,6 +31,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                         new ProviderReferralDto
                         {
                             ProviderName = "Test Provider",
+                            ProviderDisplayName = "Display Name",
+                            ProviderVenueName = "Venue Name",
                             ProviderVenueTown = "ProviderTown",
                             ProviderVenuePostCode = "ProviderPostcode"
                         }
