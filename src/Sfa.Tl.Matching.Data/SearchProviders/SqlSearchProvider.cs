@@ -52,6 +52,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                 {
                                     ProviderVenueId = providerVenue.Id,
                                     ProviderName = provider.Name,
+                                    ProviderDisplayName = provider.DisplayName,
                                     ProviderVenueName = providerVenue.Name,
                                     Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
                                     providerVenue.Postcode,
@@ -76,6 +77,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                 ProviderVenuePostcode = r.Postcode,
                 ProviderVenueId = r.ProviderVenueId,
                 ProviderName = r.ProviderName,
+                ProviderDisplayName = r.ProviderDisplayName,
                 ProviderVenueName = r.ProviderVenueName,
                 Distance = r.Distance,
                 QualificationShortTitles = qualificationShortTitles.Where(q => q.ProviderVenueId == r.ProviderVenueId).Select(q => q.QualificationShortTitle)

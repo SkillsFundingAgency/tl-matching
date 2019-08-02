@@ -6,6 +6,7 @@
         public int OpportunityItemId { get; set; }
         public int ReferralId { get; set; }
         public string ProviderName { get; set; }
+        public string ProviderDisplayName { get; set; }
         public string ProviderPrimaryContact { get; set; }
         public string ProviderPrimaryContactEmail { get; set; }
         public string ProviderSecondaryContactEmail { get; set; }

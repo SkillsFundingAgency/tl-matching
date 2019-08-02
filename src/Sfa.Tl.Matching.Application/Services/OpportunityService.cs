@@ -121,6 +121,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         ProviderVenuePostcode = r.ProviderVenue.Postcode,
                         DistanceFromEmployer = r.DistanceFromEmployer,
                         ProviderName = r.ProviderVenue.Provider.Name,
+                        ProviderDisplayName = r.ProviderVenue.Provider.DisplayName,
                         ProviderVenueName = r.ProviderVenue.Name
                     }).ToList()
                 });

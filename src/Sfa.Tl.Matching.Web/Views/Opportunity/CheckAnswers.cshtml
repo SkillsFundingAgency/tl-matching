@@ -84,11 +84,11 @@
 
                         @if (@Model.Providers[i].ProviderVenueName == @Model.Providers[i].ProviderVenuePostcode)
                         {
-                            <th class="govuk-table__header" scope="row">@Model.Providers[i].ProviderName</th>
+                            <th class="govuk-table__header" scope="row">@Model.Providers[i].ProviderDisplayName</th>
                         }
                         else
                         {
-                            <th class="govuk-table__header" scope="row">@Model.Providers[i].ProviderVenueName (part of @Model.Providers[i].ProviderName)</th>
+                            <th class="govuk-table__header" scope="row">@Model.Providers[i].ProviderVenueName (part of @Model.Providers[i].ProviderDisplayName)</th>
                         }
 
                         <td class="govuk-table__cell">

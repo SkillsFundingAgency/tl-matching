@@ -44,6 +44,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   OpportunityItemId = oi.Id,
                                   ReferralId = re.Id,
                                   ProviderName = p.Name,
+                                  ProviderDisplayName = p.DisplayName,
                                   ProviderPrimaryContact = p.PrimaryContact,
                                   ProviderPrimaryContactEmail = p.PrimaryContactEmail,
                                   ProviderSecondaryContactEmail = p.SecondaryContactEmail,
@@ -107,6 +108,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                             select new ProviderReferralDto
                                             {
                                                 ProviderName = p.Name,
+                                                ProviderDisplayName = p.DisplayName,
                                                 ProviderVenueName = pv.Name,
                                                 ProviderVenueTown = pv.Town,
                                                 ProviderVenuePostCode = pv.Postcode
@@ -190,7 +192,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                           DistanceFromEmployer = re.DistanceFromEmployer,
                                           PlacementsKnown = oi.PlacementsKnown,
                                           Placements = oi.Placements,
-                                          ProviderName = pv.Name == pv.Postcode ? p.Name : $"{pv.Name} (part of {p.Name})",
+                                          ProviderName = pv.Name == pv.Postcode ? p.DisplayName : $"{pv.Name} (part of {p.DisplayName})",
                                           ProviderVenueTownAndPostcode = $"{pv.Town} {pv.Postcode}",
                                       }).ToList()
                              }).SingleOrDefaultAsync();

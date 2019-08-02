@@ -71,8 +71,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     var providers = string.Join(", ", data.ProviderAndVenueDetails.Select(dto =>
                     {
                         var venue = dto.ProviderVenueName == dto.ProviderVenuePostCode
-                            ? dto.ProviderName
-                            : $"{dto.ProviderVenueName} (part of {dto.ProviderName})";
+                            ? dto.ProviderDisplayName
+                            : $"{dto.ProviderVenueName} (part of {dto.ProviderDisplayName})";
                         return venue;
 
                     }));
