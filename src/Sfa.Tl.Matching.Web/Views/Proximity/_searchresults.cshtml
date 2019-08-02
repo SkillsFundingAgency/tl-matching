@@ -40,7 +40,7 @@
                             <input type="hidden" asp-for="@searchResult.ProviderVenueId" name="SelectedProvider[@i].ProviderVenueId" />
 
                             @* DO NOT DELETE - asp-for needs to be Model.SearchResults.Results[i].IsSelected *@
-                            <input type="checkbox" id="tl-search-results-checkbox[@i]" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" />
+                            <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" />
                             <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected">
                                 <span class="tl-search-results-flag">T level provider</span>
 
@@ -52,16 +52,15 @@
                                 </ul>
 
                                 @* New journey times styling, for next sprint when I'm not here, do not delete
-
-            <div class="timeline">
-            <ul>
-                <li>
-                    <p class="govuk-body govuk-!-font-weight-bold">Ask someone to confirm your identity</p>
-                    <p class="govuk-body">Public transport: 31 minutes</p>
-                    <p class="govuk-body">Car: 27 minutes</p>
-                </li>
-            </ul>
-        </div>*@
+                                <div class="timeline">
+                                    <ul>
+                                        <li>
+                                            <p class="govuk-body govuk-!-font-weight-bold">Ask someone to confirm your identity</p>
+                                            <p class="govuk-body">Public transport: 31 minutes</p>
+                                            <p class="govuk-body">Car: 27 minutes</p>
+                                        </li>
+                                    </ul>
+                                </div>*@
                                 <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
                                 <ul class="govuk-list govuk-list--bullet">
                                     @foreach (var qualification in searchResult.QualificationShortTitles)
