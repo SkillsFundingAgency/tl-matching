@@ -44,12 +44,24 @@
                             <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected">
                                 <span class="tl-search-results-flag">T level provider</span>
 
-                                @searchResult.ProviderName
-                                <ul class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
-                                    <li>Part of Name here</li>
-                                    <li>@searchResult.Town @searchResult.Postcode</li>
-                                    <li>@($" {searchResult.Distance:#0.0}") miles</li>
-                                </ul>
+
+                                @if (searchResult.ProviderVenueName == searchResult.ProviderVenuePostcode)
+                                {
+                                    @searchResult.ProviderDisplayName
+                                    <ul class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
+                                        <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
+                                        <li>@($" {searchResult.Distance:#0.0}") miles</li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    @searchResult.ProviderVenueName
+                                    <ul class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
+                                        <li>Part of @searchResult.ProviderDisplayName</li>
+                                        <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
+                                        <li>@($" {searchResult.Distance:#0.0}") miles</li>
+                                    </ul>
+                                }
 
                                 @* New journey times styling, for next sprint when I'm not here, do not delete
                                 <div class="timeline">

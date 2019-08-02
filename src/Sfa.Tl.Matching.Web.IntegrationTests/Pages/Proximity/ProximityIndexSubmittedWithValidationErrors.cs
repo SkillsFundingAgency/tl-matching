@@ -8,13 +8,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 {
-    public class ProximityIndexSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class ProximityIndexSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const int OpportunityId = 1000;
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ProximityIndexSubmittedWithValidationErrors(CustomWebApplicationFactory<Startup> factory)
+        public ProximityIndexSubmittedWithValidationErrors(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

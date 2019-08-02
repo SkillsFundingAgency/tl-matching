@@ -6,15 +6,15 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 {
-    public class DetailsPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class DetailsPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Confirm contact details for industry placements";
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public DetailsPageLoaded(CustomWebApplicationFactory<Startup> factory)
+        public DetailsPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

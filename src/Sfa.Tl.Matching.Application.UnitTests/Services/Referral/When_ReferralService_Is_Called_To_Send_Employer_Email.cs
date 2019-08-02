@@ -200,7 +200,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             const string expectedProvidersList = "# WorkplaceTown WorkplacePostcode\r\n"
                                                  + "*Job role: Job Role\r\n"
                                                  + "*Students wanted: 2\r\n"
-                                                 + "*Providers selected: Test Provider\r\n"
+                                                 + "*Providers selected: Venue Name (part of Display Name)\r\n"
                                                  + "\r\n";
             _emailService
                 .Received(1)

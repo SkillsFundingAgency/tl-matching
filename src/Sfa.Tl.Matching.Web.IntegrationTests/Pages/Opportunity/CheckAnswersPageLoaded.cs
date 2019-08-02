@@ -7,14 +7,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class CheckAnswersPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class CheckAnswersPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Check answers";
         private const int OpportunityItemId = 2000;
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public CheckAnswersPageLoaded(CustomWebApplicationFactory<Startup> factory)
+        public CheckAnswersPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

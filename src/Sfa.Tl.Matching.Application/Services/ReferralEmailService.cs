@@ -44,8 +44,8 @@ namespace Sfa.Tl.Matching.Application.Services
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
         }
 
-        
-       public async Task SendEmployerReferralEmailAsync(int opportunityId, int backgroundProcessHistoryId, string username)
+
+        public async Task SendEmployerReferralEmailAsync(int opportunityId, int backgroundProcessHistoryId, string username)
         {
             if (await GetBackgroundProcessHistoryData(backgroundProcessHistoryId) == null) return;
 
@@ -68,7 +68,14 @@ namespace Sfa.Tl.Matching.Application.Services
                 foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
                 {
                     var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
-                    var providers = string.Join(", ", data.ProviderDetails.Select(dto => dto.ProviderName));
+                    var providers = string.Join(", ", data.ProviderAndVenueDetails.Select(dto =>
+                    {
+                        var venue = dto.ProviderVenueName == dto.ProviderVenuePostCode
+                            ? dto.ProviderDisplayName
+                            : $"{dto.ProviderVenueName} (part of {dto.ProviderDisplayName})";
+                        return venue;
+
+                    }));
 
                     sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
                     sb.AppendLine($"*Job role: {data.JobRole}");
@@ -113,13 +120,16 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     var toAddress = referral.ProviderPrimaryContactEmail;
                     var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
+                    var venueText = referral.ProviderVenueName == referral.ProviderVenuePostcode
+                        ? $"in {referral.ProviderVenueTown} {referral.ProviderVenuePostcode}"
+                        : $"at {referral.ProviderVenueName} in {referral.ProviderVenueTown} {referral.ProviderVenuePostcode}";
 
                     var tokens = new Dictionary<string, string>
                     {
                         { "primary_contact_name", referral.ProviderPrimaryContact },
                         { "provider_name", referral.ProviderName },
                         { "route", referral.RouteName.ToLowerInvariant() },
-                        { "venue_postcode", $"{referral.ProviderVenueTown} {referral.ProviderVenuePostcode}" },
+                        { "venue_text", venueText },
                         { "search_radius", referral.DistanceFromEmployer },
                         { "job_role", referral.JobRole },
                         { "employer_business_name", referral.CompanyName },
@@ -130,7 +140,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "number_of_placements", placements }
                     };
 
-                    await SendEmail(EmailTemplateName.ProviderReferral, opportunityId, toAddress,
+                    await SendEmail(EmailTemplateName.ProviderReferralComplex, opportunityId, toAddress,
                         "Industry Placement Matching Referral", tokens, referral.CreatedBy);
 
                     await CompleteSelectedReferrals(opportunityId, referral.OpportunityItemId, username);
@@ -271,7 +281,7 @@ namespace Sfa.Tl.Matching.Application.Services
             backgroundProcessHistory.ModifiedBy = userName;
             backgroundProcessHistory.ModifiedOn = _dateTimeProvider.UtcNow();
 
-            await _backgroundProcessHistoryRepository.UpdateWithSpecifedColumnsOnly(backgroundProcessHistory, 
+            await _backgroundProcessHistoryRepository.UpdateWithSpecifedColumnsOnly(backgroundProcessHistory,
                 history => history.RecordCount,
                 history => history.Status,
                 history => history.StatusMessage,
@@ -279,7 +289,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 history => history.ModifiedOn);
         }
 
-        private Func<int, Task<BackgroundProcessHistory>> GetBackgroundProcessHistoryData =>  BackgroundProcessHistoryData;
+        private Func<int, Task<BackgroundProcessHistory>> GetBackgroundProcessHistoryData => BackgroundProcessHistoryData;
 
         private async Task<BackgroundProcessHistory> BackgroundProcessHistoryData(int backgroundProcessHistoryId)
         {

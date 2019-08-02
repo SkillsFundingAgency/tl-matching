@@ -8,14 +8,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 {
-    public class ProximityResultsSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class ProximityResultsSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ProximityResultsSubmittedWithValidationErrors(CustomWebApplicationFactory<Startup> factory)
+        public ProximityResultsSubmittedWithValidationErrors(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

@@ -80,39 +80,49 @@
                         milesText = "mile";
                     }
 
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">@Model.Providers[i].Name (Part of Name name name)</th>
-                    <td class="govuk-table__cell">
-                        @($"{distance:#0.0}") @milesText from @Model.Postcode
-                    </td>
-                    @if (Model.Providers.Count() > 1)
-                        {
-                    <td class="govuk-table__cell">
-                        <a href="#" class="govuk-link">Remove</a>
-                    </td>
-                    }
+                    <tr class="govuk-table__row">
 
-                </tr>
+                        @if (@Model.Providers[i].ProviderVenueName == @Model.Providers[i].Postcode)
+                        {
+                            <th class="govuk-table__header" scope="row">@Model.Providers[i].ProviderDisplayName</th>
+                        }
+                        else
+                        {
+                            <th class="govuk-table__header" scope="row">@Model.Providers[i].ProviderVenueName (part of @Model.Providers[i].ProviderDisplayName)</th>
+                        }
+
+                        <td class="govuk-table__cell">
+                            @($"{distance:#0.0}") @milesText from @Model.Postcode
+                        </td>
+
+                        @if (Model.Providers.Count() > 1)
+                        {
+                            <td class="govuk-table__cell">
+                                <a href="#" class="govuk-link">Remove</a>
+                            </td>
+                        }
+
+                    </tr>
                 }
 
-                </tbody>
-            </table>
+            </tbody>
+        </table>
 
-                <p class="govuk-body">
-                    <a class="govuk-link" id="tl-change-providers"
-                       asp-route="GetProviderResults"
-                       asp-route-opportunityId="@Model.OpportunityId"
-                       asp-route-opportunityItemId="@Model.OpportunityItemId"
-                       asp-route-searchRadius="@Model.SearchRadius"
-                       asp-route-Postcode="@Model.Postcode"
-                       asp-route-SelectedRouteId="@Model.RouteId">Change providers</a>
-                </p>
+        <p class="govuk-body">
+            <a class="govuk-link" id="tl-change-providers"
+               asp-route="GetProviderResults"
+               asp-route-opportunityId="@Model.OpportunityId"
+               asp-route-opportunityItemId="@Model.OpportunityItemId"
+               asp-route-searchRadius="@Model.SearchRadius"
+               asp-route-Postcode="@Model.Postcode"
+               asp-route-SelectedRouteId="@Model.RouteId">Change providers</a>
+        </p>
 
-                <form asp-action="SaveCheckAnswers" novalidate>
-                    <input asp-for="OpportunityId" type="hidden" />
-                    <input asp-for="OpportunityItemId" type="hidden" />
+        <form asp-action="SaveCheckAnswers" novalidate>
+            <input asp-for="OpportunityId" type="hidden" />
+            <input asp-for="OpportunityItemId" type="hidden" />
 
-                    <button type="submit" class="govuk-button" id="tl-confirm">Confirm and save opportunity</button>
-                </form>
-</div>
+            <button type="submit" class="govuk-button" id="tl-confirm">Confirm and save opportunity</button>
+        </form>
+    </div>
 </div>

@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             {
                 new SearchResultsViewModelItem
                 {
-                    Postcode = Postcode,
+                    ProviderVenuePostcode = Postcode,
                     Distance = 1.5d
                 }
             };

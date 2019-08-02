@@ -8,13 +8,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class PlacementInformationSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class PlacementInformationSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const int OpportunityItemId = 2000;
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public PlacementInformationSubmittedWithValidationErrors(CustomWebApplicationFactory<Startup> factory)
+        public PlacementInformationSubmittedWithValidationErrors(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

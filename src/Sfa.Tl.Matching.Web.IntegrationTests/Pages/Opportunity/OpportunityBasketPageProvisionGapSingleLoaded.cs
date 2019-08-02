@@ -6,15 +6,15 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class OpportunityBasketPageProvisionGapSingleLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class OpportunityBasketPageProvisionGapSingleLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "All opportunities";
         private const int OpportunityId = 1020;
         private const int OpportunityItemId = 1021;
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public OpportunityBasketPageProvisionGapSingleLoaded(CustomWebApplicationFactory<Startup> factory)
+        public OpportunityBasketPageProvisionGapSingleLoaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

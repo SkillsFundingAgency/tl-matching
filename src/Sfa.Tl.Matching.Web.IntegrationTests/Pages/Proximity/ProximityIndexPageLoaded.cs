@@ -6,13 +6,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 {
-    public class ProximityIndexPageLoaded : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class ProximityIndexPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Set up placement opportunity";
 
-        private readonly CustomWebApplicationFactory<Startup> _factory;
+        private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ProximityIndexPageLoaded(CustomWebApplicationFactory<Startup> factory)
+        public ProximityIndexPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
