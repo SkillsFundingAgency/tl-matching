@@ -75,12 +75,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             
             viewModel.Providers.Count.Should().Be(2);
 
-            viewModel.Providers[0].Name.Should().Be("Provider1");
+            viewModel.Providers[0].ProviderName.Should().Be("Provider1");
             viewModel.Providers[0].DistanceFromEmployer.Should().Be(1.3m);
-            viewModel.Providers[0].Postcode.Should().Be("AA1 1AA");
-            viewModel.Providers[1].Name.Should().Be("Provider2");
+            viewModel.Providers[0].ProviderVenuePostcode.Should().Be("AA1 1AA");
+            viewModel.Providers[1].ProviderName.Should().Be("Provider2");
             viewModel.Providers[1].DistanceFromEmployer.Should().Be(31.6m);
-            viewModel.Providers[1].Postcode.Should().Be("BB1 1BB");
+            viewModel.Providers[1].ProviderVenuePostcode.Should().Be("BB1 1BB");
         }
     }
 }

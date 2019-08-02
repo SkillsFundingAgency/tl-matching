@@ -9,6 +9,7 @@
         public string ProviderPrimaryContact { get; set; }
         public string ProviderPrimaryContactEmail { get; set; }
         public string ProviderSecondaryContactEmail { get; set; }
+        public string ProviderVenueName { get; set; }
         public string ProviderVenuePostcode { get; set; }
         public string ProviderVenueTown { get; set; }
         public string RouteName { get; set; }

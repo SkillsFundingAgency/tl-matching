@@ -10,8 +10,8 @@
         public string Town { get; set; }
         public string Postcode { get; set; }
         public string ProviderVenueTownAndPostcode { get; set; }
+        public string ProviderVenueName { get; set; }
         public decimal DistanceFromEmployer { get; set; }
-
         public string PlacementsDetail =>
             PlacementsKnown.GetValueOrDefault()
                 ? Placements.ToString()

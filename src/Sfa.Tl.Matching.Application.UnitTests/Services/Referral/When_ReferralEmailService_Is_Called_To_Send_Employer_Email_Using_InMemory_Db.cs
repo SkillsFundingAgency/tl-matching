@@ -334,7 +334,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
             {
                 var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
-                var providers = string.Join(", ", data.ProviderDetails.Select(dto => dto.ProviderName));
+                var providers = string.Join(", ", data.ProviderAndVenueDetails.Select(dto => dto.ProviderName));
 
                 sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
                 sb.AppendLine($"*Job role: {data.JobRole}");

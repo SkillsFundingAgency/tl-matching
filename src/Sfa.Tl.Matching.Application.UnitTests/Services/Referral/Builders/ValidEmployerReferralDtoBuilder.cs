@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                     PlacementsKnown = true,
                     WorkplaceTown = "WorkplaceTown",
                     WorkplacePostcode = "WorkplacePostcode",
-                    ProviderDetails = new List<ProviderReferralDto>
+                    ProviderAndVenueDetails = new List<ProviderReferralDto>
                     {
                         new ProviderReferralDto
                         {
