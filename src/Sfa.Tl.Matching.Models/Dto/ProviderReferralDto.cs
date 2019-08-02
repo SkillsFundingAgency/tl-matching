@@ -20,6 +20,10 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ProviderName { get; set; }
         public string ProviderDisplayName { get; set; }
         public string ProviderVenueName { get; set; }
+
+        public string CustomisedProviderDisplayName => ProviderVenueName == ProviderVenuePostCode
+            ? ProviderDisplayName
+            : $"{ProviderVenueName} (part of {ProviderDisplayName})";
     }
 
 }

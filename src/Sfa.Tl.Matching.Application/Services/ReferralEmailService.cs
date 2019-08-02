@@ -68,14 +68,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
                 {
                     var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
-                    var providers = string.Join(", ", data.ProviderAndVenueDetails.Select(dto =>
-                    {
-                        var venue = dto.ProviderVenueName == dto.ProviderVenuePostCode
-                            ? dto.ProviderDisplayName
-                            : $"{dto.ProviderVenueName} (part of {dto.ProviderDisplayName})";
-                        return venue;
-
-                    }));
+                    var providers = string.Join(", ", data.ProviderAndVenueDetails.Select(dto => dto.CustomisedProviderDisplayName));
 
                     sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
                     sb.AppendLine($"*Job role: {data.JobRole}");
@@ -120,16 +113,13 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     var toAddress = referral.ProviderPrimaryContactEmail;
                     var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
-                    var venueText = referral.ProviderVenueName == referral.ProviderVenuePostcode
-                        ? $"in {referral.ProviderVenueTown} {referral.ProviderVenuePostcode}"
-                        : $"at {referral.ProviderVenueName} in {referral.ProviderVenueTown} {referral.ProviderVenuePostcode}";
 
                     var tokens = new Dictionary<string, string>
                     {
                         { "primary_contact_name", referral.ProviderPrimaryContact },
                         { "provider_name", referral.ProviderName },
                         { "route", referral.RouteName.ToLowerInvariant() },
-                        { "venue_text", venueText },
+                        { "venue_text", referral.VenueText },
                         { "search_radius", referral.DistanceFromEmployer },
                         { "job_role", referral.JobRole },
                         { "employer_business_name", referral.CompanyName },

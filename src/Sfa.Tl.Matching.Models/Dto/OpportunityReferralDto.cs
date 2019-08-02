@@ -26,5 +26,8 @@
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
         public string CreatedBy { get; set; }
+        public string VenueText => ProviderVenueName == ProviderVenuePostcode
+            ? $"in {ProviderVenueTown} {ProviderVenuePostcode}"
+        : $"at {ProviderVenueName} in {ProviderVenueTown} {ProviderVenuePostcode}";
     }
 }
