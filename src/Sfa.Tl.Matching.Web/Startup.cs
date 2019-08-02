@@ -152,6 +152,12 @@ namespace Sfa.Tl.Matching.Web
                 Configuration[Constants.ServiceNameConfigKey]);
         }
 
+        protected virtual bool ConfigurationIsLocalOrDev()
+        {
+            return Configuration[Constants.EnvironmentNameConfigKey].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
+                   Configuration[Constants.EnvironmentNameConfigKey].Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
+        }
+
         private void AddAuthentication(IServiceCollection services)
         {
             services.AddAuthentication(sharedOptions =>
@@ -255,12 +261,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
 
             services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
-        }
-
-        private bool ConfigurationIsLocalOrDev()
-        {
-            return Configuration["EnvironmentName"].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
-                   Configuration["EnvironmentName"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }
