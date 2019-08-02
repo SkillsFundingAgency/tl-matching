@@ -16,7 +16,14 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
 
         protected override void ConfigureConfiguration(IServiceCollection services)
         {
-            MatchingConfiguration = TestConfiguration.MatchingConfiguration;
+            MatchingConfiguration = new MatchingConfiguration
+            {
+                PostcodeRetrieverBaseUrl = "https://postcodes.io/postcodes",
+                NotificationsApiClientConfiguration = new NotificationsApiClientConfiguration
+                {
+                    ApiBaseUrl = "http://localhost:56133/"
+                }
+            };
         }
 
         protected override bool ConfigurationIsLocalOrDev()
