@@ -47,7 +47,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var viewModel = new ProviderDetailViewModel
             {
                 UkPrn = 123,
-                Name = "ProviderName"
+                Name = "ProviderName",
+                DisplayName = "display name"
             };
 
             providerService.UpdateProviderDetail(viewModel).GetAwaiter().GetResult();
@@ -65,6 +66,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         {
             _repository.Received(1)
                 .Update(Arg.Any<Domain.Models.Provider>());
+        }
+        
+        [Fact]
+        public void Then_ProviderRepository_Update_Is_Called_With_Expected_Values()
+        {
+            _repository.Received(1)
+                .Update(Arg.Is<Domain.Models.Provider>(
+                    p => p.UkPrn == 123 &&
+                         p.Name == "ProviderName" &&
+                         p.DisplayName == "Display Name"));
         }
     }
 }

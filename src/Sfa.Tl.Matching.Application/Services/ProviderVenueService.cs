@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using GeoAPI.Geometries;
 using NetTopologySuite;
@@ -51,6 +52,11 @@ namespace Sfa.Tl.Matching.Application.Services
             await GetGeoLocationData(viewModel, providerVenue);
 
             await GetGoogleAddressDetails(providerVenue);
+
+            if (string.IsNullOrWhiteSpace(providerVenue.Name))
+            {
+                providerVenue.Name = providerVenue.Postcode;
+            }
 
             return await _providerVenueRepository.Create(providerVenue);
         }

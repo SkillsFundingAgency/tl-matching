@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("add-provider", Name = "AddProvider")]
         public IActionResult AddProvider(AddProviderViewModel viewModel)
         {
-            return RedirectToRoute("CreateProviderDetail", new
+            return RedirectToRoute("AddProviderDetail", new
             {
                 ukPrn = viewModel.UkPrn,
                 name = viewModel.Name
@@ -77,6 +77,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View(new ProviderDetailViewModel
             {
                 Name = viewModel.Name,
+                DisplayName = viewModel.Name.ToTitleCase(),
                 UkPrn = viewModel.UkPrn
             });
         }

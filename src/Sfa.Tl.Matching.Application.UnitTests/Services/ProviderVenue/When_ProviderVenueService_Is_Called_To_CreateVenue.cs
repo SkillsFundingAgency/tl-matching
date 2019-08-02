@@ -85,6 +85,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             _providerVenueRepository.Received(1).Create(Arg.Is<Domain.Models.ProviderVenue>(venue =>
                 venue.Postcode == FormatedPostcode &&
                 venue.Town == "Coventry" &&
+                venue.Name == FormatedPostcode &&
                 venue.Longitude == 1.2m &&
                 venue.Latitude == 1.2m));
         }
