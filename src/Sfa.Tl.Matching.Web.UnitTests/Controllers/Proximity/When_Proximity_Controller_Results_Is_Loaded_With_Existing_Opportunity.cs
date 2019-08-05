@@ -101,7 +101,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         {
             _proximityService
                 .Received(1)
-                .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>(a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId));
+                .SearchProvidersByPostcodeProximity(
+                    Arg.Is<ProviderSearchParametersDto>(
+                        a => a.Postcode == Postcode && 
+                             a.SearchRadius == SearchRadius && 
+                             a.SelectedRouteId == RouteId));
         }
 
         [Fact]
@@ -154,13 +158,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_ViewModel_SearchRadius_Should_Be_Default_Search_Radius()
-        {
-            var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
-            searchParametersViewModel.SearchRadius.Should().Be(SearchParametersViewModel.DefaultSearchRadius);
-        }
-
-        [Fact]
         public void Then_GetReferrals_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetReferrals(OpportunityItemId);
@@ -189,7 +186,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_ViewModel_Should_Have_Provider_And_Venue_display_Name()
+        public void Then_ViewModel_Should_Have_Provider_And_Venue_Display_Name()
         {
             var viewModel = _result.GetViewModel<SearchViewModel>();
 
