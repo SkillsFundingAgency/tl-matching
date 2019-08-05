@@ -98,6 +98,7 @@
     <Build Include="Tables\DBProjDeployLog.sql" />
     <Build Include="Tables\OpportunityItem.sql" />
     <Build Include="Tables\Opportunity.sql" />
+    <None Include="PostDeployment\Backfill Provider Venue Names.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

@@ -11,3 +11,4 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Update Date Columns to UTC.sql"
 :r ".\Add Employer ForeignKey.sql"
 
+:r ".\Backfill Provider Venue Names.sql"
