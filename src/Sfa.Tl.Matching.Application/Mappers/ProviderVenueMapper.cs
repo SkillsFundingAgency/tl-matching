@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<ProviderVenueDetailViewModel, ProviderVenue>()
                 .ForMember(m => m.Id, config => config.MapFrom(s => s.Id))
-                .ForMember(m => m.Name, config => config.MapFrom(s => s.Name))
+                .ForMember(m => m.Name, config => config.MapFrom<VenueNameResolver>())
                 .ForMember(m => m.IsEnabledForReferral, config => config.MapFrom(s => s.IsEnabledForReferral))
                 .ForMember(m => m.Source, config => config.MapFrom(s => s.Source))
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<ProviderVenueDetailViewModel, ProviderVenue>>())

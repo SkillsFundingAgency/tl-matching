@@ -17,12 +17,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
-    public class When_ProviderVenueService_Is_Called_To_UpdateVenue
+    public class When_ProviderVenueService_Is_Called_To_UpdateVenue_With_Postcode_For_Name
     {
         private readonly ILocationApiClient _locationApiClient;
         private readonly IProviderVenueRepository _providerVenueRepository;
 
-        public When_ProviderVenueService_Is_Called_To_UpdateVenue()
+        public When_ProviderVenueService_Is_Called_To_UpdateVenue_With_Postcode_For_Name()
         {
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
             httpcontextAccesor.HttpContext.Returns(new DefaultHttpContext
@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 .Returns(callinfo => callinfo.Arg<string>() == "CV1 2WT"
                     ? (true, "CV1 2WT")
                     : (false, null));
-
+            
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(ProviderVenueMapper).Assembly);
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             {
                 Id = 1,
                 Postcode = "CV1 2WT",
-                Name = "Test provider venue",
+                Name = "CV1 2WT",
                 IsEnabledForReferral = true
             };
 
@@ -83,7 +83,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         {
             _locationApiClient
                 .Received(1)
-                .IsValidPostCode(Arg.Is<string>(s => s == "Test provider venue"));
+                .IsValidPostCode(Arg.Is<string>(s => s == "CV1 2WT"));
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 .Update(Arg.Is<Domain.Models.ProviderVenue>(
                     pv => pv.Id == 1 &&
                     pv.Postcode == "CV1 2WT" &&
-                    pv.Name == "Test Provider Venue" &&
+                    pv.Name == "CV1 2WT" &&
                     pv.IsEnabledForReferral &&
                     !pv.IsRemoved &&
                     pv.ModifiedBy == "TestUser" &&
