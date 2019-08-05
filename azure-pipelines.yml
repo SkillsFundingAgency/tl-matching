@@ -91,6 +91,8 @@ steps:
     Contents: |
      azure\**
      src\**\*.dacpac
+     src\**\chromedriver.exe
+     src\**\Sfa.Tl.Matching.EndToEndTests.dll
      config\**
     TargetFolder: '$(build.artifactstagingdirectory)/publish'
     OverWrite: true
