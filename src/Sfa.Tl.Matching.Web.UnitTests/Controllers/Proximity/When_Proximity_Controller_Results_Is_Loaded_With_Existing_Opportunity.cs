@@ -27,6 +27,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         private const int RouteId = 1;
         private const int ProviderVenueId = 11;
 
+        private const string ProviderDisplayName = "Provider display name";
+        private const string ProviderVenueDisplayName = "Provider venue display name";
+        
         private const string Postcode = "SW1A 2AA";
         private const int SearchRadius = 10;
         private readonly int _selectedRouteId;
@@ -47,7 +50,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 {
                     ProviderVenuePostcode = Postcode,
                     Distance = 1.5d,
-                    ProviderVenueId = ProviderVenueId
+                    ProviderVenueId = ProviderVenueId,
+                    ProviderVenueName = ProviderVenueDisplayName,
+                    ProviderDisplayName = ProviderDisplayName
                 }
             };
 
@@ -56,7 +61,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
             _proximityService = Substitute.For<IProximityService>();
             _proximityService
-                .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>(a => a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId))
+                .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>(a =>
+                    a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
             var routePathService = Substitute.For<IRoutePathService>();
@@ -180,6 +186,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         {
             var viewModel = _result.GetViewModel<SearchViewModel>();
             viewModel.SearchParameters.CompanyNameWithAka.Should().Be("CompanyName (AlsoKnownAs)");
+        }
+
+        [Fact]
+        public void Then_ViewModel_Should_Have_Provider_And_Venue_display_Name()
+        {
+            var viewModel = _result.GetViewModel<SearchViewModel>();
+
+            viewModel.SearchResults.Results.Select(x => x.ProviderDisplayName).Should()
+                .Contain("Provider display name");
+
+            viewModel.SearchResults.Results.Select(x => x.ProviderVenueName).Should()
+                .Contain("Provider venue display name");
+
         }
     }
 }

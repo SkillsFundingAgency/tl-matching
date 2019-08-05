@@ -23,6 +23,7 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                 .Customize(new InMemoryDbContextCustomization())
                 .Customize(new OpportunityCustomization())
                 .Customize(new DomainCustomization())
+                .Customize(new Mappercustomization())
                 .Customize(autoNSubstituteCustomization);
 
         }

@@ -5,14 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.10.0" />
     <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.10.0" />
     <PackageReference Include="AutoFixture.SeedExtensions" Version="4.10.0" />
     <PackageReference Include="AutoFixture.Xunit2" Version="4.10.0" />
+    <PackageReference Include="AutoMapper" Version="8.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.4" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Domain\Sfa.Tl.Matching.Domain.csproj" />
   </ItemGroup>

@@ -4,19 +4,15 @@ using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using AutoMapper;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
-using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
@@ -31,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
             MatchingConfiguration config,
-            [Frozen] IHttpContextAccessor httpContextAccessor,
+            [Frozen] Mapper mapper,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
@@ -51,26 +47,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-
-            var mapperConfig = new MapperConfiguration(c =>
-            {
-                c.AddMaps(typeof(OpportunityMapper).Assembly);
-                c.ConstructServicesUsing(type =>
-                    type.Name.Contains("LoggedInUserEmailResolver")
-                        ?
-                        new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
-                            httpContextAccessor)
-                        : type.Name.Contains("LoggedInUserNameResolver")
-                            ? (object)new
-                                LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
-                                    httpContextAccessor)
-                            : type.Name.Contains("UtcNowResolver")
-                                ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(
-                                    dateTimeProvider)
-                                :
-                                null);
-            });
-            var mapper = new Mapper(mapperConfig);
 
             var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
@@ -111,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
             MatchingConfiguration config,
-            [Frozen] IHttpContextAccessor httpContextAccessor,
+            [Frozen] Mapper mapper,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
@@ -131,25 +107,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-            var mapperConfig = new MapperConfiguration(c =>
-            {
-                c.AddMaps(typeof(OpportunityMapper).Assembly);
-                c.ConstructServicesUsing(type =>
-                    type.Name.Contains("LoggedInUserEmailResolver")
-                        ?
-                        new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
-                            httpContextAccessor)
-                        : type.Name.Contains("LoggedInUserNameResolver")
-                            ? (object)new
-                                LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
-                                    httpContextAccessor)
-                            : type.Name.Contains("UtcNowResolver")
-                                ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(
-                                    dateTimeProvider)
-                                :
-                                null);
-            });
-            var mapper = new Mapper(mapperConfig);
 
             var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
@@ -194,7 +151,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
             MatchingConfiguration config,
-            [Frozen] IHttpContextAccessor httpContextAccessor,
+            [Frozen] Mapper mapper,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
@@ -214,26 +171,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-            var mapperConfig = new MapperConfiguration(c =>
-            {
-                c.AddMaps(typeof(OpportunityMapper).Assembly);
-                c.ConstructServicesUsing(type =>
-                    type.Name.Contains("LoggedInUserEmailResolver")
-                        ?
-                        new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
-                            httpContextAccessor)
-                        : type.Name.Contains("LoggedInUserNameResolver")
-                            ? (object)new
-                                LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
-                                    httpContextAccessor)
-                            : type.Name.Contains("UtcNowResolver")
-                                ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(
-                                    dateTimeProvider)
-                                :
-                                null);
-            });
-            var mapper = new Mapper(mapperConfig);
-
+            
             var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
             var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
@@ -293,7 +231,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
             MatchingConfiguration config,
-            [Frozen] IHttpContextAccessor httpContextAccessor,
+            [Frozen] Mapper mapper,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
@@ -313,26 +251,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-
-            var mapperConfig = new MapperConfiguration(c =>
-            {
-                c.AddMaps(typeof(OpportunityMapper).Assembly);
-                c.ConstructServicesUsing(type =>
-                    type.Name.Contains("LoggedInUserEmailResolver")
-                        ?
-                        new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
-                            httpContextAccessor)
-                        : type.Name.Contains("LoggedInUserNameResolver")
-                            ? (object)new
-                                LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
-                                    httpContextAccessor)
-                            : type.Name.Contains("UtcNowResolver")
-                                ? new UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>(
-                                    dateTimeProvider)
-                                :
-                                null);
-            });
-            var mapper = new Mapper(mapperConfig);
 
             var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
