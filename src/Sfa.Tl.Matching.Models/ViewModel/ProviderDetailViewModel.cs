@@ -50,7 +50,8 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string SubmitAction { get; set; }
         public string Source { get; set; }
         public bool IsCdfProvider { get; set; } = true;
-
+        public bool IsTLevelProvider { get; set; } = false;
+        
         public IList<ProviderVenueViewModel> ProviderVenues { get; set; }
 
         public bool IsSaveSection=>

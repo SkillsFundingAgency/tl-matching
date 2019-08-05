@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string ProviderName { get; set; }
         public string ProviderDisplayName { get; set; }
         public string ProviderVenueName { get; set; }
+        public bool IsTLevelProvider { get; set; }
         public IEnumerable<string> QualificationShortTitles { get; set; }
     }
 }

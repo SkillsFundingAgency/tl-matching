@@ -42,9 +42,11 @@
                             @* DO NOT DELETE - asp-for needs to be Model.SearchResults.Results[i].IsSelected *@
                             <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" />
                             <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected">
-                                <span class="tl-search-results-flag">T level provider</span>
-
-
+                                @if(@Model.SearchResults.Results[i].IsTLevelProvider)
+                                {
+                                    <span class="tl-search-results-flag">T level provider</span>
+                                }
+                                
                                 @if (searchResult.ProviderVenueName == searchResult.ProviderVenuePostcode)
                                 {
                                     @searchResult.ProviderDisplayName

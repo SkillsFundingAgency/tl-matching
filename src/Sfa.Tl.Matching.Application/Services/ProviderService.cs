@@ -73,6 +73,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     SecondaryContactEmail = p.SecondaryContactEmail,
                     IsCdfProvider = p.IsCdfProvider,
                     IsEnabledForReferral = p.IsEnabledForReferral,
+                    IsTLevelProvider = p.IsTLevelProvider,
                     Source = p.Source,
                     ProviderVenues = p.ProviderVenue
                     .Where(venue => !venue.IsRemoved)
@@ -90,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return provider;
         }
-        
+
         public async Task UpdateProviderDetailSectionAsync(ProviderDetailViewModel viewModel)
         {
             var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
