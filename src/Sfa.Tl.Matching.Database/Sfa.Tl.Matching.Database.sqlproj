@@ -81,7 +81,6 @@
     <Build Include="Tables\QualificationRouteMapping.sql" />
     <Build Include="Tables\Qualification.sql" />
     <Build Include="Tables\ProviderQualification.sql" />
-    <Build Include="Tables\OLDOpportunity.sql" />
     <Build Include="Tables\ProvisionGap.sql" />
     <Build Include="Tables\Referral.sql" />
     <Build Include="Tables\EmailTemplate.sql" />
@@ -99,6 +98,7 @@
     <Build Include="Tables\OpportunityItem.sql" />
     <Build Include="Tables\Opportunity.sql" />
     <None Include="PostDeployment\Backfill Provider Venue Names.sql" />
+    <None Include="PostDeployment\Remove Obsolete Tables.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
