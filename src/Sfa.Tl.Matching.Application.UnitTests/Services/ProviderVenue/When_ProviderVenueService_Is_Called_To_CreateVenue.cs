@@ -86,6 +86,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 venue.Postcode == FormatedPostcode &&
                 venue.Town == "Coventry" &&
                 venue.Name == FormatedPostcode &&
+                venue.IsEnabledForReferral == true &&
+                venue.IsRemoved == false && 
                 venue.Longitude == 1.2m &&
                 venue.Latitude == 1.2m));
         }

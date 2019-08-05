@@ -40,22 +40,11 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<AddProviderVenueViewModel, ProviderVenue>()
-                .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.Name, config => config.Ignore())
-                .ForMember(m => m.Town, config => config.Ignore())
-                .ForMember(m => m.County, config => config.Ignore())
-                .ForMember(m => m.Location, config => config.Ignore())
-                .ForMember(m => m.Longitude, config => config.Ignore())
-                .ForMember(m => m.Latitude, config => config.Ignore())
-                .ForMember(m => m.IsRemoved, config => config.Ignore())
-                .ForMember(m => m.IsEnabledForReferral, config => config.Ignore())
-                .ForMember(m => m.Provider, config => config.Ignore())
-                .ForMember(m => m.ProviderQualification, config => config.Ignore())
-                .ForMember(m => m.Referral, config => config.Ignore())
-                .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<AddProviderVenueViewModel, ProviderVenue>>())
-                .ForMember(m => m.CreatedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore())
-                .ForMember(m => m.ModifiedOn, config => config.Ignore())
+                .ForMember(m => m.ProviderId, config => config.MapFrom(s => s.ProviderId))
+                .ForMember(m => m.Postcode, config => config.MapFrom(s => s.Postcode))
+                .ForMember(m => m.Source, config => config.MapFrom(s => s.Source))
+                .ForMember(m => m.IsEnabledForReferral, config => config.MapFrom(s => true))
+                .ForAllOtherMembers(config => config.Ignore())
                 ;
         }
     }
