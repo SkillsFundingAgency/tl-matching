@@ -91,7 +91,9 @@ steps:
     Contents: |
      azure\**
      src\**\*.dacpac
-     src\Sfa.Tl.Matching.EndToEndTests\**\bin\release\*
+     src\Sfa.Tl.Matching.EndToEndTests\**\bin\release\*.exe
+     src\Sfa.Tl.Matching.EndToEndTests\**\bin\release\*.dll
+     src\Sfa.Tl.Matching.EndToEndTests\**\bin\release\*.json
      config\**
     TargetFolder: '$(build.artifactstagingdirectory)/publish'
     OverWrite: true
