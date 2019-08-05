@@ -64,9 +64,6 @@
   <ItemGroup>
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
     <None Include="PostDeployment\Seed Email Templates.sql" />
-    <None Include="PostDeployment\Migrate Opportunity Data.sql" />
-    <None Include="PostDeployment\Update Date Columns to UTC.sql" />
-    <None Include="PostDeployment\Add Employer ForeignKey.sql" />
     <None Include="Sfa.Tl.Matching.Database.Local.Int.Test.publish.xml" />
     <None Include="Sfa.Tl.Matching.Database.Local.publish.xml" />
   </ItemGroup>
