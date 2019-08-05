@@ -111,7 +111,7 @@
     "SqlConnectionString": {
       "minLength": 1,
       "type": "string",
-      "environmentVariable": "SqlConnectionStringAT"
+      "environmentVariable": "SqlConnectionString"
     }
   },
   "additionalProperties": false,
