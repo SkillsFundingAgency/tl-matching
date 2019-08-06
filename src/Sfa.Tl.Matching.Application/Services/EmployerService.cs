@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -12,6 +13,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.Event;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -197,17 +199,21 @@ namespace Sfa.Tl.Matching.Application.Services
             return opportunity?.CreatedBy;
         }
 
-        public async Task<int> HandleEmployerCreatedAsync(JObject payload)
+        public async Task<int> HandleEmployerCreatedAsync(string payload)
         {
-            return await CreateOrUpdateEmployerAsync(payload);
+            var createdEvent = JsonConvert.DeserializeObject<CrmEmployerCreatedEvent>(payload);
+
+            return await CreateOrUpdateEmployerAsync(createdEvent);
         }
 
-        public async Task<int> HandleEmployerUpdatedAsync(JObject payload)
+        public async Task<int> HandleEmployerUpdatedAsync(string payload)
         {
-            return await CreateOrUpdateEmployerAsync(payload);
+            var updatedEvent = JsonConvert.DeserializeObject<CrmEmployerUpdatedEvent>(payload);
+
+            return await CreateOrUpdateEmployerAsync(updatedEvent);
         }
 
-        private async Task<int> CreateOrUpdateEmployerAsync(JObject payload)
+        private async Task<int> CreateOrUpdateEmployerAsync(CrmEmployerEventBase employerData)
         {
             var employerStaging = _mapper.Map<EmployerStagingFileImportDto>(payload);
 

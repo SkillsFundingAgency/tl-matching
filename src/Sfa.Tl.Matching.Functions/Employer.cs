@@ -8,14 +8,13 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Functions
@@ -62,20 +61,18 @@ namespace Sfa.Tl.Matching.Functions
         {
             try
             {
-                JObject payLoad;
-
-                using (var streamReader = new StreamReader(req.Body))
-                {
-                    using (var jsonReader = new JsonTextReader(streamReader))
-                    {
-                        payLoad = await JObject.LoadAsync(jsonReader);
-                    }
-                }
-
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var updatedRecords = await employerService.HandleEmployerCreatedAsync(payLoad);
+                
+                string requestBody;
+                using (var streamReader = new StreamReader(req.Body))
+                {
+                    requestBody = await streamReader.ReadToEndAsync();
+                }
+
+                var updatedRecords = await employerService.HandleEmployerCreatedAsync(requestBody);
+
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -113,7 +110,15 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var updatedRecords = 0;//await employerService.ValidateAndUpdateEmployer();
+                
+                string requestBody;
+                using (var streamReader = new StreamReader(req.Body))
+                {
+                    requestBody = await streamReader.ReadToEndAsync();
+                }
+
+                var updatedRecords = await employerService.HandleEmployerUpdatedAsync(requestBody);
+
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -152,7 +157,7 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var updatedRecords = 0;//await employerService.ValidateAndDeleteEmployer();
+                var updatedRecords = 0; //await employerService.ValidateAndDeleteEmployer();
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -190,7 +195,7 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var updatedRecords = 0;//await employerService.ValidateAndUpdateEmployer();
+                var updatedRecords = 0; //await employerService.ValidateAndUpdateEmployer();
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -216,4 +221,6 @@ namespace Sfa.Tl.Matching.Functions
         }
 
     }
+
+
 }
