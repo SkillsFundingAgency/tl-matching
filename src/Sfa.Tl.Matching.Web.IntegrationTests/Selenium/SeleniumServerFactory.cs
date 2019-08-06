@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Selenium
 {
     public class SeleniumServerFactory<TStartup> : CustomWebApplicationFactory<TStartup>
         where TStartup : class
