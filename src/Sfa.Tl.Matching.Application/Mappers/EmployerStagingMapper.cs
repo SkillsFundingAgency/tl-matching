@@ -29,6 +29,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 //.ForMember(m => m.Email, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'address1_postalcode')].value")))
                 .ForMember(m => m.Postcode, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'address1_postalcode')].value")))
                 .ForMember(m => m.Owner, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'ownerid')].value.LogicalName")))
+                .ForAllOtherMembers(c => c.Ignore())
                 ;
 
             CreateMap<EmployerStagingFileImportDto, Employer>()
@@ -42,11 +43,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Email, config => config.MapFrom(s => s.Email))
                 .ForMember(m => m.Postcode, config => config.MapFrom(s => s.Postcode))
                 .ForMember(m => m.Owner, config => config.MapFrom(s => s.Owner))
-                .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.ChecksumCol, config => config.Ignore())
-                .ForMember(m => m.CreatedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForAllOtherMembers(c => c.Ignore())
                 ;
         }
     }
