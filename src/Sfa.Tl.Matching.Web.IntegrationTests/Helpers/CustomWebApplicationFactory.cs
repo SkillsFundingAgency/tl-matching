@@ -9,7 +9,7 @@ using Sfa.Tl.Matching.Web.IntegrationTests.Database;
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Helpers
 {
     public class CustomWebApplicationFactory<TStartup>
-        : CustomWebApplicationFactoryBase<TestStartup>
+        : CustomWebApplicationFactoryBase<TStartup> where TStartup : class
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
