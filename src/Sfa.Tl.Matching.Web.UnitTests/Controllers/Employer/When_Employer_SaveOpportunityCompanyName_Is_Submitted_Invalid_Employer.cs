@@ -1,11 +1,14 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
@@ -31,7 +34,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var referralService = Substitute.For<IReferralService>();
             var mapper = new Mapper(config);
 
-            _employerController = new EmployerController(employerService, opportunityService, referralService, mapper);
+            var employerController = new EmployerController(employerService, opportunityService, referralService, mapper);
+
+            _employerController = new ClaimsBuilder<EmployerController>(employerController)
+                .Add(ClaimTypes.Role, RolesExtensions.StandardUser)
+                .AddUserName("Username")
+                .Build();
 
             _result = _employerController.SaveOpportunityCompanyName(viewModel).GetAwaiter().GetResult();
         }
