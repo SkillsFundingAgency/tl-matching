@@ -52,7 +52,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{opportunityId}-{opportunityItemId}")]
         public async Task<IActionResult> SaveOpportunityCompanyName(FindEmployerViewModel viewModel)
         {
-            await ValidateAsync(viewModel);
+            var username = HttpContext.User.GetUserName();
+
+            await ValidateAsync(viewModel, username);
 
             if (!ModelState.IsValid)
                 return View("FindEmployer", viewModel);
@@ -200,7 +202,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return viewModel;
         }
 
-        private async Task ValidateAsync(FindEmployerViewModel viewModel)
+        private async Task ValidateAsync(FindEmployerViewModel viewModel, string currentUser)
         {
             var isValidEmployer =
                 await _employerService.ValidateCompanyNameAndId(viewModel.SelectedEmployerId, viewModel.CompanyName);
@@ -216,9 +218,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
                 if (!string.IsNullOrEmpty(lockedByUser))
                 {
-                    ModelState.AddModelError(nameof(viewModel.CompanyName),
-                        "Your colleague, " + $"{lockedByUser}, is already working on this employer’s opportunities. " +
-                        "Please choose a different employer.");
+                    if (lockedByUser == currentUser)
+                        ModelState.AddModelError(nameof(viewModel.CompanyName),
+                            "You are already working on this employer’s opportunities. Please start again and find this employer in your saved opportunities.");
+                    else
+                        ModelState.AddModelError(nameof(viewModel.CompanyName),
+                            "Your colleague, " + $"{lockedByUser}, is already working on this employer’s opportunities. " +
+                            "Please choose a different employer.");
                 }
             }
         }
