@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +30,7 @@ using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
@@ -261,6 +263,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
 
             services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
+
+            services.AddTransient<IValidator<EmployerStagingFileImportDto>, EmployerStagingDataValidator>();
         }
     }
 }

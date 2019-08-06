@@ -172,7 +172,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IReferralEmailService, ReferralEmailService>();
-
+            
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         }
