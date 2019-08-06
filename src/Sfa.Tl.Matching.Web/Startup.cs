@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Security.Claims;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -95,7 +98,17 @@ namespace Sfa.Tl.Matching.Web
                 {
                     options.DefaultAuthenticateScheme = "Local Scheme";
                     options.DefaultChallengeScheme = "Local Scheme";
-                }).AddTestAuth(o => { });
+                }).AddTestAuth(o =>
+                {
+                    o.Identity.AddClaims(
+                        new List<Claim>
+                        {
+                            new Claim(ClaimTypes.GivenName, "Dev"),
+                            new Claim(ClaimTypes.Surname, "Surname"),
+                            new Claim(ClaimTypes.Upn, "dev@email.com"),
+                            new Claim(ClaimTypes.Role, RolesExtensions.AdminUser)
+                        });
+                });
             }
             RegisterDependencies(services);
         }
