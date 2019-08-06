@@ -16,6 +16,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string Source { get; set; }
         public bool IsFromAddVenue { get; set; }
         public string SubmitAction { get; set; }
+        public bool IsRemoved => false;
         public List<QualificationDetailViewModel> Qualifications { get; set; }
     }
 }

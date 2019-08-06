@@ -34,6 +34,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Name, config => config.MapFrom<VenueNameResolver>())
                 .ForMember(m => m.IsEnabledForReferral, config => config.MapFrom(s => s.IsEnabledForReferral))
                 .ForMember(m => m.Source, config => config.MapFrom(s => s.Source))
+                .ForMember(m => m.IsRemoved, config => config.MapFrom(s => s.IsRemoved))
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<ProviderVenueDetailViewModel, ProviderVenue>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<ProviderVenueDetailViewModel, ProviderVenue>>())
                 .ForAllOtherMembers(config => config.Ignore())
