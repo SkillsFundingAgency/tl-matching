@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 .Errors[0]
                 .ErrorMessage
                 .Should()
-                .Be("Your colleague, Another User is already working on this employer’s opportunities. " +
+                .Be("Your colleague, Another User, is already working on this employer’s opportunities. " +
                     "Please choose a different employer.");
         }
     }

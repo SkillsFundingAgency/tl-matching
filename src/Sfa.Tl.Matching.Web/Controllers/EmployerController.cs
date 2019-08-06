@@ -217,7 +217,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 if (!string.IsNullOrEmpty(lockedByUser))
                 {
                     ModelState.AddModelError(nameof(viewModel.CompanyName),
-                        "Your colleague, " + $"{lockedByUser} is already working on this employer’s opportunities. " +
+                        "Your colleague, " + $"{lockedByUser}, is already working on this employer’s opportunities. " +
                         "Please choose a different employer.");
                 }
             }
