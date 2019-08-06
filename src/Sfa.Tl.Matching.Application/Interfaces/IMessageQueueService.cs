@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Interfaces

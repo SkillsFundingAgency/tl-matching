@@ -1,4 +1,4 @@
-﻿namespace Sfa.Tl.Matching.Models.Dto
+﻿namespace Sfa.Tl.Matching.Models.Command
 {
     public class SendProviderFeedbackEmail
     {
