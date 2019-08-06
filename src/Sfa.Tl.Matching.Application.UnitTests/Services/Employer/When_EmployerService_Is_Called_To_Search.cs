@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using AutoMapper;
 using FluentAssertions;
+using FluentValidation;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
@@ -29,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             employerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new SearchResultsBuilder().Build().AsQueryable());
 
-            var employerService = new EmployerService(employerRepository, opportunityRepository);
+            var employerService = new EmployerService(employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<EmployerStagingFileImportDto>>());
 
             const string companyName = "Co";
 

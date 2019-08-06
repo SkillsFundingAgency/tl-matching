@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -18,22 +20,18 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly IRepository<Employer> _employerRepository;
         private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IMapper _mapper;
+        private readonly IValidator<EmployerStagingFileImportDto> _employerValidator;
 
         public EmployerService(IRepository<Employer> employerRepository,
-            IOpportunityRepository opportunityRepository)
+                               IOpportunityRepository opportunityRepository,
+                               IMapper mapper,
+                               IValidator<EmployerStagingFileImportDto> employerValidator)
         {
             _employerRepository = employerRepository;
             _opportunityRepository = opportunityRepository;
-        }
-
-        public async Task<int> HandleEmployerCreatedAsync(JObject payload)
-        {
-            return await Task.FromResult(1);
-        }
-
-        public async Task<int> HandleEmployerUpdatedAsync(JObject payload)
-        {
-            return await Task.FromResult(1);
+            _mapper = mapper;
+            _employerValidator = employerValidator;
         }
 
         public async Task<bool> ValidateCompanyNameAndId(int employerId, string companyName)
@@ -170,7 +168,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return viewModel;
         }
-        
+
         public async Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunity(int opportunityId, string username)
         {
             var opportunityCount = _opportunityRepository.GetEmployerOpportunityCount(opportunityId);
@@ -197,6 +195,37 @@ namespace Sfa.Tl.Matching.Application.Services
                      && o.OpportunityItem.Any(oi => oi.IsSaved &&
                                                     !oi.IsCompleted));
             return opportunity?.CreatedBy;
+        }
+
+        public async Task<int> HandleEmployerCreatedAsync(JObject payload)
+        {
+            return await CreateOrUpdateEmployerAsync(payload);
+        }
+
+        public async Task<int> HandleEmployerUpdatedAsync(JObject payload)
+        {
+            return await CreateOrUpdateEmployerAsync(payload);
+        }
+
+        private async Task<int> CreateOrUpdateEmployerAsync(JObject payload)
+        {
+            var employerStaging = _mapper.Map<EmployerStagingFileImportDto>(payload);
+
+            var validationResult = await _employerValidator.ValidateAsync(employerStaging);
+
+            if (!validationResult.IsValid) return -1;
+
+            var employer = _mapper.Map<Employer>(employerStaging);
+
+            var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employer.CrmId);
+
+            if (existingEmployer == null)
+            {
+                return await _employerRepository.Create(employer);
+            }
+
+            await _employerRepository.Update(employer);
+            return 1;
         }
     }
 }
