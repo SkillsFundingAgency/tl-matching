@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.EndToEndTests
             {
                 driver.Navigate().GoToUrl("https://at.industryplacementmatching.education.gov.uk");
 
-                driver.Title.Should().Be("How to ssdfsdfign in - Match employers with providers for industry placements - GOV.UK");
+                driver.Title.Should().Be("How to sign in - Match employers with providers for industry placements - GOV.UK");
             }
         }
     }
