@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -142,18 +143,30 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchRadius = viewModel.SearchRadius
             });
 
+            var additionalResults = searchResults.Any() 
+                ? new List<SearchResultsByRouteViewModelItem>()
+                : await _proximityService.SearchProvidersForOtherRoutesByPostcodeProximity(new ProviderSearchParametersDto
+                {
+                    Postcode = viewModel.Postcode,
+                    SelectedRouteId = viewModel.SelectedRouteId,
+                    SearchRadius = SearchParametersViewModel.DefaultSearchRadius
+                });
+
             var resultsViewModel = new SearchViewModel
             {
                 SearchResults = new SearchResultsViewModel
                 {
-                    Results =  searchResults
+                    Results =  searchResults,
+                    AdditionalResults = additionalResults
                 },
                 SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId
             };
 
-            if (viewModel.OpportunityId == 0 && viewModel.OpportunityItemId == 0)
+            if (!searchResults.Any() 
+                || (viewModel.OpportunityId == 0 
+                    && viewModel.OpportunityItemId == 0))
                 return resultsViewModel;
 
             var selectedResultsViewModel = SetProviderIsSelected(resultsViewModel);

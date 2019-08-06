@@ -5,11 +5,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
 {
     public class SearchResultsBuilder
     {
-        private readonly IList<SearchResultsViewModelItem> _searchResults;
-
-        public SearchResultsBuilder()
-        {
-            _searchResults = new List<SearchResultsViewModelItem>
+        public IList<SearchResultsViewModelItem> Build() =>
+            new List<SearchResultsViewModelItem>
             {
                 new SearchResultsViewModelItem
                 {
@@ -36,9 +33,5 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
                     }
                 }
             };
-        }
-
-        public IList<SearchResultsViewModelItem> Build() =>
-            _searchResults;
     }
 }
