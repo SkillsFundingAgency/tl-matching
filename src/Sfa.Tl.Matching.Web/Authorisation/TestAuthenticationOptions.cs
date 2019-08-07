@@ -8,6 +8,9 @@ namespace Sfa.Tl.Matching.Web.Authorisation
     {
         public virtual ClaimsIdentity Identity { get; } = new ClaimsIdentity(new[]
         {
+            new Claim(ClaimTypes.GivenName, "Dev"),
+            new Claim(ClaimTypes.Surname, "Surname"),
+            new Claim(ClaimTypes.Upn, "dev@email.com"),
             new Claim(ClaimTypes.Role, RolesExtensions.AdminUser)
         }, "test");
     }

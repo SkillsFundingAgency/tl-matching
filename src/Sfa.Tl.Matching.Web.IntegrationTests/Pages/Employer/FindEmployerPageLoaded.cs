@@ -34,8 +34,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
             documentHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
 
-            // TODO FIX var companyName = documentHtml.QuerySelector("#CompanyName") as IHtmlSelectElement;
-            //companyName.Value.Should().Be("Company Name");
+            var companyName = documentHtml.QuerySelector("#companyNameHidden") as IHtmlInputElement;
+            companyName.Value.Should().Be("Company Name");
 
             var continueButton = documentHtml.QuerySelector("#tl-continue") as IHtmlButtonElement;
             continueButton.TextContent.Should().Be("Continue");

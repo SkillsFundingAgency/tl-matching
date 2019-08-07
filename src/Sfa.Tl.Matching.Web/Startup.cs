@@ -98,17 +98,7 @@ namespace Sfa.Tl.Matching.Web
                 {
                     options.DefaultAuthenticateScheme = "Local Scheme";
                     options.DefaultChallengeScheme = "Local Scheme";
-                }).AddTestAuth(o =>
-                {
-                    o.Identity.AddClaims(
-                        new List<Claim>
-                        {
-                            new Claim(ClaimTypes.GivenName, "Dev"),
-                            new Claim(ClaimTypes.Surname, "Surname"),
-                            new Claim(ClaimTypes.Upn, "dev@email.com"),
-                            new Claim(ClaimTypes.Role, RolesExtensions.AdminUser)
-                        });
-                });
+                }).AddTestAuth(o => { });
             }
             RegisterDependencies(services);
         }

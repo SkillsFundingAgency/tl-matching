@@ -72,7 +72,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<OpportunityDto> GetOpportunity(int opportunityId)
         {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == opportunityId);
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == opportunityId,
+                navigationPropertyPath: o => o.Employer);
 
             var dto = _mapper.Map<OpportunityDto>(opportunity);
 
