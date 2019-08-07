@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Newtonsoft.Json.Linq;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Event;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
@@ -18,31 +18,15 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
                 ;
 
-            CreateMap<JObject, EmployerStagingFileImportDto>()
-                .ForMember(m => m.CrmId, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'accountid')].value")))
-                .ForMember(m => m.CompanyName, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'name')].value")))
-                //.ForMember(m => m.AlsoKnownAs, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'address1_postalcode')].value")))
-                //.ForMember(m => m.Aupa, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'address1_postalcode')].value")))
-                //.ForMember(m => m.CompanyType, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'address1_postalcode')].value")))
-                //.ForMember(m => m.PrimaryContact, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'address1_postalcode')].value")))
-                //.ForMember(m => m.Phone, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'address1_postalcode')].value")))
-                //.ForMember(m => m.Email, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'address1_postalcode')].value")))
-                .ForMember(m => m.Postcode, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'address1_postalcode')].value")))
-                .ForMember(m => m.Owner, config => config.MapFrom(s => s.SelectToken("$.InputParameters[0].value.Attributes[?(@.key == 'ownerid')].value.LogicalName")))
-                .ForAllOtherMembers(c => c.Ignore())
-                ;
-
-            CreateMap<EmployerStagingFileImportDto, Employer>()
-                .ForMember(m => m.CrmId, config => config.MapFrom(s => s.CrmId.ToGuid()))
-                .ForMember(m => m.CompanyName, config => config.MapFrom(s => s.CompanyName))
-                .ForMember(m => m.AlsoKnownAs, config => config.MapFrom(s => s.AlsoKnownAs))
-                .ForMember(m => m.Aupa, config => config.MapFrom(s => s.Aupa))
-                .ForMember(m => m.CompanyType, config => config.MapFrom(s => s.CompanyType))
-                .ForMember(m => m.PrimaryContact, config => config.MapFrom(s => s.PrimaryContact))
-                .ForMember(m => m.Phone, config => config.MapFrom(s => s.Phone))
-                .ForMember(m => m.Email, config => config.MapFrom(s => s.Email))
-                .ForMember(m => m.Postcode, config => config.MapFrom(s => s.Postcode))
-                .ForMember(m => m.Owner, config => config.MapFrom(s => s.Owner))
+            CreateMap<CrmEmployerEventBase, Employer>()
+                .ForMember(m => m.CrmId, config => config.MapFrom(s => s.accountid.ToGuid()))
+                .ForMember(m => m.CompanyName, config => config.MapFrom(s => s.Name))
+                .ForMember(m => m.AlsoKnownAs, config => config.MapFrom(s => s.sfa_alias))
+                .ForMember(m => m.Aupa, config => config.MapFrom(s => s.sfa_aupa.Value.ToAupaStatus()))
+                .ForMember(m => m.PrimaryContact, config => config.MapFrom(s => s.PrimaryContactId.name))
+                .ForMember(m => m.Phone, config => config.MapFrom(s => s.ContactTelephone1))
+                .ForMember(m => m.Email, config => config.MapFrom(s => s.ContactEmail))
+                .ForMember(m => m.Owner, config => config.MapFrom(s => s.owneridname))
                 .ForAllOtherMembers(c => c.Ignore())
                 ;
         }

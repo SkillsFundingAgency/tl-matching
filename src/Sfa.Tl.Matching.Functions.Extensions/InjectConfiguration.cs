@@ -27,6 +27,7 @@ using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Event;
 
 namespace Sfa.Tl.Matching.Functions.Extensions
 {
@@ -163,6 +164,8 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterApplicationServices(IServiceCollection services)
         {
+            services.AddTransient<IValidator<CrmEmployerEventBase>, CrmEmployerEventDataValidator>();
+            
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IEmailService, EmailService>();
@@ -175,6 +178,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)

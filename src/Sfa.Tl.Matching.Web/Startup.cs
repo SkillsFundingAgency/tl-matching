@@ -16,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -37,6 +36,7 @@ using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Event;
 using Sfa.Tl.Matching.Web.Authorisation;
 
 namespace Sfa.Tl.Matching.Web
@@ -258,6 +258,8 @@ namespace Sfa.Tl.Matching.Web
 
         private static void RegisterApplicationServices(IServiceCollection services)
         {
+            services.AddTransient<IValidator<CrmEmployerEventBase>, CrmEmployerEventDataValidator>();
+
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailHistoryService, EmailHistoryService>();
             services.AddTransient<IEmployerService, EmployerService>();
@@ -276,8 +278,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
 
             services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
-
-            services.AddTransient<IValidator<EmployerStagingFileImportDto>, EmployerStagingDataValidator>();
         }
     }
 }

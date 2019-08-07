@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Event;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
@@ -31,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             employerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new SearchResultsBuilder().Build().AsQueryable());
 
-            var employerService = new EmployerService(employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<EmployerStagingFileImportDto>>());
+            var employerService = new EmployerService(employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>());
 
             const string companyName = "Co";
 
