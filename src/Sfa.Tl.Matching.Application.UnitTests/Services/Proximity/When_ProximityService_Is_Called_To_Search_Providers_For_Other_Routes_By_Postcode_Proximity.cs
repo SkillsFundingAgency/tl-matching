@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
@@ -51,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         [Fact]
         public void Then_The_Expected_Number_Of_Search_Results_Is_Returned()
         {
-            _result.Count().Should().Be(2);
+            _result.Count.Should().Be(2);
         }
 
         [Fact]

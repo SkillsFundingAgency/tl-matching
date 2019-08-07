@@ -6,9 +6,9 @@ namespace Sfa.Tl.Matching.Web.Authorisation
 {
     public class TestAuthenticationOptions : AuthenticationSchemeOptions
     {
-        public virtual ClaimsIdentity Identity { get; } = new ClaimsIdentity(new Claim[]
+        public virtual ClaimsIdentity Identity { get; } = new ClaimsIdentity(new[]
         {
-            new Claim(ClaimTypes.Role, RolesExtensions.AdminUser),
+            new Claim(ClaimTypes.Role, RolesExtensions.AdminUser)
         }, "test");
     }
 }
