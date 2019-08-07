@@ -1,4 +1,4 @@
-﻿@model List<Sfa.Tl.Matching.Models.ViewModel.BasketReferralItemViewModel>
+﻿@model Sfa.Tl.Matching.Models.ViewModel.OpportunityBasketViewModel
 <h2 class="govuk-heading-l tl-hidden-desktop">
     With providers
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
@@ -15,8 +15,8 @@
         </div>
     </fieldset>
 </div>
-<div class="govuk-form-group" @*sfa-validation-for="@Model.ReferralItems[0].IsSelected"*@ sfa-validationerror-class="govuk-form-group--error">
-    <span class="govuk-error-message" @*asp-validation-for="@Model.ReferralItems[0].IsSelected" *@></span>
+<div class="govuk-form-group" sfa-validation-for="@Model.ReferralItems[0].IsSelected " sfa-validationerror-class="govuk-form-group--error">
+    <span class="govuk-error-message" asp-validation-for="@Model.ReferralItems[0].IsSelected" ></span>
 
     <table class="govuk-table tl-table-responsive tl-table-clickable">
         <thead class="govuk-table__head">
@@ -31,16 +31,16 @@
             </tr>
         </thead>
         <tbody class="govuk-table__body">
-            @for (var i = 0; i < Model.Count; i++)
+            @for (var i = 0; i < Model.ReferralItems.Count; i++)
             {
-                var basketItem = Model[i];
+                var basketItem = Model.ReferralItems[i];
 
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell tl-table-responsive-check">
                         <div class="govuk-checkboxes">
                             <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input tl-checkbox" asp-for="@Model[i].IsSelected" name="SelectedOpportunity[@i].IsSelected" />
-                                <label class="govuk-label govuk-checkboxes__label" asp-for="@Model[i].IsSelected">
+                                <input class="govuk-checkboxes__input tl-checkbox" asp-for="@Model.ReferralItems[i].IsSelected" name="SelectedOpportunity[@i].IsSelected" />
+                                <label class="govuk-label govuk-checkboxes__label" asp-for="@Model.ReferralItems[i].IsSelected">
                                     <span class="govuk-visually-hidden">Select this opportunity</span>
                                 </label>
                             </div>
