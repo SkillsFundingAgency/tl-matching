@@ -77,3 +77,18 @@
         display: block;
     }
 }
+
+/* Min Max Widths */
+
+
+@for $i from 1 through 10 {
+    $width: 50 * $i;
+
+    .tl-min-#{$width} {
+        min-width: $width + px;
+    }
+
+    .tl-max-#{$width} {
+        max-width: $width + px;
+    }
+}
