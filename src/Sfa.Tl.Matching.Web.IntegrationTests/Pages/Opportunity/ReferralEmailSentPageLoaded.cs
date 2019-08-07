@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             header1.TextContent.Should().Be(Title);
 
             var crmLink = documentHtml.QuerySelector("#tl-crm-link") as IHtmlAnchorElement;
-            crmLink.Href.Should().BeEquivalentTo("https://esfa-cs-prod.crm4.dynamics.com/main.aspx?pagetype=entityrecord&etc=1&id=%7b65351B3C-FAF8-4752-8806-8D6E240C334E%7d&extraqs=&newWindow=true");
+            crmLink.Href.Should().Be("https://esfa-cs-prod.crm4.dynamics.com/main.aspx?pagetype=entityrecord&etc=1&id=%7b65351b3c-faf8-4752-8806-8d6e240c334e%7d&extraqs=&newWindow=true");
 
             var endButton = documentHtml.QuerySelector("#tl-end") as IHtmlAnchorElement;
             endButton.TextContent.Should().Be("Finish");
