@@ -6,7 +6,6 @@ using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -23,12 +22,12 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IRepository<Employer> _employerRepository;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IMapper _mapper;
-        private readonly IValidator<EmployerStagingFileImportDto> _employerValidator;
+        private readonly IValidator<CrmEmployerEventBase> _employerValidator;
 
         public EmployerService(IRepository<Employer> employerRepository,
                                IOpportunityRepository opportunityRepository,
                                IMapper mapper,
-                               IValidator<EmployerStagingFileImportDto> employerValidator)
+                               IValidator<CrmEmployerEventBase> employerValidator)
         {
             _employerRepository = employerRepository;
             _opportunityRepository = opportunityRepository;
@@ -215,13 +214,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<int> CreateOrUpdateEmployerAsync(CrmEmployerEventBase employerData)
         {
-            var employerStaging = _mapper.Map<EmployerStagingFileImportDto>(employerData);
-
-            var validationResult = await _employerValidator.ValidateAsync(employerStaging);
+            var validationResult = await _employerValidator.ValidateAsync(employerData);
 
             if (!validationResult.IsValid) return -1;
 
-            var employer = _mapper.Map<Employer>(employerStaging);
+            var employer = _mapper.Map<Employer>(employerData);
 
             var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employer.CrmId);
 
