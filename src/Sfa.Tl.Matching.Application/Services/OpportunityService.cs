@@ -119,6 +119,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     PlacementsKnown = oi.PlacementsKnown,
                     Providers = oi.Referral.Select(r => new ReferralsViewModel
                     {
+                        ReferralId = r.Id,
                         Postcode = r.ProviderVenue.Postcode,
                         DistanceFromEmployer = r.DistanceFromEmployer,
                         Name = r.ProviderVenue.Provider.Name,
@@ -396,6 +397,15 @@ namespace Sfa.Tl.Matching.Application.Services
                 ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 FileContent = fileContent
             };
+        }
+
+        public async Task DeleteReferralAsync(int referralId)
+        {
+            var referral = await _referralRepository.GetFirstOrDefault(r => r.Id == referralId);
+
+            if (referral == null) return;
+
+            await _referralRepository.Delete(referral);
         }
 
         private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds)

@@ -89,7 +89,7 @@
                         @if (Model.Providers.Count() > 1)
                         {
                             <td class="govuk-table__cell">
-                                <a href="#" class="govuk-link">Remove</a>
+                                <a asp-action="DeleteReferral" asp-route-referralId="@Model.Providers[i].ReferralId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link">Remove</a>
                             </td>
                         }
 

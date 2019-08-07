@@ -36,5 +36,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<string> GetCompanyNameWithAkaAsync(int? opportunityId);
         Task DeleteEmployerOpportunityItemAsync(int opportunityId);
         Task<FileDownloadDto> GetOpportunitySpreadsheetDataAsync(int opportunityId);
+        Task DeleteReferralAsync(int referralId);
     }
 }

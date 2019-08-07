@@ -239,6 +239,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 downloadedFileInfo.FileName);
         }
 
+        [HttpGet]
+        [Route("remove-referral/{referralId}-{opportunityItemId}", Name = "DeleteReferral")]
+        public async Task<IActionResult> DeleteReferral(int referralId, int opportunityItemId)
+        {
+            await _opportunityService.DeleteReferralAsync(referralId);
+            return RedirectToRoute("GetCheckAnswers", new { opportunityItemId });
+        }
+
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)
         {
             var opportunityId = await _opportunityService.CreateOpportunityAsync(dto);

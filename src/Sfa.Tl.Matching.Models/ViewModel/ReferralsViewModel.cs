@@ -2,6 +2,7 @@
 {
     public class ReferralsViewModel
     {
+        public int ReferralId { get; set; }
         public string Name { get; set; }
         public string ProviderDisplayName { get; set; }
         public string ProviderVenueName { get; set; }
