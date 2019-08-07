@@ -29,8 +29,8 @@ namespace Sfa.Tl.Matching.Application.Extensions
                     "or", "some", "the", "to", };
 
             var result = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLowerInvariant());
-            
-            var tokens = result.Split(new[] { ' ', '\t', '\r', '\n' }, 
+
+            var tokens = result.Split(new[] { ' ', '\t', '\r', '\n' },
                     StringSplitOptions.RemoveEmptyEntries)
                 .ToList();
 
@@ -92,6 +92,12 @@ namespace Sfa.Tl.Matching.Application.Extensions
             }
         }
 
+        public static AupaStatus ToAupaStatus(this int value)
+        {
+            Enum.TryParse<AupaStatus>(value.ToString(), out var aupaStatus);
+            return aupaStatus;
+        }
+
         public static bool IsDateTime(this string value)
         {
             return DateTime.TryParse(value, out _);
@@ -115,6 +121,18 @@ namespace Sfa.Tl.Matching.Application.Extensions
             }
         }
 
+        public static bool IsAupaStatus(this int value)
+        {
+            try
+            {
+                return (value >= 0) && (value == 1 || value == 2 || value == 3 || value == 4);
+            }
+            catch (NoMatchFoundException)
+            {
+                return false;
+            }
+        }
+
         public static bool IsCompanyType(this string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return true;
@@ -123,6 +141,18 @@ namespace Sfa.Tl.Matching.Application.Extensions
             {
                 value.DehumanizeTo<CompanyType>();
                 return true;
+            }
+            catch (NoMatchFoundException)
+            {
+                return false;
+            }
+        }
+
+        public static bool IsCompanyType(this int value)
+        {
+            try
+            {
+                return (value >= 0) && (value == 1 || value == 2 || value == 3 || value == 4);
             }
             catch (NoMatchFoundException)
             {
