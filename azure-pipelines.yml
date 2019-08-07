@@ -85,14 +85,14 @@ steps:
     configuration: '$(buildConfiguration)'
     msbuildArgs: '/p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Build End To End Tests'
-  inputs:
-    command: publish
-    publishWebProjects: false
-    zipAfterPublish: false
-    projects: 'src\Sfa.Tl.Matching.EndToEndTests\Sfa.Tl.Matching.EndToEndTests.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore'
+# - task: DotNetCoreCLI@2
+  # displayName: 'Build Acceptance Tests'
+  # inputs:
+    # command: publish
+    # publishWebProjects: false
+    # zipAfterPublish: false
+    # projects: 'src\Sfa.Tl.Matching.EndToEndTests\Sfa.Tl.Matching.EndToEndTests.csproj'
+    # arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore'
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
