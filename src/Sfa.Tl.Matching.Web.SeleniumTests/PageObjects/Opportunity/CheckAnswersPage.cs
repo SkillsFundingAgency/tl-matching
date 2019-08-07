@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using FluentAssertions;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Proximity;
-using Sfa.Tl.Matching.Web.Tests.Common.Database;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
 {
@@ -74,38 +71,6 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         {
             AssertTitle(Title);
             AssertHeader1(Title);
-        }
-
-        public void AssertDatabase()
-        {
-            var opportunityRetriever = new OpportunityRetriever();
-            var opportunity = opportunityRetriever.GetLast();
-            var opportunityItem = opportunity.OpportunityItem.First();
-
-            var skillAreaOnScreen = Driver.FindElement(_skillAreaValue).Text;
-            skillAreaOnScreen.Should().Be(opportunityItem.Route.Name);
-
-            var postcodeOnScreen = Driver.FindElement(_postcodeValue).Text;
-            postcodeOnScreen.Should().Be(opportunityItem.Postcode);
-
-            var jobRoleOnScreen = Driver.FindElement(_jobRoleValue).Text;
-            jobRoleOnScreen.Should().Be(opportunityItem.JobRole);
-
-            var studentsWantedOnScreen = Driver.FindElement(_studentsWantedValue).Text;
-            studentsWantedOnScreen.Should().Be(opportunityItem.PlacementsKnown.GetValueOrDefault()
-                ? opportunityItem.Placements.ToString()
-                : "at least 1");
-
-            var referral1 = opportunityItem.Referral.First();
-            var providerVenue1 = referral1.ProviderVenue;
-            var provider1 = providerVenue1.Provider;
-            var provider1OnScreen = Driver.FindElement(_provider1Value).Text;
-            provider1OnScreen.Should().Be(provider1.Name);
-
-            var provider1DistanceOnScreen = Driver.FindElement(_provider1DistanceValue).Text;
-            provider1DistanceOnScreen.Should()
-                .Be(
-                    $"{referral1.DistanceFromEmployer:#0.0} miles from {opportunityItem.Postcode}");
         }
     }
 }

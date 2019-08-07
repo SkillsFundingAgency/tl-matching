@@ -39,10 +39,5 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Proximity
             AssertTitle(Title);
             AssertHeader1(Title);
         }
-
-        public void AssertDatabase()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

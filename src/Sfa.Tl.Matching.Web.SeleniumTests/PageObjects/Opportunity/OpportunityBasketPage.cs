@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using FluentAssertions;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer;
-using Sfa.Tl.Matching.Web.Tests.Common.Database;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
 {
@@ -41,27 +38,6 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         {
             AssertTitle(Title);
             AssertHeader1(Title);
-        }
-
-        public void AssertDatabase()
-        {
-            var opportunityRetriever = new OpportunityRetriever();
-            var opportunity = opportunityRetriever.GetLast();
-            var opportunityItem = opportunity.OpportunityItem.First();
-
-            var workplaceOnScreen = Driver.FindElement(_workplaceValue).Text;
-            workplaceOnScreen.Should().Be($"{opportunityItem.Town} {opportunityItem.Postcode}");
-
-            var jobRoleOnScreen = Driver.FindElement(_jobRoleValue).Text;
-            jobRoleOnScreen.Should().Be(opportunityItem.JobRole);
-
-            var studentsWantedOnScreen = Driver.FindElement(_studentsWantedValue).Text;
-            studentsWantedOnScreen.Should().Be(opportunityItem.PlacementsKnown.GetValueOrDefault()
-                ? opportunityItem.Placements.ToString()
-                : "at least 1");
-
-            var providersOnScreen = Driver.FindElement(_providersValue).Text;
-            providersOnScreen.Should().Be(opportunityItem.Referral.Count.ToString());
         }
     }
 }

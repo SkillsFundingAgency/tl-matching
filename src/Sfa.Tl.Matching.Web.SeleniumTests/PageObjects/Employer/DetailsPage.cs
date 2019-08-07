@@ -3,7 +3,7 @@ using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
 {
-    public class DetailsPage : PageBase
+    public class DetailsPage : PageBase, IPage
     {
         private readonly By _findDifferentLink = By.Id("tl-find-different");
         private readonly By _contactName = By.Id("EmployerContact");

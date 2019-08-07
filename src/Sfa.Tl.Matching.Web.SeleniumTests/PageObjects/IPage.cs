@@ -3,6 +3,5 @@
     public interface IPage
     {
         void AssertContent();
-        void AssertDatabase();
     }
 }

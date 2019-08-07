@@ -15,10 +15,5 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
             AssertTitle(Title);
             AssertHeader1(Title);
         }
-
-        public void AssertDatabase()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

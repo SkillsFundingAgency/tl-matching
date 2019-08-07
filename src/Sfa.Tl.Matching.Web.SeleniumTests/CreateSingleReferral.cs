@@ -54,11 +54,9 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
 
             var checkAnswersPage = detailsPage.ClickConfirm();
             checkAnswersPage.AssertContent();
-            //checkAnswersPage.AssertDatabase();
 
             var opportunityBasketPage = checkAnswersPage.ClickConfirm();
             opportunityBasketPage.AssertContent();
-            //opportunityBasketPage.AssertDatabase();
 
             var employerConsentPage = opportunityBasketPage.ClickContinue();
             employerConsentPage.AssertContent();

@@ -5,9 +5,9 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
     public class IdamsLogin
     {
         private const string StandardUsername = "Tmatching1";
-        private const string StandardPassword = "Windmill1";
+        private const string StandardPassword = "";
         private const string AdminUsername = "Tmatching3";
-        private const string AdminPassword = "Windmill1";
+        private const string AdminPassword = "";
 
         private readonly IWebDriver _driver;
 

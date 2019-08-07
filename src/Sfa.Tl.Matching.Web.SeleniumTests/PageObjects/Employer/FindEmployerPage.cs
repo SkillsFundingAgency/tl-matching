@@ -34,10 +34,5 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
             //AssertTitle(Title);
             //AssertHeader1(Title);
         }
-
-        public void AssertDatabase()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

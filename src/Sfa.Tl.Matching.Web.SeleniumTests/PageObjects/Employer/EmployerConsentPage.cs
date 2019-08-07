@@ -1,7 +1,5 @@
-﻿using FluentAssertions;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity;
-using Sfa.Tl.Matching.Web.Tests.Common.Database;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
 {
@@ -46,26 +44,6 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
         {
             AssertTitle(Title);
             AssertHeader1("Before you send emails");
-        }
-
-        public void AssertDatabase()
-        {
-            var opportunityRetriever = new OpportunityRetriever();
-            var opportunity = opportunityRetriever.GetLast();
-
-            var contactNameOnScreen = Driver.FindElement(_contactNameValue).Text;
-            contactNameOnScreen.Should().Be(opportunity.EmployerContact);
-
-            var contactEmailOnScreen = Driver.FindElement(_contactEmailValue).Text;
-            contactEmailOnScreen.Should().Be(opportunity.EmployerContactEmail);
-
-            var contactPhoneOnScreen = Driver.FindElement(_contactPhoneValue).Text;
-            contactPhoneOnScreen.Should().Be(opportunity.EmployerContactPhone);
-
-            var confirmationOnScreen = Driver.FindElement(_confirmationValue).Text;
-            confirmationOnScreen.Should().Be($"{_contactNameValue} has confirmed that we can " +
-                                             "share their details with providers, and that these providers " +
-                                             "can contact them about industry placements.");
         }
     }
 }
