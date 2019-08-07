@@ -215,7 +215,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<int> CreateOrUpdateEmployerAsync(CrmEmployerEventBase employerData)
         {
-            var employerStaging = _mapper.Map<EmployerStagingFileImportDto>(payload);
+            var employerStaging = _mapper.Map<EmployerStagingFileImportDto>(employerData);
 
             var validationResult = await _employerValidator.ValidateAsync(employerStaging);
 
