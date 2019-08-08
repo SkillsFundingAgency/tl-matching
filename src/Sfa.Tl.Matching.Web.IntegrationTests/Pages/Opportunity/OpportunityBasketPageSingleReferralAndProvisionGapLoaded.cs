@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
 
-            var saveLink = documentHtml.QuerySelector("#tl-save") as IHtmlAnchorElement;
+            var saveLink = documentHtml.GetElementById("tl-save") as IHtmlAnchorElement;
             saveLink.Text.Should().Be("Save and come back later");
             saveLink.PathName.Should().Be($"/saved-opportunities");
 
@@ -69,11 +69,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             providerDeleteCell.Text.Should().Be("Delete");
             providerDeleteCell.PathName.Should().Be($"/remove-opportunity/{OpportunityItemId}");
 
-            var addAnotherLink = documentHtml.QuerySelector("#tl-add-another-opportunity") as IHtmlAnchorElement;
+            var addAnotherLink = documentHtml.GetElementById("tl-add-another-opportunity") as IHtmlAnchorElement;
             addAnotherLink.Text.Should().Be("Add another opportunity");
             addAnotherLink.PathName.Should().Be($"/find-providers/{OpportunityId}");
 
-            var continueButton = documentHtml.QuerySelector("#tl-continue") as IHtmlButtonElement;
+            var continueButton = documentHtml.GetElementById("tl-continue") as IHtmlButtonElement;
             continueButton.Name.Should().Be("SubmitAction");
             continueButton.Value.Should().Be("SaveSelectedOpportunities");
             continueButton.TextContent.Should().Be("Continue with opportunity");
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             noProviderRow.Cells[2].TextContent.Should().Be("1");
             noProviderRow.Cells[3].TextContent.Should().Be("Providers were too far away");
 
-            var downloadLink = documentHtml.QuerySelector("#tl-download") as IHtmlAnchorElement;
+            var downloadLink = documentHtml.GetElementById("tl-download") as IHtmlAnchorElement;
             downloadLink.Text.Should().Be("Download all data as a spreadsheet");
             downloadLink.PathName.Should().Be($"/download-opportunity/{OpportunityId}");
         }

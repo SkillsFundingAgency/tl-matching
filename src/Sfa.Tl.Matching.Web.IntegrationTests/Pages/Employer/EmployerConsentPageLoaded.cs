@@ -42,24 +42,24 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
 
-            var backLink = documentHtml.QuerySelector("#tl-back") as IHtmlAnchorElement;
+            var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
             backLink.PathName.Should().Be($"/employer-opportunities/{OpportunityId}-{OpportunityItemId}");
 
-            var saveLink = documentHtml.QuerySelector("#tl-save") as IHtmlAnchorElement;
+            var saveLink = documentHtml.GetElementById("tl-save") as IHtmlAnchorElement;
             saveLink.Text.Should().Be("Save and come back later");
             saveLink.PathName.Should().Be($"/save-employer-opportunity/{OpportunityId}");
 
-            var name = documentHtml.QuerySelector("#tl-name") as IHtmlParagraphElement;
+            var name = documentHtml.GetElementById("tl-name") as IHtmlParagraphElement;
             name.TextContent.Should().Be("Employer Contact");
 
-            var email = documentHtml.QuerySelector("#tl-email") as IHtmlParagraphElement;
+            var email = documentHtml.GetElementById("tl-email") as IHtmlParagraphElement;
             email.TextContent.Should().Be("employer-contact@email.com");
 
-            var phone = documentHtml.QuerySelector("#tl-phone") as IHtmlParagraphElement;
+            var phone = documentHtml.GetElementById("tl-phone") as IHtmlParagraphElement;
             phone.TextContent.Should().Be("01474 787878");
 
-            var changeLink = documentHtml.QuerySelector("#tl-change") as IHtmlAnchorElement;
+            var changeLink = documentHtml.GetElementById("tl-change") as IHtmlAnchorElement;
             changeLink.Text.Should().Be("Change contact details");
             changeLink.PathName.Should().Be($"/check-employer-details/{OpportunityId}-{OpportunityItemId}");
 

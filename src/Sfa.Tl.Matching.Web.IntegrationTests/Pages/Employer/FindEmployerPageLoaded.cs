@@ -36,10 +36,14 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
             documentHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
 
-            var companyName = documentHtml.QuerySelector("#companyNameHidden") as IHtmlInputElement;
+            var companyName = documentHtml.GetElementById("companyNameHidden") as IHtmlInputElement;
             companyName.Value.Should().Be("Company Name");
 
-            var continueButton = documentHtml.QuerySelector("#tl-continue") as IHtmlButtonElement;
+            var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
+            backLink.Text.Should().Be("Back");
+            backLink.PathName.Should().Be($"/placement-information/{OpportunityItemId}");
+
+            var continueButton = documentHtml.GetElementById("tl-continue") as IHtmlButtonElement;
             continueButton.TextContent.Should().Be("Continue");
             continueButton.Type.Should().Be("submit");
         }

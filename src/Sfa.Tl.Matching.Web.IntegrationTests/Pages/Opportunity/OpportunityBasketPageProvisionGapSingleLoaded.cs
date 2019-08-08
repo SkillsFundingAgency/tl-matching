@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
 
-            var saveLink = documentHtml.QuerySelector("#tl-save") as IHtmlAnchorElement;
+            var saveLink = documentHtml.GetElementById("tl-save") as IHtmlAnchorElement;
             saveLink.Text.Should().Be("Save and come back later");
             saveLink.PathName.Should().Be($"/saved-opportunities");
 
@@ -53,16 +53,16 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             row.Cells[2].TextContent.Should().Be("1");
             row.Cells[3].TextContent.Should().Be("Employer had a bad experience with them");
 
-            var addAnotherLink = documentHtml.QuerySelector("#tl-add-another-opportunity") as IHtmlAnchorElement;
+            var addAnotherLink = documentHtml.GetElementById("tl-add-another-opportunity") as IHtmlAnchorElement;
             addAnotherLink.Text.Should().Be("Add another opportunity");
             addAnotherLink.PathName.Should().Be($"/find-providers/{OpportunityId}");
 
-            var finishButton = documentHtml.QuerySelector("#tl-finish") as IHtmlButtonElement;
+            var finishButton = documentHtml.GetElementById("tl-finish") as IHtmlButtonElement;
             finishButton.Name.Should().Be("SubmitAction");
             finishButton.Value.Should().Be("CompleteProvisionGaps");
             finishButton.TextContent.Should().Be("Finish");
 
-            var downloadLink = documentHtml.QuerySelector("#tl-download") as IHtmlAnchorElement;
+            var downloadLink = documentHtml.GetElementById("tl-download") as IHtmlAnchorElement;
             downloadLink.Text.Should().Be("Download all data as a spreadsheet");
             downloadLink.PathName.Should().Be($"/download-opportunity/{OpportunityId}");
         }

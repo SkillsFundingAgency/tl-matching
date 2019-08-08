@@ -43,13 +43,17 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
 
-            var cancelLink = documentHtml.QuerySelector("#tl-finish") as IHtmlAnchorElement;
+            var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
+            backLink.Text.Should().Be("Back");
+            backLink.PathName.Should().Be($"/get-placement-or-employer/{OpportunityId}-{OpportunityItemId}");
+
+            var cancelLink = documentHtml.GetElementById("tl-finish") as IHtmlAnchorElement;
             cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");
 
             var providerResultsUrl =
                 $"/provider-results-for-opportunity-1000-item-{OpportunityItemId}-within-10-miles-of-SW1A%202AA-for-route-1";
 
-            var placementInformationTable = documentHtml.QuerySelector("#tl-placement-table") as IHtmlTableElement;
+            var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
             var skillAreaRow = placementInformationTable.Rows[0];
             skillAreaRow.Cells[1].TextContent.Should().Be("\n                        Agriculture, environmental and animal care\n                    ");
             var skillAreaChangeCell = skillAreaRow.Cells[2].Children[0] as IHtmlAnchorElement;
@@ -74,7 +78,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             studentsWantedChangeCell.Text().Should().Be("Change the number of placements");
             studentsWantedChangeCell.PathName.Should().Be($"/placement-information/{OpportunityItemId}");
 
-            var providerTable = documentHtml.QuerySelector("#tl-providers-table") as IHtmlTableElement;
+            var providerTable = documentHtml.GetElementById("tl-providers-table") as IHtmlTableElement;
             var provider1Row = providerTable.Rows[0];
             var providerNameCell = provider1Row.Cells[0] as IHtmlTableHeaderCellElement;
             providerNameCell.TextContent.Should().Be(" (part of )");
@@ -83,11 +87,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             distanceCell.TextContent.Should()
                 .Be("\n                            1.2 miles from SW1A 2AA\n                        ");
 
-            var changeProvidersLink = documentHtml.QuerySelector("#tl-change-providers") as IHtmlAnchorElement;
+            var changeProvidersLink = documentHtml.GetElementById("tl-change-providers") as IHtmlAnchorElement;
             changeProvidersLink.TextContent.Should().Be("Change providers");
             changeProvidersLink.PathName.Should().Be(providerResultsUrl);
 
-            var confirmButton = documentHtml.QuerySelector("#tl-confirm") as IHtmlButtonElement;
+            var confirmButton = documentHtml.GetElementById("tl-confirm") as IHtmlButtonElement;
             confirmButton.TextContent.Should().Be("Confirm and save opportunity");
             confirmButton.Type.Should().Be("submit");
         }

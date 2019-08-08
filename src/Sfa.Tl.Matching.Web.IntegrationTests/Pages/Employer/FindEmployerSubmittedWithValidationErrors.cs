@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
         private static void AssertError(IHtmlDocument responseContent, string errorMessage)
         {
-            var companyNameInput = responseContent.QuerySelector("#CompanyName");
+            var companyNameInput = responseContent.GetElementById("CompanyName");
             var companyNameDiv = companyNameInput.ParentElement;
             companyNameDiv.ClassName.Should().Be("govuk-form-group govuk-form-group--error");
             companyNameDiv.QuerySelector(".govuk-error-message").TextContent.Should()

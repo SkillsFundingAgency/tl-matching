@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Sfa.Tl.Matching.Web.Tests.Common;
@@ -10,6 +11,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
     public class ProximityIndexPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Set up placement opportunity";
+        private const int OpportunityId = 1000;
+        private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
@@ -21,6 +24,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
         [Fact]
         public async Task ReturnsCorrectResponse()
         {
+            // ReSharper disable all PossibleNullReferenceException
+
             var client = _factory.CreateClient();
 
             var response = await client.GetAsync("/find-providers");
@@ -36,6 +41,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
 
+            var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
+            backLink.Text.Should().Be("Back");
+            backLink.PathName.Should().Be("/Start");
+
+            var cancelLink = documentHtml.GetElementById("tl-finish") as IHtmlAnchorElement;
+            cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");
+
             var routeList = documentHtml.GetElementById("SelectedRouteId");
             routeList.Children.Length.Should().Be(2);
             routeList.Text().Should().Be("Agriculture, environmental and animal care\nBusiness and administration\n");
@@ -43,8 +55,9 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             var postcode = documentHtml.GetElementById("Postcode");
             postcode.Should().NotBeNull();
 
-            var search = documentHtml.GetElementById("tl-search");
-            search.Should().NotBeNull();
+            var search = documentHtml.GetElementById("tl-search") as IHtmlButtonElement;
+            search.TextContent.Should().Be("Search");
+            search.Type.Should().Be("submit");
         }
     }
 }

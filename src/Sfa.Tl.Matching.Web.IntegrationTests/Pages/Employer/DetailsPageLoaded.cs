@@ -42,27 +42,27 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
 
-            var backLink = documentHtml.QuerySelector("#tl-back") as IHtmlAnchorElement;
+            var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
             backLink.PathName.Should().Be($"/who-is-employer/{OpportunityId}-{OpportunityItemId}");
 
-            var cancelLink = documentHtml.QuerySelector("#tl-finish") as IHtmlAnchorElement;
+            var cancelLink = documentHtml.GetElementById("tl-finish") as IHtmlAnchorElement;
             cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");
 
-            var findAnotherLink = documentHtml.QuerySelector("#tl-find-different") as IHtmlAnchorElement;
+            var findAnotherLink = documentHtml.GetElementById("tl-find-different") as IHtmlAnchorElement;
             findAnotherLink.Text.Should().Be("Find a different employer");
             findAnotherLink.PathName.Should().Be($"/who-is-employer/{OpportunityId}-{OpportunityItemId}");
 
-            var employerContact = documentHtml.QuerySelector("#EmployerContact") as IHtmlInputElement;
+            var employerContact = documentHtml.GetElementById("EmployerContact") as IHtmlInputElement;
             employerContact.Value.Should().Be("Employer Contact");
 
-            var employerContactEmail = documentHtml.QuerySelector("#EmployerContactEmail") as IHtmlInputElement;
+            var employerContactEmail = documentHtml.GetElementById("EmployerContactEmail") as IHtmlInputElement;
             employerContactEmail.Value.Should().Be("employer-contact@email.com");
 
-            var employerContactPhone = documentHtml.QuerySelector("#EmployerContactPhone") as IHtmlInputElement;
+            var employerContactPhone = documentHtml.GetElementById("EmployerContactPhone") as IHtmlInputElement;
             employerContactPhone.Value.Should().Be("01474 787878");
 
-            var confirmButton = documentHtml.QuerySelector("#tl-confirm") as IHtmlButtonElement;
+            var confirmButton = documentHtml.GetElementById("tl-confirm") as IHtmlButtonElement;
             confirmButton.TextContent.Should().Be("Confirm and continue");
             confirmButton.Type.Should().Be("submit");
         }

@@ -38,19 +38,19 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
 
-            var jobRole = documentHtml.QuerySelector("#JobRole") as IHtmlInputElement;
+            var jobRole = documentHtml.GetElementById("JobRole") as IHtmlInputElement;
             jobRole.Value.Should().Be("Job Role");
 
-            var placements = documentHtml.QuerySelector("#Placements") as IHtmlInputElement;
+            var placements = documentHtml.GetElementById("Placements") as IHtmlInputElement;
             placements.Value.Should().Be("1");
 
-            var placementLocationYes = documentHtml.QuerySelector("#placement-location-yes") as IHtmlInputElement;
+            var placementLocationYes = documentHtml.GetElementById("placement-location-yes") as IHtmlInputElement;
             placementLocationYes.Value.Should().Be("true");
 
-            var placementLocationNo = documentHtml.QuerySelector("#placement-location-no") as IHtmlInputElement;
+            var placementLocationNo = documentHtml.GetElementById("placement-location-no") as IHtmlInputElement;
             placementLocationNo.Value.Should().Be("false");
 
-            var continueButton = documentHtml.QuerySelector("#tl-continue") as IHtmlButtonElement;
+            var continueButton = documentHtml.GetElementById("tl-continue") as IHtmlButtonElement;
             continueButton.TextContent.Should().Be("Continue");
             continueButton.Type.Should().Be("submit");
         }
