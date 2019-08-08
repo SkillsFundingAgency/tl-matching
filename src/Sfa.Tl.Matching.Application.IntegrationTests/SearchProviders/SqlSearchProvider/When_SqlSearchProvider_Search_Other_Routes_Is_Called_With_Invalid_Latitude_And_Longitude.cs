@@ -7,11 +7,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider
 {
-    public class When_SqlSearchProvider_Search_Is_Called_With_InValid_PostCode
+    public class When_SqlSearchProvider_Search_Other_Routes_Is_Called_With_Invalid_Latitude_And_Longitude
     {
         private readonly Data.SearchProviders.SqlSearchProvider _provider;
 
-        public When_SqlSearchProvider_Search_Is_Called_With_InValid_PostCode()
+        public When_SqlSearchProvider_Search_Other_Routes_Is_Called_With_Invalid_Latitude_And_Longitude()
         {
             var logger = Substitute.For<ILogger<Data.SearchProviders.SqlSearchProvider>>();
 
@@ -20,9 +20,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         }
 
         [Fact]
-        public void Then_Results_Should_Not_Be_Null()
+        public void Then_Search_Should_Throw_Exception()
         {
-            Action action = () => _provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "CV1 234", SearchRadius = 5, SelectedRouteId = 7, Latitude = "", Longitude = "" }).GetAwaiter().GetResult();
+            Action action = () => _provider.SearchProvidersForOtherRoutesByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "CV1 2WT", SearchRadius = 5, SelectedRouteId = 7, Latitude = "", Longitude = "" }).GetAwaiter().GetResult();
             action.Should().ThrowExactly<InvalidOperationException>();
         }
     }
