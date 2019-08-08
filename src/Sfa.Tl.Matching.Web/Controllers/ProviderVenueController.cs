@@ -75,7 +75,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var isSaveSection = IsSaveSection(viewModel.SubmitAction);
             if (isSaveSection)
-                return View(viewModel);
+            {
+                return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.Id, providerId = viewModel.ProviderId });
+            }
 
             if (viewModel.Qualifications == null || viewModel.Qualifications.Count == 0)
             {
