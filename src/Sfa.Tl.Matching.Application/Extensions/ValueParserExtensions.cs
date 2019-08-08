@@ -125,7 +125,12 @@ namespace Sfa.Tl.Matching.Application.Extensions
         {
             try
             {
-                return (value >= 0) && (value == 1 || value == 2 || value == 3 || value == 4);
+                //Aware	        229660000
+                //Understand	229660001
+                //Planning	    229660002
+                //Active	    229660003
+
+                return (value >= 0) && (value == 229660000 || value == 229660001 || value == 229660002 || value == 229660003);
             }
             catch (NoMatchFoundException)
             {
@@ -152,7 +157,10 @@ namespace Sfa.Tl.Matching.Application.Extensions
         {
             try
             {
-                return (value >= 0) && (value == 1 || value == 2 || value == 3 || value == 4);
+                //Employer          200005
+                //Employer Provider 200008
+
+                return (value >= 0) && (value == 200005 || value == 200008);
             }
             catch (NoMatchFoundException)
             {
