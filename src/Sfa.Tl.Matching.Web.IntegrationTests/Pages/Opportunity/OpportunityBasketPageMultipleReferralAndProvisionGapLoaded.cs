@@ -45,6 +45,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
 
+            var saveLink = documentHtml.QuerySelector("#tl-save") as IHtmlAnchorElement;
+            saveLink.Text.Should().Be("Save and come back later");
+            saveLink.PathName.Should().Be($"/saved-opportunities");
+
             var tabList = documentHtml.QuerySelector(".govuk-tabs__list");
             var providerTab = tabList.Children[0] as IHtmlListItemElement;
             providerTab.Text().Should().Be("\n            \n                With providers\n            \n        ");
@@ -82,6 +86,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             noProviderRow.Cells[1].TextContent.Should().Be("Job Role");
             noProviderRow.Cells[2].TextContent.Should().Be("1");
             noProviderRow.Cells[3].TextContent.Should().Be("Employer had a bad experience with them");
+
+            var downloadLink = documentHtml.QuerySelector("#tl-download") as IHtmlAnchorElement;
+            downloadLink.Text.Should().Be("Download all data as a spreadsheet");
+            downloadLink.PathName.Should().Be($"/download-opportunity/{OpportunityId}");
         }
     }
 }

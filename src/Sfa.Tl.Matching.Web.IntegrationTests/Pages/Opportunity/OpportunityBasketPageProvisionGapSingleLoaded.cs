@@ -42,6 +42,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
 
+            var saveLink = documentHtml.QuerySelector("#tl-save") as IHtmlAnchorElement;
+            saveLink.Text.Should().Be("Save and come back later");
+            saveLink.PathName.Should().Be($"/saved-opportunities");
+
             var basketTable = documentHtml.QuerySelector(".govuk-table") as IHtmlTableElement;
             var row = basketTable.Rows[1];
             row.Cells[0].TextContent.Should().Be("London SW1A 2AA");
@@ -57,6 +61,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             finishButton.Name.Should().Be("SubmitAction");
             finishButton.Value.Should().Be("CompleteProvisionGaps");
             finishButton.TextContent.Should().Be("Finish");
+
+            var downloadLink = documentHtml.QuerySelector("#tl-download") as IHtmlAnchorElement;
+            downloadLink.Text.Should().Be("Download all data as a spreadsheet");
+            downloadLink.PathName.Should().Be($"/download-opportunity/{OpportunityId}");
         }
     }
 }

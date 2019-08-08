@@ -11,6 +11,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
     public class CheckAnswersPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Check answers";
+        private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
@@ -42,6 +43,9 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
 
+            var cancelLink = documentHtml.QuerySelector("#tl-finish") as IHtmlAnchorElement;
+            cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");
+
             var providerResultsUrl =
                 $"/provider-results-for-opportunity-1000-item-{OpportunityItemId}-within-10-miles-of-SW1A%202AA-for-route-1";
 
@@ -70,7 +74,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             studentsWantedChangeCell.Text().Should().Be("Change the number of placements");
             studentsWantedChangeCell.PathName.Should().Be($"/placement-information/{OpportunityItemId}");
 
-            // TODO Assert Provider Information -- Change UI
             var providerTable = documentHtml.QuerySelector("#tl-providers-table") as IHtmlTableElement;
             var provider1Row = providerTable.Rows[0];
             var providerNameCell = provider1Row.Cells[0] as IHtmlTableHeaderCellElement;
