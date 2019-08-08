@@ -23,6 +23,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         [Fact]
         public async Task ReturnsCorrectResponse()
         {
+            // ReSharper disable all PossibleNullReferenceException
+
             var client = _factory.CreateClient();
             var response = await client.GetAsync($"employer-details/{OpportunityId}-{OpportunityItemId}");
 
@@ -36,6 +38,16 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
             var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
+
+            var employerName = documentHtml.QuerySelector(".govuk-caption-l");
+            employerName.TextContent.Should().Be("Company Name");
+
+            var backLink = documentHtml.QuerySelector("#tl-back") as IHtmlAnchorElement;
+            backLink.Text.Should().Be("Back");
+            backLink.PathName.Should().Be($"/who-is-employer/{OpportunityId}-{OpportunityItemId}");
+
+            var cancelLink = documentHtml.QuerySelector("#tl-finish") as IHtmlAnchorElement;
+            cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");
 
             var findAnotherLink = documentHtml.QuerySelector("#tl-find-different") as IHtmlAnchorElement;
             findAnotherLink.Text.Should().Be("Find a different employer");
@@ -52,6 +64,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
             var confirmButton = documentHtml.QuerySelector("#tl-confirm") as IHtmlButtonElement;
             confirmButton.TextContent.Should().Be("Confirm and continue");
+            confirmButton.Type.Should().Be("submit");
         }
     }
 }

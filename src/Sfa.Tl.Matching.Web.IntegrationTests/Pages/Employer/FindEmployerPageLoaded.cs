@@ -23,6 +23,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         [Fact]
         public async Task ReturnsCorrectResponse()
         {
+            // ReSharper disable all PossibleNullReferenceException
+
             var client = _factory.CreateClient();
             var response = await client.GetAsync($"who-is-employer/{OpportunityId}-{OpportunityItemId}");
 
@@ -39,6 +41,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
             var continueButton = documentHtml.QuerySelector("#tl-continue") as IHtmlButtonElement;
             continueButton.TextContent.Should().Be("Continue");
+            continueButton.Type.Should().Be("submit");
         }
     }
 }

@@ -23,6 +23,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         [Fact]
         public async Task ReturnsCorrectResponse()
         {
+            // ReSharper disable all PossibleNullReferenceException
+
             var client = _factory.CreateClient();
             var response = await client.GetAsync($"permission/{OpportunityId}-{OpportunityItemId}");
 
@@ -36,6 +38,17 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
             var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be("Before you send emails");
+
+            var employerName = documentHtml.QuerySelector(".govuk-caption-l");
+            employerName.TextContent.Should().Be("Company Name");
+
+            var backLink = documentHtml.QuerySelector("#tl-back") as IHtmlAnchorElement;
+            backLink.Text.Should().Be("Back");
+            backLink.PathName.Should().Be($"/employer-opportunities/{OpportunityId}-{OpportunityItemId}");
+
+            var saveLink = documentHtml.QuerySelector("#tl-save") as IHtmlAnchorElement;
+            saveLink.Text.Should().Be("Save and come back later");
+            saveLink.PathName.Should().Be($"/save-employer-opportunity/{OpportunityId}");
 
             var name = documentHtml.QuerySelector("#tl-name") as IHtmlParagraphElement;
             name.TextContent.Should().Be("Employer Contact");

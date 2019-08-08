@@ -23,6 +23,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         [Fact]
         public async Task ReturnsCorrectResponse()
         {
+            // ReSharper disable all PossibleNullReferenceException
+
             var client = _factory.CreateClient();
             var response = await client.GetAsync($"employer-opportunities/{OpportunityId}-{OpportunityItemId}");
 

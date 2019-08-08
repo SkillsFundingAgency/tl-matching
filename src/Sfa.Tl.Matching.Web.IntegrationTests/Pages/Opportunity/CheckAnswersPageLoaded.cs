@@ -23,6 +23,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         [Fact]
         public async Task ReturnsCorrectResponse()
         {
+            // ReSharper disable all PossibleNullReferenceException
+
             var client = _factory.CreateClient();
             var response = await client.GetAsync($"check-answers/{OpportunityItemId}");
 
@@ -43,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var providerResultsUrl =
                 $"/provider-results-for-opportunity-1000-item-{OpportunityItemId}-within-10-miles-of-SW1A%202AA-for-route-1";
 
-            var placementInformationTable = documentHtml.QuerySelector(".govuk-table") as IHtmlTableElement;
+            var placementInformationTable = documentHtml.QuerySelector("#tl-placement-table") as IHtmlTableElement;
             var skillAreaRow = placementInformationTable.Rows[0];
             skillAreaRow.Cells[1].TextContent.Should().Be("\n                        Agriculture, environmental and animal care\n                    ");
             var skillAreaChangeCell = skillAreaRow.Cells[2].Children[0] as IHtmlAnchorElement;
@@ -69,10 +71,22 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             studentsWantedChangeCell.PathName.Should().Be($"/placement-information/{OpportunityItemId}");
 
             // TODO Assert Provider Information -- Change UI
+            var providerTable = documentHtml.QuerySelector("#tl-providers-table") as IHtmlTableElement;
+            var provider1Row = providerTable.Rows[0];
+            var providerNameCell = provider1Row.Cells[0] as IHtmlTableHeaderCellElement;
+            providerNameCell.TextContent.Should().Be(" (part of )");
+
+            var distanceCell = provider1Row.Cells[1] as IHtmlTableDataCellElement;
+            distanceCell.TextContent.Should()
+                .Be("\n                            1.2 miles from SW1A 2AA\n                        ");
 
             var changeProvidersLink = documentHtml.QuerySelector("#tl-change-providers") as IHtmlAnchorElement;
             changeProvidersLink.TextContent.Should().Be("Change providers");
             changeProvidersLink.PathName.Should().Be(providerResultsUrl);
+
+            var confirmButton = documentHtml.QuerySelector("#tl-confirm") as IHtmlButtonElement;
+            confirmButton.TextContent.Should().Be("Confirm and save opportunity");
+            confirmButton.Type.Should().Be("submit");
         }
     }
 }
