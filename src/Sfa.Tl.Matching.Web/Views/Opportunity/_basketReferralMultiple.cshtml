@@ -16,7 +16,7 @@
     </fieldset>
 </div>
 <div class="govuk-form-group" sfa-validation-for="@Model.ReferralItems[0].IsSelected " sfa-validationerror-class="govuk-form-group--error">
-    <span class="govuk-error-message" asp-validation-for="@Model.ReferralItems[0].IsSelected" ></span>
+    <span class="govuk-error-message" asp-validation-for="@Model.ReferralItems[0].IsSelected"></span>
 
     <table class="govuk-table tl-table-responsive tl-table-clickable">
         <thead class="govuk-table__head">
@@ -40,7 +40,7 @@
                         <div class="govuk-checkboxes">
                             <div class="govuk-checkboxes__item">
                                 <input class="govuk-checkboxes__input tl-checkbox" asp-for="@Model.ReferralItems[i].IsSelected" name="SelectedOpportunity[@i].IsSelected" />
-                                <label class="govuk-label govuk-checkboxes__label" asp-for="@Model.ReferralItems[i].IsSelected">
+                                <label class="govuk-label govuk-checkboxes__label" asp-for="@Model.ReferralItems[i].IsSelected" name="SelectedOpportunity[@i].IsSelected">
                                     <span class="govuk-visually-hidden">Select this opportunity</span>
                                 </label>
                             </div>
