@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using System.Collections.Generic;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -30,7 +31,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ReferralEmails
                 functionLogRepo);
 
             //Assert
-            await referralEmailService.Received(1).SendEmployerReferralEmailAsync(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<string>());
+            await referralEmailService.Received(1).SendEmployerReferralEmailAsync(Arg.Any<int>(), Arg.Any<IEnumerable<int>>(), Arg.Any<int>(), Arg.Any<string>());
 
         }
     }

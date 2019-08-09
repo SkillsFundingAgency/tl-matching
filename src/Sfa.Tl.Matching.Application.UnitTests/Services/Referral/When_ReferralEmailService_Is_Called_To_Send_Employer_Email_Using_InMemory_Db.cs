@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi=>oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var expectedResult = await GetExpectedResult(repo, opportunity.Id, itemIds);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -145,7 +145,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id),  backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -215,7 +215,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var expectedResult = await GetExpectedResult(repo, opportunity.Id, itemIds);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -263,7 +263,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var expectedResult = await GetExpectedResult(repo, opportunity.Id, itemIds);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -310,7 +310,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id),  backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),

@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
             //Act
-            await sut.SendProviderReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
 
             var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
@@ -111,7 +111,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
             //Act
-            await sut.SendProviderReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
 
             var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
@@ -179,7 +179,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  && oi.IsSelectedForReferral).Select(oi => oi.Id);
 
             //Act
-            await sut.SendProviderReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
             var data = (from op in dbContext.Opportunity
@@ -279,7 +279,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 ).ToList();
 
             //Act
-            await sut.SendProviderReferralEmailAsync(opportunity.Id, backgroundProcessHistory.Id, "System");
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),

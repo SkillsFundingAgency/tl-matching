@@ -45,13 +45,13 @@ namespace Sfa.Tl.Matching.Application.Services
         }
 
 
-        public async Task SendEmployerReferralEmailAsync(int opportunityId, int backgroundProcessHistoryId, string username)
+        public async Task SendEmployerReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
         {
             if (await GetBackgroundProcessHistoryData(backgroundProcessHistoryId) == null) return;
 
             try
             {
-                var employerReferral = await GetEmployerReferrals(opportunityId, GetOpportunityItemIds(opportunityId));
+                var employerReferral = await GetEmployerReferrals(opportunityId, itemIds);
                 var sb = new StringBuilder();
 
                 if (employerReferral == null) return;
@@ -101,11 +101,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
         }
 
-        public async Task SendProviderReferralEmailAsync(int opportunityId, int backgroundProcessHistoryId, string username)
+        public async Task SendProviderReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
         {
             if (await GetBackgroundProcessHistoryData(backgroundProcessHistoryId) == null) return;
 
-            var referrals = await GetOpportunityReferrals(opportunityId, GetOpportunityItemIds(opportunityId));
+            var referrals = await GetOpportunityReferrals(opportunityId, itemIds);
 
             try
             {
@@ -152,17 +152,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
 
-        }
-
-        private IEnumerable<int> GetOpportunityItemIds(int opportunityId)
-        {
-            var itemIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
-                                                                   && oi.IsSaved
-                                                                   && oi.IsSelectedForReferral
-                                                                   && !oi.IsCompleted)
-                .Select(oi => oi.Id).ToList();
-
-            return itemIds;
         }
 
         private async Task CompleteSelectedReferrals(int opportunityId, int itemId, string username)

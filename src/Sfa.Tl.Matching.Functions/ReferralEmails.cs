@@ -26,10 +26,11 @@ namespace Sfa.Tl.Matching.Functions
 
             var opportunityId = employerReferralEmailData.OpportunityId;
             var backgroundProcessHistoryId = employerReferralEmailData.BackgroundProcessHistoryId;
+            var itemIds = employerReferralEmailData.ItemIds;
 
             try
             {
-                await referralEmailService.SendEmployerReferralEmailAsync(opportunityId, backgroundProcessHistoryId, "System");
+                await referralEmailService.SendEmployerReferralEmailAsync(opportunityId, itemIds, backgroundProcessHistoryId, "System");
             }
             catch (Exception e)
             {
@@ -63,10 +64,11 @@ namespace Sfa.Tl.Matching.Functions
 
             var opportunityId = providerReferralEmailData.OpportunityId;
             var backgroundProcessHistoryId = providerReferralEmailData.BackgroundProcessHistoryId;
+            var itemIds = providerReferralEmailData.ItemIds;
 
             try
             {
-                await referralEmailService.SendProviderReferralEmailAsync(opportunityId, backgroundProcessHistoryId, "System");
+                await referralEmailService.SendProviderReferralEmailAsync(opportunityId, itemIds, backgroundProcessHistoryId, "System");
             }
             catch (Exception e)
             {

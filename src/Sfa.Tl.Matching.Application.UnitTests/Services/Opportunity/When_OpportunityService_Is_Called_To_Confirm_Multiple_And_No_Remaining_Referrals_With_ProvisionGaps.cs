@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using AutoMapper;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Extensions;
@@ -133,10 +134,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 Status = BackgroundProcessHistoryStatus.Pending.ToString()
             });
 
+            var itemIds = new List<int>
+            {
+                1
+            };
+
             var referralService = new ReferralEmailService(mapper, configuration, dateTimeProvider, emailService,
                 emailHistoryService, opportunityRepo, _opportunityItemRepository, backgroundProcessHistoryRepo);
 
-            referralService.SendProviderReferralEmailAsync(1, 1, httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
+            referralService.SendProviderReferralEmailAsync(1, itemIds, 1,  httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
         }
 
         [Fact]

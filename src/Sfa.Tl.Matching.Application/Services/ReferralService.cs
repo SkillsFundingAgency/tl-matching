@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -11,33 +13,39 @@ namespace Sfa.Tl.Matching.Application.Services
     public class ReferralService : IReferralService
     {
         private readonly IMessageQueueService _messageQueueService;
+        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         public ReferralService(
                             IMessageQueueService messageQueueService,
+                            IRepository<OpportunityItem> opportunityItemRepository,
                             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
         {
             _messageQueueService = messageQueueService;
+            _opportunityItemRepository = opportunityItemRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
         }
 
 
         public async Task ConfirmOpportunities(int opportunityId, string username)
         {
-            await RequestReferralEmailsAsync(opportunityId, username);
+            var itemIds = GetOpportunityItemIds(opportunityId);
+            await RequestReferralEmailsAsync(opportunityId, itemIds.ToList(), username);
         }
 
-        private async Task RequestReferralEmailsAsync(int opportunityId, string username)
+        private async Task RequestReferralEmailsAsync(int opportunityId, IList<int> itemIds, string username)
         {
             await _messageQueueService.PushEmployerReferralEmailMessageAsync(new SendEmployerReferralEmail
             {
                 OpportunityId = opportunityId,
+                ItemIds = itemIds,
                 BackgroundProcessHistoryId = await CreateAndGetBackgroundProcessId(BackgroundProcessType.EmployerReferralEmail, username)
             });
 
             await _messageQueueService.PushProviderReferralEmailMessageAsync(new SendProviderReferralEmail
             {
                 OpportunityId = opportunityId,
+                ItemIds = itemIds,
                 BackgroundProcessHistoryId = await CreateAndGetBackgroundProcessId(BackgroundProcessType.ProviderReferralEmail, username)
             });
         }
@@ -52,6 +60,17 @@ namespace Sfa.Tl.Matching.Application.Services
                     Status = BackgroundProcessHistoryStatus.Pending.ToString(),
                     CreatedBy = username
                 });
+        }
+
+        private IEnumerable<int> GetOpportunityItemIds(int opportunityId)
+        {
+            var itemIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+                                                                   && oi.IsSaved
+                                                                   && oi.IsSelectedForReferral
+                                                                   && !oi.IsCompleted)
+                .Select(oi => oi.Id).ToList();
+
+            return itemIds;
         }
 
     }

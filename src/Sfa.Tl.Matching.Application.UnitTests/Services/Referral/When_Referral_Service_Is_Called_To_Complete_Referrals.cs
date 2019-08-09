@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using FluentAssertions;
@@ -27,6 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
             IMessageQueueService messageQueueService,
+            IRepository<OpportunityItem> repo,
             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository
         )
         {
@@ -35,7 +39,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
-            var sut = new ReferralService(messageQueueService, backgroundProcessHistoryRepository);
+            var sut = new ReferralService(messageQueueService, repo, backgroundProcessHistoryRepository);
+
+            repo.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(opportunity.OpportunityItem.AsQueryable());
 
             //Act
             await sut.ConfirmOpportunities(opportunity.Id, "username");

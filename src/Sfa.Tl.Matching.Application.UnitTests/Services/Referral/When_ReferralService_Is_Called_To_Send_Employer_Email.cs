@@ -50,10 +50,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new ValidEmployerReferralDtoBuilder().Build());
 
+            var itemIds = new List<int>
+            {
+                1
+            };
+
             var referralEmailService = new ReferralEmailService(mapper, configuration, datetimeProvider, _emailService,
                 _emailHistoryService, _opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo);
 
-            referralEmailService.SendEmployerReferralEmailAsync(1, 1, "system").GetAwaiter().GetResult();
+            referralEmailService.SendEmployerReferralEmailAsync(1, itemIds, 1, "system").GetAwaiter().GetResult();
         }
 
         [Fact]
