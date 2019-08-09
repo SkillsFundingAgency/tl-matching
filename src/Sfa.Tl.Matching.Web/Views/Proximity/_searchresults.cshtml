@@ -18,7 +18,7 @@
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <p class="govuk-hint">Choose one or more providers for this opportunity</p>
 
-<form asp-controller="Proximity" asp-action="ValidateProviderSearchResult" >
+<form asp-controller="Proximity" asp-action="ValidateProviderSearchResult">
     <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden" />
     <input asp-for="SearchParameters.SearchRadius" name="SearchRadius" type="hidden" />
     <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden" />
@@ -42,46 +42,41 @@
                             @* DO NOT DELETE - asp-for needs to be Model.SearchResults.Results[i].IsSelected *@
                             <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" />
                             <label class="govuk-heading-m govuk-checkboxes__label" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected">
-                                @if(@Model.SearchResults.Results[i].IsTLevelProvider)
+                                @if (@Model.SearchResults.Results[i].IsTLevelProvider)
                                 {
-                                    <span class="tl-search-results-flag">T level provider</span>
+                                    <span id="tl-provider" class="tl-search-results-flag">T level provider</span>
                                 }
-                                
+
                                 @if (searchResult.ProviderVenueName == searchResult.ProviderVenuePostcode)
                                 {
                                     @searchResult.ProviderDisplayName
-                                    <ul class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
-                                        <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
-                                        <li>@($" {searchResult.Distance:#0.0}") miles</li>
-                                    </ul>
                                 }
                                 else
                                 {
                                     @searchResult.ProviderVenueName
-                                    <ul class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
-                                        <li>Part of @searchResult.ProviderDisplayName</li>
-                                        <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
-                                        <li>@($" {searchResult.Distance:#0.0}") miles</li>
-                                    </ul>
                                 }
 
+                                <ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
+                                    <li>Part of @searchResult.ProviderDisplayName</li>
+                                    <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
+                                    <li>@($"{searchResult.Distance:#0.0}") miles</li>
+                                </ul>
+
                                 @* New journey times styling, for next sprint when I'm not here, do not delete
-                                <div class="timeline">
-                                    <ul>
-                                        <li>
-                                            <p class="govuk-body govuk-!-font-weight-bold">Ask someone to confirm your identity</p>
-                                            <p class="govuk-body">Public transport: 31 minutes</p>
-                                            <p class="govuk-body">Car: 27 minutes</p>
-                                        </li>
-                                    </ul>
-                                </div>*@
+                                    <div class="timeline">
+                                        <ul>
+                                            <li>
+                                                <p class="govuk-body govuk-!-font-weight-bold">Ask someone to confirm your identity</p>
+                                                <p class="govuk-body">Public transport: 31 minutes</p>
+                                                <p class="govuk-body">Car: 27 minutes</p>
+                                            </li>
+                                        </ul>
+                                    </div>*@
                                 <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
-                                <ul class="govuk-list govuk-list--bullet">
+                                <ul id="tl-qualification-list" class="govuk-list govuk-list--bullet">
                                     @foreach (var qualification in searchResult.QualificationShortTitles)
                                     {
-                                        <li>
-                                            @qualification
-                                        </li>
+                                        <li>@qualification</li>
                                     }
                                 </ul>
                             </label>

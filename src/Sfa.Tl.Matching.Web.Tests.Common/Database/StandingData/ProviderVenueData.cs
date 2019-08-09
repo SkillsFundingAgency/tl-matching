@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     Id = 1,
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
+                    Town = "Coventry",
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
@@ -33,7 +34,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 {
                     Id = 2,
                     Provider = BuildProvider(true),
-                    Postcode = "CV1 2WT",
+                    Postcode = "CV1 1EE",
+                    Town = "Coventry",
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
@@ -58,6 +60,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 Id = 1,
                 UkPrn = 10203040,
                 Name = "SQL Search Provider",
+                DisplayName = "SQL Search Provider Display Name",
                 PrimaryContact = "Test",
                 PrimaryContactEmail = "Test@test.com",
                 PrimaryContactPhone = "0123456789",
@@ -66,6 +69,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 SecondaryContactPhone = "0123456789",
                 IsCdfProvider = isCdfProvider,
                 IsEnabledForReferral = true,
+                IsTLevelProvider = true,
                 Source = "Test"
             };
         }

@@ -54,34 +54,31 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
                 $"/provider-results-for-opportunity-1000-item-{OpportunityItemId}-within-10-miles-of-SW1A%202AA-for-route-1";
 
             var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
-            var skillAreaRow = placementInformationTable.Rows[0];
-            skillAreaRow.Cells[1].TextContent.Should().Be("\n                        Agriculture, environmental and animal care\n                    ");
-            var skillAreaChangeCell = skillAreaRow.Cells[2].Children[0] as IHtmlAnchorElement;
-            skillAreaChangeCell.Text().Should().Be("Change the type of placement");
-            skillAreaChangeCell.PathName.Should().Be(providerResultsUrl);
 
-            var postcodeRow = placementInformationTable.Rows[1];
-            postcodeRow.Cells[1].TextContent.Should().Be("\n                        SW1A 2AA\n                    ");
-            var postcodeChangeCell = postcodeRow.Cells[2].Children[0] as IHtmlAnchorElement;
-            postcodeChangeCell.Text().Should().Be("Change the postcode of the workplace");
-            postcodeChangeCell.PathName.Should().Be(providerResultsUrl);
+            AssertPlacementTableRow(placementInformationTable.Rows[0],
+                "\n                        Agriculture, environmental and animal care\n                    ",
+                "Change the type of placement",
+                providerResultsUrl);
 
-            var jobRoleRow = placementInformationTable.Rows[2];
-            jobRoleRow.Cells[1].TextContent.Should().Be("\n                        Job Role\n                    ");
-            var jobRoleChangeCell = jobRoleRow.Cells[2].Children[0] as IHtmlAnchorElement;
-            jobRoleChangeCell.Text().Should().Be("Change the job role");
-            jobRoleChangeCell.PathName.Should().Be($"/placement-information/{OpportunityItemId}");
+            AssertPlacementTableRow(placementInformationTable.Rows[1],
+                "\n                        SW1A 2AA\n                    ",
+                "Change the postcode of the workplace",
+                providerResultsUrl);
 
-            var studentsWantedRow = placementInformationTable.Rows[3];
-            studentsWantedRow.Cells[1].TextContent.Should().Be("\n                        1\n                    ");
-            var studentsWantedChangeCell = studentsWantedRow.Cells[2].Children[0] as IHtmlAnchorElement;
-            studentsWantedChangeCell.Text().Should().Be("Change the number of placements");
-            studentsWantedChangeCell.PathName.Should().Be($"/placement-information/{OpportunityItemId}");
+            AssertPlacementTableRow(placementInformationTable.Rows[2],
+                "\n                        Job Role\n                    ",
+                "Change the job role",
+                $"/placement-information/{OpportunityItemId}");
+
+            AssertPlacementTableRow(placementInformationTable.Rows[3],
+                "\n                        1\n                    ",
+                "Change the number of placements",
+                $"/placement-information/{OpportunityItemId}");
 
             var providerTable = documentHtml.GetElementById("tl-providers-table") as IHtmlTableElement;
             var provider1Row = providerTable.Rows[0];
             var providerNameCell = provider1Row.Cells[0] as IHtmlTableHeaderCellElement;
-            providerNameCell.TextContent.Should().Be(" (part of )");
+            providerNameCell.TextContent.Should().Be(" (part of SQL Search Provider Display Name)");
 
             var distanceCell = provider1Row.Cells[1] as IHtmlTableDataCellElement;
             distanceCell.TextContent.Should()
@@ -94,6 +91,15 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var confirmButton = documentHtml.GetElementById("tl-confirm") as IHtmlButtonElement;
             confirmButton.TextContent.Should().Be("Confirm and save opportunity");
             confirmButton.Type.Should().Be("submit");
+        }
+
+        private static void AssertPlacementTableRow(IHtmlTableRowElement row, string cell1Text, string cell2Text,
+            string cell2Path)
+        {
+            row.Cells[1].TextContent.Should().Be(cell1Text);
+            var changeCell = row.Cells[2].Children[0] as IHtmlAnchorElement;
+            changeCell.Text().Should().Be(cell2Text);
+            changeCell.PathName.Should().Be(cell2Path);
         }
     }
 }

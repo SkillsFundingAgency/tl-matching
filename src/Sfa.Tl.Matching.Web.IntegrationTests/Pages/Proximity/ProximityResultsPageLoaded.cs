@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
@@ -64,10 +63,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             searchButton.Value.Should().Be("searchAgain");
             searchButton.Type.Should().Be("submit");
 
-            var noProvidersLink = documentHtml.GetElementById("tl-search-nosuitable") as IHtmlAnchorElement;
-            noProvidersLink.Text.Should().Be("No suitable providers? Let us know");
-            noProvidersLink.PathName.Should().Be($"/2-provisiongap-opportunities-within-10-miles-of-CV1%202WT-for-route-1");
-
             var searchCount = documentHtml.GetElementById("tl-search-count");
             searchCount.TextContent.Should().Be("2");
 
@@ -80,9 +75,49 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             var searchPostcode = documentHtml.GetElementById("tl-search-postcode");
             searchPostcode.TextContent.Should().Be("CV1 2WT");
 
+            var noProvidersLink = documentHtml.GetElementById("tl-search-nosuitable") as IHtmlAnchorElement;
+            noProvidersLink.Text.Should().Be("No suitable providers? Let us know");
+            noProvidersLink.PathName.Should().Be($"/2-provisiongap-opportunities-within-10-miles-of-CV1%202WT-for-route-1");
+
+            var searchResults = documentHtml.QuerySelector(".tl-search-results") as IHtmlOrderedListElement;
+            AssertSearchResult(searchResults, 0);
+
             var continueButton = documentHtml.GetElementById("tl-continue") as IHtmlButtonElement;
             continueButton.TextContent.Should().Be("Continue with selected providers");
             continueButton.Type.Should().Be("submit");
+        }
+
+        private void AssertSearchResult(IHtmlOrderedListElement searchResults, int itemNumber)
+        {
+            var searchDistance = searchResults.Children[itemNumber].QuerySelector("#searchResult_Distance") as IHtmlInputElement;
+            searchDistance.Type.Should().Be("hidden");
+            searchDistance.Value.Should().Be("0");
+
+            var providerVenueId = searchResults.Children[itemNumber].QuerySelector("#searchResult_ProviderVenueId") as IHtmlInputElement;
+            providerVenueId.Type.Should().Be("hidden");
+            providerVenueId.Value.Should().Be("1");
+
+            var providerIsSelected = searchResults.Children[itemNumber].QuerySelector($"#SearchResults_Results_{itemNumber}__IsSelected") as IHtmlInputElement;
+            providerIsSelected.Type.Should().Be("checkbox");
+            providerIsSelected.Value.Should().Be("true");
+
+            var tLevelProvider = searchResults.Children[itemNumber].QuerySelector("#tl-provider");
+            tLevelProvider.TextContent.Should().Be("T level provider");
+            tLevelProvider.ClassName.Should().Be("tl-search-results-flag");
+
+            var venueDetailList = searchResults.Children[itemNumber].QuerySelector("#tl-venue-detail-list");
+            var providerNameListItem = venueDetailList.Children[0] as IHtmlListItemElement;
+            providerNameListItem.TextContent.Should().Be("Part of SQL Search Provider Display Name");
+
+            var townAndPostcodeListItem = venueDetailList.Children[1] as IHtmlListItemElement;
+            townAndPostcodeListItem.TextContent.Should().Be("Coventry CV1 2WT");
+
+            var distanceListItem = venueDetailList.Children[2] as IHtmlListItemElement;
+            distanceListItem.TextContent.Should().Be("0.0 miles");
+
+            var qualificationList = searchResults.Children[itemNumber].QuerySelector("#tl-qualification-list");
+            var shortTitleListItem = qualificationList.Children[0] as IHtmlListItemElement;
+            shortTitleListItem.TextContent.Should().Be("Short Title");
         }
     }
 }
