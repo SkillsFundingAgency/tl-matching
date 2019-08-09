@@ -9,14 +9,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 {
-    public class ProximityResultsSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class ProximityResultsSearchSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ProximityResultsSubmittedWithValidationErrors(CustomWebApplicationFactory<TestStartup> factory)
+        public ProximityResultsSearchSubmittedWithValidationErrors(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             var pageContent = await HtmlHelpers.GetDocumentAsync(pageResponse);
 
             var response = await client.SendAsync(
-                (IHtmlFormElement)pageContent.QuerySelector("form"),
+                (IHtmlFormElement)pageContent.QuerySelector("form[id='tl-search-form']"),
                 (IHtmlButtonElement)pageContent.QuerySelector("button[id='tl-search']"),
                 new Dictionary<string, string>
                 {
