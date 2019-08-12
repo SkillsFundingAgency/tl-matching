@@ -31,25 +31,34 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> Index(DataImportParametersViewModel viewModel)
         {
+            Validate(viewModel);
+
+            if (!ModelState.IsValid)
+                return View(viewModel);
+
+            var dto = _mapper.Map<DataUploadDto>(viewModel);
+            dto.UserName = HttpContext.User.GetUserName();
+
+            await _dataBlobUploadService.Upload(dto);
+
+            viewModel.IsImportSuccessful = true;
+
+            return View(viewModel);
+        }
+
+        private void Validate(DataImportParametersViewModel viewModel)
+        {
             if (viewModel.File == null)
+            {
                 ModelState.AddModelError("file", "You must select a file");
+            }
 
             var fileContentType = viewModel.SelectedImportType.GetFileExtensionType();
 
-            if (viewModel.File != null && viewModel.File.ContentType != fileContentType)
-                ModelState.AddModelError("file", fileContentType.GetFileExtensionErrorMessage());
-
-            if (ModelState.IsValid)
+            if (viewModel.File?.ContentType != fileContentType)
             {
-                var dto = _mapper.Map<DataUploadDto>(viewModel);
-                dto.UserName = HttpContext.User.GetUserName();
-
-                await _dataBlobUploadService.Upload(dto);
-
-                viewModel.IsImportSuccessful = true;
+                ModelState.AddModelError("file", fileContentType.GetFileExtensionErrorMessage());
             }
-
-            return View(viewModel);
         }
     }
 }

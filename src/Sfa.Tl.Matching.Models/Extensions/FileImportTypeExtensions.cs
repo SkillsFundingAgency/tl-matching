@@ -14,14 +14,15 @@ namespace Sfa.Tl.Matching.Models.Extensions
         {
             var memInfo = importFileType.GetType().GetTypeInfo().GetDeclaredField(importFileType.ToString());
 
-            var attribute = memInfo.GetCustomAttributes(true).Single(attributeType => attributeType is FileExtensionsAttribute);
+            var attribute = memInfo?.GetCustomAttributes(true).Single(attributeType => attributeType is FileExtensionsAttribute);
 
-            var fileContentType = typeof(FileExtensionsAttribute)
-                                .GetProperty("Extensions")
-                                .GetValue(attribute)
-                                .ToString();
+            if (attribute != null)
+                return typeof(FileExtensionsAttribute)
+                .GetProperty("Extensions")
+                ?.GetValue(attribute)
+                .ToString();
 
-            return fileContentType;
+            return null;
         }
 
         public static string GetFileExtensionErrorMessage(this string fileContentType)
@@ -30,7 +31,7 @@ namespace Sfa.Tl.Matching.Models.Extensions
             var fileExtensionType = isExcel ? "XLSX" : "CSV";
             var fileType = isExcel ? "Excel" : "CSV";
             
-            return $"You must upload an { fileType } file with the { fileExtensionType } file extension";
+            return $"You must upload an {fileType} file with the {fileExtensionType} file extension";
         }
     }
 }
