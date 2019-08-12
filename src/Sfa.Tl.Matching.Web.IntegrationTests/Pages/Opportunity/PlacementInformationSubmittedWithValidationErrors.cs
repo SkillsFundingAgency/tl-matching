@@ -21,9 +21,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         }
 
         [Theory]
-        // TODO FIX [InlineData("NoSuitableStudent", "", "You must tell us why the employer did not choose a provider", 0)]
-        [InlineData("PlacementsKnown", "", "You must tell us whether the employer knows how many students they want for this job at this location", 2)]
-        public async Task CorrectErrorMessageDisplayed(string field, string value, string errorMessage, int errorSummaryIndex)
+        [InlineData("tl-no-provider", "NoSuitableStudent", "", "You must tell us why the employer did not choose a provider", 0)]
+        [InlineData("tl-no-provider", "HadBadExperience", "", "You must tell us why the employer did not choose a provider", 0)]
+        [InlineData("tl-no-provider", "ProvidersTooFarAway", "", "You must tell us why the employer did not choose a provider", 0)]
+        [InlineData("tl-job-role", "JobRole", "A", "You must enter a job role using 2 or more characters", 1)]
+        [InlineData("tl-job-role", "JobRole", "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", "You must enter a job role using 99 characters or less", 1)]
+        [InlineData("tl-placements-known", "PlacementsKnown", "", "You must tell us whether the employer knows how many students they want for this job at this location", 2)]
+        public async Task CorrectErrorMessageDisplayed(string id, string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();
             var pageResponse = await client.GetAsync($"placement-information/{OpportunityItemId}");
@@ -45,17 +49,20 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var errorSummaryList = responseContent.QuerySelector(".govuk-error-summary div ul");
             errorSummaryList.Children[errorSummaryIndex].TextContent.Should().Be(errorMessage);
 
-            AssertError(responseContent, field, errorMessage);
+            AssertError(responseContent, id, field, errorMessage);
 
             Assert.Null(response.Headers.Location?.OriginalString);
         }
 
-        private static void AssertError(IHtmlDocument responseContent, string field, string errorMessage)
+        private static void AssertError(IHtmlDocument responseContent, string id, string field, string errorMessage)
         {
-            var placementsKnown = responseContent.QuerySelector($"#{field}");
-            var placementsKnownDiv = placementsKnown.ParentElement.ParentElement;
-            placementsKnownDiv.ClassName.Should().Be("govuk-form-group govuk-form-group--error");
-            placementsKnownDiv.QuerySelector(".govuk-error-message").TextContent.Should()
+            var element = responseContent.QuerySelector($"#{field}");
+            var elementDiv = element.ParentElement.ParentElement;
+
+            var groupDiv = responseContent.QuerySelector($"#{id}-group");
+            groupDiv.ClassName.Should().Be("govuk-form-group govuk-form-group--error");
+
+            elementDiv.QuerySelector($"#{id}-error").TextContent.Should()
                 .Be(errorMessage);
         }
     }
