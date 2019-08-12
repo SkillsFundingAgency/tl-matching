@@ -46,6 +46,13 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
         private const int ReferralAndProvisionGapMultiple1Id = 1055;
         private const int ReferralAndProvisionGapMultiple2Id = 1056;
 
+        // Multiple Providers
+        private const int OpportunityProviderMultipleId = 1060;
+        private const int OpportunityItemProviderMultipleId = 1061;
+        private const int ProviderReferral1Id = 1062;
+        private const int ProviderReferral2Id = 1063;
+
+
         internal static Opportunity CreateReferralSingle()
         {
             return new Opportunity
@@ -291,7 +298,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 }
             };
         }
-        
+
         internal static Opportunity CreateReferralMultipleAndProvisionGap()
         {
             return new Opportunity
@@ -447,7 +454,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                         {
                             Id = OpportunityItem2Id,
                             OpportunityId = Opportunity1Id,
-                            OpportunityType = OpportunityType.Referral.ToString(),
+                            OpportunityType = OpportunityType.ProvisionGap.ToString(),
                             Town = "London",
                             Postcode = "SW1A 2AA",
                             SearchRadius = 10,
@@ -474,6 +481,61 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                             }
                         }
                     }
+                }
+            };
+        }
+
+        internal static Opportunity CreateProvidersMultiple()
+        {
+            return new Opportunity
+            {
+                Id = OpportunityProviderMultipleId,
+                EmployerId = 1,
+                EmployerContact = "Employer Contact",
+                EmployerContactEmail = "employer-contact@email.com",
+                EmployerContactPhone = "01474 787878",
+                CreatedOn = new DateTime(2019, 1, 1),
+                CreatedBy = "IntegrationTests",
+                OpportunityItem = new List<OpportunityItem>
+                {
+                    new OpportunityItem
+                    {
+                        Id = OpportunityItemProviderMultipleId,
+                        OpportunityId = OpportunityProviderMultipleId,
+                        OpportunityType = OpportunityType.Referral.ToString(),
+                        Town = "London",
+                        Postcode = "SW1A 2AA",
+                        SearchRadius = 10,
+                        SearchResultProviderCount = 4,
+                        JobRole = "Job Role",
+                        PlacementsKnown = true,
+                        Placements = 1,
+                        IsSaved = false,
+                        IsSelectedForReferral = false,
+                        IsCompleted = false,
+                        RouteId = 1,
+                        CreatedOn = new DateTime(2019, 1, 1),
+                        CreatedBy = "IntegrationTests",
+                        Referral = new List<Referral>
+                        {
+                            new Referral
+                            {
+                                Id = ProviderReferral1Id,
+                                ProviderVenueId = 1,
+                                DistanceFromEmployer = 1.23m,
+                                CreatedOn = new DateTime(2019, 1, 1),
+                                CreatedBy = "IntegrationTests",
+                            },
+                            new Referral
+                            {
+                                Id = ProviderReferral2Id,
+                                ProviderVenueId = 2,
+                                DistanceFromEmployer = 2.93m,
+                                CreatedOn = new DateTime(2019, 1, 1),
+                                CreatedBy = "IntegrationTests",
+                            }
+                        }
+                    }                    
                 }
             };
         }
