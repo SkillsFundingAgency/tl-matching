@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Sfa.Tl.Matching.Web.Tests.Common;
@@ -6,7 +7,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
 {
-    public class ProvidersPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Provider_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Select providers for this opportunity";
         private const int OpportunityId = 0;
@@ -17,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ProvidersPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Provider_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
@@ -25,6 +26,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
         [Fact]
         public async Task ReturnsCorrectResponse()
         {
+            // ReSharper disable all PossibleNullReferenceException
+
             var client = _factory.CreateClient();
             var response = await client.GetAsync($"provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}");
 
@@ -39,13 +42,19 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
             var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
 
-            var resultText = documentHtml.QuerySelector(".govuk-body");
+            var resultText = documentHtml.QuerySelector(".govuk-body"); 
             resultText.TextContent.Trim().Should().Be("2 results in Agriculture, environmental and animal care within 25 miles of CV1 2WT");
-         
-            //TODO: Add more test cases
-            
+
+            var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
+            backLink.Text.Should().Be("Back");
+            backLink.PathName.Should().Be($"/find-providers/{OpportunityId}");
+
+            var searchResult = documentHtml.GetElementById("tl-venue-detail-list") as IHtmlUnorderedListElement;
+            searchResult.TextContent.Trim().Should().Contain("Part of SQL Search Provider Display Name");
+            searchResult.TextContent.Trim().Should().Contain("Coventry CV1 2WT");
+
+            var submitButton = documentHtml.GetElementById("tl-continue") as IHtmlButtonElement;
+            submitButton.TextContent.Should().Be("Continue with selected providers");
         }
-
-
     }
 }
