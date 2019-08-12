@@ -14,6 +14,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
+        private const int OpportunityProviderMultipleId = 1060;
+        private const int OpportunityItemProviderMultipleId = 1061;
+        private const int ProviderReferral1Id = 1062;
+        private const int ProviderReferral2Id = 1063;
+
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
         public When_Check_Answers_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
@@ -51,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");
 
             var providerResultsUrl =
-                $"/provider-results-for-opportunity-1000-item-{OpportunityItemId}-within-10-miles-of-SW1A%202AA-for-route-1";
+                $"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-10-miles-of-SW1A%202AA-for-route-1";
 
             var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
 
@@ -91,6 +96,70 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var confirmButton = documentHtml.GetElementById("tl-confirm") as IHtmlButtonElement;
             confirmButton.TextContent.Should().Be("Confirm and save opportunity");
             confirmButton.Type.Should().Be("submit");
+        }
+
+        [Fact]
+        public async Task Then_Correct_Response_With_RemoveLink_For_Providers_Is_Returned()
+        {
+            var client = _factory.CreateClient();
+            var response = await client.GetAsync($"check-answers/{OpportunityItemProviderMultipleId}");
+
+            response.EnsureSuccessStatusCode();
+            Assert.Equal("text/html; charset=utf-8",
+                response.Content.Headers.ContentType.ToString());
+
+            var documentHtml = await HtmlHelpers.GetDocumentAsync(response);
+
+            documentHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
+
+            var header1 = documentHtml.QuerySelector(".govuk-heading-l");
+            header1.TextContent.Should().Be(Title);
+
+            var employerName = documentHtml.QuerySelector(".govuk-caption-l");
+            employerName.TextContent.Should().Be("Company Name");
+
+            var providerResultsUrl =
+                $"/provider-results-for-opportunity-{OpportunityProviderMultipleId}-item-{OpportunityItemProviderMultipleId}-within-10-miles-of-SW1A%202AA-for-route-1";
+
+            var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
+            AssertPlacementTableRow(placementInformationTable.Rows[0],
+               "Agriculture, environmental and animal care",
+               "Change the type of placement",
+               providerResultsUrl);
+
+            AssertPlacementTableRow(placementInformationTable.Rows[1],
+                "SW1A 2AA",
+                "Change the postcode of the workplace",
+                providerResultsUrl);
+
+            AssertPlacementTableRow(placementInformationTable.Rows[2],
+                "Job Role",
+                "Change the job role",
+                $"/placement-information/{OpportunityItemProviderMultipleId}");
+
+            AssertPlacementTableRow(placementInformationTable.Rows[3],
+                "1",
+                "Change the number of placements",
+                $"/placement-information/{OpportunityItemProviderMultipleId}");
+
+
+            // Assert Provider Information with Remove Link
+
+            var providerTable = documentHtml.GetElementById("tl-providers-table") as IHtmlTableElement;
+
+            AssertPlacementTableRow(providerTable.Rows[0],
+                "\n                            1.2 miles from SW1A 2AA\n                        ",
+                "Remove",
+                $"/remove-referral/{ProviderReferral1Id}-{OpportunityItemProviderMultipleId}");
+
+            AssertPlacementTableRow(providerTable.Rows[1],
+                "\n                            2.9 miles from SW1A 2AA\n                        ",
+                "Remove",
+                $"/remove-referral/{ProviderReferral2Id}-{OpportunityItemProviderMultipleId}");
+
+            var changeProvidersLink = documentHtml.QuerySelector("#tl-change-providers") as IHtmlAnchorElement;
+            changeProvidersLink.TextContent.Should().Be("Change providers");
+            changeProvidersLink.PathName.Should().Be(providerResultsUrl);
         }
 
         private static void AssertPlacementTableRow(IHtmlTableRowElement row, string cell1Text, string cell2Text,
