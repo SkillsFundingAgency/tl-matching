@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         [Theory]
         [InlineData("CompanyName", "", "You must find and choose an employer", 0)]
         // TODO FIX [InlineData("CompanyName", "A", "{lockedByUser}, is already working on this employer’s opportunities. Please choose a different employer.", 0)]
-        public async Task CorrectErrorMessageDisplayed(string field, string value, string errorMessage, int errorSummaryIndex)
+        public async Task Then_Correct_Error_Message_Is_Displayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();
             var pageResponse = await client.GetAsync($"who-is-employer/{OpportunityId}-{OpportunityItemId}");

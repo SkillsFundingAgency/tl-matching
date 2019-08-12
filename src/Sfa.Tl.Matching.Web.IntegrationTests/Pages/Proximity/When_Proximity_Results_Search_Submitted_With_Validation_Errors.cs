@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 
         [Theory]
         [InlineData("Postcode", "", "You must enter a postcode", 0)]
-        public async Task CorrectErrorMessageDisplayed(string field, string value, string errorMessage, int errorSummaryIndex)
+        public async Task Then_Correct_Error_Message_Is_Displayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();
             var pageResponse = await client.GetAsync($"provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-5-miles-of-SW1A%202AA-for-route-1");

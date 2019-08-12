@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
         }
 
         [Fact]
-        public async Task CorrectErrorMessageDisplayed()
+        public async Task Then_Correct_Error_Message_Is_Displayed()
         {
             // ReSharper disable all PossibleNullReferenceException
 

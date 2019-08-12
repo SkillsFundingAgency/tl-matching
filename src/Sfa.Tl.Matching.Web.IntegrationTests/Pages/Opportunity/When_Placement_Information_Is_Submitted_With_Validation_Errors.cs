@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         [InlineData("tl-job-role", "JobRole", "A", "You must enter a job role using 2 or more characters", 1)]
         [InlineData("tl-job-role", "JobRole", "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", "You must enter a job role using 99 characters or less", 1)]
         [InlineData("tl-placements-known", "PlacementsKnown", "", "You must tell us whether the employer knows how many students they want for this job at this location", 2)]
-        public async Task CorrectErrorMessageDisplayed(string id, string field, string value, string errorMessage, int errorSummaryIndex)
+        public async Task Then_Correct_Error_Message_Is_Displayed(string id, string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();
             var pageResponse = await client.GetAsync($"placement-information/{OpportunityItemId}");

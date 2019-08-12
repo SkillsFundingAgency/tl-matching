@@ -56,22 +56,22 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
 
             AssertPlacementTableRow(placementInformationTable.Rows[0],
-                "\n                        Agriculture, environmental and animal care\n                    ",
+                "Agriculture, environmental and animal care",
                 "Change the type of placement",
                 providerResultsUrl);
 
             AssertPlacementTableRow(placementInformationTable.Rows[1],
-                "\n                        SW1A 2AA\n                    ",
+                "SW1A 2AA",
                 "Change the postcode of the workplace",
                 providerResultsUrl);
 
             AssertPlacementTableRow(placementInformationTable.Rows[2],
-                "\n                        Job Role\n                    ",
+                "Job Role",
                 "Change the job role",
                 $"/placement-information/{OpportunityItemId}");
 
             AssertPlacementTableRow(placementInformationTable.Rows[3],
-                "\n                        1\n                    ",
+                "1",
                 "Change the number of placements",
                 $"/placement-information/{OpportunityItemId}");
 

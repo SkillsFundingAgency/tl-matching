@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         }
 
         [Fact]
-        public async Task CorrectErrorMessageDisplayed()
+        public async Task Then_Correct_Error_Message_Is_Displayed()
         {
             var client = _factory.CreateClient();
             var pageResponse = await client.GetAsync($"permission/{OpportunityId}-{OpportunityItemId}");

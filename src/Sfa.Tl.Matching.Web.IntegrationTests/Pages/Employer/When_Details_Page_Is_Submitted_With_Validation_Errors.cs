@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
@@ -31,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         [InlineData("EmployerContactPhone", "", "You must enter a contact telephone number for placements", 2)]
         [InlineData("EmployerContactPhone", "A", "You must enter a number", 2)]
         [InlineData("EmployerContactPhone", "123", "You must enter a telephone number that has 7 or more numbers", 2)]
-        public async Task CorrectErrorMessageDisplayed(string field, string value, string errorMessage, int errorSummaryIndex)
+        public async Task Then_Correct_Error_Message_Is_Displayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();
             var pageResponse = await client.GetAsync($"employer-details/{OpportunityId}-{OpportunityItemId}");
@@ -58,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             Assert.Null(response.Headers.Location?.OriginalString);
         }
 
-        private static void AssertError(IHtmlDocument responseContent, string labelFor, string errorMessage)
+        private static void AssertError(IParentNode responseContent, string labelFor, string errorMessage)
         {
             var label = responseContent.QuerySelector($"label[for='{labelFor}']");
             var labelDiv = label.ParentElement;
