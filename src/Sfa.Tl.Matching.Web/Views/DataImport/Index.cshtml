@@ -14,7 +14,7 @@
                     <p class="tl-notification__body">File uploaded successfully</p>
                 </div>
             }
-            <h1 class="govuk-heading-xl">@ViewData["Title"]</h1>
+            <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
         </div>
     </div>
     <div class="govuk-grid-row">
@@ -56,7 +56,9 @@
             </div>
             <div class="govuk-grid-column-two-thirds">
                 <div class="govuk-form-group">
-                    <input class="govuk-button" type="submit" value="Upload" />
+                    <button type="submit" class="govuk-button" id="tl-upload">
+                        Upload
+                    </button>
                 </div>
             </div>
         </form>
