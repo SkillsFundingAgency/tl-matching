@@ -60,22 +60,22 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 
             var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
 
-            AssertPlacementTableRow(placementInformationTable.Rows[0],
+            AssertTableRow(placementInformationTable.Rows[0],
                 "Agriculture, environmental and animal care",
                 "Change the type of placement",
                 providerResultsUrl);
 
-            AssertPlacementTableRow(placementInformationTable.Rows[1],
+            AssertTableRow(placementInformationTable.Rows[1],
                 "SW1A 2AA",
                 "Change the postcode of the workplace",
                 providerResultsUrl);
 
-            AssertPlacementTableRow(placementInformationTable.Rows[2],
+            AssertTableRow(placementInformationTable.Rows[2],
                 "Job Role",
                 "Change the job role",
                 $"/placement-information/{OpportunityItemId}");
 
-            AssertPlacementTableRow(placementInformationTable.Rows[3],
+            AssertTableRow(placementInformationTable.Rows[3],
                 "1",
                 "Change the number of placements",
                 $"/placement-information/{OpportunityItemId}");
@@ -122,22 +122,22 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
                 $"/provider-results-for-opportunity-{OpportunityProviderMultipleId}-item-{OpportunityItemProviderMultipleId}-within-10-miles-of-SW1A%202AA-for-route-1";
 
             var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
-            AssertPlacementTableRow(placementInformationTable.Rows[0],
+            AssertTableRow(placementInformationTable.Rows[0],
                "Agriculture, environmental and animal care",
                "Change the type of placement",
                providerResultsUrl);
 
-            AssertPlacementTableRow(placementInformationTable.Rows[1],
+            AssertTableRow(placementInformationTable.Rows[1],
                 "SW1A 2AA",
                 "Change the postcode of the workplace",
                 providerResultsUrl);
 
-            AssertPlacementTableRow(placementInformationTable.Rows[2],
+            AssertTableRow(placementInformationTable.Rows[2],
                 "Job Role",
                 "Change the job role",
                 $"/placement-information/{OpportunityItemProviderMultipleId}");
 
-            AssertPlacementTableRow(placementInformationTable.Rows[3],
+            AssertTableRow(placementInformationTable.Rows[3],
                 "1",
                 "Change the number of placements",
                 $"/placement-information/{OpportunityItemProviderMultipleId}");
@@ -147,12 +147,12 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 
             var providerTable = documentHtml.GetElementById("tl-providers-table") as IHtmlTableElement;
 
-            AssertPlacementTableRow(providerTable.Rows[0],
+            AssertTableRow(providerTable.Rows[0],
                 "\n                            1.2 miles from SW1A 2AA\n                        ",
                 "Remove",
                 $"/remove-referral/{ProviderReferral1Id}-{OpportunityItemProviderMultipleId}");
 
-            AssertPlacementTableRow(providerTable.Rows[1],
+            AssertTableRow(providerTable.Rows[1],
                 "\n                            2.9 miles from SW1A 2AA\n                        ",
                 "Remove",
                 $"/remove-referral/{ProviderReferral2Id}-{OpportunityItemProviderMultipleId}");
@@ -162,7 +162,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             changeProvidersLink.PathName.Should().Be(providerResultsUrl);
         }
 
-        private static void AssertPlacementTableRow(IHtmlTableRowElement row, string cell1Text, string cell2Text,
+        private static void AssertTableRow(IHtmlTableRowElement row, string cell1Text, string cell2Text,
             string cell2Path)
         {
             row.Cells[1].TextContent.Should().Be(cell1Text);
