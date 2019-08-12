@@ -7,20 +7,20 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class ReferralEmailSentPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Referral_Sent_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Emails sent";
         private const int OpportunityId = 1000;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ReferralEmailSentPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Referral_Sent_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
 
         [Fact]
-        public async Task ReturnsCorrectResponse()
+        public async Task Then_Correct_Response_Is_Returned()
         {
             // ReSharper disable all PossibleNullReferenceException
 

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 {
-    public class ProximityResultsPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Proximity_Results_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Select providers for this opportunity";
         private const int OpportunityId = 1000;
@@ -15,13 +15,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ProximityResultsPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Proximity_Results_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
 
         [Fact]
-        public async Task ReturnsCorrectResponse()
+        public async Task Then_Correct_Response_Is_Returned()
         {
             // ReSharper disable all PossibleNullReferenceException
 

@@ -7,20 +7,20 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class PlacementInformationPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Placement_Information_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Placement information";
         private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public PlacementInformationPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Placement_Information_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
 
         [Fact]
-        public async Task ReturnsCorrectResponse()
+        public async Task Then_Correct_Response_Is_Returned()
         {
             // ReSharper disable all PossibleNullReferenceException
 

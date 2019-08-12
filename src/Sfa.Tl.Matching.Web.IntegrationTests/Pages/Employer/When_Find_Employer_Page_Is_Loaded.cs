@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 {
-    public class FindEmployerPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Find_Employer_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
@@ -15,13 +15,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
-        public FindEmployerPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Find_Employer_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
 
         [Fact]
-        public async Task ReturnsCorrectResponse()
+        public async Task Then_Correct_Response_Is_Returned()
         {
             // ReSharper disable all PossibleNullReferenceException
 

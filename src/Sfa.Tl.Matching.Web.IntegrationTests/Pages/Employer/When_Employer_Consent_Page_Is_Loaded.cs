@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 {
-    public class EmployerConsentPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Employer_Consent_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Confirm that we can share the employer’s contact details";
         private const int OpportunityId = 1000;
@@ -15,13 +15,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public EmployerConsentPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Employer_Consent_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
 
         [Fact]
-        public async Task ReturnsCorrectResponse()
+        public async Task Then_Correct_Response_Is_Returned()
         {
             // ReSharper disable all PossibleNullReferenceException
 

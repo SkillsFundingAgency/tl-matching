@@ -7,30 +7,32 @@ using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Sfa.Tl.Matching.Web.Tests.Common;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 {
-    public class ProximityIndexSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Find_Employer_Page_Is_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const int OpportunityId = 1000;
+        private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ProximityIndexSubmittedWithValidationErrors(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Find_Employer_Page_Is_Submitted_With_Validation_Errors(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
 
         [Theory]
-        [InlineData("Postcode", "", "You must enter a postcode", 0)]
+        [InlineData("CompanyName", "", "You must find and choose an employer", 0)]
+        // TODO FIX [InlineData("CompanyName", "A", "{lockedByUser}, is already working on this employer’s opportunities. Please choose a different employer.", 0)]
         public async Task CorrectErrorMessageDisplayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();
-            var pageResponse = await client.GetAsync($"find-providers/{OpportunityId}");
+            var pageResponse = await client.GetAsync($"who-is-employer/{OpportunityId}-{OpportunityItemId}");
             var pageContent = await HtmlHelpers.GetDocumentAsync(pageResponse);
 
             var response = await client.SendAsync(
                 (IHtmlFormElement)pageContent.QuerySelector("form"),
-                (IHtmlButtonElement)pageContent.QuerySelector("button[id='tl-search']"),
+                (IHtmlButtonElement)pageContent.QuerySelector("button[id='tl-continue']"),
                 new Dictionary<string, string>
                 {
                     [field] = value
@@ -44,17 +46,17 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             var errorSummaryList = responseContent.QuerySelector(".govuk-error-summary div ul");
             errorSummaryList.Children[errorSummaryIndex].TextContent.Should().Be(errorMessage);
 
-            AssertError(responseContent, field, errorMessage);
+            AssertError(responseContent, errorMessage);
 
             Assert.Null(response.Headers.Location?.OriginalString);
         }
 
-        private static void AssertError(IHtmlDocument responseContent, string field, string errorMessage)
+        private static void AssertError(IHtmlDocument responseContent, string errorMessage)
         {
-            var input = responseContent.QuerySelector($"#{field}");
-            var div = input.ParentElement;
-            div.ClassName.Should().Be("govuk-form-group govuk-form-group--error");
-            div.QuerySelector(".govuk-error-message").TextContent.Should()
+            var companyNameInput = responseContent.GetElementById("CompanyName");
+            var companyNameDiv = companyNameInput.ParentElement;
+            companyNameDiv.ClassName.Should().Be("govuk-form-group govuk-form-group--error");
+            companyNameDiv.QuerySelector(".govuk-error-message").TextContent.Should()
                 .Be(errorMessage);
         }
     }

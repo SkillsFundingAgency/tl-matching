@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         }
 
         [Fact]
-        public async Task ReturnsCorrectResponse()
+        public async Task Then_Correct_Response_Is_Returned()
         {
             // ReSharper disable all PossibleNullReferenceException
 

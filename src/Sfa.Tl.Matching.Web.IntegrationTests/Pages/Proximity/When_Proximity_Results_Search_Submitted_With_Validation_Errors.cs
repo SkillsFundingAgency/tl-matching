@@ -9,14 +9,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 {
-    public class ProximityResultsSearchSubmittedWithValidationErrors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Proximity_Results_Search_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public ProximityResultsSearchSubmittedWithValidationErrors(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Proximity_Results_Search_Submitted_With_Validation_Errors(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }

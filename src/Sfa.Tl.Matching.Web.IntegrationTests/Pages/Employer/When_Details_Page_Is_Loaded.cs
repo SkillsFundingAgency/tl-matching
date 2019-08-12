@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 {
-    public class DetailsPageLoaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Details_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Confirm contact details for industry placements";
         private const int OpportunityId = 1000;
@@ -15,13 +15,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public DetailsPageLoaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Details_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
 
         [Fact]
-        public async Task ReturnsCorrectResponse()
+        public async Task Then_Correct_Response_Is_Returned()
         {
             // ReSharper disable all PossibleNullReferenceException
 
