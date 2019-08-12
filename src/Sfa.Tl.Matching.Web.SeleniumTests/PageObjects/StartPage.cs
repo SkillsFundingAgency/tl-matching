@@ -2,6 +2,8 @@
 using OpenQA.Selenium;
 using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Proximity;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
 {
     public class StartPage : PageBase

@@ -1,6 +1,8 @@
 ﻿using System.Threading;
 using OpenQA.Selenium;
 
+// ReSharper disable UnusedMember.Local
+
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
 {
     public class FindEmployerPage : PageBase, IPage
@@ -31,6 +33,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
 
         public void AssertContent()
         {
+            // TODO FIX
             //AssertTitle(Title);
             //AssertHeader1(Title);
         }

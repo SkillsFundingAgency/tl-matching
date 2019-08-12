@@ -1,6 +1,8 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Proximity
 {
     public class ProximityIndexPage : PageBase, IPage

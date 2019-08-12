@@ -1,5 +1,7 @@
 ﻿using OpenQA.Selenium;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
 {
     public class IdamsLogin

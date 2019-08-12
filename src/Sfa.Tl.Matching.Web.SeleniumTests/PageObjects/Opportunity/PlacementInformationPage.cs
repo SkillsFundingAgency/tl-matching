@@ -3,6 +3,8 @@ using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
 {
+    // ReSharper disable UnusedMember.Global
+
     public class PlacementInformationPage : PageBase, IPage
     {
         private readonly By _firstReasonNoProvider = By.Id("NoSuitableStudent");

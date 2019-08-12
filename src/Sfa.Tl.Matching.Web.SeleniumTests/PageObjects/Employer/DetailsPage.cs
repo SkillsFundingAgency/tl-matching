@@ -1,6 +1,8 @@
 ﻿using OpenQA.Selenium;
 using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity;
 
+// ReSharper disable UnusedMember.Global
+
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
 {
     public class DetailsPage : PageBase, IPage
