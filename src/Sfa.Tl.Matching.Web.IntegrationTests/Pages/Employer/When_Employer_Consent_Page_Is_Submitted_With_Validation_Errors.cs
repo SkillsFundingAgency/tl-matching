@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
             var response = await client.SendAsync(
                 (IHtmlFormElement)pageContent.QuerySelector("form"),
-                (IHtmlButtonElement)pageContent.QuerySelector("button[id='tl-continue']"),
+                (IHtmlButtonElement)pageContent.GetElementById("tl-continue"),
                 new Dictionary<string, string>
                 {
                     ["ConfirmationSelected"] = "false"

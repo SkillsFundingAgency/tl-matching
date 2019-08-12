@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
             var response = await client.SendAsync(
                 (IHtmlFormElement)pageContent.QuerySelector("form"),
-                (IHtmlButtonElement)pageContent.QuerySelector("button[id='tl-confirm']"),
+                (IHtmlButtonElement)pageContent.GetElementById("tl-confirm"),
                 new Dictionary<string, string>
                 {
                     [field] = value

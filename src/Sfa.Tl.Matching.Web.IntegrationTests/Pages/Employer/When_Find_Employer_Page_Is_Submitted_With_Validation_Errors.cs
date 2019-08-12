@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
@@ -32,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 
             var response = await client.SendAsync(
                 (IHtmlFormElement)pageContent.QuerySelector("form"),
-                (IHtmlButtonElement)pageContent.QuerySelector("button[id='tl-continue']"),
+                (IHtmlButtonElement)pageContent.GetElementById("tl-continue"),
                 new Dictionary<string, string>
                 {
                     [field] = value
@@ -51,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             Assert.Null(response.Headers.Location?.OriginalString);
         }
 
-        private static void AssertError(IHtmlDocument responseContent, string errorMessage)
+        private static void AssertError(INonElementParentNode responseContent, string errorMessage)
         {
             var companyNameInput = responseContent.GetElementById("CompanyName");
             var companyNameDiv = companyNameInput.ParentElement;

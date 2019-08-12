@@ -31,8 +31,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             var pageContent = await HtmlHelpers.GetDocumentAsync(pageResponse);
 
             var response = await client.SendAsync(
-                (IHtmlFormElement)pageContent.QuerySelector("form[id='tl-result-form']"),
-                (IHtmlButtonElement)pageContent.QuerySelector("button[id='tl-continue']"),
+                (IHtmlFormElement)pageContent.GetElementById("tl-result-form"),
+                (IHtmlButtonElement)pageContent.GetElementById("tl-continue"),
                 new Dictionary<string, string>
                 {
                     ["SelectedProvider[0].IsSelected"] = "false"
