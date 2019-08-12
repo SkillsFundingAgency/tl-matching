@@ -7,12 +7,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests
 {
-    public class CreateSingleReferral : IClassFixture<SeleniumServerFactory<Startup>>, IDisposable
+    public class CreateSingleProvisionGap : IClassFixture<SeleniumServerFactory<Startup>>, IDisposable
     {
         private readonly StartPage _startPage;
         public IWebDriver Driver { get; }
 
-        public CreateSingleReferral(SeleniumServerFactory<Startup> server)
+        public CreateSingleProvisionGap(SeleniumServerFactory<Startup> server)
         {
             server.CreateClient();
             var opts = new ChromeOptions();
@@ -35,11 +35,11 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
 
             var proximityResultsPage = proximityIndexPage.ClickSearch();
             proximityResultsPage.AssertContent();
-            proximityResultsPage.SelectProvider();
             proximityResultsPage.EnterSearchRadius("25 miles");
 
-            var placementInformationPage = proximityResultsPage.ClickContinue();
+            var placementInformationPage = proximityResultsPage.ClickNoSuitableProvidersLink();
             placementInformationPage.AssertContent();
+            placementInformationPage.SelectReasonNoProvider();
             placementInformationPage.SelectPlacementsKnown();
 
             var findEmployerPage = placementInformationPage.ClickContinue();
@@ -49,18 +49,9 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
             var detailsPage = findEmployerPage.ClickContinue();
             detailsPage.AssertContent();
 
-            var checkAnswersPage = detailsPage.ClickConfirm();
-            checkAnswersPage.AssertContent();
-
-            var opportunityBasketPage = checkAnswersPage.ClickConfirm();
+            var opportunityBasketPage = detailsPage.ClickConfirmToOpprunityBasket();
             opportunityBasketPage.AssertContent();
-
-            var employerConsentPage = opportunityBasketPage.ClickContinue();
-            employerConsentPage.AssertContent();
-            employerConsentPage = employerConsentPage.SelectConfirmationSelected();
-
-            var referralEmailSentPage = employerConsentPage.ClickConfirm();
-            referralEmailSentPage.AssertContent();
+            opportunityBasketPage.ClickFinish();
         }
 
         public void Dispose()

@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         private readonly By _deleteLink = By.XPath("//*[@id='main-content']/div[2]/div/form/table/tbody/tr/td[6]/a");
         private readonly By _continueButton = By.Id("tl-continue");
         private readonly By _downloadSpreadsheetLink = By.Id("tl-download");
+        private readonly By _finishButton = By.Id("tl-finish");
 
         private readonly By _workplaceValue = By.XPath("//*[@id='main-content']/div[2]/div/form/table/tbody/tr/td[1]");
         private readonly By _jobRoleValue = By.XPath("//*[@id='main-content']/div[2]/div/form/table/tbody/tr/td[2]");
@@ -25,6 +26,13 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         public void ClickAddOpportunityLink()
         {
             Driver.FindElement(_addOpportunityLink).Click();
+        }
+
+        public StartPage ClickFinish()
+        {
+            Driver.FindElement(_finishButton).Click();
+
+            return new StartPage(Driver);
         }
 
         public EmployerConsentPage ClickContinue()

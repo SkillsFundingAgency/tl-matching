@@ -5,6 +5,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
 {
     public class PlacementInformationPage : PageBase, IPage
     {
+        private readonly By _firstReasonNoProvider = By.Id("NoSuitableStudent");
         private readonly By _jobRole = By.Id("JobRole");
         private readonly By _placementsKnownYes = By.Id("placement-location-yes");
         private readonly By _placementsKnownNo = By.Id("placement-location-no");
@@ -17,21 +18,22 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         {
         }
 
+        public void SelectReasonNoProvider()
+        {
+            Driver.FindElement(_firstReasonNoProvider).Click();
+        }
+
         public void EnterJobRole(string jobRole)
         {
             Driver.FindElement(_jobRole).SendKeys(jobRole);
         }
 
-        public PlacementInformationPage SelectPlacementsKnown(bool? value = false)
+        public void SelectPlacementsKnown(bool? value = false)
         {
             if (value.HasValue && value.Value)
-            {
                 Driver.FindElement(_placementsKnownYes).Click();
-                return this;
-            }
 
             Driver.FindElement(_placementsKnownNo).Click();
-            return this;
         }
 
         public void EnterPlacements(string placements)

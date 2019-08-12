@@ -52,6 +52,13 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
             return new CheckAnswersPage(Driver);
         }
 
+        public OpportunityBasketPage ClickConfirmToOpprunityBasket()
+        {
+            Driver.FindElement(_confirmButton).Click();
+
+            return new OpportunityBasketPage(Driver);
+        }
+
         public void AssertContent()
         {
             AssertTitle(Title);
