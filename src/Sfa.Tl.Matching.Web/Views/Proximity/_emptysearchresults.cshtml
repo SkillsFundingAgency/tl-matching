@@ -15,7 +15,8 @@
     <ul class="govuk-list govuk-list--bullet">
         @foreach (var item in Model.SearchResults.AdditionalResults)
         {
-            <li>@item.NumberOfResults results for @item.RouteName</li>
+            var result = item.NumberOfResults == 1 ? "result" : "results";
+            <li>@item.NumberOfResults @result for @item.RouteName</li>
         }
     </ul>
 }
