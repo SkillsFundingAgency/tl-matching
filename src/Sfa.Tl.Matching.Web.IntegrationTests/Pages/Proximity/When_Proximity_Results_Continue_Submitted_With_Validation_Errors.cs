@@ -24,6 +24,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
         [Fact]
         public async Task CorrectErrorMessageDisplayed()
         {
+            // ReSharper disable all PossibleNullReferenceException
+
             var client = _factory.CreateClient();
             var pageResponse = await client.GetAsync($"provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-5-miles-of-SW1A%202AA-for-route-1");
             var pageContent = await HtmlHelpers.GetDocumentAsync(pageResponse);
