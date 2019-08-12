@@ -19,6 +19,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 new ProviderVenue
                 {
                     Id = 1,
+                    Name = "Venue 1 Name",
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
                     Town = "Coventry",
@@ -33,6 +34,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 new ProviderVenue
                 {
                     Id = 2,
+                    Name = "Venue 2 Name",
                     Provider = BuildProvider(true),
                     Postcode = "CV1 1EE",
                     Town = "Coventry",
