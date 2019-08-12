@@ -25,8 +25,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
         }
 
         [Theory]
-        [InlineData("SearchResults_Results_0__IsSelected", "false", "You must select at least one provider", 0)]
-        public async Task Then_Correct_Error_Message_Is_Displayed(string field, string value, string errorMessage, int errorSummaryIndex)
+        [InlineData("You must select at least one provider", 0)]
+        public async Task Then_Correct_Error_Message_Is_Displayed(string errorMessage, int errorSummaryIndex)
         {
             // ReSharper disable all PossibleNullReferenceException
 
