@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
@@ -49,9 +51,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
             backLink.Text.Should().Be("Back");
             backLink.PathName.Should().Be($"/find-providers/{OpportunityId}");
 
-            var searchResult = documentHtml.GetElementById("tl-venue-detail-list") as IHtmlUnorderedListElement;
-            searchResult.TextContent.Trim().Should().Contain("Part of SQL Search Provider Display Name");
-            searchResult.TextContent.Trim().Should().Contain("Coventry CV1 2WT");
+            //var searchResult = documentHtml.GetElementsByClassName("tl-inline-list") as IHtmlCollection<IElement>;
+
+            //var textContents = searchResult.Select(x => x.TextContent.Trim());
+            //textContents.Should().Contain("Part of SQL Search Provider Display Name");
+            //textContents.Should().Contain("Coventry CV1 2WT");
 
             var submitButton = documentHtml.GetElementById("tl-continue") as IHtmlButtonElement;
             submitButton.TextContent.Should().Be("Continue with selected providers");
