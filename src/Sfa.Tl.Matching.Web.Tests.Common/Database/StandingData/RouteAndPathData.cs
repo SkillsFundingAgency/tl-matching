@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     Name = "Agriculture, environmental and animal care",
                     Summary = "Includes: animal care and management; agriculture, land management and production",
                     CreatedOn = new DateTime(2019, 1, 1),
-                    CreatedBy = "IntegrationTests",
+                    CreatedBy = "Dev Surname",
                     Path = new List<Path>
                     {
                         new Path
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                             RouteId = 1,
                             Name = "Agriculture, land management and production",
                             CreatedOn = new DateTime(2019, 1, 1),
-                            CreatedBy = "IntegrationTests",
+                            CreatedBy = "Dev Surname",
                         },
                         new Path
                         {
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                             RouteId = 1,
                             Name = "Animal care and management",
                             CreatedOn = new DateTime(2019, 1, 1),
-                            CreatedBy = "IntegrationTests",
+                            CreatedBy = "Dev Surname",
                         }
                     }
                 },
@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     Name = "Business and administration",
                     Summary = "Includes: management and administration; human resources (HR)",
                     CreatedOn = new DateTime(2019, 1, 1),
-                    CreatedBy = "IntegrationTests",
+                    CreatedBy = "Dev Surname",
                     Path = new List<Path>
                     {
                         new Path
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                             RouteId = 2,
                             Name = "Human resources",
                             CreatedOn = new DateTime(2019, 1, 1),
-                            CreatedBy = "IntegrationTests",
+                            CreatedBy = "Dev Surname",
                         },
                         new Path
                         {
@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                             RouteId = 2,
                             Name = "Management and administration",
                             CreatedOn = new DateTime(2019, 1, 1),
-                            CreatedBy = "IntegrationTests",
+                            CreatedBy = "Dev Surname",
                         }
                     }
                 }

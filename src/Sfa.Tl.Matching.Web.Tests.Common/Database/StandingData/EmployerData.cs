@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     Postcode = "CV1 2WT",
                     Owner = "Owner",
                     CreatedOn = new DateTime(2019, 1, 1),
-                    CreatedBy = "IntegrationTests"
+                    CreatedBy = "Dev Surname"
                 },
                 new Employer
                 {
@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     Postcode = "CV1 2WT",
                     Owner = "Owner",
                     CreatedOn = new DateTime(2019, 1, 1),
-                    CreatedBy = "IntegrationTests"
+                    CreatedBy = "Dev Surname"
                 }
             };
 

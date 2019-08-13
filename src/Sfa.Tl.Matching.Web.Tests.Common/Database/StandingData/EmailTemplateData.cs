@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     TemplateName = "ProviderReferral",
                     TemplateId = "5740b7d4-b421-4497-8649-81cd57dbc0b0",
                     CreatedOn = new DateTime(2019, 1, 1),
-                    CreatedBy = "IntegrationTests"
+                    CreatedBy = "Dev Surname"
                 },
                 new EmailTemplate
                 {
@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     TemplateName = "EmployerReferral",
                     TemplateId = "4918d3d5-6694-4f11-975f-e91c255dd583",
                     CreatedOn = new DateTime(2019, 1, 1),
-                    CreatedBy = "IntegrationTests"
+                    CreatedBy = "Dev Surname"
                 },
                 new EmailTemplate
                 {
@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     TemplateName = "ProviderQuarterlyUpdate",
                     TemplateId = "714e5adb-8f08-4b25-9be8-cb2f3fc66ed6",
                     CreatedOn = new DateTime(2019, 1, 1),
-                    CreatedBy = "IntegrationTests"
+                    CreatedBy = "Dev Surname"
                 }
             };
 

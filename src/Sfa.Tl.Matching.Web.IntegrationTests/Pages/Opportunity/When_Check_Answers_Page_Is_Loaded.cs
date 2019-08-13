@@ -59,6 +59,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
                 $"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-10-miles-of-SW1A%202AA-for-route-1";
 
             var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
+            placementInformationTable.Rows.Length.Should().Be(4);
 
             AssertTableRow(placementInformationTable.Rows[0],
                 "Agriculture, environmental and animal care",

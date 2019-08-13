@@ -55,6 +55,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             noProviderTab.Text().Should().Be("\n            \n                With no providers\n            \n        ");
 
             var providerBasketTable = documentHtml.QuerySelector("#providers .govuk-table") as IHtmlTableElement;
+            providerBasketTable.Rows.Length.Should().Be(1);
+
             var providerRow = providerBasketTable.Rows[1];
             providerRow.Cells[0].TextContent.Should().Be("London SW1A 2AA");
             providerRow.Cells[1].TextContent.Should().Be("Job Role");
