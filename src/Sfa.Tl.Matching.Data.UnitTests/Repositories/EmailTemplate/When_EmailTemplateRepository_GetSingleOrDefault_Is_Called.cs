@@ -29,31 +29,15 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailTemplate
         }
 
         [Fact]
-        public void Then_EmailTemplate_Id_Is_Returned() =>
+        public void Then_Fields_Are_As_Expected()
+        {
             _result.Id.Should().Be(1);
-        
-        [Fact]
-        public void Then_EmailTemplate_TemplateId_Is_Returned() =>
             _result.TemplateId.Should().BeEquivalentTo("1777EF96-70F5-4537-A6B1-41E8A0D8E0EC");
-
-        [Fact]
-        public void Then_EmailTemplate_TemplateName_Is_Returned() =>
             _result.TemplateName.Should().BeEquivalentTo("TestTemplate");
-        
-        [Fact]
-        public void Then_EmailTemplate_CreatedBy_Is_Returned() =>
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-        [Fact]
-        public void Then_EmailTemplate_CreatedOn_Is_Returned() =>
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
-
-        [Fact]
-        public void Then_EmailTemplate_ModifiedBy_Is_Returned() =>
             _result.ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);
-        
-        [Fact]
-        public void Then_EmailTemplate_ModifiedOn_Is_Returned() =>
             _result.ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
+        }
     }
 }

@@ -34,43 +34,18 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory
             _result.Count().Should().Be(2);
 
         [Fact]
-        public void Then_EmailHistory_Id_Is_Returned() =>
+        public void Then_First_EmailHistory_Fields_Have_Expected_Values()
+        {
             _result.First().Id.Should().Be(1);
-        
-        [Fact]
-        public void Then_EmailHistory_OpportunityId_Is_Returned() =>
             _result.First().OpportunityId.Should().Be(1);
-
-        [Fact]
-        public void Then_EmailHistory_EmailTemplateId_Is_Returned() =>
             _result.First().EmailTemplateId.Should().Be(2);
-        
-        [Fact]
-        public void Then_EmailHistory_SentTo_Is_Returned() =>
             _result.First().SentTo.Should().BeEquivalentTo("recipient@test.com");
-
-        [Fact]
-        public void Then_EmailHistory_CopiedTo_Is_Returned()
-            => _result.First().CopiedTo.Should().BeEquivalentTo("copy@test.com");
-
-        [Fact]
-        public void Then_EmailHistory_BlindCopiedTo_Is_Returned()
-            => _result.First().BlindCopiedTo.Should().BeEquivalentTo("blindcopy@test.com");
-
-        [Fact]
-        public void Then_EmailHistory_CreatedBy_Is_Returned() =>
+            _result.First().CopiedTo.Should().BeEquivalentTo("copy@test.com");
+            _result.First().BlindCopiedTo.Should().BeEquivalentTo("blindcopy@test.com");
             _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-        [Fact]
-        public void Then_EmailHistory_CreatedOn_Is_Returned() =>
             _result.First().CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
-
-        [Fact]
-        public void Then_EmailHistory_ModifiedBy_Is_Returned() =>
             _result.First().ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);
-        
-        [Fact]
-        public void Then_EmailHistory_ModifiedOn_Is_Returned() =>
             _result.First().ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
+        }
     }
 }

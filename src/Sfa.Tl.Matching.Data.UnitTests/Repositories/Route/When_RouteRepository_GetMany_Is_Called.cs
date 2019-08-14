@@ -29,41 +29,22 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
                 _result = repository.GetMany().ToList();
             }
         }
-        
+
         [Fact]
         public void Then_The_Expected_Number_Of_Routes_Is_Returned() =>
             _result.Count().Should().Be(2);
-        
+
         [Fact]
-        public void Then_Route_Id_Is_Returned() => 
+        public void Then_First_Path_Fields_Have_Expected_Values()
+        {
             _result.First().Id.Should().Be(RouteConstants.Id);
-
-        [Fact]
-        public void Then_Route_Name_Is_Returned() =>
             _result.First().Name.Should().BeEquivalentTo(RouteConstants.Name);
-
-        [Fact]
-        public void Then_Route_Keywords_Is_Returned() =>
             _result.First().Keywords.Should().BeEquivalentTo(RouteConstants.Keywords);
-
-        [Fact]
-        public void Then_Route_Summary_Is_Returned()
-            => _result.First().Summary.Should().BeEquivalentTo(RouteConstants.Summary);
-
-        [Fact]
-        public void Then_Route_CreatedBy_Is_Returned() =>
+            _result.First().Summary.Should().BeEquivalentTo(RouteConstants.Summary);
             _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-        [Fact]
-        public void Then_Route_CreatedOn_Is_Returned() =>
             _result.First().CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
-
-        [Fact]
-        public void Then_Route_ModifiedBy_Is_Returned() =>
             _result.First().ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);
-
-        [Fact]
-        public void Then_Route_ModifiedOn_Is_Returned() =>
             _result.First().ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
+        }
     }
 }

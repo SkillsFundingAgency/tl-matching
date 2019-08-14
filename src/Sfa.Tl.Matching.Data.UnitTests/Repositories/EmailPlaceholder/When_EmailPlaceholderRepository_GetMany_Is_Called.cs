@@ -34,35 +34,16 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailPlaceholder
             _result.Count().Should().Be(2);
 
         [Fact]
-        public void Then_EmailPlaceholder_Id_Is_Returned() =>
+        public void Then_First_EmailHistory_Fields_Have_Expected_Values()
+        {
             _result.First().Id.Should().Be(1);
-        
-        [Fact]
-        public void Then_EmailPlaceholder_EmailHistoryId_Is_Returned() =>
             _result.First().EmailHistoryId.Should().Be(1);
-
-        [Fact]
-        public void Then_EmailPlaceholder_Key_Is_Returned() =>
             _result.First().Key.Should().BeEquivalentTo("name_Placeholder");
-        
-        [Fact]
-        public void Then_EmailPlaceholder_Value_Is_Returned()
-            => _result.First().Value.Should().BeEquivalentTo("Name");
-
-        [Fact]
-        public void Then_EmailPlaceholder_CreatedBy_Is_Returned() =>
+            _result.First().Value.Should().BeEquivalentTo("Name");
             _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-        [Fact]
-        public void Then_EmailPlaceholder_CreatedOn_Is_Returned() =>
             _result.First().CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
-
-        [Fact]
-        public void Then_EmailPlaceholder_ModifiedBy_Is_Returned() =>
             _result.First().ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);
-        
-        [Fact]
-        public void Then_EmailPlaceholder_ModifiedOn_Is_Returned() =>
             _result.First().ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
+        }
     }
 }

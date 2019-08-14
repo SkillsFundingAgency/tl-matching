@@ -29,35 +29,16 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Qualification
         }
 
         [Fact]
-        public void Then_Qualification_Id_Is_Returned() =>
+        public void Then_Fields_Are_As_Expected()
+        {
             _result.Id.Should().Be(1);
-        
-        [Fact]
-        public void Then_Qualification_LarsId_Is_Returned() =>
             _result.LarsId.Should().BeEquivalentTo("1000");
-
-        [Fact]
-        public void Then_Qualification_Title_Is_Returned() =>
             _result.Title.Should().BeEquivalentTo("Title");
-
-        [Fact]
-        public void Then_Qualification_ShortTitle_Is_Returned()
-            => _result.ShortTitle.Should().BeEquivalentTo("ShortTitle");
-       
-        [Fact]
-        public void Then_Qualification_CreatedBy_Is_Returned() =>
+            _result.ShortTitle.Should().BeEquivalentTo("ShortTitle");
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-        [Fact]
-        public void Then_Qualification_CreatedOn_Is_Returned() =>
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
-
-        [Fact]
-        public void Then_Qualification_ModifiedBy_Is_Returned() =>
             _result.ModifiedBy.Should().Be(EntityCreationConstants.ModifiedByUser);
-        
-        [Fact]
-        public void Then_Qualification_ModifiedOn_Is_Returned() =>
             _result.ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
+        }
     }
 }
