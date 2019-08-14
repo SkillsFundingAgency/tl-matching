@@ -4,6 +4,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
@@ -26,6 +27,20 @@ namespace Sfa.Tl.Matching.Application.Services
             await PushMessageAsync(
                 JsonConvert.SerializeObject(providerRequest),
                 QueueName.ProviderQuarterlyRequestQueue);
+        }
+
+        public async Task PushEmployerReferralEmailMessageAsync(SendEmployerReferralEmail employerReferralEmail)
+        {
+            await PushMessageAsync(
+                JsonConvert.SerializeObject(employerReferralEmail),
+                QueueName.EmployerReferralEmailQueue);
+        }
+
+        public async Task PushProviderReferralEmailMessageAsync(SendProviderReferralEmail providerReferralEmail)
+        {
+            await PushMessageAsync(
+                JsonConvert.SerializeObject(providerReferralEmail),
+                QueueName.ProviderReferralEmailQueue);
         }
 
         private async Task PushMessageAsync(string message, string queueName)

@@ -7,7 +7,7 @@ workspace:
     clean: all
 
 variables:
-  buildConfiguration: 'release'
+  buildConfiguration: 'debug'
   buildPlatform: 'anycpu'
 
 pool:
@@ -55,6 +55,13 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: Integration Tests
+  inputs:
+    command: test
+    projects: '**/*.Web.IntegrationTests.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
   displayName: 'Publish Website'
   inputs:
     command: publish
@@ -77,6 +84,15 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     msbuildArgs: '/p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+
+# - task: DotNetCoreCLI@2
+  # displayName: 'Build Acceptance Tests'
+  # inputs:
+    # command: publish
+    # publishWebProjects: false
+    # zipAfterPublish: false
+    # projects: 'src\Sfa.Tl.Matching.EndToEndTests\Sfa.Tl.Matching.EndToEndTests.csproj'
+    # arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore'
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'

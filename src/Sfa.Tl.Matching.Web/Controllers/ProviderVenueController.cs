@@ -1,5 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +8,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-#if !NoAuth
     [Authorize(Roles = RolesExtensions.AdminUser)]
-#endif
     public class ProviderVenueController : Controller
     {
         private readonly IProviderVenueService _providerVenueService;
@@ -78,7 +75,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var isSaveSection = IsSaveSection(viewModel.SubmitAction);
             if (isSaveSection)
-                return View(viewModel);
+            {
+                return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId = viewModel.Id, providerId = viewModel.ProviderId });
+            }
 
             if (viewModel.Qualifications == null || viewModel.Qualifications.Count == 0)
             {

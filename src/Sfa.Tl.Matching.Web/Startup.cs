@@ -1,7 +1,9 @@
-﻿// ReSharper disable RedundantUsingDirective
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Security.Claims;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
@@ -30,31 +32,35 @@ using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
+using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.Event;
+using Sfa.Tl.Matching.Web.Authorisation;
 
 namespace Sfa.Tl.Matching.Web
 {
     public class Startup
     {
-        private readonly MatchingConfiguration _configuration;
+        protected MatchingConfiguration MatchingConfiguration;
         private readonly ILoggerFactory _loggerFactory;
+
+        public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
-            _configuration = ConfigurationLoader.Load(
-                configuration[Constants.EnvironmentNameConfigKey],
-                configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
-                configuration[Constants.VersionConfigKey],
-                configuration[Constants.ServiceNameConfigKey]);
+            Configuration = configuration;
             _loggerFactory = loggerFactory;
-
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureConfiguration(services);
+
+            var isConfigLocalOrDev = ConfigurationIsLocalOrDev();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -71,27 +77,34 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddMvc(config =>
             {
-#if !NoAuth
+                if (!isConfigLocalOrDev)
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    config.Filters.Add(new AuthorizeFilter(policy));
+                }
 
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                config.Filters.Add(new AuthorizeFilter(policy));
-#endif
                 config.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 config.Filters.Add(new CustomExceptionFilterAttribute(_loggerFactory));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-#if !NoAuth
-            AddAuthentication(services);
-#endif
-
+            if (!isConfigLocalOrDev)
+                AddAuthentication(services);
+            else
+            {
+                services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = "Local Scheme";
+                    options.DefaultChallengeScheme = "Local Scheme";
+                }).AddTestAuth(o => { });
+            }
             RegisterDependencies(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             var cultureInfo = new CultureInfo("en-GB");
 
@@ -127,16 +140,29 @@ namespace Sfa.Tl.Matching.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-#if !NoAuth
 
             app.UseAuthentication();
-#endif
+
             app.UseMvcWithDefaultRoute();
             app.UseCookiePolicy();
             app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
         }
 
-        // ReSharper disable once UnusedMember.Local
+        protected virtual void ConfigureConfiguration(IServiceCollection services)
+        {
+            MatchingConfiguration = ConfigurationLoader.Load(
+                Configuration[Constants.EnvironmentNameConfigKey],
+                Configuration[Constants.ConfigurationStorageConnectionStringConfigKey],
+                Configuration[Constants.VersionConfigKey],
+                Configuration[Constants.ServiceNameConfigKey]);
+        }
+
+        protected virtual bool ConfigurationIsLocalOrDev()
+        {
+            return Configuration[Constants.EnvironmentNameConfigKey].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
+                   Configuration[Constants.EnvironmentNameConfigKey].Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
+        }
+
         private void AddAuthentication(IServiceCollection services)
         {
             services.AddAuthentication(sharedOptions =>
@@ -147,8 +173,8 @@ namespace Sfa.Tl.Matching.Web
                 sharedOptions.DefaultSignOutScheme = WsFederationDefaults.AuthenticationScheme;
             }).AddWsFederation(options =>
             {
-                options.Wtrealm = _configuration.Authentication.WtRealm;
-                options.MetadataAddress = _configuration.Authentication.MetaDataEndpoint;
+                options.Wtrealm = MatchingConfiguration.Authentication.WtRealm;
+                options.MetadataAddress = MatchingConfiguration.Authentication.MetaDataEndpoint;
                 options.TokenValidationParameters.RoleClaimType = RolesExtensions.IdamsUserRole;
             }).AddCookie(options =>
             {
@@ -167,20 +193,20 @@ namespace Sfa.Tl.Matching.Web
 
             //Inject DbContext
             services.AddDbContext<MatchingDbContext>(options =>
-                options.UseSqlServer(_configuration.SqlConnectionString,
+                options.UseSqlServer(MatchingConfiguration.SqlConnectionString,
                     builder => builder.UseNetTopologySuite()
                                       .EnableRetryOnFailure()));
 
             //Inject services
-            services.AddSingleton(_configuration);
-            
+            services.AddSingleton(MatchingConfiguration);
+
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
-            
+
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
-            RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
+            RegisterNotificationsApi(services, MatchingConfiguration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }
@@ -216,12 +242,14 @@ namespace Sfa.Tl.Matching.Web
                 ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(apiConfiguration)).Build()
                 : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(apiConfiguration)).Build();
 
-           services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
-               new NotificationsApi(httpClient, apiConfiguration));
+            services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
+                new NotificationsApi(httpClient, apiConfiguration));
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
         {
+            services.AddTransient<IValidator<CrmEmployerEventBase>, CrmEmployerEventDataValidator>();
+
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailHistoryService, EmailHistoryService>();
             services.AddTransient<IEmployerService, EmployerService>();
@@ -234,7 +262,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
-            
+
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();

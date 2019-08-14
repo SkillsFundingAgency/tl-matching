@@ -5,6 +5,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
@@ -49,7 +50,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _result.ReferralItems.First().JobRole.Should().BeEquivalentTo("Automation Tester");
             _result.ReferralItems.First().PlacementsKnown.Should().BeTrue();
             _result.ReferralItems.First().Placements.Should().Be(5);
-            _result.ReferralItems.First().ProviderName.Should().BeEquivalentTo("ProviderName");
+            _result.ReferralItems.First().ProviderName.Should().BeEquivalentTo("Venue name (part of Provider display name)");
             _result.ReferralItems.First().ProviderVenueTownAndPostcode.Should().Be("Town AA1 1AA");
             _result.ReferralItems.First().DistanceFromEmployer.Should().Be(3.5M);
 

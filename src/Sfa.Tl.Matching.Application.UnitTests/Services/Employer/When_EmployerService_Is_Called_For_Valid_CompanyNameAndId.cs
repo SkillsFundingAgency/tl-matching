@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq.Expressions;
+using AutoMapper;
 using FluentAssertions;
+using FluentValidation;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Event;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
@@ -25,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
                                                     Arg.Any<Expression<Func<Domain.Models.Employer, int>>>())
                                 .Returns(100);
 
-            var employerService = new EmployerService(_employerRepository, opportunityRepository);
+            var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>());
 
             _employerResult = employerService.ValidateCompanyNameAndId(EmployerId, CompanyName).GetAwaiter().GetResult();
         }

@@ -6,6 +6,8 @@
         public decimal DistanceFromEmployer { get; set; }
         public string Name { get; set; }
         public string Postcode { get; set; }
+        public string ProviderDisplayName { get; set; }
+        public string ProviderVenueName { get; set; }
         public string CreatedBy { get; set; }
     }
 }

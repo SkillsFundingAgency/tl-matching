@@ -36,5 +36,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
         {
             searchTerm.IsAllSpecialCharactersOrNumbers().Should().Be(result);
         }
+
+        [Theory(DisplayName = "ToTitleCase Data Tests")]
+        [InlineData("Word", "Word")]
+        [InlineData("an interesting idea", "An Interesting Idea")]
+        [InlineData("war and peace", "War and Peace")]
+        [InlineData("Sentence with an ACRONYM.", "Sentence With an Acronym.")]
+        [InlineData("Kensington And Chelsea College", "Kensington and Chelsea College")]
+        public void ToTitleCaseDataTests(string input, string result)
+        {
+            input.ToTitleCase().Should().Be(result);
+        }
     }
 }

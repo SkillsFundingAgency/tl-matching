@@ -16,6 +16,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public long UkPrn { get; set; }
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "You must tell us how the provider name should be displayed")]
         [MaxLength(400, ErrorMessage = "You must enter a provider name that is 400 characters or fewer")]
         public string DisplayName { get; set; }
 
@@ -49,7 +50,8 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string SubmitAction { get; set; }
         public string Source { get; set; }
         public bool IsCdfProvider { get; set; } = true;
-
+        public bool IsTLevelProvider { get; set; } = false;
+        
         public IList<ProviderVenueViewModel> ProviderVenues { get; set; }
 
         public bool IsSaveSection=>

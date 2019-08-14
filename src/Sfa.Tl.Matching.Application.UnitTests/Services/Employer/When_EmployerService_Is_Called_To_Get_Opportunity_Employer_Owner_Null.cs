@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq.Expressions;
+using AutoMapper;
 using FluentAssertions;
+using FluentValidation;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Event;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
@@ -21,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _opportunityRepository.GetFirstOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>())
                 .Returns((Domain.Models.Opportunity)null);
 
-            var employerService = new EmployerService(employerRepository, _opportunityRepository);
+            var employerService = new EmployerService(employerRepository, _opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>());
 
             _result = employerService.GetEmployerOpportunityOwnerAsync(1).GetAwaiter().GetResult();
         }

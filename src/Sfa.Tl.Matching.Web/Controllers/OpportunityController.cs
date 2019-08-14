@@ -1,7 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
-
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -16,9 +13,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-#if !NoAuth
     [Authorize(Roles = RolesExtensions.AdminUser + "," + RolesExtensions.StandardUser)]
-#endif
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;
@@ -182,10 +177,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("emails-sent/{id}", Name = "EmailSentReferrals_Get")]
-        public async Task<IActionResult> ReferralEmailSent(int id)
+        [Route("emails-sent/{opportunityId}", Name = "EmailSentReferrals_Get")]
+        public async Task<IActionResult> ReferralEmailSent(int opportunityId)
         {
-            var dto = await _opportunityService.GetOpportunity(id);
+            var dto = await _opportunityService.GetOpportunity(opportunityId);
             var viewModel = _mapper.Map<SentViewModel>(dto);
             viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
 
@@ -242,6 +237,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return File(downloadedFileInfo.FileContent, 
                 downloadedFileInfo.ContentType,
                 downloadedFileInfo.FileName);
+        }
+
+        [HttpGet]
+        [Route("remove-referral/{referralId}-{opportunityItemId}", Name = "DeleteReferral")]
+        public async Task<IActionResult> DeleteReferral(int referralId, int opportunityItemId)
+        {
+            await _opportunityService.DeleteReferralAsync(referralId);
+            return RedirectToRoute("GetCheckAnswers", new { opportunityItemId });
         }
 
         private async Task<int> CreateOpportunityAsync(OpportunityDto dto)

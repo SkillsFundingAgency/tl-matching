@@ -4,6 +4,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailPlaceholder.Builders;
+using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailPlaceholder

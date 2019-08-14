@@ -52,6 +52,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await GetGoogleAddressDetails(providerVenue);
 
+            if (string.IsNullOrWhiteSpace(providerVenue.Name))
+            {
+                providerVenue.Name = providerVenue.Postcode;
+            }
+
             return await _providerVenueRepository.Create(providerVenue);
         }
 

@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string JobRole { get; set; }
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
-        public IEnumerable<ProviderReferralDto> ProviderDetails { get; set; }
+        public IEnumerable<ProviderReferralDto> ProviderAndVenueDetails { get; set; }
 
     }
 
@@ -18,6 +18,12 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ProviderVenueTown { get; set; }
         public string ProviderVenuePostCode { get; set; }
         public string ProviderName { get; set; }
+        public string ProviderDisplayName { get; set; }
+        public string ProviderVenueName { get; set; }
+
+        public string CustomisedProviderDisplayName => ProviderVenueName == ProviderVenuePostCode
+            ? ProviderDisplayName
+            : $"{ProviderVenueName} (part of {ProviderDisplayName})";
     }
 
 }

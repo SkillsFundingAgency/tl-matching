@@ -23,6 +23,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var viewModel = new ProviderVenueDetailViewModel
             {
                 Id = 1,
+                ProviderId = 2,
                 Postcode = "CV1 2WT",
                 Qualifications = new List<QualificationDetailViewModel>
                 {
@@ -56,6 +57,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteName.Should().BeEquivalentTo("GetProviderDetail");
+            redirect?.RouteValues["providerId"].Should().Be(2);
         }
 
         [Fact]

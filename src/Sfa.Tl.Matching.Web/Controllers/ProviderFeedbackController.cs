@@ -1,8 +1,6 @@
-﻿// ReSharper disable RedundantUsingDirective
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Configuration;
@@ -10,9 +8,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-#if !NoAuth
     [Authorize(Roles = RolesExtensions.AdminUser)]
-#endif
     public class ProviderFeedbackController : Controller
     {
         private readonly MatchingConfiguration _configuration;

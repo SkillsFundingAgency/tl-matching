@@ -13,6 +13,7 @@
 	[SecondaryContactPhone] VARCHAR(150) NULL,
 	[IsCDFProvider] BIT NOT NULL,
 	[IsEnabledForReferral] BIT NOT NULL,
+	[IsTLevelProvider] BIT NOT NULL DEFAULT 0,
 	[Source] VARCHAR(50) NOT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 

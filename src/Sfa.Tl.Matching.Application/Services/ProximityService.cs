@@ -33,6 +33,19 @@ namespace Sfa.Tl.Matching.Application.Services
             return results;
         }
 
+        public async Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximity(ProviderSearchParametersDto dto)
+        {
+            var geoLocationData = await _locationApiClient.GetGeoLocationData(dto.Postcode);
+            dto.Latitude = geoLocationData.Latitude;
+            dto.Longitude = geoLocationData.Longitude;
+
+            var searchResults = await _searchProvider.SearchProvidersForOtherRoutesByPostcodeProximity(dto);
+
+            var results = searchResults.Any() ? searchResults : new List<SearchResultsByRouteViewModelItem>();
+
+            return results;
+        }
+
         public async Task<(bool, string)> IsValidPostCode(string postCode)
         {
             return await _locationApiClient.IsValidPostCode(postCode);

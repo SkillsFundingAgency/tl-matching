@@ -53,18 +53,6 @@
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NoAuth|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineDebug>true</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
@@ -76,9 +64,6 @@
   <ItemGroup>
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
     <None Include="PostDeployment\Seed Email Templates.sql" />
-    <None Include="PostDeployment\Migrate Opportunity Data.sql" />
-    <None Include="PostDeployment\Update Date Columns to UTC.sql" />
-    <None Include="PostDeployment\Add Employer ForeignKey.sql" />
     <None Include="Sfa.Tl.Matching.Database.Local.Int.Test.publish.xml" />
     <None Include="Sfa.Tl.Matching.Database.Local.publish.xml" />
   </ItemGroup>
@@ -93,7 +78,6 @@
     <Build Include="Tables\QualificationRouteMapping.sql" />
     <Build Include="Tables\Qualification.sql" />
     <Build Include="Tables\ProviderQualification.sql" />
-    <Build Include="Tables\OLDOpportunity.sql" />
     <Build Include="Tables\ProvisionGap.sql" />
     <Build Include="Tables\Referral.sql" />
     <Build Include="Tables\EmailTemplate.sql" />
@@ -110,6 +94,8 @@
     <Build Include="Tables\DBProjDeployLog.sql" />
     <Build Include="Tables\OpportunityItem.sql" />
     <Build Include="Tables\Opportunity.sql" />
+    <None Include="PostDeployment\Backfill Provider Venue Names.sql" />
+    <None Include="PostDeployment\Remove Obsolete Tables.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Model_Contains_Postcode_Error()
+        public void Then_Model_Contains_UkPrn_Error()
         {
             var viewResult = _result as ViewResult;
             viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();

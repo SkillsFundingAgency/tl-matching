@@ -6,6 +6,7 @@
 
 @section backButton{
     <a class="govuk-back-link"
+       id="tl-back"
        asp-route="GetProviderResults"
        asp-route-opportunityId="@Model.OpportunityId"
        asp-route-opportunityItemId="@Model.OpportunityItemId"
@@ -56,7 +57,7 @@
             {
                 @if (Model.SearchResultProviderCount > 0)
                 {
-                    <div class="govuk-form-group" sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-form-group--error">
+                    <div id="tl-no-provider-group" class="govuk-form-group" sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-form-group--error">
                         <fieldset class="govuk-fieldset">
                             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                                 <h1 class="govuk-fieldset__heading">
@@ -67,7 +68,7 @@
                                 Select all that apply
                             </span>
                             <div class="govuk-checkboxes">
-                                <span class="govuk-error-message" asp-validation-for="NoSuitableStudent"></span>
+                                <span id="tl-no-provider-error" class="govuk-error-message" asp-validation-for="NoSuitableStudent"></span>
                                 <div class="govuk-checkboxes__item">
                                     <input asp-for="NoSuitableStudent" class="govuk-checkboxes__input" type="checkbox"
                                            sfa-validation-for="NoSuitableStudent" sfa-validationerror-class="govuk-input--error">
@@ -95,18 +96,18 @@
                 }
             }
 
-            <div class="govuk-form-group" sfa-validation-for="JobRole" sfa-validationerror-class="govuk-form-group--error">
+            <div id="tl-job-role-group" class="govuk-form-group" sfa-validation-for="JobRole" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label govuk-label--m" asp-for="JobRole">
                     What specific job would the placement student do? (optional)
                 </label>
                 <span id="placement-role-hint" class="govuk-hint">
                     For example, admin assistant, care worker, bricklayer
                 </span>
-                <span class="govuk-error-message" asp-validation-for="JobRole"></span>
+                <span id="tl-job-role-error" class="govuk-error-message" asp-validation-for="JobRole"></span>
                 <input asp-for="JobRole" class="govuk-input govuk-!-width-one-half" sfa-validation-for="JobRole" sfa-validationerror-class="govuk-input--error" />
             </div>
 
-            <div class="govuk-form-group" sfa-validation-for="PlacementsKnown" sfa-validationerror-class="govuk-form-group--error">
+            <div id="tl-placements-known-group" class="govuk-form-group" sfa-validation-for="PlacementsKnown" sfa-validationerror-class="govuk-form-group--error">
                 <fieldset class="govuk-fieldset" aria-describedby="placement-location-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m" id="PlacementsKnown" name="PlacementsKnown">
                         Does the employer know how many students they want for this job at @Model.Postcode?
@@ -114,7 +115,7 @@
                     <span id="placement-location-hint" class="govuk-hint">
                         This can be an estimate
                     </span>
-                    <span class="govuk-error-message" asp-validation-for="PlacementsKnown"></span>
+                    <span id="tl-placements-known-error" class="govuk-error-message" asp-validation-for="PlacementsKnown"></span>
                     <div class="govuk-radios govuk-radios--conditional" data-module="radios" sfa-validation-for="Placements" sfa-validationerror-class="govuk-form-group--error">
                         <div class="govuk-radios__item">
                             <input asp-for="PlacementsKnown" class="govuk-radios__input" id="placement-location-yes" type="radio" value="true" data-aria-controls="conditional-placement-location">

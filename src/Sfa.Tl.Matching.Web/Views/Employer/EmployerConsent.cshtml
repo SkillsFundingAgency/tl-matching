@@ -6,7 +6,7 @@
 }
 
 @section backButton{
-    <a asp-route="GetOpportunityBasket" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>
+    <a asp-route="GetOpportunityBasket" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link" id="tl-back">Back</a>
     <a asp-route="SaveEmployerOpportunity" asp-route-opportunityId="@Model.OpportunityId" class="govuk-link tl-float-right govuk-!-margin-top-3" id="tl-save">Save and come back later</a>
 }
 
@@ -25,20 +25,20 @@
                 </div>
             </div>
         }
-        <span class="govuk-caption-l"> @Model.Details.CompanyNameWithAka</span>
+        <span class="govuk-caption-l">@Model.Details.CompanyNameWithAka</span>
 
         <h1 class="govuk-heading-l">Before you send emails</h1>
         <h2 class="govuk-heading-m">Check details for industry placements</h2>
 
         <section>
             <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Contact name</h3>
-            <p class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContact</p>
+            <p id="tl-name" class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContact</p>
 
             <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Email</h3>
-            <p class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContactEmail</p>
+            <p id="tl-email" class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContactEmail</p>
 
             <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Telephone number</h3>
-            <p class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContactPhone</p>
+            <p id="tl-phone" class="govuk-body govuk-!-margin-bottom-2">@Model.Details.EmployerContactPhone</p>
 
             <p class="govuk-body">
                 <a asp-route="CheckEmployerDetails" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId"

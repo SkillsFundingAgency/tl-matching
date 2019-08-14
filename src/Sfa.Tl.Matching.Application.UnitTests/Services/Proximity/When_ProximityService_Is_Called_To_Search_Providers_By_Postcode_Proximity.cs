@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
@@ -17,13 +16,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         private const string Postcode = "SW1A 2AA";
         private const int SearchRadius = 5;
         private const int RouteId = 2;
-        private readonly IEnumerable<SearchResultsViewModelItem> _result;
+        private readonly IList<SearchResultsViewModelItem> _result;
         private readonly ILocationApiClient _locationApiClient;
         private readonly ISearchProvider _searchProvider;
 
         public When_ProximityService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
         {
-            var dto = new ProviderSearchParametersDto { Postcode = Postcode, SearchRadius = SearchRadius, SelectedRouteId = RouteId };
+            var dto = new ProviderSearchParametersDto
+            {
+                Postcode = Postcode,
+                SearchRadius = SearchRadius,
+                SelectedRouteId = RouteId
+            };
 
             _searchProvider = Substitute.For<ISearchProvider>();
             _searchProvider
@@ -46,7 +50,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         [Fact]
         public void Then_The_Expected_Number_Of_Search_Results_Is_Returned()
         {
-            _result.Count().Should().Be(2);
+            _result.Count.Should().Be(2);
+        }
+        
+        [Fact]
+        public void Then_The_Search_Results_Should_Have_Expected_Values()
+        {
+            _result[0].ProviderVenueId.Should().Be(1);
+            _result[1].ProviderVenueId.Should().Be(2);
         }
 
         [Fact]

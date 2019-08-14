@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         public void Then_Result_Is_Redirect_To_Results()
         {
             var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("CreateProviderDetail");
+            redirect?.RouteName.Should().BeEquivalentTo("AddProviderDetail");
         }
 
         [Fact]

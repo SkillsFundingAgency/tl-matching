@@ -1,7 +1,4 @@
-﻿// ReSharper disable RedundantUsingDirective
-
-using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -14,9 +11,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-#if !NoAuth
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
-#endif
     public class EmployerController : Controller
     {
         private readonly IEmployerService _employerService;
@@ -24,9 +19,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IReferralService _referralService;
         private readonly IMapper _mapper;
 
-        public EmployerController(IEmployerService employerService, 
+        public EmployerController(IEmployerService employerService,
                                     IOpportunityService opportunityService,
-                                    IReferralService referralService, 
+                                    IReferralService referralService,
                                     IMapper mapper)
         {
             _employerService = employerService;
@@ -57,7 +52,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("who-is-employer/{opportunityId}-{opportunityItemId}")]
         public async Task<IActionResult> SaveOpportunityCompanyName(FindEmployerViewModel viewModel)
         {
-            await ValidateAsync(viewModel);
+            var username = HttpContext.User.GetUserName();
+
+            await ValidateAsync(viewModel, username);
 
             if (!ModelState.IsValid)
                 return View("FindEmployer", viewModel);
@@ -186,10 +183,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(await GetEmployerConsentViewModel(viewModel.OpportunityId, viewModel.OpportunityItemId));
 
-            await _referralService.SendEmployerReferralEmail(viewModel.OpportunityId);
-            await _referralService.SendProviderReferralEmail(viewModel.OpportunityId);
-
-            await _opportunityService.ConfirmOpportunities(viewModel.OpportunityId);
+            await _referralService.ConfirmOpportunities(viewModel.OpportunityId, HttpContext.User.GetUserName());
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }
@@ -208,7 +202,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return viewModel;
         }
 
-        private async Task ValidateAsync(FindEmployerViewModel viewModel)
+        private async Task ValidateAsync(FindEmployerViewModel viewModel, string currentUser)
         {
             var isValidEmployer =
                 await _employerService.ValidateCompanyNameAndId(viewModel.SelectedEmployerId, viewModel.CompanyName);
@@ -224,9 +218,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
                 if (!string.IsNullOrEmpty(lockedByUser))
                 {
-                    ModelState.AddModelError(nameof(viewModel.CompanyName),
-                        $"{lockedByUser} is already working on this employer’s opportunities. " +
-                        "Please choose a different employer.");
+                    if (lockedByUser == currentUser)
+                        ModelState.AddModelError(nameof(viewModel.CompanyName),
+                            "You are already working on this employer’s opportunities. Please start again and find this employer in your saved opportunities.");
+                    else
+                        ModelState.AddModelError(nameof(viewModel.CompanyName),
+                            "Your colleague, " + $"{lockedByUser}, is already working on this employer’s opportunities. " +
+                            "Please choose a different employer.");
                 }
             }
         }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Humanizer;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Models.Enums;
@@ -19,8 +21,31 @@ namespace Sfa.Tl.Matching.Application.Extensions
         /// <returns></returns>
         public static string ToTitleCase(this string value)
         {
-            return string.IsNullOrWhiteSpace(value) ? string.Empty :
-                CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLowerInvariant());
+            if (string.IsNullOrWhiteSpace(value))
+                return string.Empty;
+
+            var artsAndPreps = new List<string>()
+                { "a", "an", "and", "any", "at", "for", "from", "into", "of", "on",
+                    "or", "some", "the", "to", };
+
+            var result = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLowerInvariant());
+
+            var tokens = result.Split(new[] { ' ', '\t', '\r', '\n' },
+                    StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
+
+            result = tokens[0];
+            tokens.RemoveAt(0);
+
+            result += tokens.Aggregate(string.Empty, (prev, input)
+                => prev +
+                   (artsAndPreps.Contains(input.ToLower()) // If True
+                       ? " " + input.ToLower()              // Return the prep/art lowercase
+                       : " " + input));                   // Otherwise return the valid word.
+
+            result = Regex.Replace(result, @"(?!^Out)(Out\s+Of)", "out of");
+
+            return result;
         }
 
         public static string ToLetterOrDigit(this string value)
@@ -67,6 +92,12 @@ namespace Sfa.Tl.Matching.Application.Extensions
             }
         }
 
+        public static AupaStatus ToAupaStatus(this int value)
+        {
+            Enum.TryParse<AupaStatus>(value.ToString(), out var aupaStatus);
+            return aupaStatus;
+        }
+
         public static bool IsDateTime(this string value)
         {
             return DateTime.TryParse(value, out _);
@@ -90,6 +121,23 @@ namespace Sfa.Tl.Matching.Application.Extensions
             }
         }
 
+        public static bool IsAupaStatus(this int value)
+        {
+            try
+            {
+                //Aware	        229660000
+                //Understand	229660001
+                //Planning	    229660002
+                //Active	    229660003
+
+                return (value >= 0) && (value == 229660000 || value == 229660001 || value == 229660002 || value == 229660003);
+            }
+            catch (NoMatchFoundException)
+            {
+                return false;
+            }
+        }
+
         public static bool IsCompanyType(this string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return true;
@@ -98,6 +146,21 @@ namespace Sfa.Tl.Matching.Application.Extensions
             {
                 value.DehumanizeTo<CompanyType>();
                 return true;
+            }
+            catch (NoMatchFoundException)
+            {
+                return false;
+            }
+        }
+
+        public static bool IsCompanyType(this int value)
+        {
+            try
+            {
+                //Employer          200005
+                //Employer Provider 200008
+
+                return (value >= 0) && (value == 200005 || value == 200008);
             }
             catch (NoMatchFoundException)
             {

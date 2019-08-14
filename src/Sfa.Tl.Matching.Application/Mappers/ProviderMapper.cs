@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -16,6 +17,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<ProviderDetailViewModel, Provider>()
+                .ForMember(m => m.DisplayName, config => config.MapFrom(s => s.DisplayName.ToTitleCase()))
                 .ForMember(m => m.OfstedRating, config => config.Ignore())
                 .ForMember(m => m.Source, config => config.Ignore())
                 .ForMember(m => m.ProviderVenue, config => config.Ignore())
@@ -26,6 +28,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<CreateProviderDetailViewModel, Provider>()
+                .ForMember(m => m.DisplayName, config => config.MapFrom(s => s.DisplayName.ToTitleCase()))
                 .ForMember(m => m.OfstedRating, config => config.Ignore())
                 .ForMember(m => m.ProviderVenue, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<CreateProviderDetailViewModel, Provider>>())

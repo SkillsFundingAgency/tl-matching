@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var fileResult = _result as FileContentResult;
             fileResult.Should().NotBeNull();
             fileResult?.ContentType.Should().Be("application/file");
-            fileResult?.FileDownloadName.Should().Be($"test_file.xlsx");
+            fileResult?.FileDownloadName.Should().Be("test_file.xlsx");
             fileResult?.FileContents.Should().NotBeNull();
         }
 

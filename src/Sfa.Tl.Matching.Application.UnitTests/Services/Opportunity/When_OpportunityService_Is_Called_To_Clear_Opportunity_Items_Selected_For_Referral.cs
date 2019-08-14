@@ -7,7 +7,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
-using Sfa.Tl.Matching.Application.FileWriter;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;

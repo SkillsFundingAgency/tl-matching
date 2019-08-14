@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
@@ -17,5 +18,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunity(int opportunityId, string username);
 
         Task<string> GetEmployerOpportunityOwnerAsync(int employerId);
+        Task<int> HandleEmployerCreatedAsync(string payload);
+        Task<int> HandleEmployerUpdatedAsync(string payload);
     }
 }

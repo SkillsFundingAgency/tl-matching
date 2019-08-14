@@ -72,7 +72,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<OpportunityDto> GetOpportunity(int opportunityId)
         {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == opportunityId);
+            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == opportunityId,
+                navigationPropertyPath: o => o.Employer);
 
             var dto = _mapper.Map<OpportunityDto>(opportunity);
 
@@ -102,25 +103,28 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<CheckAnswersViewModel> GetCheckAnswers(int opportunityItemId)
         {
-            var dto = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId,
-                o => new CheckAnswersViewModel
+            var dto = await _opportunityItemRepository.GetSingleOrDefault(oi => oi.Id == opportunityItemId,
+                oi => new CheckAnswersViewModel
                 {
-                    OpportunityItemId = o.Id,
-                    OpportunityId = o.OpportunityId,
-                    Postcode = o.Postcode,
-                    JobRole = o.JobRole,
-                    Placements = o.Placements,
-                    RouteId = o.RouteId,
-                    SearchRadius = o.SearchRadius,
-                    RouteName = o.Route.Name,
-                    CompanyName = o.Opportunity.Employer.CompanyName,
-                    CompanyNameAka = o.Opportunity.Employer.AlsoKnownAs,
-                    PlacementsKnown = o.PlacementsKnown,
-                    Providers = o.Referral.Select(r => new ReferralsViewModel
+                    OpportunityItemId = oi.Id,
+                    OpportunityId = oi.OpportunityId,
+                    Postcode = oi.Postcode,
+                    JobRole = oi.JobRole,
+                    Placements = oi.Placements,
+                    RouteId = oi.RouteId,
+                    SearchRadius = oi.SearchRadius,
+                    RouteName = oi.Route.Name,
+                    CompanyName = oi.Opportunity.Employer.CompanyName,
+                    CompanyNameAka = oi.Opportunity.Employer.AlsoKnownAs,
+                    PlacementsKnown = oi.PlacementsKnown,
+                    Providers = oi.Referral.Select(r => new ReferralsViewModel
                     {
+                        ReferralId = r.Id,
                         Postcode = r.ProviderVenue.Postcode,
                         DistanceFromEmployer = r.DistanceFromEmployer,
-                        Name = r.ProviderVenue.Provider.Name
+                        Name = r.ProviderVenue.Provider.Name,
+                        ProviderDisplayName = r.ProviderVenue.Provider.DisplayName,
+                        ProviderVenueName = r.ProviderVenue.Name
                     }).ToList()
                 });
 
@@ -136,7 +140,9 @@ namespace Sfa.Tl.Matching.Application.Services
                     Name = r.ProviderVenue.Provider.Name,
                     Postcode = r.ProviderVenue.Postcode,
                     DistanceFromEmployer = r.DistanceFromEmployer,
-                    ProviderVenueId = r.ProviderVenueId
+                    ProviderVenueId = r.ProviderVenueId,
+                    ProviderDisplayName = r.ProviderVenue.Provider.DisplayName,
+                    ProviderVenueName = r.ProviderVenue.Name
                 })
                 .ToList();
 
@@ -363,44 +369,6 @@ namespace Sfa.Tl.Matching.Application.Services
                 await SetOpportunityItemsAsReferral(referralIds);
         }
 
-        public async Task ConfirmOpportunities(int opportunityId)
-        {
-            await CompleteSelectedReferrals(opportunityId);
-            await CompleteRemainingItems(opportunityId);
-        }
-
-        private async Task CompleteSelectedReferrals(int opportunityId)
-        {
-            var selectedOpportunityIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
-                                                                                  && oi.IsSaved
-                                                                                  && oi.IsSelectedForReferral
-                                                                                  && !oi.IsCompleted)
-                .Select(oi => oi.Id).ToList();
-
-            if (selectedOpportunityIds.Count > 0)
-                await SetOpportunityItemsAsCompleted(selectedOpportunityIds);
-        }
-
-        private async Task CompleteRemainingItems(int opportunityId)
-        {
-            var remainingOpportunities = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
-                                                                                  && oi.IsSaved
-                                                                                  && !oi.IsSelectedForReferral
-                                                                                  && !oi.IsCompleted);
-
-            var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString())
-                .ToList();
-            var provisionItems = remainingOpportunities
-                .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
-
-            if (provisionItems.Count > 0 && referralItems.Count == 0)
-            {
-                var provisionIds = provisionItems.Select(oi => oi.Id).ToList();
-                if (provisionIds.Count > 0)
-                    await SetOpportunityItemsAsCompleted(provisionIds);
-            }
-        }
-
         public async Task<string> GetCompanyNameWithAkaAsync(int? opportunityId)
         {
             var opportunity = await _opportunityRepository.GetSingleOrDefault(
@@ -429,6 +397,15 @@ namespace Sfa.Tl.Matching.Application.Services
                 ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 FileContent = fileContent
             };
+        }
+
+        public async Task DeleteReferralAsync(int referralId)
+        {
+            var referral = await _referralRepository.GetFirstOrDefault(r => r.Id == referralId);
+
+            if (referral == null) return;
+
+            await _referralRepository.Delete(referral);
         }
 
         private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds)

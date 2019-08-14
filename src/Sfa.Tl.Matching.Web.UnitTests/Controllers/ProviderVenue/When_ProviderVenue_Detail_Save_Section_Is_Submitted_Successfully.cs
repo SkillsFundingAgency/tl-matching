@@ -28,6 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var viewModel = new ProviderVenueDetailViewModel
             {
                 Id = 1,
+                ProviderId = 2,
                 Postcode = "CV1 2WT",
                 SubmitAction = "SaveSection"
             };
@@ -40,8 +41,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _result.Should().NotBeNull();
 
         [Fact]
-        public void Then_Result_Is_ViewResult() =>
-            _result.Should().BeAssignableTo<ViewResult>();
+        public void Then_Result_Is_Redirect_To_Get_Provider_Venue_Detail()
+        {
+            var redirect = _result as RedirectToRouteResult;
+            redirect?.RouteName.Should().BeEquivalentTo("GetProviderVenueDetail");
+
+            redirect?.RouteValues["providerVenueId"].Should().Be(1);
+            redirect?.RouteValues["providerId"].Should().Be(2);
+        }
 
         [Fact]
         public void Then_Model_Is_Not_Null()
@@ -49,10 +56,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
         }
+
         [Fact]
-        public void Then_GetVenueWithQualifications_Is_Called_Exactly_Once()
+        public void Then_GetVenueWithQualifications_Is_Not_Called()
         {
-            _providerVenueService.DidNotReceive().GetVenueWithQualificationsAsync(1);
+            _providerVenueService.DidNotReceive().GetVenueWithQualificationsAsync(Arg.Any<int>());
         }
 
         [Fact]

@@ -14,21 +14,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
     public class When_Employer_Consent_Is_Submitted_Successfully
     {
-        private readonly IOpportunityService _opportunityService;
+        private readonly IReferralService _referralService;
 
         private readonly IActionResult _result;
 
         public When_Employer_Consent_Is_Submitted_Successfully()
         {
-            _opportunityService = Substitute.For<IOpportunityService>();
+            var opportunityService = Substitute.For<IOpportunityService>();
 
             var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
-            var referralService = Substitute.For<IReferralService>();
+            _referralService = Substitute.For<IReferralService>();
             var mapper = new Mapper(config);
 
-            var employerController = new EmployerController(null, _opportunityService, referralService, mapper);
+            var employerController = new EmployerController(null, opportunityService, _referralService, mapper);
             var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
                 .AddStandardUser()
                 .AddUserName("username")
@@ -37,15 +37,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             _result = controllerWithClaims.EmployerConsent(new EmployerConsentViewModel
-                {
-                    OpportunityId = 1
-                }).GetAwaiter().GetResult();
+            {
+                OpportunityId = 1
+            }).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_ConfirmOpportunities_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).ConfirmOpportunities(1);
+            _referralService.Received(1).ConfirmOpportunities(1, "username");
         }
 
         [Fact]

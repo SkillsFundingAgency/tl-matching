@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             _result = controllerWithClaims.ProviderDetail(new AddProviderViewModel
             {
                 UkPrn = 123,
-                Name = "ProviderName"
+                Name = "Provider name"
             });
         }
 
@@ -52,10 +52,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_OpportunityId_Is_Set()
+        public void Then_View_Model_Is_Correct()
         {
             var viewModel = _result.GetViewModel<ProviderDetailViewModel>();
-            viewModel.Name.Should().Be("ProviderName");
+            viewModel.Name.Should().Be("Provider name");
+            viewModel.DisplayName.Should().Be("Provider Name");
             viewModel.UkPrn.Should().Be(123);
             viewModel.IsCdfProvider.Should().BeTrue();
             viewModel.IsEnabledForReferral.Should().BeTrue();

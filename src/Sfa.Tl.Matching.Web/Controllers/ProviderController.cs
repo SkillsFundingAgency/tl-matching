@@ -1,9 +1,7 @@
-﻿// ReSharper disable RedundantUsingDirective
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -13,9 +11,7 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
-#if !NoAuth
     [Authorize(Roles = RolesExtensions.AdminUser)]
-#endif
     public class ProviderController : Controller
     {
         private readonly MatchingConfiguration _configuration;
@@ -67,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("add-provider", Name = "AddProvider")]
         public IActionResult AddProvider(AddProviderViewModel viewModel)
         {
-            return RedirectToRoute("CreateProviderDetail", new
+            return RedirectToRoute("AddProviderDetail", new
             {
                 ukPrn = viewModel.UkPrn,
                 name = viewModel.Name
@@ -81,6 +77,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View(new ProviderDetailViewModel
             {
                 Name = viewModel.Name,
+                DisplayName = viewModel.Name.ToTitleCase(),
                 UkPrn = viewModel.UkPrn
             });
         }

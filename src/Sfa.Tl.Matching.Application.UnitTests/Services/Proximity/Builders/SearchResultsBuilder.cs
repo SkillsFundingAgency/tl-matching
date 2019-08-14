@@ -5,17 +5,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
 {
     public class SearchResultsBuilder
     {
-        private readonly IList<SearchResultsViewModelItem> _searchResults;
-
-        public SearchResultsBuilder()
-        {
-            _searchResults = new List<SearchResultsViewModelItem>
+        public IList<SearchResultsViewModelItem> Build() =>
+            new List<SearchResultsViewModelItem>
             {
                 new SearchResultsViewModelItem
                 {
                     ProviderVenueId = 1,
                     ProviderName = "The WKCIC Group",
-                    Postcode = "NW1 3HB",
+                    ProviderVenuePostcode = "NW1 3HB",
                     Distance = 2.5d,
                     QualificationShortTitles = new List<string>
                     {
@@ -27,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
                 {
                     ProviderVenueId = 2,
                     ProviderName = "Lambeth College",
-                    Postcode = "SW4 9BL",
+                    ProviderVenuePostcode = "SW4 9BL",
                     Distance = 2.5d,
                     QualificationShortTitles = new List<string>
                     {
@@ -36,9 +33,5 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
                     }
                 }
             };
-        }
-
-        public IList<SearchResultsViewModelItem> Build() =>
-            _searchResults;
     }
 }

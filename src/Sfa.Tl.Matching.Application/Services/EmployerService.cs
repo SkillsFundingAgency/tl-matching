@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.Event;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -17,12 +21,18 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly IRepository<Employer> _employerRepository;
         private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IMapper _mapper;
+        private readonly IValidator<CrmEmployerEventBase> _employerValidator;
 
         public EmployerService(IRepository<Employer> employerRepository,
-            IOpportunityRepository opportunityRepository)
+                               IOpportunityRepository opportunityRepository,
+                               IMapper mapper,
+                               IValidator<CrmEmployerEventBase> employerValidator)
         {
             _employerRepository = employerRepository;
             _opportunityRepository = opportunityRepository;
+            _mapper = mapper;
+            _employerValidator = employerValidator;
         }
 
         public async Task<bool> ValidateCompanyNameAndId(int employerId, string companyName)
@@ -55,14 +65,14 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             return await _opportunityRepository.GetSingleOrDefault(
                 o => o.Id == opportunityId,
-                oi => new FindEmployerViewModel
+                o => new FindEmployerViewModel
                 {
                     OpportunityItemId = opportunityItemId,
                     OpportunityId = opportunityId,
-                    CompanyName = oi.Employer.CompanyName,
-                    PreviousCompanyName = oi.Employer.CompanyName,
-                    AlsoKnownAs = oi.Employer.AlsoKnownAs,
-                    SelectedEmployerId = oi.EmployerId ?? 0,
+                    CompanyName = o.Employer.CompanyName,
+                    PreviousCompanyName = o.Employer.CompanyName,
+                    AlsoKnownAs = o.Employer.AlsoKnownAs,
+                    SelectedEmployerId = o.EmployerId ?? 0,
                 });
         }
 
@@ -159,7 +169,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return viewModel;
         }
-        
+
         public async Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunity(int opportunityId, string username)
         {
             var opportunityCount = _opportunityRepository.GetEmployerOpportunityCount(opportunityId);
@@ -186,6 +196,39 @@ namespace Sfa.Tl.Matching.Application.Services
                      && o.OpportunityItem.Any(oi => oi.IsSaved &&
                                                     !oi.IsCompleted));
             return opportunity?.CreatedBy;
+        }
+
+        public async Task<int> HandleEmployerCreatedAsync(string payload)
+        {
+            var createdEvent = JsonConvert.DeserializeObject<CrmEmployerCreatedEvent>(payload);
+
+            return await CreateOrUpdateEmployerAsync(createdEvent);
+        }
+
+        public async Task<int> HandleEmployerUpdatedAsync(string payload)
+        {
+            var updatedEvent = JsonConvert.DeserializeObject<CrmEmployerUpdatedEvent>(payload);
+
+            return await CreateOrUpdateEmployerAsync(updatedEvent);
+        }
+
+        private async Task<int> CreateOrUpdateEmployerAsync(CrmEmployerEventBase employerData)
+        {
+            var validationResult = await _employerValidator.ValidateAsync(employerData);
+
+            if (!validationResult.IsValid) return -1;
+
+            var employer = _mapper.Map<Employer>(employerData);
+
+            var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employer.CrmId);
+
+            if (existingEmployer == null)
+            {
+                return await _employerRepository.Create(employer);
+            }
+
+            await _employerRepository.Update(employer);
+            return 1;
         }
     }
 }

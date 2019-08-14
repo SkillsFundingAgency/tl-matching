@@ -22,7 +22,7 @@
                 </h2>
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
-                        <li><a href="#tl-continue" sfa-validation-for="@Model.ReferralItems[0].IsSelected"></a></li>
+                        <li><a href="#ReferralItems_0__IsSelected" sfa-validation-for="@Model.ReferralItems[0].IsSelected"></a></li>
                     </ul>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                         <partial name="_basketProvisionGapSingle" , model="Model.ProvisionGapItems" />
                         break;
                     case OpportunityBasketType.ReferralMultiple:
-                        <partial name="_basketReferralMultiple" , model="Model.ReferralItems" />
+                        <partial name="_basketReferralMultiple" , model="Model" />
                         break;
                     case OpportunityBasketType.MultipleReferralAndProvisionGap:
                     case OpportunityBasketType.SingleReferralAndProvisionGap:

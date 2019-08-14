@@ -33,9 +33,9 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId);
 
         Task ContinueWithOpportunities(ContinueOpportunityViewModel viewModel);
-        Task ConfirmOpportunities(int opportunityId);
         Task<string> GetCompanyNameWithAkaAsync(int? opportunityId);
         Task DeleteEmployerOpportunityItemAsync(int opportunityId);
         Task<FileDownloadDto> GetOpportunitySpreadsheetDataAsync(int opportunityId);
+        Task DeleteReferralAsync(int referralId);
     }
 }

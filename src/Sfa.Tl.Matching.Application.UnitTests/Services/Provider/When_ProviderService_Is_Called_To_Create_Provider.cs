@@ -15,6 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
     public class When_ProviderService_Is_Called_To_Create_Provider
     {
         private readonly int _result;
+        private readonly IRepository<Domain.Models.Provider> _repository;
         private const int ProviderId = 1;
 
         public When_ProviderService_Is_Called_To_Create_Provider()
@@ -35,18 +36,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             });
             var mapper = new Mapper(config);
 
-            var repository = Substitute.For<IRepository<Domain.Models.Provider>>();
+            _repository = Substitute.For<IRepository<Domain.Models.Provider>>();
             var referenceRepository = Substitute.For<IRepository<ProviderReference>>();
 
-            repository.Create(Arg.Any<Domain.Models.Provider>())
+            _repository.Create(Arg.Any<Domain.Models.Provider>())
                 .Returns(ProviderId);
 
-            var providerService = new ProviderService(mapper, repository, referenceRepository);
+            var providerService = new ProviderService(mapper, _repository, referenceRepository);
 
             var viewModel = new CreateProviderDetailViewModel
             {
                 UkPrn = 123,
-                Name = "ProviderName"
+                Name = "ProviderName",
+                DisplayName = "Display name"
             };
 
             _result = providerService.CreateProvider(viewModel).GetAwaiter().GetResult();
@@ -56,6 +58,23 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         public void Then_ProviderId_Is_Created()
         {
             _result.Should().Be(ProviderId);
+        }
+        
+        [Fact]
+        public void Then_ProviderRepository_Update_Is_Called_Exactly_Once()
+        {
+            _repository.Received(1)
+                .Create(Arg.Any<Domain.Models.Provider>());
+        }
+
+        [Fact]
+        public void Then_ProviderRepository_Update_Is_Called_With_Expected_Values()
+        {
+            _repository.Received(1)
+                .Create(Arg.Is<Domain.Models.Provider>(
+                    p => p.UkPrn == 123 &&
+                         p.Name == "ProviderName" &&
+                         p.DisplayName == "Display Name"));
         }
     }
 }

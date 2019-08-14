@@ -4,7 +4,7 @@
 }
 
 @section backButton{
-    <a asp-route="GetPlacementOrEmployer" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link">Back</a>
+    <a asp-route="GetPlacementOrEmployer" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link" id="tl-back">Back</a>
     @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 
@@ -14,14 +14,12 @@
 
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-        <table class="govuk-table">
+        <table class="govuk-table" id="tl-placement-table">
             <caption class="govuk-table__caption govuk-heading-m">Placement information</caption>
             <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Skill area</th>
-                    <td class="govuk-table__cell">
-                        @Model.RouteName
-                    </td>
+                    <td class="govuk-table__cell">@Model.RouteName</td>
                     <td class="govuk-table__cell">
                         <a asp-route="GetProviderResults"
                            asp-route-opportunityId="@Model.OpportunityId"
@@ -33,9 +31,7 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Postcode of workplace</th>
-                    <td class="govuk-table__cell">
-                        @Model.Postcode
-                    </td>
+                    <td class="govuk-table__cell">@Model.Postcode</td>
                     <td class="govuk-table__cell">
                         <a asp-route="GetProviderResults"
                            asp-route-opportunityId="@Model.OpportunityId"
@@ -47,18 +43,14 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Job role</th>
-                    <td class="govuk-table__cell">
-                        @Model.JobRole
-                    </td>
+                    <td class="govuk-table__cell">@Model.JobRole</td>
                     <td class="govuk-table__cell">
                         <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right" id="tl-change-link">Change<span class="govuk-visually-hidden"> the job role</span></a>
                     </td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Students wanted</th>
-                    <td class="govuk-table__cell">
-                        @Model.PlacementsDetail
-                    </td>
+                    <td class="govuk-table__cell">@Model.PlacementsDetail</td>
                     <td class="govuk-table__cell">
                         <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right" id="tl-change-link">Change<span class="govuk-visually-hidden"> the number of placements</span></a>
                     </td>
@@ -68,21 +60,35 @@
 
         <hr class="govuk-section-break govuk-section-break--l ">
 
-        <h2 class="govuk-heading-m">Provider information</h2>
-        @for (int i = 0; i < Model.Providers.Count(); i++)
-        {
-            var distance = @Model.Providers[i].DistanceFromEmployer;
-            var milesText = "miles";
-            if (distance == 1)
-            {
-                milesText = "mile";
-            }
+        <h2 class="govuk-heading-m">Selected providers</h2>
+        <table class="govuk-table" id="tl-providers-table">
+            <tbody class="govuk-table__body">
+                @for (int i = 0; i < Model.Providers.Count(); i++)
+                {
+                    var distance = @Model.Providers[i].DistanceFromEmployer;
+                    var milesText = "miles";
+                    if (distance == 1)
+                    {
+                        milesText = "mile";
+                    }
 
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Provider @(i + 1)</h3>
-            <p class="govuk-body govuk-!-margin-bottom-1">@Model.Providers[i].Name</p>
-            <p class="govuk-body govuk-!-margin-bottom-1">@($"{distance:#0.0}") @milesText from @Model.Postcode</p>
-            <hr class="govuk-section-break govuk-!-margin-bottom-4">
-        }
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">@Model.Providers[i].DisplayText</th>
+                        <td class="govuk-table__cell tl-min-150">
+                            @($"{distance:#0.0}") @milesText from @Model.Postcode
+                        </td>
+
+                        @if (Model.Providers.Count() > 1)
+                        {
+                            <td class="govuk-table__cell">
+                                <a asp-action="DeleteReferral" asp-route-referralId="@Model.Providers[i].ReferralId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link">Remove</a>
+                            </td>
+                        }
+                    </tr>
+                }
+
+            </tbody>
+        </table>
 
         <p class="govuk-body">
             <a class="govuk-link" id="tl-change-providers"
