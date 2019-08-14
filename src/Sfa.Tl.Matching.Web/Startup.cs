@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Security.Claims;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;

@@ -292,14 +292,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Pending.ToString());
             processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Processing.ToString());
             processStatus.Should().Be(BackgroundProcessHistoryStatus.Complete.ToString());
-
-        }
-
-        private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
-        {
-            return placementsKnown.GetValueOrDefault()
-                ? placements.ToString()
-                : "at least 1";
         }
     }
 }

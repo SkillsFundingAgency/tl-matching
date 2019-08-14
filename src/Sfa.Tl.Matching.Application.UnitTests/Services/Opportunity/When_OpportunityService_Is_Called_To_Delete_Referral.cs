@@ -18,19 +18,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const int ReferralId = 2;
         private const int OpportunityItemId = 1;
 
-        private readonly IOpportunityRepository _opportunityRepository;
-        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly IRepository<Domain.Models.Referral> _referralRepository;
-        private readonly IRepository<ProvisionGap> _provisionGapRepository;
 
         public When_OpportunityService_Is_Called_To_Delete_Referral()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
 
-            _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
-            _provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
+            var opportunityRepository = Substitute.For<IOpportunityRepository>();
+            var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
+            var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             _referralRepository.GetFirstOrDefault(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>())
@@ -44,8 +41,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
-            var opportunityService = new OpportunityService(mapper, _opportunityRepository, _opportunityItemRepository,
-                _provisionGapRepository, _referralRepository, googleMapApiClient,
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
+                provisionGapRepository, _referralRepository, googleMapApiClient,
                 opportunityPipelineReportWriter, dateTimeProvider);
 
             opportunityService.DeleteReferralAsync(ReferralId).GetAwaiter().GetResult();
