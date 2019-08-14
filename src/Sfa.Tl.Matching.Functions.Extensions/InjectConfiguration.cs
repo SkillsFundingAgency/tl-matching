@@ -115,6 +115,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddTransient<IFileImportService<TImportDto>, FileImportService<TImportDto, TDto, TEntity>>();
         }
+
         private static void RegisterCsvFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
                 where TDto : class, new()
                 where TImportDto : FileImportDto
@@ -140,6 +141,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterRepositories(IServiceCollection services)
         {
+            services.AddTransient<IRepository<BankHoliday>, GenericRepository<BankHoliday>>();
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
             services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
             services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
@@ -156,7 +158,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
             services.AddTransient<IRepository<OpportunityItem>, GenericRepository<OpportunityItem>>();
             services.AddTransient<IOpportunityRepository, OpportunityRepository>();
-            
+
             services.AddTransient<IBulkInsertRepository<LearningAimReferenceStaging>, SqlBulkInsertRepository<LearningAimReferenceStaging>>();
             services.AddTransient<IBulkInsertRepository<ProviderReferenceStaging>, SqlBulkInsertRepository<ProviderReferenceStaging>>();
             services.AddTransient<IBulkInsertRepository<EmployerStaging>, SqlBulkInsertRepository<EmployerStaging>>();
@@ -178,7 +180,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)

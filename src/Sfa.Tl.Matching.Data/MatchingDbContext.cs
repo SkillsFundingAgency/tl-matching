@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Data
         }
 
         public virtual DbSet<BackgroundProcessHistory> BackgroundProcessHistory { get; set; }
+        public virtual DbSet<BankHoliday> BankHoliday { get; set; }
         public virtual DbSet<EmailHistory> EmailHistory { get; set; }
         public virtual DbSet<EmailPlaceholder> EmailPlaceholder { get; set; }
         public virtual DbSet<EmailTemplate> EmailTemplate { get; set; }
