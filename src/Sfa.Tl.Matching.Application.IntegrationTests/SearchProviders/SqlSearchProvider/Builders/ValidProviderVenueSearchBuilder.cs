@@ -136,7 +136,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 PrimaryContactPhone = "0123456789",
                 SecondaryContact = "Test 2",
                 SecondaryContactEmail = "Test2@test.com",
-                SecondaryContactPhone = "0123456789",
+                SecondaryContactPhone = "0987654321",
                 IsCdfProvider = isCdfProvider,
                 IsEnabledForReferral = true,
                 Source = "Test"
