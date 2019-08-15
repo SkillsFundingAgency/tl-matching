@@ -3,9 +3,7 @@
 @if (!ViewData.ModelState.IsValid)
 {
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-        <h2 class="govuk-error-summary__title" id="error-summary-title">
-            There is a problem
-        </h2>
+        <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 <li><a sfa-validation-for="UkPrn"></a></li>
@@ -32,12 +30,12 @@
                                sfa-validation-for="UkPrn" sfa-validationerror-class="tl-search-input--error"
                                aria-describedby="ukprn-hint">
                     </div>
-                    <div class="tl-search-submit"><button class="button" type="submit">Search</button></div>
+                    <div class="tl-search-submit"><button id="tl-search" class="button" type="submit">Search</button></div>
                 </div>
             </div>
         </div>
         @if (Model.ShowAllProvider)
         {
-            <p class="govuk-body"><a class="govuk-link" asp-route="SearchProvider">Show all providers</a></p>
+            <p class="govuk-body"><a id="tl-show-all" class="govuk-link" asp-route="SearchProvider">Show all providers</a></p>
         }
     </form>

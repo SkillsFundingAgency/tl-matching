@@ -18,9 +18,7 @@
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-                    <h2 class="govuk-error-summary__title" id="error-summary-title">
-                        There is a problem
-                    </h2>
+                    <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
                     <div class="govuk-error-summary__body">
                         <ul class="govuk-list govuk-error-summary__list">
                             <li><a sfa-validation-for="DisplayName"></a></li>
@@ -65,9 +63,7 @@
                 </fieldset>
             </div>
 
-            <button type="submit" class="govuk-button tl-button--grey" name="SubmitAction" value="SaveSection">
-                Save
-            </button>
+            <button id="tl-save-section" type="submit" class="govuk-button tl-button--grey" name="SubmitAction" value="SaveSection">Save</button>
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0">
 
             <div class="govuk-form-group">
@@ -103,11 +99,11 @@
                     </legend>
                     <div class="govuk-radios govuk-radios--inline">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="placements-yes" type="radio" value="true" asp-for="IsTLevelProvider">
+                            <input class="govuk-radios__input" id="tlevel-yes" type="radio" value="true" asp-for="IsTLevelProvider">
                             <label class="govuk-label govuk-radios__label" asp-for="IsTLevelProvider" >Yes</label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="placements-no" type="radio" value="false" asp-for="IsTLevelProvider">
+                            <input class="govuk-radios__input" id="tlevel-no" type="radio" value="false" asp-for="IsTLevelProvider">
                             <label class="govuk-label govuk-radios__label" asp-for="IsTLevelProvider" >No</label>
                         </div>
                     </div>
@@ -215,16 +211,12 @@
                         @for (var i = 0; i < Model.ProviderVenues.Count(); i++)
                         {
                             var providerVenue = Model.ProviderVenues[i];
-
+                            var isEnabledForReferralText = Model.ProviderVenues[i].IsEnabledForReferral ? "Yes" : "No";
+                        
                             <tr class="govuk-table__row">
                                 <th class="govuk-table__cell">@Model.ProviderVenues[i].Postcode</th>
                                 <td class="govuk-table__cell">@Model.ProviderVenues[i].QualificationCount</td>
-                                <td class="govuk-table__cell">
-                                    @{
-                                        var isEnabledForReferralText = Model.ProviderVenues[i].IsEnabledForReferral ? "Yes" : "No";
-                                        @isEnabledForReferralText
-                                    }
-                                </td>
+                                <td class="govuk-table__cell">@isEnabledForReferralText</td>
                                 <td class="govuk-table__cell">
                                     <a asp-route="GetProviderVenueDetail" asp-route-providerVenueId="@Model.ProviderVenues[i].ProviderVenueId"
                                        asp-route-providerId="@Model.Id"
@@ -242,12 +234,12 @@
 
             @if (Model.ProviderVenues.Count == 0)
             {
-                <button type="submit" class="govuk-button" name="SubmitAction" value="SaveAndAddVenue">Save and add venue</button>
+                <button id="tl-save-finish" type="submit" class="govuk-button" name="SubmitAction" value="SaveAndAddVenue">Save and add venue</button>
             }
             else
             {
-                <p class="govuk-body"><a class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
-                <button type="submit" class="govuk-button" name="SubmitAction" value="SaveAndFinish">Save and finish</button>
+                <p class="govuk-body"><a id="tl-add-venue" class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
+                <button id="tl-save-finish" type="submit" class="govuk-button" name="SubmitAction" value="SaveAndFinish">Save and finish</button>
             }
         </form>
     </div>

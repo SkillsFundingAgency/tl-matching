@@ -47,19 +47,24 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             saveLink.PathName.Should().Be($"/saved-opportunities");
 
             var basketTable = documentHtml.QuerySelector(".govuk-table") as IHtmlTableElement;
-            //basketTable.Rows.Length.Should().Be(2);
+            basketTable.Head.Rows.Length.Should().Be(1);
+            basketTable.Head.Rows[0].Cells[0].TextContent.Should().Be("Workplace");
+            basketTable.Head.Rows[0].Cells[1].TextContent.Should().Be("Job role");
+            basketTable.Head.Rows[0].Cells[2].TextContent.Should().Be("Students wanted");
+            basketTable.Head.Rows[0].Cells[3].TextContent.Should().Be("Providers");
 
-            var row = basketTable.Rows[1];
-            row.Cells[0].TextContent.Should().Be("London SW1A 2AA");
-            row.Cells[1].TextContent.Should().Be("Job Role");
-            row.Cells[2].TextContent.Should().Be("1");
-            row.Cells[3].TextContent.Should().Be("1");
+            var basketTableBody = basketTable.Bodies[0];
+            basketTableBody.Rows.Length.Should().Be(1);
+            basketTableBody.Rows[0].Cells[0].TextContent.Should().Be("London SW1A 2AA");
+            basketTableBody.Rows[0].Cells[1].TextContent.Should().Be("Job Role");
+            basketTableBody.Rows[0].Cells[2].TextContent.Should().Be("1");
+            basketTableBody.Rows[0].Cells[3].TextContent.Should().Be("1");
 
-            var editCell = row.Cells[4].Children[0] as IHtmlAnchorElement;
+            var editCell = basketTableBody.Rows[0].Cells[4].Children[0] as IHtmlAnchorElement;
             editCell.Text.Should().Be("Edit");
             editCell.PathName.Should().Be($"/check-answers/{OpportunityItemId}");
 
-            var deleteCell = row.Cells[5].Children[0] as IHtmlAnchorElement;
+            var deleteCell = basketTableBody.Rows[0].Cells[5].Children[0] as IHtmlAnchorElement;
             deleteCell.Text.Should().Be("Delete");
             deleteCell.PathName.Should().Be($"/remove-opportunity/{OpportunityItemId}");
 

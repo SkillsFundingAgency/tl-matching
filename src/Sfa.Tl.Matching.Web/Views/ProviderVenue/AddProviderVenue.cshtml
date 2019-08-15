@@ -11,9 +11,7 @@
 @if (!ViewData.ModelState.IsValid)
 {
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-        <h2 class="govuk-error-summary__title" id="error-summary-title">
-            There is a problem
-        </h2>
+        <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 <li><a sfa-validation-for="Postcode"></a></li>
@@ -28,17 +26,15 @@
             <input asp-for="Source" value="Admin" type="hidden" />
             <div class="govuk-form-group" sfa-validation-for="Postcode" sfa-validationerror-class="govuk-form-group--error">
                 <label class="govuk-label" asp-for="Postcode">
-                    <h1>Enter the venue’s postcode</h1>
+                    <h1 class="govuk-heading-l">Enter the venue’s postcode</h1>
                 </label>
                 <span class="govuk-error-message" asp-validation-for="Postcode"></span>
                 <input asp-for="Postcode" class="govuk-input govuk-input--width-5"
                        sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error"
-                       type="text">
+                       type="text" />
             </div>
 
-            <button type="submit" class="govuk-button">
-                Continue
-            </button>
+            <button id="tl-continue" type="submit" class="govuk-button">Continue</button>
         </form>
     </div>
 </div>

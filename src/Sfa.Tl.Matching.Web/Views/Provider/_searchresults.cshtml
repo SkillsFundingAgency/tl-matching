@@ -19,7 +19,8 @@
                 <td class="govuk-table__cell">@provider.ProviderName</td>
                 <td class="govuk-table__cell">@provider.IsCdfProvider</td>
                 <td class="govuk-table__cell">
-                    <a asp-route="GetProviderDetail" asp-route-providerId="@provider.ProviderId" class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden">@provider.ProviderName's details</span></a>
+                    <a asp-route="GetProviderDetail" asp-route-providerId="@provider.ProviderId" 
+                       class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden"> @provider.ProviderName's details</span></a>
                     <input type="hidden" asp-for="@provider.ProviderId" name="Providers[@i].ProviderId" />
                 </td>
             </tr>
@@ -27,8 +28,8 @@
     </tbody>
 </table>
 
-
 @if (Model.IsAuthorisedUser)
 {
-    <p class="govuk-body"><a class="tl-button--red govuk-button govuk-!-margin-right-1" asp-route="ConfirmSendProviderEmail">Send email to all CDF providers</a></p>
+    <p class="govuk-body"><a class="tl-button--red govuk-button govuk-!-margin-right-1" 
+                             asp-route="ConfirmSendProviderEmail">Send email to all CDF providers</a></p>
 }

@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 PrimaryContactPhone = "0123456789",
                 SecondaryContact = "Test 2",
                 SecondaryContactEmail = "Test2@test.com",
-                SecondaryContactPhone = "0123456789",
+                SecondaryContactPhone = "0987654321",
                 IsCdfProvider = isCdfProvider,
                 IsEnabledForReferral = true,
                 IsTLevelProvider = true,
