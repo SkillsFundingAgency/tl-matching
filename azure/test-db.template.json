@@ -1,0 +1,94 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "comments": "This template is part a temporary solution while the project gains confidence in it's integration tests, this will then be removed"
+    },
+    "parameters": {
+        "environmentNameAbbreviation": {
+            "type": "string",
+            "maxLength": 4
+        },
+        "sharedEnvResourceGroup": {
+            "type": "string"
+        },
+        "sharedSQLServerName": {
+            "type": "string"
+        },
+        "sqlDatabaseSkuName": {
+            "type": "string"
+        },
+        "sqlDatabaseTier": {
+            "type": "string"
+        },
+        "testRunnerOutboundIp": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/tl-platform-building-blocks/master/templates/",
+        "resourceNamePrefix": "[concat('tl-', toLower(parameters('environmentNameAbbreviation')))]",
+        "testSqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-mtchinttest-db')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-05-10",
+            "name": "sql-database",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'sql-database.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "databaseName": {
+                        "value": "[variables('testSqlDatabaseName')]"
+                    },
+                    "sqlServerName": {
+                        "value": "[parameters('sharedSQLServerName')]"
+                    },
+                    "databaseSkuName": {
+                        "value": "[parameters('sqlDatabaseSkuName')]"
+                    },
+                    "databaseTier": {
+                        "value": "[parameters('sqlDatabaseTier')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "sql-server-firewall-rules",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'sql-server-firewall-rules.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "firewallRuleNamePrefix": {
+                        "value": "AZURE_IP-"
+                    },
+                    "ipAddresses": {
+                        "value": [
+                            "[parameters('testRunnerOutboundIp')]"
+                        ]
+                    },
+                    "serverName": {
+                        "value": "[parameters('sharedSQLServerName')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "testSqlDatabaseName": {
+            "type": "string",
+            "value": "[variables('testSqlDatabaseName')]"
+        }
+    }
+}
