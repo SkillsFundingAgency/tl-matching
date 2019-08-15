@@ -54,6 +54,9 @@
                     },
                     "databaseTier": {
                         "value": "[parameters('sqlDatabaseTier')]"
+                    },
+                    "serverlessMinCapacity": {
+                        "value": "0.5"
                     }
                 }
             }
