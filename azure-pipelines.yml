@@ -92,7 +92,14 @@ jobs:
       platform: '$(buildPlatform)'
       configuration: '$(buildConfiguration)'
       msbuildArgs: '/p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+    inputs:
+      contents: |	
+        src\**\*.dacpac	
+      targetFolder: '$(build.artifactstagingdirectory)/publish'
+      overWrite: true
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
     inputs:
-        PathtoPublish: '$(build.artifactstagingdirectory)/publish'
+        pathtoPublish: '$(build.artifactstagingdirectory)/publish'
