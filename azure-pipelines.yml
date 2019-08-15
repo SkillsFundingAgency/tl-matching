@@ -80,8 +80,8 @@ jobs:
           PathtoPublish: '$(build.artifactstagingdirectory)/publish'
 
 - job: 'DACPACBuild'
-  pool: 
-    vmImage: 'windows-2019'
+  pool:
+    name: 'Continuous Integration 02 - SSD - 160ACU'
   workspace:
     clean: all
   steps:
