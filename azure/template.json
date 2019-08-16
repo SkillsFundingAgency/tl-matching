@@ -45,7 +45,10 @@
         "certificateName": {
             "type": "string"
         },
-		"providerReferenceTrigger": {
+        "employerFeedbackTrigger": {
+            "type": "string"
+        },
+        "providerReferenceTrigger": {
             "type": "string"
         }
     },
@@ -252,8 +255,12 @@
                                 "value": "1.0"
                             },
                             {
-                                "name": "ServiceName",
-                                "value": "Sfa.Tl.Matching"
+                                 "name": "ServiceName",
+                                 "value": "Sfa.Tl.Matching"
+                            },
+                            {
+                                "name": "EmployerFeedbackTrigger",
+                                "value": "[parameters('employerFeedbackTrigger')]"
                             },
                             {
                                 "name": "ProviderReferenceTrigger",

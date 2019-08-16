@@ -85,15 +85,20 @@
       "type": "boolean",
       "environmentVariable": "SendEmailEnabled"
     },
-	"GoogleMapsApiBaseUrl": {
+    "GoogleMapsApiBaseUrl": {
       "minLength": 1,
       "type": "string",
       "environmentVariable": "GoogleMapsApiBaseUrl"
     },
-	"GoogleMapsApiKey": {
+    "GoogleMapsApiKey": {
       "minLength": 1,
       "type": "string",
       "environmentVariable": "GoogleMapsApiKey"
+    },
+    "CalendarJsonUrl": {
+      "minLength": 1,
+      "type": "string",
+      "environmentVariable": "CalendarJsonUrl"
     },
     "BlobStorageConnectionString": {
       "type": "string",
