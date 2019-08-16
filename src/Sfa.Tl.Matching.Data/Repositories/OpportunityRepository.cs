@@ -152,7 +152,15 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        Workplace = $"{oi.Town} {oi.Postcode}",
                                                        PlacementsKnown = oi.PlacementsKnown,
                                                        Placements = oi.Placements,
-                                                       Providers = oi.Referral.Count,
+                                                       ProviderNames = (from r in oi.Referral
+                                                                        join pv in _dbContext.ProviderVenue on r.ProviderVenueId equals pv.Id
+                                                                        join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                                                                        select new ProviderNameViewModel
+                                                                        {
+                                                                            DisplayName = p.DisplayName,
+                                                                            VenueName = pv.Name,
+                                                                            Postcode = pv.Postcode
+                                                                        }).ToList(),
                                                        OpportunityType = oi.OpportunityType
                                                    }).ToList()
                                            }).SingleOrDefaultAsync();

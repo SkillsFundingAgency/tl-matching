@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
                     cells.Count.Should().Be(3);
 
                     cells[0].InnerText.Should().Be("London SW1 1AA");
-                    cells[1].InnerText.Should().Be("at least 1");
+                    cells[1].InnerText.Should().Be("At least 1");
                     cells[2].InnerText.Should().Be("Reason");
                 }
             }

@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             providerBasketTableBody.Rows[0].Cells[0].TextContent.Should().Be("London SW1A 2AA");
             providerBasketTableBody.Rows[0].Cells[1].TextContent.Should().Be("Job Role");
             providerBasketTableBody.Rows[0].Cells[2].TextContent.Should().Be("1");
-            providerBasketTableBody.Rows[0].Cells[3].TextContent.Should().Be("1");
+            providerBasketTableBody.Rows[0].Cells[3].TextContent.Should().Be("Venue 1 Name (part of SQL Search Provider Display Name)");
 
             var providerEditCell = providerBasketTableBody.Rows[0].Cells[4].Children[0] as IHtmlAnchorElement;
             providerEditCell.Text.Should().Be("Edit");

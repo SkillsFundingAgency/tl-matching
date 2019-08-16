@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewModel.CompanyNameWithAka.Should().Be("Company Name1 (Also Known As 1)");
             viewModel.Postcode.Should().Be("PostCode1");
             viewModel.JobRole.Should().Be("JobRole1");
-            viewModel.PlacementsDetail.Should().Be("at least 1");
+            viewModel.PlacementsDetail.Should().Be("At least 1");
             viewModel.DeleteWarningText.Should().Be("This cannot be undone.");
             viewModel.SubmitActionText.Should().Be("Confirm and continue");
         }
