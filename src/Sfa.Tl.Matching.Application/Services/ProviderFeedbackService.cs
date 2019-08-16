@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 var providers = await ((IProviderRepository)_providerRepository).GetProvidersWithFundingAsync();
 
-                await UpdatebackgroundProcessHistory(backgroundProcessHistory,
+                await UpdateBackgroundProcessHistory(backgroundProcessHistory,
                     providers.Count,
                     BackgroundProcessHistoryStatus.Processing,
                     userName);
@@ -137,7 +137,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     numberOfProviderEmailsSent++;
                 }
 
-                await UpdatebackgroundProcessHistory(backgroundProcessHistory,
+                await UpdateBackgroundProcessHistory(backgroundProcessHistory,
                     numberOfProviderEmailsSent,
                     BackgroundProcessHistoryStatus.Complete,
                     userName);
@@ -149,7 +149,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 _logger.LogError(ex, errorMessage);
 
-                await UpdatebackgroundProcessHistory(backgroundProcessHistory,
+                await UpdateBackgroundProcessHistory(backgroundProcessHistory,
                     numberOfProviderEmailsSent,
                     BackgroundProcessHistoryStatus.Error,
                     userName,
@@ -179,7 +179,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 createdBy);
         }
 
-        private async Task UpdatebackgroundProcessHistory(
+        private async Task UpdateBackgroundProcessHistory(
             BackgroundProcessHistory backgroundProcessHistory,
             int providerCount, BackgroundProcessHistoryStatus historyStatus,
             string userName, string errorMessage = null)

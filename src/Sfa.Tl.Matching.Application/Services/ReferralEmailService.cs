@@ -82,7 +82,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 await SendEmail(EmailTemplateName.EmployerReferralComplex, opportunityId, employerReferral.EmployerContactEmail,
                     "Your industry placement referral – ESFA National Apprenticeship Service", tokens, employerReferral.CreatedBy);
 
-                await UpdatebackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
+                await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
                     BackgroundProcessHistoryStatus.Complete, username);
 
             }
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 var errorMessage = $"Error sending employer referral emails. {ex.Message} " +
                                    $"Opportunity id {opportunityId}";
 
-                await UpdatebackgroundProcessHistory(GetBackgroundProcessHistoryData,
+                await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData,
                     backgroundProcessHistoryId,
                     1,
                     BackgroundProcessHistoryStatus.Error,
@@ -139,7 +139,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await CompleteRemainingItems(opportunityId, username);
 
-                await UpdatebackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
+                await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
                     BackgroundProcessHistoryStatus.Complete, username);
 
             }
@@ -148,7 +148,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 var errorMessage = $"Error sending provider referral emails. {ex.Message} " +
                                    $"Opportunity id {opportunityId}";
 
-                await UpdatebackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
+                await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
                     BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
 
@@ -246,7 +246,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 createdBy);
         }
 
-        private async Task UpdatebackgroundProcessHistory(
+        private async Task UpdateBackgroundProcessHistory(
             Func<int, Task<BackgroundProcessHistory>> data,
             int backgroundProcessHistoryId,
             int providerCount, BackgroundProcessHistoryStatus historyStatus,
@@ -284,6 +284,5 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return backgroundProcessHistory;
         }
-
     }
 }

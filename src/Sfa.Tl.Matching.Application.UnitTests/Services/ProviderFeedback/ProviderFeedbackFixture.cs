@@ -9,9 +9,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
     public class ProviderFeedbackFixture
     {
-       internal readonly MatchingConfiguration Configuration;
-       internal readonly  IDateTimeProvider DateTimeProvider;
-       internal readonly ILogger<ProviderFeedbackService> Logger;
+        internal readonly MatchingConfiguration Configuration;
+        internal readonly IDateTimeProvider DateTimeProvider;
+        internal readonly ILogger<ProviderFeedbackService> Logger;
 
         public ProviderFeedbackFixture()
         {
