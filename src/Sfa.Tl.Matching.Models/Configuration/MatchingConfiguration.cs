@@ -22,5 +22,7 @@ namespace Sfa.Tl.Matching.Models.Configuration
 
         public string GoogleMapsApiBaseUrl { get; set; }
         public string GoogleMapsApiKey { get; set; }
+
+        public string CalendarJsonUrl { get; set; }
     }
 }
