@@ -18,14 +18,14 @@ namespace Sfa.Tl.Matching.Functions
             TimerInfo timer,
             ExecutionContext context,
             ILogger logger,
-            //[Inject] IEmployerFeedbackService employerFeedbackService,
+            [Inject] IEmployerFeedbackService employerFeedbackService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             var stopwatch = Stopwatch.StartNew();
 
             try
             {
-                //await employerFeedbackService.SendFeedbackEmailsAsync("System");
+                await employerFeedbackService.SendEmployerFeedbackEmailsAsync("System");
             }
             catch (Exception e)
             {

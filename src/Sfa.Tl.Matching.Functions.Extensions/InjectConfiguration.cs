@@ -169,17 +169,18 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         private static void RegisterApplicationServices(IServiceCollection services)
         {
             services.AddTransient<IValidator<CrmEmployerEventBase>, CrmEmployerEventDataValidator>();
-            
+
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailHistoryService, EmailHistoryService>();
+            services.AddTransient<IEmployerFeedbackService, EmployerFeedbackService>();
             services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IReferralEmailService, ReferralEmailService>();
-            
+
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         }
@@ -202,14 +203,14 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddTransient<IProviderQueryPortTypeClient>(svcProvider =>
             {
-               var client = new ProviderQueryPortTypeClient();
+                var client = new ProviderQueryPortTypeClient();
 
-               var fiveMinuteTimeSpan = new TimeSpan(0, 5, 0);
+                var fiveMinuteTimeSpan = new TimeSpan(0, 5, 0);
 
-               client.Endpoint.Binding.SendTimeout = fiveMinuteTimeSpan;
-               client.Endpoint.Binding.ReceiveTimeout = fiveMinuteTimeSpan;
+                client.Endpoint.Binding.SendTimeout = fiveMinuteTimeSpan;
+                client.Endpoint.Binding.ReceiveTimeout = fiveMinuteTimeSpan;
 
-               return client;
+                return client;
             });
 
             services.AddTransient<IProviderReferenceDataClient, ProviderReferenceDataClient>();
