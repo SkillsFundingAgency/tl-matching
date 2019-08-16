@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
             httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var fakeResponseHandler = new FakeResponseHandler();
-            fakeResponseHandler.AddFakeResponse(new Uri($"https://raw.githubusercontent.com/alphagov/calendars/master/lib/data/bank-holidays.json"),
+            fakeResponseHandler.AddFakeResponse(new Uri("https://raw.githubusercontent.com/alphagov/calendars/master/lib/data/bank-holidays.json"),
                 httpResponseMessage);
 
             var httpClient = new HttpClient(fakeResponseHandler);
