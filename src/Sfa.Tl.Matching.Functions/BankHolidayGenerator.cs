@@ -10,7 +10,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Api.Clients.Calendar;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
@@ -28,7 +27,7 @@ namespace Sfa.Tl.Matching.Functions
             ILogger logger,
             [Inject] ICalendarApiClient calendarApiClient,
             [Inject] IMapper mapper,
-            [Inject] IRepository<BankHoliday> bankHolidayRepository,
+            [Inject] IBulkInsertRepository<BankHoliday> bankHolidayBulkInsertRepository,
             [Inject] IRepository<FunctionLog> functionLogRepository)
         {
             try
@@ -37,7 +36,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 var stopwatch = Stopwatch.StartNew();
                 var holidays = await calendarApiClient.GetBankHolidaysAsync();
-                var createdRecords = await SaveHolidaysAsync(holidays, bankHolidayRepository, mapper);
+                var createdRecords = await SaveHolidaysAsync(holidays, bankHolidayBulkInsertRepository, mapper);
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -68,13 +67,13 @@ namespace Sfa.Tl.Matching.Functions
             ILogger logger,
             [Inject] ICalendarApiClient calendarApiClient,
             [Inject] IMapper mapper,
-            [Inject] IRepository<BankHoliday> bankHolidayRepository)
+            [Inject] IBulkInsertRepository<BankHoliday> bankHolidayBulkInsertRepository)
         {
             logger.LogInformation($"Function {context.FunctionName} triggered");
 
             var stopwatch = Stopwatch.StartNew();
             var holidays = await calendarApiClient.GetBankHolidaysAsync();
-            var createdRecords = await SaveHolidaysAsync(holidays, bankHolidayRepository, mapper);
+            var createdRecords = await SaveHolidaysAsync(holidays, bankHolidayBulkInsertRepository, mapper);
             stopwatch.Stop();
 
             logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -84,13 +83,15 @@ namespace Sfa.Tl.Matching.Functions
             return new OkObjectResult($"{createdRecords} records created.");
         }
 
-        private async Task<int> SaveHolidaysAsync(IList<BankHolidayResultDto> holidays, IRepository<BankHoliday> bankHolidayRepository, IMapper mapper)
+        private async Task<int> SaveHolidaysAsync(IList<BankHolidayResultDto> holidays, 
+            IBulkInsertRepository<BankHoliday> bankHolidayBulkInsertRepository,
+            IMapper mapper)
         {
-            //await bankHolidayRepository.DeleteMany();
             var entities = mapper.Map<IList<BankHoliday>>(holidays).ToList();
+            
+            await bankHolidayBulkInsertRepository.BulkInsert(entities);
 
-            //TODO: Set CreatedBy = "System" - mapper?
-            return await bankHolidayRepository.CreateMany(entities);
+            return entities.Count;
         }
     }
 }
