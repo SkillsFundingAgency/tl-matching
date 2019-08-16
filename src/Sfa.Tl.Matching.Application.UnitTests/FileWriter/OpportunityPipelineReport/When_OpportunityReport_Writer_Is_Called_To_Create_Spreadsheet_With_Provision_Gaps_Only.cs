@@ -59,11 +59,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
                     rows.Count.Should().Be(2);
 
                     var cells = rows[1].Descendants<Cell>().ToList();
-                    cells.Count.Should().Be(3);
+                    cells.Count.Should().Be(4);
 
                     cells[0].InnerText.Should().Be("London SW1 1AA");
-                    cells[1].InnerText.Should().Be("At least 1");
-                    cells[2].InnerText.Should().Be("Reason");
+                    cells[1].InnerText.Should().Be("Provision Gap Role");
+                    cells[2].InnerText.Should().Be("At least 1");
+                    cells[3].InnerText.Should().Be("Reason");
                 }
             }
         }

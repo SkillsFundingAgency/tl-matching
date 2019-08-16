@@ -202,6 +202,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                           Placements = oi.Placements,
                                           ProviderName = pv.Name == pv.Postcode ? p.DisplayName : $"{pv.Name} (part of {p.DisplayName})",
                                           ProviderVenueTownAndPostcode = $"{pv.Town} {pv.Postcode}",
+                                          PrimaryContact = p.PrimaryContact,
+                                          PrimaryContactEmail = p.PrimaryContactEmail,
+                                          PrimaryContactPhone = p.PrimaryContactPhone,
+                                          SecondaryContact = p.SecondaryContact,
+                                          SecondaryContactEmail = p.SecondaryContactEmail,
+                                          SecondaryContactPhone = p.SecondaryContactPhone
                                       }).ToList()
                              }).SingleOrDefaultAsync();
 

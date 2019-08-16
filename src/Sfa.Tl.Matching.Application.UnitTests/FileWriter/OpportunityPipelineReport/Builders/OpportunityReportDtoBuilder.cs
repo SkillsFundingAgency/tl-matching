@@ -29,7 +29,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
                 Town = "London",
                 Postcode = "SW1 1AB",
                 ProviderVenueTownAndPostcode = "London SW1 1AB",
-                DistanceFromEmployer = 1.5M
+                DistanceFromEmployer = 1.5M,
+                PrimaryContact = "Primary contact",
+                PrimaryContactEmail = "Primary contact email",
+                PrimaryContactPhone = "Primary contact telephone",
+                SecondaryContact = "Secondary contact",
+                SecondaryContactEmail = "Secondary contact email",
+                SecondaryContactPhone = "Secondary contact telephone"
             });
 
             return this;

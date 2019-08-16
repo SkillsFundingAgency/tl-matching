@@ -78,6 +78,12 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
                 row.AppendChild(CreateTextCell(4, rowIndex, referral.ProviderName));
                 row.AppendChild(CreateTextCell(5, rowIndex, referral.ProviderVenueTownAndPostcode));
                 row.AppendChild(CreateTextCell(6, rowIndex, $"{referral.DistanceFromEmployer:#0.0} miles"));
+                row.AppendChild(CreateTextCell(7, rowIndex, referral.PrimaryContact));
+                row.AppendChild(CreateTextCell(8, rowIndex, referral.PrimaryContactEmail));
+                row.AppendChild(CreateTextCell(9, rowIndex, referral.PrimaryContactPhone));
+                row.AppendChild(CreateTextCell(10, rowIndex, referral.SecondaryContact));
+                row.AppendChild(CreateTextCell(11, rowIndex, referral.SecondaryContactEmail));
+                row.AppendChild(CreateTextCell(12, rowIndex, referral.SecondaryContactPhone));
 
                 sheetData.AppendChild(row);
                 rowIndex++;
@@ -93,12 +99,12 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
                 var row = new Row { RowIndex = (uint)rowIndex };
 
                 row.AppendChild(CreateTextCell(1, rowIndex, provisionGap.Workplace));
-
+                row.AppendChild(CreateTextCell(2, rowIndex, provisionGap.JobRole));
                 row.AppendChild(int.TryParse(provisionGap.PlacementsDetail, out var placements)
-                    ? CreateTextCell(2, rowIndex, placements)
-                    : CreateTextCell(2, rowIndex, provisionGap.PlacementsDetail));
+                    ? CreateTextCell(3, rowIndex, placements)
+                    : CreateTextCell(3, rowIndex, provisionGap.PlacementsDetail));
 
-                row.AppendChild(CreateTextCell(3, rowIndex, provisionGap.Reason));
+                row.AppendChild(CreateTextCell(4, rowIndex, provisionGap.Reason));
 
                 sheetData.AppendChild(row);
                 rowIndex++;

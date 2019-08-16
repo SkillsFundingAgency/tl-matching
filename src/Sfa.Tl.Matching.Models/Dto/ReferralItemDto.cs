@@ -16,5 +16,11 @@
             PlacementsKnown.GetValueOrDefault()
                 ? Placements.ToString()
                 : "At least 1";
+        public string PrimaryContact { get; set; }
+        public string PrimaryContactEmail { get; set; }
+        public string PrimaryContactPhone { get; set; }
+        public string SecondaryContact { get; set; }
+        public string SecondaryContactEmail { get; set; }
+        public string SecondaryContactPhone { get; set; }
     }
 }
