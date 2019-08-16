@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("SendEmployerFeedbackEmails")]
         public async Task SendEmployerFeedbackEmails(
-            [TimerTrigger("0 0 10 * * MON-FRI", RunOnStartup = true)]
+            [TimerTrigger("%EmployerFeedbackTrigger%", RunOnStartup = true)]
             TimerInfo timer,
             ExecutionContext context,
             ILogger logger,
