@@ -22,6 +22,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
 
         [Theory]
         [InlineData("LarId", "", "You must enter a learning aim reference (LAR)", 0)]
+        [InlineData("LarId", "99999999", "You must enter a real learning aim reference (LAR)", 0)]
+        [InlineData("LarId", "1", "Enter a learning aim reference (LAR) that has 8 characters", 0)]
         public async Task Then_Correct_Error_Message_Is_Displayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             // ReSharper disable all PossibleNullReferenceException
