@@ -38,6 +38,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.IsSaved, o => o.MapFrom(s => s.IsSaved))
                 .ForMember(m => m.IsSelectedForReferral, o => o.MapFrom(s => s.IsSelectedForReferral))
                 .ForMember(m => m.IsCompleted, o => o.MapFrom(s => s.IsCompleted))
+                .ForMember(m => m.EmployerFeedbackSent, o => o.MapFrom(s => s.EmployerFeedbackSent))
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityItemDto, OpportunityItem>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
@@ -108,6 +109,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.IsSaved, o => o.MapFrom(s => s.IsSaved))
                 .ForMember(m => m.IsSelectedForReferral, o => o.MapFrom(s => s.IsSelectedForReferral))
                 .ForMember(m => m.IsCompleted, o => o.MapFrom(s => s.IsCompleted))
+                .ForMember(m => m.EmployerFeedbackSent, o => o.MapFrom(s => s.EmployerFeedbackSent))
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 

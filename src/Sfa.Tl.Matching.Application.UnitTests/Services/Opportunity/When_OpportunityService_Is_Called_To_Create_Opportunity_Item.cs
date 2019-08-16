@@ -82,7 +82,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 SearchResultProviderCount = 15,
                 IsSaved = true,
                 IsSelectedForReferral = true,
-                IsCompleted = true
+                IsCompleted = true,
+                EmployerFeedbackSent = true
             };
 
             _result = opportunityService.CreateOpportunityItemAsync(dto).GetAwaiter().GetResult();
@@ -108,6 +109,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     opportunityItem.IsSaved &&
                     opportunityItem.IsSelectedForReferral &&
                     opportunityItem.IsCompleted &&
+                    opportunityItem.EmployerFeedbackSent &&
                     opportunityItem.CreatedBy == "adminUserName"
             ));
         }
