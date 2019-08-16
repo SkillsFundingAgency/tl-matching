@@ -10,6 +10,7 @@ using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using Sfa.Tl.Matching.Api.Clients.Calendar;
 using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
@@ -196,6 +197,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         {
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
+            services.AddHttpClient<ICalendarApiClient, CalendarApiClient>();
 
             services.AddTransient<IProviderQueryPortTypeClient>(svcProvider =>
             {
