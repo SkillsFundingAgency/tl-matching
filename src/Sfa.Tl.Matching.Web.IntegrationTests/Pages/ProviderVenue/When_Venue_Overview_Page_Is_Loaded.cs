@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
             var qualificationTable = documentHtml.QuerySelector(".govuk-table") as IHtmlTableElement;
             qualificationTable.Head.Rows.Length.Should().Be(1);
             qualificationTable.Head.Rows[0].Cells[0].TextContent.Should().Be("Learning aim reference");
-            qualificationTable .Head.Rows[0].Cells[1].TextContent.Should().Be("Qualification title");
+            qualificationTable.Head.Rows[0].Cells[1].TextContent.Should().Be("Qualification title");
             qualificationTable.Head.Rows[0].Cells[2].TextContent.Should().BeEmpty();
 
             var qualificationTableBody = qualificationTable.Bodies[0];

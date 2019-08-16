@@ -26,11 +26,11 @@
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
         <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Learning aim reference (LAR)</p>
-        <p class="govuk-body">@Model.LarId</p>
+        <p id="tl-qualification-larid" class="govuk-body">@Model.LarId</p>
         <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Qualification title</p>
-        <p class="govuk-body">@Model.Title</p>
+        <p id="tl-qualification-title" class="govuk-body">@Model.Title</p>
 
-        <p class="govuk-body"><a class="govuk-link" asp-route="AddQualification" asp-route-ProviderVenueId="@Model.ProviderVenueId">Change qualification</a></p>
+        <p class="govuk-body"><a id="tl-change" class="govuk-link" asp-route="AddQualification" asp-route-ProviderVenueId="@Model.ProviderVenueId">Change qualification</a></p>
 
         <form asp-route="SaveMissingQualification" novalidate>
             <input type="hidden" asp-for="ProviderVenueId" />
@@ -78,20 +78,16 @@
                                        name="Routes[@i].IsSelected">
                                 <label class="govuk-label govuk-checkboxes__label"
                                        asp-for="@Model.Routes[i].IsSelected"
-                                       name="Routes[@i].IsSelected">
-                                    @route.Name
-                                </label>
+                                       name="Routes[@i].IsSelected">@route.Name</label>
                                 <span class="govuk-hint govuk-checkboxes__hint"
-                                      id="Routes[@i]-hint">
-                                    @route.Summary
-                                </span>
+                                      id="Routes[@i]-hint">@route.Summary</span>
                             </div>
                         </div>
                     }
 
                 </fieldset>
             </div>
-            <button class="govuk-button" type="submit">Add qualification</button>
+            <button id="tl-add" class="govuk-button" type="submit">Add qualification</button>
         </form>
     </div>
 </div>
