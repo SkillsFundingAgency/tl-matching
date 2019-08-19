@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.Extensions;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -43,7 +44,6 @@ namespace Sfa.Tl.Matching.Application.Services
             _opportunityItemRepository = opportunityItemRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
         }
-
 
         public async Task SendEmployerReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
         {
@@ -80,7 +80,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 tokens.Add("placements_list", sb.ToString());
 
                 await SendEmail(EmailTemplateName.EmployerReferralComplex, opportunityId, employerReferral.EmployerContactEmail,
-                    "Your industry placement referral – ESFA National Apprenticeship Service", tokens, employerReferral.CreatedBy);
+                    "Your industry placement referral – ESFA", tokens, employerReferral.CreatedBy);
 
                 await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
                     BackgroundProcessHistoryStatus.Complete, username);
@@ -98,7 +98,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     username,
                     errorMessage);
             }
-
         }
 
         public async Task SendProviderReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
@@ -107,34 +106,47 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var referrals = await GetOpportunityReferrals(opportunityId, itemIds);
 
+            const string emailSubject = "Industry Placement Matching Referral";
+
             try
             {
                 foreach (var referral in referrals)
                 {
-                    var toAddress = referral.ProviderPrimaryContactEmail;
                     var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
 
                     var tokens = new Dictionary<string, string>
                     {
-                        { "primary_contact_name", referral.ProviderPrimaryContact },
+                        { "contact_name", referral.ProviderPrimaryContact },
                         { "provider_name", referral.ProviderName },
                         { "route", referral.RouteName.ToLowerInvariant() },
-                        { "venue_text", referral.VenueText },
+                        { "venue_text", GetVenueText(referral.ProviderVenueName, 
+                            referral.ProviderVenueTown,
+                            referral.ProviderVenuePostcode,
+                            referral.ProviderDisplayName) },
                         { "search_radius", referral.DistanceFromEmployer },
-                        { "job_role", referral.JobRole },
+                        { "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
+                            ? $"* who is looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
+                            : $"* who is looking for this job role: {referral.JobRole}" },
                         { "employer_business_name", referral.CompanyName },
                         { "employer_contact_name", referral.EmployerContact},
                         { "employer_contact_number", referral.EmployerContactPhone },
                         { "employer_contact_email", referral.EmployerContactEmail },
-                        { "employer_postcode", $"{referral.Town} {referral.Postcode }" },
+                        { "employer_town_postcode", $"{referral.Town} {referral.Postcode }" },
                         { "number_of_placements", placements }
                     };
 
-                    await SendEmail(EmailTemplateName.ProviderReferralComplex, opportunityId, toAddress,
-                        "Industry Placement Matching Referral", tokens, referral.CreatedBy);
+                    await SendEmail(EmailTemplateName.ProviderReferral_V3, opportunityId, referral.ProviderPrimaryContactEmail,
+                        emailSubject, tokens, referral.CreatedBy);
+
+                    if (!string.IsNullOrEmpty(referral.ProviderSecondaryContactEmail))
+                    {
+                        tokens["contact_name"] = referral.ProviderSecondaryContact;
+                        await SendEmail(EmailTemplateName.ProviderReferral_V3, opportunityId,
+                            referral.ProviderSecondaryContactEmail,
+                            emailSubject, tokens, referral.CreatedBy);
+                    }
 
                     await CompleteSelectedReferrals(opportunityId, referral.OpportunityItemId, username);
-
                 }
 
                 await CompleteRemainingItems(opportunityId, username);
@@ -151,7 +163,6 @@ namespace Sfa.Tl.Matching.Application.Services
                 await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
                     BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
-
         }
 
         private async Task CompleteSelectedReferrals(int opportunityId, int itemId, string username)
@@ -283,6 +294,17 @@ namespace Sfa.Tl.Matching.Application.Services
             }
 
             return backgroundProcessHistory;
+        }
+
+        private static string GetVenueText(string venueName, string venueTown, string venuePostcode, string providerDisplayName)
+        {
+            var venueText = string.Empty;
+            if (venueName != venuePostcode)
+                venueText = $"at {ProviderDisplayExtensions.GetDisplayText(venueName, venuePostcode, providerDisplayName)} ";
+
+            venueText += $"in {venueTown} {venuePostcode}";
+
+            return venueText;
         }
     }
 }

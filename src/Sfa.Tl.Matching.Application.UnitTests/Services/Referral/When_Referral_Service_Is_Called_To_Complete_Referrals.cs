@@ -56,7 +56,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .PushProviderReferralEmailMessageAsync(Arg.Any<SendProviderReferralEmail>());
 
             backgroundProcessData?.Status.Should().Be(BackgroundProcessHistoryStatus.Pending.ToString());
-            
         }
     }
 }

@@ -8,6 +8,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.Extensions;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Data.Repositories
@@ -48,6 +49,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   ProviderDisplayName = p.DisplayName,
                                   ProviderPrimaryContact = p.PrimaryContact,
                                   ProviderPrimaryContactEmail = p.PrimaryContactEmail,
+                                  ProviderSecondaryContact = p.SecondaryContact,
                                   ProviderSecondaryContactEmail = p.SecondaryContactEmail,
                                   CompanyName = emp.CompanyName,
                                   EmployerContact = op.EmployerContact,
@@ -201,7 +203,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                           DistanceFromEmployer = re.DistanceFromEmployer,
                                           PlacementsKnown = oi.PlacementsKnown,
                                           Placements = oi.Placements,
-                                          ProviderName = pv.Name == pv.Postcode ? p.DisplayName : $"{pv.Name} (part of {p.DisplayName})",
+                                          ProviderName = ProviderDisplayExtensions.GetDisplayText(pv.Name, pv.Postcode, p.DisplayName),
                                           ProviderVenueTownAndPostcode = $"{pv.Town} {pv.Postcode}",
                                           PrimaryContact = p.PrimaryContact,
                                           PrimaryContactEmail = p.PrimaryContactEmail,
