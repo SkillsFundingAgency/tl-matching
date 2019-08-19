@@ -7,7 +7,7 @@ workspace:
     clean: all
 
 variables:
-  buildConfiguration: 'debug'
+  buildConfiguration: 'release'
   buildPlatform: 'anycpu'
 
 pool:
