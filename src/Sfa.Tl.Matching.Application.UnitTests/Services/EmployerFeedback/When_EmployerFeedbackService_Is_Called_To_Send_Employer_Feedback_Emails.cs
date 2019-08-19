@@ -61,11 +61,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityRepository.GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>())
-                .Returns(new List<EmployerReferralDto>
+                .Returns(new List<EmployerFeedbackDto>
                 {
-                    new EmployerReferralDto
+                    new EmployerFeedbackDto
                     {
                         OpportunityId = 1,
+                        OpportunityItemId = 2,
                         EmployerContact = "Employer Contact",
                         EmployerContactEmail = "primary.contact@employer.co.uk"
                     }

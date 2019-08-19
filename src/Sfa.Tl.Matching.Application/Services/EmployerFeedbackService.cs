@@ -51,11 +51,8 @@ namespace Sfa.Tl.Matching.Application.Services
                 .OrderBy(d => d.Date)
                 .ToListAsync();
 
-            _dateTimeProvider.AddWorkingDays(_dateTimeProvider.UtcNow().Date, 10, bankHolidays);
+            var referralDate = _dateTimeProvider.AddWorkingDays(_dateTimeProvider.UtcNow().Date, 10, bankHolidays);
 
-            var referralDate = DateTime.Now.Subtract(TimeSpan.FromDays(10));
-            // Employers sent a single referral and have not been sent the feedback email
-            //TODO: Create a new type for the dto here?
             var referrals = await _opportunityRepository.GetReferralsForEmployerFeedbackAsync(referralDate);
 
             try
@@ -72,7 +69,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     // Update flag to say email was sent
                 }
-                // (employer_contact_name
             }
             catch (Exception ex)
             {

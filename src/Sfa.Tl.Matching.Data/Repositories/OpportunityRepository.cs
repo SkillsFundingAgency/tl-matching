@@ -223,9 +223,21 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
         }
 
-        public async Task<IList<EmployerReferralDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
+        public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
         {
-            return new List<EmployerReferralDto>();
+            // Employers sent a single referral and have not been sent the feedback email
+            //TODO: Create a new type for the dto here?
+            /*
+             OpportunityId, 
+             OpportunityItemId, 
+             EmployerContact
+             EmployerContactEmail
+            where
+            oi.ModifiedDate >= referralDate
+            !EmployerFeedbackSent
+             */
+
+            return new List<EmployerFeedbackDto>();
         }
 
         private static bool IsValidBasketState(OpportunityItem oi, OpportunityType type)
