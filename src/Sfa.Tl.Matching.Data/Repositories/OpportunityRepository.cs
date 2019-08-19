@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -218,6 +219,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             return _dbContext.OpportunityItem.Count(item =>
                 item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
+        }
+
+        public async Task<IList<EmployerReferralDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
+        {
+            return new List<EmployerReferralDto>();
         }
 
         private static bool IsValidBasketState(OpportunityItem oi, OpportunityType type)

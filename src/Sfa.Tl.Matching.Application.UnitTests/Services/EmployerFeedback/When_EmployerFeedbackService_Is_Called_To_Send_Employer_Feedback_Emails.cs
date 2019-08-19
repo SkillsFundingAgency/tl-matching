@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
@@ -31,7 +28,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-
+            _opportunityRepository.GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>())
+                .Returns(new List<EmployerReferralDto>
+                {
+                    new EmployerReferralDto
+                    {
+                        OpportunityId = 1,
+                        EmployerContact = "Employer Contact",
+                        EmployerContactEmail = "primary.contact@employer.co.uk"
+                    }
+                });
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
             var employerFeedbackService = new EmployerFeedbackService(
@@ -44,52 +50,77 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .SendEmployerFeedbackEmailsAsync("TestUser")
                 .GetAwaiter().GetResult();
         }
-        
+
+        [Fact]
+        public void Then_OpportunityRepository_GetEmployerReferrals_Is_Called_Exactly_Once()
+        {
+            _opportunityRepository
+                .Received(1)
+                .GetReferralsForEmployerFeedbackAsync(
+                    Arg.Any<DateTime>());
+        }
+
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_Exactly_Once()
         {
-            //_emailService
-            //    .Received(1)
-            //    .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Expected_Parameters()
         {
-            //_emailService
-            //    .Received(1)
-            //    .SendEmail(Arg.Is<string>(
-            //            templateName => templateName == "EmployerFeedback"),
-            //        Arg.Is<string>(toAddress => toAddress == "primary.contact@provider.co.uk"),
-            //        Arg.Is<string>(subject => subject == "Industry Placement Matching Employer Feedback"),
-            //        Arg.Any<IDictionary<string, string>>(),
-            //        Arg.Is<string>(replyToAddress => replyToAddress == ""));
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Is<string>(
+                        templateName => templateName == "EmployerFeedback"),
+                    Arg.Is<string>(toAddress => toAddress == "primary.contact@employer.co.uk"),
+                    Arg.Is<string>(subject => subject == "Your industry placement progress – ESFA"),
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Is<string>(replyToAddress => replyToAddress == ""));
         }
 
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Expected_Tokens()
         {
-            //var expectedResults = new Dictionary<string, string>
-            //{
-                //{ "employer_name",  "Employer Name" },
-            //};
+            var expectedResults = new Dictionary<string, string>
+            {
+                { "employer_contact_name",  "Employer Contact" },
+            };
 
-            //_emailService
-            //    .Received(1)
-            //    .SendEmail(Arg.Any<string>(),
-            //        Arg.Any<string>(),
-            //        Arg.Any<string>(),
-            //        Arg.Is<IDictionary<string, string>>(
-            //            tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)),
-            //        Arg.Any<string>());
+            _emailService
+                .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)),
+                    Arg.Any<string>());
         }
 
         [Fact]
         public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
         {
-            //_emailHistoryService
-            //    .Received(1)
-            //    .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
+            _emailHistoryService
+                .Received(1)
+                .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
         }
+
+
+        [Fact]
+        public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_With_Expected_Parameters()
+        {
+            _emailHistoryService
+                .Received(1)
+                .SaveEmailHistory(
+                    Arg.Is<string>(templateName => templateName == "EmployerFeedback"),
+
+                    Arg.Any<IDictionary<string, string>>(), 
+                    Arg.Any<int?>(), 
+                    Arg.Any<string>(), 
+                    Arg.Is<string>(s => s == "TestUser"));
+        }
+
     }
 }

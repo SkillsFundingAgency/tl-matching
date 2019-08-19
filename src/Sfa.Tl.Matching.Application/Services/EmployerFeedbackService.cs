@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
-        private readonly IRepository<Opportunity> _opportunityRepository;
+        private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly ILogger<EmployerFeedbackService> _logger;
 
@@ -40,9 +40,27 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SendEmployerFeedbackEmailsAsync(string userName)
         {
+            //TODO: Calculate working days
+            var referralDate = DateTime.Now.Subtract(TimeSpan.FromDays(10));
+            // Employers sent a single referral and have not been sent the feedback email
+            //TODO: Create a new type for the dto here?
+            var referrals = await _opportunityRepository.GetReferralsForEmployerFeedbackAsync(referralDate);
+            
             try
             {
+                foreach (var referral in referrals)
+                {
+                    var tokens = new Dictionary<string, string>
+                    {
+                        { "employer_contact_name", referral.EmployerContact },
+                    };
 
+                    await SendEmail(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.EmployerContactEmail,
+                        "Your industry placement progress – ESFA", tokens, userName);
+
+                    // Update flag to say email was sent
+                }
+                // (employer_contact_name
             }
             catch (Exception ex)
             {
