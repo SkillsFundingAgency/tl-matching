@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -18,6 +20,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
+        private readonly IRepository<BankHoliday> _bankHolidayRepository;
         private readonly ILogger<EmployerFeedbackService> _logger;
 
         public EmployerFeedbackService(
@@ -27,6 +30,7 @@ namespace Sfa.Tl.Matching.Application.Services
             IEmailHistoryService emailHistoryService,
             IOpportunityRepository opportunityRepository,
             IRepository<OpportunityItem> opportunityItemRepository,
+            IRepository<BankHoliday> bankHolidayRepository,
             IDateTimeProvider dateTimeProvider)
         {
             _configuration = configuration;
@@ -35,17 +39,25 @@ namespace Sfa.Tl.Matching.Application.Services
             _emailHistoryService = emailHistoryService;
             _opportunityRepository = opportunityRepository;
             _opportunityItemRepository = opportunityItemRepository;
+            _bankHolidayRepository = bankHolidayRepository;
             _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task SendEmployerFeedbackEmailsAsync(string userName)
         {
-            //TODO: Calculate working days
+            var bankHolidays = await _bankHolidayRepository.GetMany(
+                d => d.Date <= DateTime.Today)
+                .Select(d => d.Date)
+                .OrderBy(d => d.Date)
+                .ToListAsync();
+
+            _dateTimeProvider.AddWorkingDays(_dateTimeProvider.UtcNow().Date, 10, bankHolidays);
+
             var referralDate = DateTime.Now.Subtract(TimeSpan.FromDays(10));
             // Employers sent a single referral and have not been sent the feedback email
             //TODO: Create a new type for the dto here?
             var referrals = await _opportunityRepository.GetReferralsForEmployerFeedbackAsync(referralDate);
-            
+
             try
             {
                 foreach (var referral in referrals)
