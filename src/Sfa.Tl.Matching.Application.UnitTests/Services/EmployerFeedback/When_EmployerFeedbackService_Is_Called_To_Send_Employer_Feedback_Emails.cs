@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Extensions;
 using Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builders;
@@ -42,6 +46,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
 
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("UtcNowResolver") ?
+                        new UtcNowResolver<OpportunityItemWithUsernameForEmployerFeedbackSentDto, OpportunityItem>(_dateTimeProvider) :
+                        null);
+            });
+            var mapper = new Mapper(config);
             var bankHolidays = new BankHolidayListBuilder().Build().AsQueryable();
 
             var mockSet = Substitute.For<DbSet<BankHoliday>, IAsyncEnumerable<BankHoliday>, IQueryable<BankHoliday>>();
@@ -61,20 +74,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityRepository.GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>())
-                .Returns(new List<EmployerFeedbackDto>
-                {
-                    new EmployerFeedbackDto
-                    {
-                        OpportunityId = 1,
-                        OpportunityItemId = 2,
-                        EmployerContact = "Employer Contact",
-                        EmployerContactEmail = "primary.contact@employer.co.uk"
-                    }
-                });
+                .Returns(new EmployerFeedbackDtoListBuilder().Build());
+
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
             var employerFeedbackService = new EmployerFeedbackService(
-                _testFixture.Configuration, _testFixture.Logger,
+                mapper, _testFixture.Configuration, _testFixture.Logger,
                 _emailService, _emailHistoryService,
                 _opportunityRepository, _opportunityItemRepository,
                 bankHolidayRepository,
@@ -85,20 +90,40 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .GetAwaiter().GetResult();
         }
 
-        //[Fact]
-        //public void Then_BankHolidayRepository_GetMany_Is_Called_Exactly_Once()
-        //{
-        //    _bankHolidayRepository
-        //        .Received(1)
-        //        .GetMany(Arg.Any<Expression<Func<BankHoliday, bool>>>());
-        //}
-
         [Fact]
         public void Then_OpportunityRepository_GetReferralsForEmployerFeedbackAsync_Is_Called_Exactly_Once()
         {
             _opportunityRepository
                 .Received(1)
                 .GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>());
+        }
+
+        [Fact]
+        public void Then_OpportunityItemRepository_UpdateManyWithSpecifedColumnsOnly_Is_Called_Exactly_Once()
+        {
+            _opportunityItemRepository
+                .Received(1)
+                .UpdateManyWithSpecifedColumnsOnly(Arg.Any<IList<OpportunityItem>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>()
+                );
+        }
+
+        [Fact]
+        public void Then_OpportunityItemRepository_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values()
+        {
+            _opportunityItemRepository.Received(1)
+                .UpdateManyWithSpecifedColumnsOnly(Arg.Is<IList<OpportunityItem>>(
+                        o => o.Count == 1
+                             && o[0].Id == 2
+                             && o[0].EmployerFeedbackSent
+                             && o.All(x => x.ModifiedBy == "TestUser")
+                             && o.All(x => x.ModifiedOn == new DateTime(2019, 9, 1))
+                    ),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
+                    Arg.Any<Expression<Func<OpportunityItem, object>>>());
         }
 
         [Fact]
@@ -170,6 +195,5 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                     Arg.Any<string>(),
                     Arg.Is<string>(s => s == "TestUser"));
         }
-
     }
 }

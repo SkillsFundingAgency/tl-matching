@@ -225,19 +225,24 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
         {
-            // Employers sent a single referral and have not been sent the feedback email
-            //TODO: Create a new type for the dto here?
-            /*
-             OpportunityId, 
-             OpportunityItemId, 
-             EmployerContact
-             EmployerContactEmail
-            where
-            oi.ModifiedDate >= referralDate
-            !EmployerFeedbackSent
-             */
+            var dto = await (from o in _dbContext.Opportunity
+                join oi in _dbContext.OpportunityItem
+                    on o.Id equals oi.OpportunityId
+                where oi.IsCompleted 
+                      && !oi.EmployerFeedbackSent
+                      && oi.ModifiedOn.HasValue
+                      && oi.ModifiedOn.Value <= referralDate
+                      && o.OpportunityItem.Count == 1
+                      && oi.OpportunityType == OpportunityType.Referral.ToString()
+                select new EmployerFeedbackDto
+                {
+                    OpportunityId = o.Id,
+                    OpportunityItemId = oi.Id,
+                    EmployerContact = o.EmployerContact,
+                    EmployerContactEmail = o.EmployerContactEmail
+                }).ToListAsync();
 
-            return new List<EmployerFeedbackDto>();
+            return dto;
         }
 
         private static bool IsValidBasketState(OpportunityItem oi, OpportunityType type)

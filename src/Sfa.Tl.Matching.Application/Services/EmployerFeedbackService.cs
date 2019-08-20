@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -16,6 +18,7 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
@@ -24,6 +27,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly ILogger<EmployerFeedbackService> _logger;
 
         public EmployerFeedbackService(
+            IMapper mapper,
             MatchingConfiguration configuration,
             ILogger<EmployerFeedbackService> logger,
             IEmailService emailService,
@@ -33,6 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
             IRepository<BankHoliday> bankHolidayRepository,
             IDateTimeProvider dateTimeProvider)
         {
+            _mapper = mapper;
             _configuration = configuration;
             _logger = logger;
             _emailService = emailService;
@@ -66,9 +71,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     await SendEmail(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.EmployerContactEmail,
                         "Your industry placement progress – ESFA", tokens, userName);
-
-                    // Update flag to say email was sent
                 }
+
+                await SetOpportunityItemsEmployerFeedbackAsSent(
+                    referrals.Select(r => r.OpportunityItemId), 
+                    userName);
             }
             catch (Exception ex)
             {
@@ -76,6 +83,22 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 _logger.LogError(ex, errorMessage);
             }
+        }
+
+        private async Task SetOpportunityItemsEmployerFeedbackAsSent(IEnumerable<int> opportunityItemIds, string userName)
+        {
+            var itemsToBeCompleted = opportunityItemIds.Select(id => new OpportunityItemWithUsernameForEmployerFeedbackSentDto
+            {
+                Id = id,
+                Username = userName
+            });
+
+            var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
+
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+                x => x.EmployerFeedbackSent,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
         }
 
         private async Task SendEmail(EmailTemplateName template, int? opportunityId,

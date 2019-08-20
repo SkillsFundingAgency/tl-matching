@@ -237,6 +237,12 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>>())
                 .ForAllOtherMembers(config => config.Ignore());
 
+            CreateMap<OpportunityItemWithUsernameForEmployerFeedbackSentDto, OpportunityItem>()
+                .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.EmployerFeedbackSent, o => o.MapFrom(s => true))
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.Username))
+                .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<OpportunityItemWithUsernameForEmployerFeedbackSentDto, OpportunityItem>>())
+                .ForAllOtherMembers(config => config.Ignore());
         }
     }
 }

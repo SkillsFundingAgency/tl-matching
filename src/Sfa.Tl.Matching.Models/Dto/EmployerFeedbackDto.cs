@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-
+﻿
 namespace Sfa.Tl.Matching.Models.Dto
 {
     public class EmployerFeedbackDto
