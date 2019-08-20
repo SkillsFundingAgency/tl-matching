@@ -8,7 +8,7 @@ using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Sfa.Tl.Matching.Web.Tests.Common;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderVenue
 {
     public class When_Add_Venue_Is_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {

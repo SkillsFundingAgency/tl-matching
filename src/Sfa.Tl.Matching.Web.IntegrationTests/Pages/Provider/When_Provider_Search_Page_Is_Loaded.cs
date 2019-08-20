@@ -5,7 +5,7 @@ using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Sfa.Tl.Matching.Web.Tests.Common;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderVenue
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
 {
     public class When_Provider_Search_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
