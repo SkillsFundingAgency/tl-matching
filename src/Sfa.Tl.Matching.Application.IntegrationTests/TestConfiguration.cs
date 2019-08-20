@@ -21,6 +21,12 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests
                 .AddJsonFile("appsettings.test.json")
                 .Build();
 
+            //TODO: Figure out how to work with tokenized values
+            if (configuration["EnvironmentName"] == "__EnvironmentName__")
+                configuration["EnvironmentName"] = "LOCAL";
+            if (configuration["ConfigurationStorageConnectionString"] == "__ConfigurationStorageConnectionString__")
+                configuration["ConfigurationStorageConnectionString"] = "UseDevelopmentStorage=true;";
+
             MatchingConfiguration = ConfigurationLoader.Load(
                 configuration["EnvironmentName"],
                 configuration["ConfigurationStorageConnectionString"],
