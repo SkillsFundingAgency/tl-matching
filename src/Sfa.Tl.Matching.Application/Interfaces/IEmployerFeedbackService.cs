@@ -4,6 +4,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IEmployerFeedbackService
     {
-        Task SendEmployerFeedbackEmailsAsync(string userName);
+        Task<int> SendEmployerFeedbackEmailsAsync(string userName);
     }
 }

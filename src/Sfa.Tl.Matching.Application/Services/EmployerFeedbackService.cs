@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public async Task SendEmployerFeedbackEmailsAsync(string userName)
+        public async Task<int> SendEmployerFeedbackEmailsAsync(string userName)
         {
             var bankHolidays = await _bankHolidayRepository.GetMany(
                 d => d.Date <= DateTime.Today)
@@ -56,7 +56,16 @@ namespace Sfa.Tl.Matching.Application.Services
                 .OrderBy(d => d.Date)
                 .ToListAsync();
 
-            var referralDate = _dateTimeProvider.AddWorkingDays(_dateTimeProvider.UtcNow().Date, 10, bankHolidays);
+            if (bankHolidays.Contains(_dateTimeProvider.UtcNow().Date))
+                return -1;
+
+            var numberOfDays = 9; //TODO: Get from config
+            var referralDate = _dateTimeProvider
+                .AddWorkingDays(
+                    _dateTimeProvider.UtcNow().Date,
+                    numberOfDays, 
+                    bankHolidays)
+                .AddSeconds(-1);
 
             var referrals = await _opportunityRepository.GetReferralsForEmployerFeedbackAsync(referralDate);
 
@@ -76,6 +85,8 @@ namespace Sfa.Tl.Matching.Application.Services
                 await SetOpportunityItemsEmployerFeedbackAsSent(
                     referrals.Select(r => r.OpportunityItemId), 
                     userName);
+
+                return referrals.Count;
             }
             catch (Exception ex)
             {
@@ -83,6 +94,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 _logger.LogError(ex, errorMessage);
             }
+
+            return -1;
         }
 
         private async Task SetOpportunityItemsEmployerFeedbackAsSent(IEnumerable<int> opportunityItemIds, string userName)

@@ -21,11 +21,16 @@ namespace Sfa.Tl.Matching.Functions
             [Inject] IEmployerFeedbackService employerFeedbackService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             try
             {
-                await employerFeedbackService.SendEmployerFeedbackEmailsAsync("System");
+                var stopwatch = Stopwatch.StartNew();
+
+                var emailsSent = await employerFeedbackService.SendEmployerFeedbackEmailsAsync("System");
+
+                stopwatch.Stop();
+
+                logger.LogInformation($"Function {context.FunctionName} sent {emailsSent} emails\n" +
+                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
             }
             catch (Exception e)
             {
@@ -40,11 +45,6 @@ namespace Sfa.Tl.Matching.Functions
                     RowNumber = -1
                 });
             }
-
-            stopwatch.Stop();
-
-            logger.LogInformation($"Function {context.FunctionName} sent emails\n" +
-                                  $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
@@ -30,8 +31,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
+        private readonly int _result;
 
-        public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails(EmployerFeedbackFixture testFixture)
+        public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails(
+            EmployerFeedbackFixture testFixture)
         {
             _testFixture = testFixture;
 
@@ -50,9 +53,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             {
                 c.AddMaps(typeof(OpportunityMapper).Assembly);
                 c.ConstructServicesUsing(type =>
-                    type.Name.Contains("UtcNowResolver") ?
-                        new UtcNowResolver<OpportunityItemWithUsernameForEmployerFeedbackSentDto, OpportunityItem>(_dateTimeProvider) :
-                        null);
+                    type.Name.Contains("UtcNowResolver")
+                        ? new UtcNowResolver<OpportunityItemWithUsernameForEmployerFeedbackSentDto, OpportunityItem>(
+                            _dateTimeProvider)
+                        : null);
             });
             var mapper = new Mapper(config);
             var bankHolidays = new BankHolidayListBuilder().Build().AsQueryable();
@@ -60,8 +64,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             var mockSet = Substitute.For<DbSet<BankHoliday>, IAsyncEnumerable<BankHoliday>, IQueryable<BankHoliday>>();
 
             // ReSharper disable once SuspiciousTypeConversion.Global
-            ((IAsyncEnumerable<BankHoliday>)mockSet).GetEnumerator().Returns(new FakeAsyncEnumerator<BankHoliday>(bankHolidays.GetEnumerator()));
-            ((IQueryable<BankHoliday>)mockSet).Provider.Returns(new FakeAsyncQueryProvider<BankHoliday>(bankHolidays.Provider));
+            ((IAsyncEnumerable<BankHoliday>)mockSet).GetEnumerator()
+                .Returns(new FakeAsyncEnumerator<BankHoliday>(bankHolidays.GetEnumerator()));
+            ((IQueryable<BankHoliday>)mockSet).Provider.Returns(
+                new FakeAsyncQueryProvider<BankHoliday>(bankHolidays.Provider));
             ((IQueryable<BankHoliday>)mockSet).Expression.Returns(bankHolidays.Expression);
             ((IQueryable<BankHoliday>)mockSet).ElementType.Returns(bankHolidays.ElementType);
             ((IQueryable<BankHoliday>)mockSet).GetEnumerator().Returns(bankHolidays.GetEnumerator());
@@ -70,7 +76,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             var mockContext = Substitute.For<MatchingDbContext>(contextOptions);
             mockContext.Set<BankHoliday>().Returns(mockSet);
 
-            IRepository<BankHoliday> bankHolidayRepository = new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
+            IRepository<BankHoliday> bankHolidayRepository =
+                new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityRepository.GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>())
@@ -85,7 +92,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 bankHolidayRepository,
                 _dateTimeProvider);
 
-            employerFeedbackService
+            _result = employerFeedbackService
                 .SendEmployerFeedbackEmailsAsync("TestUser")
                 .GetAwaiter().GetResult();
         }
@@ -111,7 +118,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         }
 
         [Fact]
-        public void Then_OpportunityItemRepository_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values()
+        public void
+            Then_OpportunityItemRepository_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values()
         {
             _opportunityItemRepository.Received(1)
                 .UpdateManyWithSpecifedColumnsOnly(Arg.Is<IList<OpportunityItem>>(
@@ -139,7 +147,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Fact]
@@ -160,7 +169,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             var expectedResults = new Dictionary<string, string>
             {
-                { "employer_contact_name",  "Employer Contact" },
+                {"employer_contact_name", "Employer Contact"},
             };
 
             _emailService
@@ -178,10 +187,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailHistoryService
                 .Received(1)
-                .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
+                .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(),
+                    Arg.Any<string>(), Arg.Any<string>());
         }
-
-
+        
         [Fact]
         public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_With_Expected_Parameters()
         {
@@ -194,6 +203,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                     Arg.Any<int?>(),
                     Arg.Any<string>(),
                     Arg.Is<string>(s => s == "TestUser"));
+        }
+
+        [Fact]
+        public void Then_Result_Has_Expected_Value()
+        {
+            _result.Should().Be(1);
         }
     }
 }
