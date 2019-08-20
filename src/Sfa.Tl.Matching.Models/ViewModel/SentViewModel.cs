@@ -3,7 +3,7 @@
     public class SentViewModel
     {
         public string EmployerContact { get; set; }
-        
+        public string CompanyName { get; set; }
         private string _employerCrmId;
         public string EmployerCrmRecord
         {

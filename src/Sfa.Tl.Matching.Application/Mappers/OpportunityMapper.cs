@@ -89,6 +89,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
                 .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
                 .ForPath(m => m.EmployerCrmId, o => o.MapFrom(s => s.Employer.CrmId))
+                .ForPath(m => m.CompanyName, o => o.MapFrom(s => s.Employer.CompanyName))
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 
