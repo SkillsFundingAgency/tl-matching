@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.Services
             });
         }
 
-        public async Task SendProviderQuarterlyUpdateEmailsAsync(int backgroundProcessHistoryId, string userName)
+        public async Task<int> SendProviderQuarterlyUpdateEmailsAsync(int backgroundProcessHistoryId, string userName)
         {
             var backgroundProcessHistory =
                 await _backgroundProcessHistoryRepository
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.Services
             if (backgroundProcessHistory == null ||
                 backgroundProcessHistory.Status != BackgroundProcessHistoryStatus.Pending.ToString())
             {
-                return;
+                return 0;
             }
 
             var numberOfProviderEmailsSent = 0;
@@ -155,6 +155,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     userName,
                     errorMessage);
             }
+
+            return numberOfProviderEmailsSent;
         }
 
         private async Task SendEmail(EmailTemplateName template, int? opportunityId,

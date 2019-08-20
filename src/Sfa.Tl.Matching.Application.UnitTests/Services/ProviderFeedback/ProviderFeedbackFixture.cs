@@ -23,7 +23,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
             DateTimeProvider = Substitute.For<IDateTimeProvider>();
             Logger = Substitute.For<ILogger<ProviderFeedbackService>>();
-
         }
 
         public bool DoTokensContainExpectedValues(IDictionary<string, string> tokens, IDictionary<string, string> expectedResults)

@@ -21,13 +21,18 @@ namespace Sfa.Tl.Matching.Functions
             [Inject] IProviderFeedbackService providerFeedbackService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             var backgroundProcessHistoryId = providerRequestData.BackgroundProcessHistoryId;
 
             try
             {
-                await providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(backgroundProcessHistoryId, "System");
+                var stopwatch = Stopwatch.StartNew();
+
+                var emailsSent = await providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(backgroundProcessHistoryId, "System");
+
+                stopwatch.Stop();
+
+                logger.LogInformation($"Function {context.FunctionName} sent {emailsSent} emails\n" +
+                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
             }
             catch (Exception e)
             {
@@ -42,12 +47,6 @@ namespace Sfa.Tl.Matching.Functions
                     RowNumber = -1
                 });
             }
-
-            stopwatch.Stop();
-
-            logger.LogInformation($"Function {context.FunctionName} sent emails\n" +
-                                  $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
-
         }
     }
 }
