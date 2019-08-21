@@ -56,14 +56,13 @@ namespace Sfa.Tl.Matching.Application.Services
                 .OrderBy(d => d.Date)
                 .ToListAsync();
 
-            if (bankHolidays.Contains(_dateTimeProvider.UtcNow().Date))
+            if (_dateTimeProvider.IsHoliday(_dateTimeProvider.UtcNow().Date, bankHolidays))
                 return -1;
 
-            var numberOfDays = 9; //TODO: Get from config
             var referralDate = _dateTimeProvider
                 .AddWorkingDays(
                     _dateTimeProvider.UtcNow().Date,
-                    numberOfDays, 
+                    _configuration.EmployerFeedbackPeriod - 1,
                     bankHolidays)
                 .AddSeconds(-1);
 
@@ -83,7 +82,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 }
 
                 await SetOpportunityItemsEmployerFeedbackAsSent(
-                    referrals.Select(r => r.OpportunityItemId), 
+                    referrals.Select(r => r.OpportunityItemId),
                     userName);
 
                 return referrals.Count;

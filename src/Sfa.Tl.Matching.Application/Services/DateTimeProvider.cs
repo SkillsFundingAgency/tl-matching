@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return newDate;
         }
 
-        private static bool IsHoliday(DateTime date, IList<DateTime> holidays)
+        public bool IsHoliday(DateTime date, IList<DateTime> holidays)
         {
             return holidays != null && 
                    holidays.Any(hol => hol.Date == date.Date);
