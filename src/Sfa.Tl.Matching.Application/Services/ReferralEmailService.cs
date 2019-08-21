@@ -135,13 +135,13 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "number_of_placements", placements }
                     };
 
-                    await SendEmail(EmailTemplateName.ProviderReferral_V3, opportunityId, referral.ProviderPrimaryContactEmail,
+                    await SendEmail(EmailTemplateName.ProviderReferralV3, opportunityId, referral.ProviderPrimaryContactEmail,
                         emailSubject, tokens, referral.CreatedBy);
 
                     if (!string.IsNullOrEmpty(referral.ProviderSecondaryContactEmail))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmail(EmailTemplateName.ProviderReferral_V3, opportunityId,
+                        await SendEmail(EmailTemplateName.ProviderReferralV3, opportunityId,
                             referral.ProviderSecondaryContactEmail,
                             emailSubject, tokens, referral.CreatedBy);
                     }
