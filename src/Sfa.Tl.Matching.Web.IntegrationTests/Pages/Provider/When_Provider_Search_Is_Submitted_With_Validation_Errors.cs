@@ -20,6 +20,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
 
         [Theory]
         [InlineData("UkPrn", "", "You must enter a UKPRN", 0)]
+        [InlineData("UkPrn", "ABC", "The value 'ABC' is not valid for UKPRN.", 0)]
         public async Task Then_Correct_Error_Message_Is_Displayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             // ReSharper disable all PossibleNullReferenceException

@@ -23,6 +23,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 
         [Theory]
         [InlineData("Postcode", "", "You must enter a postcode", 0)]
+        [InlineData("Postcode", "ABC", "You must enter a real postcode", 0)]
         public async Task Then_Correct_Error_Message_Is_Displayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();

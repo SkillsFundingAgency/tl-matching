@@ -48,9 +48,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
             search.TextContent.Should().Be("Search");
             search.Type.Should().Be("submit");
 
-            // TODO AU ADD
-
-
             var providerTable = documentHtml.QuerySelector(".govuk-table") as IHtmlTableElement;
             providerTable.Head.Rows.Length.Should().Be(1);
             providerTable.Head.Rows[0].Cells[0].TextContent.Should().Be("UKPRN");
