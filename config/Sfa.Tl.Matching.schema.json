@@ -100,6 +100,11 @@
       "type": "string",
       "environmentVariable": "CalendarJsonUrl"
     },
+    "EmployerFeedbackPeriod": {
+      "minLength": 1,
+      "type": "integer",
+      "environmentVariable": "EmployerFeedbackPeriod"
+    },
     "BlobStorageConnectionString": {
       "type": "string",
       "environmentVariable": "BlobStorageConnectionString"

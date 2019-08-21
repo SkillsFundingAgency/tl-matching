@@ -24,5 +24,6 @@ namespace Sfa.Tl.Matching.Models.Configuration
         public string GoogleMapsApiKey { get; set; }
 
         public string CalendarJsonUrl { get; set; }
+        public int EmployerFeedbackPeriod { get; set; }
     }
 }
