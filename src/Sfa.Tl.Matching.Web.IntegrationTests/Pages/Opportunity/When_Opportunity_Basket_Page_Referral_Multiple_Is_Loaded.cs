@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
                 "London SW1A 2AA",
                 "Job Role",
                 "1",
-                "Venue 1 Name (part of SQL Search Provider Display Name)",
+                "Venue 1 Name (part of SQL Search Provider Display Name), Venue 2 Name (part of SQL Search Provider Display Name)",
                 OpportunityItem1Id);
 
             AssertTableRow(basketTableBody.Rows[1],
