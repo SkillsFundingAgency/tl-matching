@@ -296,6 +296,9 @@ __pycache__/
 # Azure Functions localsettings file
 **/*.Functions/local.settings.json
 
+# Application Integration Tests appsettings file
+**/*.Application.IntegrationTests/appsettings.local.json
+
 # nlog output files
 *-nlog.txt
 
