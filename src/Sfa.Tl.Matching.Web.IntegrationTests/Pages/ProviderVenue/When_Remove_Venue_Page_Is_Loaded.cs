@@ -9,7 +9,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderVenue
 {
     public class When_Remove_Venue_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
-        private const string Title = "Remove venue";
         private const int VenueId = 1;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
