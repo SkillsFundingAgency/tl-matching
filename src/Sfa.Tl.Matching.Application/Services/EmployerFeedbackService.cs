@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var referralDate = _dateTimeProvider
                 .AddWorkingDays(
                     _dateTimeProvider.UtcNow().Date,
-                    _configuration.EmployerFeedbackPeriodInWorkingDays - 1,
+                    -1 * (_configuration.EmployerFeedbackPeriodInWorkingDays - 1),
                     bankHolidays)
                 .AddSeconds(-1);
 
