@@ -188,10 +188,6 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('ui-app-insights').outputs.InstrumentationKey.value]"
-                            },
-                            {
-                                "name": "WEBSITE_TIME_ZONE",
-                                "value": "GMT Standard Time"
                             }
                         ]
                     },
@@ -285,6 +281,10 @@
                             {
                                 "name": "AzureWebJobsDashboard",
                                 "value": "[reference('storage-account').outputs.storageConnectionString.value]"
+                            },
+                            {
+                                "name": "WEBSITE_TIME_ZONE",
+                                "value": "GMT Standard Time"
                             },
                             {
                                 "name": "FUNCTIONS_EXTENSION_VERSION",
