@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         [FunctionName("GenerateBankHoliday")]
         public async Task GenerateBankHoliday(
-            [TimerTrigger("0 0 0 1 1,6 *", RunOnStartup = true)]
+            [TimerTrigger("0 0 0 1 1,6 *")]
             TimerInfo timer,
             ExecutionContext context,
             ILogger logger,
