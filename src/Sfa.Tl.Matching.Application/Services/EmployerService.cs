@@ -200,14 +200,14 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> HandleEmployerCreatedAsync(string payload)
         {
-            var createdEvent = JsonConvert.DeserializeObject<CrmEmployerCreatedEvent>(payload);
+            var createdEvent = JsonConvert.DeserializeObject<CrmEmployerCreatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
 
             return await CreateOrUpdateEmployerAsync(createdEvent);
         }
 
         public async Task<int> HandleEmployerUpdatedAsync(string payload)
         {
-            var updatedEvent = JsonConvert.DeserializeObject<CrmEmployerUpdatedEvent>(payload);
+            var updatedEvent = JsonConvert.DeserializeObject<CrmEmployerUpdatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
 
             return await CreateOrUpdateEmployerAsync(updatedEvent);
         }
