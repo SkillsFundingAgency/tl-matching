@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -36,13 +37,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task RemoveProviderQualificationAsync(int providerVenueId, int qualificationId)
         {
-            var providerQualification = await _providerQualificationRepository.GetSingleOrDefault(
+            var providerQualifications = await _providerQualificationRepository.GetMany(
                 pq => pq.ProviderVenueId == providerVenueId
-                      && pq.QualificationId == qualificationId);
+                      && pq.QualificationId == qualificationId).ToListAsync();
 
-            if (providerQualification != null)
+            if (providerQualifications != null)
             {
-                await _providerQualificationRepository.Delete(providerQualification);
+                await _providerQualificationRepository.DeleteMany(providerQualifications);
             }
         }
     }

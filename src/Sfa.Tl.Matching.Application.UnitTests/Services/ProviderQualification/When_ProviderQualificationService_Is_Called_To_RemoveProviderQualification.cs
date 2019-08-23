@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using NSubstitute;
@@ -19,13 +22,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
             var mapper = new Mapper(config);
 
             _providerQualificationRepository = Substitute.For<IRepository<Domain.Models.ProviderQualification>>();
-            _providerQualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderQualification, bool>>>())
-                .Returns(new Domain.Models.ProviderQualification
+            _providerQualificationRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.ProviderQualification, bool>>>())
+                .Returns(new List<Domain.Models.ProviderQualification> {new Domain.Models.ProviderQualification
                 {
                     Id = 1,
                     ProviderVenueId = 1,
                     QualificationId = 2
-                });
+                }}.AsQueryable());
 
             var providerQualificationService = new ProviderQualificationService(mapper, _providerQualificationRepository);
 
@@ -33,21 +36,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
         }
 
         [Fact]
-        public void Then_ProviderVenueRepository_Delete_Is_Called_Exactly_Once()
+        public void Then_ProviderQualificationRepository_Delete_Is_Called_Exactly_Once_With_Expected_Values()
         {
             _providerQualificationRepository
                 .Received(1)
-                .Delete(Arg.Any<Domain.Models.ProviderQualification>());
-        }
-
-        [Fact]
-        public void Then_ProviderQualificationRepository_Delete_Is_Called_With_Expected_Values()
-        {
-            _providerQualificationRepository
-                .Received()
-                .Delete(Arg.Is<Domain.Models.ProviderQualification> (
-                    p => p.ProviderVenueId == 1 &&
-                         p.QualificationId == 2
+                .DeleteMany(Arg.Is<IList<Domain.Models.ProviderQualification>>(
+                    p => p.First().ProviderVenueId == 1 &&
+                         p.First().QualificationId == 2
                         ));
         }
     }
