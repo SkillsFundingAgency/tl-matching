@@ -6,7 +6,6 @@ using Microsoft.Azure.WebJobs.Extensions.Timers;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.Calendar;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -20,7 +19,6 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
         private readonly ICalendarApiClient _calendarApiClient;
         private readonly IBulkInsertRepository<BankHoliday> _bankHolidayBulkInsertRepository;
         private readonly IRepository<FunctionLog> _functionLogRepository;
-        private readonly DateTime _minValue = new DateTime(0001, 1, 1, 0, 0, 0);
 
         public When_BankHolidayGenerator_Function_Timer_Trigger_Fires()
         {
@@ -43,8 +41,6 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
                 .Returns(dto);
 
             var timerSchedule = Substitute.For<TimerSchedule>();
-            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
-            dateTimeProvider.MinValue().Returns(_minValue);
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(BankHolidayMapper).Assembly));
             var mapper = new Mapper(config);

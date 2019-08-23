@@ -18,13 +18,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
 {
-    public class When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires
+    public class When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires_On_A_Bank_Holiday
     {
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmployerFeedbackService _employerFeedbackService;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
-        public When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires()
+        public When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires_On_A_Bank_Holiday()
         {
             var timerSchedule = Substitute.For<TimerSchedule>();
 
@@ -35,14 +35,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
 
             _dateTimeProvider = Substitute.For<IDateTimeProvider>();
             _dateTimeProvider
-            .UtcNow()
-            .Returns(new DateTime(2019, 8, 30));
+                .UtcNow()
+                .Returns(new DateTime(2019, 8, 26));
             _dateTimeProvider
-                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<int>(), Arg.Any<IList<DateTime>>())
-                .Returns(new DateTime(2019, 8, 16));
+                       .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<int>(), Arg.Any<IList<DateTime>>())
+                       .Returns(new DateTime(2019, 8, 16));
             _dateTimeProvider
-                .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>())
-                .Returns(false);
+                 .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>())
+                 .Returns(true);
 
             var bankHolidays = new BankHolidayListBuilder().Build().AsQueryable();
 
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
                 new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
-
+            
             _employerFeedbackService = Substitute.For<IEmployerFeedbackService>();
 
             var employerFeedback = new Functions.EmployerFeedback();
@@ -79,24 +79,31 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
                 bankHolidayRepository,
                 _functionLogRepository).GetAwaiter().GetResult();
         }
-
+        
         [Fact]
-        public void Then_DateTimeProvider_AddWorkingDays_Is_Called_Exactly_Once()
+        public void Then_DateTimeProvider_IsHoliday_Is_Called_Exactly_Once()
         {
             _dateTimeProvider
                 .Received(1)
+                .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>());
+        }
+
+        [Fact]
+        public void Then_DateTimeProvider_AddWorkingDays_Is_Not_Called()
+        {
+            _dateTimeProvider
+                .DidNotReceive()
                 .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<int>(), Arg.Any<IList<DateTime>>());
         }
 
         [Fact]
-        public void SendFeedbackEmailsAsync_Is_Called_Exactly_Once()
+        public void SendFeedbackEmailsAsync_Is_Not_Called()
         {
             _employerFeedbackService
-                .Received(1)
+                .DidNotReceive()
                 .SendEmployerFeedbackEmailsAsync(
-                    Arg.Is<DateTime>(x =>
-                        x == DateTime.Parse("2019-8-15 23:59:59")),
-                    Arg.Is<string>(x => x == "System"));
+                    Arg.Any<DateTime>(),
+                    Arg.Any<string>());
         }
 
         [Fact]

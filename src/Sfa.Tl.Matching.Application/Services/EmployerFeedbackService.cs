@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -17,13 +16,11 @@ namespace Sfa.Tl.Matching.Application.Services
     public class EmployerFeedbackService : IEmployerFeedbackService
     {
         private readonly MatchingConfiguration _configuration;
-        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
-        private readonly IRepository<BankHoliday> _bankHolidayRepository;
         private readonly ILogger<EmployerFeedbackService> _logger;
 
         public EmployerFeedbackService(
@@ -33,9 +30,7 @@ namespace Sfa.Tl.Matching.Application.Services
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
             IOpportunityRepository opportunityRepository,
-            IRepository<OpportunityItem> opportunityItemRepository,
-            IRepository<BankHoliday> bankHolidayRepository,
-            IDateTimeProvider dateTimeProvider)
+            IRepository<OpportunityItem> opportunityItemRepository)
         {
             _mapper = mapper;
             _configuration = configuration;
@@ -44,28 +39,10 @@ namespace Sfa.Tl.Matching.Application.Services
             _emailHistoryService = emailHistoryService;
             _opportunityRepository = opportunityRepository;
             _opportunityItemRepository = opportunityItemRepository;
-            _bankHolidayRepository = bankHolidayRepository;
-            _dateTimeProvider = dateTimeProvider;
         }
 
-        public async Task<int> SendEmployerFeedbackEmailsAsync(string userName)
+        public async Task<int> SendEmployerFeedbackEmailsAsync(DateTime referralDate, string userName)
         {
-            var bankHolidays = await _bankHolidayRepository.GetMany(
-                d => d.Date <= DateTime.Today)
-                .Select(d => d.Date)
-                .OrderBy(d => d.Date)
-                .ToListAsync();
-
-            if (_dateTimeProvider.IsHoliday(_dateTimeProvider.UtcNow().Date, bankHolidays))
-                return -1;
-
-            var referralDate = _dateTimeProvider
-                .AddWorkingDays(
-                    _dateTimeProvider.UtcNow().Date,
-                    -1 * (_configuration.EmployerFeedbackPeriodInWorkingDays - 1),
-                    bankHolidays)
-                .AddSeconds(-1);
-
             var referrals = await _opportunityRepository.GetReferralsForEmployerFeedbackAsync(referralDate);
 
             try

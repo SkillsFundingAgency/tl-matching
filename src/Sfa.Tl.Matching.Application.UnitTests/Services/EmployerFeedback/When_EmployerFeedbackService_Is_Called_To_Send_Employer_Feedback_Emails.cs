@@ -4,18 +4,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Extensions;
 using Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builders;
-using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
@@ -26,7 +21,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         : IClassFixture<EmployerFeedbackFixture>
     {
         private readonly EmployerFeedbackFixture _testFixture;
-        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
@@ -38,16 +32,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _testFixture = testFixture;
 
-            _dateTimeProvider = Substitute.For<IDateTimeProvider>();
-            _dateTimeProvider
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
+            dateTimeProvider
                 .UtcNow()
                 .Returns(new DateTime(2019, 9, 1));
-            _dateTimeProvider
-                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<int>(), Arg.Any<IList<DateTime>>())
-                .Returns(new DateTime(2019, 8, 16));
-            _dateTimeProvider
-                .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>())
-                .Returns(false);
             
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
@@ -58,29 +46,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("UtcNowResolver")
                         ? new UtcNowResolver<OpportunityItemWithUsernameForEmployerFeedbackSentDto, OpportunityItem>(
-                            _dateTimeProvider)
+                            dateTimeProvider)
                         : null);
             });
             var mapper = new Mapper(config);
-            var bankHolidays = new BankHolidayListBuilder().Build().AsQueryable();
-
-            var mockSet = Substitute.For<DbSet<BankHoliday>, IAsyncEnumerable<BankHoliday>, IQueryable<BankHoliday>>();
-
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            ((IAsyncEnumerable<BankHoliday>)mockSet).GetEnumerator()
-                .Returns(new FakeAsyncEnumerator<BankHoliday>(bankHolidays.GetEnumerator()));
-            ((IQueryable<BankHoliday>)mockSet).Provider.Returns(
-                new FakeAsyncQueryProvider<BankHoliday>(bankHolidays.Provider));
-            ((IQueryable<BankHoliday>)mockSet).Expression.Returns(bankHolidays.Expression);
-            ((IQueryable<BankHoliday>)mockSet).ElementType.Returns(bankHolidays.ElementType);
-            ((IQueryable<BankHoliday>)mockSet).GetEnumerator().Returns(bankHolidays.GetEnumerator());
-
-            var contextOptions = new DbContextOptions<MatchingDbContext>();
-            var mockContext = Substitute.For<MatchingDbContext>(contextOptions);
-            mockContext.Set<BankHoliday>().Returns(mockSet);
-
-            IRepository<BankHoliday> bankHolidayRepository =
-                new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityRepository.GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>())
@@ -91,12 +60,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             var employerFeedbackService = new EmployerFeedbackService(
                 mapper, _testFixture.Configuration, _testFixture.Logger,
                 _emailService, _emailHistoryService,
-                _opportunityRepository, _opportunityItemRepository,
-                bankHolidayRepository,
-                _dateTimeProvider);
+                _opportunityRepository, _opportunityItemRepository);
 
             _result = employerFeedbackService
-                .SendEmployerFeedbackEmailsAsync("TestUser")
+                .SendEmployerFeedbackEmailsAsync(
+                    new DateTime(2019, 8, 20), 
+                    "TestUser")
                 .GetAwaiter().GetResult();
         }
 
@@ -135,14 +104,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>());
-        }
-
-        [Fact]
-        public void Then_DateTimeProvider_AddWorkingDays_Is_Called_Exactly_Once()
-        {
-            _dateTimeProvider
-                .Received(1)
-                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<int>(), Arg.Any<IList<DateTime>>());
         }
 
         [Fact]
