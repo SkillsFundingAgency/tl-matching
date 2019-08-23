@@ -19,8 +19,8 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class BankHolidayGenerator
     {
-        [FunctionName("GenerateBankHoliday")]
-        public async Task GenerateBankHoliday(
+        [FunctionName("GenerateBankHolidays")]
+        public async Task GenerateBankHolidays(
             [TimerTrigger("0 0 0 1 1,6 *")]
             TimerInfo timer,
             ExecutionContext context,
@@ -60,8 +60,8 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         // ReSharper disable once UnusedMember.Global
-        [FunctionName("ManualGenerateBankHoliday")]
-        public async Task<IActionResult> ManualGenerateBankHoliday(
+        [FunctionName("ManualGenerateBankHolidays")]
+        public async Task<IActionResult> ManualGenerateBankHolidays(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,

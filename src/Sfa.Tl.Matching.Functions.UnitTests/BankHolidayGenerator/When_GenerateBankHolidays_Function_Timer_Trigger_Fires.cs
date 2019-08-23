@@ -14,13 +14,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
 {
-    public class When_BankHolidayGenerator_Function_Timer_Trigger_Fires
+    public class When_GenerateBankHolidays_Function_Timer_Trigger_Fires
     {
         private readonly ICalendarApiClient _calendarApiClient;
         private readonly IBulkInsertRepository<BankHoliday> _bankHolidayBulkInsertRepository;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
-        public When_BankHolidayGenerator_Function_Timer_Trigger_Fires()
+        public When_GenerateBankHolidays_Function_Timer_Trigger_Fires()
         {
             var dto = new List<BankHolidayResultDto>
             {
@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
             _bankHolidayBulkInsertRepository = Substitute.For<IBulkInsertRepository<BankHoliday>>();
 
             var bankHolidayGenerator = new Functions.BankHolidayGenerator();
-            bankHolidayGenerator.GenerateBankHoliday(
+            bankHolidayGenerator.GenerateBankHolidays(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
                 new NullLogger<Functions.BankHolidayGenerator>(),
