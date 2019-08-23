@@ -91,7 +91,8 @@ namespace Sfa.Tl.Matching.Functions
             IEmployerFeedbackService employerFeedbackService,
             IRepository<BankHoliday> bankHolidayRepository)
         {
-            var referralDate = await GetReferralDateAsync(configuration.EmployerFeedbackPeriodInWorkingDays,
+            var referralDate = await GetReferralDateAsync(
+                TimeSpan.Parse(configuration.EmployerFeedbackTimeSpan),
                 dateTimeProvider, bankHolidayRepository);
 
             var emailsSent = 0;
@@ -104,7 +105,7 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         private async Task<DateTime?> GetReferralDateAsync(
-            int employerFeedbackPeriodInWorkingDays,
+            TimeSpan employerFeedbackTimespan,
             IDateTimeProvider dateTimeProvider,
             IRepository<BankHoliday> bankHolidayRepository)
         {
@@ -116,13 +117,12 @@ namespace Sfa.Tl.Matching.Functions
 
             if (dateTimeProvider.IsHoliday(dateTimeProvider.UtcNow().Date, bankHolidays))
                 return null;
-
+            
             var referralDate = dateTimeProvider
                 .AddWorkingDays(
                     dateTimeProvider.UtcNow().Date,
-                    -1 * (employerFeedbackPeriodInWorkingDays - 1),
-                    bankHolidays)
-                .AddSeconds(-1);
+                    employerFeedbackTimespan,
+                    bankHolidays);
 
             return referralDate;
         }

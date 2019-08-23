@@ -30,16 +30,16 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
 
             var configuration = new MatchingConfiguration
             {
-                EmployerFeedbackPeriodInWorkingDays = 10
+                EmployerFeedbackTimeSpan = "-10.00:00:00"
             };
 
             _dateTimeProvider = Substitute.For<IDateTimeProvider>();
             _dateTimeProvider
             .UtcNow()
             .Returns(new DateTime(2019, 8, 30));
-            _dateTimeProvider
-                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<int>(), Arg.Any<IList<DateTime>>())
-                .Returns(new DateTime(2019, 8, 16));
+           _dateTimeProvider
+                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<TimeSpan>(), Arg.Any<IList<DateTime>>())
+                .Returns(DateTime.Parse("2019-8-15 23:59:59"));
             _dateTimeProvider
                 .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>())
                 .Returns(false);
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
         {
             _dateTimeProvider
                 .Received(1)
-                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<int>(), Arg.Any<IList<DateTime>>());
+                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<TimeSpan>(), Arg.Any<IList<DateTime>>());
         }
 
         [Fact]

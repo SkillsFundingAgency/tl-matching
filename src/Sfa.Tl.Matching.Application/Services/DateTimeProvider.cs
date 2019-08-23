@@ -22,26 +22,36 @@ namespace Sfa.Tl.Matching.Application.Services
             return DateTime.MinValue;
         }
 
-        public DateTime AddWorkingDays(DateTime date, int days, IList<DateTime> holidays)
+        public DateTime AddWorkingDays(DateTime startDate, TimeSpan timeSpan, IList<DateTime> holidays)
         {
-            var direction = days < 0 ? -1 : 1;
-            var newDate = date;
-            while (days != 0)
+            //start = 15, add 0 days, end = 15
+            //if start = end then return end.date + 1 day - 1 sec
+            //start = 15, add 1 days, end = 16
+            //if start = end then return end.date + 1 day - 1 sec
+            //else +1 to start until start = end
+            //if current start is holiday +1 to end as well
+            //start = 15, add -1 days, end = 14
+            //if start = end then return end.date + 1 day - 1 sec add
+            //else -1 to start until start = end
+            //if current start is bank holiday -1 to end as well
+            var endDate = startDate.AddMilliseconds(timeSpan.TotalMilliseconds);
+            var direction = startDate < endDate ? 1 : -1;
+            while (startDate.Date != endDate.Date)
             {
-                newDate = newDate.AddDays(direction);
-                if (newDate.DayOfWeek != DayOfWeek.Saturday &&
-                    newDate.DayOfWeek != DayOfWeek.Sunday &&
-                    !IsHoliday(newDate, holidays))
+                startDate = startDate.AddDays(direction);
+                if (startDate.DayOfWeek == DayOfWeek.Saturday ||
+                    startDate.DayOfWeek == DayOfWeek.Sunday ||
+                    IsHoliday(startDate, holidays))
                 {
-                    days -= direction;
+                    endDate = endDate.AddDays(direction);
                 }
             }
-            return newDate;
+            return endDate.Date.AddDays(1).AddSeconds(-1);
         }
 
         public bool IsHoliday(DateTime date, IList<DateTime> holidays)
         {
-            return holidays != null && 
+            return holidays != null &&
                    holidays.Any(hol => hol.Date == date.Date);
         }
     }

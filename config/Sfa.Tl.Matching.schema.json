@@ -100,10 +100,10 @@
       "type": "string",
       "environmentVariable": "CalendarJsonUrl"
     },
-    "EmployerFeedbackPeriodInWorkingDays": {
+    "EmployerFeedbackTimeSpan": {
       "minLength": 1,
-      "type": "integer",
-      "environmentVariable": "EmployerFeedbackPeriodInWorkingDays"
+      "type": "string",
+      "environmentVariable": "EmployerFeedbackTimeSpan"
     },
     "BlobStorageConnectionString": {
       "type": "string",
