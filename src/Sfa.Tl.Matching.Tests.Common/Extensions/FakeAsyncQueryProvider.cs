@@ -5,13 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
+namespace Sfa.Tl.Matching.Tests.Common.Extensions
 {
     public class FakeAsyncQueryProvider<TEntity> : IAsyncQueryProvider
     {
         private readonly IQueryProvider _inner;
 
-        internal FakeAsyncQueryProvider(IQueryProvider inner)
+        public FakeAsyncQueryProvider(IQueryProvider inner)
         {
             _inner = inner;
         }
