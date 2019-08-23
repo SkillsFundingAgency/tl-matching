@@ -2,7 +2,7 @@
 (
 	[Id] INT IDENTITY(1,1) NOT NULL, 
 	[LarsId] NVARCHAR(8) NOT NULL,
-	[Title] NVARCHAR(250) NOT NULL, 
+	[Title] NVARCHAR(400) NOT NULL, 
 	[ShortTitle] NVARCHAR(100) NULL,
 	[QualificationSearch] NVARCHAR(350) NULL,
 	[ShortTitleSearch] NVARCHAR(100) NULL,

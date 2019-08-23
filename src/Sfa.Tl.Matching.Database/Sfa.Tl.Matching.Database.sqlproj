@@ -98,6 +98,7 @@
     <None Include="PostDeployment\Remove Obsolete Tables.sql" />
     <Build Include="Tables\OLDOpportunity.sql" />
     <Build Include="Tables\BankHoliday.sql" />
+    <None Include="PostDeployment\Update Qualification Title length.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

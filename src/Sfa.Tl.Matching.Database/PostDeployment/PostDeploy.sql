@@ -9,3 +9,4 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Seed Email Templates.sql"
 :r ".\Backfill Provider Venue Names.sql"
 :r ".\Remove Obsolete Tables.sql"
+:r ".\Update Qualification Title length"
