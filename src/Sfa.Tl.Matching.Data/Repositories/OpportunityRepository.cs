@@ -232,7 +232,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                       && !oi.EmployerFeedbackSent
                       && oi.ModifiedOn.HasValue
                       && oi.ModifiedOn.Value <= referralDate
-                      && o.OpportunityItem.Count == 1
+                      && o.OpportunityItem.Count(x => x.IsCompleted) == 1
                       && oi.OpportunityType == OpportunityType.Referral.ToString()
                 select new EmployerFeedbackDto
                 {

@@ -24,16 +24,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public DateTime AddWorkingDays(DateTime startDate, TimeSpan timeSpan, IList<DateTime> holidays)
         {
-            //start = 15, add 0 days, end = 15
-            //if start = end then return end.date + 1 day - 1 sec
-            //start = 15, add 1 days, end = 16
-            //if start = end then return end.date + 1 day - 1 sec
-            //else +1 to start until start = end
-            //if current start is holiday +1 to end as well
-            //start = 15, add -1 days, end = 14
-            //if start = end then return end.date + 1 day - 1 sec add
-            //else -1 to start until start = end
-            //if current start is bank holiday -1 to end as well
             var endDate = startDate.AddMilliseconds(timeSpan.TotalMilliseconds);
             var direction = startDate < endDate ? 1 : -1;
             while (startDate.Date != endDate.Date)

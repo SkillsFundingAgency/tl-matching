@@ -10,3 +10,4 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Backfill Provider Venue Names.sql"
 :r ".\Remove Obsolete Tables.sql"
 :r ".\Update Qualification Title length.sql"
+:r ".\Backfill Employer Feedback Sent.sql"
