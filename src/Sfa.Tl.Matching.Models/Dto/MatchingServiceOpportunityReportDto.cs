@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class ServiceOpportunityReportDto
+    public class MatchingServiceOpportunityReportDto
     {
         public int OpportunityItemId { get; set; }
         public string OpportunityType { get; set; }
