@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int OpportunityItemId { get; set; }
 
         [MinLength(2, ErrorMessage = "You must enter a job role using 2 or more characters")]
-        [MaxLength(99, ErrorMessage = "You must enter a job role using 99 characters or less")]
+        [MaxLength(99, ErrorMessage = "You must enter a job role that is 100 characters or fewer")]
         [RegularExpression(@"^(?!^\d+$)^.+$", ErrorMessage = "You must enter a job role using letters")]
         public string JobRole { get; set; }
 

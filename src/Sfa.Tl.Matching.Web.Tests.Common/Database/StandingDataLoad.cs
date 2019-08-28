@@ -12,7 +12,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database
             context.AddRange(EmployerData.Create().ToList());
             context.AddRange(RouteAndPathData.Create().ToList());
             context.AddRange(ProviderVenueData.Create());            
-            context.AddRange(OpportunityData.Create());            
+            context.AddRange(OpportunityData.Create());
+            context.AddRange(LearningAimReferenceData.Create().ToList());
             context.AddRange(OpportunityData.CreateReferralSingle());
             context.AddRange(OpportunityData.CreateProvisionGapSingle());
             context.AddRange(OpportunityData.CreateReferralMultiple());

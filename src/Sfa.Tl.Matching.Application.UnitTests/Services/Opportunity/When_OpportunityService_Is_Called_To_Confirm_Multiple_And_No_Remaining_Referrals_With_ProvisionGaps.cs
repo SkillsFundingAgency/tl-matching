@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using AutoMapper;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Extensions;

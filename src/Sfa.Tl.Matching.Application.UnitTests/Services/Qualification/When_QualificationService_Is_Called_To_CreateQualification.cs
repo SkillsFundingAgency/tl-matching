@@ -18,8 +18,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 {
     public class When_QualificationService_Is_Called_To_CreateQualification
     {
-        private readonly IRepository<QualificationRouteMapping>  _qualificationRouteMappingRepository;
-        private readonly  int _result;
+        private readonly IRepository<QualificationRouteMapping> _qualificationRouteMappingRepository;
+        private readonly int _result;
 
         public When_QualificationService_Is_Called_To_CreateQualification()
         {
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 .Returns(1);
             qualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
                 .Returns(new Domain.Models.Qualification());
-            
+
             _qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
             _qualificationRouteMappingRepository
                 .CreateMany(Arg.Do<IList<QualificationRouteMapping>>(
@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             _qualificationRouteMappingRepository
                 .Received(1)
                 .CreateMany(Arg.Is<IList<QualificationRouteMapping>>(
-                    qrpm => qrpm.Count == 1 && 
+                    qrpm => qrpm.Count == 1 &&
                             qrpm.First().Qualification.LarsId == "10042982" &&
                             qrpm.First().Qualification.ShortTitle == "short title" &&
                             qrpm.First().RouteId == 1

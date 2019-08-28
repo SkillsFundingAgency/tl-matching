@@ -8,6 +8,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
         public OpportunityDto Build() => new OpportunityDto
         {
             Id = 1,
+            CompanyName = "CompanyName",
             EmployerContact = "EmployerContact",
             EmployerContactEmail = "EmployerContactEmail",
             EmployerContactPhone = "EmployerContactPhone",

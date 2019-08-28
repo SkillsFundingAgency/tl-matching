@@ -29,6 +29,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
         private const int OpportunityItemReferralMultiple2Id = 1032;
         private const int ReferralMultiple1Id = 1033;
         private const int ReferralMultiple2Id = 1034;
+        private const int ReferralMultiple3Id = 1035;
 
         // SingleReferralAndProvisionGap
         private const int OpportunityReferralSingleAndProvisionGapId = 1040;
@@ -138,6 +139,14 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 Id = ReferralMultiple1Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
+                                CreatedOn = new DateTime(2019, 1, 2),
+                                CreatedBy = "Dev Surname",
+                            },
+                            new Referral
+                            {
+                                Id = ReferralMultiple3Id,
+                                ProviderVenueId = 2,
+                                DistanceFromEmployer = 2.5m,
                                 CreatedOn = new DateTime(2019, 1, 2),
                                 CreatedBy = "Dev Surname",
                             }

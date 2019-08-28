@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                         select oi.Id
                 ).ToList();
 
-            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
@@ -138,10 +138,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 ).ToList();
 
             //Assert
-            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
-            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("employer_business_name")), Arg.Any<string>());
 
         }
@@ -201,25 +201,25 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                         select oi.Id
                 ).ToList();
 
-            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
-            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == opportunity.Employer.CompanyName),
                 Arg.Any<string>());
 
-            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_name") && tokens["employer_contact_name"] == opportunity.EmployerContact),
                 Arg.Any<string>());
 
-            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_number") && tokens["employer_contact_number"] == opportunity.EmployerContactPhone),
                 Arg.Any<string>());
 
-            await emailService.Received(data.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_email") && tokens["employer_contact_email"] == opportunity.EmployerContactEmail),
                 Arg.Any<string>());
@@ -282,7 +282,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
-            await emailService.Received(referrals.Count).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
             var processStatus = dbContext.BackgroundProcessHistory
@@ -292,14 +292,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Pending.ToString());
             processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Processing.ToString());
             processStatus.Should().Be(BackgroundProcessHistoryStatus.Complete.ToString());
-
-        }
-
-        private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
-        {
-            return placementsKnown.GetValueOrDefault()
-                ? placements.ToString()
-                : "at least 1";
         }
     }
 }

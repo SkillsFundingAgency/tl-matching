@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             {
                 Provider = BuildProvider(true),
                 Postcode = "CV1 2WT",
+                Name = "CV1 2WT",
                 Latitude = Latitude,
                 Longitude = Longitude,
                 Location = location,
@@ -36,6 +37,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             {
                 Provider = BuildProvider(false),
                 Postcode = "CV1 2WT",
+                Name = "CV1 2WT",
                 Latitude = Latitude,
                 Longitude = Longitude,
                 Location = location,
@@ -56,6 +58,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
+                    Name = "CV1 2WT",
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
@@ -68,6 +71,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
+                    Name = "CV1 2WT",
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
@@ -89,6 +93,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
+                    Name = "CV1 2WT",
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
@@ -101,6 +106,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
                 {
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
+                    Name = "CV1 2WT",
                     Latitude = Latitude,
                     Longitude = Longitude,
                     Location = location,
@@ -124,12 +130,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             {
                 UkPrn = 10203040,
                 Name = "SQL Search Provider",
+                DisplayName = "SQL Search Provider",
                 PrimaryContact = "Test",
                 PrimaryContactEmail = "Test@test.com",
                 PrimaryContactPhone = "0123456789",
                 SecondaryContact = "Test 2",
                 SecondaryContactEmail = "Test2@test.com",
-                SecondaryContactPhone = "0123456789",
+                SecondaryContactPhone = "0987654321",
                 IsCdfProvider = isCdfProvider,
                 IsEnabledForReferral = true,
                 Source = "Test"

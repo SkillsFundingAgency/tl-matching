@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
                     rows.Count.Should().Be(2);
 
                     var cells = rows[1].Descendants<Cell>().ToList();
-                    cells.Count.Should().Be(6);
+                    cells.Count.Should().Be(12);
 
                     cells[0].InnerText.Should().Be("London SW1 1AA");
                     cells[1].InnerText.Should().Be("Referral Role");
@@ -68,6 +68,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
                     cells[3].InnerText.Should().Be("Provider");
                     cells[4].InnerText.Should().Be("London SW1 1AB");
                     cells[5].InnerText.Should().Be("1.5 miles");
+                    cells[6].InnerText.Should().Be("Primary contact");
+                    cells[7].InnerText.Should().Be("Primary contact email");
+                    cells[8].InnerText.Should().Be("Primary contact telephone");
+                    cells[9].InnerText.Should().Be("Secondary contact");
+                    cells[10].InnerText.Should().Be("Secondary contact email");
+                    cells[11].InnerText.Should().Be("Secondary contact telephone");
                 }
             }
         }
@@ -86,11 +92,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
                     rows.Count.Should().Be(2);
 
                     var cells = rows[1].Descendants<Cell>().ToList();
-                    cells.Count.Should().Be(3);
+                    cells.Count.Should().Be(4);
 
                     cells[0].InnerText.Should().Be("London SW1 1AA");
-                    cells[1].InnerText.Should().Be("at least 1");
-                    cells[2].InnerText.Should().Be("Reason");
+                    cells[1].InnerText.Should().Be("Provision Gap Role");
+                    cells[2].InnerText.Should().Be("At least 1");
+                    cells[3].InnerText.Should().Be("Reason");
                 }
             }
         }

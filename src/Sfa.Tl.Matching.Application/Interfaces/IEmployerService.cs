@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 

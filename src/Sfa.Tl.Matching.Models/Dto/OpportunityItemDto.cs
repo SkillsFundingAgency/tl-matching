@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public bool IsSaved { get; set; }
         public bool IsSelectedForReferral { get; set; }
         public bool IsCompleted { get; set; }
+        public bool EmployerFeedbackSent { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }

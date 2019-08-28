@@ -105,15 +105,15 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             tLevelProvider.TextContent.Should().Be("T level provider");
             tLevelProvider.ClassName.Should().Be("tl-search-results-flag");
 
-            //var venueDetailList = searchResults.Children[itemNumber].QuerySelector("#tl-venue-detail-list");
-            //var providerNameListItem = venueDetailList.Children[0] as IHtmlListItemElement;
-            //providerNameListItem.TextContent.Should().Be("Part of SQL Search Provider Display Name");
+            var venueDetailList = searchResults.Children[itemNumber].QuerySelector("#tl-venue-detail-list");
+            var providerNameListItem = venueDetailList.Children[0] as IHtmlListItemElement;
+            providerNameListItem.TextContent.Should().Be("Part of SQL Search Provider Display Name");
 
-            //var townAndPostcodeListItem = venueDetailList.Children[1] as IHtmlListItemElement;
-            //townAndPostcodeListItem.TextContent.Should().Be("Coventry CV1 2WT");
+            var townAndPostcodeListItem = venueDetailList.Children[1] as IHtmlListItemElement;
+            townAndPostcodeListItem.TextContent.Should().Be("Coventry CV1 2WT");
 
-            //var distanceListItem = venueDetailList.Children[2] as IHtmlListItemElement;
-            //distanceListItem.TextContent.Should().Be("0.0 miles");
+            var distanceListItem = venueDetailList.Children[2] as IHtmlListItemElement;
+            distanceListItem.TextContent.Should().Be("0.0 miles");
 
             var qualificationList = searchResults.Children[itemNumber].QuerySelector("#tl-qualification-list");
             var shortTitleListItem = qualificationList.Children[0] as IHtmlListItemElement;

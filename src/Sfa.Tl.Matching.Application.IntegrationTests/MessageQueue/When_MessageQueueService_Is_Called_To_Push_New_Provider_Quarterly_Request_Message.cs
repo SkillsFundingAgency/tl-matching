@@ -5,7 +5,6 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Command;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 

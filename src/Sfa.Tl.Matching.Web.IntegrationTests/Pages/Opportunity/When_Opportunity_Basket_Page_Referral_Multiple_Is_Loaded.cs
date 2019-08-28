@@ -11,7 +11,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
     {
         private const string Title = "All opportunities";
         private const int OpportunityId = 1030;
-        private const int OpportunityItemId = 1031;
+        private const int OpportunityItem1Id = 1031;
+        private const int OpportunityItem2Id = 1032;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
@@ -26,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             // ReSharper disable all PossibleNullReferenceException
 
             var client = _factory.CreateClient();
-            var response = await client.GetAsync($"employer-opportunities/{OpportunityId}-{OpportunityItemId}");
+            var response = await client.GetAsync($"employer-opportunities/{OpportunityId}-{OpportunityItem1Id}");
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html; charset=utf-8",
@@ -47,32 +48,29 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             saveLink.PathName.Should().Be($"/saved-opportunities");
 
             var basketTable = documentHtml.QuerySelector(".govuk-table") as IHtmlTableElement;
-            //basketTable.Rows.Length.Should().Be(2);
+            basketTable.Head.Rows.Length.Should().Be(1);
+            basketTable.Head.Rows[0].Cells[1].TextContent.Should().Be("Workplace");
+            basketTable.Head.Rows[0].Cells[2].TextContent.Should().Be("Job role");
+            basketTable.Head.Rows[0].Cells[3].TextContent.Should().Be("Students wanted");
+            basketTable.Head.Rows[0].Cells[4].TextContent.Should().Be("Providers");
 
-            var row1 = basketTable.Rows[1];
-            row1.Cells[1].TextContent.Should().Be("London SW1A 2AA");
-            row1.Cells[2].TextContent.Should().Be("Job Role");
-            row1.Cells[3].TextContent.Should().Be("1");
-            row1.Cells[4].TextContent.Should().Be("1");
-            var editRow1Cell = row1.Cells[5].Children[0] as IHtmlAnchorElement;
-            editRow1Cell.Text.Should().Be("Edit");
-            editRow1Cell.PathName.Should().Be($"/check-answers/{OpportunityItemId}");
-            var deleteRow1Cell = row1.Cells[6].Children[0] as IHtmlAnchorElement;
-            deleteRow1Cell.Text.Should().Be("Delete");
-            deleteRow1Cell.PathName.Should().Be($"/remove-opportunity/{OpportunityItemId}");
+            var basketTableBody = basketTable.Bodies[0];
+            basketTableBody.Rows.Length.Should().Be(2);
 
-            var row2 = basketTable.Rows[2];
-            row2.Cells[1].TextContent.Should().Be("London SW2A 3AA");
-            row2.Cells[2].TextContent.Should().Be("Job Role");
-            row2.Cells[3].TextContent.Should().Be("1");
-            row2.Cells[4].TextContent.Should().Be("1");
-            var editRow2Cell = row1.Cells[5].Children[0] as IHtmlAnchorElement;
-            editRow2Cell.Text.Should().Be("Edit");
-            editRow2Cell.PathName.Should().Be($"/check-answers/{OpportunityItemId}");
-            var deleteRow2Cell = row1.Cells[6].Children[0] as IHtmlAnchorElement;
-            deleteRow2Cell.Text.Should().Be("Delete");
-            deleteRow2Cell.PathName.Should().Be($"/remove-opportunity/{OpportunityItemId}");
-            
+            AssertTableRow(basketTableBody.Rows[0],
+                "London SW1A 2AA",
+                "Job Role",
+                "1",
+                "Venue 1 Name (part of SQL Search Provider Display Name), Venue 2 Name (part of SQL Search Provider Display Name)",
+                OpportunityItem1Id);
+
+            AssertTableRow(basketTableBody.Rows[1],
+                "London SW2A 3AA",
+                "Job Role",
+                "1",
+                "Venue 1 Name (part of SQL Search Provider Display Name)",
+                OpportunityItem2Id);
+
             var addAnotherLink = documentHtml.GetElementById("tl-add-another-opportunity") as IHtmlAnchorElement;
             addAnotherLink.Text.Should().Be("Add another opportunity");
             addAnotherLink.PathName.Should().Be($"/find-providers/{OpportunityId}");
@@ -85,6 +83,23 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var downloadLink = documentHtml.GetElementById("tl-download") as IHtmlAnchorElement;
             downloadLink.Text.Should().Be("Download all data as a spreadsheet");
             downloadLink.PathName.Should().Be($"/download-opportunity/{OpportunityId}");
+        }
+
+        private static void AssertTableRow(IHtmlTableRowElement row, string workplace, string jobRole, string studentsWanted,
+            string providers, int opportunityItemId)
+        {
+            row.Cells[1].TextContent.Should().Be(workplace);
+            row.Cells[2].TextContent.Should().Be(jobRole);
+            row.Cells[3].TextContent.Should().Be(studentsWanted);
+            row.Cells[4].TextContent.Should().Be(providers);
+
+            var editCell = row.Cells[5].Children[0] as IHtmlAnchorElement;
+            editCell.Text.Should().Be("Edit");
+            editCell.PathName.Should().Be($"/check-answers/{opportunityItemId}");
+
+            var deleteCell = row.Cells[6].Children[0] as IHtmlAnchorElement;
+            deleteCell.Text.Should().Be("Delete");
+            deleteCell.PathName.Should().Be($"/remove-opportunity/{opportunityItemId}");
         }
     }
 }

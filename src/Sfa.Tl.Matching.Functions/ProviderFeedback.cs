@@ -8,7 +8,6 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Command;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Functions
@@ -22,13 +21,18 @@ namespace Sfa.Tl.Matching.Functions
             [Inject] IProviderFeedbackService providerFeedbackService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             var backgroundProcessHistoryId = providerRequestData.BackgroundProcessHistoryId;
 
             try
             {
-                await providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(backgroundProcessHistoryId, "System");
+                var stopwatch = Stopwatch.StartNew();
+
+                var emailsSent = await providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(backgroundProcessHistoryId, "System");
+
+                stopwatch.Stop();
+
+                logger.LogInformation($"Function {context.FunctionName} sent {emailsSent} emails\n" +
+                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
             }
             catch (Exception e)
             {
@@ -43,12 +47,6 @@ namespace Sfa.Tl.Matching.Functions
                     RowNumber = -1
                 });
             }
-
-            stopwatch.Stop();
-
-            logger.LogInformation($"Function {context.FunctionName} sent emails\n" +
-                                  $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
-
         }
     }
 }

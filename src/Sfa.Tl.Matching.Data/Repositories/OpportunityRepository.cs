@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.Extensions;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Data.Repositories
@@ -47,6 +49,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   ProviderDisplayName = p.DisplayName,
                                   ProviderPrimaryContact = p.PrimaryContact,
                                   ProviderPrimaryContactEmail = p.PrimaryContactEmail,
+                                  ProviderSecondaryContact = p.SecondaryContact,
                                   ProviderSecondaryContactEmail = p.SecondaryContactEmail,
                                   CompanyName = emp.CompanyName,
                                   EmployerContact = op.EmployerContact,
@@ -152,7 +155,15 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        Workplace = $"{oi.Town} {oi.Postcode}",
                                                        PlacementsKnown = oi.PlacementsKnown,
                                                        Placements = oi.Placements,
-                                                       Providers = oi.Referral.Count,
+                                                       ProviderNames = (from r in oi.Referral
+                                                                        join pv in _dbContext.ProviderVenue on r.ProviderVenueId equals pv.Id
+                                                                        join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                                                                        select new ProviderNameViewModel
+                                                                        {
+                                                                            DisplayName = p.DisplayName,
+                                                                            VenueName = pv.Name,
+                                                                            Postcode = pv.Postcode
+                                                                        }).ToList(),
                                                        OpportunityType = oi.OpportunityType
                                                    }).ToList()
                                            }).SingleOrDefaultAsync();
@@ -192,8 +203,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                           DistanceFromEmployer = re.DistanceFromEmployer,
                                           PlacementsKnown = oi.PlacementsKnown,
                                           Placements = oi.Placements,
-                                          ProviderName = pv.Name == pv.Postcode ? p.DisplayName : $"{pv.Name} (part of {p.DisplayName})",
+                                          ProviderName = ProviderDisplayExtensions.GetDisplayText(pv.Name, pv.Postcode, p.DisplayName),
                                           ProviderVenueTownAndPostcode = $"{pv.Town} {pv.Postcode}",
+                                          PrimaryContact = p.PrimaryContact,
+                                          PrimaryContactEmail = p.PrimaryContactEmail,
+                                          PrimaryContactPhone = p.PrimaryContactPhone,
+                                          SecondaryContact = p.SecondaryContact,
+                                          SecondaryContactEmail = p.SecondaryContactEmail,
+                                          SecondaryContactPhone = p.SecondaryContactPhone
                                       }).ToList()
                              }).SingleOrDefaultAsync();
 
@@ -204,6 +221,28 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             return _dbContext.OpportunityItem.Count(item =>
                 item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
+        }
+
+        public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
+        {
+            var dto = await (from o in _dbContext.Opportunity
+                join oi in _dbContext.OpportunityItem
+                    on o.Id equals oi.OpportunityId
+                where oi.IsCompleted 
+                      && !oi.EmployerFeedbackSent
+                      && oi.ModifiedOn.HasValue
+                      && oi.ModifiedOn.Value <= referralDate
+                      && o.OpportunityItem.Count(x => x.IsCompleted) == 1
+                      && oi.OpportunityType == OpportunityType.Referral.ToString()
+                select new EmployerFeedbackDto
+                {
+                    OpportunityId = o.Id,
+                    OpportunityItemId = oi.Id,
+                    EmployerContact = o.EmployerContact,
+                    EmployerContactEmail = o.EmployerContactEmail
+                }).ToListAsync();
+
+            return dto;
         }
 
         private static bool IsValidBasketState(OpportunityItem oi, OpportunityType type)

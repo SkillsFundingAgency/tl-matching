@@ -42,6 +42,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             crmLink.Href.Should().Be("https://esfa-cs-prod.crm4.dynamics.com/main.aspx?pagetype=entityrecord&etc=1&id=%7b65351b3c-faf8-4752-8806-8d6e240c334e%7d&extraqs=&newWindow=true");
             crmLink.TextContent.Should().Be("update the employer’s CRM record (opens in a new window or tab)");
 
+            var nextText = documentHtml.GetElementById("tl-next");
+            nextText.TextContent.Should().Be(
+                "We expect the providers will contact Employer Contact within 2 to 3 working days. " +
+                "The providers will work with Company Name to arrange the terms and details of each placement.");
+
             var endButton = documentHtml.GetElementById("tl-end") as IHtmlAnchorElement;
             endButton.TextContent.Should().Be("Finish");
             endButton.PathName.Should().Be("/Start");

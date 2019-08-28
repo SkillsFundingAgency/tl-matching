@@ -9,6 +9,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
             Id = 1,
             UkPrn = 10000546,
             Name = "ProviderName",
+            DisplayName = "Provider Display Name",
             OfstedRating = 1,
             PrimaryContact = "PrimaryContact",
             PrimaryContactEmail = "primary@contact.co.uk",

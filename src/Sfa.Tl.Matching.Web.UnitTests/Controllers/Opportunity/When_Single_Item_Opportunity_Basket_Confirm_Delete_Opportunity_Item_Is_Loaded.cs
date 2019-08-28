@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewModel.CompanyNameWithAka.Should().Be("Company Name (Also Known As)");
             viewModel.Postcode.Should().Be("PostCode");
             viewModel.JobRole.Should().Be("JobRole");
-            viewModel.PlacementsDetail.Should().Be("at least 1");
+            viewModel.PlacementsDetail.Should().Be("At least 1");
             viewModel.DeleteWarningText.Should().Be("This cannot be undone and will mean this employer has no more saved opportunities.");
             viewModel.SubmitActionText.Should().Be("Confirm and finish");
         }

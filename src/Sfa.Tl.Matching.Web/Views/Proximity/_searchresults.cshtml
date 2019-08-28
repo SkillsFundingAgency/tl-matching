@@ -50,18 +50,18 @@
                                 @if (searchResult.ProviderVenueName == searchResult.ProviderVenuePostcode)
                                 {
                                     @searchResult.ProviderDisplayName
-                                    <ul class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
+                                    <ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
                                         <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
-                                        <li>@($" {searchResult.Distance:#0.0}") miles</li>
+                                        <li>@($"{searchResult.Distance:#0.0}") miles</li>
                                     </ul>
                                 }
                                 else
                                 {
                                     @searchResult.ProviderVenueName
-                                    <ul class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
+                                    <ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
                                         <li>Part of @searchResult.ProviderDisplayName</li>
                                         <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
-                                        <li>@($" {searchResult.Distance:#0.0}") miles</li>
+                                        <li>@($"{searchResult.Distance:#0.0}") miles</li>
                                     </ul>
                                 }
 

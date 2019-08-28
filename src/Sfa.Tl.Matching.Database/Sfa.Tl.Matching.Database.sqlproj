@@ -97,6 +97,9 @@
     <None Include="PostDeployment\Backfill Provider Venue Names.sql" />
     <None Include="PostDeployment\Remove Obsolete Tables.sql" />
     <Build Include="Tables\OLDOpportunity.sql" />
+    <Build Include="Tables\BankHoliday.sql" />
+    <None Include="PostDeployment\Update Qualification Title length.sql" />
+    <None Include="PostDeployment\Backfill Employer Feedback Sent.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

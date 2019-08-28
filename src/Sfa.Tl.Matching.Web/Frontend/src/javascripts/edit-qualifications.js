@@ -50,7 +50,7 @@ var editQualifications = (function () {
                 }
             },
             error: function () {
-                console.log("An error occurred.");
+                setSaveValidationError();
             }
         });
     });
@@ -95,6 +95,21 @@ var editQualifications = (function () {
 
             populateErrorSummary(errorsArray, qualId);
         }
+    }
+
+    function setSaveValidationError() {
+        $(`#tl-error-summary`).removeClass("tl-hidden");
+
+        $(`#tl-error-summary`).append(`
+                    <div class="govuk-error-summary__body" id="errorSummary">
+                        <div>
+                            <ul class="govuk-list govuk-error-summary__list">
+                            <a href="#">The system could not save your changes. Please try again later.</a>
+                            </ul>
+                        <div>
+                        <br/>
+                    </div>
+                `);
     }
 
     function populateErrorSummary(errorsArray, qualId) {

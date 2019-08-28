@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Configuration;
-using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services

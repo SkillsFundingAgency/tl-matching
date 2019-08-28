@@ -10,6 +10,7 @@ using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
+using Sfa.Tl.Matching.Api.Clients.Calendar;
 using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
@@ -115,6 +116,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddTransient<IFileImportService<TImportDto>, FileImportService<TImportDto, TDto, TEntity>>();
         }
+
         private static void RegisterCsvFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
                 where TDto : class, new()
                 where TImportDto : FileImportDto
@@ -140,6 +142,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterRepositories(IServiceCollection services)
         {
+            services.AddTransient<IRepository<BankHoliday>, GenericRepository<BankHoliday>>();
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
             services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
             services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
@@ -156,7 +159,8 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
             services.AddTransient<IRepository<OpportunityItem>, GenericRepository<OpportunityItem>>();
             services.AddTransient<IOpportunityRepository, OpportunityRepository>();
-            
+
+            services.AddTransient<IBulkInsertRepository<BankHoliday>, SqlBulkInsertRepository<BankHoliday>>();
             services.AddTransient<IBulkInsertRepository<LearningAimReferenceStaging>, SqlBulkInsertRepository<LearningAimReferenceStaging>>();
             services.AddTransient<IBulkInsertRepository<ProviderReferenceStaging>, SqlBulkInsertRepository<ProviderReferenceStaging>>();
             services.AddTransient<IBulkInsertRepository<EmployerStaging>, SqlBulkInsertRepository<EmployerStaging>>();
@@ -165,20 +169,20 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         private static void RegisterApplicationServices(IServiceCollection services)
         {
             services.AddTransient<IValidator<CrmEmployerEventBase>, CrmEmployerEventDataValidator>();
-            
+
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailHistoryService, EmailHistoryService>();
+            services.AddTransient<IEmployerFeedbackService, EmployerFeedbackService>();
             services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IReferralEmailService, ReferralEmailService>();
-            
+
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
@@ -195,17 +199,18 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         {
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
+            services.AddHttpClient<ICalendarApiClient, CalendarApiClient>();
 
             services.AddTransient<IProviderQueryPortTypeClient>(svcProvider =>
             {
-               var client = new ProviderQueryPortTypeClient();
+                var client = new ProviderQueryPortTypeClient();
 
-               var fiveMinuteTimeSpan = new TimeSpan(0, 5, 0);
+                var fiveMinuteTimeSpan = new TimeSpan(0, 5, 0);
 
-               client.Endpoint.Binding.SendTimeout = fiveMinuteTimeSpan;
-               client.Endpoint.Binding.ReceiveTimeout = fiveMinuteTimeSpan;
+                client.Endpoint.Binding.SendTimeout = fiveMinuteTimeSpan;
+                client.Endpoint.Binding.ReceiveTimeout = fiveMinuteTimeSpan;
 
-               return client;
+                return client;
             });
 
             services.AddTransient<IProviderReferenceDataClient, ProviderReferenceDataClient>();

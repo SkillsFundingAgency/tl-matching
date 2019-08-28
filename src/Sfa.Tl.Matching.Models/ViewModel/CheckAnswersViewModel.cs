@@ -18,6 +18,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int? Placements { get; set; }
         public bool? PlacementsKnown { get; set; }
         public List<ReferralsViewModel> Providers { get; set; }
-        public string PlacementsDetail => PlacementsKnown.GetValueOrDefault() ? Placements.ToString() : "at least 1";
+        public string PlacementsDetail => PlacementsKnown.GetValueOrDefault() ? Placements.ToString() : "At least 1";
     }
 }

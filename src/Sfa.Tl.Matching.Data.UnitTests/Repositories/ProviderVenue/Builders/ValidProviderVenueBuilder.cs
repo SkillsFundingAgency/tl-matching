@@ -9,6 +9,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue.Builders
                 Id = 1,
                 ProviderId = 10000546,
                 Postcode = "AA1 1AA",
+                Name = "Venue Name",
                 Town = "Town",
                 County = "County",
                 Latitude = 52.648869M,

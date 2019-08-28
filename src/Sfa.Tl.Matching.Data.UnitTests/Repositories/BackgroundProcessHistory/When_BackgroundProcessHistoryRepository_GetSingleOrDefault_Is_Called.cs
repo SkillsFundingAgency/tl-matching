@@ -30,35 +30,16 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory
         }
 
         [Fact]
-        public void Then_BackgroundProcessHistory_Id_Is_Returned() =>
+        public void Then_Fields_Are_As_Expected()
+        {
             _result.Id.Should().Be(1);
-        
-        [Fact]
-        public void Then_BackgroundProcessHistory_ProviderCount_Is_Returned() =>
             _result.RecordCount.Should().Be(5);
-
-        [Fact]
-        public void Then_BackgroundProcessHistory_Status_Is_Returned() =>
             _result.Status.Should().Be(BackgroundProcessHistoryStatus.Pending.ToString());
-
-        [Fact]
-        public void Then_BackgroundProcessHistory_StatusMessage_Is_Returned() =>
             _result.StatusMessage.Should().Be("Status Message");
-
-        [Fact]
-        public void Then_BackgroundProcessHistory_CreatedBy_Is_Returned() =>
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-        [Fact]
-        public void Then_BackgroundProcessHistory_CreatedOn_Is_Returned() =>
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
-
-        [Fact]
-        public void Then_BackgroundProcessHistory_ModifiedBy_Is_Returned() =>
             _result.ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);
-        
-        [Fact]
-        public void Then_BackgroundProcessHistory_ModifiedOn_Is_Returned() =>
             _result.ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
+        }
     }
 }

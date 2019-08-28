@@ -3,7 +3,7 @@
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[UkPrn] BIGINT NOT NULL,
 	[Name] NVARCHAR(400) NOT NULL,
-	[DisplayName] NVARCHAR(400) NULL,
+	[DisplayName] NVARCHAR(400) NOT NULL,
 	[OfstedRating] INT NOT NULL,
 	[PrimaryContact] NVARCHAR(100) NOT NULL,
 	[PrimaryContactEmail] VARCHAR(320) NOT NULL,

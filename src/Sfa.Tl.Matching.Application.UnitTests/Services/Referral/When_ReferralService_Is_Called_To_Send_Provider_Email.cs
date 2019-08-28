@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailService_SendEmail_Is_Called_Exactly_Once()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
@@ -82,9 +82,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailService_SendEmail_Is_Called_With_TemplateName()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Is<string>(
-                        templateName => templateName == "ProviderReferralComplex"),
+                        templateName => templateName == "ProviderReferralV3"),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
@@ -92,7 +92,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_ToAddress()
+        public void Then_EmailService_SendEmail_Is_Called_With_Primary_ToAddress()
         {
             _emailService
                 .Received(1)
@@ -105,10 +105,23 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Subject()
+        public void Then_EmailService_SendEmail_Is_Called_With_Secondary_ToAddress()
         {
             _emailService
                 .Received(1)
+                .SendEmail(Arg.Any<string>(),
+                    Arg.Is<string>(
+                        toAddress => toAddress == "secondary.contact@provider.co.uk"),
+                    Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Subject()
+        {
+            _emailService
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<string>(
@@ -121,7 +134,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailService_SendEmail_Is_Called_With_ReplyToAddress()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -131,16 +144,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_PrimaryContactName_Token()
+        public void Then_EmailService_SendEmail_Is_Called_With_ContactName_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("primary_contact_name")
-                                  && tokens["primary_contact_name"] == "Provider Contact"),
+                        tokens => tokens.ContainsKey("contact_name")),
                     Arg.Any<string>());
         }
 
@@ -148,7 +160,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailService_SendEmail_Is_Called_With_ProviderName_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -162,7 +174,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailService_SendEmail_Is_Called_With_Route_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -173,25 +185,24 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
+        public void Then_EmailService_SendEmail_Is_Called_With_Venue_Text_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("venue_text")
-                                  && tokens["venue_text"] == "at Venue name in Venuetown AA2 2AA"),
+                                  && tokens["venue_text"] == "at Venue name (part of Provider display name) in Venuetown AA2 2AA"),
                     Arg.Any<string>());
-
         }
 
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Search_Radius_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -202,16 +213,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Job_Role_Token()
+        public void Then_EmailService_SendEmail_Is_Called_With_Job_Role_List_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("job_role")
-                                  && tokens["job_role"] == "Testing Job Title"),
+                        tokens => tokens.ContainsKey("job_role_list")
+                                  && tokens["job_role_list"] == "* who is looking for this job role: Testing Job Title"),
                     Arg.Any<string>());
         }
 
@@ -219,7 +230,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailService_SendEmail_Is_Called_With_Employer_Business_Name_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -233,7 +244,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Name_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -247,7 +258,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Number_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -261,7 +272,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Email_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
@@ -272,16 +283,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Postcode_Token()
+        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Town_Postcode_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_postcode")
-                                  && tokens["employer_postcode"] == "Town AA1 1AA"),
+                        tokens => tokens.ContainsKey("employer_town_postcode")
+                                  && tokens["employer_town_postcode"] == "Town AA1 1AA"),
                     Arg.Any<string>());
         }
 
@@ -289,13 +300,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailService_SendEmail_Is_Called_With_Number_Of_Placements_Token()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("number_of_placements")
-                                  && tokens["number_of_placements"] == "at least 1"),
+                                  && tokens["number_of_placements"] == "At least 1"),
                     Arg.Any<string>());
         }
 
@@ -303,7 +314,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
         {
             _emailHistoryService
-                .Received(1)
+                .Received(2)
                 .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
         }
     }

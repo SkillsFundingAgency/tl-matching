@@ -18,8 +18,15 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests
         static TestConfiguration()
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.test.json")
+                .AddJsonFile("appsettings.test.json", true)
                 .Build();
+
+            if (configuration["EnvironmentName"] == "__EnvironmentName__")
+            {
+                configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.local.json")
+                    .Build();
+            }
 
             MatchingConfiguration = ConfigurationLoader.Load(
                 configuration["EnvironmentName"],

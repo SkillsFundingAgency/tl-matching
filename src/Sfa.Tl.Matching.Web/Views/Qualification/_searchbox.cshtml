@@ -3,9 +3,7 @@
 @if (!ViewData.ModelState.IsValid)
 {
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-        <h2 class="govuk-error-summary__title" id="error-summary-title">
-            There is a problem
-        </h2>
+        <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
         <div class="govuk-error-summary__body">
             <ul class="govuk-list govuk-error-summary__list">
                 <li><a sfa-validation-for="SearchTerms"></a></li>
@@ -15,9 +13,7 @@
 }
 
 <div class="govuk-error-summary tl-hidden" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary" id="tl-error-summary">
-    <h2 class="govuk-error-summary__title" id="error-summary-title">
-        There is a problem
-    </h2>
+    <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
 </div>
 
 <form class="form" asp-route="SearchQualifications">
@@ -32,7 +28,7 @@
                     <input class="govuk-input tl-search-input" type="text" asp-for="SearchTerms"
                            sfa-validation-for="SearchTerms" sfa-validationerror-class="govuk-input--error tl-search-input--error" />
                 </div>
-                <div class="tl-search-submit"><button class="button" type="submit">Search</button></div>
+                <div class="tl-search-submit"><button id="tl-search" class="button" type="submit">Search</button></div>
             </div>
         </div>
     </div>

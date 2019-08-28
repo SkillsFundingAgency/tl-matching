@@ -13,6 +13,6 @@
         public string PlacementsDetail =>
             PlacementsKnown.GetValueOrDefault()
                 ? Placements.ToString()
-                : "at least 1";
+                : "At least 1";
     }
 }

@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         [Theory]
         [InlineData("EmployerContact", "", "You must enter a contact name for placements", 0)]
         [InlineData("EmployerContact", "A", "You must enter a contact name using 2 or more characters", 0)]
-        [InlineData("EmployerContact", "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", "You must enter a contact name using 99 characters or less", 0)]
+        [InlineData("EmployerContact", "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", "You must enter a contact name that is 100 characters or fewer", 0)]
         [InlineData("EmployerContact", "/%^*&$", "You must enter a contact name using only letters, hyphens and apostrophes", 0)]
         [InlineData("EmployerContactEmail", "", "You must enter a contact email for placements", 1)]
         [InlineData("EmployerContactEmail", "Abcd", "You must enter a valid email", 1)]

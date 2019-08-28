@@ -22,7 +22,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
         {
             _viewModel.ReferralItems.Add(new BasketReferralItemViewModel
             {
-                Providers = 1,
+                ProviderNames = new List<ProviderNameViewModel>
+                {
+                    new ProviderNameViewModel
+                    {
+                        DisplayName = "Provider Display Name",
+                        Postcode = "CV1 2WT",
+                        VenueName = "Venue Name"
+                    }
+                },
                 JobRole = "Referral"
             });
 

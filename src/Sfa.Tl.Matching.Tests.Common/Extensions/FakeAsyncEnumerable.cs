@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
+namespace Sfa.Tl.Matching.Tests.Common.Extensions
 {
     public class FakeAsyncEnumerable<T> : EnumerableQuery<T>, IAsyncEnumerable<T>, IQueryable<T>
     {

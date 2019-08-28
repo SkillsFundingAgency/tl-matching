@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
     public class When_ProviderQualificationService_Is_Called_To_CreateProviderQualification
     {
         private readonly IRepository<Domain.Models.ProviderQualification> _providerQualificationRepository;
-        private readonly  int _result;
+        private readonly int _result;
 
         public When_ProviderQualificationService_Is_Called_To_CreateProviderQualification()
         {
@@ -77,7 +77,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
         {
             _providerQualificationRepository
                 .Received()
-                .Create(Arg.Is<Domain.Models.ProviderQualification> (
+                .Create(Arg.Is<Domain.Models.ProviderQualification>(
                     p => p.ProviderVenueId == 1 &&
                          p.QualificationId == 2
                         ));

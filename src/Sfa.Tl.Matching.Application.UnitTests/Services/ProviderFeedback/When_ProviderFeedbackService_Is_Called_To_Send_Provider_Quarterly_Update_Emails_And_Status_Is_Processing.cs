@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
@@ -19,6 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IProviderRepository _providerRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
+        private readonly int _result;
 
         public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_And_Status_Is_Processing(ProviderFeedbackFixture testFixture)
         {
@@ -46,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     _providerRepository, _backgroundProcessHistoryRepository,
                     messageQueueService, testFixture.DateTimeProvider);
 
-            providerFeedbackService
+            _result = providerFeedbackService
                 .SendProviderQuarterlyUpdateEmailsAsync(1, "TestUser")
                 .GetAwaiter().GetResult();
         }
@@ -89,6 +91,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _emailHistoryService
                 .DidNotReceiveWithAnyArgs()
                 .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_Result_Has_Expected_Value()
+        {
+            _result.Should().Be(0);
         }
     }
 }

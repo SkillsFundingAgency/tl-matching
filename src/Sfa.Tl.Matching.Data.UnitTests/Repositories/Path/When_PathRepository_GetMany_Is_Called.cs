@@ -29,41 +29,22 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
                 _result = repository.GetMany().ToList();
             }
         }
-        
+
         [Fact]
         public void Then_The_Expected_Number_Of_Paths_Is_Returned() =>
             _result.Count().Should().Be(2);
 
         [Fact]
-        public void Then_Path_Id_Is_Returned() => 
+        public void Then_First_Path_Fields_Have_Expected_Values()
+        {
             _result.First().Id.Should().Be(PathConstants.Id);
-
-        [Fact]
-        public void Then_Path_Name_Is_Returned() =>
             _result.First().Name.Should().BeEquivalentTo(PathConstants.Name);
-
-        [Fact]
-        public void Then_Path_Keywords_Is_Returned() =>
             _result.First().Keywords.Should().BeEquivalentTo(PathConstants.Keywords);
-
-        [Fact]
-        public void Then_Path_Summary_Is_Returned()
-            => _result.First().Summary.Should().BeEquivalentTo(PathConstants.Summary);
-
-        [Fact]
-        public void Then_Path_CreatedBy_Is_Returned() =>
+            _result.First().Summary.Should().BeEquivalentTo(PathConstants.Summary);
             _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-        [Fact]
-        public void Then_Path_CreatedOn_Is_Returned() =>
             _result.First().CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
-
-        [Fact]
-        public void Then_Path_ModifiedBy_Is_Returned() =>
             _result.First().ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);
-
-        [Fact]
-        public void Then_Path_ModifiedOn_Is_Returned() =>
             _result.First().ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
+        }
     }
 }

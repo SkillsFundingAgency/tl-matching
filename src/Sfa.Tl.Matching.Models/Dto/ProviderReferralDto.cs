@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sfa.Tl.Matching.Models.Extensions;
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
@@ -21,9 +22,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ProviderDisplayName { get; set; }
         public string ProviderVenueName { get; set; }
 
-        public string CustomisedProviderDisplayName => ProviderVenueName == ProviderVenuePostCode
-            ? ProviderDisplayName
-            : $"{ProviderVenueName} (part of {ProviderDisplayName})";
+        public string CustomisedProviderDisplayName =>
+            ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, ProviderVenuePostCode, ProviderDisplayName);
     }
-
 }

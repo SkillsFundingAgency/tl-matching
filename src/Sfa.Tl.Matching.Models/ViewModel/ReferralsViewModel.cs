@@ -1,4 +1,6 @@
-﻿namespace Sfa.Tl.Matching.Models.ViewModel
+﻿using Sfa.Tl.Matching.Models.Extensions;
+
+namespace Sfa.Tl.Matching.Models.ViewModel
 {
     public class ReferralsViewModel
     {
@@ -8,8 +10,7 @@
         public string ProviderVenueName { get; set; }
         public string Postcode { get; set; }
         public decimal DistanceFromEmployer { get; set; }
-        public string DisplayText => ProviderVenueName == Postcode
-            ? ProviderDisplayName
-            : $"{ProviderVenueName} (part of {ProviderDisplayName})";
+        public string DisplayText =>
+            ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, Postcode, ProviderDisplayName);
     }
 }

@@ -38,6 +38,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.IsSaved, o => o.MapFrom(s => s.IsSaved))
                 .ForMember(m => m.IsSelectedForReferral, o => o.MapFrom(s => s.IsSelectedForReferral))
                 .ForMember(m => m.IsCompleted, o => o.MapFrom(s => s.IsCompleted))
+                .ForMember(m => m.EmployerFeedbackSent, o => o.MapFrom(s => s.EmployerFeedbackSent))
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityItemDto, OpportunityItem>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
@@ -88,6 +89,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
                 .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
                 .ForPath(m => m.EmployerCrmId, o => o.MapFrom(s => s.Employer.CrmId))
+                .ForPath(m => m.CompanyName, o => o.MapFrom(s => s.Employer.CompanyName))
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 
@@ -108,6 +110,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.IsSaved, o => o.MapFrom(s => s.IsSaved))
                 .ForMember(m => m.IsSelectedForReferral, o => o.MapFrom(s => s.IsSelectedForReferral))
                 .ForMember(m => m.IsCompleted, o => o.MapFrom(s => s.IsCompleted))
+                .ForMember(m => m.EmployerFeedbackSent, o => o.MapFrom(s => s.EmployerFeedbackSent))
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
 
@@ -234,6 +237,12 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>>())
                 .ForAllOtherMembers(config => config.Ignore());
 
+            CreateMap<OpportunityItemWithUsernameForEmployerFeedbackSentDto, OpportunityItem>()
+                .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.EmployerFeedbackSent, o => o.MapFrom(s => true))
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.Username))
+                .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<OpportunityItemWithUsernameForEmployerFeedbackSentDto, OpportunityItem>>())
+                .ForAllOtherMembers(config => config.Ignore());
         }
     }
 }
