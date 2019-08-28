@@ -1,0 +1,23 @@
+@model Sfa.Tl.Matching.Models.ViewModel.MaintenanceViewModel
+@{
+    ViewData["Title"] = "Service under maintenance";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+
+        <form asp-action="SaveMaintenanceHistory" novalidate>
+            <input asp-for="IsOnline" type="hidden" />
+
+            <p class="govuk-body">The service is currently @Model.BodyDisplayText.</p>
+
+            <button type="submit"
+                    class="@Model.ButtonClassName"
+                    id="tl-maintenance">
+                @Model.StatusDisplayText
+            </button>
+        </form>
+
+    </div>
+</div>
