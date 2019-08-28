@@ -14,8 +14,8 @@ namespace Sfa.Tl.Matching.Functions
 {
     public static class MatchingServiceReport
     {
-        [FunctionName("GetServiceOpportunityReport")]
-        public static async Task<IActionResult> GetServiceOpportunityReport(
+        [FunctionName("GetMatchingServiceOpportunityReport")]
+        public static async Task<IActionResult> GetMatchingServiceOpportunityReport(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, 
         ExecutionContext context,
         ILogger logger, 
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
-                var result = await opportunityRepository.GetServiceOpportunityReportAsync();
+                var result = await opportunityRepository.GetMatchingServiceOpportunityReportAsync();
 
                 stopwatch.Stop();
 
@@ -54,8 +54,8 @@ namespace Sfa.Tl.Matching.Functions
                 throw;
             }        }
 
-        [FunctionName("GetProviderOpportunityReport")]
-        public static async Task<IActionResult> GetProviderOpportunityReport(
+        [FunctionName("GetMatchingServiceProviderOpportunityReport")]
+        public static async Task<IActionResult> GetMatchingServiceProviderOpportunityReport(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, 
         ExecutionContext context,
         ILogger logger, 
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
-                var result = await opportunityRepository.GetProviderOpportunityReportAsync();
+                var result = await opportunityRepository.GetMatchingServiceProviderOpportunityReportAsync();
 
                 stopwatch.Stop();
 

@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<FunctionLog> FunctionLog { get; set; }
         public virtual DbSet<MaintenanceHistory> MaintenanceHistory { get; set; }
 
-        public DbQuery<ServiceOpportunityReportDto> ServiceOpportunityReport { get; set; }
-        public DbQuery<ServiceProviderOpportunityReportDto> ServiceProviderOpportunityReport { get; set; }
+        public DbQuery<MatchingServiceOpportunityReportDto> ServiceOpportunityReport { get; set; }
+        public DbQuery<MatchingServiceProviderOpportunityReportDto> ServiceProviderOpportunityReport { get; set; }
     }
 }

@@ -225,14 +225,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
         }
 
-        public async Task<List<ServiceOpportunityReportDto>> GetServiceOpportunityReportAsync()
+        public async Task<List<MatchingServiceOpportunityReportDto>> GetMatchingServiceOpportunityReportAsync()
         {
-            return await QueryFromSqlAsync<ServiceOpportunityReportDto>("OpportunityServiceReport.sql");
+            return await QueryFromSqlAsync<MatchingServiceOpportunityReportDto>("MatchingServiceOpportunityReport.sql");
         }
 
-        public async Task<List<ServiceProviderOpportunityReportDto>> GetProviderOpportunityReportAsync()
+        public async Task<List<MatchingServiceProviderOpportunityReportDto>> GetMatchingServiceProviderOpportunityReportAsync()
         {
-            return await QueryFromSqlAsync<ServiceProviderOpportunityReportDto>("ProviderOpportunityServiceReport.sql");
+            return await QueryFromSqlAsync<MatchingServiceProviderOpportunityReportDto>("MatchingServiceProviderOpportunityReport.sql");
         }
 
         private async Task<List<T>> QueryFromSqlAsync<T>(string sqlFileName) where T : class
