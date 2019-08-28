@@ -293,9 +293,6 @@ __pycache__/
 !Sfa.Tl.Matching.Database.Local.publish.xml
 !Sfa.Tl.Matching.Database.Local.Int.Test.publish.xml
 
-# Azure Functions localsettings file
-**/*.Functions/local.settings.json
-
 # nlog output files
 *-nlog.txt
 
