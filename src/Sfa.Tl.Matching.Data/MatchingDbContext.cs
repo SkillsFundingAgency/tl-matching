@@ -31,5 +31,6 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Referral> Referral { get; set; }
         public virtual DbSet<Route> Route { get; set; }
         public virtual DbSet<FunctionLog> FunctionLog { get; set; }
+        public virtual DbSet<MaintenanceHistory> MaintenanceHistory { get; set; }
     }
 }
