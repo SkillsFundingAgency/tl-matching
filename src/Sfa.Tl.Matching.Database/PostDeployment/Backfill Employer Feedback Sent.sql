@@ -8,7 +8,8 @@ BEGIN
 
 	UPDATE [OpportunityItem]
 	SET [EmployerFeedbackSent] = 1
-	WHERE [ModifiedOn] < GETUTCDATE()
+	WHERE [IsCompleted] = 1 
+	  AND CONVERT(date, [ModifiedOn]) < CONVERT(date, GETUTCDATE())
 
 	INSERT INTO [dbo].[DBProjDeployLog]( [Date], [Name], [MD5], [Revision] )
 	VALUES( GETUTCDATE(), @scriptName, @TicketNo, 1 );
