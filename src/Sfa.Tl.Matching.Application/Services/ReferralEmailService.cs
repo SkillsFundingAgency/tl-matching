@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("placements_list", sb.ToString());
 
-                await SendEmail(EmailTemplateName.EmployerReferralComplex, opportunityId, employerReferral.EmployerContactEmail,
+                await SendEmail(EmailTemplateName.EmployerReferralV3, opportunityId, employerReferral.EmployerContactEmail,
                     "Your industry placement referral – ESFA", tokens, employerReferral.CreatedBy);
 
                 await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,

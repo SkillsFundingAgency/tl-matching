@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailService
                 .Received(1)
                 .SendEmail(Arg.Is<string>(
-                        templateName => templateName == "EmployerReferralComplex"),
+                        templateName => templateName == "EmployerReferralV3"),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
