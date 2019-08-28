@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -221,6 +223,29 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             return _dbContext.OpportunityItem.Count(item =>
                 item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
+        }
+
+        public async Task<List<ServiceOpportunityReportDto>> GetServiceOpportunityReportAsync()
+        {
+            return await QueryFromSqlAsync<ServiceOpportunityReportDto>("OpportunityServiceReport.sql");
+        }
+
+        public async Task<List<ServiceProviderOpportunityReportDto>> GetProviderOpportunityReportAsync()
+        {
+            return await QueryFromSqlAsync<ServiceProviderOpportunityReportDto>("ProviderOpportunityServiceReport.sql");
+        }
+
+        private async Task<List<T>> QueryFromSqlAsync<T>(string sqlFileName) where T : class
+        {
+            string sqlCommnad;
+            var resourceName = $"{typeof(OpportunityRepository).Namespace}.{sqlFileName}";
+            using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            using (var streamReader = new StreamReader(templateStream ?? throw new InvalidOperationException($"Could not find {sqlFileName} file")))
+            {
+                sqlCommnad = streamReader.ReadToEnd();
+            }
+
+            return await _dbContext.Query<T>().FromSql(sqlCommnad).ToListAsync();
         }
 
         public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
