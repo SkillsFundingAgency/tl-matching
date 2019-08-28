@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
 
         public When_Calendar_Api_Is_Called_To_Get_Bank_Holidays()
         {
-            var httpClient = new CalendarHttpClient().Get();
+            var httpClient = new TestCalendarHttpClient().Get();
 
             var calendarApi = new CalendarApiClient(httpClient, 
                 new MatchingConfiguration

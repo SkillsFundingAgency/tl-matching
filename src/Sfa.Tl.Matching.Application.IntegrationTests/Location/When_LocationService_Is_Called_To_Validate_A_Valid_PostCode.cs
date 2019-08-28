@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
         public When_LocationService_Is_Called_To_Validate_A_Valid_PostCode()
         {
             const string requestPostcode = "Cv12wT";
-            var httpClient = new PostcodesIoHttpClient().Get(requestPostcode);
+            var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
 
             var locationService = new LocationApiClient(httpClient, new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
             _postCodeResultDto = locationService.IsValidPostCode(requestPostcode).GetAwaiter().GetResult();

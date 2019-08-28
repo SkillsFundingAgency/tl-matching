@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
         public When_Proximity_Controller_FindProviders_Is_Called_With_Unformated_PostCode()
         {
             const string requestPostcode = "cV12 Wt";
-            var httpClient = new PostcodesIoHttpClient().Get(requestPostcode);
+            var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
 
             var routes = new List<Route>
             {

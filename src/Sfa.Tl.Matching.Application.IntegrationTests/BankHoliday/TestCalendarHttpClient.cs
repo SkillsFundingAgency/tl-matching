@@ -7,11 +7,11 @@ using System.Reflection;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
 {
-    public class CalendarHttpClient
+    public class TestCalendarHttpClient
     {
         private readonly bool _isMockedHttpClient;
 
-        public CalendarHttpClient()
+        public TestCalendarHttpClient()
         {
             _isMockedHttpClient = TestConfiguration.IsMockedHttpClient;
         }
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
 
         private static string GetTestJson()
         {
-            var resourceName = $"{typeof(CalendarHttpClient).Namespace}.TestBankHolidays.json";
+            var resourceName = $"{typeof(TestCalendarHttpClient).Namespace}.TestBankHolidays.json";
             using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
             using (var streamReader = new StreamReader(templateStream ?? throw new InvalidOperationException("Could not find json test file")))
             {

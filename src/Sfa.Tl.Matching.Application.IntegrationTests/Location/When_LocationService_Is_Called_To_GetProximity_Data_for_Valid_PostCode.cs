@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
 
         public When_LocationService_Is_Called_To_GetProximity_Data_For_Valid_PostCode()
         {
-            var httpClient = new PostcodesIoHttpClient().Get();
+            var httpClient = new TestPostcodesIoHttpClient().Get();
 
             var locationService = new LocationApiClient(httpClient, new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
             _postCodeLookupResultDto = locationService.GetGeoLocationData("CV1 2WT").GetAwaiter().GetResult();

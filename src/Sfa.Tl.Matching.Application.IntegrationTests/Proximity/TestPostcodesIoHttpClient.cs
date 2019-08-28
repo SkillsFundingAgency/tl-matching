@@ -8,11 +8,11 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
-    public class PostcodesIoHttpClient
+    public class TestPostcodesIoHttpClient
     {
         private readonly bool _isMockedHttpClient;
 
-        public PostcodesIoHttpClient()
+        public TestPostcodesIoHttpClient()
         {
             _isMockedHttpClient = TestConfiguration.IsMockedHttpClient;
         }
