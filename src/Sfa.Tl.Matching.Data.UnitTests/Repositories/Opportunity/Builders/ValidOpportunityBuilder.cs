@@ -148,5 +148,34 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
         }
 
         public Domain.Models.Opportunity Build() => _opportunity;
+
+        public ValidOpportunityBuilder AddAbandonedOpportunityItem()
+        {
+            if (_opportunity.OpportunityItem == null)
+            {
+                _opportunity.OpportunityItem = new List<Domain.Models.OpportunityItem>();
+            }
+
+            _opportunity.OpportunityItem.Add(
+                new Domain.Models.OpportunityItem
+                {
+                    OpportunityId = 1,
+                    OpportunityType = "Referral",
+                    JobRole = "Automation Tester",
+                    PlacementsKnown = false,
+                    Placements = null,
+                    Town = "Coventry",
+                    Postcode = "CV1 2WT",
+                    IsSaved = false,
+                    IsCompleted = false,
+                    EmployerFeedbackSent = false,
+                    CreatedBy = EntityCreationConstants.CreatedByUser,
+                    CreatedOn = EntityCreationConstants.CreatedOn,
+                    ModifiedBy = EntityCreationConstants.ModifiedByUser,
+                    ModifiedOn = EntityCreationConstants.ModifiedOn,
+                });
+
+            return this;
+        }
     }
 }

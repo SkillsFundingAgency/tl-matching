@@ -13,12 +13,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 {
-    public class When_OpportunityRepository_GetReferralsForEmployerFeedback_Is_Called : IDisposable
+    public class When_OpportunityRepository_GetReferralsForEmployerFeedback_Is_Called_With_One_Abandoned_Opportunity : IDisposable
     {
         private readonly MatchingDbContext _dbContext;
         private readonly IList<EmployerFeedbackDto> _result;
 
-        public When_OpportunityRepository_GetReferralsForEmployerFeedback_Is_Called()
+        public When_OpportunityRepository_GetReferralsForEmployerFeedback_Is_Called_With_One_Abandoned_Opportunity()
         {
             var logger = Substitute.For<ILogger<OpportunityRepository>>();
 
@@ -28,6 +28,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
                     new ValidOpportunityBuilder()
                         .AddEmployer()
                         .AddReferrals(true)
+                        .AddAbandonedOpportunityItem()
                         .Build());
                 _dbContext.SaveChanges();
 
