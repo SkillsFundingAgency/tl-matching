@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
                     cells[0].InnerText.Should().Be("London SW1 1AA");
                     cells[1].InnerText.Should().Be("Referral Role");
                     cells[2].InnerText.Should().Be("5");
-                    cells[3].InnerText.Should().Be("Provider");
+                    cells[3].InnerText.Should().Be("ProviderVenueName (part of Provider)");
                     cells[4].InnerText.Should().Be("London SW1 1AB");
                     cells[5].InnerText.Should().Be("1.5 miles");
                     cells[6].InnerText.Should().Be("Primary contact");

@@ -1,4 +1,6 @@
-﻿namespace Sfa.Tl.Matching.Models.Dto
+﻿using Sfa.Tl.Matching.Models.Extensions;
+
+namespace Sfa.Tl.Matching.Models.Dto
 {
     public class ReferralItemDto
     {
@@ -6,7 +8,6 @@
         public string JobRole { get; set; }
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
-        public string ProviderName { get; set; }
         public string Town { get; set; }
         public string Postcode { get; set; }
         public string ProviderVenueTownAndPostcode { get; set; }
@@ -22,5 +23,7 @@
         public string SecondaryContact { get; set; }
         public string SecondaryContactEmail { get; set; }
         public string SecondaryContactPhone { get; set; }
+        public string ProviderDisplayName { get; set; }
+        public string ProviderName => ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, Postcode, ProviderDisplayName);
     }
 }

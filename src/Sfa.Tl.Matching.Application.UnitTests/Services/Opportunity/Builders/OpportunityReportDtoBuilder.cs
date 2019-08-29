@@ -25,9 +25,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
                 JobRole = "Referral",
                 PlacementsKnown = true,
                 Placements = 5,
-                ProviderName = "Provider",
+                ProviderDisplayName = "Provider",
                 Town = "London",
                 Postcode = "SW1 1AB",
+                ProviderVenueName = "ProviderVenueName",
                 ProviderVenueTownAndPostcode = "London SW1 1AB",
                 DistanceFromEmployer = 1.5M
             });
