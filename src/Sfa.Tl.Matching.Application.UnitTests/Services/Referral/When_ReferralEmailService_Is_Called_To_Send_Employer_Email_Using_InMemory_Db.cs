@@ -350,7 +350,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         {
             return placementsKnown.GetValueOrDefault()
                 ? placements.ToString()
-                : "At least 1";
+                : "at least 1";
         }
     }
 }
