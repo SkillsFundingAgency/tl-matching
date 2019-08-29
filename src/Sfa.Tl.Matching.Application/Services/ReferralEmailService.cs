@@ -232,7 +232,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             return placementsKnown.GetValueOrDefault()
                 ? placements.ToString()
-                : "At least 1";
+                : "at least 1";
         }
 
         private async Task SendEmail(EmailTemplateName template, int? opportunityId,
