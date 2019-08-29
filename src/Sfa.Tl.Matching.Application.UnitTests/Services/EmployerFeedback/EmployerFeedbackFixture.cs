@@ -15,6 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             Configuration = new MatchingConfiguration
             {
+                EmployerFeedbackTimeSpan = "-10.00:00:00",
                 SendEmailEnabled = true,
                 NotificationsSystemId = "TLevelsIndustryPlacement"
             };

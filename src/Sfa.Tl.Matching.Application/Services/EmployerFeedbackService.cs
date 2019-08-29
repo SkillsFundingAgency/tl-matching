@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -17,8 +18,10 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
+        private readonly IRepository<BankHoliday> _bankHolidayRepository;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly ILogger<EmployerFeedbackService> _logger;
@@ -27,21 +30,59 @@ namespace Sfa.Tl.Matching.Application.Services
             IMapper mapper,
             MatchingConfiguration configuration,
             ILogger<EmployerFeedbackService> logger,
+            IDateTimeProvider dateTimeProvider,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
+            IRepository<BankHoliday> bankHolidayRepository,
             IOpportunityRepository opportunityRepository,
             IRepository<OpportunityItem> opportunityItemRepository)
         {
             _mapper = mapper;
             _configuration = configuration;
             _logger = logger;
+            _dateTimeProvider = dateTimeProvider;
             _emailService = emailService;
             _emailHistoryService = emailHistoryService;
+            _bankHolidayRepository = bankHolidayRepository;
             _opportunityRepository = opportunityRepository;
             _opportunityItemRepository = opportunityItemRepository;
         }
 
-        public async Task<int> SendEmployerFeedbackEmailsAsync(DateTime referralDate, string userName)
+        public async Task<int> SendEmployerFeedbackEmailsAsync(string userName)
+        {
+            var referralDate = await GetReferralDateAsync();
+
+            var emailsSent = 0;
+            if (referralDate != null)
+            {
+                emailsSent = await SendEmployerFeedbackEmailsAsync(referralDate.Value, userName);
+            }
+
+            return emailsSent;
+        }
+
+        private async Task<DateTime?> GetReferralDateAsync()
+        {
+            var employerFeedbackTimespan = TimeSpan.Parse(_configuration.EmployerFeedbackTimeSpan);
+            var bankHolidays = await _bankHolidayRepository.GetMany(
+                    d => d.Date <= DateTime.Today)
+                .Select(d => d.Date)
+                .OrderBy(d => d.Date)
+                .ToListAsync();
+
+            if (_dateTimeProvider.IsHoliday(_dateTimeProvider.UtcNow().Date, bankHolidays))
+                return null;
+
+            var referralDate = _dateTimeProvider
+                .AddWorkingDays(
+                    _dateTimeProvider.UtcNow().Date,
+                    employerFeedbackTimespan,
+                    bankHolidays);
+
+            return referralDate;
+        }
+
+        private async Task<int> SendEmployerFeedbackEmailsAsync(DateTime referralDate, string userName)
         {
             var referrals = await _opportunityRepository.GetReferralsForEmployerFeedbackAsync(referralDate);
 
@@ -69,9 +110,8 @@ namespace Sfa.Tl.Matching.Application.Services
                 var errorMessage = $"Error sending employer feedback emails. {ex.Message} ";
 
                 _logger.LogError(ex, errorMessage);
+                throw;
             }
-
-            return -1;
         }
 
         private async Task SetOpportunityItemsEmployerFeedbackAsSent(IEnumerable<int> opportunityItemIds, string userName)

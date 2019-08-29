@@ -1,18 +1,15 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
-using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Functions
 {
@@ -24,19 +21,14 @@ namespace Sfa.Tl.Matching.Functions
             TimerInfo timer,
             ExecutionContext context,
             ILogger logger,
-            [Inject] MatchingConfiguration configuration,
-            [Inject] IDateTimeProvider dateTimeProvider,
             [Inject] IEmployerFeedbackService employerFeedbackService,
-            [Inject] IRepository<BankHoliday> bankHolidayRepository,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             try
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                var emailsSent = await SendEmployerFeedbackEmailsAsync(
-                    configuration, dateTimeProvider,
-                    employerFeedbackService, bankHolidayRepository);
+                var emailsSent = await employerFeedbackService.SendEmployerFeedbackEmailsAsync("System");
 
                 stopwatch.Stop();
 
@@ -64,18 +56,13 @@ namespace Sfa.Tl.Matching.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
-            [Inject] MatchingConfiguration configuration,
-            [Inject] IDateTimeProvider dateTimeProvider,
-            [Inject] IEmployerFeedbackService employerFeedbackService,
-            [Inject] IRepository<BankHoliday> bankHolidayRepository)
+            [Inject] IEmployerFeedbackService employerFeedbackService)
         {
             logger.LogInformation($"Function {context.FunctionName} triggered");
 
             var stopwatch = Stopwatch.StartNew();
 
-            var emailsSent = await SendEmployerFeedbackEmailsAsync(
-                configuration, dateTimeProvider,
-                employerFeedbackService, bankHolidayRepository);
+            var emailsSent = await employerFeedbackService.SendEmployerFeedbackEmailsAsync("System");
 
             stopwatch.Stop();
 
@@ -83,48 +70,6 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
 
             return new OkObjectResult($"{emailsSent} emails sent.");
-        }
-
-        private async Task<int> SendEmployerFeedbackEmailsAsync(
-            MatchingConfiguration configuration,
-            IDateTimeProvider dateTimeProvider,
-            IEmployerFeedbackService employerFeedbackService,
-            IRepository<BankHoliday> bankHolidayRepository)
-        {
-            var referralDate = await GetReferralDateAsync(
-                TimeSpan.Parse(configuration.EmployerFeedbackTimeSpan),
-                dateTimeProvider, bankHolidayRepository);
-
-            var emailsSent = 0;
-            if (referralDate != null)
-            {
-                emailsSent = await employerFeedbackService.SendEmployerFeedbackEmailsAsync(referralDate.Value, "System");
-            }
-
-            return emailsSent;
-        }
-
-        private async Task<DateTime?> GetReferralDateAsync(
-            TimeSpan employerFeedbackTimespan,
-            IDateTimeProvider dateTimeProvider,
-            IRepository<BankHoliday> bankHolidayRepository)
-        {
-            var bankHolidays = await bankHolidayRepository.GetMany(
-                    d => d.Date <= DateTime.Today)
-                .Select(d => d.Date)
-                .OrderBy(d => d.Date)
-                .ToListAsync();
-
-            if (dateTimeProvider.IsHoliday(dateTimeProvider.UtcNow().Date, bankHolidays))
-                return null;
-            
-            var referralDate = dateTimeProvider
-                .AddWorkingDays(
-                    dateTimeProvider.UtcNow().Date,
-                    employerFeedbackTimespan,
-                    bankHolidays);
-
-            return referralDate;
         }
     }
 }

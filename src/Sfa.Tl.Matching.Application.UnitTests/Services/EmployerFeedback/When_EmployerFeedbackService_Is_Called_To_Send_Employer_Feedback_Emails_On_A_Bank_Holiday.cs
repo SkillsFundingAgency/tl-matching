@@ -22,10 +22,9 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 {
-    public class When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails
+    public class When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails_On_A_Bank_Holiday
         : IClassFixture<EmployerFeedbackFixture>
     {
-        private readonly EmployerFeedbackFixture _testFixture;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
@@ -33,24 +32,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly int _result;
 
-        public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails(
+        public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails_On_A_Bank_Holiday(
             EmployerFeedbackFixture testFixture)
         {
-            _testFixture = testFixture;
-
             _dateTimeProvider = Substitute.For<IDateTimeProvider>();
             _dateTimeProvider
                 .UtcNow()
-                .Returns(new DateTime(2019, 9, 1));
-            //_dateTimeProvider
-            //    .UtcNow()
-            //    .Returns(new DateTime(2019, 8, 30));
+                .Returns(new DateTime(2019, 8, 26));
             _dateTimeProvider
                 .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<TimeSpan>(), Arg.Any<IList<DateTime>>())
                 .Returns(DateTime.Parse("2019-8-15 23:59:59"));
             _dateTimeProvider
                 .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>())
-                .Returns(false);
+                .Returns(true);
 
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
@@ -93,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
 
             var employerFeedbackService = new EmployerFeedbackService(
-                mapper, _testFixture.Configuration, _testFixture.Logger,
+                mapper, testFixture.Configuration, testFixture.Logger,
                 _dateTimeProvider, 
                 _emailService, _emailHistoryService, bankHolidayRepository, 
                 _opportunityRepository, _opportunityItemRepository);
@@ -104,117 +98,62 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         }
 
         [Fact]
-        public void Then_DateTimeProvider_AddWorkingDays_Is_Called_Exactly_Once()
+        public void Then_DateTimeProvider_IsHoliday_Is_Called_Exactly_Once()
         {
             _dateTimeProvider
                 .Received(1)
+                .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>());
+        }
+
+        [Fact]
+        public void Then_DateTimeProvider_AddWorkingDays_Is_Not_Called()
+        {
+            _dateTimeProvider
+                .DidNotReceive()
                 .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<TimeSpan>(), Arg.Any<IList<DateTime>>());
         }
 
         [Fact]
-        public void Then_OpportunityRepository_GetReferralsForEmployerFeedbackAsync_Is_Called_Exactly_Once()
+        public void Then_OpportunityRepository_GetReferralsForEmployerFeedbackAsync_Is_Not_Called()
         {
             _opportunityRepository
-                .Received(1)
+                .DidNotReceive()
                 .GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>());
         }
 
-        [Fact]
-        public void Then_OpportunityItemRepository_UpdateManyWithSpecifedColumnsOnly_Is_Called_Exactly_Once()
+        [Fact]public void Then_OpportunityItemRepository_UpdateManyWithSpecifedColumnsOnly_Is_Not_Called()
         {
             _opportunityItemRepository
-                .Received(1)
+                .DidNotReceive()
                 .UpdateManyWithSpecifedColumnsOnly(Arg.Any<IList<OpportunityItem>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>()
                 );
         }
-
+        
         [Fact]
-        public void Then_OpportunityItemRepository_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values()
-        {
-            _opportunityItemRepository
-                .Received(1)
-                .UpdateManyWithSpecifedColumnsOnly(Arg.Is<IList<OpportunityItem>>(
-                        o => o.Count == 1
-                             && o[0].Id == 2
-                             && o[0].EmployerFeedbackSent
-                             && o.All(x => x.ModifiedBy == "TestUser")
-                             && o.All(x => x.ModifiedOn == new DateTime(2019, 9, 1))
-                    ),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_Exactly_Once()
+        public void Then_EmailService_SendEmail_Is_Not_Called_Exactly_Once()
         {
             _emailService
-                .Received(1)
+                .DidNotReceive()
                 .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
-
+        
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Expected_Parameters()
-        {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Is<string>(
-                        templateName => templateName == "EmployerFeedback"),
-                    Arg.Is<string>(toAddress => toAddress == "primary.contact@employer.co.uk"),
-                    Arg.Is<string>(subject => subject == "Your industry placement progress – ESFA"),
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Is<string>(replyToAddress => replyToAddress == ""));
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Expected_Tokens()
-        {
-            var expectedResults = new Dictionary<string, string>
-            {
-                {"employer_contact_name", "Employer Contact"},
-            };
-
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)),
-                    Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
+        public void Then_EmailHistoryService_SaveEmailHistory_Is_Not_Called()
         {
             _emailHistoryService
-                .Received(1)
+                .DidNotReceive()
                 .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(),
                     Arg.Any<string>(), Arg.Any<string>());
         }
-        
-        [Fact]
-        public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_With_Expected_Parameters()
-        {
-            _emailHistoryService
-                .Received(1)
-                .SaveEmailHistory(
-                    Arg.Is<string>(templateName => templateName == "EmployerFeedback"),
-
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Any<int?>(),
-                    Arg.Any<string>(),
-                    Arg.Is<string>(s => s == "TestUser"));
-        }
-
+       
         [Fact]
         public void Then_Result_Has_Expected_Value()
         {
-            _result.Should().Be(1);
+            _result.Should().Be(0);
         }
     }
 }
