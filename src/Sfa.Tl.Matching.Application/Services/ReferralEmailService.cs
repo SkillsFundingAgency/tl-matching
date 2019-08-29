@@ -10,7 +10,6 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
-using Sfa.Tl.Matching.Models.Extensions;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -119,10 +118,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "contact_name", referral.ProviderPrimaryContact },
                         { "provider_name", referral.ProviderName },
                         { "route", referral.RouteName.ToLowerInvariant() },
-                        { "venue_text", GetVenueText(referral.ProviderVenueName, 
-                            referral.ProviderVenueTown,
-                            referral.ProviderVenuePostcode,
-                            referral.ProviderDisplayName) },
+                        { "venue_text", referral.VenueText },
                         { "search_radius", referral.DistanceFromEmployer },
                         { "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
                             ? $"* who is looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
@@ -296,15 +292,6 @@ namespace Sfa.Tl.Matching.Application.Services
             return backgroundProcessHistory;
         }
 
-        private static string GetVenueText(string venueName, string venueTown, string venuePostcode, string providerDisplayName)
-        {
-            var venueText = string.Empty;
-            if (venueName != venuePostcode)
-                venueText = $"at {ProviderDisplayExtensions.GetDisplayText(venueName, venuePostcode, providerDisplayName)} ";
-
-            venueText += $"in {venueTown} {venuePostcode}";
-
-            return venueText;
-        }
+        
     }
 }

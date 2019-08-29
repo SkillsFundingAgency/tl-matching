@@ -1,4 +1,6 @@
-﻿namespace Sfa.Tl.Matching.Models.Dto
+﻿using Sfa.Tl.Matching.Models.Extensions;
+
+namespace Sfa.Tl.Matching.Models.Dto
 {
     public class OpportunityReferralDto
     {
@@ -27,5 +29,19 @@
         public bool? PlacementsKnown { get; set; }
         public int? Placements { get; set; }
         public string CreatedBy { get; set; }
+
+        public string VenueText
+        {
+            get
+            {
+                var venueText = string.Empty;
+                if (ProviderVenueName != ProviderVenuePostcode)
+                    venueText = $"at {ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, ProviderVenuePostcode, ProviderDisplayName)} ";
+
+                venueText += $"in {ProviderVenueTown} {ProviderVenuePostcode}";
+
+                return venueText;
+            }
+        }
     }
 }
