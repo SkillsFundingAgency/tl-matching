@@ -226,22 +226,23 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
         {
             var dto = await (from o in _dbContext.Opportunity
-                join oi in _dbContext.OpportunityItem
-                    on o.Id equals oi.OpportunityId
-                where oi.IsCompleted 
-                      && !oi.EmployerFeedbackSent
-                      && oi.ModifiedOn.HasValue
-                      && oi.ModifiedOn.Value <= referralDate
-                      && o.OpportunityItem.Count(x => x.IsCompleted) == 1
-                      && oi.OpportunityType == OpportunityType.Referral.ToString()
-                select new EmployerFeedbackDto
-                {
-                    OpportunityId = o.Id,
-                    OpportunityItemId = oi.Id,
-                    EmployerContact = o.EmployerContact,
-                    EmployerContactEmail = o.EmployerContactEmail
-                }).ToListAsync();
-
+                             join oi in _dbContext.OpportunityItem
+                                 on o.Id equals oi.OpportunityId
+                             where oi.IsCompleted
+                                   && !oi.EmployerFeedbackSent
+                                   && oi.ModifiedOn.HasValue
+                                   && oi.ModifiedOn.Value <= referralDate
+                                   && o.OpportunityItem.Count(x => x.IsCompleted) == 1
+                                   && o.OpportunityItem.Count(x => x.IsSaved) == 1
+                                   && oi.OpportunityType == OpportunityType.Referral.ToString()
+                             select new EmployerFeedbackDto
+                             {
+                                 OpportunityId = o.Id,
+                                 OpportunityItemId = oi.Id,
+                                 EmployerContact = o.EmployerContact,
+                                 EmployerContactEmail = o.EmployerContactEmail
+                             }).ToListAsync();
+            
             return dto;
         }
 
