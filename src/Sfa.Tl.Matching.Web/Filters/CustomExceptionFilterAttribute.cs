@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Models.ViewModel;
 
-namespace Sfa.Tl.Matching.Web.Extensions
+namespace Sfa.Tl.Matching.Web.Filters
 {
     public class CustomExceptionFilterAttribute : ExceptionFilterAttribute
     {

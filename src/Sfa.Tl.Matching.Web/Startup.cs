@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using AutoMapper;
+using DocumentFormat.OpenXml.Spreadsheet;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
@@ -36,6 +38,8 @@ using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Event;
 using Sfa.Tl.Matching.Web.Authorisation;
+using Sfa.Tl.Matching.Web.Filters;
+using Sfa.Tl.Matching.Web.TagHelpers;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -85,6 +89,8 @@ namespace Sfa.Tl.Matching.Web
 
                 config.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 config.Filters.Add(new CustomExceptionFilterAttribute(_loggerFactory));
+                config.Filters.Add(new SetBackLinkFilter(new List<string>()));
+
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

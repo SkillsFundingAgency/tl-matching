@@ -4,8 +4,11 @@
 }
 
 @section backButton{
-    @await Component.InvokeAsync("Back",
-        new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
+
+    <a sfa-backlink-for="OpportunityId" class="govuk-back-link" id="tl-back">Back</a>
+
+    @*@await Component.InvokeAsync("Back",
+        new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })*@
     @await Component.InvokeAsync("Cancel",
         new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
