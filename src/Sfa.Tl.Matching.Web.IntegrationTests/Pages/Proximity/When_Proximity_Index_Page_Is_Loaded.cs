@@ -41,9 +41,9 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
 
-            var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
-            backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be("/Start");
+            //var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
+            //backLink.Text.Should().Be("Back");
+            //backLink.PathName.Should().Be("/Start");
 
             var cancelLink = documentHtml.GetElementById("tl-finish") as IHtmlAnchorElement;
             cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");
