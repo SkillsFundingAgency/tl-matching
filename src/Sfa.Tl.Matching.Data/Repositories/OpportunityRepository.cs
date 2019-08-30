@@ -114,6 +114,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                 ProviderName = p.Name,
                                                 ProviderDisplayName = p.DisplayName,
                                                 ProviderVenueName = pv.Name,
+                                                ProviderPrimaryContact = p.PrimaryContact,
+                                                ProviderPrimaryContactEmail = p.PrimaryContactEmail,
+                                                ProviderPrimaryContactPhone = p.PrimaryContactPhone,
+                                                ProviderSecondaryContact = p.SecondaryContact,
+                                                ProviderSecondaryContactEmail = p.SecondaryContactEmail,
+                                                ProviderSecondaryContactPhone = p.SecondaryContactPhone,
                                                 ProviderVenueTown = pv.Town,
                                                 ProviderVenuePostCode = pv.Postcode
                                             })

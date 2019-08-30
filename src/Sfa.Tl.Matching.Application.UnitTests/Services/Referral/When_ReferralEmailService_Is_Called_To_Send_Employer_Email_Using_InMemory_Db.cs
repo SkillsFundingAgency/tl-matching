@@ -170,13 +170,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_email") && tokens["employer_contact_email"] == opportunity.EmployerContactEmail),
                 Arg.Any<string>());
-
-            await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("employer_postcode") && tokens["employer_postcode"] == opportunity.Employer.Postcode),
-                Arg.Any<string>());
-
-
         }
 
         [Theory, AutoDomainData]
@@ -323,7 +316,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Pending.ToString());
             processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Processing.ToString());
             processStatus.Should().Be(BackgroundProcessHistoryStatus.Complete.ToString());
-
         }
 
         private static async Task<string> GetExpectedResult(OpportunityRepository repo, int opportunityId, IEnumerable<int> itemIds)
@@ -334,12 +326,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
             {
                 var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
-                var providers = string.Join(", ", data.ProviderAndVenueDetails.Select(dto => dto.CustomisedProviderDisplayName));
+                var providers = data.ProviderAndVenueDetails.Select(dto => dto.CustomisedProviderDisplayName);
 
                 sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
-                sb.AppendLine($"*Job role: {data.JobRole}");
-                sb.AppendLine($"*Students wanted: {placements}");
-                sb.AppendLine($"*Providers selected: {providers}");
+                sb.AppendLine($"* Job role: {data.JobRole}");
+                sb.AppendLine($"* Students wanted: {placements}");
+                sb.AppendLine($"* Providers selected:");
+
+                foreach (var providerAndVenue in data.ProviderAndVenueDetails)
+                {
+                    sb.AppendLine($"** {providerAndVenue.CustomisedProviderDisplayName}");
+                    sb.AppendLine($"Primary contact: {providerAndVenue.ProviderPrimaryContact} (Telephone: {providerAndVenue.ProviderPrimaryContactPhone}; Email: {providerAndVenue.ProviderPrimaryContactEmail})");
+                    sb.AppendLine($"Secondary contact: {providerAndVenue.ProviderSecondaryContact} (Telephone: {providerAndVenue.ProviderSecondaryContactPhone}; Email: {providerAndVenue.ProviderSecondaryContactEmail})");
+                    sb.AppendLine("");
+                }
+
                 sb.AppendLine("");
             }
 

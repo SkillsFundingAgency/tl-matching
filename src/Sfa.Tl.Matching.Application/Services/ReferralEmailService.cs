@@ -60,19 +60,29 @@ namespace Sfa.Tl.Matching.Application.Services
                     { "employer_contact_name", employerReferral.EmployerContact },
                     { "employer_business_name", employerReferral.CompanyName },
                     { "employer_contact_number", employerReferral.EmployerContactPhone },
-                    { "employer_contact_email", employerReferral.EmployerContactEmail },
-                    { "employer_postcode", employerReferral.Postcode }
+                    { "employer_contact_email", employerReferral.EmployerContactEmail }
                 };
 
                 foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
                 {
                     var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
-                    var providers = string.Join(", ", data.ProviderAndVenueDetails.Select(dto => dto.CustomisedProviderDisplayName));
 
                     sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
-                    sb.AppendLine($"*Job role: {data.JobRole}");
-                    sb.AppendLine($"*Students wanted: {placements}");
-                    sb.AppendLine($"*Providers selected: {providers}");
+                    sb.AppendLine($"* Job role: {data.JobRole}");
+                    sb.AppendLine($"* Students wanted: {placements}");
+                    sb.AppendLine($"* Providers selected:");
+
+                    foreach (var providerAndVenue in data.ProviderAndVenueDetails)
+                    {
+                        sb.AppendLine($"** {providerAndVenue.CustomisedProviderDisplayName}");
+                        sb.AppendLine($"Primary contact: {providerAndVenue.ProviderPrimaryContact} (Telephone: {providerAndVenue.ProviderPrimaryContactPhone}; Email: {providerAndVenue.ProviderPrimaryContactEmail})");
+
+                        if (!string.IsNullOrWhiteSpace(providerAndVenue.ProviderSecondaryContact))
+                        {
+                            sb.AppendLine($"Secondary contact: {providerAndVenue.ProviderSecondaryContact} (Telephone: {providerAndVenue.ProviderSecondaryContactPhone}; Email: {providerAndVenue.ProviderSecondaryContactEmail})");
+                        }
+                        sb.AppendLine("");
+                    }
                     sb.AppendLine("");
                 }
 

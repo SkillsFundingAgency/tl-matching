@@ -186,27 +186,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Postcode_Token()
+        public void Then_EmailService_SendEmail_Is_Called_With_Placements_List()
         {
-            _emailService
-                .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_postcode")
-                                  && tokens["employer_postcode"] == "AA1 1AA"),
-                    Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Venue_Postcode_Token()
-        {
-            const string expectedProvidersList = "# WorkplaceTown WorkplacePostcode\r\n"
-                                                 + "*Job role: Job Role\r\n"
-                                                 + "*Students wanted: 2\r\n"
-                                                 + "*Providers selected: Venue Name (part of Display Name)\r\n"
+            const string expectedPlacementsList = "# WorkplaceTown WorkplacePostcode\r\n"
+                                                 + "* Job role: Job Role\r\n"
+                                                 + "* Students wanted: 2\r\n"
+                                                 + "* Providers selected:\r\n"
+                                                 + "** Venue Name (part of Display Name)\r\n"
+                                                 + "Primary contact: Primary Contact (Telephone: 020 123 3210; Email: primary.contact@provider.ac.uk)\r\n"
+                                                 + "Secondary contact: Secondary Contact (Telephone: 021 456 0987; Email: secondary.contact@provider.ac.uk)\r\n"
+                                                 + "\r\n"
                                                  + "\r\n";
+
             _emailService
                 .Received(1)
                 .SendEmail(Arg.Any<string>(),
@@ -214,7 +205,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("placements_list")
-                                  && tokens["placements_list"] == expectedProvidersList),
+                                  && tokens["placements_list"] == expectedPlacementsList),
                     Arg.Any<string>());
         }
 

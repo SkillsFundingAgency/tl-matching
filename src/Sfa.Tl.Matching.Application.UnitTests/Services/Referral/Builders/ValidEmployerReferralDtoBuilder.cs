@@ -34,6 +34,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                             ProviderDisplayName = "Display Name",
                             ProviderVenueName = "Venue Name",
                             ProviderVenueTown = "ProviderTown",
+                            ProviderPrimaryContact = "Primary Contact",
+                            ProviderPrimaryContactEmail = "primary.contact@provider.ac.uk",
+                            ProviderPrimaryContactPhone = "020 123 3210",
+                            ProviderSecondaryContact = "Secondary Contact",
+                            ProviderSecondaryContactEmail = "secondary.contact@provider.ac.uk",
+                            ProviderSecondaryContactPhone = "021 456 0987",
                             ProviderVenuePostCode = "ProviderPostcode"
                         }
                     }
