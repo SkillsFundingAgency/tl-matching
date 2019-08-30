@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         [InlineData("tl-no-provider", "HadBadExperience", "", "You must tell us why the employer did not choose a provider", 0)]
         [InlineData("tl-no-provider", "ProvidersTooFarAway", "", "You must tell us why the employer did not choose a provider", 0)]
         [InlineData("tl-job-role", "JobRole", "A", "You must enter a job role using 2 or more characters", 1)]
-        [InlineData("tl-job-role", "JobRole", "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", "You must enter a job role that is 100 characters or fewer", 1)]
+        [InlineData("tl-job-role", "JobRole", "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVW", "You must enter a job role that is 100 characters or fewer", 1)]
         [InlineData("tl-placements-known", "PlacementsKnown", "", "You must tell us whether the employer knows how many students they want for this job at this location", 2)]
         [InlineData("tl-placements", "Placements", "", "You must estimate how many students the employer wants for this job at this location", 3)]
         [InlineData("tl-placements", "Placements", "0", "The number of students must be 1 or more", 3)]

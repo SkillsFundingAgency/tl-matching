@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
 
         [Theory]
         [InlineData("ShortTitle", "ShortTitle", "", "You must enter a short title", 0)]
-        [InlineData("shortTitleHidden", "ShortTitle", "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", "You must enter a short title that is 100 characters or fewer", 0)]
+        [InlineData("shortTitleHidden", "ShortTitle", "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVW", "You must enter a short title that is 100 characters or fewer", 0)]
         [InlineData("Routes_0__IsSelected", "Routes", "", "You must choose a skill area for this qualification", 1)]
         public async Task Then_Correct_Error_Message_Is_Displayed(string field, string fieldValMsg, string value, string errorMessage, int errorSummaryIndex)
         {
