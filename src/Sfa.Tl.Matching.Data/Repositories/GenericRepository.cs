@@ -218,6 +218,20 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return await queryable.Select(selector).FirstOrDefaultAsync();
         }
 
+        public async Task<T> GetLastOrDefault(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] navigationPropertyPath)
+        {
+            var queryable = GetQueryableWithIncludes(predicate, null, true, navigationPropertyPath);
+
+            return await queryable.LastOrDefaultAsync();
+        }
+
+        public async Task<TDto> GetLastOrDefault<TDto>(Expression<Func<T, bool>> predicate, Expression<Func<T, TDto>> selector, Expression<Func<T, object>> orderBy, bool asendingorder = true, params Expression<Func<T, object>>[] navigationPropertyPath)
+        {
+            var queryable = GetQueryableWithIncludes(predicate, orderBy, asendingorder, navigationPropertyPath);
+
+            return await queryable.Select(selector).LastOrDefaultAsync();
+        }
+
         public async Task<int> Count(Expression<Func<T, bool>> predicate = null)
         {
             return predicate != null ? await _dbContext.Set<T>().CountAsync(predicate) :

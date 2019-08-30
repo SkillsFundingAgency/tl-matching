@@ -6,56 +6,57 @@
 @section backButton{
     <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link" id="tl-back">Back</a>
 }
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            @if (Model.IsImportSuccessful)
-            {
-                <div class="tl-notification tl-notification--success">
-                    <p class="tl-notification__body">File uploaded successfully</p>
-                </div>
-            }
-            <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        </div>
-    </div>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
-                    <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
-                    <div class="govuk-error-summary__body">
-                        <ul class="govuk-list govuk-error-summary__list">
-                            <li><a sfa-validation-for="File"></a></li>
-                        </ul>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
 
-    <div class="govuk-grid-row">
-        <form asp-controller="DataImport" asp-action="Index" enctype="multipart/form-data" novalidate>
-            <div class="govuk-grid-column-two-thirds">
-                <div class="govuk-form-group" sfa-validation-for="File" sfa-validationerror-class="govuk-form-group--error">
-                    <label class="govuk-label govuk-!-font-weight-bold" for="file">
-                        Select the file
-                    </label>
-                    <span asp-validation-for="File" class="govuk-error-message"></span>
-                    <input asp-for="File" class="govuk-file-upload" type="file" accept=".xlsx,.csv">
-                </div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (Model.IsImportSuccessful)
+        {
+            <div class="tl-notification tl-notification--success">
+                <p class="tl-notification__body">File uploaded successfully</p>
             </div>
-            <div class="govuk-grid-column-two-thirds">
-                <div class="govuk-form-group">
-                    <label class="govuk-label govuk-!-font-weight-bold" asp-for="SelectedImportType">
-                        Choose file type
-                    </label>
-                    <select class="govuk-select" asp-for="SelectedImportType" asp-items="Model.ImportType"></select>
-                </div>
-            </div>
-            <div class="govuk-grid-column-two-thirds">
-                <div class="govuk-form-group">
-                    <button type="submit" class="govuk-button" id="tl-upload">Upload</button>
-                </div>
-            </div>
-        </form>
+        }
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
     </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li><a sfa-validation-for="File"></a></li>
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <form asp-controller="DataImport" asp-action="Index" enctype="multipart/form-data" novalidate>
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group" sfa-validation-for="File" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label govuk-!-font-weight-bold" for="file">
+                    Select the file
+                </label>
+                <span asp-validation-for="File" class="govuk-error-message"></span>
+                <input asp-for="File" class="govuk-file-upload" type="file" accept=".xlsx,.csv">
+            </div>
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-!-font-weight-bold" asp-for="SelectedImportType">
+                    Choose file type
+                </label>
+                <select class="govuk-select" asp-for="SelectedImportType" asp-items="Model.ImportType"></select>
+            </div>
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group">
+                <button type="submit" class="govuk-button" id="tl-upload">Upload</button>
+            </div>
+        </div>
+    </form>
+</div>

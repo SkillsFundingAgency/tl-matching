@@ -1,7 +1,8 @@
-﻿// ReSharper disable RedundantUsingDirective
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -9,6 +10,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
     [AllowAnonymous]
     public class HomeController : Controller
     {
+        private readonly IMaintenanceHistoryService _maintenanceHistoryService;
+
+        public HomeController(IMaintenanceHistoryService maintenanceHistoryService)
+        {
+            _maintenanceHistoryService = maintenanceHistoryService;
+        }
+
         public IActionResult Index()
         {
             if (HttpContext.User.Identity.IsAuthenticated)
@@ -48,6 +56,28 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Maintenance()
+        {
+            var viewModel = await _maintenanceHistoryService.GetLatestMaintenanceHistory();
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("Home/Maintenance")]
+        public async Task<IActionResult> SaveMaintenanceHistory(MaintenanceViewModel viewModel)
+        {
+            await _maintenanceHistoryService.SaveMaintenanceHistory(viewModel);
+
+            return RedirectToAction(nameof(Maintenance));
+        }
+
+        [Route("service-unavailable")]
+        public IActionResult ServiceUnavailable()
         {
             return View();
         }

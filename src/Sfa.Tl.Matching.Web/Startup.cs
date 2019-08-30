@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using AutoMapper;
-using DocumentFormat.OpenXml.Spreadsheet;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
@@ -87,9 +86,10 @@ namespace Sfa.Tl.Matching.Web
                     config.Filters.Add(new AuthorizeFilter(policy));
                 }
 
-                config.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                config.Filters.Add(new CustomExceptionFilterAttribute(_loggerFactory));
+                config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                config.Filters.Add<CustomExceptionFilterAttribute>();
                 config.Filters.Add(new SetBackLinkFilter(new List<string>()));
+                config.Filters.Add<ServiceUnavailableFilterAttribute>();
 
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -238,6 +238,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
+            services.AddTransient<IRepository<MaintenanceHistory>, GenericRepository<MaintenanceHistory>>();
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
@@ -266,6 +267,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
+            services.AddTransient<IMaintenanceHistoryService, MaintenanceHistoryService>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
