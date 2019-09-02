@@ -5,12 +5,13 @@
     ViewData["Title"] = "Select providers for this opportunity";
 }
 @section backButton{
-    <a asp-controller="Proximity" asp-action="Index" class="govuk-back-link" id="tl-back">Back</a>
+    @*<a asp-controller="Proximity" asp-action="Index" class="govuk-back-link" id="tl-back">Back</a>*@
+    <a sfa-backlink-for="@Model.OpportunityId" class="govuk-back-link" id="tl-back">Back</a>
     @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 
-@if (!ViewData.ModelState.IsValid && 
-     ViewData.ModelState.GetValidationState("SearchResults.Results[0].IsSelected") == ModelValidationState.Invalid)
+@if (!ViewData.ModelState.IsValid &&
+    ViewData.ModelState.GetValidationState("SearchResults.Results[0].IsSelected") == ModelValidationState.Invalid)
 {
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
         <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>

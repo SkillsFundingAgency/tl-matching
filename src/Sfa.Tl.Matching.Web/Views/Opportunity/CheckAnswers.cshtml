@@ -4,7 +4,8 @@
 }
 
 @section backButton{
-    <a asp-route="GetPlacementOrEmployer" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link" id="tl-back">Back</a>
+    @*<a asp-route="GetPlacementOrEmployer" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-back-link" id="tl-back">Back</a>*@
+    <a sfa-backlink-for="@Model.OpportunityId" class="govuk-back-link" id="tl-back">Back</a>
     @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 

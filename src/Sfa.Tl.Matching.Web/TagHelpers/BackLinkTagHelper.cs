@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.TagHelpers
 {
@@ -23,8 +22,13 @@ namespace Sfa.Tl.Matching.Web.TagHelpers
 
             ViewContext.HttpContext.Items.TryGetValue("Action", out var action);
 
-            if (action is List<string> backLinkList)
-                tagBuilder.Attributes.Add("href", $"{backLinkList.SkipLast(1).LastOrDefault()}");
+            if (action is CommandManager backLinkList)
+            {
+                var backLink = backLinkList.Undo();
+                var currLink = backLinkList.Redo();
+                
+                tagBuilder.Attributes.Add("href", $"{backLink.Result()}");
+            }
 
             output.MergeAttributes(tagBuilder);
         }

@@ -5,14 +5,15 @@
 }
 
 @section backButton{
-    <a class="govuk-back-link"
-       id="tl-back"
-       asp-route="GetProviderResults"
-       asp-route-opportunityId="@Model.OpportunityId"
-       asp-route-opportunityItemId="@Model.OpportunityItemId"
-       asp-route-searchRadius="@Model.SearchRadius"
-       asp-route-Postcode="@Model.Postcode"
-       asp-route-SelectedRouteId="@Model.RouteId">Back</a>
+    @*<a class="govuk-back-link"
+        id="tl-back"
+        asp-route="GetProviderResults"
+        asp-route-opportunityId="@Model.OpportunityId"
+        asp-route-opportunityItemId="@Model.OpportunityItemId"
+        asp-route-searchRadius="@Model.SearchRadius"
+        asp-route-Postcode="@Model.Postcode"
+        asp-route-SelectedRouteId="@Model.RouteId">Back</a>*@
+    <a sfa-backlink-for="@Model.OpportunityId" class="govuk-back-link" id="tl-back">Back</a>
     @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 

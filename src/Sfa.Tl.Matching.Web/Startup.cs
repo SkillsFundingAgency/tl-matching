@@ -24,7 +24,6 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Web.Extensions;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
@@ -38,7 +37,6 @@ using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Event;
 using Sfa.Tl.Matching.Web.Authorisation;
 using Sfa.Tl.Matching.Web.Filters;
-using Sfa.Tl.Matching.Web.TagHelpers;
 
 namespace Sfa.Tl.Matching.Web
 {
@@ -88,7 +86,7 @@ namespace Sfa.Tl.Matching.Web
 
                 config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
                 config.Filters.Add<CustomExceptionFilterAttribute>();
-                config.Filters.Add(new SetBackLinkFilter(new List<string>()));
+                config.Filters.Add(typeof(SetBackLinkFilter));
                 config.Filters.Add<ServiceUnavailableFilterAttribute>();
 
             })
@@ -210,6 +208,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
+            services.AddSingleton<CommandManager>();
+            
             RegisterNotificationsApi(services, MatchingConfiguration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);
             RegisterApplicationServices(services);

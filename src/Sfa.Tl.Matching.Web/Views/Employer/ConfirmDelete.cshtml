@@ -6,16 +6,17 @@
 
 
 @section backButton{
-<a class="govuk-back-link" asp-route="GetSavedEmployerOpportunity" id="tl-back">Back</a>
+    @*<a class="govuk-back-link" asp-route="GetSavedEmployerOpportunity" id="tl-back">Back</a>*@
+    <a sfa-backlink-for="@Model.OpportunityId" class="govuk-back-link" id="tl-back">Back</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        
+
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
         <p class="govuk-body">@Model.WarningDeleteText</p>
-        
+
         <a asp-route="DeleteEmployer" class="govuk-button tl-button--red" id="tl-confirm">@Model.SubmitActionText</a>
         <p class="govuk-body"><a asp-route="GetSavedEmployerOpportunity" class="govuk-link" id="tl-cancel">Cancel and go back</a></p>
     </div>
