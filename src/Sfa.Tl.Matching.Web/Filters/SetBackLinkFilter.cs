@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Web.Filters
         T Undo(T input);
         T Result();
     }
-    
+
     public class AddBackLinkCommand : ICommand<string>
     {
         private string Value { get; set; }
@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Filters
             var cmd = _undo.Pop();
             _redo.Push(cmd);
 
-            return _undo.Peek();
+            return UndoCount == 0 ? null : _undo.Peek();
 
         }
         public ICommand<string> Redo()
@@ -112,7 +112,7 @@ namespace Sfa.Tl.Matching.Web.Filters
             var cmd = _redo.Pop();
             _undo.Push(cmd);
 
-            return _undo.Peek();
+            return UndoCount == 0 ? null : _undo.Peek();
 
         }
     }

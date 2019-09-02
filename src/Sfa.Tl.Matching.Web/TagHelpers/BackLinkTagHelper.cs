@@ -26,8 +26,9 @@ namespace Sfa.Tl.Matching.Web.TagHelpers
             {
                 var backLink = backLinkList.Undo();
                 var currLink = backLinkList.Redo();
-                
-                tagBuilder.Attributes.Add("href", $"{backLink.Result()}");
+
+                if (backLink != null)
+                    tagBuilder.Attributes.Add("href", $"{backLink.Result()}");
             }
 
             output.MergeAttributes(tagBuilder);

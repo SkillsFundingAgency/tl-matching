@@ -39,9 +39,9 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             var companyName = documentHtml.GetElementById("companyNameHidden") as IHtmlInputElement;
             companyName.Value.Should().Be("Company Name");
 
-            var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
-            backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be($"/placement-information/{OpportunityItemId}");
+            //var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
+            //backLink.Text.Should().Be("Back");
+            //backLink.PathName.Should().Be($"/placement-information/{OpportunityItemId}");
 
             var continueButton = documentHtml.GetElementById("tl-continue") as IHtmlButtonElement;
             continueButton.TextContent.Should().Be("Continue");

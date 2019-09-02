@@ -42,9 +42,9 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
 
-            var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
-            backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be($"/who-is-employer/{OpportunityId}-{OpportunityItemId}");
+            //var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
+            //backLink.Text.Should().Be("Back");
+            //backLink.PathName.Should().Be($"/who-is-employer/{OpportunityId}-{OpportunityItemId}");
 
             var cancelLink = documentHtml.GetElementById("tl-finish") as IHtmlAnchorElement;
             cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");
