@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -223,25 +225,49 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
         }
 
+        public async Task<List<MatchingServiceOpportunityReportDto>> GetMatchingServiceOpportunityReportAsync()
+        {
+            return await QueryFromSqlAsync<MatchingServiceOpportunityReportDto>("MatchingServiceOpportunityReport.sql");
+        }
+
+        public async Task<List<MatchingServiceProviderOpportunityReportDto>> GetMatchingServiceProviderOpportunityReportAsync()
+        {
+            return await QueryFromSqlAsync<MatchingServiceProviderOpportunityReportDto>("MatchingServiceProviderOpportunityReport.sql");
+        }
+
+        private async Task<List<T>> QueryFromSqlAsync<T>(string sqlFileName) where T : class
+        {
+            string sqlCommnad;
+            var resourceName = $"{typeof(OpportunityRepository).Namespace}.{sqlFileName}";
+            using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            using (var streamReader = new StreamReader(templateStream ?? throw new InvalidOperationException($"Could not find {sqlFileName} file")))
+            {
+                sqlCommnad = streamReader.ReadToEnd();
+            }
+
+            return await _dbContext.Query<T>().FromSql(sqlCommnad).ToListAsync();
+        }
+
         public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
         {
             var dto = await (from o in _dbContext.Opportunity
-                join oi in _dbContext.OpportunityItem
-                    on o.Id equals oi.OpportunityId
-                where oi.IsCompleted 
-                      && !oi.EmployerFeedbackSent
-                      && oi.ModifiedOn.HasValue
-                      && oi.ModifiedOn.Value <= referralDate
-                      && o.OpportunityItem.Count(x => x.IsCompleted) == 1
-                      && oi.OpportunityType == OpportunityType.Referral.ToString()
-                select new EmployerFeedbackDto
-                {
-                    OpportunityId = o.Id,
-                    OpportunityItemId = oi.Id,
-                    EmployerContact = o.EmployerContact,
-                    EmployerContactEmail = o.EmployerContactEmail
-                }).ToListAsync();
-
+                             join oi in _dbContext.OpportunityItem
+                                 on o.Id equals oi.OpportunityId
+                             where oi.IsCompleted
+                                   && !oi.EmployerFeedbackSent
+                                   && oi.ModifiedOn.HasValue
+                                   && oi.ModifiedOn.Value <= referralDate
+                                   && o.OpportunityItem.Count(x => x.IsCompleted) == 1
+                                   && o.OpportunityItem.Count(x => x.IsSaved) == 1
+                                   && oi.OpportunityType == OpportunityType.Referral.ToString()
+                             select new EmployerFeedbackDto
+                             {
+                                 OpportunityId = o.Id,
+                                 OpportunityItemId = oi.Id,
+                                 EmployerContact = o.EmployerContact,
+                                 EmployerContactEmail = o.EmployerContactEmail
+                             }).ToListAsync();
+            
             return dto;
         }
 

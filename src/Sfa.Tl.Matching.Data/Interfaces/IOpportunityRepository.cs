@@ -15,5 +15,7 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<OpportunityReportDto> GetPipelineOpportunitiesAsync(int opportunityId);
         int GetEmployerOpportunityCount(int opportunityId);
         Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate);
+        Task<List<MatchingServiceOpportunityReportDto>> GetMatchingServiceOpportunityReportAsync();
+        Task<List<MatchingServiceProviderOpportunityReportDto>> GetMatchingServiceProviderOpportunityReportAsync();
     }
 }

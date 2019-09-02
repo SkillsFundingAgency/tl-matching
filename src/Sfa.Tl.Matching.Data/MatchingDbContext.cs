@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Data
 {
@@ -31,5 +32,8 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Referral> Referral { get; set; }
         public virtual DbSet<Route> Route { get; set; }
         public virtual DbSet<FunctionLog> FunctionLog { get; set; }
+
+        public DbQuery<MatchingServiceOpportunityReportDto> ServiceOpportunityReport { get; set; }
+        public DbQuery<MatchingServiceProviderOpportunityReportDto> ServiceProviderOpportunityReport { get; set; }
     }
 }
