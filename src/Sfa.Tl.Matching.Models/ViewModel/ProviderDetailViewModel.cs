@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         [Required(ErrorMessage = "You must tell us who the primary contact is for industry placements")]
         [MinLength(2, ErrorMessage = "You must enter a contact name using 2 or more characters")]
-        [MaxLength(99, ErrorMessage = "You must enter a contact name that is 100 characters or fewer")]
+        [MaxLength(100, ErrorMessage = "You must enter a contact name that is 100 characters or fewer")]
         [RegularExpression(@"^(?!^\d+$)^.+$", ErrorMessage = "You must enter a contact name using letters")]
         public string PrimaryContact { get; set; }
 
@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string PrimaryContactPhone { get; set; }
 
         [MinLength(2, ErrorMessage = "You must enter a contact name using 2 or more characters")]
-        [MaxLength(99, ErrorMessage = "You must enter a contact name that is 100 characters or fewer")]
+        [MaxLength(100, ErrorMessage = "You must enter a contact name that is 100 characters or fewer")]
         [RegularExpression(@"^(?!^\d+$)^.+$", ErrorMessage = "You must enter a contact name using letters")]
         public string SecondaryContact { get; set; }
 
