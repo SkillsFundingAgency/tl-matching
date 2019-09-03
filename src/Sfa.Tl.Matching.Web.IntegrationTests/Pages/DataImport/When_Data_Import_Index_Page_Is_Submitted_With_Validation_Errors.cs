@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Io.Dom;
 using FluentAssertions;
@@ -63,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.DataImport
             Assert.Null(response.Headers.Location?.OriginalString);
         }
 
-        private static void AssertError(IHtmlDocument responseContent, string field, string errorMessage)
+        private static void AssertError(IParentNode responseContent, string field, string errorMessage)
         {
             var input = responseContent.QuerySelector($"#{field}");
             var div = input.ParentElement;
