@@ -193,7 +193,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("venue_text")
-                                  && tokens["venue_text"] == "at Venue name (part of Provider display name) in Venuetown AA2 2AA"),
+                                  && tokens["venue_text"] == "at Venue name in Venuetown AA2 2AA"),
                     Arg.Any<string>());
         }
 

@@ -36,7 +36,8 @@ namespace Sfa.Tl.Matching.Models.Dto
             {
                 var venueText = string.Empty;
                 if (ProviderVenueName != ProviderVenuePostcode)
-                    venueText = $"at {ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, ProviderVenuePostcode, ProviderDisplayName)} ";
+                    venueText =
+                        $"at {ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, ProviderVenuePostcode, ProviderDisplayName, false)} ";
 
                 venueText += $"in {ProviderVenueTown} {ProviderVenuePostcode}";
 
