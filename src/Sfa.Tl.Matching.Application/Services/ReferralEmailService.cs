@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Humanizer;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -70,18 +72,19 @@ namespace Sfa.Tl.Matching.Application.Services
                     sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
                     sb.AppendLine($"* Job role: {data.JobRole}");
                     sb.AppendLine($"* Students wanted: {placements}");
-                    sb.AppendLine($"* Providers selected:");
 
+                    var count = 1;
                     foreach (var providerAndVenue in data.ProviderAndVenueDetails)
                     {
-                        sb.AppendLine($"** {providerAndVenue.CustomisedProviderDisplayName}");
+                        sb.AppendLine($"* {count.ToOrdinalWords().ToTitleCase()} provider selected: {providerAndVenue.CustomisedProviderDisplayName}");
                         sb.AppendLine($"Primary contact: {providerAndVenue.ProviderPrimaryContact} (Telephone: {providerAndVenue.ProviderPrimaryContactPhone}; Email: {providerAndVenue.ProviderPrimaryContactEmail})");
 
                         if (!string.IsNullOrWhiteSpace(providerAndVenue.ProviderSecondaryContact))
                         {
                             sb.AppendLine($"Secondary contact: {providerAndVenue.ProviderSecondaryContact} (Telephone: {providerAndVenue.ProviderSecondaryContactPhone}; Email: {providerAndVenue.ProviderSecondaryContactEmail})");
                         }
-                        sb.AppendLine("");
+
+                        count++;
                     }
                     sb.AppendLine("");
                 }
@@ -93,7 +96,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
                     BackgroundProcessHistoryStatus.Complete, username);
-
             }
             catch (Exception ex)
             {

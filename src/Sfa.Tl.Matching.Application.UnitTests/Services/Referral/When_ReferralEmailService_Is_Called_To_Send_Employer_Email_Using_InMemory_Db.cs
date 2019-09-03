@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using AutoMapper;
 using FluentAssertions;
+using Humanizer;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
@@ -53,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi=>oi.Id), backgroundProcessHistory.Id, "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -145,7 +147,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id),  backgroundProcessHistory.Id, "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -303,7 +305,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
 
             //Act
-            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id),  backgroundProcessHistory.Id, "System");
+            await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
             await emailService.Received(1).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -326,19 +328,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
             {
                 var placements = GetNumberOfPlacements(data.PlacementsKnown, data.Placements);
-                var providers = data.ProviderAndVenueDetails.Select(dto => dto.CustomisedProviderDisplayName);
 
                 sb.AppendLine($"# {data.WorkplaceTown} {data.WorkplacePostcode}");
                 sb.AppendLine($"* Job role: {data.JobRole}");
                 sb.AppendLine($"* Students wanted: {placements}");
-                sb.AppendLine($"* Providers selected:");
 
+                var count = 1;
                 foreach (var providerAndVenue in data.ProviderAndVenueDetails)
                 {
-                    sb.AppendLine($"** {providerAndVenue.CustomisedProviderDisplayName}");
+                    sb.AppendLine($"* {count.ToOrdinalWords().ToTitleCase()} provider selected: {providerAndVenue.CustomisedProviderDisplayName}");
                     sb.AppendLine($"Primary contact: {providerAndVenue.ProviderPrimaryContact} (Telephone: {providerAndVenue.ProviderPrimaryContactPhone}; Email: {providerAndVenue.ProviderPrimaryContactEmail})");
                     sb.AppendLine($"Secondary contact: {providerAndVenue.ProviderSecondaryContact} (Telephone: {providerAndVenue.ProviderSecondaryContactPhone}; Email: {providerAndVenue.ProviderSecondaryContactEmail})");
-                    sb.AppendLine("");
+                    count++;
                 }
 
                 sb.AppendLine("");
