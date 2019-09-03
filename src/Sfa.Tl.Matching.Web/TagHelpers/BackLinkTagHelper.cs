@@ -18,20 +18,20 @@ namespace Sfa.Tl.Matching.Web.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var tagBuilder = new TagBuilder("a");
+            //var tagBuilder = new TagBuilder("a");
 
-            ViewContext.HttpContext.Items.TryGetValue("Action", out var action);
+            //ViewContext.HttpContext.Items.TryGetValue("Action", out var action);
 
-            if (action is CommandManager backLinkList)
-            {
-                var backLink = backLinkList.Undo();
-                var currLink = backLinkList.Redo();
+            //if (action is NavigationManager backLinkList)
+            //{
+            //    var backLink = backLinkList.Undo();
+            //    var currLink = backLinkList.Redo();
 
-                if (backLink != null)
-                    tagBuilder.Attributes.Add("href", $"{backLink.Result()}");
-            }
+            //    if (backLink != null)
+            //        tagBuilder.Attributes.Add("href", $"{backLink.Result()}");
+            //}
 
-            output.MergeAttributes(tagBuilder);
+            //output.MergeAttributes(tagBuilder);
         }
     }
 }

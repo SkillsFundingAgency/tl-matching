@@ -7,7 +7,7 @@
 
 @section backButton{
     @*<a class="govuk-back-link" asp-route="GetSavedEmployerOpportunity" id="tl-back">Back</a>*@
-    <a sfa-backlink-for="@Model.OpportunityId" class="govuk-back-link" id="tl-back">Back</a>
+    <a asp-route="GetBackLink" class="govuk-back-link" id="tl-back">Back</a>
 }
 
 <div class="govuk-grid-row">

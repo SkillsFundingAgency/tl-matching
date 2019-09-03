@@ -207,7 +207,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
-            services.AddSingleton<CommandManager>();
+            services.AddSingleton<NavigationManager>();
             
             RegisterNotificationsApi(services, MatchingConfiguration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);

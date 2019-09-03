@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -74,6 +75,21 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
             return RedirectToRoute("GetSavedEmployerOpportunity");
+        }
+
+        [HttpGet]
+        [Route("get-back-link", Name = "GetBackLink")]
+        public IActionResult BackLink()
+        {
+            HttpContext.Items.TryGetValue("Action", out var action);
+
+            if (action is NavigationManager backLinkList)
+            {
+                var backLink = backLinkList.Undo();
+                return Redirect(backLink.Result());
+            }
+
+            return null;
         }
     }
 }

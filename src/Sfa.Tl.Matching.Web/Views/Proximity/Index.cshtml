@@ -5,7 +5,7 @@
 
 @section backButton{
 
-    <a sfa-backlink-for="OpportunityId" class="govuk-back-link" id="tl-back">Back</a>
+    <a asp-route="GetBackLink" class="govuk-back-link" id="tl-back">Back</a>
 
     @*@await Component.InvokeAsync("Back",
         new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })*@

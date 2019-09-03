@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Sfa.Tl.Matching.Web.Filters
 {
     public class SetBackLinkFilter : IActionFilter
     {
-        private readonly CommandManager _urlList;
+        private readonly NavigationManager _urlList;
 
-        public SetBackLinkFilter(CommandManager urlList)
+        public SetBackLinkFilter(NavigationManager urlList)
         {
             _urlList = urlList;
         }
@@ -17,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.Filters
 
             var path = context.HttpContext.Request.Path.ToString();
 
-            if (path != "/referral-create")
+            if (!ExcludedUrls.ExcludedList.Any(path.Contains)  )
                 _urlList.Do(new AddBackLinkCommand(path), path);
 
             context.HttpContext.Items.Add("Action", _urlList);
@@ -28,6 +29,17 @@ namespace Sfa.Tl.Matching.Web.Filters
         {
 
         }
+    }
+
+    public class ExcludedUrls
+    {
+        public static List<string> ExcludedList = new List<string>
+        {
+            "referral-create",
+            "get-back-link",
+            "404",
+            "employer-search"
+        };
     }
 
     public interface ICommand<T>
@@ -63,7 +75,7 @@ namespace Sfa.Tl.Matching.Web.Filters
         }
     }
 
-    public class CommandManager
+    public class NavigationManager
     {
         private Stack<ICommand<string>> _undo;
         private Stack<ICommand<string>> _redo;
@@ -72,7 +84,7 @@ namespace Sfa.Tl.Matching.Web.Filters
 
         public int RedoCount => _redo.Count;
 
-        public CommandManager()
+        public NavigationManager()
         {
             Reset();
         }
