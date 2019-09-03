@@ -126,7 +126,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     var tokens = new Dictionary<string, string>
                     {
                         { "contact_name", referral.ProviderPrimaryContact },
-                        { "provider_name", referral.ProviderName },
+                        { "provider_name", referral.ProviderDisplayName },
                         { "route", referral.RouteName.ToLowerInvariant() },
                         { "venue_text", referral.VenueText },
                         { "search_radius", referral.DistanceFromEmployer },

@@ -37,7 +37,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             
-
             backgroundProcessHistoryRepo.GetSingleOrDefault(
                 Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
             {
@@ -166,7 +165,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("provider_name")
-                        && tokens["provider_name"] == "Provider"),
+                        && tokens["provider_name"] == "Provider display name"),
                     Arg.Any<string>());
         }
 
