@@ -21,6 +21,9 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<MaintenanceViewModel> GetLatestMaintenanceHistory()
         {
             var maintenanceHistory = await _maintenanceHistoryRepository.GetLastOrDefault(mh => true);
+            if (maintenanceHistory == null)
+                return new MaintenanceViewModel();
+
             var viewModel = _mapper.Map<MaintenanceHistory, MaintenanceViewModel>(maintenanceHistory);
 
             return viewModel;
