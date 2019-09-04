@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -11,10 +13,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class NavigationController : Controller
     {
         private readonly IOpportunityService _opportunityService;
-
-        public NavigationController(IOpportunityService opportunityService)
+        private readonly IBackLinkService _backLinkService;
+        
+        public NavigationController(IOpportunityService opportunityService, IBackLinkService backLinkService)
         {
             _opportunityService = opportunityService;
+            _backLinkService = backLinkService;
         }
 
         [HttpGet]
@@ -79,17 +83,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("get-back-link", Name = "GetBackLink")]
-        public IActionResult BackLink()
+        public async Task<IActionResult> BackLink()
         {
-            HttpContext.Items.TryGetValue("Action", out var action);
-
-            if (action is NavigationManager backLinkList)
-            {
-                var backLink = backLinkList.GetPrevLink();
-                return Redirect(backLink.BackLinkUrl());
-            }
-
-            return null;
+            return Redirect(await _backLinkService.GetBackLink(HttpContext.User.GetUserName()));
         }
     }
 }

@@ -208,6 +208,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
             services.AddSingleton<NavigationManager>();
+            services.AddTransient<IBackLinkService, BackLinkService>();
+            services.AddTransient<IBackLinkRepository, BackLinkHistoryRepository>();
 
             RegisterNotificationsApi(services, MatchingConfiguration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);

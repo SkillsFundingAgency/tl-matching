@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Filters;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
@@ -15,9 +16,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
         public When_Navigation_Controller_With_Items_Remove_And_Get_OpportunityBasket()
         {
             var opportunityService = Substitute.For<IOpportunityService>();
+            var backLinkService = Substitute.For<IBackLinkService>();
+
             opportunityService.GetSavedOpportunityItemCountAsync(Arg.Any<int>()).Returns(Task.FromResult(1));
 
-            var navigationController = new NavigationController(opportunityService);
+            var navigationController = new NavigationController(opportunityService, backLinkService);
 
             _result = navigationController.RemoveOpportunityItemAndGetOpportunityBasket(1, 2).GetAwaiter().GetResult();
         }

@@ -33,6 +33,7 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Route> Route { get; set; }
         public virtual DbSet<FunctionLog> FunctionLog { get; set; }
         public virtual DbSet<MaintenanceHistory> MaintenanceHistory { get; set; }
+        public virtual DbSet<BackLinkHistory> BackLinkHistory { get; set; }
 
         public DbQuery<MatchingServiceOpportunityReportDto> ServiceOpportunityReport { get; set; }
         public DbQuery<MatchingServiceProviderOpportunityReportDto> ServiceProviderOpportunityReport { get; set; }
