@@ -60,6 +60,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View();
         }
 
+        [Route("service-under-maintenance", Name = "ServiceUnderMaintenance")]
         public async Task<IActionResult> Maintenance()
         {
             var viewModel = await _maintenanceHistoryService.GetLatestMaintenanceHistory();
@@ -68,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Home/Maintenance")]
+        [Route("service-under-maintenance", Name = "ServiceUnderMaintenance")]
         public async Task<IActionResult> SaveMaintenanceHistory(MaintenanceViewModel viewModel)
         {
             await _maintenanceHistoryService.SaveMaintenanceHistory(viewModel);
