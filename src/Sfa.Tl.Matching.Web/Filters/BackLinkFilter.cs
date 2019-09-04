@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -44,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.Filters
             _backLinkRepository = backLinkRepository;
         }
 
-        public async Task AddCurrentUrl(FilterContext context)
+        public async Task AddCurrentUrl(ActionContext context)
         {
             if (context.HttpContext.Request.Method != "GET") return;
 
@@ -73,7 +74,19 @@ namespace Sfa.Tl.Matching.Web.Filters
             return backLink.CurrentUrl;
         }
 
-        private async Task AddUrlToBackLinkHistory(FilterContext context, BackLinkHistoryDto dto)
+        public async Task<string> GetBackLinkPlacementInformation(string username)
+        {
+            var backLinkItems = _backLinkRepository.GetMany(bl => bl.CreatedBy == username && bl.CurrentUrl.Contains("provider-results-for-opportunity"))
+                .OrderByDescending(bl => bl.Id);
+
+            await _backLinkRepository.DeleteMany(backLinkItems.ToList());
+
+            //var backLink = await _backLinkRepository.GetLastOrDefault(bl => bl.CreatedBy == username);
+
+            return await GetBackLink(username);
+        }
+
+        private async Task AddUrlToBackLinkHistory(ActionContext context, BackLinkHistoryDto dto)
         {
             var backlinkHistoryItem = _mapper.Map<BackLinkHistory>(dto);
             var items = _backLinkRepository.GetMany(x =>
@@ -83,21 +96,23 @@ namespace Sfa.Tl.Matching.Web.Filters
                 await _backLinkRepository.Create(backlinkHistoryItem);
         }
 
-        private void DeleteOrphanedUrls(FilterContext context, string path)
+        private void DeleteOrphanedUrls(ActionContext context, string path)
         {
+            if (path != "/Start" && !path.Contains("employer-opportunities")) return;
+
             var items = _backLinkRepository.GetMany(x =>
                 x.CreatedBy == context.HttpContext.User.GetUserName());
 
-            if (path == "/Start" || path.Contains("employer-opportunities"))
-                _backLinkRepository.DeleteMany(items.ToList()).GetAwaiter().GetResult();
+            _backLinkRepository.DeleteMany(items.ToList()).GetAwaiter().GetResult();
         }
 
     }
 
     public interface IBackLinkService
     {
-        Task AddCurrentUrl(FilterContext context);
+        Task AddCurrentUrl(ActionContext context);
         Task<string> GetBackLink(string username);
+        Task<string> GetBackLinkPlacementInformation(string username);
     }
 
     public class ExcludedUrls

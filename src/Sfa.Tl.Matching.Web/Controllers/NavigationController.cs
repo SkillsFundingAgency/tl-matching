@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -84,6 +85,25 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> BackLink()
         {
             return Redirect(await _backLinkService.GetBackLink(HttpContext.User.GetUserName()));
+        }
+
+        [HttpGet]
+        [Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{SearchRadius}/{Postcode}/{SelectedRouteId}", Name = "GetBackLinkForSearchResults")]
+        public async Task<IActionResult> BackLink(SearchParametersViewModel viewModel)
+        {
+            var prevUrl = await _backLinkService.GetBackLinkPlacementInformation(HttpContext.User.GetUserName());
+
+            if (prevUrl.Contains("check-answers")) return Redirect(prevUrl);
+
+            return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
+            {
+                SelectedRouteId = viewModel.SelectedRouteId,
+                Postcode = viewModel.Postcode,
+                SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
+                OpportunityId = viewModel.OpportunityId,
+                OpportunityItemId = viewModel.OpportunityItemId,
+                CompanyNameWithAka = viewModel.CompanyNameWithAka
+            });
         }
 
     }
