@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Home
 
             var client = _factory.CreateClient();
 
-            var response = await client.GetAsync("/Home/Maintenance");
+            var response = await client.GetAsync("/service-under-maintenance");
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html; charset=utf-8",
