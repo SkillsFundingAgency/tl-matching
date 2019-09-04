@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web
 
                 config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
                 config.Filters.Add<CustomExceptionFilterAttribute>();
-                config.Filters.Add(typeof(SetBackLinkFilter));
+                config.Filters.Add<SetBackLinkFilter>();
                 config.Filters.Add<ServiceUnavailableFilterAttribute>();
 
             })
@@ -208,7 +208,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
             services.AddSingleton<NavigationManager>();
-            
+
             RegisterNotificationsApi(services, MatchingConfiguration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);
             RegisterApplicationServices(services);

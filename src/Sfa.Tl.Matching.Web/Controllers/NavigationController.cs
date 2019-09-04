@@ -85,8 +85,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (action is NavigationManager backLinkList)
             {
-                var backLink = backLinkList.Undo();
-                return Redirect(backLink.Result());
+                var backLink = backLinkList.GetPrevLink();
+                return Redirect(backLink.BackLinkUrl());
             }
 
             return null;

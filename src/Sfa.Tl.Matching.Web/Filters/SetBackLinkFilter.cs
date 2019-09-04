@@ -45,8 +45,8 @@ namespace Sfa.Tl.Matching.Web.Filters
     public interface ICommand<T>
     {
         T Do(T input);
-        T Undo(T input);
-        T Result();
+        T GetPrevLink(T input);
+        T BackLinkUrl();
     }
 
     public class AddBackLinkCommand : ICommand<string>
@@ -63,13 +63,13 @@ namespace Sfa.Tl.Matching.Web.Filters
             return Value;
         }
 
-        public string Undo(string input)
+        public string GetPrevLink(string input)
         {
             Value = input;
             return Value;
         }
 
-        public string Result()
+        public string BackLinkUrl()
         {
             return Value;
         }
@@ -77,12 +77,12 @@ namespace Sfa.Tl.Matching.Web.Filters
 
     public class NavigationManager
     {
-        private Stack<ICommand<string>> _undo;
-        private Stack<ICommand<string>> _redo;
+        private Stack<ICommand<string>> _prevLink;
+        private Stack<ICommand<string>> _currLink;
 
-        public int UndoCount => _undo.Count;
+        public int UndoCount => _prevLink.Count;
 
-        public int RedoCount => _redo.Count;
+        public int RedoCount => _currLink.Count;
 
         public NavigationManager()
         {
@@ -90,42 +90,41 @@ namespace Sfa.Tl.Matching.Web.Filters
         }
         public void Reset()
         {
-            _undo = new Stack<ICommand<string>>();
-            _redo = new Stack<ICommand<string>>();
+            _prevLink = new Stack<ICommand<string>>();
+            _currLink = new Stack<ICommand<string>>();
         }
 
         public string Do(ICommand<string> cmd, string input)
         {
             var output = cmd.Do(input);
 
-            if (_undo.Count > 0 && _undo.Peek().Result() == input) return output;
+            if (_prevLink.Count > 0 && _prevLink.Peek().BackLinkUrl() == input) return output;
 
-            _undo.Push(cmd);
+            _prevLink.Push(cmd);
 
-            _redo.Clear();
+            _currLink.Clear();
 
             return output;
         }
 
-        public ICommand<string> Undo()
+        public ICommand<string> GetPrevLink()
         {
-            if (_undo.Count <= 0) return null;
+            if (_prevLink.Count <= 0) return null;
 
-            var cmd = _undo.Pop();
-            _redo.Push(cmd);
+            var cmd = _prevLink.Pop();
+            _currLink.Push(cmd);
 
-            return UndoCount == 0 ? null : _undo.Peek();
+            return UndoCount == 0 ? null : _prevLink.Peek();
 
         }
-        public ICommand<string> Redo()
+        public ICommand<string> GetCurrLink()
         {
-            if (_redo.Count <= 0) return null;
+            if (_currLink.Count <= 0) return null;
 
-            var cmd = _redo.Pop();
-            _undo.Push(cmd);
+            var cmd = _currLink.Pop();
+            _prevLink.Push(cmd);
 
-            return UndoCount == 0 ? null : _undo.Peek();
-
+            return UndoCount == 0 ? null : _prevLink.Peek();
         }
     }
 }
