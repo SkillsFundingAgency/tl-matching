@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public BackLinkHistoryMapper()
         {
             CreateMap<BackLinkHistoryDto, BackLinkHistory>()
-                .ForMember(m => m.Link, config => config.MapFrom(s => s.Link))
+                .ForMember(m => m.CurrentUrl, config => config.MapFrom(s => s.CurrentUrl))
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<BackLinkHistoryDto, BackLinkHistory>>())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<BackLinkHistoryDto, BackLinkHistory>>())

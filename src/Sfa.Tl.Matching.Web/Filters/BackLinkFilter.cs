@@ -10,12 +10,12 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Web.Filters
 {
-    public class SetBackLinkFilter : IActionFilter
+    public class BackLinkFilter : IActionFilter
     {
         private readonly IBackLinkService _backLinkService;
 
 
-        public SetBackLinkFilter(IBackLinkService backLinkService)
+        public BackLinkFilter(IBackLinkService backLinkService)
         {
             _backLinkService = backLinkService;
 
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.Filters
 
                 await AddUrlToBackLinkHistory(context, new BackLinkHistoryDto
                 {
-                    Link = path
+                    CurrentUrl = path
                 });
             }
         }
@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Web.Filters
 
             var backLink = await _backLinkRepository.GetLastOrDefault(bl => bl.CreatedBy == username);
 
-            return backLink.Link;
+            return backLink.CurrentUrl;
         }
 
         private async Task AddUrlToBackLinkHistory(FilterContext context, BackLinkHistoryDto dto)
@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Web.Filters
             var items = _backLinkRepository.GetMany(x =>
                 x.CreatedBy == context.HttpContext.User.GetUserName()).OrderByDescending(x => x.Id);
 
-            if(items.FirstOrDefault()?.Link != dto.Link)
+            if(items.FirstOrDefault()?.CurrentUrl != dto.CurrentUrl)
                 await _backLinkRepository.Create(backlinkHistoryItem);
         }
 

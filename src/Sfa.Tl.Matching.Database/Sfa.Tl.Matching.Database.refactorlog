@@ -49,4 +49,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="JobRole" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="a484cf9a-60c6-446c-a8a2-c8892598279b" ChangeDateTime="09/04/2019 13:20:01">
+    <Property Name="ElementName" Value="[dbo].[BackLinkHistory].[Link]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[BackLinkHistory]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Current" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c2794da5-2567-4787-a651-686c10fb71da" ChangeDateTime="09/04/2019 13:20:10">
+    <Property Name="ElementName" Value="[dbo].[BackLinkHistory].[Current]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[BackLinkHistory]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CurrentUrl" />
+  </Operation>
 </Operations>

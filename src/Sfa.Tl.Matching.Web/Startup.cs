@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web
 
                 config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
                 config.Filters.Add<CustomExceptionFilterAttribute>();
-                config.Filters.Add<SetBackLinkFilter>();
+                config.Filters.Add<BackLinkFilter>();
                 config.Filters.Add<ServiceUnavailableFilterAttribute>();
 
             })
