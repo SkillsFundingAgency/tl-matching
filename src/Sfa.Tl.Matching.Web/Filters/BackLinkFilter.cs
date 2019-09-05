@@ -1,18 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 
 namespace Sfa.Tl.Matching.Web.Filters
 {
     public class BackLinkFilter : IActionFilter
     {
+        private readonly ILogger<BackLinkFilter> _logger;
         private readonly IBackLinkService _backLinkService;
 
 
-        public BackLinkFilter(IBackLinkService backLinkService)
+        public BackLinkFilter(ILogger<BackLinkFilter> logger, IBackLinkService backLinkService)
         {
+            _logger = logger;
             _backLinkService = backLinkService;
-
         }
         public void OnActionExecuting(ActionExecutingContext context)
         {
@@ -21,9 +24,15 @@ namespace Sfa.Tl.Matching.Web.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (context.HttpContext.Request.Method != "GET") return;
-
-            _backLinkService.AddCurrentUrl(context);
+            try
+            {
+                _backLinkService.AddCurrentUrl(context);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, exception.Message);
+            }
+            
         }
     }
 
