@@ -34,8 +34,16 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<FunctionLog> FunctionLog { get; set; }
         public virtual DbSet<MaintenanceHistory> MaintenanceHistory { get; set; }
         public virtual DbSet<BackLinkHistory> BackLinkHistory { get; set; }
-
+        public virtual DbSet<UserCache> UserCache { get; set; }
         public DbQuery<MatchingServiceOpportunityReportDto> ServiceOpportunityReport { get; set; }
         public DbQuery<MatchingServiceProviderOpportunityReportDto> ServiceProviderOpportunityReport { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserCache>()
+                .Property(b => b.UrlHistory).HasColumnName("Value");
+        }
     }
+
+    
 }
