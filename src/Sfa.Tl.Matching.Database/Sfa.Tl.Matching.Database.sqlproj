@@ -102,6 +102,7 @@
     <None Include="PostDeployment\Update Qualification Title length.sql" />
     <None Include="PostDeployment\Backfill Employer Feedback Sent.sql" />
     <Build Include="Tables\UserCache.sql" />
+    <Build Include="Tables\BackLinkHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
