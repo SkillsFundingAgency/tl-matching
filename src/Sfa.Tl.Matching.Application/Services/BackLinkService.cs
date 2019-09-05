@@ -92,13 +92,16 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             "/page-not-found",
             "/Account/PostSignIn",
+            "Account/SignIn",
+            "Account/SignOut",
             "referral-create",
             "get-back-link",
             "404",
             "employer-search",
             "saved-opportunities",
             "download-opportunity",
-            "remove-opportunityItem"
+            "remove-opportunityItem",
+            "service-under-maintenance"
         };
     }
 }
