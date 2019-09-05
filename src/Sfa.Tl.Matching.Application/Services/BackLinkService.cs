@@ -51,8 +51,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var backLinkItems = _backLinkRepository.GetMany(bl => bl.CreatedBy == username)
                 .OrderByDescending(bl => bl.Id).FirstOrDefault();
 
-            await _backLinkRepository.DeleteMany(_backLinkRepository
-                .GetMany(x => x.CreatedBy == username && x.CurrentUrl == backLinkItems.CurrentUrl).ToList());
+            await _backLinkRepository.Delete(backLinkItems);
 
             var backLink = await _backLinkRepository.GetLastOrDefault(bl => bl.CreatedBy == username);
 
@@ -77,14 +76,18 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var backlinkHistoryItem = _mapper.Map<BackLinkHistory>(dto);
 
-            await _backLinkRepository.Create(backlinkHistoryItem);
+            var items = _backLinkRepository.GetMany(x =>
+                x.CreatedBy == context.HttpContext.User.GetUserName()).OrderByDescending(x => x.Id);
+
+            if (items.FirstOrDefault()?.CurrentUrl != dto.CurrentUrl)
+                await _backLinkRepository.Create(backlinkHistoryItem);
         }
 
         private async Task DeleteOrphanedUrls()
         {
-            var prevDate = DateTime.Today.AddDays(-1);
+            var prevDate = DateTime.UtcNow.AddDays(-1);
 
-            var items = _backLinkRepository.GetMany(x => x.CreatedOn <= prevDate);
+            var items = _backLinkRepository.GetMany(x => x.CreatedOn.Date <= prevDate);
 
             if (items.Any()) await _backLinkRepository.DeleteMany(items.ToList());
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 
@@ -7,7 +8,7 @@ namespace Sfa.Tl.Matching.Data
     // ReSharper disable UnusedMember.Global
     public class MatchingDbContext : DbContext
     {
-        public MatchingDbContext(DbContextOptions options)
+        public MatchingDbContext(DbContextOptions<MatchingDbContext> options)
             : base(options)
         {
         }
@@ -33,16 +34,9 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Route> Route { get; set; }
         public virtual DbSet<FunctionLog> FunctionLog { get; set; }
         public virtual DbSet<MaintenanceHistory> MaintenanceHistory { get; set; }
-        public virtual DbSet<BackLinkHistory> BackLinkHistory { get; set; }
-        public virtual DbSet<UserCache> UserCache { get; set; }
         public DbQuery<MatchingServiceOpportunityReportDto> ServiceOpportunityReport { get; set; }
         public DbQuery<MatchingServiceProviderOpportunityReportDto> ServiceProviderOpportunityReport { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<UserCache>()
-                .Property(b => b.UrlHistory).HasColumnName("Value");
-        }
     }
 
     

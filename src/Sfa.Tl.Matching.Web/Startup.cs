@@ -194,7 +194,12 @@ namespace Sfa.Tl.Matching.Web
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(MatchingConfiguration.SqlConnectionString,
                     builder => builder.UseNetTopologySuite()
-                                      .EnableRetryOnFailure()), ServiceLifetime.Transient);
+                                      .EnableRetryOnFailure()));
+
+            services.AddDbContext<UserCacheDbContext>(options =>
+                options.UseSqlServer(MatchingConfiguration.SqlConnectionString,
+                    builder => builder.UseNetTopologySuite()
+                        .EnableRetryOnFailure()));
 
             //Inject services
             services.AddSingleton(MatchingConfiguration);
