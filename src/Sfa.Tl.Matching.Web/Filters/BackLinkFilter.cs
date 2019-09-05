@@ -74,14 +74,12 @@ namespace Sfa.Tl.Matching.Web.Filters
             return backLink.CurrentUrl;
         }
 
-        public async Task<string> GetBackLinkPlacementInformation(string username)
+        public async Task<string> GetBackLinkForSearchResults(string username)
         {
             var backLinkItems = _backLinkRepository.GetMany(bl => bl.CreatedBy == username && bl.CurrentUrl.Contains("provider-results-for-opportunity"))
                 .OrderByDescending(bl => bl.Id);
 
             await _backLinkRepository.DeleteMany(backLinkItems.ToList());
-
-            //var backLink = await _backLinkRepository.GetLastOrDefault(bl => bl.CreatedBy == username);
 
             return await GetBackLink(username);
         }
@@ -112,7 +110,7 @@ namespace Sfa.Tl.Matching.Web.Filters
     {
         Task AddCurrentUrl(ActionContext context);
         Task<string> GetBackLink(string username);
-        Task<string> GetBackLinkPlacementInformation(string username);
+        Task<string> GetBackLinkForSearchResults(string username);
     }
 
     public class ExcludedUrls
@@ -124,7 +122,10 @@ namespace Sfa.Tl.Matching.Web.Filters
             "referral-create",
             "get-back-link",
             "404",
-            "employer-search"
+            "employer-search",
+            "saved-opportunities",
+            "download-opportunity",
+            "remove-opportunityItem"
         };
     }
 

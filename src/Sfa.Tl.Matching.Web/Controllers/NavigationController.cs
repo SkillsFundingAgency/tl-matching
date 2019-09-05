@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{SearchRadius}/{Postcode}/{SelectedRouteId}", Name = "GetBackLinkForSearchResults")]
         public async Task<IActionResult> BackLink(SearchParametersViewModel viewModel)
         {
-            var prevUrl = await _backLinkService.GetBackLinkPlacementInformation(HttpContext.User.GetUserName());
+            var prevUrl = await _backLinkService.GetBackLinkForSearchResults(HttpContext.User.GetUserName());
 
             if (prevUrl.Contains("check-answers")) return Redirect(prevUrl);
 
