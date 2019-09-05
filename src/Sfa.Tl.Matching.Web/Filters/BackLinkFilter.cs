@@ -26,6 +26,8 @@ namespace Sfa.Tl.Matching.Web.Filters
         {
             try
             {
+                if (context.HttpContext.Request.Method != "GET") return;
+
                 _backLinkService.AddCurrentUrl(context);
             }
             catch (Exception exception)

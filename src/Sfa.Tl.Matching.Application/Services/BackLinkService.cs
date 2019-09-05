@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 if (!ExcludedUrls.ExcludedList.Any(path.Contains))
                 {
-                    DeleteOrphanedUrls(context, path);
+                    await DeleteOrphanedUrls();
 
                     await AddUrlToBackLinkHistory(context, new BackLinkHistoryDto
                     {
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.Services
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
-                
+
             }
         }
 
@@ -51,7 +51,8 @@ namespace Sfa.Tl.Matching.Application.Services
             var backLinkItems = _backLinkRepository.GetMany(bl => bl.CreatedBy == username)
                 .OrderByDescending(bl => bl.Id).FirstOrDefault();
 
-            await _backLinkRepository.Delete(backLinkItems);
+            await _backLinkRepository.DeleteMany(_backLinkRepository
+                .GetMany(x => x.CreatedBy == username && x.CurrentUrl == backLinkItems.CurrentUrl).ToList());
 
             var backLink = await _backLinkRepository.GetLastOrDefault(bl => bl.CreatedBy == username);
 
@@ -75,21 +76,17 @@ namespace Sfa.Tl.Matching.Application.Services
         private async Task AddUrlToBackLinkHistory(ActionContext context, BackLinkHistoryDto dto)
         {
             var backlinkHistoryItem = _mapper.Map<BackLinkHistory>(dto);
-            var items = _backLinkRepository.GetMany(x =>
-                x.CreatedBy == context.HttpContext.User.GetUserName()).OrderByDescending(x => x.Id);
 
-            if (items.FirstOrDefault()?.CurrentUrl != dto.CurrentUrl)
-                await _backLinkRepository.Create(backlinkHistoryItem);
+            await _backLinkRepository.Create(backlinkHistoryItem);
         }
 
-        private void DeleteOrphanedUrls(ActionContext context, string path)
+        private async Task DeleteOrphanedUrls()
         {
-            if (path != "/Start" && !path.Contains("employer-opportunities")) return;
+            var prevDate = DateTime.Today.AddDays(-1);
 
-            var items = _backLinkRepository.GetMany(x =>
-                x.CreatedBy == context.HttpContext.User.GetUserName());
+            var items = _backLinkRepository.GetMany(x => x.CreatedOn <= prevDate);
 
-            _backLinkRepository.DeleteMany(items.ToList()).GetAwaiter().GetResult();
+            if (items.Any()) await _backLinkRepository.DeleteMany(items.ToList());
         }
     }
 
@@ -110,5 +107,11 @@ namespace Sfa.Tl.Matching.Application.Services
             "remove-opportunityItem",
             "service-under-maintenance"
         };
+
+        public static List<string> OrphanedList = new List<string>
+        {
+            "employer-opportunities"
+        };
+
     }
 }
