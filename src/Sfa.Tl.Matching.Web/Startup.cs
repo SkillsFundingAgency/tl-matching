@@ -55,97 +55,113 @@ namespace Sfa.Tl.Matching.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureConfiguration(services);
-
-            var isConfigLocalOrDev = ConfigurationIsLocalOrDev();
-
-            services.Configure<CookiePolicyOptions>(options =>
+            try
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+                ConfigureConfiguration(services);
 
-            services.AddAntiforgery(options =>
-            {
-                options.Cookie.Name = "tlevels-x-csrf";
-                options.FormFieldName = "_csrfToken";
-                options.HeaderName = "X-XSRF-TOKEN";
-            });
+                var isConfigLocalOrDev = ConfigurationIsLocalOrDev();
 
-            services.AddMvc(config =>
-            {
+                services.Configure<CookiePolicyOptions>(options =>
+                {
+                    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                    options.CheckConsentNeeded = context => true;
+                    options.MinimumSameSitePolicy = SameSiteMode.None;
+                });
+
+                services.AddAntiforgery(options =>
+                {
+                    options.Cookie.Name = "tlevels-x-csrf";
+                    options.FormFieldName = "_csrfToken";
+                    options.HeaderName = "X-XSRF-TOKEN";
+                });
+
+                services.AddMvc(config =>
+                    {
+                        if (!isConfigLocalOrDev)
+                        {
+                            var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+                            config.Filters.Add(new AuthorizeFilter(policy));
+                        }
+
+                        config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                        config.Filters.Add<CustomExceptionFilterAttribute>();
+                        config.Filters.Add<BackLinkFilter>();
+                        config.Filters.Add<ServiceUnavailableFilterAttribute>();
+                    })
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
                 if (!isConfigLocalOrDev)
+                    AddAuthentication(services);
+                else
                 {
-                    var policy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .Build();
-                    config.Filters.Add(new AuthorizeFilter(policy));
+                    services.AddAuthentication(options =>
+                    {
+                        options.DefaultAuthenticateScheme = "Local Scheme";
+                        options.DefaultChallengeScheme = "Local Scheme";
+                    }).AddTestAuth(o => { });
                 }
-
-                config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
-                config.Filters.Add<CustomExceptionFilterAttribute>();
-                config.Filters.Add<BackLinkFilter>();
-                config.Filters.Add<ServiceUnavailableFilterAttribute>();
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            if (!isConfigLocalOrDev)
-                AddAuthentication(services);
-            else
-            {
-                services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = "Local Scheme";
-                    options.DefaultChallengeScheme = "Local Scheme";
-                }).AddTestAuth(o => { });
+                RegisterDependencies(services);
             }
-            RegisterDependencies(services);
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            var cultureInfo = new CultureInfo("en-GB");
-
-            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-
-            if (env.IsDevelopment())
+            try
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+                var cultureInfo = new CultureInfo("en-GB");
 
-            app.UseXContentTypeOptions();
-            app.UseReferrerPolicy(opts => opts.NoReferrer());
-            app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
-            app.UseXfo(xfo => xfo.Deny());
-            app.UseCsp(options => options
-                .ScriptSources(s =>
+                CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+                CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
+                if (env.IsDevelopment())
                 {
-                    s.Self()
-                        .CustomSources("https://az416426.vo.msecnd.net/",
-                                       "https://www.google-analytics.com/analytics.js",
-                                       "https://www.googletagmanager.com/",
-                                       "https://tagmanager.google.com/",
-                                       "https://www.smartsurvey.co.uk/")
-                        .UnsafeInline();
+                    app.UseDeveloperExceptionPage();
                 }
-            ));
+                else
+                {
+                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                    app.UseHsts();
+                }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+                app.UseXContentTypeOptions();
+                app.UseReferrerPolicy(opts => opts.NoReferrer());
+                app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
+                app.UseXfo(xfo => xfo.Deny());
+                app.UseCsp(options => options
+                    .ScriptSources(s =>
+                        {
+                            s.Self()
+                                .CustomSources("https://az416426.vo.msecnd.net/",
+                                    "https://www.google-analytics.com/analytics.js",
+                                    "https://www.googletagmanager.com/",
+                                    "https://tagmanager.google.com/",
+                                    "https://www.smartsurvey.co.uk/")
+                                .UnsafeInline();
+                        }
+                    ));
 
-            app.UseAuthentication();
+                app.UseHttpsRedirection();
+                app.UseStaticFiles();
 
-            app.UseMvcWithDefaultRoute();
-            app.UseCookiePolicy();
-            app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
+                app.UseAuthentication();
+
+                app.UseMvcWithDefaultRoute();
+                app.UseCookiePolicy();
+                app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                
+            }
+            
         }
 
         protected virtual void ConfigureConfiguration(IServiceCollection services)

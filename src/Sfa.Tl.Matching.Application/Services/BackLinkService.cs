@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -24,18 +25,24 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task AddCurrentUrl(ActionContext context)
         {
-            if (context.HttpContext.Request.Method != "GET") return;
-
-            var path = context.HttpContext.Request.Path.ToString();
-
-            if (!ExcludedUrls.ExcludedList.Any(path.Contains))
+            try
             {
-                DeleteOrphanedUrls(context, path);
+                var path = context.HttpContext.Request.Path.ToString();
 
-                await AddUrlToBackLinkHistory(context, new BackLinkHistoryDto
+                if (!ExcludedUrls.ExcludedList.Any(path.Contains))
                 {
-                    CurrentUrl = path
-                });
+                    DeleteOrphanedUrls(context, path);
+
+                    await AddUrlToBackLinkHistory(context, new BackLinkHistoryDto
+                    {
+                        CurrentUrl = path
+                    });
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                
             }
         }
 
