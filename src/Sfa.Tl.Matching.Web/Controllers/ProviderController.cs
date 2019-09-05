@@ -8,10 +8,12 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
+    [ServiceFilter(typeof(BackLinkFilter))]
     public class ProviderController : Controller
     {
         private readonly MatchingConfiguration _configuration;

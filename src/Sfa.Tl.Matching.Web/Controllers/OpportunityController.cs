@@ -10,10 +10,12 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser + "," + RolesExtensions.StandardUser)]
+    [ServiceFilter(typeof(BackLinkFilter))]
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;

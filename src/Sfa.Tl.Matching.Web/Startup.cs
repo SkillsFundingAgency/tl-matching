@@ -87,7 +87,6 @@ namespace Sfa.Tl.Matching.Web
 
                         config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
                         config.Filters.Add<CustomExceptionFilterAttribute>();
-                        config.Filters.Add<BackLinkFilter>();
                         config.Filters.Add<ServiceUnavailableFilterAttribute>();
                     })
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -225,6 +224,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddSingleton<NavigationManager>();
             services.AddTransient<IBackLinkService, BackLinkService>();
             services.AddTransient<IBackLinkRepository, BackLinkHistoryRepository>();
+            services.AddTransient<BackLinkFilter>();
 
             RegisterNotificationsApi(services, MatchingConfiguration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);
