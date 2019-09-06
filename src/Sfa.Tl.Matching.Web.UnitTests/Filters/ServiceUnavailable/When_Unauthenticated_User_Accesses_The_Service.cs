@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Web.Filters;
 using Xunit;
 
@@ -18,6 +19,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
         public When_Unauthenticated_User_Accesses_The_Service()
         {
             var defaultHttpContext = Substitute.For<HttpContext>();
+            var maintenanceHistoryService = Substitute.For<IMaintenanceHistoryService>();
+
             defaultHttpContext.User.Identity.IsAuthenticated.Returns(false);
 
             var routeData = new RouteData();
@@ -29,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
                 new Dictionary<string, object>(),
                 null);
 
-            var filterAttribute = new ServiceUnavailableFilterAttribute();
+            var filterAttribute = new ServiceUnavailableFilterAttribute(maintenanceHistoryService);
 
             filterAttribute.OnActionExecuting(_actionExecutingContext);
         }

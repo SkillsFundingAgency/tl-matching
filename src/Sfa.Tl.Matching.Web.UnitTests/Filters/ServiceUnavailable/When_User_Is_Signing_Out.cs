@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Extensions;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Filters;
 using Xunit;
@@ -48,7 +49,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
                 new Dictionary<string, object>(),
                 null);
 
-            var filterAttribute = new ServiceUnavailableFilterAttribute();
+            var maintenanceHistoryService = Substitute.For<IMaintenanceHistoryService>();
+            var filterAttribute = new ServiceUnavailableFilterAttribute(maintenanceHistoryService);
 
             filterAttribute.OnActionExecuting(_actionExecutingContext);
         }
