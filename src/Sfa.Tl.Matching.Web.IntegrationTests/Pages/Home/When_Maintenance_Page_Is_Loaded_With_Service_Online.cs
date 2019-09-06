@@ -38,6 +38,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Home
             var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
 
+            var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
+            backLink.Text.Should().Be("Back");
+            backLink.PathName.Should().Be("/Start");
+
             var body = documentHtml.QuerySelector(".govuk-body");
             body.TextContent.Should().Be("The service is currently online.");
 

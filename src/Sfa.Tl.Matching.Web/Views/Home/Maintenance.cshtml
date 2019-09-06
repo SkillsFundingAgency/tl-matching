@@ -3,6 +3,10 @@
     ViewData["Title"] = "Service under maintenance";
 }
 
+@section backButton{
+    <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link" id="tl-back">Back</a>
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
