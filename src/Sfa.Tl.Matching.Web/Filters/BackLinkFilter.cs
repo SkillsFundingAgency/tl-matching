@@ -19,11 +19,6 @@ namespace Sfa.Tl.Matching.Web.Filters
         }
         public void OnActionExecuting(ActionExecutingContext context)
         {
-
-        }
-
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
             try
             {
                 if (context.HttpContext.Request.Method != "GET") return;
@@ -34,6 +29,10 @@ namespace Sfa.Tl.Matching.Web.Filters
             {
                 _logger.LogError(exception, exception.Message);
             }
+        }
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
             
         }
     }

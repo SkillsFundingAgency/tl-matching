@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web
 
                 config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
                 config.Filters.Add<CustomExceptionFilterAttribute>();
-                config.Filters.Add<ServiceUnavailableFilterAttribute>();
+                //config.Filters.Add<ServiceUnavailableFilterAttribute>();
             })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -194,12 +194,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddDbContext<MatchingDbContext>(options =>
                 options.UseSqlServer(MatchingConfiguration.SqlConnectionString,
                     builder => builder.UseNetTopologySuite()
-                                      .EnableRetryOnFailure()));
-
-            services.AddDbContext<UserCacheDbContext>(options =>
-                options.UseSqlServer(MatchingConfiguration.SqlConnectionString,
-                    builder => builder.UseNetTopologySuite()
-                        .EnableRetryOnFailure()));
+                                      .EnableRetryOnFailure()), ServiceLifetime.Transient);
 
             //Inject services
             services.AddSingleton(MatchingConfiguration);
