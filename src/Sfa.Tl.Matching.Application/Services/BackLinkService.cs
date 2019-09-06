@@ -49,13 +49,13 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<string> GetBackLink(string username)
         {
             var backLinkItems = _backLinkRepository.GetMany(bl => bl.CreatedBy == username)
-                .OrderByDescending(bl => bl.Id).FirstOrDefault();
+                .OrderByDescending(bl => bl.Id).ToList();
 
-            await _backLinkRepository.Delete(backLinkItems);
+            var prevUrl = GetNext(backLinkItems.Select(x => x.CurrentUrl), backLinkItems.FirstOrDefault()?.CurrentUrl);
 
-            var backLink = await _backLinkRepository.GetLastOrDefault(bl => bl.CreatedBy == username);
+            await _backLinkRepository.Delete(backLinkItems.FirstOrDefault());
 
-            return backLink.CurrentUrl;
+            return prevUrl;
         }
 
         public async Task<string> GetBackLinkForSearchResults(string username)
@@ -91,6 +91,18 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (items.Any()) await _backLinkRepository.DeleteMany(items.ToList());
         }
+
+        private static T GetNext<T>(IEnumerable<T> list, T current)
+        {
+            try
+            {
+                return list.SkipWhile(x => !x.Equals(current)).Skip(1).First();
+            }
+            catch
+            {
+                return default(T);
+            }
+        }
     }
 
     public class ExcludedUrls
@@ -115,6 +127,5 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             "employer-opportunities"
         };
-
     }
 }
