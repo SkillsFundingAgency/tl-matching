@@ -28,21 +28,22 @@ namespace Sfa.Tl.Matching.Application.Services
             try
             {
                 var path = context.HttpContext.Request.Path.ToString();
+                var username = context.HttpContext.User.GetUserName();
 
                 if (!ExcludedUrls.ExcludedList.Any(path.Contains))
                 {
-                    await DeleteOrphanedUrls();
-
-                    await AddUrlToBackLinkHistory(context, new BackLinkHistoryDto
+                    await AddUrlToBackLinkHistory(username, new BackLinkHistoryDto
                     {
                         CurrentUrl = path
                     });
                 }
+
+                await DeleteOrphanedUrls();
+
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
-
             }
         }
 
@@ -72,12 +73,11 @@ namespace Sfa.Tl.Matching.Application.Services
             return await GetBackLink(username);
         }
 
-        private async Task AddUrlToBackLinkHistory(ActionContext context, BackLinkHistoryDto dto)
+        private async Task AddUrlToBackLinkHistory(string username, BackLinkHistoryDto dto)
         {
             var backlinkHistoryItem = _mapper.Map<BackLinkHistory>(dto);
 
-            var items = _backLinkRepository.GetMany(x =>
-                x.CreatedBy == context.HttpContext.User.GetUserName()).OrderByDescending(x => x.Id);
+            var items = _backLinkRepository.GetMany(x => x.CreatedBy == username).OrderByDescending(x => x.Id);
 
             if (items.FirstOrDefault()?.CurrentUrl != dto.CurrentUrl)
                 await _backLinkRepository.Create(backlinkHistoryItem);
