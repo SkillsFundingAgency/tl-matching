@@ -85,7 +85,6 @@ namespace Sfa.Tl.Matching.Web
 
                 config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
                 config.Filters.Add<CustomExceptionFilterAttribute>();
-                //config.Filters.Add<ServiceUnavailableFilterAttribute>();
             })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -238,7 +237,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
             services.AddTransient<IRepository<MaintenanceHistory>, GenericRepository<MaintenanceHistory>>();
-            
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
@@ -270,6 +268,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IMaintenanceHistoryService, MaintenanceHistoryService>();
             services.AddTransient<IBackLinkService, BackLinkService>();
             services.AddTransient<BackLinkFilter>();
+            services.AddTransient<ServiceUnavailableFilterAttribute>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 

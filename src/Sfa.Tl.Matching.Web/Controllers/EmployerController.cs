@@ -14,6 +14,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
     [ServiceFilter(typeof(BackLinkFilter))]
+    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class EmployerController : Controller
     {
         private readonly IEmployerService _employerService;

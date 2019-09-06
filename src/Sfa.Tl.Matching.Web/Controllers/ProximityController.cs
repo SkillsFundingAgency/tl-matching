@@ -16,6 +16,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
     [ServiceFilter(typeof(BackLinkFilter))]
+    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class ProximityController : Controller
     {
         private readonly IMapper _mapper;

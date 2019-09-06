@@ -1,17 +1,22 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
 using Sfa.Tl.Matching.Application.Extensions;
-using Sfa.Tl.Matching.Data;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Web.Controllers;
 
 namespace Sfa.Tl.Matching.Web.Filters
 {
     public class ServiceUnavailableFilterAttribute : IActionFilter
     {
+        private readonly IMaintenanceHistoryService _maintenanceHistoryService;
+
+        public ServiceUnavailableFilterAttribute(IMaintenanceHistoryService maintenanceHistoryService)
+        {
+            _maintenanceHistoryService = maintenanceHistoryService;
+        }
+
         public async void OnActionExecuting(ActionExecutingContext context)
         {
             if (!context.HttpContext.User.Identity.IsAuthenticated) return;
@@ -19,10 +24,8 @@ namespace Sfa.Tl.Matching.Web.Filters
 
             if (IsSignOut(context)) return;
             
-            var dbContext = context.HttpContext.RequestServices.GetService<MatchingDbContext>();
-
-            var maintenanceHistory = dbContext.MaintenanceHistory.LastOrDefault();
-            if (maintenanceHistory == null || maintenanceHistory.IsOnline) return;
+            var maintenanceHistory = await _maintenanceHistoryService.GetLatestMaintenanceHistory();
+            if (maintenanceHistory.IsOnline) return;
 
             if (IsServiceUnavailable(context)) return;
 

@@ -11,12 +11,12 @@ namespace Sfa.Tl.Matching.Web.Filters
         private readonly ILogger<BackLinkFilter> _logger;
         private readonly IBackLinkService _backLinkService;
 
-
         public BackLinkFilter(ILogger<BackLinkFilter> logger, IBackLinkService backLinkService)
         {
             _logger = logger;
             _backLinkService = backLinkService;
         }
+
         public void OnActionExecuting(ActionExecutingContext context)
         {
             try

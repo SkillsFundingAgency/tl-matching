@@ -16,6 +16,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser + "," + RolesExtensions.StandardUser)]
     [ServiceFilter(typeof(BackLinkFilter))]
+    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;
