@@ -15,9 +15,9 @@ namespace Sfa.Tl.Matching.Application.Services
     public class BackLinkService : IBackLinkService
     {
         private readonly IMapper _mapper;
-        private readonly IBackLinkRepository _backLinkRepository;
+        private readonly IRepository<BackLinkHistory> _backLinkRepository;
 
-        public BackLinkService(IMapper mapper, IBackLinkRepository backLinkRepository)
+        public BackLinkService(IMapper mapper, IRepository<BackLinkHistory> backLinkRepository)
         {
             _mapper = mapper;
             _backLinkRepository = backLinkRepository;

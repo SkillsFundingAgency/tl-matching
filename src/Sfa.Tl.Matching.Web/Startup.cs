@@ -211,10 +211,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
             services.AddSingleton<NavigationManager>();
-            services.AddTransient<IBackLinkService, BackLinkService>();
-            services.AddTransient<IBackLinkRepository, BackLinkHistoryRepository>();
-            services.AddTransient<BackLinkFilter>();
-
+            
             RegisterNotificationsApi(services, MatchingConfiguration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
@@ -223,8 +220,10 @@ namespace Sfa.Tl.Matching.Web
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddTransient<OpportunityRepository>();
+            services.AddTransient<BackLinkHistoryRepository>();
             services.AddTransient<IOpportunityRepository>(x => x.GetRequiredService<OpportunityRepository>());
             services.AddTransient<IRepository<Opportunity>>(x => x.GetRequiredService<OpportunityRepository>());
+            services.AddTransient<IRepository<BackLinkHistory>>(x=>x.GetRequiredService<BackLinkHistoryRepository>());
 
             services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
@@ -244,6 +243,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
             services.AddTransient<IRepository<MaintenanceHistory>, GenericRepository<MaintenanceHistory>>();
+            
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
@@ -273,6 +273,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
             services.AddTransient<IMaintenanceHistoryService, MaintenanceHistoryService>();
+            services.AddTransient<IBackLinkService, BackLinkService>();
+            services.AddTransient<BackLinkFilter>();
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
