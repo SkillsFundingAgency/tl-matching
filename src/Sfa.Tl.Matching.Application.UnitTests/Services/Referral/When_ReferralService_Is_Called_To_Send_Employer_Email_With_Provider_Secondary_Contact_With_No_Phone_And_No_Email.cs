@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .GetEmployerReferrals(
                     Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new ValidEmployerReferralDtoBuilder()
-                    .AddSecondaryContact(includePhone: false, false)
+                    .AddSecondaryContact(false, false)
                     .Build());
 
             var itemIds = new List<int>
