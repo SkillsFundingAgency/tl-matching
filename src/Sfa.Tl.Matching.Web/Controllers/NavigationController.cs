@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -12,11 +13,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IBackLinkService _backLinkService;
-        
-        public NavigationController(IOpportunityService opportunityService, IBackLinkService backLinkService)
+        private readonly NavigationManager _urlList;
+
+        public NavigationController(IOpportunityService opportunityService, IBackLinkService backLinkService, NavigationManager urlList)
         {
             _opportunityService = opportunityService;
             _backLinkService = backLinkService;
+            _urlList = urlList;
         }
 
         [HttpGet]
@@ -83,7 +86,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("get-back-link", Name = "GetBackLink")]
         public async Task<IActionResult> BackLink()
         {
-            return Redirect(await _backLinkService.GetBackLink(HttpContext.User.GetUserName()));
+            //return Redirect(await _backLinkService.GetBackLink(HttpContext.User.GetUserName()));
+            return Redirect(_urlList.GetPrevLink(HttpContext.User.GetUserName()).BackLinkUrl());
         }
 
         [HttpGet]
