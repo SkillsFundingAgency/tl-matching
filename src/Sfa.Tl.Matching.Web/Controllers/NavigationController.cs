@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -13,13 +12,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly IOpportunityService _opportunityService;
         private readonly IBackLinkService _backLinkService;
-        private readonly NavigationManager _urlList;
 
-        public NavigationController(IOpportunityService opportunityService, IBackLinkService backLinkService, NavigationManager urlList)
+        public NavigationController(IOpportunityService opportunityService, IBackLinkService backLinkService)
         {
             _opportunityService = opportunityService;
             _backLinkService = backLinkService;
-            _urlList = urlList;
         }
 
         [HttpGet]
@@ -70,7 +67,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     new { opportunityId = viewModel.OpportunityId, opportunityItemId });
             }
 
-            return RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId});
+            return RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId });
         }
 
         [HttpGet]
@@ -83,31 +80,47 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("get-back-link", Name = "GetBackLink")]
-        public async Task<IActionResult> BackLink()
-        {
-            //return Redirect(await _backLinkService.GetBackLink(HttpContext.User.GetUserName()));
-            return Redirect(_urlList.GetPrevLink(HttpContext.User.GetUserName()).BackLinkUrl());
-        }
-
-        [HttpGet]
-        [Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{SearchRadius}/{Postcode}/{SelectedRouteId}", Name = "GetBackLinkForSearchResults")]
+        [Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{SearchRadius}/{Postcode}/{SelectedRouteId}", Name = "GetBackLink")]
         public async Task<IActionResult> BackLink(SearchParametersViewModel viewModel)
         {
-            var prevUrl = await _backLinkService.GetBackLinkForSearchResults(HttpContext.User.GetUserName());
+            var prevUrl = await _backLinkService.GetBackLink(HttpContext.User.GetUserName());
 
-            if (prevUrl.Contains("check-answers")) return Redirect(prevUrl);
-
-            return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
+            if (prevUrl.Contains("provider-results-for-opportunity") && viewModel.OpportunityId != 0)
             {
-                SelectedRouteId = viewModel.SelectedRouteId,
-                Postcode = viewModel.Postcode,
-                SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
-                OpportunityId = viewModel.OpportunityId,
-                OpportunityItemId = viewModel.OpportunityItemId,
-                CompanyNameWithAka = viewModel.CompanyNameWithAka
-            });
+                prevUrl = await _backLinkService.GetBackLink(HttpContext.User.GetUserName());
+
+                return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
+                {
+                    SelectedRouteId = viewModel.SelectedRouteId,
+                    Postcode = viewModel.Postcode,
+                    SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
+                    OpportunityId = viewModel.OpportunityId,
+                    OpportunityItemId = viewModel.OpportunityItemId,
+                    CompanyNameWithAka = viewModel.CompanyNameWithAka
+                });
+            }
+
+            return Redirect(prevUrl);
         }
+
+        //[HttpGet]
+        //[Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{SearchRadius}/{Postcode}/{SelectedRouteId}", Name = "GetBackLinkForSearchResults")]
+        //public async Task<IActionResult> BackLink(SearchParametersViewModel viewModel)
+        //{
+        //    var prevUrl = await _backLinkService.GetBackLinkForSearchResults(HttpContext.User.GetUserName());
+
+        //    if (prevUrl.Contains("check-answers")) return Redirect(prevUrl);
+
+        //    return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
+        //    {
+        //        SelectedRouteId = viewModel.SelectedRouteId,
+        //        Postcode = viewModel.Postcode,
+        //        SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
+        //        OpportunityId = viewModel.OpportunityId,
+        //        OpportunityItemId = viewModel.OpportunityItemId,
+        //        CompanyNameWithAka = viewModel.CompanyNameWithAka
+        //    });
+        //}
 
     }
 }

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
 
 namespace Sfa.Tl.Matching.Web.Filters
 {
@@ -14,13 +10,11 @@ namespace Sfa.Tl.Matching.Web.Filters
     {
         private readonly ILogger<BackLinkFilter> _logger;
         private readonly IBackLinkService _backLinkService;
-        private readonly NavigationManager _urlList;
 
-        public BackLinkFilter(ILogger<BackLinkFilter> logger, IBackLinkService backLinkService, NavigationManager urlList)
+        public BackLinkFilter(ILogger<BackLinkFilter> logger, IBackLinkService backLinkService)
         {
             _logger = logger;
             _backLinkService = backLinkService;
-            _urlList = urlList;
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
@@ -29,13 +23,7 @@ namespace Sfa.Tl.Matching.Web.Filters
             {
                 if (context.HttpContext.Request.Method != "GET") return;
 
-                var path = context.HttpContext.Request.Path.ToString();
-
-                //_backLinkService.AddCurrentUrl(context);
-
-                if (!ExcludedUrls.ExcludedList.Any(path.Contains))
-                    _urlList.Do(new AddBackLinkCommand(path), path, context.HttpContext.User.GetUserName());
-
+                _backLinkService.AddCurrentUrl(context);
             }
             catch (Exception exception)
             {
@@ -84,7 +72,12 @@ namespace Sfa.Tl.Matching.Web.Filters
 
     public class NavigationManager
     {
-        private IDictionary<string, Stack<ICommand<string>>> _urlContext;
+        private Stack<ICommand<string>> _prevLink;
+        private Stack<ICommand<string>> _currLink;
+
+        public int UndoCount => _prevLink.Count;
+
+        public int RedoCount => _currLink.Count;
 
         public NavigationManager()
         {
@@ -92,50 +85,41 @@ namespace Sfa.Tl.Matching.Web.Filters
         }
         public void Reset()
         {
-            _urlContext = new Dictionary<string, Stack<ICommand<string>>>();
+            _prevLink = new Stack<ICommand<string>>();
+            _currLink = new Stack<ICommand<string>>();
         }
 
-        public string Do(ICommand<string> cmd, string input, string username)
+        public string Do(ICommand<string> cmd, string input)
         {
             var output = cmd.Do(input);
-            _urlContext.TryGetValue(username, out var prevUrl);
 
-            if(prevUrl == null)
-            {
-                prevUrl = new Stack<ICommand<string>>();
-                prevUrl.Push(cmd);
+            if (_prevLink.Count > 0 && _prevLink.Peek().BackLinkUrl() == input) return output;
 
-                _urlContext.Add(username, prevUrl);
-            }
-            else
-            {
-                if (prevUrl.Count > 0 && prevUrl.Peek().BackLinkUrl() == input) return output;
+            _prevLink.Push(cmd);
 
-                if (input.Contains("Start"))
-                    prevUrl.Clear();
-
-                prevUrl.Push(cmd);
-            }
+            _currLink.Clear();
 
             return output;
         }
 
-        public ICommand<string> GetPrevLink(string username)
+        public ICommand<string> GetPrevLink()
         {
-            _urlContext.TryGetValue(username, out var temp);
-            temp?.Pop();
+            if (_prevLink.Count <= 0) return null;
 
-            return temp?.Peek();
+            var cmd = _prevLink.Pop();
+            _currLink.Push(cmd);
+
+            return UndoCount == 0 ? null : _prevLink.Peek();
+
         }
+        public ICommand<string> GetCurrLink()
+        {
+            if (_currLink.Count <= 0) return null;
 
-        //public ICommand<string> GetCurrLink()
-        //{
-        //    if (_currLink.Count <= 0) return null;
+            var cmd = _currLink.Pop();
+            _prevLink.Push(cmd);
 
-        //    var cmd = _currLink.Pop();
-        //    _prevLink.Push(cmd);
-
-        //    return UndoCount == 0 ? null : _prevLink.Peek();
-        //}
+            return UndoCount == 0 ? null : _prevLink.Peek();
+        }
     }
 }

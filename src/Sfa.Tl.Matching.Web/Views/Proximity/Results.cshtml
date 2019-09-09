@@ -6,7 +6,10 @@
 }
 @section backButton{
     @*<a asp-controller="Proximity" asp-action="Index" class="govuk-back-link" id="tl-back">Back</a>*@
-    <a asp-route="GetBackLink" class="govuk-back-link" id="tl-back">Back</a>
+    <a asp-route="GetBackLink"  
+       asp-route-opportunityId="@Model.OpportunityId"
+       asp-route-opportunityItemId="@Model.OpportunityItemId"
+       class="govuk-back-link" id="tl-back">Back</a>
     @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 

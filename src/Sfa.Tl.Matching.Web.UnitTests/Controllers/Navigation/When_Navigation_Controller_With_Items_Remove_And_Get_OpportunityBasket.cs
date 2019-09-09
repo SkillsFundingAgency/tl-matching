@@ -17,11 +17,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
         {
             var opportunityService = Substitute.For<IOpportunityService>();
             var backLinkService = Substitute.For<IBackLinkService>();
-            var urlList = Substitute.For<NavigationManager>();
-
+            
             opportunityService.GetSavedOpportunityItemCountAsync(Arg.Any<int>()).Returns(Task.FromResult(1));
 
-            var navigationController = new NavigationController(opportunityService, backLinkService, urlList);
+            var navigationController = new NavigationController(opportunityService, backLinkService);
 
             _result = navigationController.RemoveOpportunityItemAndGetOpportunityBasket(1, 2).GetAwaiter().GetResult();
         }
