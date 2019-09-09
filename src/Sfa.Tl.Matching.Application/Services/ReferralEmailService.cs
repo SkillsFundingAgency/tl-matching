@@ -77,11 +77,12 @@ namespace Sfa.Tl.Matching.Application.Services
                     foreach (var providerAndVenue in data.ProviderAndVenueDetails)
                     {
                         sb.AppendLine($"* {count.ToOrdinalWords().ToTitleCase()} provider selected: {providerAndVenue.CustomisedProviderDisplayName}");
-                        sb.AppendLine($"Primary contact: {providerAndVenue.ProviderPrimaryContact} (Telephone: {providerAndVenue.ProviderPrimaryContactPhone}; Email: {providerAndVenue.ProviderPrimaryContactEmail})");
+                        sb.Append("Primary contact: ");
+                        sb.AppendLine(FormatContactDetails(providerAndVenue.ProviderPrimaryContact, providerAndVenue.ProviderPrimaryContactPhone, providerAndVenue.ProviderPrimaryContactEmail));
 
                         if (!string.IsNullOrWhiteSpace(providerAndVenue.ProviderSecondaryContact))
                         {
-                            sb.AppendLine($"Secondary contact: {providerAndVenue.ProviderSecondaryContact} (Telephone: {providerAndVenue.ProviderSecondaryContactPhone}; Email: {providerAndVenue.ProviderSecondaryContactEmail})");
+                            sb.AppendLine($"Secondary contact: {FormatContactDetails(providerAndVenue.ProviderSecondaryContact, providerAndVenue.ProviderSecondaryContactPhone, providerAndVenue.ProviderSecondaryContactEmail)}");
                         }
 
                         count++;
@@ -171,6 +172,35 @@ namespace Sfa.Tl.Matching.Application.Services
                 await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
                     BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
+        }
+
+        private string FormatContactDetails(string name, string phone, string email)
+        {
+            var sb = new StringBuilder($"{name}");
+
+            var hasPhone = !string.IsNullOrWhiteSpace(phone);
+            var hasEmail = !string.IsNullOrWhiteSpace(email);
+
+            if (hasPhone || hasEmail)
+            {
+                sb.Append(" (");
+                if (hasPhone)
+                {
+                    sb.Append($"Telephone: {phone}");
+                    if (hasEmail)
+                    {
+                        sb.Append("; ");
+                    }
+                }
+
+                if (hasEmail)
+                {
+                    sb.Append($"Email: {email}");
+                }
+                sb.Append(")");
+            }
+
+            return sb.ToString();
         }
 
         private async Task CompleteSelectedReferrals(int opportunityId, int itemId, string username)
@@ -303,7 +333,5 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return backgroundProcessHistory;
         }
-
-        
     }
 }
