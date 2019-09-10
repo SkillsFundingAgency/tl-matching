@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (prevUrl.Contains("provider-results-for-opportunity") && viewModel.OpportunityId != 0)
             {
-                prevUrl = await _backLinkService.GetBackLink(HttpContext.User.GetUserName());
+                await _backLinkService.GetBackLink(HttpContext.User.GetUserName());
 
                 return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
                 {
@@ -102,25 +102,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return Redirect(prevUrl);
         }
-
-        //[HttpGet]
-        //[Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{SearchRadius}/{Postcode}/{SelectedRouteId}", Name = "GetBackLinkForSearchResults")]
-        //public async Task<IActionResult> BackLink(SearchParametersViewModel viewModel)
-        //{
-        //    var prevUrl = await _backLinkService.GetBackLinkForSearchResults(HttpContext.User.GetUserName());
-
-        //    if (prevUrl.Contains("check-answers")) return Redirect(prevUrl);
-
-        //    return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
-        //    {
-        //        SelectedRouteId = viewModel.SelectedRouteId,
-        //        Postcode = viewModel.Postcode,
-        //        SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
-        //        OpportunityId = viewModel.OpportunityId,
-        //        OpportunityItemId = viewModel.OpportunityItemId,
-        //        CompanyNameWithAka = viewModel.CompanyNameWithAka
-        //    });
-        //}
 
     }
 }

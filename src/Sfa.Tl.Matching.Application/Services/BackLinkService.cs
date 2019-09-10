@@ -38,7 +38,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     });
                 }
 
-                await DeleteOrphanedUrls();
+                if (path.Contains("Start"))
+                    await DeleteOrphanedUrls(username);
 
             }
             catch (Exception exception)
@@ -83,13 +84,15 @@ namespace Sfa.Tl.Matching.Application.Services
                 await _backLinkRepository.Create(backlinkHistoryItem);
         }
 
-        private async Task DeleteOrphanedUrls()
+        private async Task DeleteOrphanedUrls(string username)
         {
-            var prevDate = DateTime.UtcNow.AddDays(-1);
+            var items = _backLinkRepository.GetMany(x => x.CreatedBy == username).OrderByDescending(x => x.Id).Skip(1)
+                .ToList();
 
-            var items = _backLinkRepository.GetMany(x => x.CreatedOn.Date <= prevDate);
-
-            if (items.Any()) await _backLinkRepository.DeleteMany(items.ToList());
+            if (items.Any())
+            {
+                await _backLinkRepository.DeleteMany(items);
+            }
         }
 
         private static T GetNext<T>(IEnumerable<T> list, T current)
