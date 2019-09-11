@@ -293,5 +293,80 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Processing.ToString());
             processStatus.Should().Be(BackgroundProcessHistoryStatus.Complete.ToString());
         }
+
+        [Theory]
+        [InlineAutoDomainData("", "")]
+        [InlineAutoDomainData("Test", "")]
+        [InlineAutoDomainData("", "Test")]
+        [InlineAutoDomainData(null, null)]
+        [InlineAutoDomainData(null, "")]
+        [InlineAutoDomainData("", null)]
+        [InlineAutoDomainData("Test", null)]
+        [InlineAutoDomainData(null, "Test")]
+        //[InlineData("Test", "Test")]
+        public async Task AND_Secondary_Contact_Name_or_Email_Is_Invalid_Then_Send_Email_Is_NOT_Called(
+            string secondaryContactName,
+            string secondaryContactEmail,
+            [Frozen] MatchingDbContext dbContext,
+            IDateTimeProvider dateTimeProvider,
+            MatchingConfiguration config,
+            [Frozen] Mapper mapper,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            [Frozen] IEmailService emailService,
+            [Frozen] IEmailHistoryService emailHistoryService,
+            ILogger<OpportunityRepository> logger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
+            ILogger<GenericRepository<OpportunityItem>> itemLogger
+        )
+        {
+            //Arrange
+            backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
+
+            provider.SecondaryContact = secondaryContactName;
+            provider.SecondaryContactEmail = secondaryContactEmail;
+
+            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+
+            var repo = new OpportunityRepository(logger, dbContext);
+            var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
+            var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
+
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
+
+            //Act
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
+
+
+            var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
+                                                 && oi.IsSaved
+                                                 && oi.IsSelectedForReferral).Select(oi => oi.Id);
+
+            var data = (from op in dbContext.Opportunity
+                        join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
+                        join emp in dbContext.Employer on op.EmployerId equals emp.Id
+                        join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
+                        join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                        join p in dbContext.Provider on pv.ProviderId equals p.Id
+                        join r in dbContext.Route on oi.RouteId equals r.Id
+                        orderby re.DistanceFromEmployer
+                        where op.Id == opportunity.Id
+                              && itemIds.Contains(oi.Id)
+                              && oi.IsSelectedForReferral
+                              && oi.IsSaved
+                              && p.IsCdfProvider
+                              && p.IsEnabledForReferral
+                              && pv.IsEnabledForReferral
+                              && !pv.IsRemoved
+                        select oi.Id
+                ).ToList();
+
+            //Assert
+            await emailService.Received(2).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("employer_business_name")), Arg.Any<string>());
+
+        }
     }
 }

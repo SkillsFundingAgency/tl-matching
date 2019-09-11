@@ -147,7 +147,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     await SendEmail(EmailTemplateName.ProviderReferralV3, opportunityId, referral.ProviderPrimaryContactEmail,
                         emailSubject, tokens, referral.CreatedBy);
 
-                    if (!string.IsNullOrEmpty(referral.ProviderSecondaryContactEmail))
+                    if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
                         await SendEmail(EmailTemplateName.ProviderReferralV3, opportunityId,
