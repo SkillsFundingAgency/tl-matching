@@ -215,9 +215,11 @@ namespace Sfa.Tl.Matching.Web
         {
             services.AddTransient<OpportunityRepository>();
             services.AddTransient<BackLinkHistoryRepository>();
+            services.AddTransient<UserCacheRepository>();
             services.AddTransient<IOpportunityRepository>(x => x.GetRequiredService<OpportunityRepository>());
             services.AddTransient<IRepository<Opportunity>>(x => x.GetRequiredService<OpportunityRepository>());
             services.AddTransient<IRepository<BackLinkHistory>>(x=>x.GetRequiredService<BackLinkHistoryRepository>());
+            services.AddTransient<IRepository<UserCache>>(x=>x.GetRequiredService<UserCacheRepository>());
 
             services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();

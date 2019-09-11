@@ -15,12 +15,12 @@ namespace Sfa.Tl.Matching.Application.Services
     public class BackLinkService : IBackLinkService
     {
         private readonly IMapper _mapper;
-        private readonly IRepository<BackLinkHistory> _backLinkRepository;
+        private readonly IRepository<UserCache> _userCacheRepository;
 
-        public BackLinkService(IMapper mapper, IRepository<BackLinkHistory> backLinkRepository)
+        public BackLinkService(IMapper mapper, IRepository<UserCache> userCacheRepository)
         {
             _mapper = mapper;
-            _backLinkRepository = backLinkRepository;
+            _userCacheRepository = userCacheRepository;
         }
 
         public async Task AddCurrentUrl(ActionContext context)
@@ -37,10 +37,6 @@ namespace Sfa.Tl.Matching.Application.Services
                         CurrentUrl = path
                     });
                 }
-
-                if (path.Contains("Start"))
-                    await DeleteOrphanedUrls(username);
-
             }
             catch (Exception exception)
             {
@@ -50,49 +46,87 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<string> GetBackLink(string username)
         {
-            var backLinkItems = _backLinkRepository.GetMany(bl => bl.CreatedBy == username)
-                .OrderByDescending(bl => bl.Id).ToList();
+            var (data, userUrlsList) = await GetBackLinkData(username);
 
-            var prevUrl = GetNext(backLinkItems.Select(x => x.CurrentUrl), backLinkItems.FirstOrDefault()?.CurrentUrl);
+            var prevUrl = GetNext(userUrlsList.Select(x => x.Url), userUrlsList.FirstOrDefault()?.Url);
 
-            await _backLinkRepository.Delete(backLinkItems.FirstOrDefault());
+            userUrlsList.Remove(userUrlsList.FirstOrDefault());
+
+            data.Value = userUrlsList;
+
+            await CreateOrUpdate(data, new UserCacheDto
+            {
+                Key = username,
+                Value = userUrlsList
+            });
 
             return prevUrl;
         }
 
-        public async Task<string> GetBackLinkForSearchResults(string username)
-        {
-            var backLinkItems = _backLinkRepository.GetMany(bl => bl.CreatedBy == username &&
-                                                                  (bl.CurrentUrl.Contains(
-                                                                       "provider-results-for-opportunity") ||
-                                                                   bl.CurrentUrl.Contains(
-                                                                       "provisiongap-opportunities")))
-                .OrderByDescending(bl => bl.Id);
-
-            await _backLinkRepository.DeleteMany(backLinkItems.ToList());
-
-            return await GetBackLink(username);
-        }
-
         private async Task AddUrlToBackLinkHistory(string username, BackLinkHistoryDto dto)
         {
-            var backlinkHistoryItem = _mapper.Map<BackLinkHistory>(dto);
+            var (userCache, urlList) = await GetBackLinkData(username);
 
-            var items = _backLinkRepository.GetMany(x => x.CreatedBy == username).OrderByDescending(x => x.Id);
+            if (urlList.FirstOrDefault()?.Url == dto.CurrentUrl) return;
 
-            if (items.FirstOrDefault()?.CurrentUrl != dto.CurrentUrl)
-                await _backLinkRepository.Create(backlinkHistoryItem);
+            await CreateBackLinkData(urlList, dto, userCache, username);
+
+            if (dto.CurrentUrl.Contains("Start"))
+                await DeleteOrphanedUrls(userCache, username);
+
         }
 
-        private async Task DeleteOrphanedUrls(string username)
+        private async Task CreateBackLinkData(List<CurrentUrl> urlList, BackLinkHistoryDto dto, UserCache userCache, string username)
         {
-            var items = _backLinkRepository.GetMany(x => x.CreatedBy == username).OrderByDescending(x => x.Id).Skip(1)
-                .ToList();
-
-            if (items.Any())
+            urlList.Add(new CurrentUrl
             {
-                await _backLinkRepository.DeleteMany(items);
+                Id = GetCounter(urlList),
+                Url = dto.CurrentUrl
+            });
+
+            await CreateOrUpdate(userCache, new UserCacheDto
+            {
+                Key = username,
+                Value = urlList
+            });
+        }
+
+        private async Task CreateOrUpdate(UserCache data, UserCacheDto dto)
+        {
+            var userCacheItem = _mapper.Map<UserCache>(dto);
+
+            if (data == null)
+            {
+                await _userCacheRepository.Create(userCacheItem);
             }
+            else
+            {
+                userCacheItem.Id = data.Id;
+                await _userCacheRepository.UpdateWithSpecifedColumnsOnly(userCacheItem, cache => cache.UrlHistory);
+            }
+        }
+
+        private async Task DeleteOrphanedUrls(UserCache data, string username)
+        {
+            var userUrlsList = UserBackLinks(data);
+
+            userUrlsList.RemoveRange(0, userUrlsList.Count - 1);
+
+            await CreateOrUpdate(data, new UserCacheDto
+            {
+                Key = username,
+                Value = userUrlsList
+            });
+        }
+
+        private static Func<List<CurrentUrl>, int> GetCounter => items => items.Count == 0 ? 1 : items.Max(url => url.Id) + 1;
+        private static Func<UserCache, List<CurrentUrl>> UserBackLinks => data => data != null ? data.Value.OrderByDescending(x => x.Id).ToList() : new List<CurrentUrl>();
+
+        private async  Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkData(string username)
+        {
+            var data = await _userCacheRepository.GetFirstOrDefault(x => x.CreatedBy == username);
+
+            return (data , UserBackLinks(data));
         }
 
         private static T GetNext<T>(IEnumerable<T> list, T current)
@@ -125,11 +159,6 @@ namespace Sfa.Tl.Matching.Application.Services
             "remove-opportunityItem",
             "service-under-maintenance",
             "provisiongap-opportunities"
-        };
-
-        public static List<string> OrphanedList = new List<string>
-        {
-            "employer-opportunities"
         };
     }
 }

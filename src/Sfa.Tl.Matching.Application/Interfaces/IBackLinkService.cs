@@ -7,6 +7,5 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task AddCurrentUrl(ActionContext context);
         Task<string> GetBackLink(string username);
-        Task<string> GetBackLinkForSearchResults(string username);
     }
 }
