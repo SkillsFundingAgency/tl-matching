@@ -9,10 +9,12 @@ using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
+    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class QualificationController : Controller
     {
         private readonly IMapper _mapper;

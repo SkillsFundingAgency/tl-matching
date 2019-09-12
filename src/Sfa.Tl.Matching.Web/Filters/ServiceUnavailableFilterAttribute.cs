@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
@@ -17,17 +18,20 @@ namespace Sfa.Tl.Matching.Web.Filters
             _maintenanceHistoryService = maintenanceHistoryService;
         }
 
-        public async void OnActionExecuting(ActionExecutingContext context)
+        public void OnActionExecuting(ActionExecutingContext context)
         {
             if (!context.HttpContext.User.Identity.IsAuthenticated) return;
-            if (context.HttpContext.User.HasAdminRole()) return;
-
             if (IsSignOut(context)) return;
-            
-            var maintenanceHistory = await _maintenanceHistoryService.GetLatestMaintenanceHistory();
+            if (IsServiceUnavailable(context)) return;
+
+            var maintenanceHistory = _maintenanceHistoryService.GetLatestMaintenanceHistory().GetAwaiter().GetResult();
             if (maintenanceHistory.IsOnline) return;
 
-            if (IsServiceUnavailable(context)) return;
+            if (context.HttpContext.User.HasAdminRole())
+            {
+                AttachIsOnlineTo(context);
+                return;
+            }
 
             var routeValues = new RouteValueDictionary
             {
@@ -36,7 +40,15 @@ namespace Sfa.Tl.Matching.Web.Filters
             };
 
             context.Result = new RedirectToRouteResult(routeValues);
-            await context.Result.ExecuteResultAsync(context);
+            context.Result.ExecuteResultAsync(context);
+        }
+
+        private static void AttachIsOnlineTo(ActionContext context)
+        {
+            if (context.HttpContext.Items.ContainsKey("IsOnline"))
+                context.HttpContext.Items["IsOnline"] = false;
+            else
+                context.HttpContext.Items.Add("IsOnline", false);
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
