@@ -10,21 +10,21 @@ namespace Sfa.Tl.Matching.Application.Services
     public class ServiceStatusHistoryService : IServiceStatusHistoryService
     {
         private readonly IMapper _mapper;
-        private readonly IRepository<ServiceStatusHistory> _maintenanceHistoryRepository;
+        private readonly IRepository<ServiceStatusHistory> _serviceStatusHistoryRepository;
 
-        public ServiceStatusHistoryService(IMapper mapper, IRepository<ServiceStatusHistory> maintenanceHistoryRepository)
+        public ServiceStatusHistoryService(IMapper mapper, IRepository<ServiceStatusHistory> serviceStatusHistoryRepository)
         {
             _mapper = mapper;
-            _maintenanceHistoryRepository = maintenanceHistoryRepository;
+            _serviceStatusHistoryRepository = serviceStatusHistoryRepository;
         }
 
-        public async Task<ServiceStatusHistoryViewModel> GetLatestMaintenanceHistory()
+        public async Task<ServiceStatusHistoryViewModel> GetLatestServiceStatusHistory()
         {
-            var maintenanceHistory = await _maintenanceHistoryRepository.GetLastOrDefault(mh => true);
-            if (maintenanceHistory == null)
+            var serviceStatusHistory = await _serviceStatusHistoryRepository.GetLastOrDefault(ssh => true);
+            if (serviceStatusHistory == null)
                 return new ServiceStatusHistoryViewModel();
 
-            var viewModel = _mapper.Map<ServiceStatusHistory, ServiceStatusHistoryViewModel>(maintenanceHistory);
+            var viewModel = _mapper.Map<ServiceStatusHistory, ServiceStatusHistoryViewModel>(serviceStatusHistory);
 
             return viewModel;
         }
@@ -32,9 +32,9 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<int> SaveServiceStatusHistory(ServiceStatusHistoryViewModel viewModel)
         {
             viewModel.IsOnline = !viewModel.IsOnline;
-            var maintenanceHistory = _mapper.Map<ServiceStatusHistoryViewModel, ServiceStatusHistory>(viewModel);
+            var serviceStatusHistory = _mapper.Map<ServiceStatusHistoryViewModel, ServiceStatusHistory>(viewModel);
             
-            return await _maintenanceHistoryRepository.Create(maintenanceHistory);
+            return await _serviceStatusHistoryRepository.Create(serviceStatusHistory);
         }
     }
 }

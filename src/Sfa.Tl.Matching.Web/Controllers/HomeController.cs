@@ -60,10 +60,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View();
         }
 
-        [Route("service-under-maintenance", Name = "GetLatestMaintenanceHistory")]
+        [Route("service-under-maintenance", Name = "GetLatestServiceStatusHistory")]
         public async Task<IActionResult> Maintenance()
         {
-            var viewModel = await _maintenanceHistoryService.GetLatestMaintenanceHistory();
+            var viewModel = await _maintenanceHistoryService.GetLatestServiceStatusHistory();
 
             return View(viewModel);
         }

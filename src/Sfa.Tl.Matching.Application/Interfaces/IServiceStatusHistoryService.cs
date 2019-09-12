@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IServiceStatusHistoryService
     {
-        Task<ServiceStatusHistoryViewModel> GetLatestMaintenanceHistory();
+        Task<ServiceStatusHistoryViewModel> GetLatestServiceStatusHistory();
         Task<int> SaveServiceStatusHistory(ServiceStatusHistoryViewModel viewModel);
     }
 }

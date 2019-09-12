@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
             });
 
             var maintenanceHistoryService = new ServiceStatusHistoryService(mapper, _maintenanceHistoryRepository);
-            _result = maintenanceHistoryService.GetLatestMaintenanceHistory()
+            _result = maintenanceHistoryService.GetLatestServiceStatusHistory()
                 .GetAwaiter().GetResult();
         }
 

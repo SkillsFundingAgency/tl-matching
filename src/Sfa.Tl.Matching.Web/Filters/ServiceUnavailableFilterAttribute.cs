@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.Filters
                 return;
             }
 
-            var maintenanceHistory = await _maintenanceHistoryService.GetLatestMaintenanceHistory();
+            var maintenanceHistory = await _maintenanceHistoryService.GetLatestServiceStatusHistory();
             if (maintenanceHistory.IsOnline)
             {
                 await next();
