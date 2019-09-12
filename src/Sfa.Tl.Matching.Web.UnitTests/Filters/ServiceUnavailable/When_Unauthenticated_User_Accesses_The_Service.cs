@@ -19,7 +19,7 @@
 //        public When_Unauthenticated_User_Accesses_The_Service()
 //        {
 //            var defaultHttpContext = Substitute.For<HttpContext>();
-//            var maintenanceHistoryService = Substitute.For<IServiceStatusHistoryService>();
+//            var serviceStatusHistoryService = Substitute.For<IServiceStatusHistoryService>();
 
 //            defaultHttpContext.User.Identity.IsAuthenticated.Returns(false);
 
@@ -32,7 +32,7 @@
 //                new Dictionary<string, object>(),
 //                null);
 
-//            var filterAttribute = new ServiceUnavailableFilterAttribute(maintenanceHistoryService);
+//            var filterAttribute = new ServiceUnavailableFilterAttribute(serviceStatusHistoryService);
 
 //            var next = new ActionExecutionDelegate(() => { throw null; });
 
