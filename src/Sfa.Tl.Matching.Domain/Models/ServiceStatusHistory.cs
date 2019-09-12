@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Domain.Models
 {
-    public class MaintenanceHistory : BaseEntity
+    public class ServiceStatusHistory : BaseEntity
     {
         public bool IsOnline { get; set; }
     }

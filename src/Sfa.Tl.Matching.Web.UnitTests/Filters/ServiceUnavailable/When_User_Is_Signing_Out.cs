@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
                 new Dictionary<string, object>(),
                 null);
 
-            var maintenanceHistoryService = Substitute.For<IMaintenanceHistoryService>();
+            var maintenanceHistoryService = Substitute.For<IServiceStatusHistoryService>();
             var filterAttribute = new ServiceUnavailableFilterAttribute(maintenanceHistoryService);
 
             filterAttribute.OnActionExecuting(_actionExecutingContext);

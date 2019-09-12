@@ -3,20 +3,20 @@ using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
 {
-    internal class MaintenanceHistoryData
+    internal class ServiceStatusHistoryData
     {
-        internal static MaintenanceHistory[] Create()
+        internal static ServiceStatusHistory[] Create()
         {
             var maintenanceHistories = new[]
             {
-                new MaintenanceHistory
+                new ServiceStatusHistory
                 {
                     Id = 1,
                     IsOnline = false,
                     CreatedOn = new DateTime(2019, 1, 1),
                     CreatedBy = "Dev Surname"
                 },
-                new MaintenanceHistory
+                new ServiceStatusHistory
                 {
                     Id = 2,
                     IsOnline = true,

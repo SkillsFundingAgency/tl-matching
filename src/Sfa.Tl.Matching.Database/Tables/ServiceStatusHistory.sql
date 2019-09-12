@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[MaintenanceHistory]
+﻿CREATE TABLE [dbo].[ServiceStatusHistory]
 (
 	[Id] INT IDENTITY(1,1) NOT NULL,
 	[IsOnline] BIT NOT NULL,
@@ -7,5 +7,5 @@
 	[ModifiedOn] DATETIME2 NULL,
 	[ModifiedBy] NVARCHAR(50) NULL
 
-    CONSTRAINT [PK_MaintenanceHistory] PRIMARY KEY ([Id])
+    CONSTRAINT [PK_ServiceStatusHistory] PRIMARY KEY ([Id])
 )

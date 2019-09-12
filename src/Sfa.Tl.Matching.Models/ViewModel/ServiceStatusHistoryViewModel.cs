@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.ViewModel
 {
-    public class MaintenanceViewModel
+    public class ServiceStatusHistoryViewModel
     {
         public bool IsOnline { get; set; } = true;
 

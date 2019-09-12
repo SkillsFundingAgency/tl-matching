@@ -233,7 +233,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
-            services.AddTransient<IRepository<MaintenanceHistory>, GenericRepository<MaintenanceHistory>>();
+            services.AddTransient<IRepository<ServiceStatusHistory>, GenericRepository<ServiceStatusHistory>>();
             services.AddTransient<IRepository<UserCache>, GenericRepository<UserCache>>();
         }
 
@@ -263,7 +263,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
-            services.AddTransient<IMaintenanceHistoryService, MaintenanceHistoryService>();
+            services.AddTransient<IServiceStatusHistoryService, ServiceStatusHistoryService>();
             services.AddTransient<INavigationService, NavigationService>();
             services.AddTransient<BackLinkFilter>();
             services.AddTransient<ServiceUnavailableFilterAttribute>();

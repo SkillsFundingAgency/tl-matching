@@ -10,9 +10,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
     [AllowAnonymous]
     public class HomeController : Controller
     {
-        private readonly IMaintenanceHistoryService _maintenanceHistoryService;
+        private readonly IServiceStatusHistoryService _maintenanceHistoryService;
 
-        public HomeController(IMaintenanceHistoryService maintenanceHistoryService)
+        public HomeController(IServiceStatusHistoryService maintenanceHistoryService)
         {
             _maintenanceHistoryService = maintenanceHistoryService;
         }
@@ -69,10 +69,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("service-under-maintenance", Name = "SaveMaintenanceHistory")]
-        public async Task<IActionResult> SaveMaintenanceHistory(MaintenanceViewModel viewModel)
+        [Route("service-under-maintenance", Name = "SaveServiceStatusHistory")]
+        public async Task<IActionResult> SaveServiceStatusHistory(ServiceStatusHistoryViewModel viewModel)
         {
-            await _maintenanceHistoryService.SaveMaintenanceHistory(viewModel);
+            await _maintenanceHistoryService.SaveServiceStatusHistory(viewModel);
 
             return RedirectToAction(nameof(Maintenance));
         }

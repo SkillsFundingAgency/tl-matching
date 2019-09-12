@@ -11,9 +11,9 @@ namespace Sfa.Tl.Matching.Web.Filters
 {
     public class ServiceUnavailableFilterAttribute : IActionFilter
     {
-        private readonly IMaintenanceHistoryService _maintenanceHistoryService;
+        private readonly IServiceStatusHistoryService _maintenanceHistoryService;
 
-        public ServiceUnavailableFilterAttribute(IMaintenanceHistoryService maintenanceHistoryService)
+        public ServiceUnavailableFilterAttribute(IServiceStatusHistoryService maintenanceHistoryService)
         {
             _maintenanceHistoryService = maintenanceHistoryService;
         }

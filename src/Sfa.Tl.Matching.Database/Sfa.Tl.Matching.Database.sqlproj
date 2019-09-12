@@ -98,7 +98,7 @@
     <None Include="PostDeployment\Remove Obsolete Tables.sql" />
     <Build Include="Tables\OLDOpportunity.sql" />
     <Build Include="Tables\BankHoliday.sql" />
-    <Build Include="Tables\MaintenanceHistory.sql" />
+    <Build Include="Tables\ServiceStatusHistory.sql" />
     <None Include="PostDeployment\Update Qualification Title length.sql" />
     <None Include="PostDeployment\Backfill Employer Feedback Sent.sql" />
     <Build Include="Tables\UserCache.sql" />

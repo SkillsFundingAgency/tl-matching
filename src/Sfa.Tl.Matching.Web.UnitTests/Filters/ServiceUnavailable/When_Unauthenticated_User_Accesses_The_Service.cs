@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Filters.ServiceUnavailable
         public When_Unauthenticated_User_Accesses_The_Service()
         {
             var defaultHttpContext = Substitute.For<HttpContext>();
-            var maintenanceHistoryService = Substitute.For<IMaintenanceHistoryService>();
+            var maintenanceHistoryService = Substitute.For<IServiceStatusHistoryService>();
 
             defaultHttpContext.User.Identity.IsAuthenticated.Returns(false);
 
