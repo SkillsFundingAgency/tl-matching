@@ -12,12 +12,12 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
-    public class BackLinkService : IBackLinkService
+    public class NavigationService : INavigationService
     {
         private readonly IMapper _mapper;
         private readonly IRepository<UserCache> _userCacheRepository;
 
-        public BackLinkService(IMapper mapper, IRepository<UserCache> userCacheRepository)
+        public NavigationService(IMapper mapper, IRepository<UserCache> userCacheRepository)
         {
             _mapper = mapper;
             _userCacheRepository = userCacheRepository;
@@ -121,7 +121,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static Func<List<CurrentUrl>, int> GetCounter => items => items.Count == 0 ? 1 : items.Max(url => url.Id) + 1;
         private static Func<UserCache, List<CurrentUrl>> UserBackLinks => data => data != null ? data.Value.OrderByDescending(x => x.Id).ToList() : new List<CurrentUrl>();
-
         private async  Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkData(string username)
         {
             var data = await _userCacheRepository.GetFirstOrDefault(x => x.CreatedBy == username);

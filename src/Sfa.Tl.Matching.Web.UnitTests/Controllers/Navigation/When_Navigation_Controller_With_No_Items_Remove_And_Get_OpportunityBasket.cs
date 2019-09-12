@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
         public When_Navigation_Controller_With_No_Items_Remove_And_Get_OpportunityBasket()
         {
             var opportunityService = Substitute.For<IOpportunityService>();
-            var backLinkService = Substitute.For<IBackLinkService>();
+            var backLinkService = Substitute.For<INavigationService>();
             
             opportunityService.GetSavedOpportunityItemCountAsync(Arg.Any<int>()).Returns(Task.FromResult(0));
 

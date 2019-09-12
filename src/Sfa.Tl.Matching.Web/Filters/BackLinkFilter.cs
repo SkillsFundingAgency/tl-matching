@@ -9,9 +9,9 @@ namespace Sfa.Tl.Matching.Web.Filters
     public class BackLinkFilter : IActionFilter
     {
         private readonly ILogger<BackLinkFilter> _logger;
-        private readonly IBackLinkService _backLinkService;
+        private readonly INavigationService _backLinkService;
 
-        public BackLinkFilter(ILogger<BackLinkFilter> logger, IBackLinkService backLinkService)
+        public BackLinkFilter(ILogger<BackLinkFilter> logger, INavigationService backLinkService)
         {
             _logger = logger;
             _backLinkService = backLinkService;

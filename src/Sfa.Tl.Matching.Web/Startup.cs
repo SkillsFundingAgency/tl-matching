@@ -214,12 +214,8 @@ namespace Sfa.Tl.Matching.Web
         private static void RegisterRepositories(IServiceCollection services)
         {
             services.AddTransient<OpportunityRepository>();
-            services.AddTransient<BackLinkHistoryRepository>();
-            services.AddTransient<UserCacheRepository>();
             services.AddTransient<IOpportunityRepository>(x => x.GetRequiredService<OpportunityRepository>());
             services.AddTransient<IRepository<Opportunity>>(x => x.GetRequiredService<OpportunityRepository>());
-            services.AddTransient<IRepository<BackLinkHistory>>(x=>x.GetRequiredService<BackLinkHistoryRepository>());
-            services.AddTransient<IRepository<UserCache>>(x=>x.GetRequiredService<UserCacheRepository>());
 
             services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
@@ -239,6 +235,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
             services.AddTransient<IRepository<MaintenanceHistory>, GenericRepository<MaintenanceHistory>>();
+            services.AddTransient<IRepository<UserCache>, GenericRepository<UserCache>>();
+
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
@@ -268,7 +266,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
             services.AddTransient<IMaintenanceHistoryService, MaintenanceHistoryService>();
-            services.AddTransient<IBackLinkService, BackLinkService>();
+            services.AddTransient<INavigationService, NavigationService>();
             services.AddTransient<BackLinkFilter>();
             services.AddTransient<ServiceUnavailableFilterAttribute>();
 

@@ -11,13 +11,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
     public class When_Navigation_Controller_SaveEmployerOpportunity_Is_Called
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly IBackLinkService _backLinkService;
+        private readonly INavigationService _backLinkService;
         private readonly IActionResult _result;
 
         public When_Navigation_Controller_SaveEmployerOpportunity_Is_Called()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            _backLinkService = Substitute.For<IBackLinkService>();
+            _backLinkService = Substitute.For<INavigationService>();
             
             var navigationController = new NavigationController(_opportunityService,_backLinkService);
 

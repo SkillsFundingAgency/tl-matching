@@ -11,9 +11,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class NavigationController : Controller
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly IBackLinkService _backLinkService;
+        private readonly INavigationService _backLinkService;
 
-        public NavigationController(IOpportunityService opportunityService, IBackLinkService backLinkService)
+        public NavigationController(IOpportunityService opportunityService, INavigationService backLinkService)
         {
             _opportunityService = opportunityService;
             _backLinkService = backLinkService;
