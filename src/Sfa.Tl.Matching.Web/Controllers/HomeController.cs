@@ -10,11 +10,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
     [AllowAnonymous]
     public class HomeController : Controller
     {
-        private readonly IServiceStatusHistoryService _maintenanceHistoryService;
+        private readonly IServiceStatusHistoryService _serviceStatusHistoryService;
 
-        public HomeController(IServiceStatusHistoryService maintenanceHistoryService)
+        public HomeController(IServiceStatusHistoryService serviceStatusHistoryService)
         {
-            _maintenanceHistoryService = maintenanceHistoryService;
+            _serviceStatusHistoryService = serviceStatusHistoryService;
         }
 
         public IActionResult Index()
@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("service-under-maintenance", Name = "GetLatestServiceStatusHistory")]
         public async Task<IActionResult> Maintenance()
         {
-            var viewModel = await _maintenanceHistoryService.GetLatestServiceStatusHistory();
+            var viewModel = await _serviceStatusHistoryService.GetLatestServiceStatusHistory();
 
             return View(viewModel);
         }
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("service-under-maintenance", Name = "SaveServiceStatusHistory")]
         public async Task<IActionResult> SaveServiceStatusHistory(ServiceStatusHistoryViewModel viewModel)
         {
-            await _maintenanceHistoryService.SaveServiceStatusHistory(viewModel);
+            await _serviceStatusHistoryService.SaveServiceStatusHistory(viewModel);
 
             return RedirectToAction(nameof(Maintenance));
         }

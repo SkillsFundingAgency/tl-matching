@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
 {
     public class When_ServiceStatusHistoryService_Is_Called_To_Save
     {
-        private readonly IRepository<Domain.Models.ServiceStatusHistory> _maintenanceHistoryRepository;
+        private readonly IRepository<Domain.Models.ServiceStatusHistory> _serviceStatusHistoryRepository;
 
         public When_ServiceStatusHistoryService_Is_Called_To_Save()
         {
@@ -41,36 +41,36 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
             });
             var mapper = new Mapper(config);
 
-            _maintenanceHistoryRepository = Substitute.For<IRepository<Domain.Models.ServiceStatusHistory>>();
+            _serviceStatusHistoryRepository = Substitute.For<IRepository<Domain.Models.ServiceStatusHistory>>();
 
-            var maintenanceHistoryService = new ServiceStatusHistoryService(mapper, _maintenanceHistoryRepository);
-            maintenanceHistoryService.SaveServiceStatusHistory(new ServiceStatusHistoryViewModel
+            var serviceStatusHistoryService = new ServiceStatusHistoryService(mapper, _serviceStatusHistoryRepository);
+            serviceStatusHistoryService.SaveServiceStatusHistory(new ServiceStatusHistoryViewModel
             {
                 IsOnline = true
             }).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_MaintenanceHistoryRepository_Create_Is_Called_Exactly_Once()
+        public void Then_ServiceStatusHistoryRepository_Create_Is_Called_Exactly_Once()
         {
-            _maintenanceHistoryRepository
+            _serviceStatusHistoryRepository
                 .Received(1)
                 .Create(Arg.Any<Domain.Models.ServiceStatusHistory>());
         }
 
         [Fact]
-        public void Then_MaintenanceHistoryRepository_Create_Is_Called_With_IsOnline_Is_False()
+        public void Then_ServiceStatusHistoryRepository_Create_Is_Called_With_IsOnline_Is_False()
         {
-            _maintenanceHistoryRepository
+            _serviceStatusHistoryRepository
                 .Received(1)
                 .Create(Arg.Is<Domain.Models.ServiceStatusHistory>(mh =>
                     !mh.IsOnline));
         }
 
         [Fact]
-        public void Then_MaintenanceHistoryRepository_Create_Is_Called_With_CreatedBy()
+        public void Then_ServiceStatusHistoryRepository_Create_Is_Called_With_CreatedBy()
         {
-            _maintenanceHistoryRepository
+            _serviceStatusHistoryRepository
                 .Received(1)
                 .Create(Arg.Is<Domain.Models.ServiceStatusHistory>(mh =>
                     mh.CreatedBy == "CreatedBy"));

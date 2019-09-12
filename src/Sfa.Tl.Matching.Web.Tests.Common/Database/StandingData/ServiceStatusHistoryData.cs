@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
     {
         internal static ServiceStatusHistory[] Create()
         {
-            var maintenanceHistories = new[]
+            var serviceStatusHistories = new[]
             {
                 new ServiceStatusHistory
                 {
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 }
             };
 
-            return maintenanceHistories;
+            return serviceStatusHistories;
         }
     }
 }

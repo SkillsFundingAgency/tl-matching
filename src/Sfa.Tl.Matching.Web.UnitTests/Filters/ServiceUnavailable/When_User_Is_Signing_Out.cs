@@ -50,8 +50,8 @@
 //                new Dictionary<string, object>(),
 //                null);
 
-//            var maintenanceHistoryService = Substitute.For<IServiceStatusHistoryService>();
-//            var filterAttribute = new ServiceUnavailableFilterAttribute(maintenanceHistoryService);
+//            var serviceStatusHistoryService = Substitute.For<IServiceStatusHistoryService>();
+//            var filterAttribute = new ServiceUnavailableFilterAttribute(serviceStatusHistoryService);
 
 //            var next = new ActionExecutionDelegate(() =>
 //            {

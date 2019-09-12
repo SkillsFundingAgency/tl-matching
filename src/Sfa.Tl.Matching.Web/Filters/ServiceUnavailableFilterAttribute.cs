@@ -37,8 +37,8 @@ namespace Sfa.Tl.Matching.Web.Filters
                 return;
             }
 
-            var maintenanceHistory = await _serviceStatusHistoryService.GetLatestServiceStatusHistory();
-            if (maintenanceHistory.IsOnline)
+            var serviceStatusHistory = await _serviceStatusHistoryService.GetLatestServiceStatusHistory();
+            if (serviceStatusHistory.IsOnline)
             {
                 await next();
                 return;
