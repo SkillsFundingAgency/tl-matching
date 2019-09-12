@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 
 namespace Sfa.Tl.Matching.Web.Filters
@@ -9,12 +9,13 @@ namespace Sfa.Tl.Matching.Web.Filters
     public class BackLinkFilter : IActionFilter
     {
         private readonly ILogger<BackLinkFilter> _logger;
-        private readonly INavigationService _backLinkService;
+        private readonly INavigationService _navigationService;
 
-        public BackLinkFilter(ILogger<BackLinkFilter> logger, INavigationService backLinkService)
+
+        public BackLinkFilter(ILogger<BackLinkFilter> logger, INavigationService navigationService)
         {
             _logger = logger;
-            _backLinkService = backLinkService;
+            _navigationService = navigationService;
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
@@ -23,7 +24,11 @@ namespace Sfa.Tl.Matching.Web.Filters
             {
                 if (context.HttpContext.Request.Method != "GET") return;
 
-                _backLinkService.AddCurrentUrl(context);
+                var path = context.HttpContext.Request.Path.ToString();
+                var username = context.HttpContext.User.GetUserName();
+
+                _navigationService.AddCurrentUrl(path, username);
+
             }
             catch (Exception exception)
             {
@@ -33,93 +38,221 @@ namespace Sfa.Tl.Matching.Web.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            
+
         }
     }
 
-    public interface ICommand<T>
-    {
-        T Do(T input);
-        T GetPrevLink(T input);
-        T BackLinkUrl();
-    }
+    //Commented the following code to consider implementing the back link with command pattern
+    //Could be a tech debt ticket.
 
-    public class AddBackLinkCommand : ICommand<string>
-    {
-        private string Value { get; set; }
+    //public interface ICommand
+    //{
+    //    Task<string> Execute(string path, string username);
+    //}
 
-        public AddBackLinkCommand(string value)
-        {
-            Value = value;
-        }
-        public string Do(string input)
-        {
-            Value = input;
-            return Value;
-        }
+    //public interface INavigationManager
+    //{
+    //    void CreateLink(ICommand command, string path, string username);
+    //    void GetBackLink(ICommand command, string path, string username);
+    //    void DeleteOrphanedUrls(ICommand command, string path, string username);
+    //}
 
-        public string GetPrevLink(string input)
-        {
-            Value = input;
-            return Value;
-        }
+    //public class NavigationManager : INavigationManager
+    //{
+    //    public void CreateLink(ICommand command, string path, string username)
+    //    {
+    //        command.Execute(path, username);
+    //    }
 
-        public string BackLinkUrl()
-        {
-            return Value;
-        }
-    }
+    //    public void GetBackLink(ICommand command, string path, string username)
+    //    {
+    //        command.Execute(path, username);
+    //    }
 
-    public class NavigationManager
-    {
-        private Stack<ICommand<string>> _prevLink;
-        private Stack<ICommand<string>> _currLink;
+    //    public void DeleteOrphanedUrls(ICommand command, string path, string username)
+    //    {
+    //        command.Execute(path, username);
+    //    }
+    //}
 
-        public int UndoCount => _prevLink.Count;
+    //public class CreateCommand : ICommand
+    //{
+    //    private readonly IMapper _mapper;
+    //    private readonly IRepository<UserCache> _userCacheRepository;
 
-        public int RedoCount => _currLink.Count;
+    //    public CreateCommand(IMapper mapper, IRepository<UserCache> userCacheRepository)
+    //    {
+    //        _mapper = mapper;
+    //        _userCacheRepository = userCacheRepository;
+    //    }
 
-        public NavigationManager()
-        {
-            Reset();
-        }
-        public void Reset()
-        {
-            _prevLink = new Stack<ICommand<string>>();
-            _currLink = new Stack<ICommand<string>>();
-        }
+    //    public async Task<string> Execute(string path, string username)
+    //    {
+    //        if (!ExcludedUrls.ExcludedList.Any(path.Contains))
+    //        {
+    //            await AddUrlToBackLinkHistory(username, new BackLinkHistoryDto
+    //            {
+    //                CurrentUrl = path
+    //            });
+    //        }
 
-        public string Do(ICommand<string> cmd, string input)
-        {
-            var output = cmd.Do(input);
+    //        return string.Empty;
+    //    }
 
-            if (_prevLink.Count > 0 && _prevLink.Peek().BackLinkUrl() == input) return output;
+    //    private async Task AddUrlToBackLinkHistory(string username, BackLinkHistoryDto dto)
+    //    {
+    //        var (userCache, urlList) = await GetBackLinkData(username);
 
-            _prevLink.Push(cmd);
+    //        if (urlList.FirstOrDefault()?.Url == dto.CurrentUrl) return;
 
-            _currLink.Clear();
+    //        await CreateBackLinkData(urlList, dto, userCache, username);
 
-            return output;
-        }
+    //        if (dto.CurrentUrl.Contains("Start"))
+    //            await DeleteOrphanedUrls(userCache, username);
 
-        public ICommand<string> GetPrevLink()
-        {
-            if (_prevLink.Count <= 0) return null;
+    //    }
 
-            var cmd = _prevLink.Pop();
-            _currLink.Push(cmd);
+    //    private async Task CreateBackLinkData(List<CurrentUrl> urlList, BackLinkHistoryDto dto, UserCache userCache, string username)
+    //    {
+    //        urlList.Add(new CurrentUrl
+    //        {
+    //            Id = CommandHelper.GetCounter(urlList),
+    //            Url = dto.CurrentUrl
+    //        });
 
-            return UndoCount == 0 ? null : _prevLink.Peek();
+    //        await CreateOrUpdate(userCache, new UserCacheDto
+    //        {
+    //            Key = username,
+    //            Value = urlList
+    //        });
+    //    }
 
-        }
-        public ICommand<string> GetCurrLink()
-        {
-            if (_currLink.Count <= 0) return null;
+    //    private async Task CreateOrUpdate(UserCache data, UserCacheDto dto)
+    //    {
+    //        var userCacheItem = _mapper.Map<UserCache>(dto);
 
-            var cmd = _currLink.Pop();
-            _prevLink.Push(cmd);
+    //        if (data == null)
+    //        {
+    //            await _userCacheRepository.Create(userCacheItem);
+    //        }
+    //        else
+    //        {
+    //            userCacheItem.Id = data.Id;
+    //            await _userCacheRepository.UpdateWithSpecifedColumnsOnly(userCacheItem, cache => cache.UrlHistory);
+    //        }
+    //    }
 
-            return UndoCount == 0 ? null : _prevLink.Peek();
-        }
-    }
+    //    private async Task DeleteOrphanedUrls(UserCache data, string username)
+    //    {
+    //        var userUrlsList = CommandHelper.UserBackLinks(data);
+
+    //        userUrlsList.RemoveRange(0, userUrlsList.Count - 1);
+
+    //        await CreateOrUpdate(data, new UserCacheDto
+    //        {
+    //            Key = username,
+    //            Value = userUrlsList
+    //        });
+    //    }
+
+    //    private async Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkData(string username)
+    //    {
+    //        var data = await _userCacheRepository.GetFirstOrDefault(x => x.CreatedBy == username);
+
+    //        return (data, CommandHelper.UserBackLinks(data));
+    //    }
+
+    //}
+
+    //public class FetchCommand : ICommand
+    //{
+    //    private readonly IMapper _mapper;
+    //    private readonly IRepository<UserCache> _userCacheRepository;
+
+    //    public FetchCommand(IMapper mapper, IRepository<UserCache> userCacheRepository)
+    //    {
+    //        _mapper = mapper;
+    //        _userCacheRepository = userCacheRepository;
+    //    }
+
+    //    public async Task<string> Execute(string path, string username)
+    //    {
+    //        var (data, userUrlsList) = await GetBackLinkData(username);
+
+    //        var prevUrl = GetNext(userUrlsList.Select(x => x.Url), userUrlsList.FirstOrDefault()?.Url);
+
+    //        userUrlsList.Remove(userUrlsList.FirstOrDefault());
+
+    //        data.Value = userUrlsList;
+
+    //        await CreateOrUpdate(data, new UserCacheDto
+    //        {
+    //            Key = username,
+    //            Value = userUrlsList
+    //        });
+
+    //        return prevUrl;
+    //    }
+
+
+    //    private async Task CreateOrUpdate(UserCache data, UserCacheDto dto)
+    //    {
+    //        var userCacheItem = _mapper.Map<UserCache>(dto);
+
+    //        if (data == null)
+    //        {
+    //            await _userCacheRepository.Create(userCacheItem);
+    //        }
+    //        else
+    //        {
+    //            userCacheItem.Id = data.Id;
+    //            await _userCacheRepository.UpdateWithSpecifedColumnsOnly(userCacheItem, cache => cache.UrlHistory);
+    //        }
+    //    }
+
+    //    private async Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkData(string username)
+    //    {
+    //        var data = await _userCacheRepository.GetFirstOrDefault(x => x.CreatedBy == username);
+
+    //        return (data, CommandHelper.UserBackLinks(data));
+    //    }
+
+    //    private static T GetNext<T>(IEnumerable<T> list, T current)
+    //    {
+    //        try
+    //        {
+    //            return list.SkipWhile(x => !x.Equals(current)).Skip(1).First();
+    //        }
+    //        catch
+    //        {
+    //            return default(T);
+    //        }
+    //    }
+    //}
+
+    //public class CommandHelper
+    //{
+    //    public static Func<List<CurrentUrl>, int> GetCounter => items => items.Count == 0 ? 1 : items.Max(url => url.Id) + 1;
+    //    public static Func<UserCache, List<CurrentUrl>> UserBackLinks => data => data != null ? data.Value.OrderByDescending(x => x.Id).ToList() : new List<CurrentUrl>();
+    //}
+
+    //public class ExcludedUrls
+    //{
+    //    public static List<string> ExcludedList = new List<string>
+    //    {
+    //        "/page-not-found",
+    //        "/Account/PostSignIn",
+    //        "Account/SignIn",
+    //        "Account/SignOut",
+    //        "referral-create",
+    //        "get-back-link",
+    //        "404",
+    //        "employer-search",
+    //        "saved-opportunities",
+    //        "download-opportunity",
+    //        "remove-opportunityItem",
+    //        "service-under-maintenance",
+    //        "provisiongap-opportunities"
+    //    };
+    //}
 }

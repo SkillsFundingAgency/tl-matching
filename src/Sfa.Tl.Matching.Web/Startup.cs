@@ -2,6 +2,7 @@
 using System.Globalization;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
@@ -204,8 +205,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
-            services.AddSingleton<NavigationManager>();
-            
             RegisterNotificationsApi(services, MatchingConfiguration.NotificationsApiClientConfiguration);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
@@ -216,7 +215,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<OpportunityRepository>();
             services.AddTransient<IOpportunityRepository>(x => x.GetRequiredService<OpportunityRepository>());
             services.AddTransient<IRepository<Opportunity>>(x => x.GetRequiredService<OpportunityRepository>());
-
+            
             services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
             services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
             services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
@@ -236,7 +235,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
             services.AddTransient<IRepository<MaintenanceHistory>, GenericRepository<MaintenanceHistory>>();
             services.AddTransient<IRepository<UserCache>, GenericRepository<UserCache>>();
-
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)

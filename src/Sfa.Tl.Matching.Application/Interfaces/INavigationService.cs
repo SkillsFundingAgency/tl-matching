@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface INavigationService
     {
-        Task AddCurrentUrl(ActionContext context);
+        Task AddCurrentUrl(string path, string username);
         Task<string> GetBackLink(string username);
     }
 }

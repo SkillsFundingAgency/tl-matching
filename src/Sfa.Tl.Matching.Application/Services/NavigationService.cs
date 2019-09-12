@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -23,19 +21,13 @@ namespace Sfa.Tl.Matching.Application.Services
             _userCacheRepository = userCacheRepository;
         }
 
-        public async Task AddCurrentUrl(ActionContext context)
+        public async Task AddCurrentUrl(string path, string username)
         {
             try
             {
-                var path = context.HttpContext.Request.Path.ToString();
-                var username = context.HttpContext.User.GetUserName();
-
                 if (!ExcludedUrls.ExcludedList.Any(path.Contains))
                 {
-                    await AddUrlToBackLinkHistory(username, new BackLinkHistoryDto
-                    {
-                        CurrentUrl = path
-                    });
+                    await AddUrlToBackLinkHistory(username, path);
                 }
             }
             catch (Exception exception)
@@ -63,25 +55,25 @@ namespace Sfa.Tl.Matching.Application.Services
             return prevUrl;
         }
 
-        private async Task AddUrlToBackLinkHistory(string username, BackLinkHistoryDto dto)
+        private async Task AddUrlToBackLinkHistory(string username, string currentUrl)
         {
             var (userCache, urlList) = await GetBackLinkData(username);
 
-            if (urlList.FirstOrDefault()?.Url == dto.CurrentUrl) return;
+            if (urlList.FirstOrDefault()?.Url == currentUrl) return;
 
-            await CreateBackLinkData(urlList, dto, userCache, username);
+            await CreateBackLinkData(urlList, userCache, currentUrl, username);
 
-            if (dto.CurrentUrl.Contains("Start"))
+            if (currentUrl.Contains("Start"))
                 await DeleteOrphanedUrls(userCache, username);
 
         }
 
-        private async Task CreateBackLinkData(List<CurrentUrl> urlList, BackLinkHistoryDto dto, UserCache userCache, string username)
+        private async Task CreateBackLinkData(List<CurrentUrl> urlList, UserCache userCache, string currentUrl, string username)
         {
             urlList.Add(new CurrentUrl
             {
                 Id = GetCounter(urlList),
-                Url = dto.CurrentUrl
+                Url = currentUrl
             });
 
             await CreateOrUpdate(userCache, new UserCacheDto
@@ -121,23 +113,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static Func<List<CurrentUrl>, int> GetCounter => items => items.Count == 0 ? 1 : items.Max(url => url.Id) + 1;
         private static Func<UserCache, List<CurrentUrl>> UserBackLinks => data => data != null ? data.Value.OrderByDescending(x => x.Id).ToList() : new List<CurrentUrl>();
-        private async  Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkData(string username)
+        private static T GetNext<T>(IEnumerable<T> list, T current) => list.SkipWhile(x => !x.Equals(current)).Skip(1).First();
+        private async Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkData(string username)
         {
             var data = await _userCacheRepository.GetFirstOrDefault(x => x.CreatedBy == username);
 
-            return (data , UserBackLinks(data));
-        }
-
-        private static T GetNext<T>(IEnumerable<T> list, T current)
-        {
-            try
-            {
-                return list.SkipWhile(x => !x.Equals(current)).Skip(1).First();
-            }
-            catch
-            {
-                return default(T);
-            }
+            return (data, UserBackLinks(data));
         }
     }
 
