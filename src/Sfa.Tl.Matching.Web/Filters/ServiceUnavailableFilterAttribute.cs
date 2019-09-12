@@ -11,11 +11,11 @@ namespace Sfa.Tl.Matching.Web.Filters
 {
     public class ServiceUnavailableFilterAttribute : IAsyncActionFilter
     {
-        private readonly IServiceStatusHistoryService _maintenanceHistoryService;
+        private readonly IServiceStatusHistoryService _serviceStatusHistoryService;
 
-        public ServiceUnavailableFilterAttribute(IServiceStatusHistoryService maintenanceHistoryService)
+        public ServiceUnavailableFilterAttribute(IServiceStatusHistoryService serviceStatusHistoryService)
         {
-            _maintenanceHistoryService = maintenanceHistoryService;
+            _serviceStatusHistoryService = serviceStatusHistoryService;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.Filters
                 return;
             }
 
-            var maintenanceHistory = await _maintenanceHistoryService.GetLatestServiceStatusHistory();
+            var maintenanceHistory = await _serviceStatusHistoryService.GetLatestServiceStatusHistory();
             if (maintenanceHistory.IsOnline)
             {
                 await next();
