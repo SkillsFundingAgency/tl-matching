@@ -59,8 +59,6 @@ namespace Sfa.Tl.Matching.Web.Filters
 
             context.Result = new RedirectToRouteResult(routeValues);
             await context.Result.ExecuteResultAsync(context);
-
-            await next();
         }
 
         private static void AttachIsOnlineTo(ActionContext context)
