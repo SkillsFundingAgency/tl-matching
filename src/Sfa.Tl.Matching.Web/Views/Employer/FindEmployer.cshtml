@@ -21,28 +21,45 @@
                 </div>
             </div>
         }
-        <form asp-action="SaveOpportunityCompanyName" id="findEmployer" novalidate>
-            <input asp-for="OpportunityId" type="hidden" />
-            <input asp-for="OpportunityItemId" type="hidden" />
-            <input asp-for="SelectedEmployerId" type="hidden" />
-            <div class="govuk-form-group" sfa-validation-for="CompanyName" sfa-validationerror-class="govuk-form-group--error">
-                <h1 class="govuk-label-wrapper">
-                    <label class="govuk-label govuk-label--l" asp-for="CompanyName">
-                        @ViewData["Title"]
-                    </label>
-                    <span id="employer-name-hint" class="govuk-hint">
-                        Start typing their business name
-                    </span>
-                </h1>
-                <span class="govuk-error-message" asp-validation-for="CompanyName"></span>
-                <select id="CompanyName" name="CompanyName" class="govuk-input" asp-for="CompanyName"></select>
-            </div>
+            <form asp-action="SaveOpportunityCompanyName" id="findEmployer" novalidate>
+                <input asp-for="OpportunityId" type="hidden" />
+                <input asp-for="OpportunityItemId" type="hidden" />
+                <input asp-for="SelectedEmployerId" type="hidden" />
+                <div class="govuk-form-group" sfa-validation-for="CompanyName" sfa-validationerror-class="govuk-form-group--error">
+                    <h1 class="govuk-label-wrapper">
+                        <label class="govuk-label govuk-label--l" asp-for="CompanyName">
+                            @ViewData["Title"]
+                        </label>
+                        <span id="employer-name-hint" class="govuk-hint">
+                            Start typing their business name
+                        </span>
+                    </h1>
+                    <span class="govuk-error-message" asp-validation-for="CompanyName"></span>
+                    <select id="CompanyName" name="CompanyName" class="govuk-input" asp-for="CompanyName"></select>
+                </div>
 
-            <input id="companyNameHidden" asp-for="CompanyNameWithAka" type="hidden" />
-            <input id="previousCompanyNameHidden" asp-for="PreviousCompanyName" type="hidden" />
+                <input id="companyNameHidden" asp-for="CompanyNameWithAka" type="hidden" />
+                <input id="previousCompanyNameHidden" asp-for="PreviousCompanyName" type="hidden" />
 
-            <button id="tl-continue" class="govuk-button" type="submit">Continue</button>
-        </form>
+                @* Progressive disclosure *@
+
+                <details class="govuk-details" data-module="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text">
+                            I cannot find the employer
+                        </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                        <p class="govuk-body">Make sure they have a saved record in the employer CRM record with:</p>
+                        <ul class="govuk-list govuk-list--bullet">
+                            <li>an AUPA status</li>
+                            <li>company type set to ‘employer’ or ‘employer provider’</li>
+                        </ul>
+                        <p>If you have just added a new employer to the CRM, it will take 1 to 2 minutes to show on this page.</p>
+                    </div>
+                </details>
+                <button id="tl-continue" class="govuk-button" type="submit">Continue</button>
+            </form>
     </div>
 </div>
 @section jsfiles{
