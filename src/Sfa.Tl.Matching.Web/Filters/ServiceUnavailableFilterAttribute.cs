@@ -9,7 +9,7 @@ using Sfa.Tl.Matching.Web.Controllers;
 
 namespace Sfa.Tl.Matching.Web.Filters
 {
-    public class ServiceUnavailableFilterAttribute : IActionFilter
+    public class ServiceUnavailableFilterAttribute : IAsyncActionFilter
     {
         private readonly IServiceStatusHistoryService _maintenanceHistoryService;
 
@@ -18,18 +18,36 @@ namespace Sfa.Tl.Matching.Web.Filters
             _maintenanceHistoryService = maintenanceHistoryService;
         }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (!context.HttpContext.User.Identity.IsAuthenticated) return;
-            if (IsSignOut(context)) return;
-            if (IsServiceUnavailable(context)) return;
+            if (!context.HttpContext.User.Identity.IsAuthenticated)
+            {
+                await next();
+                return;
+            }
 
-            var maintenanceHistory = _maintenanceHistoryService.GetLatestMaintenanceHistory().GetAwaiter().GetResult();
-            if (maintenanceHistory.IsOnline) return;
+            if (IsSignOut(context))
+            {
+                await next();
+                return;
+            }
+            if (IsServiceUnavailable(context))
+            {
+                await next();
+                return;
+            }
+
+            var maintenanceHistory = await _maintenanceHistoryService.GetLatestMaintenanceHistory();
+            if (maintenanceHistory.IsOnline)
+            {
+                await next();
+                return;
+            }
 
             if (context.HttpContext.User.HasAdminRole())
             {
                 AttachIsOnlineTo(context);
+                await next();
                 return;
             }
 
@@ -40,7 +58,9 @@ namespace Sfa.Tl.Matching.Web.Filters
             };
 
             context.Result = new RedirectToRouteResult(routeValues);
-            context.Result.ExecuteResultAsync(context);
+            await context.Result.ExecuteResultAsync(context);
+
+            await next();
         }
 
         private static void AttachIsOnlineTo(ActionContext context)
@@ -49,11 +69,6 @@ namespace Sfa.Tl.Matching.Web.Filters
                 context.HttpContext.Items["IsOnline"] = false;
             else
                 context.HttpContext.Items.Add("IsOnline", false);
-        }
-
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-
         }
 
         private static bool IsSignOut(ActionContext context)
