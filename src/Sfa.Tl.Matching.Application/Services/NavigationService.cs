@@ -102,6 +102,8 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var userUrlsList = UserBackLinks(data);
 
+            if (userUrlsList.Count == 0) return;
+
             userUrlsList.RemoveRange(0, userUrlsList.Count - 1);
 
             await CreateOrUpdate(data, new UserCacheDto
