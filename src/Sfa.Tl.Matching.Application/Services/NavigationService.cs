@@ -94,7 +94,10 @@ namespace Sfa.Tl.Matching.Application.Services
             else
             {
                 userCacheItem.Id = data.Id;
-                await _userCacheRepository.UpdateWithSpecifedColumnsOnly(userCacheItem, cache => cache.UrlHistory);
+                await _userCacheRepository.UpdateWithSpecifedColumnsOnly(userCacheItem, 
+                    cache => cache.UrlHistory, 
+                    cache => cache.ModifiedBy,
+                    cache => cache.ModifiedOn);
             }
         }
 
