@@ -43,10 +43,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
                 c.AddMaps(typeof(UserCacheMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
-                            type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<UserCacheDto, UserCache>(new DateTimeProvider()) :
-                                null);
+                        (object)new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
+                        type.Name.Contains("UtcNowResolver") ?
+                            new UtcNowResolver<UserCacheDto, UserCache>(new DateTimeProvider()) :
+                            null);
             });
 
             //Arrange
@@ -96,10 +96,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
                 c.AddMaps(typeof(UserCacheMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
-                            type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<UserCacheDto, UserCache>(new DateTimeProvider()) :
-                                null);
+                        (object)new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
+                        type.Name.Contains("UtcNowResolver") ?
+                            new UtcNowResolver<UserCacheDto, UserCache>(new DateTimeProvider()) :
+                            null);
             });
 
             //Arrange
@@ -112,7 +112,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             //Act
             await sut.AddCurrentUrl("/Account/PostSignIn", username);
             await sut.AddCurrentUrl("referral-create", username);
-            
+
             var addedItem = await repo.GetFirstOrDefault(x => x.CreatedBy == username);
 
             //Assert
