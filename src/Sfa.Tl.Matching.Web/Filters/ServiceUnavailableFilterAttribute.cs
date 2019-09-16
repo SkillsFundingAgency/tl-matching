@@ -31,6 +31,7 @@ namespace Sfa.Tl.Matching.Web.Filters
                 await next();
                 return;
             }
+
             if (IsServiceUnavailable(context))
             {
                 await next();
