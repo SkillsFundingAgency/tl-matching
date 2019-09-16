@@ -97,7 +97,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             noProviderBasketTableBody.Rows[0].Cells[0].TextContent.Should().Be("London SW1A 2AA");
             noProviderBasketTableBody.Rows[0].Cells[1].TextContent.Should().Be("Job Role");
             noProviderBasketTableBody.Rows[0].Cells[2].TextContent.Should().Be("1");
-            noProviderBasketTableBody.Rows[0].Cells[3].TextContent.Should().Be("Providers were too far away");
+            noProviderBasketTableBody.Rows[0].Cells[3].TextContent.Should().Be("Providers are too far away");
 
             var downloadLink = documentHtml.GetElementById("tl-download") as IHtmlAnchorElement;
             downloadLink.Text.Should().Be("Download all data as a spreadsheet");

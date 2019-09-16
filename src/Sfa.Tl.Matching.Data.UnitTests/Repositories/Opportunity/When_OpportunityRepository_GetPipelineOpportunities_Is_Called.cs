@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _result.ProvisionGapItems.First().Reason.Should().Be(
                 "Employer had a bad experience with them, " +
                 "Providers do not have students doing the right course, " +
-                "Providers were too far away");
+                "Providers are too far away");
         }
     }
 }

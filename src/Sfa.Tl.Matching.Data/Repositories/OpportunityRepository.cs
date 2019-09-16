@@ -294,7 +294,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 reasons.Add("Providers do not have students doing the right course");
 
             if (provisionGap.ProvidersTooFarAway.HasValue && provisionGap.ProvidersTooFarAway.Value)
-                reasons.Add("Providers were too far away");
+                reasons.Add("Providers are too far away");
 
             if (reasons.Count == 0)
                 reasons.Add("None available");
