@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using GeoAPI.Geometries;
 
 namespace Sfa.Tl.Matching.Domain.Models
@@ -10,7 +11,9 @@ namespace Sfa.Tl.Matching.Domain.Models
         public string Town { get; set; }
         public string County { get; set; }
         public string Postcode { get; set; }
+        [Column(TypeName = "decimal(9, 6)")]
         public decimal? Latitude { get; set; }
+        [Column(TypeName = "decimal(9, 6)")]
         public decimal? Longitude { get; set; }
         public bool IsRemoved { get; set; }
         public bool IsEnabledForReferral { get; set; }
