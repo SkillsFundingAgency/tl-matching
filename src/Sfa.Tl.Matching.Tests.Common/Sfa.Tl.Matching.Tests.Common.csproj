@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Sfa.Tl.Matching.Domain\Sfa.Tl.Matching.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Builders\" />
+  </ItemGroup>
+
 </Project>

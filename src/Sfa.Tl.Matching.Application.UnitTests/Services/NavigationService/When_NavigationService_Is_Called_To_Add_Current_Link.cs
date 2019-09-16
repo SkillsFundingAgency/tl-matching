@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoFixture.Xunit2;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using NSubstitute;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
@@ -26,17 +25,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
         [Theory, AutoDomainData]
         public async Task Then_Add_Current_Link(
             MatchingDbContext dbContext,
-            IHttpContextAccessor httpContextAccessor,
+            HttpContext httpContext,
+            HttpContextAccessor httpContextAccessor,
             ILogger<GenericRepository<UserCache>> logger
             )
         {
-            httpContextAccessor.HttpContext.Returns(new DefaultHttpContext
-            {
-                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.GivenName, "adminUserName")
-                }))
-            });
+            httpContextAccessor.HttpContext = httpContext;
 
             var config = new MapperConfiguration(c =>
             {
@@ -79,17 +73,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
         [Theory, AutoDomainData]
         public async Task Then_Do_Not_Add_Excluded_List(
             MatchingDbContext dbContext,
-            IHttpContextAccessor httpContextAccessor,
+            HttpContext httpContext,
+            HttpContextAccessor httpContextAccessor,
             ILogger<GenericRepository<UserCache>> logger
             )
         {
-            httpContextAccessor.HttpContext.Returns(new DefaultHttpContext
-            {
-                User = new ClaimsPrincipal(new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.GivenName, "adminUserName")
-                }))
-            });
+            httpContextAccessor.HttpContext = httpContext;
 
             var config = new MapperConfiguration(c =>
             {
@@ -117,7 +106,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
 
             //Assert
             addedItem.Should().BeNull();
-
         }
+
     }
 }

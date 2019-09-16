@@ -1,4 +1,6 @@
-﻿using AutoFixture;
+﻿using System.Collections.Generic;
+using System.Net;
+using AutoFixture;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 
