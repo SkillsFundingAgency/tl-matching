@@ -41,7 +41,10 @@ namespace Sfa.Tl.Matching.Data
         {
             modelBuilder.Entity<UserCache>()
                 .Property(b => b.UrlHistory).HasColumnName("Value");
-        }
 
+            modelBuilder.Entity<UserCache>()
+                .Property(b => b.UserCacheKey).HasColumnName("Key");
+
+        }
     }
 }

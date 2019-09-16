@@ -18,7 +18,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<UserCacheDto, UserCache>>())
                 .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<UserCacheDto, UserCache>>())
                 .ForAllOtherMembers(config => config.Ignore());
-
         }
     }
 }
