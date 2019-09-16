@@ -142,7 +142,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                CompanyName = e.CompanyName,
                                                CompanyNameAka = e.AlsoKnownAs,
                                                ProvisionGapItems = o.OpportunityItem
-                                                   .Where(oi => IsValidBasketState(oi, OpportunityType.ProvisionGap))
+                                                   .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString() && 
+                                                                oi.IsSaved && !oi.IsCompleted)
                                                    .Select(oi => new BasketProvisionGapItemViewModel
                                                    {
                                                        OpportunityItemId = oi.Id,
@@ -154,7 +155,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        OpportunityType = oi.OpportunityType
                                                    }).ToList(),
                                                ReferralItems = o.OpportunityItem
-                                                   .Where(oi => IsValidBasketState(oi, OpportunityType.Referral))
+                                                   .Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString() &&
+                                                                oi.IsSaved && !oi.IsCompleted)
                                                    .Select(oi => new BasketReferralItemViewModel
                                                    {
                                                        OpportunityItemId = oi.Id,
@@ -188,7 +190,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              {
                                  CompanyName = e.CompanyName,
                                  ProvisionGapItems = o.OpportunityItem
-                                     .Where(oi => IsValidBasketState(oi, OpportunityType.ProvisionGap))
+                                     .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString() &&
+                                                  oi.IsSaved && !oi.IsCompleted)
                                      .Select(oi => new ProvisionGapItemDto
                                      {
                                          JobRole = oi.JobRole,
@@ -202,7 +205,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                       join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
                                       join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                                       join p in _dbContext.Provider on pv.ProviderId equals p.Id
-                                      where IsValidBasketState(oi, OpportunityType.Referral)
+                                      where (oi.OpportunityType == OpportunityType.Referral.ToString() &&
+                                                       oi.IsSaved && !oi.IsCompleted)
                                       select new ReferralItemDto
                                       {
                                           JobRole = oi.JobRole,
@@ -276,12 +280,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              }).ToListAsync();
             
             return dto;
-        }
-
-        private static bool IsValidBasketState(OpportunityItem oi, OpportunityType type)
-        {
-            return oi.OpportunityType == type.ToString()
-                   && oi.IsSaved && !oi.IsCompleted;
         }
 
         private static string GetReasons(ProvisionGap provisionGap)
