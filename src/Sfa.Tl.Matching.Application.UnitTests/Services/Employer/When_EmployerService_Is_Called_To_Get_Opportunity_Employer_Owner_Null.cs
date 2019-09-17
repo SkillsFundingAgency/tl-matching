@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _opportunityRepository.GetFirstOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>())
                 .Returns((Domain.Models.Opportunity)null);
 
-            var employerService = new EmployerService(employerRepository, _opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>());
+            var employerService = new EmployerService(employerRepository, _opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>(), Substitute.For<IValidator<CrmContactEventBase>>());
 
             _result = employerService.GetEmployerOpportunityOwnerAsync(1).GetAwaiter().GetResult();
         }

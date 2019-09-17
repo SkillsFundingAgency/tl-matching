@@ -157,7 +157,15 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var updatedRecords = 0; //await employerService.ValidateAndDeleteEmployer();
+
+                string requestBody;
+                using (var streamReader = new StreamReader(req.Body))
+                {
+                    requestBody = await streamReader.ReadToEndAsync();
+                }
+
+                var updatedRecords = await employerService.HandleContactCreatedAsync(requestBody);
+
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -195,7 +203,15 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var updatedRecords = 0; //await employerService.ValidateAndUpdateEmployer();
+
+                string requestBody;
+                using (var streamReader = new StreamReader(req.Body))
+                {
+                    requestBody = await streamReader.ReadToEndAsync();
+                }
+
+                var updatedRecords = await employerService.HandleContactUpdatedAsync(requestBody);
+
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -219,8 +235,5 @@ namespace Sfa.Tl.Matching.Functions
                 throw;
             }
         }
-
     }
-
-
 }

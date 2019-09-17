@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq.Expressions;
 using AutoMapper;
+using FluentValidation;
 using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Event;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
@@ -23,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns((Domain.Models.Employer)null);
 
-            var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), new CrmEmployerEventDataValidator());
+            var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), new CrmEmployerEventDataValidator(), Substitute.For<IValidator<CrmContactEventBase>>());
 
             var employerEventBase = CrmEmployerEventBaseBuilder.Buiild(true);
 

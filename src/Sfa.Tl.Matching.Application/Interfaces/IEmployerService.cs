@@ -19,5 +19,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task<string> GetEmployerOpportunityOwnerAsync(int employerId);
         Task<int> HandleEmployerCreatedAsync(string payload);
         Task<int> HandleEmployerUpdatedAsync(string payload);
+        Task<int> HandleContactCreatedAsync(string payload);
+        Task<int> HandleContactUpdatedAsync(string payload);
     }
 }

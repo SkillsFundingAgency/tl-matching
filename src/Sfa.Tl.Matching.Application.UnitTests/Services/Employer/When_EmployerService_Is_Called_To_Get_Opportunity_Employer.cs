@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, FindEmployerViewModel>>>())
                 .Returns(new FindEmployerViewModelBuilder().BuildWithEmployer());
 
-            var employerService = new EmployerService(employerRepository, _opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>());
+            var employerService = new EmployerService(employerRepository, _opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>(), Substitute.For<IValidator<CrmContactEventBase>>());
 
             _result = employerService.GetOpportunityEmployerAsync(1, 2).GetAwaiter().GetResult();
         }

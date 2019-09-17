@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
                                                     Arg.Any<Expression<Func<Domain.Models.Employer, int>>>())
                                 .Returns(100);
 
-            var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>());
+            var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>(), Substitute.For<IValidator<CrmContactEventBase>>());
 
             _employerResult = employerService.ValidateCompanyNameAndId(EmployerId, CompanyName).GetAwaiter().GetResult();
         }

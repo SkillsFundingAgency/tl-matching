@@ -23,16 +23,20 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<CrmEmployerEventBase> _employerValidator;
+        private readonly IValidator<CrmContactEventBase> _contactValidator;
 
         public EmployerService(IRepository<Employer> employerRepository,
                                IOpportunityRepository opportunityRepository,
                                IMapper mapper,
-                               IValidator<CrmEmployerEventBase> employerValidator)
+                               IValidator<CrmEmployerEventBase> employerValidator,
+                               IValidator<CrmContactEventBase> contactValidator
+                               )
         {
             _employerRepository = employerRepository;
             _opportunityRepository = opportunityRepository;
             _mapper = mapper;
             _employerValidator = employerValidator;
+            _contactValidator = contactValidator;
         }
 
         public async Task<bool> ValidateCompanyNameAndId(int employerId, string companyName)
@@ -212,6 +216,20 @@ namespace Sfa.Tl.Matching.Application.Services
             return await CreateOrUpdateEmployerAsync(updatedEvent);
         }
 
+        public async Task<int> HandleContactCreatedAsync(string payload)
+        {
+            var createdEvent = JsonConvert.DeserializeObject<CrmContactCreatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+
+            return await CreateOrUpdateContactAsync(createdEvent);
+        }
+
+        public async Task<int> HandleContactUpdatedAsync(string payload)
+        {
+            var createdEvent = JsonConvert.DeserializeObject<CrmContactUpdatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+
+            return await CreateOrUpdateContactAsync(createdEvent);
+        }
+
         private async Task<int> CreateOrUpdateEmployerAsync(CrmEmployerEventBase employerData)
         {
             var validationResult = await _employerValidator.ValidateAsync(employerData);
@@ -227,8 +245,27 @@ namespace Sfa.Tl.Matching.Application.Services
                 return await _employerRepository.Create(employer);
             }
 
+            employer.Id = existingEmployer.Id;
             await _employerRepository.Update(employer);
             return 1;
+
+        }
+        private async Task<int> CreateOrUpdateContactAsync(CrmContactEventBase employerData)
+        {
+            //var validationResult = await _contactValidator.ValidateAsync(employerData);
+
+            //if (!validationResult.IsValid) return -1;
+
+            //var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employer.CrmId);
+
+            //if (existingEmployer != null)
+            //{
+            //    employer.Id = existingEmployer.Id;
+            //    await _employerRepository.Update(employer);
+            //    return 1;
+            //}
+
+            return -1;
         }
     }
 }
