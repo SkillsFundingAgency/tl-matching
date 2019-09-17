@@ -11,11 +11,11 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderFeedback
 {
     public class When_SendProviderQuarterlyUpdateEmails_Function_Queue_Trigger_Fires
     {
-        private readonly IProviderFeedbackService _providerFeedbackService;
+        private readonly IProviderQuarterlyUpdateEmailService _providerFeedbackService;
 
         public When_SendProviderQuarterlyUpdateEmails_Function_Queue_Trigger_Fires()
         {
-            _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
+            _providerFeedbackService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
 
             var providerFeedbackFunctions = new Functions.ProviderFeedback();
             providerFeedbackFunctions.SendProviderQuarterlyUpdateEmails(

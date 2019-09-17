@@ -12,15 +12,15 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
 {
-    public class When_ProviderFeedback_Controller_ConfirmSendProviderEmail_Is_Loaded
+    public class When_ProviderQuarterlyUpdateEmail_Controller_ConfirmSendProviderEmail_Is_Loaded
     {
         private readonly IActionResult _result;
         private readonly IProviderService _providerService;
 
-        public When_ProviderFeedback_Controller_ConfirmSendProviderEmail_Is_Loaded()
+        public When_ProviderQuarterlyUpdateEmail_Controller_ConfirmSendProviderEmail_Is_Loaded()
         {
             _providerService = Substitute.For<IProviderService>();
-            var providerFeedbackService = Substitute.For<IProviderFeedbackService>();
+            var providerFeedbackService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
 
             _providerService
                 .GetProvidersWithFundingCountAsync()
@@ -33,8 +33,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
             };
 
             var providerFeedbackController =
-                new ProviderFeedbackController(providerFeedbackService, _providerService, configuration);
-            var controllerWithClaims = new ClaimsBuilder<ProviderFeedbackController>(providerFeedbackController)
+                new ProviderQuarterlyUpdateEmailController(providerFeedbackService, _providerService, configuration);
+            var controllerWithClaims = new ClaimsBuilder<ProviderQuarterlyUpdateEmailController>(providerFeedbackController)
                 .Add(ClaimTypes.Role, RolesExtensions.AdminUser)
                 .AddEmail(adminEmail)
                 .Build();

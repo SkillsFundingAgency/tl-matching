@@ -7,13 +7,13 @@ using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
-    public class ProviderFeedbackFixture
+    public class ProviderQuarterlyUpdateEmailFixture
     {
         internal readonly MatchingConfiguration Configuration;
         internal readonly IDateTimeProvider DateTimeProvider;
-        internal readonly ILogger<ProviderFeedbackService> Logger;
+        internal readonly ILogger<ProviderQuarterlyUpdateEmailService> Logger;
 
-        public ProviderFeedbackFixture()
+        public ProviderQuarterlyUpdateEmailFixture()
         {
             Configuration = new MatchingConfiguration
             {
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             };
 
             DateTimeProvider = Substitute.For<IDateTimeProvider>();
-            Logger = Substitute.For<ILogger<ProviderFeedbackService>>();
+            Logger = Substitute.For<ILogger<ProviderQuarterlyUpdateEmailService>>();
         }
 
         public bool DoTokensContainExpectedValues(IDictionary<string, string> tokens, IDictionary<string, string> expectedResults)

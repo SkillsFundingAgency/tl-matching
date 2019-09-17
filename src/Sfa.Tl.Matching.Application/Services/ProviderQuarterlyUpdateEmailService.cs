@@ -13,7 +13,7 @@ using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
-    public class ProviderFeedbackService : IProviderFeedbackService
+    public class ProviderQuarterlyUpdateEmailService : IProviderQuarterlyUpdateEmailService
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
@@ -22,11 +22,11 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IRepository<Provider> _providerRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
         private readonly IMessageQueueService _messageQueueService;
-        private readonly ILogger<ProviderFeedbackService> _logger;
+        private readonly ILogger<ProviderQuarterlyUpdateEmailService> _logger;
 
-        public ProviderFeedbackService(
+        public ProviderQuarterlyUpdateEmailService(
             MatchingConfiguration configuration,
-            ILogger<ProviderFeedbackService> logger,
+            ILogger<ProviderQuarterlyUpdateEmailService> logger,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
             IRepository<Provider> providerRepository,

@@ -13,8 +13,8 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
-    public class When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_And_Status_Is_Processing
-        : IClassFixture<ProviderFeedbackFixture>
+    public class When_ProviderQuarterlyUpdateEmailService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_And_Status_Is_Processing
+        : IClassFixture<ProviderQuarterlyUpdateEmailFixture>
     {
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
         private readonly int _result;
 
-        public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_And_Status_Is_Processing(ProviderFeedbackFixture testFixture)
+        public When_ProviderQuarterlyUpdateEmailService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_And_Status_Is_Processing(ProviderQuarterlyUpdateEmailFixture testFixture)
         {
             _emailService = Substitute.For<IEmailService>();
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .GetSingleOrDefault(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>())
                 .Returns(backgroundProcessHistory);
 
-            var providerFeedbackService = new ProviderFeedbackService(
+            var providerFeedbackService = new ProviderQuarterlyUpdateEmailService(
                 testFixture.Configuration, testFixture.Logger,
                     _emailService, _emailHistoryService,
                     _providerRepository, _backgroundProcessHistoryRepository,

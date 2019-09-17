@@ -9,13 +9,13 @@ using Sfa.Tl.Matching.Models.ViewModel;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
-    public class ProviderFeedbackController : Controller
+    public class ProviderQuarterlyUpdateEmailController : Controller
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IProviderService _providerService;
-        private readonly IProviderFeedbackService _providerFeedbackService;
+        private readonly IProviderQuarterlyUpdateEmailService _providerFeedbackService;
 
-        public ProviderFeedbackController(IProviderFeedbackService providerFeedbackService,
+        public ProviderQuarterlyUpdateEmailController(IProviderQuarterlyUpdateEmailService providerFeedbackService,
             IProviderService providerService,
             MatchingConfiguration configuration)
         {

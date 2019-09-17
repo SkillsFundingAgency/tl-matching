@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Functions
         public async Task SendProviderQuarterlyUpdateEmails([QueueTrigger(QueueName.ProviderQuarterlyRequestQueue, Connection = "BlobStorageConnectionString")]SendProviderFeedbackEmail providerRequestData, 
             ExecutionContext context,
             ILogger logger,
-            [Inject] IProviderFeedbackService providerFeedbackService,
+            [Inject] IProviderQuarterlyUpdateEmailService providerQuarterlyUpdateEmailService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             var backgroundProcessHistoryId = providerRequestData.BackgroundProcessHistoryId;
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Functions
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                var emailsSent = await providerFeedbackService.SendProviderQuarterlyUpdateEmailsAsync(backgroundProcessHistoryId, "System");
+                var emailsSent = await providerQuarterlyUpdateEmailService.SendProviderQuarterlyUpdateEmailsAsync(backgroundProcessHistoryId, "System");
 
                 stopwatch.Stop();
 

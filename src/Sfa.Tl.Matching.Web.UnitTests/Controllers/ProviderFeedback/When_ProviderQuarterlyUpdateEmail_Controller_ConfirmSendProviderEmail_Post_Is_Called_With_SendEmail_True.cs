@@ -12,15 +12,15 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
 {
-    public class When_ProviderFeedback_Controller_ConfirmSendProviderEmail_Post_Is_Called_With_SendEmail_True
+    public class When_ProviderQuarterlyUpdateEmail_Controller_ConfirmSendProviderEmail_Post_Is_Called_With_SendEmail_True
     {
         private readonly IActionResult _result;
-        private readonly IProviderFeedbackService _providerFeedbackService;
+        private readonly IProviderQuarterlyUpdateEmailService _providerFeedbackService;
 
-        public When_ProviderFeedback_Controller_ConfirmSendProviderEmail_Post_Is_Called_With_SendEmail_True()
+        public When_ProviderQuarterlyUpdateEmail_Controller_ConfirmSendProviderEmail_Post_Is_Called_With_SendEmail_True()
         {
             var providerService = Substitute.For<IProviderService>();
-            _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
+            _providerFeedbackService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
 
             const string adminEmail = "admin@admin.com";
             var configuration = new MatchingConfiguration
@@ -29,8 +29,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
             };
 
             var providerFeedbackController =
-                new ProviderFeedbackController(_providerFeedbackService, providerService, configuration);
-            var controllerWithClaims = new ClaimsBuilder<ProviderFeedbackController>(providerFeedbackController)
+                new ProviderQuarterlyUpdateEmailController(_providerFeedbackService, providerService, configuration);
+            var controllerWithClaims = new ClaimsBuilder<ProviderQuarterlyUpdateEmailController>(providerFeedbackController)
                 .Add(ClaimTypes.Role, RolesExtensions.AdminUser)
                 .AddEmail(adminEmail)
                 .Build();

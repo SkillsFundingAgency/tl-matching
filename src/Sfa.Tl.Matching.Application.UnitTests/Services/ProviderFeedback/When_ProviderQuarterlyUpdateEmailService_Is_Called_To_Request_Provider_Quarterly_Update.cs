@@ -11,14 +11,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
-    public class When_ProviderFeedbackService_Is_Called_To_Request_Provider_Quarterly_Update
-        : IClassFixture<ProviderFeedbackFixture>
+    public class When_ProviderQuarterlyUpdateEmailService_Is_Called_To_Request_Provider_Quarterly_Update
+        : IClassFixture<ProviderQuarterlyUpdateEmailFixture>
     {
         private readonly IEmailService _emailService;
         private readonly IMessageQueueService _messageQueueService;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
-        public When_ProviderFeedbackService_Is_Called_To_Request_Provider_Quarterly_Update(ProviderFeedbackFixture testFixture)
+        public When_ProviderQuarterlyUpdateEmailService_Is_Called_To_Request_Provider_Quarterly_Update(ProviderQuarterlyUpdateEmailFixture testFixture)
         {
             _emailService = Substitute.For<IEmailService>();
             var emailHistoryService = Substitute.For<IEmailHistoryService>();
@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .GetProvidersWithFundingAsync()
                 .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
 
-            var providerFeedbackService = new ProviderFeedbackService(
+            var providerFeedbackService = new ProviderQuarterlyUpdateEmailService(
                 testFixture.Configuration, testFixture.Logger, 
                 _emailService, emailHistoryService,
                 providerRepository, _backgroundProcessHistoryRepository,

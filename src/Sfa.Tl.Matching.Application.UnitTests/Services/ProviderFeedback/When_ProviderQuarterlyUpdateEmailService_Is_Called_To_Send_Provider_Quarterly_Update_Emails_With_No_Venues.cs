@@ -14,10 +14,10 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
-    public class When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails
-        : IClassFixture<ProviderFeedbackFixture>
+    public class When_ProviderQuarterlyUpdateEmailService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_With_No_Venues
+        : IClassFixture<ProviderQuarterlyUpdateEmailFixture>
     {
-        private readonly ProviderFeedbackFixture _testFixture;
+        private readonly ProviderQuarterlyUpdateEmailFixture _testFixture;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IProviderRepository _providerRepository;
@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         private readonly IList<BackgroundProcessHistory> _receivedProviderFeedbackRequestHistories;
         private readonly int _result;
 
-        public When_ProviderFeedbackService_Is_Called_To_Send_Provider_Quarterly_Update_Emails(ProviderFeedbackFixture testFixture)
+        public When_ProviderQuarterlyUpdateEmailService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_With_No_Venues(ProviderQuarterlyUpdateEmailFixture testFixture)
         {
             _testFixture = testFixture;
 
@@ -33,11 +33,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _emailHistoryService = Substitute.For<IEmailHistoryService>();
 
             var messageQueueService = Substitute.For<IMessageQueueService>();
-            
+           
             _providerRepository = Substitute.For<IProviderRepository>();
             _providerRepository
                 .GetProvidersWithFundingAsync()
-                .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
+                .Returns(new ValidProviderWithFundingDtoListBuilder().BuildWithNoVenues());
 
             _backgroundProcessHistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
             _backgroundProcessHistoryRepository
@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     }
                 )));
 
-            var providerFeedbackService = new ProviderFeedbackService(
+            var providerFeedbackService = new ProviderQuarterlyUpdateEmailService(
                 _testFixture.Configuration, _testFixture.Logger,
                     _emailService, _emailHistoryService,
                     _providerRepository, _backgroundProcessHistoryRepository,
@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Received(1)
                 .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
-
+        
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Expected_Parameters()
         {
@@ -146,7 +146,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Is<string>(replyToAddress => replyToAddress == ""));
         }
-
+        
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Expected_Tokens()
         {
@@ -154,10 +154,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                                                         + "* Name: SecondaryContact\r\n"
                                                         + "* Email: secondary@contact.co.uk\r\n"
                                                         + "* Telephone: 01234559999\r\n";
-            const string expectedProviderVenueQualificationsList = "AA1 1AA:\r\n"
-                                                                   + "* 10042982: Qualification 1\r\n"
-                                                                   + "* 60165522: Qualification 2\r\n"
-                                                                   + "\r\n";
+            const string expectedProviderVenueQualificationsList = "";
             
             var expectedResults = new Dictionary<string, string>
             {
@@ -166,8 +163,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 { "primary_contact_email", "primary.contact@provider.co.uk" },
                 { "primary_contact_phone", "01777757777" },
                 { "secondary_contact_details", expectedSecondaryDetailsList },
-                { "provider_has_venues", "yes" },
-                { "provider_has_no_venues", "no" },
+                { "provider_has_venues", "no" },
+                { "provider_has_no_venues", "yes" },
                 { "venues_and_qualifications_list", expectedProviderVenueQualificationsList }
             };
 
@@ -188,7 +185,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Received(1)
                 .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
         }
-
         [Fact]
         public void Then_Result_Has_Expected_Value()
         {

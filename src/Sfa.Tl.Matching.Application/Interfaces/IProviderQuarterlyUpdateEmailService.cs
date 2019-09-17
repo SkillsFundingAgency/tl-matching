@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Application.Interfaces
 {
-    public interface IProviderFeedbackService
+    public interface IProviderQuarterlyUpdateEmailService
     {
         Task RequestProviderQuarterlyUpdateAsync(string userName);
         Task<int> SendProviderQuarterlyUpdateEmailsAsync(int backgroundProcessHistoryId, string userName);
