@@ -1,16 +1,16 @@
 {
   "IsEncrypted": false,
-  "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "CronSchedule": "0 */15 * * * *",
-    "ProviderReferenceTrigger": "0 0 10 * * *",
-    "EmployerFeedbackTrigger": "0 0 10 * * MON-FRI",
-    "BlobStorageConnectionString": "UseDevelopmentStorage=true;",
-    "ConfigurationStorageConnectionString": "UseDevelopmentStorage=true;",
-    "ServiceBusConnectionString": "UseDevelopmentStorage=true;",
-    "EnvironmentName": "LOCAL",
-    "ServiceName": "Sfa.Tl.Matching",
-    "Version": "1.0"
-  }
+    "Values": {
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "CronSchedule": "0 */15 * * * *",
+        "ProviderReferenceTrigger": "0 0 10 * * *",
+        "EmployerFeedbackTrigger": "0 0 10 * * MON-FRI",
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "ServiceBusConnectionString": "UseDevelopmentStorage=true;",
+        "BlobStorageConnectionString": "UseDevelopmentStorage=true;",
+        "ConfigurationStorageConnectionString": "UseDevelopmentStorage=true;",
+        "EnvironmentName": "LOCAL",
+        "ServiceName": "Sfa.Tl.Matching",
+        "Version": "1.0"
+    }
 }
