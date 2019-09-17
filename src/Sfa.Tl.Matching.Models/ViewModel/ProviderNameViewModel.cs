@@ -8,6 +8,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string VenueName { get; set; }
         public string Postcode { get; set; }
         public string ProviderName => 
-            ProviderDisplayExtensions.GetDisplayText(VenueName, Postcode, DisplayName);
+            ProviderDisplayExtensions.GetDisplayText(VenueName, Postcode, DisplayName, false);
     }
 }

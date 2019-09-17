@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var providerTable = documentHtml.GetElementById("tl-providers-table") as IHtmlTableElement;
             var provider1Row = providerTable.Rows[0];
             var providerNameCell = provider1Row.Cells[0] as IHtmlTableHeaderCellElement;
-            providerNameCell.TextContent.Should().Be("Venue 1 Name (part of SQL Search Provider Display Name)");
+            providerNameCell.TextContent.Should().Be("Venue 1 Name (CV1 2WT)");
 
             var distanceCell = provider1Row.Cells[1] as IHtmlTableDataCellElement;
             distanceCell.TextContent.Should()

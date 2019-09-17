@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _result.ReferralItems.First().JobRole.Should().BeEquivalentTo("Automation Tester");
             _result.ReferralItems.First().PlacementsKnown.Should().BeTrue();
             _result.ReferralItems.First().Placements.Should().Be(5);
-            _result.ReferralItems.First().ProviderName.Should().BeEquivalentTo("Venue name (part of Provider display name)");
+            _result.ReferralItems.First().ProviderName.Should().BeEquivalentTo("Venue name part of Provider display name (AA1 1AA)");
             _result.ReferralItems.First().ProviderVenueTownAndPostcode.Should().Be("Town AA1 1AA");
             _result.ReferralItems.First().DistanceFromEmployer.Should().Be(3.5M);
 

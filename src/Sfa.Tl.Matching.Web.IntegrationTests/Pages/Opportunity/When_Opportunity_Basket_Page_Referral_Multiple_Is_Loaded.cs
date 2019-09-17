@@ -61,14 +61,14 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
                 "London SW1A 2AA",
                 "Job Role",
                 "1",
-                "Venue 1 Name (part of SQL Search Provider Display Name), Venue 2 Name (part of SQL Search Provider Display Name)",
+                "Venue 1 Name (CV1 2WT), Venue 2 Name (CV1 1EE)",
                 OpportunityItem1Id);
 
             AssertTableRow(basketTableBody.Rows[1],
                 "London SW2A 3AA",
                 "Job Role",
                 "1",
-                "Venue 1 Name (part of SQL Search Provider Display Name)",
+                "Venue 1 Name (CV1 2WT)",
                 OpportunityItem2Id);
 
             var addAnotherLink = documentHtml.GetElementById("tl-add-another-opportunity") as IHtmlAnchorElement;
