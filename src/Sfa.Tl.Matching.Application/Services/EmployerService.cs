@@ -236,17 +236,16 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (!validationResult.IsValid) return -1;
 
-            var employer = _mapper.Map<Employer>(employerData);
-
-            var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employer.CrmId);
+            var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employerData.accountid.ToGuid());
 
             if (existingEmployer == null)
             {
+                var employer = _mapper.Map<Employer>(employerData);
                 return await _employerRepository.Create(employer);
             }
 
-            employer.Id = existingEmployer.Id;
-            await _employerRepository.Update(employer);
+            existingEmployer = _mapper.Map(employerData, existingEmployer);
+            await _employerRepository.Update(existingEmployer);
             return 1;
 
         }
