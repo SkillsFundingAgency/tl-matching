@@ -19,13 +19,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 
         public When_Employer_Service_Is_Called_To_Handle_Valid_Employer_Created_Event_For_Existing_Employer()
         {
+            var mapper = Substitute.For<IMapper>();
+
+            mapper.Map<Domain.Models.Employer>(Arg.Any<CrmEmployerEventBase>()).Returns(new Domain.Models.Employer());
+
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
             _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new Domain.Models.Employer());
 
-            var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), new CrmEmployerEventDataValidator(), Substitute.For<IValidator<CrmContactEventBase>>());
+            var employerService = new EmployerService(_employerRepository, opportunityRepository, mapper, new CrmEmployerEventDataValidator(), Substitute.For<IValidator<CrmContactEventBase>>());
 
             var employerEventBase = CrmEmployerEventBaseBuilder.Buiild(true);
 
