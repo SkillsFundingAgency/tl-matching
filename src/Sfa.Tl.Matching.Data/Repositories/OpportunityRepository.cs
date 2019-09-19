@@ -132,7 +132,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId)
         {
-            var opportunityBasket = await (from o in _dbContext.Opportunity.Include(o => o.OpportunityItem).ThenInclude(oi => oi.ProvisionGap)
+            var opportunityBasket = await (from o in _dbContext.Opportunity
                                            join e in _dbContext.Employer
                                                on o.EmployerId equals e.Id
                                            where o.Id == opportunityId
@@ -151,7 +151,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        Placements = oi.Placements,
                                                        PlacementsKnown = oi.PlacementsKnown,
                                                        Workplace = $"{oi.Town} {oi.Postcode}",
-                                                       Reason = GetReasons(oi.ProvisionGap.First()),
+                                                       Reason = GetReasons(oi.ProvisionGap.OrderBy(pg => pg.Id).First()),
                                                        OpportunityType = oi.OpportunityType
                                                    }).ToList(),
                                                ReferralItems = o.OpportunityItem
@@ -198,7 +198,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                          Placements = oi.Placements,
                                          PlacementsKnown = oi.PlacementsKnown,
                                          Workplace = $"{oi.Town} {oi.Postcode}",
-                                         Reason = GetReasons(oi.ProvisionGap.First()),
+                                         Reason = GetReasons(oi.ProvisionGap.OrderBy(pg => pg.Id).First()),
                                      }).ToList(),
                                  ReferralItems =
                                      (from oi in o.OpportunityItem
