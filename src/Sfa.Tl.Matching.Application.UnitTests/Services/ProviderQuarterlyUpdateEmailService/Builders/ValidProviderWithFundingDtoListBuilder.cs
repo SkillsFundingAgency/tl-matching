@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Models.Dto;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdateEmailService.Builders
 {
     public class ValidProviderWithFundingDtoListBuilder
     {

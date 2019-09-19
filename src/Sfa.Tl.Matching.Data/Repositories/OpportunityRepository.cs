@@ -291,6 +291,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                              join p in _dbContext.Provider on pv.ProviderId equals p.Id
                              where oi.IsCompleted
+                                   && oi.IsSaved
                                    && oi.ModifiedOn.HasValue
                                    && oi.ModifiedOn.Value <= referralDate
                                    && oi.OpportunityType == OpportunityType.Referral.ToString()

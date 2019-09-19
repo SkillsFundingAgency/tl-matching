@@ -2,16 +2,15 @@
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Configuration;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdateEmailService
 {
     public class ProviderQuarterlyUpdateEmailFixture
     {
         internal readonly MatchingConfiguration Configuration;
         internal readonly IDateTimeProvider DateTimeProvider;
-        internal readonly ILogger<ProviderQuarterlyUpdateEmailService> Logger;
+        internal readonly ILogger<Application.Services.ProviderQuarterlyUpdateEmailService> Logger;
 
         public ProviderQuarterlyUpdateEmailFixture()
         {
@@ -22,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             };
 
             DateTimeProvider = Substitute.For<IDateTimeProvider>();
-            Logger = Substitute.For<ILogger<ProviderQuarterlyUpdateEmailService>>();
+            Logger = Substitute.For<ILogger<Application.Services.ProviderQuarterlyUpdateEmailService>>();
         }
 
         public bool DoTokensContainExpectedValues(IDictionary<string, string> tokens, IDictionary<string, string> expectedResults)

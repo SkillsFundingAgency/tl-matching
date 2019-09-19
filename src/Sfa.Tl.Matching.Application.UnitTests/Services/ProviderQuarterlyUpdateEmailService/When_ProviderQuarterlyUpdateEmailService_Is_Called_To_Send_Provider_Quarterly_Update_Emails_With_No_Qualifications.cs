@@ -5,14 +5,13 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
+using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdateEmailService.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdateEmailService
 {
     public class When_ProviderQuarterlyUpdateEmailService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_With_No_Qualifications
         : IClassFixture<ProviderQuarterlyUpdateEmailFixture>
@@ -58,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     }
                 )));
 
-            var providerFeedbackService = new ProviderQuarterlyUpdateEmailService(
+            var providerFeedbackService = new Application.Services.ProviderQuarterlyUpdateEmailService(
                 _testFixture.Configuration, _testFixture.Logger,
                     _emailService, _emailHistoryService,
                     _providerRepository, _backgroundProcessHistoryRepository,

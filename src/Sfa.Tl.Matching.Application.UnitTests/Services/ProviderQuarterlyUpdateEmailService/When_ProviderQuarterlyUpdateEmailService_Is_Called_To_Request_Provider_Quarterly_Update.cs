@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builders;
+using Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdateEmailService.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdateEmailService
 {
     public class When_ProviderQuarterlyUpdateEmailService_Is_Called_To_Request_Provider_Quarterly_Update
         : IClassFixture<ProviderQuarterlyUpdateEmailFixture>
@@ -36,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .GetProvidersWithFundingAsync()
                 .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
 
-            var providerFeedbackService = new ProviderQuarterlyUpdateEmailService(
+            var providerFeedbackService = new Application.Services.ProviderQuarterlyUpdateEmailService(
                 testFixture.Configuration, testFixture.Logger, 
                 _emailService, emailHistoryService,
                 providerRepository, _backgroundProcessHistoryRepository,

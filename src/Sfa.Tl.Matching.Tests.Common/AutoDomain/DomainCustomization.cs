@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using AutoFixture;
+using NSubstitute.Core;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 
@@ -15,7 +16,9 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 
             fixture.Customize<MatchingConfiguration>(composer =>
                 composer.With(config => config.SendEmailEnabled, true)
-                    .With(config => config.NotificationsSystemId, "TLevelsIndustryPlacement"));
+                    .With(config => config.NotificationsSystemId, "TLevelsIndustryPlacement")
+                    .With(config => config.EmployerFeedbackTimeSpan, "-10.00:00:00"));
+                
 
             fixture.Customize<Provider>(composer => composer.With(p => p.IsCdfProvider, true)
                 .With(p => p.IsEnabledForReferral, true));

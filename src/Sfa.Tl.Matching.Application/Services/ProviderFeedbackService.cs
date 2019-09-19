@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly MatchingConfiguration _configuration;
-        private readonly ILogger<EmployerFeedbackService> _logger;
+        private readonly ILogger<ProviderFeedbackService> _logger;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public ProviderFeedbackService(
             IMapper mapper,
             MatchingConfiguration configuration,
-            ILogger<EmployerFeedbackService> logger,
+            ILogger<ProviderFeedbackService> logger,
             IDateTimeProvider dateTimeProvider,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
