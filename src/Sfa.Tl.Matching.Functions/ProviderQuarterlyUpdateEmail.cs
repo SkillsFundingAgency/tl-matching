@@ -12,7 +12,7 @@ using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Functions
 {
-    public class ProviderFeedback
+    public class ProviderQuarterlyUpdateEmail
     {
         [FunctionName("SendProviderQuarterlyUpdateEmails")]
         public async Task SendProviderQuarterlyUpdateEmails([QueueTrigger(QueueName.ProviderQuarterlyRequestQueue, Connection = "BlobStorageConnectionString")]SendProviderFeedbackEmail providerRequestData, 

@@ -142,7 +142,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                CompanyName = e.CompanyName,
                                                CompanyNameAka = e.AlsoKnownAs,
                                                ProvisionGapItems = o.OpportunityItem
-                                                   .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString() && 
+                                                   .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString() &&
                                                                 oi.IsSaved && !oi.IsCompleted)
                                                    .Select(oi => new BasketProvisionGapItemViewModel
                                                    {
@@ -278,8 +278,68 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                  EmployerContact = o.EmployerContact,
                                  EmployerContactEmail = o.EmployerContactEmail
                              }).ToListAsync();
-            
+
             return dto;
+        }
+
+        public async Task<IList<ProviderFeedbackDto>> GetReferralsForProviderFeedbackAsync(DateTime referralDate)
+        {
+            var dto = await (from o in _dbContext.Opportunity
+                             join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
+                             join e in _dbContext.Employer on o.EmployerId equals e.Id
+                             join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
+                             join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                             join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                             where oi.IsCompleted
+                                   && oi.ModifiedOn.HasValue
+                                   && oi.ModifiedOn.Value <= referralDate
+                                   && o.OpportunityItem.Count(x => x.IsCompleted) == 1
+                                   && o.OpportunityItem.Count(x => x.IsSaved) == 1
+                                   && oi.OpportunityType == OpportunityType.Referral.ToString()
+                             select new ProviderFeedbackDto
+                             {
+                                 OpportunityId = o.Id,
+                                 OpportunityItemId = oi.Id,
+                                 ProviderId = p.Id,
+                                 Companyname = e.CompanyName,
+                                 ProviderPrimaryContactName = p.PrimaryContact,
+                                 ProviderPrimaryContactEmail = p.PrimaryContactEmail,
+                                 ProviderSecondaryContactName = p.SecondaryContact,
+                                 ProviderSecondaryContactEmail = p.SecondaryContactEmail,
+                                 IsProviderFeedbackEmailSent = oi.ProviderFeedbackSent
+                             }).ToListAsync();
+
+            var compareList = (from leftComparer in dto
+                        from rightComparer in dto
+                        where leftComparer.ProviderId == rightComparer.ProviderId && leftComparer.IsProviderFeedbackEmailSent
+                        select rightComparer).ToList();
+
+            var finalList = dto.Except(compareList)
+                .Distinct()
+                .GroupBy(feedbackDto => feedbackDto.ProviderId)
+                .Select((data, index) => new {data, index})
+                .Select((x, y) => x.data.FirstOrDefault())
+                .Select(result =>
+                {
+                    if (result != null)
+                        return new ProviderFeedbackDto
+                        {
+                            ProviderId = result.ProviderId,
+                            IsProviderFeedbackEmailSent = result.IsProviderFeedbackEmailSent,
+                            OpportunityItemId = result.OpportunityItemId,
+                            ProviderPrimaryContactEmail = result.ProviderPrimaryContactEmail,
+                            OpportunityId = result.OpportunityId,
+                            Companyname = result.Companyname,
+                            ProviderPrimaryContactName = result.ProviderPrimaryContactName,
+                            ProviderSecondaryContactEmail = result.ProviderSecondaryContactEmail,
+                            ProviderSecondaryContactName = result.ProviderSecondaryContactName
+                        };
+
+                    return new ProviderFeedbackDto();
+                }).ToList();
+
+
+            return finalList;
         }
 
         private static string GetReasons(ProvisionGap provisionGap)

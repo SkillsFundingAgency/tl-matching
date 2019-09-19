@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderFeedback
         {
             _providerFeedbackService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
 
-            var providerFeedbackFunctions = new Functions.ProviderFeedback();
+            var providerFeedbackFunctions = new ProviderQuarterlyUpdateEmail();
             providerFeedbackFunctions.SendProviderQuarterlyUpdateEmails(
                 new SendProviderFeedbackEmail { BackgroundProcessHistoryId = 1 }, 
                 new ExecutionContext(), 

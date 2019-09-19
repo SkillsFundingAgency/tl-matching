@@ -176,6 +176,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailHistoryService, EmailHistoryService>();
             services.AddTransient<IEmployerFeedbackService, EmployerFeedbackService>();
+            services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
             services.AddTransient<IProviderQuarterlyUpdateEmailService, ProviderQuarterlyUpdateEmailService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
