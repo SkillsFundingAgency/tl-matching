@@ -151,7 +151,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                        Placements = oi.Placements,
                                                        PlacementsKnown = oi.PlacementsKnown,
                                                        Workplace = $"{oi.Town} {oi.Postcode}",
-                                                       Reason = GetReasons(oi.ProvisionGap.OrderBy(pg => pg.Id).First()),
+                                                       Reason = GetReasons(oi.ProvisionGap),
                                                        OpportunityType = oi.OpportunityType
                                                    }).ToList(),
                                                ReferralItems = o.OpportunityItem
@@ -198,7 +198,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                          Placements = oi.Placements,
                                          PlacementsKnown = oi.PlacementsKnown,
                                          Workplace = $"{oi.Town} {oi.Postcode}",
-                                         Reason = GetReasons(oi.ProvisionGap.OrderBy(pg => pg.Id).First()),
+                                         Reason = GetReasons(oi.ProvisionGap)
                                      }).ToList(),
                                  ReferralItems =
                                      (from oi in o.OpportunityItem
@@ -342,9 +342,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return distinctList;
         }
 
-        private static string GetReasons(ProvisionGap provisionGap)
+        private static string GetReasons(IEnumerable<ProvisionGap> provisionGaps)
         {
             var reasons = new List<string>();
+
+            var provisionGap = provisionGaps.First();
             if (provisionGap.HadBadExperience.HasValue && provisionGap.HadBadExperience.Value)
                 reasons.Add("Employer had a bad experience with them");
 
