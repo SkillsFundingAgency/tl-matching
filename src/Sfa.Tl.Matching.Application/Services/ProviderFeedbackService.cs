@@ -85,7 +85,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<int> SendProviderFeedbackEmailsAsync(DateTime referralDate, string userName)
         {
-            var referrals = await _opportunityRepository.GetReferralsForProviderFeedbackAsync(referralDate);
+            var data = await _opportunityRepository.GetAllReferralsForProviderFeedbackAsync(referralDate);
+            var referrals = _opportunityRepository.GetDistinctReferralsForProviderFeedbackAsync(data);
 
             try
             {
@@ -107,7 +108,7 @@ namespace Sfa.Tl.Matching.Application.Services
                             userName);
                 }
 
-                await SetOpportunityItemsProviderFeedbackAsSent(referrals.Select(r => r.OpportunityItemId),userName);
+                await SetOpportunityItemsProviderFeedbackAsSent(data.Select(r => r.OpportunityItemId),userName);
 
                 return referrals.Count;
             }

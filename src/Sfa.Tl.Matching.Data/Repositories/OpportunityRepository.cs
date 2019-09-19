@@ -282,7 +282,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return dto;
         }
 
-        public async Task<IList<ProviderFeedbackDto>> GetReferralsForProviderFeedbackAsync(DateTime referralDate)
+        public async Task<IList<ProviderFeedbackDto>> GetAllReferralsForProviderFeedbackAsync(DateTime referralDate)
         {
             var dto = await (from o in _dbContext.Opportunity
                              join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
@@ -293,8 +293,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              where oi.IsCompleted
                                    && oi.ModifiedOn.HasValue
                                    && oi.ModifiedOn.Value <= referralDate
-                                   && o.OpportunityItem.Count(x => x.IsCompleted) == 1
-                                   && o.OpportunityItem.Count(x => x.IsSaved) == 1
                                    && oi.OpportunityType == OpportunityType.Referral.ToString()
                              select new ProviderFeedbackDto
                              {
@@ -309,10 +307,15 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                  IsProviderFeedbackEmailSent = oi.ProviderFeedbackSent
                              }).ToListAsync();
 
+            return dto;
+        }
+
+        public IList<ProviderFeedbackDto> GetDistinctReferralsForProviderFeedbackAsync(IList<ProviderFeedbackDto> dto)
+        {
             var compareList = (from leftComparer in dto
-                        from rightComparer in dto
-                        where leftComparer.ProviderId == rightComparer.ProviderId && leftComparer.IsProviderFeedbackEmailSent
-                        select rightComparer).ToList();
+                from rightComparer in dto
+                where leftComparer.ProviderId == rightComparer.ProviderId && leftComparer.IsProviderFeedbackEmailSent
+                select rightComparer).ToList();
 
             var distinctList = dto.Except(compareList)
                 .GroupBy(feedbackDto => feedbackDto.ProviderId)
