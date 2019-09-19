@@ -121,7 +121,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private static T GetNext<T>(IEnumerable<T> list, T current) => list.SkipWhile(x => !x.Equals(current)).Skip(1).First();
         private async Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkData(string username)
         {
-            var data = await _userCacheRepository.GetFirstOrDefault(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink);
+            var data = await _userCacheRepository.GetFirstOrDefault(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink.ToString());
 
             return (data, UserBackLinks(data));
         }

@@ -92,11 +92,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             await sut.AddCurrentUrl("/find-providers", username);
             await sut.AddCurrentUrl("/test-url", username);
 
-            var addedItem = await repo.GetFirstOrDefault(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink);
+            var addedItem = await repo.GetFirstOrDefault(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink.ToString());
 
             //Assert
             addedItem.Should().NotBeNull();
-            addedItem.Key.Should().Be(CacheTypes.BackLink);
+            addedItem.Key.Should().Be(CacheTypes.BackLink.ToString());
         }
 
         [Theory, AutoDomainData]
@@ -132,7 +132,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             await sut.AddCurrentUrl("/find-providers", username);
             await sut.AddCurrentUrl("/test-url", username);
 
-            var addedItem = await repo.GetFirstOrDefault(x => x.CreatedBy == "invalid user" && x.Key == CacheTypes.BackLink);
+            var addedItem = await repo.GetFirstOrDefault(x => x.CreatedBy == "invalid user" && x.Key == CacheTypes.BackLink.ToString());
 
             //Assert
             addedItem.Should().BeNull();
