@@ -314,11 +314,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         where leftComparer.ProviderId == rightComparer.ProviderId && leftComparer.IsProviderFeedbackEmailSent
                         select rightComparer).ToList();
 
-            var finalList = dto.Except(compareList)
-                .Distinct()
+            var distinctList = dto.Except(compareList)
                 .GroupBy(feedbackDto => feedbackDto.ProviderId)
-                .Select((data, index) => new {data, index})
-                .Select((x, y) => x.data.FirstOrDefault())
+                .Select(data => data.FirstOrDefault())
                 .Select(result =>
                 {
                     if (result != null)
@@ -338,8 +336,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     return new ProviderFeedbackDto();
                 }).ToList();
 
-
-            return finalList;
+            return distinctList;
         }
 
         private static string GetReasons(ProvisionGap provisionGap)

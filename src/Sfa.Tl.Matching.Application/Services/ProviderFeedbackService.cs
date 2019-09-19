@@ -91,25 +91,36 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 foreach (var referral in referrals)
                 {
-                    
+                    var tokens = new Dictionary<string, string>
+                    {
+                        { "contact_name", referral.Displayname },
+                        { "company_name", referral.Companyname},
+                    };
+
+                    await SendEmail(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
+                        referral.ProviderPrimaryContactEmail, "Your industry placement progress – ESFA", tokens,
+                        userName);
+
+                    if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail))
+                        await SendEmail(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
+                            referral.ProviderSecondaryContactEmail, "Your industry placement progress – ESFA", tokens,
+                            userName);
                 }
 
-                await SetOpportunityItemsEmployerFeedbackAsSent(
-                    referrals.Select(r => r.OpportunityItemId),
-                    userName);
+                await SetOpportunityItemsProviderFeedbackAsSent(referrals.Select(r => r.OpportunityItemId),userName);
 
                 return referrals.Count;
             }
             catch (Exception ex)
             {
-                var errorMessage = $"Error sending employer feedback emails. {ex.Message} ";
-
+                var errorMessage = $"Error sending provider feedback emails. {ex.Message} ";
                 _logger.LogError(ex, errorMessage);
+
                 throw;
             }
         }
 
-        private async Task SetOpportunityItemsEmployerFeedbackAsSent(IEnumerable<int> opportunityItemIds, string userName)
+        private async Task SetOpportunityItemsProviderFeedbackAsSent(IEnumerable<int> opportunityItemIds, string userName)
         {
             var itemsToBeCompleted = opportunityItemIds.Select(id => new OpportunityItemWithUsernameForProviderFeedbackSentDto
             {
