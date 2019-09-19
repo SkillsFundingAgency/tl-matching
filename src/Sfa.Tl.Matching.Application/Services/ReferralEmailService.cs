@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 var tokens = new Dictionary<string, string>
                 {
-                    { "employer_contact_name", employerReferral.EmployerContact },
+                    { "employer_contact_name", employerReferral.EmployerContact.ToTitleCase() },
                     { "employer_business_name", employerReferral.CompanyName },
                     { "employer_contact_number", employerReferral.EmployerContactPhone },
                     { "employer_contact_email", employerReferral.EmployerContactEmail }
