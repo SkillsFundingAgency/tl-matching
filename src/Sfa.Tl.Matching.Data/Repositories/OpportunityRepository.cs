@@ -182,7 +182,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<OpportunityReportDto> GetPipelineOpportunitiesAsync(int opportunityId)
         {
-            var dto = await (from o in _dbContext.Opportunity.Include(o => o.OpportunityItem).ThenInclude(oi => oi.ProvisionGap)
+            var dto = await (from o in _dbContext.Opportunity
                              join e in _dbContext.Employer
                                  on o.EmployerId equals e.Id
                              where o.Id == opportunityId
