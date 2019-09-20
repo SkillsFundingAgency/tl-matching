@@ -250,7 +250,6 @@ namespace Sfa.Tl.Matching.Web
         private static void RegisterApplicationServices(IServiceCollection services)
         {
             services.AddTransient<IValidator<CrmEmployerEventBase>, CrmEmployerEventDataValidator>();
-            services.AddTransient<IValidator<CrmContactEventBase>, CrmContactEventDataValidator>();
 
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailHistoryService, EmailHistoryService>();

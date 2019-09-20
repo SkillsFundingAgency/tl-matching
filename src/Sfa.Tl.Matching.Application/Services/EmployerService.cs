@@ -23,20 +23,17 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<CrmEmployerEventBase> _employerValidator;
-        private readonly IValidator<CrmContactEventBase> _contactValidator;
 
         public EmployerService(IRepository<Employer> employerRepository,
                                IOpportunityRepository opportunityRepository,
                                IMapper mapper,
-                               IValidator<CrmEmployerEventBase> employerValidator,
-                               IValidator<CrmContactEventBase> contactValidator
+                               IValidator<CrmEmployerEventBase> employerValidator
                                )
         {
             _employerRepository = employerRepository;
             _opportunityRepository = opportunityRepository;
             _mapper = mapper;
             _employerValidator = employerValidator;
-            _contactValidator = contactValidator;
         }
 
         public async Task<bool> ValidateCompanyNameAndId(int employerId, string companyName)

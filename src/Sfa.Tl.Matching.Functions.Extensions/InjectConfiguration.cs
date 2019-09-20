@@ -169,7 +169,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         private static void RegisterApplicationServices(IServiceCollection services)
         {
             services.AddTransient<IValidator<CrmEmployerEventBase>, CrmEmployerEventDataValidator>();
-            services.AddTransient<IValidator<CrmContactEventBase>, CrmContactEventDataValidator>();
 
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();

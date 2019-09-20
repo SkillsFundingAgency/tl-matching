@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new Domain.Models.Employer());
 
-            var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), new CrmEmployerEventDataValidator(), Substitute.For<IValidator<CrmContactEventBase>>());
+            var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), new CrmEmployerEventDataValidator());
 
             var employerEventBase = CrmEmployerEventBaseBuilder.Buiild(false);
 
