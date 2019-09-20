@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     var tokens = new Dictionary<string, string>
                     {
                         { "contact_name", referral.Displayname },
-                        { "company_name", referral.Companyname},
+                        { "company_name", referral.Companyname}
                     };
 
                     await SendEmail(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
