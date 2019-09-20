@@ -159,7 +159,7 @@ SELECT
     rt.[Name] as RouteName,
     rl.Region,
     rl.Team,
-    rl.Username,
+    oi.CreatedBy AS Username,
     DATEADD(DAY, 6 - DATEPART(WEEKDAY, o.CreatedOn), CAST(o.CreatedOn AS  DATE)) WeekEndDate,
     LEFT(DATENAME(MONTH, o.CreatedOn),3) + ' ' + RIGHT('00' + CAST(YEAR(o.CreatedOn) AS VARCHAR),2) as [Date]
 FROM Opportunity as o
