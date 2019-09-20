@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Humanizer;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Models.Event;
 
 namespace Sfa.Tl.Matching.Application.Extensions
 {
@@ -121,7 +122,7 @@ namespace Sfa.Tl.Matching.Application.Extensions
             }
         }
 
-        public static bool IsAupaStatus(this int value)
+        public static bool IsAupaStatus(this SfaAupa value)
         {
             try
             {
@@ -129,8 +130,8 @@ namespace Sfa.Tl.Matching.Application.Extensions
                 //Understand	229660001
                 //Planning	    229660002
                 //Active	    229660003
-
-                return (value >= 0) && (value == 229660000 || value == 229660001 || value == 229660002 || value == 229660003);
+                if (value == null) return false;
+                return (value.Value >= 0) && (value.Value == 229660000 || value.Value == 229660001 || value.Value == 229660002 || value.Value == 229660003);
             }
             catch (NoMatchFoundException)
             {
@@ -153,14 +154,15 @@ namespace Sfa.Tl.Matching.Application.Extensions
             }
         }
 
-        public static bool IsCompanyType(this int value)
+        public static bool IsCompanyType(this Customertypecode value)
         {
             try
             {
                 //Employer          200005
                 //Employer Provider 200008
+                if (value == null) return false;
 
-                return (value >= 0) && (value == 200005 || value == 200008);
+                return (value.Value >= 0) && (value.Value == 200005 || value.Value == 200008);
             }
             catch (NoMatchFoundException)
             {

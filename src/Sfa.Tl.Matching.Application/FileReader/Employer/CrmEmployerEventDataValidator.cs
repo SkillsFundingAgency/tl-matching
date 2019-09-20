@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
                 .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                 .WithMessage($"'{nameof(EmployerStagingFileImportDto.CompanyName)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
-            RuleFor(dto => dto.sfa_aupa.Value)
+            RuleFor(dto => dto.sfa_aupa)
                 .NotEmpty()
                 .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                 .WithMessage($"'{nameof(EmployerStagingFileImportDto.Aupa)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
@@ -34,16 +34,10 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
                 .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                 .WithMessage($"'{nameof(EmployerStagingFileImportDto.Aupa)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
-            //this will return true if its null or a valid Company Type because this is a optional field
-            RuleFor(dto => dto.customertypecode.Value)
+            RuleFor(dto => dto.customertypecode)
                 .Must(dto => dto.IsCompanyType())
                 .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                 .WithMessage($"'{nameof(EmployerStagingFileImportDto.CompanyType)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
-
-            //RuleFor(dto => dto.address1_postalcode)
-            //    .NotEmpty()
-            //    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-            //    .WithMessage($"'{nameof(EmployerStagingFileImportDto.Postcode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
             RuleFor(dto => dto.owneridname)
                 .NotEmpty()
