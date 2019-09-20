@@ -213,11 +213,12 @@ namespace Sfa.Tl.Matching.Application.Services
             return await CreateOrUpdateEmployerAsync(updatedEvent);
         }
 
-        public async Task<int> HandleContactCreatedAsync(string payload)
+        public Task<int> HandleContactCreatedAsync(string payload)
         {
-            var createdEvent = JsonConvert.DeserializeObject<CrmContactCreatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+            //var createdEvent = JsonConvert.DeserializeObject<CrmContactCreatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
 
-            return await CreateOrUpdateContactAsync(createdEvent);
+            //return await CreateOrUpdateContactAsync(createdEvent);
+            return Task.FromResult(-1);
         }
 
         public async Task<int> HandleContactUpdatedAsync(string payload)
@@ -248,20 +249,15 @@ namespace Sfa.Tl.Matching.Application.Services
         }
         private async Task<int> CreateOrUpdateContactAsync(CrmContactEventBase employerData)
         {
-            //var validationResult = await _contactValidator.ValidateAsync(employerData);
+            var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employerData.parentcustomerid.id.ToGuid());
 
-            //if (!validationResult.IsValid) return -1;
+            if (existingEmployer == null) return -1;
 
-            //var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employer.CrmId);
-
-            //if (existingEmployer != null)
-            //{
-            //    employer.Id = existingEmployer.Id;
-            //    await _employerRepository.Update(employer);
-            //    return 1;
-            //}
-
-            return -1;
+            existingEmployer.PrimaryContact = employerData.fullname;
+            existingEmployer.Phone = employerData.telephone1;
+            existingEmployer.Email = employerData.emailaddress1;
+            await _employerRepository.Update(existingEmployer);
+            return 1;
         }
     }
 }
