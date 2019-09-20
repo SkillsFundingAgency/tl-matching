@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
@@ -206,12 +207,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == opportunity.Employer.CompanyName),
+                    tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == opportunity.Employer.CompanyName.ToTitleCase()),
                 Arg.Any<string>());
 
             await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("employer_contact_name") && tokens["employer_contact_name"] == opportunity.EmployerContact),
+                    tokens.ContainsKey("employer_contact_name") && tokens["employer_contact_name"] == opportunity.EmployerContact.ToTitleCase()),
                 Arg.Any<string>());
 
             await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),

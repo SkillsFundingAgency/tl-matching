@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -92,7 +93,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     var tokens = new Dictionary<string, string>
                     {
-                        { "employer_contact_name", referral.EmployerContact },
+                        { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
                     };
 
                     await SendEmail(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.EmployerContactEmail,

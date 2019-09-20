@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
@@ -15,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
         {
             CreateMap<OpportunityDto, Opportunity>()
                 .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.EmployerId))
-                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact))
+                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact.ToTitleCase()))
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
                 .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityDto, Opportunity>>())
@@ -65,7 +66,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<EmployerDetailDto, Opportunity>()
-                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact))
+                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact.ToTitleCase()))
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
                 .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))

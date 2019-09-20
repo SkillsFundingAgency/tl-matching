@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dto = new OpportunityDto
             {
                 EmployerId = 1,
-                EmployerContact = "EmployerContact",
+                EmployerContact = "Employer contact",
                 EmployerContactEmail = "employer.contact@employer.co.uk",
                 EmployerContactPhone = "020 123 4567"
             };
@@ -80,7 +80,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 .Received(1)
                 .Create(Arg.Is<Domain.Models.Opportunity>(opportunity =>
                     opportunity.EmployerId == 1 && 
-                    opportunity.EmployerContact == "EmployerContact" &&
+                    opportunity.EmployerContact == "Employer Contact" &&
                     opportunity.EmployerContactEmail == "employer.contact@employer.co.uk" &&
                     opportunity.EmployerContactPhone == "020 123 4567" &&
                     opportunity.CreatedBy == "adminUserName"
