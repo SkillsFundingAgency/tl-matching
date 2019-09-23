@@ -14,12 +14,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 {
-    public class When_Employer_Service_Is_Called_To_Handle_Valid_Employer_Created_Event_For_Existing_Employer
+    public class When_Employer_Service_Is_Called_To_Handle_Valid_Employer_Updated_Event_For_Existing_Employer
     {
         private readonly IRepository<Domain.Models.Employer> _employerRepository;
         private readonly CrmEmployerEventBase _employerEventBase;
 
-        public When_Employer_Service_Is_Called_To_Handle_Valid_Employer_Created_Event_For_Existing_Employer()
+        public When_Employer_Service_Is_Called_To_Handle_Valid_Employer_Updated_Event_For_Existing_Employer()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
@@ -43,7 +43,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         public void Then_The_Employer_Record_Should_Be_Updated()
         {
             _employerRepository.DidNotReceive().Create(Arg.Any<Domain.Models.Employer>());
-
             _employerRepository.Received(1).Update(Arg.Is<Domain.Models.Employer>(e =>
                 e.CrmId == _employerEventBase.accountid.ToGuid() &&
                 e.Aupa == "Aware" &&
@@ -54,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
                 e.Email == "Test@test.com" &&
                 e.Phone == "0123456789" &&
                 e.Owner == "Test"
-                ));
+            ));
         }
     }
 }
