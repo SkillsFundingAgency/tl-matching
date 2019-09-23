@@ -240,6 +240,8 @@ namespace Sfa.Tl.Matching.Application.Services
         }
         private async Task<int> CreateOrUpdateContactAsync(CrmContactEventBase employerData)
         {
+            if (employerData.parentcustomerid == null) return -1;
+
             var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employerData.parentcustomerid.id.ToGuid());
 
             if (existingEmployer == null) return -1;
@@ -248,6 +250,7 @@ namespace Sfa.Tl.Matching.Application.Services
             existingEmployer.Phone = employerData.telephone1;
             existingEmployer.Email = employerData.emailaddress1;
             await _employerRepository.Update(existingEmployer);
+
             return 1;
         }
     }
