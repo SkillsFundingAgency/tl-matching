@@ -143,53 +143,6 @@ namespace Sfa.Tl.Matching.Functions
             }
         }
 
-
-        [FunctionName("ContactCreatedHandler")]
-        public static async Task<IActionResult> ContactCreatedHandler(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-            ExecutionContext context,
-            ILogger logger,
-            [Inject] IEmployerService employerService,
-            [Inject] IRepository<FunctionLog> functionlogRepository)
-        {
-            try
-            {
-                logger.LogInformation($"Function {context.FunctionName} triggered");
-
-                var stopwatch = Stopwatch.StartNew();
-
-                string requestBody;
-                using (var streamReader = new StreamReader(req.Body))
-                {
-                    requestBody = await streamReader.ReadToEndAsync();
-                }
-
-                var updatedRecords = await employerService.HandleContactCreatedAsync(requestBody);
-
-                stopwatch.Stop();
-
-                logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
-                                      $"\tRows saved: {updatedRecords}\n" +
-                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
-
-                return new OkObjectResult($"{updatedRecords} records updated.");
-            }
-            catch (Exception e)
-            {
-                var errormessage = $"Error importing Employer Data. Internal Error Message {e}";
-
-                logger.LogError(errormessage);
-
-                await functionlogRepository.Create(new FunctionLog
-                {
-                    ErrorMessage = errormessage,
-                    FunctionName = nameof(QualificationSearchColumns),
-                    RowNumber = -1
-                });
-                throw;
-            }
-        }
-
         [FunctionName("ContactUpdatedHandler")]
         public static async Task<IActionResult> ContactUpdatedHandler(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
