@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 CompanyName = "Company Name"
             };
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
 
             _employerController = new EmployerController(employerService, opportunityService, referralService, mapper);

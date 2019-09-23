@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 Placements = 0
             };
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
             
             _opportunityController = new OpportunityController(opportunityService, mapper);

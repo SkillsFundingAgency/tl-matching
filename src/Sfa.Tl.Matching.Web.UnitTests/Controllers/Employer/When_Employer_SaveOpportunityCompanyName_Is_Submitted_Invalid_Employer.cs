@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 CompanyName = "Invalid Business Name"
             };
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
             var referralService = Substitute.For<IReferralService>();
             var mapper = new Mapper(config);
 

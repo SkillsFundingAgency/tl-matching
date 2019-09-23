@@ -6,9 +6,9 @@ using Sfa.Tl.Matching.Models.Event;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
-    public class EmployerStagingMapper : Profile
+    public class EmployerMapper : Profile
     {
-        public EmployerStagingMapper()
+        public EmployerMapper()
         {
             CreateMap<EmployerStagingDto, EmployerStaging>()
                 .ForMember(m => m.Id, config => config.Ignore())
@@ -22,7 +22,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CrmId, config => config.MapFrom(s => s.accountid.ToGuid()))
                 .ForMember(m => m.CompanyName, config => config.MapFrom(s => s.Name))
                 .ForMember(m => m.AlsoKnownAs, config => config.MapFrom(s => s.sfa_alias))
-                .ForMember(m => m.Aupa, config => config.MapFrom(s => s.sfa_aupa.Value.ToAupaStatus()))
+                .ForMember(m => m.CompanyNameSearch, config => config.MapFrom(s => s.Name.ToLetterOrDigit() + s.sfa_alias.ToLetterOrDigit()))
+                .ForMember(m => m.Aupa, config => config.MapFrom(s => s.sfa_aupa.ToAupaStatus()))
                 .ForMember(m => m.PrimaryContact, config => config.MapFrom(s => s.PrimaryContactId.name))
                 .ForMember(m => m.Phone, config => config.MapFrom(s => s.ContactTelephone1))
                 .ForMember(m => m.Email, config => config.MapFrom(s => s.ContactEmail))
