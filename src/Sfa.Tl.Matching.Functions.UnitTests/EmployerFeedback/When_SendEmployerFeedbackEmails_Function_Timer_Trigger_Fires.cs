@@ -23,12 +23,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
             _employerFeedbackService = Substitute.For<IEmployerFeedbackService>();
 
             var employerFeedback = new Functions.EmployerFeedback();
-            employerFeedback.SendEmployerFeedbackEmails(
-                new TimerInfo(timerSchedule, new ScheduleStatus()),
-                new ExecutionContext(),
-                new NullLogger<Functions.EmployerFeedback>(),
-                _employerFeedbackService,
-                _functionLogRepository).GetAwaiter().GetResult();
+            //employerFeedback.SendEmployerFeedbackEmails(
+            //    new TimerInfo(timerSchedule, new ScheduleStatus()),
+            //    new ExecutionContext(),
+            //    new NullLogger<Functions.EmployerFeedback>(),
+            //    _employerFeedbackService,
+            //    _functionLogRepository).GetAwaiter().GetResult();
         }
         
         [Fact]

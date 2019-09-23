@@ -98,9 +98,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 _emailService, _emailHistoryService, bankHolidayRepository, 
                 _opportunityRepository, _opportunityItemRepository);
 
-            _result = employerFeedbackService
-                .SendEmployerFeedbackEmailsAsync("TestUser")
-                .GetAwaiter().GetResult();
+            //_result = employerFeedbackService
+            //    .SendEmployerFeedbackEmailsAsync("TestUser")
+            //    .GetAwaiter().GetResult();
         }
 
         [Fact]

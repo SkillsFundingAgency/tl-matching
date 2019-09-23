@@ -23,11 +23,11 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
             };
 
             var employerFeedback = new Functions.EmployerFeedback();
-            employerFeedback.ManualSendEmployerFeedbackEmails(
-                request,
-                new ExecutionContext(),
-                new NullLogger<Functions.EmployerFeedback>(),
-                _employerFeedbackService).GetAwaiter().GetResult();
+            //employerFeedback.ManualSendEmployerFeedbackEmails(
+            //    request,
+            //    new ExecutionContext(),
+            //    new NullLogger<Functions.EmployerFeedback>(),
+            //    _employerFeedbackService).GetAwaiter().GetResult();
         }
 
         [Fact]
