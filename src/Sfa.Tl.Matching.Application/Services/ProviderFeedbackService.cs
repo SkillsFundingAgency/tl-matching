@@ -160,9 +160,4 @@ namespace Sfa.Tl.Matching.Application.Services
         }
 
     }
-
-    public interface IProviderFeedbackService
-    {
-        Task<int> SendProviderFeedbackEmailsAsync(string userName);
-    }
 }

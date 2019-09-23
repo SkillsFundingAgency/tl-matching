@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using AutoMapper;
@@ -229,17 +228,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             await emailService.Received(2).SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("contact_name") && tokens["contact_name"] == $"{provider.PrimaryContact} / {provider.SecondaryContact}"), Arg.Any<string>());
-        }
-
-        private bool GetExpectedTokens(IDictionary<string, string> tokens, IDictionary<string, string> expectedResults)
-        {
-            if (tokens == null)
-            {
-                return false;
-            }
-
-            return expectedResults.All(expectedResult =>
-                tokens.ContainsKey(expectedResult.Key) && tokens[expectedResult.Key] == expectedResult.Value);
         }
     }
 }
