@@ -4,18 +4,21 @@ using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Interfaces.FeedbackFactory;
+using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.Services.FeedbackFactory;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
 {
     public class When_SendEmployerFeedbackEmails_Function_Http_Trigger_Is_Called
     {
-        private readonly IEmployerFeedbackService _employerFeedbackService;
+        private readonly IFeedbackServiceFactory<EmployerFeedbackService> _employerFeedbackService;
 
         public When_SendEmployerFeedbackEmails_Function_Http_Trigger_Is_Called()
         {
-            _employerFeedbackService = Substitute.For<IEmployerFeedbackService>();
+            _employerFeedbackService = Substitute.For<IFeedbackServiceFactory<EmployerFeedbackService>>();
+                
 
             var request = new DefaultHttpRequest(new DefaultHttpContext())
             {
@@ -23,11 +26,11 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
             };
 
             var employerFeedback = new Functions.EmployerFeedback();
-            //employerFeedback.ManualSendEmployerFeedbackEmails(
-            //    request,
-            //    new ExecutionContext(),
-            //    new NullLogger<Functions.EmployerFeedback>(),
-            //    _employerFeedbackService).GetAwaiter().GetResult();
+            employerFeedback.ManualSendEmployerFeedbackEmails(
+                request,
+                new ExecutionContext(),
+                new NullLogger<Functions.EmployerFeedback>(),
+                _employerFeedbackService).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -35,7 +38,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
         {
             _employerFeedbackService
                 .Received(1)
-                .SendEmployerFeedbackEmailsAsync(
+                .CreateInstanceOf(FeedbackEmailTypes.EmployerFeedback).SendFeedbackEmailsAsync(
                     Arg.Is<string>(x => x == "System"));
         }
     }
