@@ -98,6 +98,22 @@ namespace Sfa.Tl.Matching.Application.Extensions
             Enum.TryParse<AupaStatus>(value.ToString(), out var aupaStatus);
             return aupaStatus;
         }
+        public static AupaStatus ToAupaStatus(this SfaAupa value)
+        {
+            switch (value.Value)
+            {
+                case 229660000:
+                    return AupaStatus.Aware;
+                case 229660001:
+                    return AupaStatus.Understand;
+                case 229660002:
+                    return AupaStatus.Planning;
+                case 229660003:
+                    return AupaStatus.Active;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
 
         public static bool IsDateTime(this string value)
         {
