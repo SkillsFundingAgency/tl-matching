@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Functions
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                var emailsSent = await serviceFactory.CreateInstanceOf(FeedbackEmailTypes.EmployerFeedbackEmail)
+                var emailsSent = await serviceFactory.CreateInstanceOf(FeedbackEmailTypes.EmployerFeedback)
                     .SendFeedbackEmailsAsync("System");
 
                 stopwatch.Stop();
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Functions
 
             var stopwatch = Stopwatch.StartNew();
 
-            var emailsSent = await serviceFactory.CreateInstanceOf(FeedbackEmailTypes.EmployerFeedbackEmail)
+            var emailsSent = await serviceFactory.CreateInstanceOf(FeedbackEmailTypes.EmployerFeedback)
                 .SendFeedbackEmailsAsync("System");
 
             stopwatch.Stop();

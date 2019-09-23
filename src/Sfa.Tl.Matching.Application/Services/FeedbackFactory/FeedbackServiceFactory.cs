@@ -48,13 +48,13 @@ namespace Sfa.Tl.Matching.Application.Services.FeedbackFactory
         {
             switch (emailTypes)
             {
-                case FeedbackEmailTypes.EmployerFeedbackEmail:
+                case FeedbackEmailTypes.EmployerFeedback:
                     return new EmployerFeedbackService(_mapper, _configuration, _logger as ILogger<EmployerFeedbackService>, _dateTimeProvider,
                         _emailService,
                         _emailHistoryService, _bankHolidayRepository, _opportunityRepository,
                         _opportunityItemRepository);
 
-                case FeedbackEmailTypes.ProviderFeedbackEmail:
+                case FeedbackEmailTypes.ProviderFeedback:
                     return new ProviderFeedbackService(_mapper, _configuration, _logger as ILogger<ProviderFeedbackService>, _dateTimeProvider,
                         _emailService,
                         _emailHistoryService, _bankHolidayRepository, _opportunityRepository,
@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Application.Services.FeedbackFactory
 
     public enum FeedbackEmailTypes
     {
-        EmployerFeedbackEmail,
-        ProviderFeedbackEmail
+        EmployerFeedback,
+        ProviderFeedback
     }
 }
