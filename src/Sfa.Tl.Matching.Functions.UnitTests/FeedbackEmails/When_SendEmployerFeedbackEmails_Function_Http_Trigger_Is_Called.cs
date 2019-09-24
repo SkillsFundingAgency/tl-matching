@@ -9,7 +9,7 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.Services.FeedbackFactory;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
+namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
 {
     public class When_SendEmployerFeedbackEmails_Function_Http_Trigger_Is_Called
     {

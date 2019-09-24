@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback.Builders
+namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails.Builders
 {
     public class BankHolidayListBuilder
     {

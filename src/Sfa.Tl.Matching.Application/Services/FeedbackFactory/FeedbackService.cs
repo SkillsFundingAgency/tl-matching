@@ -78,7 +78,6 @@ namespace Sfa.Tl.Matching.Application.Services.FeedbackFactory
 
             await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
                 x => x.ProviderFeedbackSent,
-                x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
         public async Task SetOpportunityItemsEmployerFeedbackAsSent(IEnumerable<int> opportunityItemIds, string userName)
@@ -93,7 +92,6 @@ namespace Sfa.Tl.Matching.Application.Services.FeedbackFactory
 
             await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
                 x => x.EmployerFeedbackSent,
-                x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
 

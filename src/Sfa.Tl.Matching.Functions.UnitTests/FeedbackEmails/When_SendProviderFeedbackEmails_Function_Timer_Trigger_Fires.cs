@@ -9,36 +9,36 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Functions.UnitTests.EmployerFeedback
+namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
 {
-    public class When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires
+    public class When_SendProviderFeedbackEmails_Function_Timer_Trigger_Fires
     {
-        private readonly IFeedbackServiceFactory<EmployerFeedbackService> _employerFeedbackService;
+        private readonly IFeedbackServiceFactory<ProviderFeedbackService> _providerFeedbackService;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
-        public When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires()
+        public When_SendProviderFeedbackEmails_Function_Timer_Trigger_Fires()
         {
             var timerSchedule = Substitute.For<TimerSchedule>();
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            _employerFeedbackService = Substitute.For<IFeedbackServiceFactory<EmployerFeedbackService>>();
+            _providerFeedbackService = Substitute.For<IFeedbackServiceFactory<ProviderFeedbackService>>();
 
-            var employerFeedback = new Functions.EmployerFeedback();
-            employerFeedback.SendEmployerFeedbackEmails(
+            var providerFeedback = new Functions.ProviderFeedback();
+            providerFeedback.SendProviderFeedbackEmails(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
-                new NullLogger<Functions.EmployerFeedback>(),
-                _employerFeedbackService,
+                new NullLogger<Functions.ProviderFeedback>(),
+                _providerFeedbackService,
                 _functionLogRepository).GetAwaiter().GetResult();
         }
         
         [Fact]
         public void SendFeedbackEmailsAsync_Is_Called_Exactly_Once()
         {
-            _employerFeedbackService
+            _providerFeedbackService
                 .Received(1)
-                .CreateInstanceOf(FeedbackEmailTypes.EmployerFeedback).SendFeedbackEmailsAsync(
+                .CreateInstanceOf(FeedbackEmailTypes.ProviderFeedback).SendFeedbackEmailsAsync(
                     Arg.Is<string>(x => x == "System"));
         }
 

@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Functions
     public class ProviderFeedback
     {
         [FunctionName("SendProviderFeedbackEmails")]
-        public async Task SendEmployerFeedbackEmails(
+        public async Task SendProviderFeedbackEmails(
             [TimerTrigger("%EmployerFeedbackTrigger%")]
             TimerInfo timer,
             ExecutionContext context,
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Functions
 
         // ReSharper disable once UnusedMember.Global
         [FunctionName("ManualSendProviderFeedbackEmails")]
-        public async Task<IActionResult> ManualSendEmployerFeedbackEmails(
+        public async Task<IActionResult> ManualSendProviderFeedbackEmails(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
