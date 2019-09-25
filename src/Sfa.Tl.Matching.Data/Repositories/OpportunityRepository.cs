@@ -295,6 +295,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                    && oi.ModifiedOn.HasValue
                                    && oi.ModifiedOn.Value <= referralDate
                                    && oi.OpportunityType == OpportunityType.Referral.ToString()
+                                   && p.ProviderFeedbackSentOn == null
                              select new ProviderFeedbackDto
                              {
                                  OpportunityId = o.Id,
@@ -305,42 +306,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                  ProviderPrimaryContactEmail = p.PrimaryContactEmail,
                                  ProviderSecondaryContactName = p.SecondaryContact,
                                  ProviderSecondaryContactEmail = p.SecondaryContactEmail,
-                                 IsProviderFeedbackEmailSent = oi.ProviderFeedbackSent
-                             }).ToListAsync();
+                                 ProviderFeedbackEmailSentOn = p.ProviderFeedbackSentOn
+                             })
+                            .GroupBy(feedbackDto => feedbackDto.ProviderId)
+                            .Select(data => data.FirstOrDefault())
+                            .Select(feedbackDto => feedbackDto)
+                            .ToListAsync();
 
             return dto;
-        }
-
-        public IList<ProviderFeedbackDto> GetDistinctReferralsForProviderFeedbackAsync(IList<ProviderFeedbackDto> dto)
-        {
-            var compareList = (from leftComparer in dto
-                from rightComparer in dto
-                where leftComparer.ProviderId == rightComparer.ProviderId && leftComparer.IsProviderFeedbackEmailSent
-                select rightComparer).ToList();
-
-            var distinctList = dto.Except(compareList)
-                .GroupBy(feedbackDto => feedbackDto.ProviderId)
-                .Select(data => data.FirstOrDefault())
-                .Select(result =>
-                {
-                    if (result != null)
-                        return new ProviderFeedbackDto
-                        {
-                            ProviderId = result.ProviderId,
-                            IsProviderFeedbackEmailSent = result.IsProviderFeedbackEmailSent,
-                            OpportunityItemId = result.OpportunityItemId,
-                            ProviderPrimaryContactEmail = result.ProviderPrimaryContactEmail,
-                            OpportunityId = result.OpportunityId,
-                            Companyname = result.Companyname,
-                            ProviderPrimaryContactName = result.ProviderPrimaryContactName,
-                            ProviderSecondaryContactEmail = result.ProviderSecondaryContactEmail,
-                            ProviderSecondaryContactName = result.ProviderSecondaryContactName
-                        };
-
-                    return new ProviderFeedbackDto();
-                }).ToList();
-
-            return distinctList;
         }
 
         private static string GetReasons(IEnumerable<ProvisionGap> provisionGaps)

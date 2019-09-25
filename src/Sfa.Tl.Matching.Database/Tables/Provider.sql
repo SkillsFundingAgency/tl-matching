@@ -15,6 +15,7 @@
 	[IsEnabledForReferral] BIT NOT NULL,
 	[IsTLevelProvider] BIT NOT NULL DEFAULT 0,
 	[Source] VARCHAR(50) NOT NULL,
+	[ProviderFeedbackSentOn] DATETIME2 NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 

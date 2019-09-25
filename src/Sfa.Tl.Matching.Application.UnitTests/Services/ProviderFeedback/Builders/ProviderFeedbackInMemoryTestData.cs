@@ -14,6 +14,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builde
             Domain.Models.Opportunity opportunity,
             bool isSaved = true, bool isSelectedForReferral = true)
         {
+            provider.ProviderFeedbackSentOn = null;
+
             await dbContext.AddAsync(provider);
             await dbContext.AddAsync(venue);
             await dbContext.AddAsync(opportunity);
@@ -28,14 +30,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builde
                 opportunityItem.IsCompleted = true;
                 opportunityItem.IsSelectedForReferral = isSelectedForReferral;
                 opportunityItem.ModifiedOn = DateTime.Today.AddDays(-15);
-                opportunityItem.ProviderFeedbackSent = false;
                 opportunityItem.OpportunityType = "Referral";
 
                 dbContext.Entry(opportunityItem).Property("IsSaved").IsModified = true;
                 dbContext.Entry(opportunityItem).Property("IsCompleted").IsModified = true;
                 dbContext.Entry(opportunityItem).Property("IsSelectedForReferral").IsModified = true;
                 dbContext.Entry(opportunityItem).Property("ModifiedOn").IsModified = true;
-                dbContext.Entry(opportunityItem).Property("ProviderFeedbackSent").IsModified = true;
                 dbContext.Entry(opportunityItem).Property("OpportunityType").IsModified = true;
             }
 

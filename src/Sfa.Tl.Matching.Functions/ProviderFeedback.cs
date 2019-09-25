@@ -6,9 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Application.Interfaces.FeedbackFactory;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.Services.FeedbackFactory;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
@@ -23,15 +22,14 @@ namespace Sfa.Tl.Matching.Functions
             TimerInfo timer,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IFeedbackServiceFactory<ProviderFeedbackService> serviceFactory,
+            [Inject] IProviderFeedbackService providerFeedbackService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             try
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                var emailsSent = await serviceFactory.CreateInstanceOf(FeedbackEmailTypes.ProviderFeedback)
-                    .SendFeedbackEmailsAsync("System");
+                var emailsSent = await providerFeedbackService.SendProviderFeedbackEmailsAsync("System");
 
                 stopwatch.Stop();
 
@@ -59,14 +57,13 @@ namespace Sfa.Tl.Matching.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IFeedbackServiceFactory<ProviderFeedbackService> serviceFactory)
+            [Inject] IProviderFeedbackService providerFeedbackService)
         {
             logger.LogInformation($"Function {context.FunctionName} triggered");
 
             var stopwatch = Stopwatch.StartNew();
 
-            var emailsSent = await serviceFactory.CreateInstanceOf(FeedbackEmailTypes.ProviderFeedback)
-                .SendFeedbackEmailsAsync("System");
+            var emailsSent = await providerFeedbackService.SendProviderFeedbackEmailsAsync("System");
 
             stopwatch.Stop();
 

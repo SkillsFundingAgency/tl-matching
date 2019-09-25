@@ -2,9 +2,7 @@
 using Microsoft.Azure.WebJobs.Extensions.Timers;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces.FeedbackFactory;
-using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.Services.FeedbackFactory;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
@@ -13,7 +11,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
 {
     public class When_SendProviderFeedbackEmails_Function_Timer_Trigger_Fires
     {
-        private readonly IFeedbackServiceFactory<ProviderFeedbackService> _providerFeedbackService;
+        private readonly IProviderFeedbackService _providerFeedbackService;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
         public When_SendProviderFeedbackEmails_Function_Timer_Trigger_Fires()
@@ -22,7 +20,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            _providerFeedbackService = Substitute.For<IFeedbackServiceFactory<ProviderFeedbackService>>();
+            _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
 
             var providerFeedback = new Functions.ProviderFeedback();
             providerFeedback.SendProviderFeedbackEmails(
@@ -38,7 +36,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
         {
             _providerFeedbackService
                 .Received(1)
-                .CreateInstanceOf(FeedbackEmailTypes.ProviderFeedback).SendFeedbackEmailsAsync(
+                .SendProviderFeedbackEmailsAsync(
                     Arg.Is<string>(x => x == "System"));
         }
 

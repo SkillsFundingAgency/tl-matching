@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 c.AddMaps(typeof(OpportunityMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("UtcNowResolver")
-                        ? new UtcNowResolver<OpportunityItemWithUsernameForEmployerFeedbackSentDto, OpportunityItem>(
+                        ? new UtcNowResolver<UsernameForFeedbackSentDto, OpportunityItem>(
                             _dateTimeProvider)
                         : null);
             });
@@ -99,7 +99,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 _opportunityRepository, _opportunityItemRepository);
 
             _result = employerFeedbackService
-                .SendFeedbackEmailsAsync("TestUser")
+                .SendEmployerFeedbackEmailsAsync("TestUser")
                 .GetAwaiter().GetResult();
         }
 

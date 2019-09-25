@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.OfstedRating, config => config.Ignore())
                 .ForMember(m => m.Source, config => config.Ignore())
                 .ForMember(m => m.ProviderVenue, config => config.Ignore())
+                .ForMember(m => m.ProviderFeedbackSentOn, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.MapFrom<LoggedInUserNameResolver<ProviderDetailViewModel, Provider>>())
@@ -31,6 +32,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.DisplayName, config => config.MapFrom(s => s.DisplayName.ToTitleCase()))
                 .ForMember(m => m.OfstedRating, config => config.Ignore())
                 .ForMember(m => m.ProviderVenue, config => config.Ignore())
+                .ForMember(m => m.ProviderFeedbackSentOn, config => config.Ignore())
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<CreateProviderDetailViewModel, Provider>>())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
@@ -45,6 +47,14 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.ProviderName, config => config.MapFrom(s => s.Name))
                 .ForMember(m => m.IsCdfProvider, config => config.MapFrom(s => s.IsCdfProvider ? "Yes" : "No"))
                 ;
+
+            CreateMap<UsernameForFeedbackSentDto, Provider>()
+                .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.ProviderFeedbackSentOn, config => config.MapFrom<UtcNowResolver<UsernameForFeedbackSentDto, Provider>>())
+                .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.Username))
+                .ForMember(m => m.ModifiedOn, config => config.MapFrom<UtcNowResolver<UsernameForFeedbackSentDto, Provider>>())
+                .ForAllOtherMembers(config => config.Ignore());
+
         }
     }
 }

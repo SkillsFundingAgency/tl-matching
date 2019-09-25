@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services.FeedbackFactory;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
 
-    public class ProviderFeedbackService  : FeedbackService
+    public class ProviderFeedbackService : IProviderFeedbackService
     {
+        private readonly IMapper _mapper;
+        private readonly MatchingConfiguration _configuration;
         private readonly ILogger<ProviderFeedbackService> _logger;
+        private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IEmailService _emailService;
+        private readonly IEmailHistoryService _emailHistoryService;
+        private readonly IRepository<BankHoliday> _bankHolidayRepository;
         private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IRepository<Provider> _providerRepository;
 
         public ProviderFeedbackService(
             IMapper mapper,
@@ -28,14 +36,21 @@ namespace Sfa.Tl.Matching.Application.Services
             IEmailHistoryService emailHistoryService,
             IRepository<BankHoliday> bankHolidayRepository,
             IOpportunityRepository opportunityRepository,
-            IRepository<OpportunityItem> opportunityItemRepository
-            ) : base(mapper, configuration, dateTimeProvider, emailService, emailHistoryService, bankHolidayRepository, opportunityItemRepository)
+            IRepository<Provider> providerRepository
+            )
         {
+            _mapper = mapper;
+            _configuration = configuration;
             _logger = logger;
+            _dateTimeProvider = dateTimeProvider;
+            _emailService = emailService;
+            _emailHistoryService = emailHistoryService;
+            _bankHolidayRepository = bankHolidayRepository;
             _opportunityRepository = opportunityRepository;
+            _providerRepository = providerRepository;
         }
 
-        public override async Task<int> SendFeedbackEmailsAsync(string userName)
+        public async Task<int> SendProviderFeedbackEmailsAsync(string userName)
         {
             var referralDate = await GetReferralDateAsync();
 
@@ -48,10 +63,30 @@ namespace Sfa.Tl.Matching.Application.Services
             return emailsSent;
         }
 
+        public async Task<DateTime?> GetReferralDateAsync()
+        {
+            var employerFeedbackTimespan = TimeSpan.Parse(_configuration.EmployerFeedbackTimeSpan);
+            var bankHolidays = await _bankHolidayRepository.GetMany(
+                    d => d.Date <= DateTime.Today)
+                .Select(d => d.Date)
+                .OrderBy(d => d.Date)
+                .ToListAsync();
+
+            if (_dateTimeProvider.IsHoliday(_dateTimeProvider.UtcNow().Date, bankHolidays))
+                return null;
+
+            var referralDate = _dateTimeProvider
+                .AddWorkingDays(
+                    _dateTimeProvider.UtcNow().Date,
+                    employerFeedbackTimespan,
+                    bankHolidays);
+
+            return referralDate;
+        }
+
         private async Task<int> SendProviderFeedbackEmailsAsync(DateTime referralDate, string userName)
         {
-            var data = await _opportunityRepository.GetAllReferralsForProviderFeedbackAsync(referralDate);
-            var referrals = _opportunityRepository.GetDistinctReferralsForProviderFeedbackAsync(data);
+            var referrals = await _opportunityRepository.GetAllReferralsForProviderFeedbackAsync(referralDate);
 
             try
             {
@@ -73,7 +108,7 @@ namespace Sfa.Tl.Matching.Application.Services
                             userName);
                 }
 
-                await SetOpportunityItemsProviderFeedbackAsSent(data.Select(r => r.OpportunityItemId),userName);
+                await SetProviderFeedbackSentOnDate(referrals.Select(r => r.ProviderId), userName);
 
                 return referrals.Count;
             }
@@ -84,6 +119,44 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 throw;
             }
+        }
+
+        private async Task SetProviderFeedbackSentOnDate(IEnumerable<int> providerIds, string userName)
+        {
+            var itemsToBeCompleted = providerIds.Select(id => new UsernameForFeedbackSentDto
+            {
+                Id = id,
+                Username = userName
+            });
+
+            var updates = _mapper.Map<List<Provider>>(itemsToBeCompleted);
+
+            await _providerRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+                x => x.ProviderFeedbackSentOn,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
+        }
+
+        private async Task SendEmail(EmailTemplateName template, int? opportunityId,
+            string toAddress, string subject,
+            IDictionary<string, string> tokens, string createdBy)
+        {
+            if (!_configuration.SendEmailEnabled)
+            {
+                return;
+            }
+
+            await _emailService.SendEmail(template.ToString(),
+                toAddress,
+                subject,
+                tokens,
+                "");
+
+            await _emailHistoryService.SaveEmailHistory(template.ToString(),
+                tokens,
+                opportunityId,
+                toAddress,
+                createdBy);
         }
     }
 }

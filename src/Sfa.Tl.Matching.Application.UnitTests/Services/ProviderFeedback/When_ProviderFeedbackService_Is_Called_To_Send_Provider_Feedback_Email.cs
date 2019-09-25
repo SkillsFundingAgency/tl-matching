@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             ILogger<ProviderFeedbackService> logger,
             ILogger<GenericRepository<BankHoliday>> bankHolidayLogger,
             ILogger<OpportunityRepository> opportunityLogger,
-            ILogger<GenericRepository<OpportunityItem>> opportunityItemLogger,
+            ILogger<GenericRepository<Domain.Models.Provider>> opportunityItemLogger,
             IDateTimeProvider dateTimeProvider,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
@@ -42,14 +42,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             //Arrange
             var bankHolidayRepo = new GenericRepository<BankHoliday>(bankHolidayLogger, dbContext);
             var opportunityRepo = new OpportunityRepository(opportunityLogger, dbContext);
-            var opportunityItemRepo = new GenericRepository<OpportunityItem>(opportunityItemLogger, dbContext);
+            var opportunityItemRepo = new GenericRepository<Domain.Models.Provider>(opportunityItemLogger, dbContext);
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.AddMaps(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("UtcNowResolver")
-                        ? new UtcNowResolver<OpportunityItemWithUsernameForProviderFeedbackSentDto, OpportunityItem>(
+                        ? new UtcNowResolver<UsernameForFeedbackSentDto, Domain.Models.Provider>(
                             dateTimeProvider)
                         : null);
             });
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 emailHistoryService, bankHolidayRepo, opportunityRepo, opportunityItemRepo);
 
             //Act
-            var emailsCount = await sut.SendFeedbackEmailsAsync("test system");
+            var emailsCount = await sut.SendProviderFeedbackEmailsAsync("test system");
 
             //Assert
             emailsCount.Should().Be(1);
@@ -97,7 +97,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             ILogger<ProviderFeedbackService> logger,
             ILogger<GenericRepository<BankHoliday>> bankHolidayLogger,
             ILogger<OpportunityRepository> opportunityLogger,
-            ILogger<GenericRepository<OpportunityItem>> opportunityItemLogger,
+            ILogger<GenericRepository<Domain.Models.Provider>> opportunityItemLogger,
             IDateTimeProvider dateTimeProvider,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
@@ -110,16 +110,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             //Arrange
             var bankHolidayRepo = new GenericRepository<BankHoliday>(bankHolidayLogger, dbContext);
             var opportunityRepo = new OpportunityRepository(opportunityLogger, dbContext);
-            var opportunityItemRepo = new GenericRepository<OpportunityItem>(opportunityItemLogger, dbContext);
+            var opportunityItemRepo = new GenericRepository<Domain.Models.Provider>(opportunityItemLogger, dbContext);
 
             provider.SecondaryContactEmail = string.Empty;
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.AddMaps(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("UtcNowResolver")
-                        ? new UtcNowResolver<OpportunityItemWithUsernameForProviderFeedbackSentDto, OpportunityItem>(
+                        ? new UtcNowResolver<UsernameForFeedbackSentDto, Domain.Models.Provider>(
                             dateTimeProvider)
                         : null);
             });
@@ -144,7 +144,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 emailHistoryService, bankHolidayRepo, opportunityRepo, opportunityItemRepo);
 
             //Act
-            var emailsCount = await sut.SendFeedbackEmailsAsync("test system");
+            var emailsCount = await sut.SendProviderFeedbackEmailsAsync("test system");
 
             //Assert
             emailsCount.Should().Be(1);
@@ -172,7 +172,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             ILogger<ProviderFeedbackService> logger,
             ILogger<GenericRepository<BankHoliday>> bankHolidayLogger,
             ILogger<OpportunityRepository> opportunityLogger,
-            ILogger<GenericRepository<OpportunityItem>> opportunityItemLogger,
+            ILogger<GenericRepository<Domain.Models.Provider>> opportunityItemLogger,
             IDateTimeProvider dateTimeProvider,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
@@ -185,14 +185,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             //Arrange
             var bankHolidayRepo = new GenericRepository<BankHoliday>(bankHolidayLogger, dbContext);
             var opportunityRepo = new OpportunityRepository(opportunityLogger, dbContext);
-            var opportunityItemRepo = new GenericRepository<OpportunityItem>(opportunityItemLogger, dbContext);
+            var opportunityItemRepo = new GenericRepository<Domain.Models.Provider>(opportunityItemLogger, dbContext);
 
             var config = new MapperConfiguration(c =>
             {
-                c.AddMaps(typeof(OpportunityMapper).Assembly);
+                c.AddMaps(typeof(ProviderMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("UtcNowResolver")
-                        ? new UtcNowResolver<OpportunityItemWithUsernameForProviderFeedbackSentDto, OpportunityItem>(
+                        ? new UtcNowResolver<UsernameForFeedbackSentDto, Domain.Models.Provider>(
                             dateTimeProvider)
                         : null);
             });
@@ -212,7 +212,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 emailHistoryService, bankHolidayRepo, opportunityRepo, opportunityItemRepo);
 
             //Act
-            var emailsCount = await sut.SendFeedbackEmailsAsync("test system");
+            var emailsCount = await sut.SendProviderFeedbackEmailsAsync("test system");
 
             //Assert
             emailsCount.Should().Be(1);

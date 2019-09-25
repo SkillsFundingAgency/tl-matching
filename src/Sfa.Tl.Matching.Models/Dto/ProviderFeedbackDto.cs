@@ -1,4 +1,6 @@
-﻿namespace Sfa.Tl.Matching.Models.Dto
+﻿using System;
+
+namespace Sfa.Tl.Matching.Models.Dto
 {
     public class ProviderFeedbackDto
     {
@@ -10,7 +12,7 @@
         public string ProviderPrimaryContactEmail { get; set; }
         public string ProviderSecondaryContactName { get; set; }
         public string ProviderSecondaryContactEmail { get; set; }
-        public bool IsProviderFeedbackEmailSent { get; set; }
+        public DateTime? ProviderFeedbackEmailSentOn { get; set; }
 
         public string Displayname => string.IsNullOrWhiteSpace(ProviderSecondaryContactName)
             ? ProviderPrimaryContactName

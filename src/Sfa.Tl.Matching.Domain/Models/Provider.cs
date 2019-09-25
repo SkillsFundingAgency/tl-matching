@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Sfa.Tl.Matching.Domain.Models
 {
@@ -18,6 +19,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public bool IsCdfProvider { get; set; }
         public bool IsTLevelProvider { get; set; }
         public string Source { get; set; }
+        public DateTime? ProviderFeedbackSentOn { get; set; }
         public virtual ICollection<ProviderVenue> ProviderVenue { get; set; }
     }
 }
