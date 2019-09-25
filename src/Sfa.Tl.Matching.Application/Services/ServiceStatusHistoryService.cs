@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -20,11 +22,18 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<ServiceStatusHistoryViewModel> GetLatestServiceStatusHistory()
         {
-            var serviceStatusHistory = await _serviceStatusHistoryRepository.GetLastOrDefault(ssh => true);
+            var serviceStatusHistory = await _serviceStatusHistoryRepository.GetMany(ssh => true)
+                .OrderByDescending(ssh => ssh.Id)
+                .Select(ssh => new { ssh.Id, ssh.IsOnline })
+                .FirstOrDefaultAsync();
+
             if (serviceStatusHistory == null)
                 return new ServiceStatusHistoryViewModel();
 
-            var viewModel = _mapper.Map<ServiceStatusHistory, ServiceStatusHistoryViewModel>(serviceStatusHistory);
+            var viewModel = new ServiceStatusHistoryViewModel
+            {
+                IsOnline = serviceStatusHistory.IsOnline
+            };
 
             return viewModel;
         }
@@ -33,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             viewModel.IsOnline = !viewModel.IsOnline;
             var serviceStatusHistory = _mapper.Map<ServiceStatusHistoryViewModel, ServiceStatusHistory>(viewModel);
-            
+
             return await _serviceStatusHistoryRepository.Create(serviceStatusHistory);
         }
     }

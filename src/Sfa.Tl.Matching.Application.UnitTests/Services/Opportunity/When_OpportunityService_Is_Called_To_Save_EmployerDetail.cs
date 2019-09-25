@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
         private const int OpportunityId = 1;
 
-        private const string Contact = "EmployerContact";
+        private const string Contact = "Employer Contact";
         private const string ContactPhone = "123456789";
         private const string ContactEmail = "EmployerContactEmail";
         private const string ModifiedBy = "ModifiedBy";

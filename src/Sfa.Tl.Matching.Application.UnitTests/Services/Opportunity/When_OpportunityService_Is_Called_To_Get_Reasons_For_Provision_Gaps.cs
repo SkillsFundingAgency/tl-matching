@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
                 .Should().ContainAny("Employer had a bad experience with them",
-                    "Providers do not have students doing the right course", "Providers were too far away");
+                    "Providers do not have students doing the right course", "Providers are too far away");
         }
 
         [Theory, AutoDomainData]
@@ -90,7 +90,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 .Should().Contain("Employer had a bad experience with them");
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
-                .Should().NotContain("Providers were too far away");
+                .Should().NotContain("Providers are too far away");
         }
 
         [Theory, AutoDomainData]
@@ -164,7 +164,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
-                .Should().Contain("Providers were too far away");
+                .Should().Contain("Providers are too far away");
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
                 .Should().NotContain("Providers do not have students doing the right course");

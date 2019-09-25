@@ -11,6 +11,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string Postcode { get; set; }
         public decimal DistanceFromEmployer { get; set; }
         public string DisplayText =>
-            ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, Postcode, ProviderDisplayName);
+            ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, Postcode, ProviderDisplayName, false);
     }
 }

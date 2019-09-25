@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 _opportunityRepository, _opportunityItemRepository);
 
             _result = employerFeedbackService
-                .SendEmployerFeedbackEmailsAsync("TestUser")
+                .SendFeedbackEmailsAsync("TestUser")
                 .GetAwaiter().GetResult();
         }
 

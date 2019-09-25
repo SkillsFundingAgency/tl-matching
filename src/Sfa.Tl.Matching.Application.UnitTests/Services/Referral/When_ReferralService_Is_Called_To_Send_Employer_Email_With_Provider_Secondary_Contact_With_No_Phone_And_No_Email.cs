@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             const string expectedPlacementsList = "# WorkplaceTown WorkplacePostcode\r\n"
                                                  + "* Job role: Job Role\r\n"
                                                  + "* Students wanted: 2\r\n"
-                                                 + "* First provider selected: Venue Name (part of Display Name)\r\n"
+                                                 + "* First provider selected: Venue Name part of Display Name (ProviderPostcode)\r\n"
                                                  + "Primary contact: Primary Contact (Telephone: 020 123 3210; Email: primary.contact@provider.ac.uk)\r\n"
                                                  + "Secondary contact: Secondary Contact\r\n"
                                                  + "\r\n";

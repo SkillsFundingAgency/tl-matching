@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         public When_Employer_SaveOpportunityCompanyName_Is_Submitted_With_Invalid_CompanyName_And_Valid_EmployerId()
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
             var mapper = new Mapper(config);
 
             var opportunityService = Substitute.For<IOpportunityService>();

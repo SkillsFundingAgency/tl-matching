@@ -27,7 +27,8 @@ namespace Sfa.Tl.Matching.Application.Services
         public EmployerService(IRepository<Employer> employerRepository,
                                IOpportunityRepository opportunityRepository,
                                IMapper mapper,
-                               IValidator<CrmEmployerEventBase> employerValidator)
+                               IValidator<CrmEmployerEventBase> employerValidator
+                               )
         {
             _employerRepository = employerRepository;
             _opportunityRepository = opportunityRepository;
@@ -211,6 +212,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return await CreateOrUpdateEmployerAsync(updatedEvent);
         }
+        public async Task<int> HandleContactUpdatedAsync(string payload)
+        {
+            var createdEvent = JsonConvert.DeserializeObject<CrmContactUpdatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+
+            return await CreateOrUpdateContactAsync(createdEvent);
+        }
 
         private async Task<int> CreateOrUpdateEmployerAsync(CrmEmployerEventBase employerData)
         {
@@ -218,16 +225,32 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (!validationResult.IsValid) return -1;
 
-            var employer = _mapper.Map<Employer>(employerData);
-
-            var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employer.CrmId);
+            var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employerData.accountid.ToGuid());
 
             if (existingEmployer == null)
             {
+                var employer = _mapper.Map<Employer>(employerData);
                 return await _employerRepository.Create(employer);
             }
 
-            await _employerRepository.Update(employer);
+            existingEmployer = _mapper.Map(employerData, existingEmployer);
+            await _employerRepository.Update(existingEmployer);
+            return 1;
+
+        }
+        private async Task<int> CreateOrUpdateContactAsync(CrmContactEventBase employerData)
+        {
+            if (employerData.parentcustomerid == null) return -1;
+
+            var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employerData.parentcustomerid.id.ToGuid());
+
+            if (existingEmployer == null) return -1;
+
+            existingEmployer.PrimaryContact = employerData.fullname;
+            existingEmployer.Phone = employerData.telephone1;
+            existingEmployer.Email = employerData.emailaddress1;
+            await _employerRepository.Update(existingEmployer);
+
             return 1;
         }
     }

@@ -159,9 +159,11 @@ SELECT
     rt.[Name] as RouteName,
     rl.Region,
     rl.Team,
-    rl.Username,
-    DATEADD(DAY, 6 - DATEPART(WEEKDAY, o.CreatedOn), CAST(o.CreatedOn AS  DATE)) WeekEndDate,
-    LEFT(DATENAME(MONTH, o.CreatedOn),3) + ' ' + RIGHT('00' + CAST(YEAR(o.CreatedOn) AS VARCHAR),2) as [Date]
+    oi.CreatedBy AS Username,
+	oi.ModifiedOn,
+	oi.CreatedOn,
+    DATEADD(DAY, 6 - DATEPART(WEEKDAY, oi.CreatedOn), CAST(oi.CreatedOn AS  DATE)) WeekEndDate,
+    LEFT(DATENAME(MONTH, oi.CreatedOn),3) + ' ' + RIGHT('00' + CAST(YEAR(oi.CreatedOn) AS VARCHAR),2) as [Date]
 FROM Opportunity as o
     INNER JOIN OpportunityItem as oi on o.Id = oi.OpportunityId
     INNER JOIN [Route] as rt on rt.Id = oi.RouteId

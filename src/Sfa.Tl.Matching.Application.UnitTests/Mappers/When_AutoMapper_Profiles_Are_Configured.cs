@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Mappers
         
         public When_AutoMapper_Profiles_Are_Configured()
         {
-            _config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerStagingMapper).Assembly));
+            _config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
         }
 
         [Fact]

@@ -10,7 +10,7 @@
 	[PrimaryContact]	NVARCHAR(100) NULL, 
 	[Phone]				VARCHAR(150) NULL,
 	[Email]				VARCHAR(320) NULL,
-	[Postcode]			VARCHAR(10) NOT NULL,
+	[Postcode]			VARCHAR(10) NULL,
 	[Owner]				NVARCHAR(150) NOT NULL,
 	[CreatedOn]			DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy]			NVARCHAR(50) NULL, 

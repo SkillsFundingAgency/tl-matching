@@ -59,8 +59,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 var tokens = new Dictionary<string, string>
                 {
-                    { "employer_contact_name", employerReferral.EmployerContact },
-                    { "employer_business_name", employerReferral.CompanyName },
+                    { "employer_contact_name", employerReferral.EmployerContact.ToTitleCase() },
+                    { "employer_business_name", employerReferral.CompanyName.ToTitleCase() },
                     { "employer_contact_number", employerReferral.EmployerContactPhone },
                     { "employer_contact_email", employerReferral.EmployerContactEmail }
                 };
@@ -136,8 +136,8 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
                             ? $"* who is looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
                             : $"* who is looking for this job role: {referral.JobRole}" },
-                        { "employer_business_name", referral.CompanyName },
-                        { "employer_contact_name", referral.EmployerContact},
+                        { "employer_business_name", referral.CompanyName.ToTitleCase() },
+                        { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
                         { "employer_contact_number", referral.EmployerContactPhone },
                         { "employer_contact_email", referral.EmployerContactEmail },
                         { "employer_town_postcode", $"{referral.Town} {referral.Postcode }" },
@@ -162,7 +162,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
                     BackgroundProcessHistoryStatus.Complete, username);
-
             }
             catch (Exception ex)
             {

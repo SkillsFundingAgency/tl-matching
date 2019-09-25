@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Models.Enums
         ProviderQuarterlyUpdate,
         ProviderReferral,
         ProviderReferralComplex,
-        ProviderReferralV3
+        ProviderReferralV3,
+        ProviderFeedback
     }
 }
