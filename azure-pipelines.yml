@@ -4,7 +4,7 @@ trigger:
 - bugs/*
 
 variables:
-  buildConfiguration: 'debug'
+  buildConfiguration: 'release'
   buildPlatform: 'anycpu'
 
 jobs:
