@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Filters;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation

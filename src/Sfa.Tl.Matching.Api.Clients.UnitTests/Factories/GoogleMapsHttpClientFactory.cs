@@ -16,8 +16,8 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
                 Status = "OK"
             };
 
-            return base.CreateClient(response,
-                $"https://example.com/place/textsearch/json?region=uk&radius=1&key=TEST_KEY&query=CV12WT");
+            return CreateClient(response,
+                "https://example.com/place/textsearch/json?region=uk&radius=1&key=TEST_KEY&query=CV12WT");
         }
     }
 }

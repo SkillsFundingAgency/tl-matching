@@ -5,7 +5,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
