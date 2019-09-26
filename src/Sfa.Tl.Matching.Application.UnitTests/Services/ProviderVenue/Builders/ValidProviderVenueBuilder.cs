@@ -13,5 +13,18 @@
             CreatedBy = "CreatedBy",
             ModifiedBy = "ModifiedBy"
         };
+
+        public Domain.Models.ProviderVenue Build(string postcode) => new Domain.Models.ProviderVenue
+        {
+            Id = 1,
+            Postcode = postcode,
+            Name = "Test Provider Venue",
+            IsEnabledForReferral = true,
+            IsRemoved = false,
+            Source = "Test",
+            CreatedBy = "CreatedBy",
+            ModifiedBy = "ModifiedBy"
+        };
+
     }
 }

@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         }
 
         [Fact]
-        public void GetGeoLocationData_Is_Called_Exactly_Once()
+        public void GetAddressDetails_Is_Called_Exactly_Once()
         {
             _googleMapsApiClient
                 .Received(1)

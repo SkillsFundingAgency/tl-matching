@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
         {
             MatchingConfiguration = new MatchingConfiguration
             {
-                PostcodeRetrieverBaseUrl = "https://postcodes.io/postcodes",
+                PostcodeRetrieverBaseUrl = "https://postcodes.io",
                 NotificationsApiClientConfiguration = new NotificationsApiClientConfiguration
                 {
                     ApiBaseUrl = "http://localhost:56133/"

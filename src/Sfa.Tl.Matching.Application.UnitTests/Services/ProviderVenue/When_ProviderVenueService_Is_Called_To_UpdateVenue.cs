@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             dateTimeProvider.UtcNow().Returns(new DateTime(2019, 1, 1));
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
-            _locationApiClient.IsValidPostCode(Arg.Any<string>())
+            _locationApiClient.IsValidPostcode(Arg.Any<string>(), Arg.Any<bool>())
                 .Returns(callinfo => callinfo.Arg<string>() == "CV1 2WT"
                     ? (true, "CV1 2WT")
                     : (false, null));
@@ -79,11 +79,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         }
 
         [Fact]
-        public void LocationApiClient_IsValidPostCode_Is_Called_Exactly_Once()
+        public void LocationApiClient_IsValidPostcode_Is_Called_Exactly_Once()
         {
             _locationApiClient
                 .Received(1)
-                .IsValidPostCode(Arg.Is<string>(s => s == "Test provider venue"));
+                .IsValidPostcode(Arg.Is<string>(s => s == "Test provider venue"),
+                    Arg.Is<bool>(b => b));
         }
 
         [Fact]

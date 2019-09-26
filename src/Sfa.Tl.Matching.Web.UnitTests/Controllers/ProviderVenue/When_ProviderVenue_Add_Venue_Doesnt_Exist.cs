@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         public When_ProviderVenue_Add_Venue_Doesnt_Exist()
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
-            _providerVenueService.IsValidPostCodeAsync("CV1 2WT").Returns((true, "CV1 2WT"));
+            _providerVenueService.IsValidPostcodeAsync("CV1 2WT").Returns((true, "CV1 2WT"));
             _providerVenueService.GetVenue(1, "CV1 2WT").ReturnsNull();
             _providerVenueService.CreateVenueAsync(Arg.Any<AddProviderVenueViewModel>()).Returns(1);
 
@@ -68,9 +68,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         }
 
         [Fact]
-        public void Then_IsValidPostCode_Is_Called_Exactly_Once()
+        public void Then_IsValidPostcode_Is_Called_Exactly_Once()
         {
-            _providerVenueService.Received(1).IsValidPostCodeAsync("CV1 2WT");
+            _providerVenueService.Received(1).IsValidPostcodeAsync("CV1 2WT");
         }
 
         [Fact]

@@ -17,12 +17,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
-    public class When_Proximity_Controller_RefineSearchResults_Is_Called_With_Invalid_PostCode
+    public class When_Proximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode
     {
         private readonly IActionResult _result;
         private readonly ProximityController _proximityController;
 
-        public When_Proximity_Controller_RefineSearchResults_Is_Called_With_Invalid_PostCode()
+        public When_Proximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode()
         {
             var routes = new List<Route>
             {
@@ -31,7 +31,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
             var mapper = Substitute.For<IMapper>();
 
-            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), new LocationApiClient(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }));
+            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), new LocationApiClient(new HttpClient(), new MatchingConfiguration
+            {
+                PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
+            }));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);

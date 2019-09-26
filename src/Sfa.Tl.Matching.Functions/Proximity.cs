@@ -14,6 +14,7 @@ using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Sfa.Tl.Matching.Functions
@@ -94,11 +95,11 @@ namespace Sfa.Tl.Matching.Functions
 
                 foreach (var opportunityItem in opportunityItemRepository.GetMany(io => io.Town == null || io.Town == "" || io.Town == " "))
                 {
-                    var (isValidPostCode, postcode) = await locationApiClient.IsValidPostCode(opportunityItem.Postcode);
+                    var (isValidPostcode, postcode) = await locationApiClient.IsValidPostcode(opportunityItem.Postcode, true);
 
-                    if (!isValidPostCode)
+                    if (!isValidPostcode)
                     {
-                        var errormessage = "Error Back Filling Employer Post Town Data. Invalid PostCode";
+                        var errormessage = "Error Back Filling Employer Post Town Data. Invalid Postcode";
 
                         logger.LogError(errormessage);
 
@@ -171,7 +172,7 @@ namespace Sfa.Tl.Matching.Functions
                 {
                     try
                     {
-                        var geoLocationData = await locationApiClient.GetGeoLocationData(venue.Postcode);
+                        var geoLocationData = await locationApiClient.GetGeoLocationData(venue.Postcode, true);
 
                         venue.Postcode = geoLocationData.Postcode;
                         venue.Latitude = geoLocationData.Latitude.ToDecimal();
@@ -182,7 +183,7 @@ namespace Sfa.Tl.Matching.Functions
                     }
                     catch (Exception e)
                     {
-                        var errormessage = $"Error Back Filling Provider Venue Data. Invalid PostCode. Internal Error Message {e}";
+                        var errormessage = $"Error Back Filling Provider Venue Data. Invalid Postcode. Internal Error Message {e}";
 
                         logger.LogError(errormessage);
 

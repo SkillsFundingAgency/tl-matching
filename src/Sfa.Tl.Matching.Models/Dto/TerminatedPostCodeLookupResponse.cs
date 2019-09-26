@@ -2,11 +2,11 @@
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class PostcodeLookupResponse
+    public class TerminatedPostcodeLookupResponse
     {
         [JsonProperty("status")]
         public string Status { get; set; }
         [JsonProperty("result")]
-        public PostcodeLookupResultDto Result { get; set; }
+        public TerminatedPostcodeLookupResultDto Result { get; set; }
     }
 }

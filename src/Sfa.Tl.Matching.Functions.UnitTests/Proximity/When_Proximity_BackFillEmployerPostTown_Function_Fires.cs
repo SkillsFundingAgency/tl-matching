@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _googleMapsApiClient.GetAddressDetails("CV1 2WT").Returns("Coventry");
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
-            _locationApiClient.IsValidPostCode(Arg.Any<string>()).Returns((true, "CV1 2WT"));
+            _locationApiClient.IsValidPostcode(Arg.Any<string>(), Arg.Any<bool>()).Returns((true, "CV1 2WT"));
 
             var proximityfunctions = new Functions.Proximity();
 
@@ -41,11 +41,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         }
 
         [Fact]
-        public void LocationApiClient_IsValidPostCode_Is_Called_Exactly_Once()
+        public void LocationApiClient_IsValidPostcode_Is_Called_Exactly_Once()
         {
             _locationApiClient
                 .Received(1)
-                .IsValidPostCode(Arg.Is<string>(s => s == "CV1 2WT"));
+                .IsValidPostcode(Arg.Is<string>(s => s == "CV1 2WT"),
+                    Arg.Is<bool>(b => b));
         }
 
         [Fact]

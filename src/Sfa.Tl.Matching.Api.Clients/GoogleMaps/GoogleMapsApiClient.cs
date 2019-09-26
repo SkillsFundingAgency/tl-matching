@@ -22,11 +22,11 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleMaps
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<string> GetAddressDetails(string postCode)
+        public async Task<string> GetAddressDetails(string postcode)
         {
             if (string.IsNullOrWhiteSpace(_matchingConfiguration.GoogleMapsApiKey)) return null;
             
-            var lookupUrl = $"{_matchingConfiguration.GoogleMapsApiBaseUrl}place/textsearch/json?region=uk&radius=1&key={_matchingConfiguration.GoogleMapsApiKey}&query={postCode.ToLetterOrDigit()}";
+            var lookupUrl = $"{_matchingConfiguration.GoogleMapsApiBaseUrl}place/textsearch/json?region=uk&radius=1&key={_matchingConfiguration.GoogleMapsApiKey}&query={postcode.ToLetterOrDigit()}";
 
             var responseMessage = await _httpClient.GetAsync(lookupUrl);
 
@@ -34,11 +34,11 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleMaps
 
             var response = await responseMessage.Content.ReadAsAsync<GooglePlacesResult>();
             
-            //Google return "StreetName, Town PostCode" therefore below , Please note this will not work if input postcode is in lowercase and or does not have Space between segments
-            return response.Status != "OK" ? string.Empty : response.Results.First().FormattedAddress.Split(",").Last().Replace(postCode, string.Empty).Trim();
+            //Google return "StreetName, Town Postcode" therefore below , Please note this will not work if input postcode is in lowercase and or does not have Space between segments
+            return response.Status != "OK" ? string.Empty : response.Results.First().FormattedAddress.Split(",").Last().Replace(postcode, string.Empty).Trim();
         }
 
-        public Task GetJourneyDetails(string fromPostCode, string destinationPostCode)
+        public Task GetJourneyDetails(string fromPostcode, string destinationPostcode)
         {
             var apiUrl = $"{_matchingConfiguration.GoogleMapsApiBaseUrl}/&Key={_matchingConfiguration.GoogleMapsApiKey}";
 

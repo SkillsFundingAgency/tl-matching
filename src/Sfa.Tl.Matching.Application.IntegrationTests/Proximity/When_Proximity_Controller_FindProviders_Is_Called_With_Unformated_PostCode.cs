@@ -18,11 +18,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
-    public class When_Proximity_Controller_FindProviders_Is_Called_With_Unformated_PostCode
+    public class When_Proximity_Controller_FindProviders_Is_Called_With_Unformated_Postcode
     {
         private readonly IActionResult _result;
 
-        public When_Proximity_Controller_FindProviders_Is_Called_With_Unformated_PostCode()
+        public When_Proximity_Controller_FindProviders_Is_Called_With_Unformated_Postcode()
         {
             const string requestPostcode = "cV12 Wt";
             var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
@@ -37,7 +37,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
-            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), new LocationApiClient(httpClient, new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }));
+            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), new LocationApiClient(httpClient, new MatchingConfiguration
+            {
+                PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
+            }));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
@@ -78,7 +81,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
         }
 
         [Fact]
-        public void Then_Result_PostCode_Is_Correctly_Formated()
+        public void Then_Result_Postcode_Is_Correctly_Formated()
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");

@@ -33,8 +33,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(viewModel);
 
-            var (isValid, formatedPostCode) = await _providerVenueService.IsValidPostCodeAsync(viewModel.Postcode);
-            viewModel.Postcode = formatedPostCode;
+            var (isValid, formatedPostcode) = await _providerVenueService.IsValidPostcodeAsync(viewModel.Postcode);
+            viewModel.Postcode = formatedPostcode;
 
             if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
             {

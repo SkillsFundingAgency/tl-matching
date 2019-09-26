@@ -221,7 +221,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 result = false;
             }
 
-            var (isValid, formatedPostCode) = await _proximityService.IsValidPostCode(viewModel.Postcode);
+            var (isValid, formatedPostcode) = await _proximityService.IsValidPostcode(viewModel.Postcode);
             if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
             {
                 ModelState.AddModelError("Postcode", "You must enter a real postcode");
@@ -229,7 +229,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
             else
             {
-                viewModel.Postcode = formatedPostCode;
+                viewModel.Postcode = formatedPostcode;
             }
 
             if (viewModel.SearchRadius < 5 || viewModel.SearchRadius > 25)

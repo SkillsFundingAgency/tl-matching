@@ -27,9 +27,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
         private static HttpClient GetMockedHttpClient(string requestPostcode, string responsePostcode)
         {
-            var response = new PostCodeLookupResponse
+            var response = new PostcodeLookupResponse
             {
-                result = new PostCodeLookupResultDto
+                Result = new PostcodeLookupResultDto
                 {
                     Latitude = "52.400997",
                     Longitude = "-1.508122",

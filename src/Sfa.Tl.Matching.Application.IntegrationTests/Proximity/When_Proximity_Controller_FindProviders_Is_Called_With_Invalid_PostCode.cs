@@ -19,12 +19,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
-    public class When_Proximity_Controller_FindProviders_Is_Called_With_Invalid_PostCode
+    public class When_Proximity_Controller_FindProviders_Is_Called_With_Invalid_Postcode
     {
         private readonly IActionResult _result;
         private readonly ProximityController _proximityController;
 
-        public When_Proximity_Controller_FindProviders_Is_Called_With_Invalid_PostCode()
+        public When_Proximity_Controller_FindProviders_Is_Called_With_Invalid_Postcode()
         {
             var routes = new List<Route>
             {

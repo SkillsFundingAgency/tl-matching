@@ -121,7 +121,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                 ProviderSecondaryContactEmail = p.SecondaryContactEmail,
                                                 ProviderSecondaryContactPhone = p.SecondaryContactPhone,
                                                 ProviderVenueTown = pv.Town,
-                                                ProviderVenuePostCode = pv.Postcode
+                                                ProviderVenuePostcode = pv.Postcode
                                             })
                                       })
                               }

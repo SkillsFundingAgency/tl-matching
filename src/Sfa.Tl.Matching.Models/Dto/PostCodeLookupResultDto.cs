@@ -1,24 +1,35 @@
-﻿// ReSharper disable InconsistentNaming
-// ReSharper disable UnusedMember.Global
+﻿// ReSharper disable UnusedMember.Global
+
+using Newtonsoft.Json;
+
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class PostCodeLookupResultDto
+    public class PostcodeLookupResultDto
     {
+        [JsonProperty("postcode")]
         public string Postcode { get; set; }
+        [JsonProperty("longitude")]
         public string Longitude { get; set; }
 
+        [JsonProperty("latitude")]
         public string Latitude { get; set; }
 
+        [JsonProperty("country")]
         public string Country { get; set; }
 
+        [JsonProperty("region")]
         public string Region { get; set; }
 
-        public string OutCode { get; set; }
+        [JsonProperty("outcode")]
+        public string Outcode { get; set; }
 
-        public string Admin_District { get; set; }
+        [JsonProperty("admin_district")]
+        public string AdminDistrict { get; set; }
 
-        public string Admin_County { get; set; }
+        [JsonProperty("admin_county")]
+        public string AdminCounty { get; set; }
 
+        [JsonProperty("codes")]
         public LocationCodesDto Codes { get; set; }
     }
 }

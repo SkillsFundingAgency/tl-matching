@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Models.Dto
     public class ProviderReferralDto
     {
         public string ProviderVenueTown { get; set; }
-        public string ProviderVenuePostCode { get; set; }
+        public string ProviderVenuePostcode { get; set; }
         public string ProviderName { get; set; }
         public string ProviderDisplayName { get; set; }
         public string ProviderPrimaryContact { get; set; }
@@ -19,6 +19,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ProviderVenueName { get; set; }
 
         public string CustomisedProviderDisplayName =>
-            ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, ProviderVenuePostCode, ProviderDisplayName);
+            ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, ProviderVenuePostcode, ProviderDisplayName);
     }
 }

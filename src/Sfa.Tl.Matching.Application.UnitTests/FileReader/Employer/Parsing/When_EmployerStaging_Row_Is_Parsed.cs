@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.Employer.Parsing
             _firstEmployerStagingDto.Phone.Should().Be(ValidEmployerStagingFileImportDtoBuilder.Phone);
 
         [Fact]
-        public void Then_First_ParseResult_PostCode_Matches_Input() =>
+        public void Then_First_ParseResult_Postcode_Matches_Input() =>
             _firstEmployerStagingDto.Postcode.Should().Be(ValidEmployerStagingFileImportDtoBuilder.Postcode);
 
         [Fact]

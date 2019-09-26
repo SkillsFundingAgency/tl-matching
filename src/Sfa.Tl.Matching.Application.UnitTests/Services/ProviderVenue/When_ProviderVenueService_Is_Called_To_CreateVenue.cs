@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
                 .Returns(new Domain.Models.ProviderVenue());
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
-            _locationApiClient.GetGeoLocationData(UnFormatedPostcode).Returns(new PostCodeLookupResultDto
+            _locationApiClient.GetGeoLocationData(UnFormatedPostcode, true).Returns(new PostcodeLookupResultDto
             {
                 Postcode = FormatedPostcode,
                 Longitude = "1.2",
@@ -70,7 +70,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         [Fact]
         public void Then_LocationApiClient_GetGeoLocationData_Is_Called_Exactly_Once()
         {
-            _locationApiClient.Received(1).GetGeoLocationData(UnFormatedPostcode);
+            _locationApiClient
+                .Received(1)
+                .GetGeoLocationData(UnFormatedPostcode, true);
         }
 
         [Fact]

@@ -9,6 +9,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto);
         Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximity(ProviderSearchParametersDto dto);
-        Task<(bool, string)> IsValidPostCode(string postCode);
+        Task<(bool, string)> IsValidPostcode(string postcode);
     }
 }

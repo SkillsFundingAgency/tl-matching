@@ -35,12 +35,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
                 .Returns(new SearchResultsBuilder().Build());
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
-            _locationApiClient.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
-            {
-                Postcode = Postcode,
-                Longitude = "1.2",
-                Latitude = "1.2"
-            });
+            _locationApiClient.GetGeoLocationData(Postcode, true)
+                .Returns(new PostcodeLookupResultDto
+                {
+                    Postcode = Postcode,
+                    Longitude = "1.2",
+                    Latitude = "1.2"
+                });
 
             var service = new ProximityService(_searchProvider, _locationApiClient);
 
@@ -63,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         [Fact]
         public void Then_The_LocationService_Is_Called_Exactly_Once()
         {
-            _locationApiClient.Received(1).GetGeoLocationData(Postcode);
+            _locationApiClient.Received(1).GetGeoLocationData(Postcode, true);
         }
 
         [Fact]

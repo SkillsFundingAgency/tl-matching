@@ -13,13 +13,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider
 {
-    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_Provider_Is_Disabled_For_Selected_Route : IDisposable
+    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_Postcode_But_Provider_Is_Disabled_For_Selected_Route : IDisposable
     {
         private readonly IEnumerable<SearchResultsViewModelItem> _results;
         private readonly MatchingDbContext _dbContext;
         private readonly ProviderVenue _providerVenue;
 
-        public When_SqlSearchProvider_Search_Is_Called_With_Valid_PostCode_But_Provider_Is_Disabled_For_Selected_Route()
+        public When_SqlSearchProvider_Search_Is_Called_With_Valid_Postcode_But_Provider_Is_Disabled_For_Selected_Route()
         {
             var logger = Substitute.For<ILogger<Data.SearchProviders.SqlSearchProvider>>();
 

@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
-            var geoLocationData = await _locationApiClient.GetGeoLocationData(dto.Postcode);
+            var geoLocationData = await _locationApiClient.GetGeoLocationData(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 
@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximity(ProviderSearchParametersDto dto)
         {
-            var geoLocationData = await _locationApiClient.GetGeoLocationData(dto.Postcode);
+            var geoLocationData = await _locationApiClient.GetGeoLocationData(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 
@@ -46,9 +46,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return results;
         }
 
-        public async Task<(bool, string)> IsValidPostCode(string postCode)
+        public async Task<(bool, string)> IsValidPostcode(string postcode)
         {
-            return await _locationApiClient.IsValidPostCode(postCode);
+            return await _locationApiClient.IsValidPostcode(postcode, true);
         }
     }
 }

@@ -30,14 +30,19 @@ namespace Sfa.Tl.Matching.Application.Services
             _providerVenueRepository = (IProviderVenueRepository)providerVenueRepository;
         }
 
-        public async Task<(bool, string)> IsValidPostCodeAsync(string postCode)
+        public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)
         {
-            return await _locationApiClient.IsValidPostCode(postCode);
+            var (valid, postcodeResult) = await _locationApiClient.IsValidPostcode(postcode);
+
+            if (!valid)
+                (valid, postcodeResult) = await _locationApiClient.IsTerminatedPostcode(postcode);
+
+            return (valid, postcodeResult);
         }
 
-        public async Task<ProviderVenueDetailViewModel> GetVenue(int providerId, string postCode)
+        public async Task<ProviderVenueDetailViewModel> GetVenue(int providerId, string postcode)
         {
-            var venue = await _providerVenueRepository.GetSingleOrDefault(pv => pv.ProviderId == providerId && pv.Postcode == postCode);
+            var venue = await _providerVenueRepository.GetSingleOrDefault(pv => pv.ProviderId == providerId && pv.Postcode == postcode);
 
             var dto = venue == null ? null : _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue);
 
@@ -67,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task GetGeoLocationData(AddProviderVenueViewModel viewModel, ProviderVenue providerVenue)
         {
-            var geoLocationData = await _locationApiClient.GetGeoLocationData(viewModel.Postcode);
+            var geoLocationData = await _locationApiClient.GetGeoLocationData(viewModel.Postcode, true);
 
             providerVenue.Postcode = geoLocationData.Postcode;
             providerVenue.Latitude = geoLocationData.Latitude.ToDecimal();
