@@ -12,3 +12,4 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Update Qualification Title length.sql"
 :r ".\Backfill Employer Feedback Sent.sql"
 :r ".\Update Opportunity Table EmployerCrmIds.sql"
+:r ".\Remove ProviderFeedbackSent From OpportunityItem.sql"
