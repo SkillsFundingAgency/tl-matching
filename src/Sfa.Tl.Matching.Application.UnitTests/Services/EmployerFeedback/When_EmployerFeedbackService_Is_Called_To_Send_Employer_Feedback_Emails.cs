@@ -30,7 +30,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
-        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly int _result;
 
         public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails(
@@ -60,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 c.AddMaps(typeof(OpportunityMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("UtcNowResolver")
-                        ? new UtcNowResolver<UsernameForFeedbackSentDto, OpportunityItem>(
+                        ? new UtcNowResolver<UsernameForFeedbackSentDto, Domain.Models.Opportunity>(
                             _dateTimeProvider)
                         : null);
             });
@@ -69,8 +68,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityRepository.GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>())
                 .Returns(new EmployerFeedbackDtoListBuilder().Build());
-
-            _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
             var bankHolidays = new BankHolidayListBuilder().Build().AsQueryable();
 
@@ -92,11 +89,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             IRepository<BankHoliday> bankHolidayRepository =
                 new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
 
+            _dateTimeProvider
+                .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), testFixture.Configuration.EmployerFeedbackTimeSpan)
+                .Returns(DateTime.Parse("2019-8-15 23:59:59"));
+
             var employerFeedbackService = new EmployerFeedbackService(
                 mapper, _testFixture.Configuration, _testFixture.Logger,
                 _dateTimeProvider, 
                 _emailService, _emailHistoryService, bankHolidayRepository, 
-                _opportunityRepository, _opportunityItemRepository);
+                _opportunityRepository);
 
             _result = employerFeedbackService
                 .SendEmployerFeedbackEmailsAsync("TestUser")
@@ -108,7 +109,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _dateTimeProvider
                 .Received(1)
-                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<TimeSpan>(), Arg.Any<IList<DateTime>>());
+                .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), Arg.Any<string>());
         }
 
         [Fact]
@@ -122,30 +123,30 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         [Fact]
         public void Then_OpportunityItemRepository_UpdateManyWithSpecifedColumnsOnly_Is_Called_Exactly_Once()
         {
-            _opportunityItemRepository
+            _opportunityRepository
                 .Received(1)
-                .UpdateManyWithSpecifedColumnsOnly(Arg.Any<IList<OpportunityItem>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>()
+                .UpdateManyWithSpecifedColumnsOnly(Arg.Any<IList<Domain.Models.Opportunity>>(),
+                    Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>(),
+                    Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>(),
+                    Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>()
                 );
         }
 
         [Fact]
         public void Then_OpportunityItemRepository_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values()
         {
-            _opportunityItemRepository
+            _opportunityRepository
                 .Received(1)
-                .UpdateManyWithSpecifedColumnsOnly(Arg.Is<IList<OpportunityItem>>(
+                .UpdateManyWithSpecifedColumnsOnly(Arg.Is<IList<Domain.Models.Opportunity>>(
                         o => o.Count == 1
-                             && o[0].Id == 2
-                             && o[0].EmployerFeedbackSent
+                             && o[0].Id == 1
+                             && o[0].EmployerFeedbackSentOn == new DateTime(2019, 9, 1)
                              && o.All(x => x.ModifiedBy == "TestUser")
                              && o.All(x => x.ModifiedOn == new DateTime(2019, 9, 1))
                     ),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>());
+                    Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>(),
+                    Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>(),
+                    Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>());
         }
 
         [Fact]

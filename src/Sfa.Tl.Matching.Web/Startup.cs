@@ -267,11 +267,9 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<INavigationService, NavigationService>();
             services.AddTransient<BackLinkFilter>();
             services.AddTransient<ServiceUnavailableFilterAttribute>();
-
+            
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
-
             services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
         }
     }

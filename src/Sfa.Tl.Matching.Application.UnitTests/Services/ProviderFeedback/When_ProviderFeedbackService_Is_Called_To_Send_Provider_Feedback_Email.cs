@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             var mapper = new Mapper(config);
 
             dateTimeProvider
-                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<TimeSpan>(), Arg.Any<IList<DateTime>>())
+                .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), Arg.Any<string>())
                 .Returns(DateTime.Parse("2019-09-19 23:59:59"));
 
             dateTimeProvider
@@ -126,7 +126,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             var mapper = new Mapper(config);
 
             dateTimeProvider
-                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<TimeSpan>(), Arg.Any<IList<DateTime>>())
+                .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), Arg.Any<string>())
                 .Returns(DateTime.Parse("2019-09-19 23:59:59"));
 
             dateTimeProvider
@@ -199,7 +199,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             var mapper = new Mapper(config);
 
             dateTimeProvider
-                .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<TimeSpan>(), Arg.Any<IList<DateTime>>())
+                .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), Arg.Any<string>())
                 .Returns(DateTime.Parse("2019-09-19 23:59:59"));
 
             dateTimeProvider

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -18,7 +17,6 @@ namespace Sfa.Tl.Matching.Application.Services
     public class EmployerFeedbackService : IEmployerFeedbackService
     {
         private readonly IOpportunityRepository _opportunityRepository;
-        private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly IMapper _mapper;
         private readonly MatchingConfiguration _configuration;
         private readonly ILogger<EmployerFeedbackService> _logger;
@@ -35,8 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
             IRepository<BankHoliday> bankHolidayRepository,
-            IOpportunityRepository opportunityRepository,
-            IRepository<OpportunityItem> opportunityItemRepository)
+            IOpportunityRepository opportunityRepository)
         {
             _mapper = mapper;
             _configuration = configuration;
@@ -46,12 +43,11 @@ namespace Sfa.Tl.Matching.Application.Services
             _emailHistoryService = emailHistoryService;
             _bankHolidayRepository = bankHolidayRepository;
             _opportunityRepository = opportunityRepository;
-            _opportunityItemRepository = opportunityItemRepository;
         }
 
         public async Task<int> SendEmployerFeedbackEmailsAsync(string userName)
         {
-            var referralDate = await GetReferralDateAsync();
+            var referralDate = _dateTimeProvider.GetReferralDateAsync(GetBankHolidays, _configuration.EmployerFeedbackTimeSpan);
 
             var emailsSent = 0;
             if (referralDate != null)
@@ -79,9 +75,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         "Your industry placement progress – ESFA", tokens, userName);
                 }
 
-                await SetOpportunityItemsEmployerFeedbackAsSent(
-                    referrals.Select(r => r.OpportunityItemId),
-                    userName);
+                await SetEmployerFeedbackAsSent(referrals.Select(r => r.OpportunityId), userName);
 
                 return referrals.Count;
             }
@@ -94,39 +88,18 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        private async Task<DateTime?> GetReferralDateAsync()
+        private async Task SetEmployerFeedbackAsSent(IEnumerable<int> opportunityIds, string userName)
         {
-            var employerFeedbackTimespan = TimeSpan.Parse(_configuration.EmployerFeedbackTimeSpan);
-            var bankHolidays = await _bankHolidayRepository.GetMany(
-                    d => d.Date <= DateTime.Today)
-                .Select(d => d.Date)
-                .OrderBy(d => d.Date)
-                .ToListAsync();
-
-            if (_dateTimeProvider.IsHoliday(_dateTimeProvider.UtcNow().Date, bankHolidays))
-                return null;
-
-            var referralDate = _dateTimeProvider
-                .AddWorkingDays(
-                    _dateTimeProvider.UtcNow().Date,
-                    employerFeedbackTimespan,
-                    bankHolidays);
-
-            return referralDate;
-        }
-
-        private async Task SetOpportunityItemsEmployerFeedbackAsSent(IEnumerable<int> opportunityItemIds, string userName)
-        {
-            var itemsToBeCompleted = opportunityItemIds.Select(id => new UsernameForFeedbackSentDto
+            var itemsToBeCompleted = opportunityIds.Select(id => new UsernameForFeedbackSentDto
             {
                 Id = id,
                 Username = userName
             });
 
-            var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
+            var updates = _mapper.Map<List<Opportunity>>(itemsToBeCompleted);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
-                x => x.EmployerFeedbackSent,
+            await _opportunityRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+                x => x.EmployerFeedbackSentOn,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
@@ -152,5 +125,10 @@ namespace Sfa.Tl.Matching.Application.Services
                 toAddress,
                 createdBy);
         }
+
+        private List<DateTime> GetBankHolidays => _bankHolidayRepository.GetMany(d => d.Date <= DateTime.Today)
+            .Select(d => d.Date)
+            .OrderBy(d => d.Date)
+            .ToList();
     }
 }

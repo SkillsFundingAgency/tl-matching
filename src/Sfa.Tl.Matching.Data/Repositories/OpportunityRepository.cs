@@ -265,7 +265,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              join oi in _dbContext.OpportunityItem
                                  on o.Id equals oi.OpportunityId
                              where oi.IsCompleted
-                                   && !oi.EmployerFeedbackSent
+                                   && o.EmployerFeedbackSentOn == null 
                                    && oi.ModifiedOn.HasValue
                                    && oi.ModifiedOn.Value <= referralDate
                                    && o.OpportunityItem.Count(x => x.IsCompleted) == 1

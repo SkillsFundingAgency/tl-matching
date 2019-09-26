@@ -52,7 +52,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> SendProviderFeedbackEmailsAsync(string userName)
         {
-            var referralDate = await GetReferralDateAsync();
+            var referralDate =
+                _dateTimeProvider.GetReferralDateAsync(GetBankHolidays, _configuration.EmployerFeedbackTimeSpan);
 
             var emailsSent = 0;
             if (referralDate != null)
@@ -61,27 +62,6 @@ namespace Sfa.Tl.Matching.Application.Services
             }
 
             return emailsSent;
-        }
-
-        public async Task<DateTime?> GetReferralDateAsync()
-        {
-            var employerFeedbackTimespan = TimeSpan.Parse(_configuration.EmployerFeedbackTimeSpan);
-            var bankHolidays = await _bankHolidayRepository.GetMany(
-                    d => d.Date <= DateTime.Today)
-                .Select(d => d.Date)
-                .OrderBy(d => d.Date)
-                .ToListAsync();
-
-            if (_dateTimeProvider.IsHoliday(_dateTimeProvider.UtcNow().Date, bankHolidays))
-                return null;
-
-            var referralDate = _dateTimeProvider
-                .AddWorkingDays(
-                    _dateTimeProvider.UtcNow().Date,
-                    employerFeedbackTimespan,
-                    bankHolidays);
-
-            return referralDate;
         }
 
         private async Task<int> SendProviderFeedbackEmailsAsync(DateTime referralDate, string userName)
@@ -158,5 +138,11 @@ namespace Sfa.Tl.Matching.Application.Services
                 toAddress,
                 createdBy);
         }
+
+        private List<DateTime> GetBankHolidays => _bankHolidayRepository.GetMany(d => d.Date <= DateTime.Today)
+            .Select(d => d.Date)
+            .OrderBy(d => d.Date)
+            .ToList();
+
     }
 }

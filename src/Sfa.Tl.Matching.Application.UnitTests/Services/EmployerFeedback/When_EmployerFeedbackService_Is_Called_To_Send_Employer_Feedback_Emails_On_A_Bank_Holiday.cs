@@ -90,7 +90,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 mapper, testFixture.Configuration, testFixture.Logger,
                 _dateTimeProvider, 
                 _emailService, _emailHistoryService, bankHolidayRepository, 
-                _opportunityRepository, _opportunityItemRepository);
+                _opportunityRepository);
 
             _result = employerFeedbackService
                 .SendEmployerFeedbackEmailsAsync("TestUser")
@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _dateTimeProvider
                 .Received(1)
-                .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>());
+                .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), Arg.Any<string>());
         }
 
         [Fact]
