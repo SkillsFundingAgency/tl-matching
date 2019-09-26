@@ -117,9 +117,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 viewModel.SelectedProvider = viewModel.SelectedProvider.Where(p => p.IsSelected).ToArray();
 
-                var selectedProviders = JsonConvert.SerializeObject(viewModel);
+                TempData["SelectedProviders"] = JsonConvert.SerializeObject(viewModel);
 
-                return RedirectToRoute("SaveReferral", new { viewModel = selectedProviders });
+                return RedirectToRoute("SaveReferral");
             }
 
             ModelState.AddModelError("SearchResults.Results[0].IsSelected", "You must select at least one provider");

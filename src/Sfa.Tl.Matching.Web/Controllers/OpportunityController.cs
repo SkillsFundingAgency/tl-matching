@@ -66,9 +66,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("referral-create", Name = "SaveReferral")]
-        public async Task<IActionResult> SaveReferral(string viewModel)
+        public async Task<IActionResult> SaveReferral()
         {
-            var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(viewModel);
+            var selectedProviders = TempData["SelectedProviders"] as string;
+            var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(selectedProviders);
 
             var opportunityDto = _mapper.Map<OpportunityDto>(saveReferralViewModel);
             var opportunityItemDto = _mapper.Map<OpportunityItemDto>(saveReferralViewModel);

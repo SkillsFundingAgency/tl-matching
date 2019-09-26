@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -84,8 +85,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             };
 
             var serializeObject = JsonConvert.SerializeObject(viewModel);
+            var tempDataProvider = Substitute.For<ITempDataProvider>();
+            var tempDataDictionaryFactory = new TempDataDictionaryFactory(tempDataProvider);
+            var tempData = tempDataDictionaryFactory.GetTempData(new DefaultHttpContext());
+            tempData.Add("SelectedProviders", serializeObject);
+            controllerWithClaims.TempData = tempData;
 
-            _result = controllerWithClaims.SaveReferral(serializeObject).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveReferral().GetAwaiter().GetResult();
         }
 
         [Fact]
