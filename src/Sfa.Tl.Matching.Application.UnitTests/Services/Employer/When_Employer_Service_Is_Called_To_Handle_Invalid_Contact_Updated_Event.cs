@@ -11,11 +11,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 {
-    public class When_Employer_Service_Is_Called_To_Handle_Invalid_Contact_Udated_Event
+    public class When_Employer_Service_Is_Called_To_Handle_Invalid_Contact_Updated_Event
     {
         private readonly IRepository<Domain.Models.Employer> _employerRepository;
 
-        public When_Employer_Service_Is_Called_To_Handle_Invalid_Contact_Udated_Event()
+        public When_Employer_Service_Is_Called_To_Handle_Invalid_Contact_Updated_Event()
         {
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();

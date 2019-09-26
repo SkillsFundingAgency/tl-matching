@@ -2,6 +2,7 @@
 (
 	[Id]					INT IDENTITY(1,1) NOT NULL, 
 	[EmployerId]			INT NULL,
+	[EmployerCrmId]			uniqueidentifier NULL,
 	[EmployerContact]		NVARCHAR(100) NULL,
 	[EmployerContactEmail]	VARCHAR(320) NULL,
 	[EmployerContactPhone]	VARCHAR(150) NULL,

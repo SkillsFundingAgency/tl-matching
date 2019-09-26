@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Linq.Expressions;
 using AutoMapper;
-using FluentValidation;
 using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Models.Event;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
