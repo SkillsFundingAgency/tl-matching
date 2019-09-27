@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 .SearchProvidersForOtherRoutesByPostcodeProximity(
                     Arg.Is<ProviderSearchParametersDto>(
                         a => a.Postcode == Postcode && 
-                             a.SearchRadius == SearchParametersViewModel.DefaultSearchRadius && 
+                             a.SearchRadius == SearchParametersViewModel.ZeroResultsSearchRadius && 
                              a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultForOtherRoutesDto);
 
@@ -104,7 +104,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 .SearchProvidersForOtherRoutesByPostcodeProximity(
                     Arg.Is<ProviderSearchParametersDto>(
                         a => a.Postcode == Postcode &&
-                             a.SearchRadius == SearchParametersViewModel.DefaultSearchRadius &&
+                             a.SearchRadius == SearchParametersViewModel.ZeroResultsSearchRadius &&
                              a.SelectedRouteId == RouteId));
         }
 

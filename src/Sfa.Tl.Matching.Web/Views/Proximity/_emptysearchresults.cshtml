@@ -11,7 +11,7 @@
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <h2 class="govuk-heading-s">If you change the skill area</h2>
-    <p class="govuk-body">Within @SearchParametersViewModel.DefaultSearchRadius miles of @Model.SearchParameters.Postcode, there are:</p>
+    <p class="govuk-body">Within @SearchParametersViewModel.ZeroResultsSearchRadius miles of @Model.SearchParameters.Postcode, there are:</p>
     <ul class="govuk-list govuk-list--bullet">
         @foreach (var item in Model.SearchResults.AdditionalResults)
         {

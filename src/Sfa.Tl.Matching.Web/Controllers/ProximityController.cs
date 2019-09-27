@@ -152,7 +152,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 {
                     Postcode = viewModel.Postcode,
                     SelectedRouteId = viewModel.SelectedRouteId,
-                    SearchRadius = SearchParametersViewModel.DefaultSearchRadius
+                    SearchRadius = SearchParametersViewModel.ZeroResultsSearchRadius
                 });
 
             var resultsViewModel = new SearchViewModel
