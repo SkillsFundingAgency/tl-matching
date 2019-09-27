@@ -1,23 +1,33 @@
 ﻿// ReSharper disable UnusedMember.Global
-// ReSharper disable InconsistentNaming
+
+using Newtonsoft.Json;
+
 namespace Sfa.Tl.Matching.Models.Dto
 {
     public class LocationCodesDto
     {
-        public string Admin_District { get; set; }
+        [JsonProperty("admin_district")]
+        public string AdminDistrict { get; set; }
 
-        public string Admin_County { get; set; }
+        [JsonProperty("admin_county")]
+        public string AdminCounty { get; set; }
 
-        public string Admin_Ward { get; set; }
+        [JsonProperty("admin_ward")]
+        public string AdminWard { get; set; }
 
+        [JsonProperty("parish")]
         public string Parish { get; set; }
 
-        public string Parliamentary_Constituency { get; set; }
+        [JsonProperty("parliamentary_constituency")]
+        public string ParliamentaryConstituency { get; set; }
 
+        [JsonProperty("ccg")]
         public string Ccg { get; set; }
 
+        [JsonProperty("ced")]
         public string Ced { get; set; }
 
+        [JsonProperty("nuts")]
         public string Nuts { get; set; }
     }
 }
