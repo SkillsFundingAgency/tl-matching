@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.Mappers.Resolver
         {
             var name = source.Name;
 
-            var lookupResult = _locationApiClient.IsValidPostcode(name, true).GetAwaiter().GetResult();
+            var lookupResult = _locationApiClient.IsValidPostcodeAsync(name, true).GetAwaiter().GetResult();
             if (lookupResult.Item1)
                 return lookupResult.Item2;
 

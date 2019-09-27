@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         public async Task Then_Terminated_Postcode_Is_Returned_Correctly()
         {
             var postcodeData = await _locationApiClient
-                .GetTerminatedPostcodeGeoLocationData("S702YW");
+                .GetTerminatedPostcodeGeoLocationDataAsync("S702YW");
 
             postcodeData.Should().NotBeNull();
             postcodeData.Postcode.Should().Be("S70 2YW");

@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
         public When_LocationService_Is_Called_To_Validate_An_Invalid_Postcode()
         {
             var locationService = new LocationApiClient(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
-            _result = locationService.IsValidPostcode("CV1234").GetAwaiter().GetResult();
+            _result = locationService.IsValidPostcodeAsync("CV1234").GetAwaiter().GetResult();
         }
 
         [Fact]

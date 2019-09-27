@@ -20,22 +20,22 @@ namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
             _postcodeRetrieverBaseUrl = matchingConfiguration.PostcodeRetrieverBaseUrl.TrimEnd('/');
         }
 
-        public async Task<(bool, string)> IsValidPostcode(string postcode, bool includeTerminated)
+        public async Task<(bool, string)> IsValidPostcodeAsync(string postcode, bool includeTerminated)
         {
-            var (isValidPostcode, postcodeResult) = await IsValidPostcode(postcode);
+            var (isValidPostcode, postcodeResult) = await IsValidPostcodeAsync(postcode);
             if (!isValidPostcode)
             {
-                (isValidPostcode, postcodeResult) = await IsTerminatedPostcode(postcode);
+                (isValidPostcode, postcodeResult) = await IsTerminatedPostcodeAsync(postcode);
             }
 
             return (isValidPostcode, postcodeResult);
         }
 
-        public async Task<(bool, string)> IsValidPostcode(string postcode)
+        public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)
         {
             try
             {
-                var postcodeLookupResultDto = await GetGeoLocationData(postcode);
+                var postcodeLookupResultDto = await GetGeoLocationDataAsync(postcode);
                 return (true, postcodeLookupResultDto.Postcode);
             }
             catch
@@ -44,11 +44,11 @@ namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
             }
         }
 
-        public async Task<(bool, string)> IsTerminatedPostcode(string postcode)
+        public async Task<(bool, string)> IsTerminatedPostcodeAsync(string postcode)
         {
             try
             {
-                var postcodeLookupResultDto = await GetTerminatedPostcodeGeoLocationData(postcode);
+                var postcodeLookupResultDto = await GetTerminatedPostcodeGeoLocationDataAsync(postcode);
                 return (true, postcodeLookupResultDto.Postcode);
             }
             catch
@@ -57,11 +57,11 @@ namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
             }
         }
 
-        public async Task<PostcodeLookupResultDto> GetGeoLocationData(string postcode, bool includeTerminated)
+        public async Task<PostcodeLookupResultDto> GetGeoLocationDataAsync(string postcode, bool includeTerminated)
         {
             try
             {
-                return await GetGeoLocationData(postcode);
+                return await GetGeoLocationDataAsync(postcode);
             }
             catch
             {
@@ -69,10 +69,10 @@ namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
                     throw;
             }
 
-            return await GetTerminatedPostcodeGeoLocationData(postcode);
+            return await GetTerminatedPostcodeGeoLocationDataAsync(postcode);
         }
 
-        public async Task<PostcodeLookupResultDto> GetGeoLocationData(string postcode)
+        public async Task<PostcodeLookupResultDto> GetGeoLocationDataAsync(string postcode)
         {
             //Postcodes.io Returns 404 for "CV12 wt" so I have removed all special characters to get best possible result
             var lookupUrl = $"{_postcodeRetrieverBaseUrl}/postcodes/{postcode.ToLetterOrDigit()}";
@@ -86,7 +86,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GeoLocations
             return response.Result;
         }
 
-        public async Task<PostcodeLookupResultDto> GetTerminatedPostcodeGeoLocationData(string postcode)
+        public async Task<PostcodeLookupResultDto> GetTerminatedPostcodeGeoLocationDataAsync(string postcode)
         {
             var lookupUrl = $"{_postcodeRetrieverBaseUrl}/terminated_postcodes/{postcode.ToLetterOrDigit()}";
 

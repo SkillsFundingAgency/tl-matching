@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
         [Fact]
         public void Then_service_Throws_Exception()
         {
-            Action action = () => _locationApiClient.GetGeoLocationData("CV1234").GetAwaiter().GetResult();
+            Action action = () => _locationApiClient.GetGeoLocationDataAsync("CV1234").GetAwaiter().GetResult();
 
             action.Should().ThrowExactly<HttpRequestException>();
         }

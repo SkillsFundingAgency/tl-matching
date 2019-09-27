@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         public async Task Then_Postcode_Is_Returned_Correctly()
         {
             var postcodeData = await _locationApiClient
-                .GetGeoLocationData("CV12WT");
+                .GetGeoLocationDataAsync("CV12WT");
 
             postcodeData.Should().NotBeNull();
             postcodeData.Postcode.Should().Be("CV1 2WT");

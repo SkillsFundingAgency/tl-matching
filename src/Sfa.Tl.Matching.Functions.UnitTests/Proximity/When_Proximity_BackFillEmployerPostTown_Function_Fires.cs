@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
             _googleMapsApiClient.GetAddressDetails("CV1 2WT").Returns("Coventry");
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
-            _locationApiClient.IsValidPostcode(Arg.Any<string>(), Arg.Any<bool>()).Returns((true, "CV1 2WT"));
+            _locationApiClient.IsValidPostcodeAsync(Arg.Any<string>(), Arg.Any<bool>()).Returns((true, "CV1 2WT"));
 
             var proximityfunctions = new Functions.Proximity();
 
@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         {
             _locationApiClient
                 .Received(1)
-                .IsValidPostcode(Arg.Is<string>(s => s == "CV1 2WT"),
+                .IsValidPostcodeAsync(Arg.Is<string>(s => s == "CV1 2WT"),
                     Arg.Is<bool>(b => b));
         }
 
@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         }
 
         [Fact]
-        public void opportunityItemRepository_UpdateMany_Is_Called_Exactly_Once()
+        public void OpportunityItemRepository_UpdateMany_Is_Called_Exactly_Once()
         {
             _opportunityItemRepository
                 .Received(1)

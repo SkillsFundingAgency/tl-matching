@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
             {
                 PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
             });
-            _postcodeResultDto = locationService.IsTerminatedPostcode(requestPostcode).GetAwaiter().GetResult();
+            _postcodeResultDto = locationService.IsTerminatedPostcodeAsync(requestPostcode).GetAwaiter().GetResult();
         }
 
         [Fact]

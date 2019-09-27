@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
             {
                 PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
             });
-            _result = locationService.IsTerminatedPostcode("CV1 2WT").GetAwaiter().GetResult();
+            _result = locationService.IsTerminatedPostcodeAsync("CV1 2WT").GetAwaiter().GetResult();
         }
 
         [Fact]

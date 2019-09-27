@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 foreach (var opportunityItem in opportunityItemRepository.GetMany(io => io.Town == null || io.Town == "" || io.Town == " "))
                 {
-                    var (isValidPostcode, postcode) = await locationApiClient.IsValidPostcode(opportunityItem.Postcode, true);
+                    var (isValidPostcode, postcode) = await locationApiClient.IsValidPostcodeAsync(opportunityItem.Postcode, true);
 
                     if (!isValidPostcode)
                     {
@@ -172,7 +172,7 @@ namespace Sfa.Tl.Matching.Functions
                 {
                     try
                     {
-                        var geoLocationData = await locationApiClient.GetGeoLocationData(venue.Postcode, true);
+                        var geoLocationData = await locationApiClient.GetGeoLocationDataAsync(venue.Postcode, true);
 
                         venue.Postcode = geoLocationData.Postcode;
                         venue.Latitude = geoLocationData.Latitude.ToDecimal();

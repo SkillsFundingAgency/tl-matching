@@ -32,10 +32,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)
         {
-            var (valid, postcodeResult) = await _locationApiClient.IsValidPostcode(postcode);
+            var (valid, postcodeResult) = await _locationApiClient.IsValidPostcodeAsync(postcode);
 
             if (!valid)
-                (valid, postcodeResult) = await _locationApiClient.IsTerminatedPostcode(postcode);
+                (valid, postcodeResult) = await _locationApiClient.IsTerminatedPostcodeAsync(postcode);
 
             return (valid, postcodeResult);
         }
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task GetGeoLocationData(AddProviderVenueViewModel viewModel, ProviderVenue providerVenue)
         {
-            var geoLocationData = await _locationApiClient.GetGeoLocationData(viewModel.Postcode, true);
+            var geoLocationData = await _locationApiClient.GetGeoLocationDataAsync(viewModel.Postcode, true);
 
             providerVenue.Postcode = geoLocationData.Postcode;
             providerVenue.Latitude = geoLocationData.Latitude.ToDecimal();
