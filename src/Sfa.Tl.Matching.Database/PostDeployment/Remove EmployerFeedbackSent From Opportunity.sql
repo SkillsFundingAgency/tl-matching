@@ -1,5 +1,6 @@
 ﻿IF EXISTS (SELECT 1 FROM sys.columns WHERE [Name] = 'EmployerFeedbackSent' AND  OBJECT_ID = OBJECT_ID('[dbo].[OpportunityItem]'))
 BEGIN
+BEGIN
 	DECLARE @sql NVARCHAR(MAX)
 	
 	IF EXISTS (SELECT 1 FROM sys.default_constraints dc
@@ -17,7 +18,7 @@ BEGIN
 		EXEC (@sql)
 	END
 		
-	ALTER TABLE OpportunityItem DROP COLUMN ProviderFeedbackSent;
+	ALTER TABLE OpportunityItem DROP COLUMN EmployerFeedbackSent;
 
 END
 
