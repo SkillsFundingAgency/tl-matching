@@ -23,11 +23,11 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
                 Method = HttpMethod.Get.ToString()
             };
 
-            var employerFeedback = new Functions.EmployerFeedback();
+            var employerFeedback = new EmployerFeedback();
             employerFeedback.ManualSendEmployerFeedbackEmails(
                 request,
                 new ExecutionContext(),
-                new NullLogger<Functions.EmployerFeedback>(),
+                new NullLogger<EmployerFeedback>(),
                 _employerFeedbackService).GetAwaiter().GetResult();
         }
 

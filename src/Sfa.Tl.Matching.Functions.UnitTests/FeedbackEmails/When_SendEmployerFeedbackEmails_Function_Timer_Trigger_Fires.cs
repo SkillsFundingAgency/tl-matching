@@ -22,11 +22,11 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
 
             _employerFeedbackService = Substitute.For<IEmployerFeedbackService>();
 
-            var employerFeedback = new Functions.EmployerFeedback();
+            var employerFeedback = new EmployerFeedback();
             employerFeedback.SendEmployerFeedbackEmails(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
-                new NullLogger<Functions.EmployerFeedback>(),
+                new NullLogger<EmployerFeedback>(),
                 _employerFeedbackService,
                 _functionLogRepository).GetAwaiter().GetResult();
         }
