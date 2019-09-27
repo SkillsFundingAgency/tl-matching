@@ -60,12 +60,14 @@
     <Folder Include="Tables\" />
     <Folder Include="PostDeployment" />
     <Folder Include="PreDeployment" />
+    <Folder Include="Views" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Sfa.Tl.Matching.Database.publish.xml" />
     <None Include="PostDeployment\Seed Email Templates.sql" />
     <None Include="Sfa.Tl.Matching.Database.Local.Int.Test.publish.xml" />
     <None Include="Sfa.Tl.Matching.Database.Local.publish.xml" />
+    <None Include="PostDeployment\Seed UserProfile.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
@@ -105,6 +107,9 @@
     <None Include="PostDeployment\Update Opportunity Table EmployerCrmIds.sql" />
     <None Include="PostDeployment\Update Opportunity Table EmployerFeedbackSentOn.sql" />
     <None Include="PostDeployment\Remove EmployerFeedbackSent From Opportunity.sql" />
+    <Build Include="Views\MatchingServiceOpportunityReport.sql" />
+    <Build Include="Views\MatchingServiceProviderOpportunityReport.sql" />
+    <Build Include="Tables\UserProfile.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

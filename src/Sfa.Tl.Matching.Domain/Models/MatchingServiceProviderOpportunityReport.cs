@@ -1,6 +1,6 @@
-﻿namespace Sfa.Tl.Matching.Models.Dto
+﻿namespace Sfa.Tl.Matching.Domain.Models
 {
-    public class MatchingServiceProviderOpportunityReportDto
+    public class MatchingServiceProviderOpportunityReport
     {
         public int OpportunityItemCount { get; set; }
         public string RouteName { get; set; }

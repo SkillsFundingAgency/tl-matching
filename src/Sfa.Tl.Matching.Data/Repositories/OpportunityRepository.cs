@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -236,27 +234,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
         }
 
-        public async Task<List<MatchingServiceOpportunityReportDto>> GetMatchingServiceOpportunityReportAsync()
+        public async Task<List<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync()
         {
-            return await QueryFromSqlAsync<MatchingServiceOpportunityReportDto>("MatchingServiceOpportunityReport.sql");
+            return await _dbContext.MatchingServiceOpportunityReport.OrderBy(o => new { o.OpportunityItemId }).ThenByDescending(o => new { o.OpportunityType, o.IsCompleted, o.IsSaved }).ToListAsync();
         }
 
-        public async Task<List<MatchingServiceProviderOpportunityReportDto>> GetMatchingServiceProviderOpportunityReportAsync()
+        public async Task<List<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync()
         {
-            return await QueryFromSqlAsync<MatchingServiceProviderOpportunityReportDto>("MatchingServiceProviderOpportunityReport.sql");
-        }
-
-        private async Task<List<T>> QueryFromSqlAsync<T>(string sqlFileName) where T : class
-        {
-            string sqlCommnad;
-            var resourceName = $"{typeof(OpportunityRepository).Namespace}.{sqlFileName}";
-            using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-            using (var streamReader = new StreamReader(templateStream ?? throw new InvalidOperationException($"Could not find {sqlFileName} file")))
-            {
-                sqlCommnad = streamReader.ReadToEnd();
-            }
-
-            return await _dbContext.Query<T>().FromSql(sqlCommnad).ToListAsync();
+            return await _dbContext.MatchingServiceProviderOpportunityReport.ToListAsync();
         }
 
         public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)

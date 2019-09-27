@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Sfa.Tl.Matching.Models.Dto
+namespace Sfa.Tl.Matching.Domain.Models
 {
-    public class MatchingServiceOpportunityReportDto
+    public class MatchingServiceOpportunityReport
     {
         public int OpportunityItemId { get; set; }
         public string OpportunityType { get; set; }

@@ -1,15 +1,9 @@
-IF OBJECT_ID('tempdb..#Roles') IS NOT NULL 
-    DROP TABLE #Roles ;
+﻿/*
+Insert initial data for User Profile
+*/
 
-create table #Roles
-(
-    Username varchar(50),
-    Team varchar(20),
-    Region varchar(30)
-)
-
-INSERT INto #Roles
-VALUES
+MERGE INTO [dbo].[UserProfile] AS Target 
+USING (VALUES 
     ('Rebecca Mitchell',	'SME Outbound', ''),
     ('Christopher Hope',	'SME Outbound', ''),
     ('Sonia Begum',			'SME Outbound', ''),
@@ -130,50 +124,21 @@ VALUES
 	('3 Tmatching',			'NAM', 'SSW NAM'),
     ('2 Tmatching',			'TAM', ''),
     ('1 Tmatching',			'SME Outbound', '')
-
-;WITH CTE AS (
-    SELECT
-        oi.id AS OpportunityItemId,
-        count(p.Id) AS ProviderCount
-    from [Provider] AS P
-        INNER JOIN ProviderVenue AS pv ON pv.ProviderId = p.Id
-        INNER JOIN Referral AS rf ON rf.ProviderVenueId = pv.id
-        INNER JOIN OpportunityItem AS oi ON rf.OpportunityItemId = oi.id
-    GROUP BY oi.id
-)
-SELECT
-    oi.id AS OpportunityItemId,
-    oi.OpportunityType,
-    oi.IsCompleted,
-    oi.IsSaved,
-    CAST(CASE WHEN oi.IsSaved = 1 and oi.IsCompleted = 0 THEN 1 ELSE 0 END AS BIT) AS PipelineOpportunity,
-    o.EmployerId,
-    e.CompanyName,
-    e.Aupa,
-    e.Owner,
-    oi.Postcode AS EmployerPostCodeEnteredInSearch,
-    oi.PlacementsKnown,
-    oi.Placements,
-    oi.JobRole,
-    cte.ProviderCount,
-    rt.[Name] as RouteName,
-    rl.Region,
-    rl.Team,
-    oi.CreatedBy AS Username,
-	oi.ModifiedOn,
-	oi.CreatedOn,
-    DATEADD(DAY, 6 - DATEPART(WEEKDAY, oi.CreatedOn), CAST(oi.CreatedOn AS  DATE)) WeekEndDate,
-    LEFT(DATENAME(MONTH, oi.CreatedOn),3) + ' ' + RIGHT('00' + CAST(YEAR(oi.CreatedOn) AS VARCHAR),2) as [Date]
-FROM Opportunity as o
-    INNER JOIN OpportunityItem as oi on o.Id = oi.OpportunityId
-    INNER JOIN [Route] as rt on rt.Id = oi.RouteId
-    LEFT JOIN CTE ON cte.OpportunityItemId = oi.Id
-    LEFT JOIN #Roles as rl on o.CreatedBy = rl.Username
-    LEFT JOIN Employer as e on  e.Id = o.EmployerId
-WHERE 
-    oi.IsSaved = 1
-ORDER BY 
-    OpportunityType DESC,
- 	IsCompleted DESC,
- 	IsSaved DESC,
-	OpportunityItemId
+  )
+  AS Source ([Username], [Team], [Region]) 
+ON Target.[Username] = Source.[Username] 
+-- Update from Source when TemplateName is Matched
+WHEN MATCHED 
+	 AND (Target.[Username] <> Source.[Username]) 
+THEN 
+UPDATE SET 
+	[Username] = Source.[Username],
+	[Team] = Source.[Team],
+	[Region] = Source.[Region],
+	[ModifiedOn] = GETDATE(),
+	[ModifiedBy] = 'System'
+WHEN NOT MATCHED BY TARGET THEN 
+	INSERT ([Username], [Team], [Region], [CreatedBy]) 
+	VALUES ([Username], [Team], [Region], 'System') 
+WHEN NOT MATCHED BY SOURCE THEN 
+DELETE;

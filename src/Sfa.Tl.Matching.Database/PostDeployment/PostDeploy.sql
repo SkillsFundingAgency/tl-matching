@@ -14,3 +14,4 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Update Opportunity Table EmployerCrmIds.sql"
 :r ".\Update Opportunity Table EmployerFeedbackSentOn.sql"
 :r ".\Remove EmployerFeedbackSent From Opportunity.sql"
+:r ".\Seed UserProfile.sql"

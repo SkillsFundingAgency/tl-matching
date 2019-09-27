@@ -6,16 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Repositories\MatchingServiceOpportunityReport.sql" />
-    <None Remove="Repositories\MatchingServiceProviderOpportunityReport.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Repositories\MatchingServiceProviderOpportunityReport.sql" />
-    <EmbeddedResource Include="Repositories\MatchingServiceOpportunityReport.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
