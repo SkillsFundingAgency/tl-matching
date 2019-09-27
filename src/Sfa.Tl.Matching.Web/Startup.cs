@@ -2,7 +2,6 @@
 using System.Globalization;
 using AutoMapper;
 using FluentValidation;
-using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +28,7 @@ using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
@@ -201,6 +201,7 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
+            services.AddHttpClient<IGoogleDistanceMatrixApiClient, GoogleDistanceMatrixApiClient>();
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
