@@ -109,7 +109,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     opportunityItem.IsSaved &&
                     opportunityItem.IsSelectedForReferral &&
                     opportunityItem.IsCompleted &&
-                    opportunityItem.EmployerFeedbackSent &&
                     opportunityItem.CreatedBy == "adminUserName"
             ));
         }
