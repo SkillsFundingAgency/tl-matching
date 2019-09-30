@@ -137,8 +137,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailService
                 .DidNotReceive()
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                .SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>());
         }
         
         [Fact]

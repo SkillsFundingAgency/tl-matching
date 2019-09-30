@@ -6,10 +6,8 @@ using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Http;
-using SFA.DAS.Http.TokenGenerators;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Client.Configuration;
+using Notify.Client;
+using Notify.Interfaces;
 using Sfa.Tl.Matching.Api.Clients.Calendar;
 using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
@@ -82,7 +80,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             RegisterApplicationServices(services);
 
-            RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
+            RegisterNotificationsApi(services, _configuration.GovNotifyApiKey);
 
             RegisterApiClient(services);
         }
@@ -186,14 +184,9 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         }
 
-        private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
+        private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)
         {
-            var httpClient = string.IsNullOrWhiteSpace(apiConfiguration.ClientId)
-                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(apiConfiguration)).Build()
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(apiConfiguration)).Build();
-
-            services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
-                new NotificationsApi(httpClient, apiConfiguration));
+            services.AddTransient<IAsyncNotificationClient, NotificationClient>(provider => new NotificationClient(apiKey));
         }
 
         private static void RegisterApiClient(IServiceCollection services)

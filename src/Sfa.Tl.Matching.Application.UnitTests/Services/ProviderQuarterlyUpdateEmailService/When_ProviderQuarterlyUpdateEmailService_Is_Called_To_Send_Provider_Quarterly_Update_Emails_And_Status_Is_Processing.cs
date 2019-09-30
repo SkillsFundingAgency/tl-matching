@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .DidNotReceiveWithAnyArgs()
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
         }
 
         [Fact]

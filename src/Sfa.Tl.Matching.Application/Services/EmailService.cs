@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Types;
+using Notify.Interfaces;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -13,25 +13,24 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class EmailService : IEmailService
     {
-        public const string DefaultReplyToAddress = "DummyAddressOverriddenByNotificationsService"; //reply address is currently ignored by DAS Notifications
-
         private readonly MatchingConfiguration _configuration;
         private readonly ILogger<EmailService> _logger;
-        private readonly INotificationsApi _notificationsApi;
+        private readonly IAsyncNotificationClient _notificationClient;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
 
-        public EmailService(MatchingConfiguration configuration, 
-            INotificationsApi notificationsApi,
+        public EmailService(MatchingConfiguration configuration,
+            IAsyncNotificationClient notificationClient,
             IRepository<EmailTemplate> emailTemplateRepository,
             ILogger<EmailService> logger)
         {
             _configuration = configuration;
             _emailTemplateRepository = emailTemplateRepository;
-            _notificationsApi = notificationsApi;
+            _notificationClient = notificationClient;
             _logger = logger;
+
         }
 
-        public async Task SendEmail(string templateName, string toAddress, string subject, IDictionary<string, string> personalisationTokens, string replyToAddress)
+        public async Task SendEmail(string templateName, string toAddress, IDictionary<string, string> personalisationTokens)
         {
             if (!_configuration.SendEmailEnabled)
             {
@@ -54,34 +53,24 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var templateId = emailTemplate.TemplateId;
 
-            replyToAddress = !string.IsNullOrWhiteSpace(replyToAddress)
-                ? replyToAddress
-                : DefaultReplyToAddress;
-
             foreach (var recipient in recipients)
             {
                 _logger.LogInformation($"Sending {templateName} email to {recipient}");
 
-                await SendEmailViaNotificationsApi(recipient, subject, templateId, _configuration.NotificationsSystemId, personalisationTokens, replyToAddress);
+                await SendEmailViaNotificationsApi(recipient, templateId, personalisationTokens);
             }
         }
 
-        private async Task SendEmailViaNotificationsApi(string recipient, string subject, string templateId, 
-            string systemId, IDictionary<string, string> personalisationTokens, string replyToAddress)
+        private async Task SendEmailViaNotificationsApi(string recipient, string templateId, 
+            IDictionary<string, string> personalisationTokens)
         {
-            var email = new Email
-            {
-                RecipientsAddress = recipient,
-                TemplateId = templateId,
-                ReplyToAddress = replyToAddress,
-                Subject = subject,
-                SystemId = systemId,
-                Tokens = (Dictionary<string, string>)personalisationTokens
-            };
-
             try
             {
-                await _notificationsApi.SendEmail(email);
+                var tokens = personalisationTokens.Select(x => new { key = x.Key, val = (dynamic)x.Value })
+                    .ToDictionary(item => item.key, item => item.val);
+
+                await _notificationClient.SendEmailAsync(recipient, templateId, tokens);
+
             }
             catch (Exception ex)
             {

@@ -41,9 +41,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             _dateTimeProvider
                 .UtcNow()
                 .Returns(new DateTime(2019, 9, 1));
-            //_dateTimeProvider
-            //    .UtcNow()
-            //    .Returns(new DateTime(2019, 8, 30));
             _dateTimeProvider
                 .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<TimeSpan>(), Arg.Any<IList<DateTime>>())
                 .Returns(DateTime.Parse("2019-8-15 23:59:59"));
@@ -154,8 +151,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                .SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>());
         }
 
         [Fact]
@@ -166,9 +163,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .SendEmail(Arg.Is<string>(
                         templateName => templateName == "EmployerFeedback"),
                     Arg.Is<string>(toAddress => toAddress == "primary.contact@employer.co.uk"),
-                    Arg.Is<string>(subject => subject == "Your industry placement progress – ESFA"),
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Is<string>(replyToAddress => replyToAddress == ""));
+                    Arg.Any<IDictionary<string, string>>());
         }
 
         [Fact]
@@ -183,10 +178,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .Received(1)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
-                    Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)),
-                    Arg.Any<string>());
+                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)));
         }
 
         [Fact]
@@ -219,3 +212,4 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         }
     }
 }
+

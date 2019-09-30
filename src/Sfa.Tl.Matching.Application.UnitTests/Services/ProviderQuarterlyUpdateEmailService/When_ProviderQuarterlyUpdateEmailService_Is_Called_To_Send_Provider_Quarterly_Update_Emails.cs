@@ -130,7 +130,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
         }
 
         [Fact]
@@ -141,9 +141,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 .SendEmail(Arg.Is<string>(
                         templateName => templateName == "ProviderQuarterlyUpdate"),
                     Arg.Is<string>(toAddress => toAddress == "primary.contact@provider.co.uk"),
-                    Arg.Is<string>(subject => subject == "Industry Placement Matching Provider Update"),
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Is<string>(replyToAddress => replyToAddress == ""));
+                    Arg.Any<IDictionary<string, string>>());
         }
 
         [Fact]
@@ -174,10 +172,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 .Received(1)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
-                    Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)),
-                    Arg.Any<string>());
+                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)));
         }
 
         [Fact]

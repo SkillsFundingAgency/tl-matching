@@ -170,9 +170,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await _emailService.SendEmail(template.ToString(),
                     toAddress,
-                    subject,
-                    tokens,
-                    "");
+                    tokens);
 
             await _emailHistoryService.SaveEmailHistory(template.ToString(),
                 tokens,

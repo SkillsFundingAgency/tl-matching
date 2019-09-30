@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 )));
 
             _emailService
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>())
+                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>())
                 .Throws(new Exception());
 
             var providerFeedbackService = new Application.Services.ProviderQuarterlyUpdateEmailService(
@@ -138,7 +138,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
         }
 
         [Fact]

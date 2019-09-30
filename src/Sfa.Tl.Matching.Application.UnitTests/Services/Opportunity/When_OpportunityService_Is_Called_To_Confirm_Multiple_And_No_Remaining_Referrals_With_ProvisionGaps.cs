@@ -65,8 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var configuration = new MatchingConfiguration
             {
-                SendEmailEnabled = true,
-                NotificationsSystemId = "TLevelsIndustryPlacement"
+                SendEmailEnabled = true
             };
 
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();

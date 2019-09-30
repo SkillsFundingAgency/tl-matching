@@ -13,7 +13,6 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 
             fixture.Customize<MatchingConfiguration>(composer =>
                 composer.With(config => config.SendEmailEnabled, true)
-                    .With(config => config.NotificationsSystemId, "TLevelsIndustryPlacement")
                     .With(config => config.EmployerFeedbackTimeSpan, "-10.00:00:00"));
                 
 

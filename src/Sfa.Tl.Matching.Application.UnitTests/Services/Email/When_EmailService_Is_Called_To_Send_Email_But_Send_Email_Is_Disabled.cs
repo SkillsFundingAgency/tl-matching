@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
+using Notify.Interfaces;
 using NSubstitute;
-using SFA.DAS.Notifications.Api.Client;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 {
     public class When_EmailService_Is_Called_To_Send_Email_But_Send_Email_Is_Disabled
     {
-        private readonly INotificationsApi _notificationsApi;
+        private readonly IAsyncNotificationClient _notificationsApi;
 
         public When_EmailService_Is_Called_To_Send_Email_But_Send_Email_Is_Disabled()
         {
@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 SendEmailEnabled = false
             };
 
-            _notificationsApi = Substitute.For<INotificationsApi>();
+            _notificationsApi = Substitute.For<IAsyncNotificationClient>();
 
             var logger = Substitute.For<ILogger<EmailService>>();
 
@@ -49,13 +49,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             const string templateName = "TestTemplate";
 
-            emailService.SendEmail(templateName, toAddress, subject, tokens, replyToAddress).GetAwaiter().GetResult();
+            emailService.SendEmail(templateName, toAddress, tokens).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_NotificationsApi_SendEmail_Is_Not_Called()
         {
-            _notificationsApi.DidNotReceive().SendEmail(Arg.Any<SFA.DAS.Notifications.Api.Types.Email>());
+            _notificationsApi.DidNotReceive().SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Any<Dictionary<string, dynamic>>());
         }
     }
 }

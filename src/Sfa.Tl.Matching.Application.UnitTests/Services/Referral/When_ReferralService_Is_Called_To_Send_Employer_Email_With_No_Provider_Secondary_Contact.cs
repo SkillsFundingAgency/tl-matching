@@ -24,8 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
             var configuration = new MatchingConfiguration
             {
-                SendEmailEnabled = true,
-                NotificationsSystemId = "TLevelsIndustryPlacement"
+                SendEmailEnabled = true
             };
 
             var mapper = Substitute.For<IMapper>();
@@ -74,11 +73,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .Received(1)
                 .SendEmail(Arg.Any<string>(),
                     Arg.Any<string>(),
-                    Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("placements_list")
-                                  && tokens["placements_list"] == expectedPlacementsList),
-                    Arg.Any<string>());
+                                  && tokens["placements_list"] == expectedPlacementsList));
         }
     }
 }

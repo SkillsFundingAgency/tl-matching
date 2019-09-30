@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Notifications.Api.Client.Configuration;
 using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
@@ -18,11 +17,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
         {
             MatchingConfiguration = new MatchingConfiguration
             {
-                PostcodeRetrieverBaseUrl = "https://postcodes.io",
-                NotificationsApiClientConfiguration = new NotificationsApiClientConfiguration
-                {
-                    ApiBaseUrl = "http://localhost:56133/"
-                }
+                PostcodeRetrieverBaseUrl = "https://postcodes.io"
             };
         }
 
