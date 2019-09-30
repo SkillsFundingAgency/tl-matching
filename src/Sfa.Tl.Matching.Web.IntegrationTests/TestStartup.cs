@@ -17,7 +17,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
         {
             MatchingConfiguration = new MatchingConfiguration
             {
-                PostcodeRetrieverBaseUrl = "https://postcodes.io"
+                PostcodeRetrieverBaseUrl = "https://postcodes.io",
+                GoogleMapsApiBaseUrl = "https://google.com"
             };
         }
 
