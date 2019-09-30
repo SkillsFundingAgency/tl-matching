@@ -18,7 +18,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
             MatchingConfiguration = new MatchingConfiguration
             {
                 PostcodeRetrieverBaseUrl = "https://postcodes.io"
-                }
             };
         }
 
