@@ -13,10 +13,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ProviderSecondaryContactName { get; set; }
         public string ProviderSecondaryContactEmail { get; set; }
         public DateTime? ProviderFeedbackEmailSentOn { get; set; }
-
-        public string Displayname => string.IsNullOrWhiteSpace(ProviderSecondaryContactName)
-            ? ProviderPrimaryContactName
-            : $"{ProviderPrimaryContactName} / {ProviderSecondaryContactName}";
-
+        
     }
 }

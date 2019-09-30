@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     var tokens = new Dictionary<string, string>
                     {
-                        { "contact_name", referral.Displayname },
+                        { "contact_name", referral.ProviderPrimaryContactName },
                         { "company_name", referral.Companyname}
                     };
 
@@ -81,10 +81,14 @@ namespace Sfa.Tl.Matching.Application.Services
                         referral.ProviderPrimaryContactEmail, "Your industry placement progress – ESFA", tokens,
                         userName);
 
-                    if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail))
+                    if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactName))
+                    {
+                        tokens["contact_name"] = referral.ProviderSecondaryContactName;
+
                         await SendEmail(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
                             referral.ProviderSecondaryContactEmail, "Your industry placement progress – ESFA", tokens,
                             userName);
+                    }
                 }
 
                 await SetProviderFeedbackSentOnDate(referrals.Select(r => r.ProviderId), userName);
