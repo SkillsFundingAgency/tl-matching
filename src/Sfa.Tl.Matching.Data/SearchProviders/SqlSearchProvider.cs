@@ -27,11 +27,6 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
 
         public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
-            if (dto.SearchRadius == 0)
-            {
-                dto.SearchRadius = 25;
-            }
-
             _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
 
             if (string.IsNullOrWhiteSpace(dto.Latitude) || string.IsNullOrWhiteSpace(dto.Longitude))
@@ -40,7 +35,9 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
             var employerLocation = geometryFactory.CreatePoint(new Coordinate(double.Parse(dto.Longitude), double.Parse(dto.Latitude)));
 
-            var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
+            //TODO: If javascript on then will need to search by radius first, otherwise this is ignored
+            //var searchRadius = dto.SearchRadius != 0 ? dto.SearchRadius : 25;
+            //var searchRadiusInMeters = searchRadius * MilesToMeters;
 
             var result = await (from provider in _matchingDbContext.Provider
                                 join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId
@@ -48,7 +45,8 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                 join qualificationRouteMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals qualificationRouteMapping.QualificationId
                                 orderby providerVenue.Location.Distance(employerLocation)
                                 where qualificationRouteMapping.RouteId == dto.SelectedRouteId 
-                                      && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters 
+                                      //TODO: Only search by distance for non-javascript search
+                                      //&& providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters 
                                       && provider.IsCdfProvider
                                       && provider.IsEnabledForReferral
                                       && providerVenue.IsEnabledForReferral
@@ -62,6 +60,8 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                     Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
                                     providerVenue.Postcode,
                                     providerVenue.Town,
+                                    providerVenue.Latitude,
+                                    providerVenue.Longitude,
                                     provider.IsTLevelProvider
                                 }).Distinct().ToListAsync();
 
@@ -87,6 +87,8 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                 ProviderVenueName = r.ProviderVenueName,
                 Distance = r.Distance,
                 IsTLevelProvider = r.IsTLevelProvider,
+                Latitude = r.Latitude ?? 0,
+                Longitude = r.Longitude ?? 0,
                 QualificationShortTitles = qualificationShortTitles.Where(q => q.ProviderVenueId == r.ProviderVenueId).Select(q => q.QualificationShortTitle)
             }).OrderBy(r => r.Distance).ToList();
         }

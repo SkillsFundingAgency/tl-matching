@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Internal;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -13,11 +14,15 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly ISearchProvider _searchProvider;
         private readonly ILocationApiClient _locationApiClient;
+        private readonly IGoogleDistanceMatrixApiClient _googleDistanceMatrixApiClient;
 
-        public ProximityService(ISearchProvider searchProvider, ILocationApiClient locationApiClient)
+        public ProximityService(ISearchProvider searchProvider, 
+            ILocationApiClient locationApiClient,
+            IGoogleDistanceMatrixApiClient googleDistanceMatrixApiClient)
         {
             _searchProvider = searchProvider;
             _locationApiClient = locationApiClient;
+            _googleDistanceMatrixApiClient = googleDistanceMatrixApiClient;
         }
 
         public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
@@ -28,7 +33,60 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var searchResults = await _searchProvider.SearchProvidersByPostcodeProximity(dto);
 
-            var results = searchResults.Any() ? searchResults : new List<SearchResultsViewModelItem>();
+            //Call google search here
+            if (searchResults != null && searchResults.Any())
+            {
+                return await FilterByTravelTime(decimal.Parse(dto.Latitude), decimal.Parse(dto.Longitude), searchResults);
+            }
+
+            return searchResults ?? new List<SearchResultsViewModelItem>();
+        }
+
+        private async Task<IList<SearchResultsViewModelItem>> FilterByTravelTime(decimal startPointLatitude, decimal startPointLongitude, IList<SearchResultsViewModelItem> searchResults)
+        {
+            var destinations = searchResults
+                //.Where(v => v.Latitude != 0 && v.Longitude != 0)
+                .Select(v => new LocationDto
+                {
+                    Id = v.ProviderVenueId,
+                    Postcode = v.ProviderVenuePostcode,
+                    Latitude = v.Latitude,
+                    Longitude = v.Longitude
+                }).ToList();
+
+            var journeyResults =
+                await Task.WhenAll(
+                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(startPointLatitude, startPointLongitude, destinations, TravelMode.Driving),
+                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(startPointLatitude, startPointLongitude, destinations, TravelMode.Transit));
+
+            var journeyTimesByCar = journeyResults[0];
+            var journeyTimesByPublicTransport = journeyResults[1];
+
+            const int oneHour = 60 * 60;
+            var results = searchResults
+                .Where(s =>
+                        journeyTimesByCar.Any(d => d.DestinationId == s.ProviderVenueId &&
+                                                   d.TravelTime < oneHour) 
+                        ||
+                        journeyTimesByPublicTransport.Any(d => d.DestinationId == s.ProviderVenueId &&
+                                                               d.TravelTime < oneHour)
+                    )
+                .Select(r => new SearchResultsViewModelItem
+                {
+                    ProviderVenueTown = r.ProviderVenueTown,
+                    ProviderVenuePostcode = r.ProviderVenuePostcode,
+                    ProviderVenueId = r.ProviderVenueId,
+                    ProviderName = r.ProviderName,
+                    ProviderDisplayName = r.ProviderDisplayName,
+                    ProviderVenueName = r.ProviderVenueName,
+                    Distance = r.Distance,
+                    IsTLevelProvider = r.IsTLevelProvider,
+                    QualificationShortTitles = r.QualificationShortTitles,
+                    TravelTimeByDriving = journeyTimesByCar.SingleOrDefault(g => g.DestinationId == r.ProviderVenueId)?.TravelTime,
+                    TravelTimeByPublicTransport = journeyTimesByPublicTransport.SingleOrDefault(g => g.DestinationId == r.ProviderVenueId)?.TravelTime,
+                    Latitude = r.Latitude,
+                    Longitude = r.Longitude
+                }).OrderBy(r => r.Distance).ToList();
 
             return results;
         }

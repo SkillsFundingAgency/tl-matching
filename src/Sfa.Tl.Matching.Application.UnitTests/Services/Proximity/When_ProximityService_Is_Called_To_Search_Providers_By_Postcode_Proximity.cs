@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using DocumentFormat.OpenXml.Math;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -18,6 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         private const int RouteId = 2;
         private readonly IList<SearchResultsViewModelItem> _result;
         private readonly ILocationApiClient _locationApiClient;
+        private readonly IGoogleDistanceMatrixApiClient _googleDistanceMatrixApiClient;
         private readonly ISearchProvider _searchProvider;
 
         public When_ProximityService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
@@ -43,7 +46,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
                     Latitude = "1.2"
                 });
 
-            var service = new ProximityService(_searchProvider, _locationApiClient);
+            _googleDistanceMatrixApiClient = Substitute.For<IGoogleDistanceMatrixApiClient>();
+            _googleDistanceMatrixApiClient.GetJourneyTimesAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
+                    Arg.Any<IList<LocationDto>>(), TravelMode.Driving)
+                .Returns(new JourneyTimesBuilder().BuildDrivingResults());
+            _googleDistanceMatrixApiClient.GetJourneyTimesAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
+                    Arg.Any<IList<LocationDto>>(), TravelMode.Transit)
+                .Returns(new JourneyTimesBuilder().BuildPublicTransportResults());
+
+            var service = new ProximityService(_searchProvider, _locationApiClient, _googleDistanceMatrixApiClient);
 
             _result = service.SearchProvidersByPostcodeProximity(dto).GetAwaiter().GetResult();
         }
@@ -71,6 +82,26 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         public void Then_The_ISearchProvider_Is_Called_Exactly_Once()
         {
             _searchProvider.Received(1).SearchProvidersByPostcodeProximity(Arg.Any<ProviderSearchParametersDto>());
+        }
+
+        [Fact]
+        public void Then_The_Google_Distance_Matrix_Api_Is_Called_Exactly_Once_For_Driving()
+        {
+            _googleDistanceMatrixApiClient.Received(1).GetJourneyTimesAsync(
+                Arg.Any<decimal>(),
+                Arg.Any<decimal>(),
+                Arg.Any<IList<LocationDto>>(),
+                Arg.Is<string>(m => m == "driving"));
+        }
+
+        [Fact]
+        public void Then_The_Google_Distance_Matrix_Api_Is_Called_Exactly_Once_For_Public_Transport()
+        {
+            _googleDistanceMatrixApiClient.Received(1).GetJourneyTimesAsync(
+                Arg.Any<decimal>(),
+                Arg.Any<decimal>(),
+                Arg.Any<IList<LocationDto>>(),
+                Arg.Is<string>(m => m == "transit"));
         }
     }
 }

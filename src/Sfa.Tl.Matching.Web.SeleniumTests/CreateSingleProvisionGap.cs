@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
 
             var proximityIndexPage = _startPage.ClickStart();
             proximityIndexPage.AssertContent();
-            proximityIndexPage.EnterPostcode("SW1A 2AA");
+            proximityIndexPage.EnterPostcode("CV1 2WT");
 
             var proximityResultsPage = proximityIndexPage.ClickSearch();
             proximityResultsPage.AssertContent();

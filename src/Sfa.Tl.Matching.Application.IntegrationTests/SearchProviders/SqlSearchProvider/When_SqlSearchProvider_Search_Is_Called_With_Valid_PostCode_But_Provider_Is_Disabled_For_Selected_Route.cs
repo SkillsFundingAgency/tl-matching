@@ -25,13 +25,13 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
 
             _dbContext = new TestConfiguration().GetDbContext();
 
-            _providerVenue = new ValidProviderVenueSearchBuilder().BuildOneVenue();
+            _providerVenue = new ValidProviderVenueSearchBuilder().BuildWithOneDisabledVenue();
             _dbContext.Add(_providerVenue);
             _dbContext.SaveChanges();
 
             var provider = new Data.SearchProviders.SqlSearchProvider(logger, _dbContext);
 
-            _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "MK1 1AD", SearchRadius = 5, SelectedRouteId = 7, Latitude = "52.010709", Longitude = "-0.736412" }).GetAwaiter().GetResult();
+            _results = provider.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto { Postcode = "MK1 1AD", SelectedRouteId = 7, Latitude = "52.010709", Longitude = "-0.736412" }).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Should().NotBeNull();
 
         [Fact]
-        public void Then_No_Provider_Is_Found_Within_Search_Radius() =>
+        public void Then_No_Provider_Is_Found() =>
             _results.Count().Should().Be(0);
 
         public void Dispose()
