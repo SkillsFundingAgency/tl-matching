@@ -27,6 +27,11 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
 
         public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
         {
+            if (dto.SearchRadius == 0)
+            {
+                dto.SearchRadius = 25;
+            }
+
             _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
 
             if (string.IsNullOrWhiteSpace(dto.Latitude) || string.IsNullOrWhiteSpace(dto.Longitude))

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Humanizer;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
@@ -13,6 +15,23 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string ProviderDisplayName { get; set; }
         public string ProviderVenueName { get; set; }
         public bool IsTLevelProvider { get; set; }
+
+        public long? TravelTimeByDriving { get; set; }
+        public string TravelTimeByDrivingDisplay =>
+            TravelTimeByDriving.HasValue
+                ? TimeSpan.FromSeconds(TravelTimeByDriving.Value)
+                    .Humanize()
+                : null;
+
+        public long? TravelTimeByPublicTransport { get; set; }
+        public string TravelTimeByPublicTransportDisplay =>
+            TravelTimeByPublicTransport.HasValue
+                ? TimeSpan.FromSeconds(TravelTimeByPublicTransport.Value)
+                    .Humanize()
+                : null;
+
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
         public IEnumerable<string> QualificationShortTitles { get; set; }
     }
 }

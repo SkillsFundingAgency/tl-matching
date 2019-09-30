@@ -35,7 +35,6 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
 
             var proximityResultsPage = proximityIndexPage.ClickSearch();
             proximityResultsPage.AssertContent();
-            proximityResultsPage.EnterSearchRadius("25 miles");
 
             var placementInformationPage = proximityResultsPage.ClickNoSuitableProvidersLink();
             placementInformationPage.AssertContent();

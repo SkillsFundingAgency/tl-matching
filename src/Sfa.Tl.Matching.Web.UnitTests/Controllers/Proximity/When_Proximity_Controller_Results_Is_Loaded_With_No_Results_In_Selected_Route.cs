@@ -92,7 +92,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 .SearchProvidersByPostcodeProximity(
                     Arg.Is<ProviderSearchParametersDto>(
                         a => a.Postcode == Postcode && 
-                             a.SearchRadius == SearchRadius && 
                              a.SelectedRouteId == RouteId));
         }
 
@@ -127,7 +126,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         {
             var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
             searchParametersViewModel.Postcode.Should().Be(Postcode);
-            searchParametersViewModel.SearchRadius.Should().Be(SearchRadius);
             searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
         }
 
