@@ -18,10 +18,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         private readonly IAsyncNotificationClient _notificationsApi;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
 
-        private readonly string _subject;
         private readonly string _toAddress;
-        private readonly string _replyToAddress;
-
+        
         public When_EmailService_Is_Called_To_Send_Email()
         {
             var configuration = new MatchingConfiguration
@@ -46,9 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, logger);
 
-            _subject = "A test email";
             _toAddress = "test@test.com";
-            _replyToAddress = "reply@test.com";
             var tokens = new Dictionary<string, string>
             {
                 { "contactname",  "name" }
