@@ -43,11 +43,7 @@ namespace Sfa.Tl.Matching.Functions
                 };
 
                 var supportInboxEmail = matchingConfiguration.SupportInboxEmail;
-                await emailService.SendEmail(EmailTemplateName.EmployerAupaBlank.ToString(),
-                    supportInboxEmail,
-                    Subject,
-                    tokens,
-                    "");
+                await emailService.SendEmail(EmailTemplateName.EmployerAupaBlank.ToString(), supportInboxEmail, tokens);
 
                 await emailHistoryService.SaveEmailHistory(EmailTemplateName.EmployerAupaBlank.ToString(),
                     tokens,
