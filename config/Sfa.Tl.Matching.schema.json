@@ -58,28 +58,9 @@
       "type": "string",
       "environmentVariable": "PostCodeRetrieverBaseUrl"
     },
-    "NotificationsApiClientConfiguration": {
-      "properties": {
-        "ApiBaseUrl": {
-          "minLength": 1,
-          "type": "string",
-          "environmentVariable": "NotificationsApiBaseUrl"
-        },
-        "ClientToken": {
-          "minLength": 1,
-          "type": "string",
-          "environmentVariable": "NotificationsClientToken"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "ClientToken"
-      ],
-      "type": "object"
-    },
-    "NotificationsSystemId": {
+    "GovNotifyApiKey": {
       "type": "string",
-      "environmentVariable": "NotificationsSystemId"
+      "environmentVariable": "GovNotifyAPIKey"
     },
     "SendEmailEnabled": {
       "type": "boolean",
@@ -127,7 +108,6 @@
   "additionalProperties": false,
   "required": [
     "Authentication",
-    "NotificationsApiClientConfiguration",
     "SessionRedisConnectionString",
     "SqlConnectionString"
   ],
