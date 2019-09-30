@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Assert
             var data = (from op in dbContext.Opportunity
                         join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                        join emp in dbContext.Employer on op.EmployerId equals emp.Id
+                        join emp in dbContext.Employer on op.EmployerCrmId equals emp.CrmId
                         join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
                         join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                         join p in dbContext.Provider on pv.ProviderId equals p.Id
@@ -121,7 +121,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             var data = (from op in dbContext.Opportunity
                         join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                        join emp in dbContext.Employer on op.EmployerId equals emp.Id
+                        join emp in dbContext.Employer on op.EmployerCrmId equals emp.CrmId
                         join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
                         join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                         join p in dbContext.Provider on pv.ProviderId equals p.Id
@@ -185,7 +185,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Assert
             var data = (from op in dbContext.Opportunity
                         join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                        join emp in dbContext.Employer on op.EmployerId equals emp.Id
+                        join emp in dbContext.Employer on op.EmployerCrmId equals emp.CrmId
                         join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
                         join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                         join p in dbContext.Provider on pv.ProviderId equals p.Id
@@ -258,7 +258,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             var referrals = (from op in dbContext.Opportunity
                     join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                    join emp in dbContext.Employer on op.EmployerId equals emp.Id
+                    join emp in dbContext.Employer on op.EmployerCrmId equals emp.CrmId
                     join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
                     join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                     join p in dbContext.Provider on pv.ProviderId equals p.Id
@@ -343,7 +343,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             var data = (from op in dbContext.Opportunity
                         join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                        join emp in dbContext.Employer on op.EmployerId equals emp.Id
+                        join emp in dbContext.Employer on op.EmployerCrmId equals emp.CrmId
                         join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
                         join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                         join p in dbContext.Provider on pv.ProviderId equals p.Id

@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         private readonly IEmployerService _employerService;
         private const int OpportunityId = 1;
         private const int OpportunityItemId = 12;
-        private const int EmployerId = 1;
+        private readonly Guid _employerCrmId = new Guid("11111111-1111-1111-1111-111111111111");
 
         private const string CompanyName = "CompanyName";
 
@@ -32,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 {
                     OpportunityId = OpportunityId,
                     OpportunityItemId = OpportunityItemId,
-                    SelectedEmployerId = EmployerId,
+                    SelectedEmployerCrmId = _employerCrmId,
                     CompanyName = CompanyName
                 });
 
@@ -73,7 +74,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var viewModel = _result.GetViewModel<FindEmployerViewModel>();
             viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
             viewModel.OpportunityId.Should().Be(OpportunityId);
-            viewModel.SelectedEmployerId.Should().Be(EmployerId);
+            viewModel.SelectedEmployerCrmId.Should().Be(_employerCrmId);
             viewModel.CompanyName.Should().Be(CompanyName);
         }
     }

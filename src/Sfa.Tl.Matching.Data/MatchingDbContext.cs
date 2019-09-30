@@ -39,6 +39,12 @@ namespace Sfa.Tl.Matching.Data
         {
             modelBuilder.Entity<UserCache>()
                 .Property(b => b.UrlHistory).HasColumnName("Value");
+
+            modelBuilder.Entity<Opportunity>()
+                .HasOne(o => o.Employer)
+                .WithMany(e => e.Opportunity)
+                .HasPrincipalKey(e => e.CrmId)
+                .HasForeignKey(o => o.EmployerCrmId);
         }
     }
 }

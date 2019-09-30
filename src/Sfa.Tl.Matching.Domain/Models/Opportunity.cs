@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Opportunity : BaseEntity
     {
-        public int? EmployerId { get; set; }
+        public Guid? EmployerCrmId { get; set; }
         public string EmployerContact { get; set; }
         public string EmployerContactEmail { get; set; }
         public string EmployerContactPhone { get; set; }

@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public OpportunityMapper()
         {
             CreateMap<OpportunityDto, Opportunity>()
-                .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.EmployerId))
+                .ForMember(m => m.EmployerCrmId, o => o.MapFrom(s => s.EmployerCrmId))
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact.ToTitleCase()))
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
                 .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<CompanyNameDto, Opportunity>()
-                .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.EmployerId))
+                .ForMember(m => m.EmployerCrmId, o => o.MapFrom(s => s.EmployerCrmId))
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.CompanyName))
                 .ForMember(dest => dest.EmployerContact, opt => opt.MapFrom((src, dest) => src.HasChanged ? string.Empty : dest.EmployerContact))
                 .ForMember(dest => dest.EmployerContactEmail, opt => opt.MapFrom((src, dest) => src.HasChanged ? string.Empty : dest.EmployerContactEmail))
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<Opportunity, OpportunityDto>()
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.EmployerId))
+                .ForMember(m => m.EmployerCrmId, o => o.MapFrom(s => s.EmployerCrmId))
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact))
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
                 .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
@@ -202,7 +202,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<OpportunityItem, FindEmployerViewModel>()
                 .ForMember(m => m.OpportunityItemId, o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
-                .ForPath(m => m.SelectedEmployerId, o => o.MapFrom(s => s.Opportunity.EmployerId))
+                .ForPath(m => m.SelectedEmployerCrmId, o => o.MapFrom(s => s.Opportunity.EmployerCrmId))
                 .ForPath(m => m.CompanyName,
                     opt => opt.MapFrom(source =>
                         source.Opportunity.Employer != null

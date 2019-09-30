@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Domain.Models;
 
@@ -13,7 +14,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
             _opportunity = new Domain.Models.Opportunity
             {
                 Id = 1,
-                EmployerId = 5,
+                EmployerCrmId = new Guid("55555555-5555-5555-5555-555555555555"),
                 EmployerContact = "Employer Contact",
                 EmployerContactPhone = "020 123 4567",
                 EmployerContactEmail = "employer.contact@employer.co.uk",
@@ -29,6 +30,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
             _opportunity.Employer = new Employer
             {
                 Id = 5,
+                CrmId = new Guid("55555555-5555-5555-5555-555555555555"),
                 CompanyName = "Company",
                 AlsoKnownAs = "Also Known As",
                 Postcode = "CV1 2WT"

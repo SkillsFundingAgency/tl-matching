@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System;
+using AutoFixture;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 
@@ -21,6 +22,12 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 
             fixture.Customize<ProviderVenue>(composer => composer.With(pv => pv.IsRemoved, false)
                 .With(pv => pv.IsEnabledForReferral, true));
+
+            var crmId = Guid.NewGuid();
+            fixture.Customize<Employer>(composer => composer.With(e => e.CrmId, crmId));
+
+            var employer = fixture.Create<Employer>();
+            fixture.Customize<Opportunity>(composer => composer.With(op => op.EmployerCrmId, employer.CrmId));
         }
     }
 }

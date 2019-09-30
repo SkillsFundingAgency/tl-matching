@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             var data = await (from op in _dbContext.Opportunity
                               join oi in _dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                              join emp in _dbContext.Employer on op.EmployerId equals emp.Id
+                              join emp in _dbContext.Employer on op.EmployerCrmId equals emp.CrmId
                               join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
                               join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                               join p in _dbContext.Provider on pv.ProviderId equals p.Id
@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId, IEnumerable<int> itemIds)
         {
             var data = await (from op in _dbContext.Opportunity
-                              join emp in _dbContext.Employer on op.EmployerId equals emp.Id
+                              join emp in _dbContext.Employer on op.EmployerCrmId equals emp.CrmId
                               where op.Id == opportunityId
                               select new EmployerReferralDto
                               {
@@ -132,7 +132,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             var opportunityBasket = await (from o in _dbContext.Opportunity
                                            join e in _dbContext.Employer
-                                               on o.EmployerId equals e.Id
+                                               on o.EmployerCrmId equals e.CrmId
                                            where o.Id == opportunityId
                                            select new OpportunityBasketViewModel
                                            {
@@ -182,7 +182,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             var dto = await (from o in _dbContext.Opportunity
                              join e in _dbContext.Employer
-                                 on o.EmployerId equals e.Id
+                                 on o.EmployerCrmId equals e.CrmId
                              where o.Id == opportunityId
                              select new OpportunityReportDto
                              {
@@ -271,7 +271,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             var dto = await (from o in _dbContext.Opportunity
                              join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
-                             join e in _dbContext.Employer on o.EmployerId equals e.Id
+                             join e in _dbContext.Employer on o.EmployerCrmId equals e.CrmId
                              join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
                              join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                              join p in _dbContext.Provider on pv.ProviderId equals p.Id

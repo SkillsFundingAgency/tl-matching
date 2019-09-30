@@ -208,7 +208,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private async Task ValidateAsync(FindEmployerViewModel viewModel, string currentUser)
         {
             var isValidEmployer =
-                await _employerService.ValidateCompanyNameAndId(viewModel.SelectedEmployerId, viewModel.CompanyName);
+                await _employerService.ValidateCompanyNameAndCrmId(viewModel.SelectedEmployerCrmId, viewModel.CompanyName);
 
             if (!isValidEmployer)
             {
@@ -217,7 +217,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             else
             {
                 var lockedByUser = await _employerService
-                    .GetEmployerOpportunityOwnerAsync(viewModel.SelectedEmployerId);
+                    .GetEmployerOpportunityOwnerAsync(viewModel.SelectedEmployerCrmId);
 
                 if (!string.IsNullOrEmpty(lockedByUser))
                 {

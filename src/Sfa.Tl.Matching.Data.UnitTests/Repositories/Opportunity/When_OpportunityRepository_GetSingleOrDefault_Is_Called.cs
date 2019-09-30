@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -32,7 +33,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
         public void Then_Fields_Are_As_Expected()
         {
             _result.Id.Should().Be(1);
-            _result.EmployerId.Should().Be(5);
+            _result.EmployerCrmId.Should().Be(new Guid("55555555-5555-5555-5555-555555555555"));
             _result.EmployerContact.Should().BeEquivalentTo("Employer Contact");
             _result.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
             _result.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");

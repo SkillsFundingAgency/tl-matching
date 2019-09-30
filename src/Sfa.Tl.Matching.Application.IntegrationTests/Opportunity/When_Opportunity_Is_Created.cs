@@ -17,7 +17,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 
             var opportunityDto = new OpportunityDto
             {
-                EmployerId = null,
                 EmployerContact = EmployerContact
             };
 

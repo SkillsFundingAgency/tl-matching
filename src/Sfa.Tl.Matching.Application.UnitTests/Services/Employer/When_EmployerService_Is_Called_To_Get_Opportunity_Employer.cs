@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         {
             _result.OpportunityItemId.Should().Be(1);
             _result.OpportunityId.Should().Be(2);
-            _result.SelectedEmployerId.Should().Be(3);
+            _result.SelectedEmployerCrmId.Should().Be(new Guid("33333333-3333-3333-3333-333333333333"));
             _result.CompanyName.Should().Be("CompanyName");
             _result.PreviousCompanyName.Should().Be("CompanyName");
         }

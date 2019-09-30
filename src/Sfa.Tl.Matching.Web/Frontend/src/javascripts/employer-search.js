@@ -11,7 +11,7 @@ var employer = (function () {
         minLength: queryMinLength,
         source: search,
         name: "CompanyName",
-        onConfirm: setSelectedEmployerId
+        onConfirm: setSelectedEmployerCrmId
     });
 
     function search(query, populateResults) {
@@ -35,7 +35,7 @@ var employer = (function () {
 
                     if (Searchresult !== undefined && Searchresult !== null) {
                         if (Searchresult[0] !== undefined && Searchresult[0] !== null) {
-                            $("#SelectedEmployerId").val(Searchresult[0].id);
+                            $("#SelectedEmployerCrmId").val(Searchresult[0].crmId);
                         }
                     }
 
@@ -56,10 +56,10 @@ var employer = (function () {
         return e.companyName + " (" + e.alsoKnownAs + ")";
     }
 
-    function setSelectedEmployerId(confirmed) {
+    function setSelectedEmployerCrmId(confirmed) {
         $.each(Searchresult, function () {
             if (getCompanyNameWithAka(this) === confirmed) {
-                $("#SelectedEmployerId").val(this.id);
+                $("#SelectedEmployerCrmId").val(this.crmId);
             }
         });
     }

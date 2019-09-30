@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Domain.Models
         public bool? IsCompleted { get; set; }
         public bool? IsSaved { get; set; }
         public bool? PipelineOpportunity { get; set; }
-        public int? EmployerId { get; set; }
+        public Guid? EmployerCrmId { get; set; }
         public string CompanyName { get; set; }
         public string Aupa { get; set; }
         public string Owner { get; set; }

@@ -12,5 +12,4 @@
 	[ModifiedOn]			DATETIME2 NULL, 
 	[ModifiedBy]			NVARCHAR(50) NULL
 	CONSTRAINT [PK_Opportunity] PRIMARY KEY ([Id]),
-	--CONSTRAINT [FK_Opportunity_Employer] FOREIGN KEY ([EmployerId]) REFERENCES [Employer]([Id]),
 )

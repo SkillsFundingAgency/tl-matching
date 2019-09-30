@@ -41,15 +41,15 @@ namespace Sfa.Tl.Matching.Application.Services
             _messageQueueService = messageQueueService;
         }
 
-        public async Task<bool> ValidateCompanyNameAndId(int employerId, string companyName)
+        public async Task<bool> ValidateCompanyNameAndCrmId(Guid employerCrmId, string companyName)
         {
-            if (employerId == 0 || string.IsNullOrEmpty(companyName)) return false;
+            if (employerCrmId == Guid.Empty || string.IsNullOrEmpty(companyName)) return false;
 
             var employer = await _employerRepository.GetSingleOrDefault(
-                e => e.Id == employerId && companyName.ToLetterOrDigit() == e.CompanyNameSearch,
-                e => e.Id);
+                e => e.CrmId == employerCrmId && companyName.ToLetterOrDigit() == e.CompanyNameSearch,
+                e => e.CrmId);
 
-            return employer > 0;
+            return employer != Guid.Empty;
         }
 
         public IEnumerable<EmployerSearchResultDto> Search(string companyName)
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 .OrderBy(e => e.CompanyName)
                 .Select(e => new EmployerSearchResultDto
                 {
-                    Id = e.Id,
+                    CrmId = e.CrmId,
                     CompanyName = e.CompanyName,
                     AlsoKnownAs = e.AlsoKnownAs
                 });
@@ -78,17 +78,17 @@ namespace Sfa.Tl.Matching.Application.Services
                     CompanyName = o.Employer.CompanyName,
                     PreviousCompanyName = o.Employer.CompanyName,
                     AlsoKnownAs = o.Employer.AlsoKnownAs,
-                    SelectedEmployerId = o.EmployerId ?? 0,
+                    SelectedEmployerCrmId = o.EmployerCrmId ?? Guid.Empty,
                 });
         }
 
         public async Task<EmployerDetailsViewModel> GetOpportunityEmployerDetailAsync(int opportunityId, int opportunityItemId)
         {
-            var employerId = await _opportunityRepository.GetSingleOrDefault(
+            var employerCrmId = await _opportunityRepository.GetSingleOrDefault(
                 opportunity => opportunity.Id == opportunityId,
-                o => o.EmployerId);
+                o => o.EmployerCrmId);
 
-            if (employerId == null || employerId <= 0)
+            if (employerCrmId == null || employerCrmId == Guid.Empty)
                 throw new InvalidOperationException("Unable to Find any Employer Details for current Opportunity. Please go back to Find Employer Screen and select an employer");
 
             //1 first try getting from current Opportunity if its not null
@@ -112,9 +112,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (employerDetails != null) return employerDetails;
 
-            //2 then try and find from any previous completed Opportunities using employerId
+            //2 then try and find from any previous completed Opportunities using employerCrmId
             employerDetails = await _opportunityRepository.GetFirstOrDefault(
-                    o => o.EmployerId == employerId &&
+                    o => o.EmployerCrmId == employerCrmId &&
                         !string.IsNullOrEmpty(o.EmployerContact) &&
                         !string.IsNullOrEmpty(o.EmployerContactEmail) &&
                         !string.IsNullOrEmpty(o.EmployerContactPhone) &&
@@ -134,7 +134,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             //3 Finally we cant find employer details in existing Opportunities so now try to load it from Employer Table 
             return await _employerRepository.GetSingleOrDefault(
-                    e => e.Id == employerId,
+                    e => e.CrmId == employerCrmId,
                     e => new EmployerDetailsViewModel
                     {
                         OpportunityItemId = opportunityItemId,
@@ -195,10 +195,10 @@ namespace Sfa.Tl.Matching.Application.Services
             return removeEmployerDto;
         }
 
-        public async Task<string> GetEmployerOpportunityOwnerAsync(int employerId)
+        public async Task<string> GetEmployerOpportunityOwnerAsync(Guid employerCrmId)
         {
             var opportunity = await _opportunityRepository.GetFirstOrDefault(
-                o => o.EmployerId == employerId
+                o => o.EmployerCrmId == employerCrmId
                      && o.OpportunityItem.Any(oi => oi.IsSaved &&
                                                     !oi.IsCompleted));
             return opportunity?.CreatedBy;

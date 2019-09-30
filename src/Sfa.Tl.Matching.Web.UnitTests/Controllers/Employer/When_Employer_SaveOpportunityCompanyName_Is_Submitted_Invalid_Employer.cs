@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_SaveOpportunityCompanyName_Is_Submitted_Invalid_Employer()
         {
             var employerService = Substitute.For<IEmployerService>();
-            employerService.ValidateCompanyNameAndId(Arg.Any<int>(), Arg.Any<string>())
+            employerService.ValidateCompanyNameAndCrmId(Arg.Any<Guid>(), Arg.Any<string>())
                 .Returns(false);
             var opportunityService = Substitute.For<IOpportunityService>();
 

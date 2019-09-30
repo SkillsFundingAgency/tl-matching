@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -26,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
 
         public OpportunityItemBuilder AddEmployer()
         {
-            _opportunityItem.Opportunity.EmployerId = 3;
+            _opportunityItem.Opportunity.EmployerCrmId = new Guid("33333333-3333-3333-3333-333333333333");
             _opportunityItem.Opportunity.Employer = new Domain.Models.Employer
             {
                 Id = 3,
