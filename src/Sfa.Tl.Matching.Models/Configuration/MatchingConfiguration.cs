@@ -25,5 +25,7 @@ namespace Sfa.Tl.Matching.Models.Configuration
 
         public string CalendarJsonUrl { get; set; }
         public string EmployerFeedbackTimeSpan { get; set; }
+        public string SupportInboxEmail { get; set; }
+
     }
 }

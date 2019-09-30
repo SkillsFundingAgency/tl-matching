@@ -11,6 +11,7 @@ namespace Sfa.Tl.Matching.Models.Enums
         ProviderReferral,
         ProviderReferralComplex,
         ProviderReferralV3,
-        ProviderFeedback
+        ProviderFeedback,
+        EmployerAupaBlank
     }
 }

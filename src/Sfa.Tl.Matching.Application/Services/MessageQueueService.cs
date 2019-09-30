@@ -42,6 +42,13 @@ namespace Sfa.Tl.Matching.Application.Services
                 QueueName.ProviderReferralEmailQueue);
         }
 
+        public async Task PushEmployerAupaBlankEmailMessageAsync(SendEmployerAupaBlankEmail employerAupaBlankEmail)
+        {
+            await PushMessageAsync(
+                JsonConvert.SerializeObject(employerAupaBlankEmail),
+                QueueName.EmployerAupaBlankEmailQueue);
+        }
+
         private async Task PushMessageAsync(string message, string queueName)
         {
             var queue = await GetQueue(queueName);

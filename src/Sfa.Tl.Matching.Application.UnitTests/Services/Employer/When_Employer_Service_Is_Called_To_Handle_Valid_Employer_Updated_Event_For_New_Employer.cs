@@ -5,10 +5,12 @@ using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Event;
 using Xunit;
 
@@ -17,6 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
     public class When_Employer_Service_Is_Called_To_Handle_Valid_Employer_Updated_Event_For_New_Employer
     {
         private readonly IRepository<Domain.Models.Employer> _employerRepository;
+        private readonly IMessageQueueService _messageQueueService;
         private readonly CrmEmployerEventBase _employerEventBase;
 
         public When_Employer_Service_Is_Called_To_Handle_Valid_Employer_Updated_Event_For_New_Employer()
@@ -31,7 +34,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns((Domain.Models.Employer)null);
 
-            var employerService = new EmployerService(_employerRepository, opportunityRepository, mapper, new CrmEmployerEventDataValidator());
+            _messageQueueService = Substitute.For<IMessageQueueService>();
+            var employerService = new EmployerService(_employerRepository, opportunityRepository, mapper, new CrmEmployerEventDataValidator(),
+                _messageQueueService);
 
             _employerEventBase = CrmEmployerEventBaseBuilder.Buiild(true);
 
@@ -55,6 +60,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
                 e.Phone == "0123456789" &&
                 e.Owner == "Test"
                 ));
+            _messageQueueService.DidNotReceive()
+                .PushEmployerAupaBlankEmailMessageAsync(Arg.Any<SendEmployerAupaBlankEmail>());
         }
     }
 }

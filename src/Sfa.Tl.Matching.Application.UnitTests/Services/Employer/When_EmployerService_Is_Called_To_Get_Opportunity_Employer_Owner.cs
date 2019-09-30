@@ -4,6 +4,7 @@ using AutoMapper;
 using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Event;
@@ -30,7 +31,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _opportunityRepository.GetFirstOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>())
                 .Returns(opportunity);
 
-            var employerService = new EmployerService(employerRepository, _opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>());
+            var employerService = new EmployerService(employerRepository, _opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>(),
+                Substitute.For<IMessageQueueService>());
 
             _result = employerService.GetEmployerOpportunityOwnerAsync(1).GetAwaiter().GetResult();
         }

@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.Event;
@@ -23,17 +25,20 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<CrmEmployerEventBase> _employerValidator;
+        private readonly IMessageQueueService _messageQueueService;
 
         public EmployerService(IRepository<Employer> employerRepository,
                                IOpportunityRepository opportunityRepository,
                                IMapper mapper,
-                               IValidator<CrmEmployerEventBase> employerValidator
+                               IValidator<CrmEmployerEventBase> employerValidator,
+                               IMessageQueueService messageQueueService
                                )
         {
             _employerRepository = employerRepository;
             _opportunityRepository = opportunityRepository;
             _mapper = mapper;
             _employerValidator = employerValidator;
+            _messageQueueService = messageQueueService;
         }
 
         public async Task<bool> ValidateCompanyNameAndId(int employerId, string companyName)
@@ -223,9 +228,23 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var validationResult = await _employerValidator.ValidateAsync(employerData);
 
-            if (!validationResult.IsValid) return -1;
+            var isAupaMissing = false;
+            if (!validationResult.IsValid)
+            {
+                isAupaMissing = IsAupaMissing(validationResult.Errors);
+                if (!isAupaMissing) return -1;
+            }
 
             var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employerData.accountid.ToGuid());
+
+            if (isAupaMissing)
+            {
+                if (existingEmployer == null) return -1;
+
+                await AddMessageToQueueAsync(employerData);
+
+                return -1;
+            }
 
             if (existingEmployer == null)
             {
@@ -235,9 +254,22 @@ namespace Sfa.Tl.Matching.Application.Services
 
             existingEmployer = _mapper.Map(employerData, existingEmployer);
             await _employerRepository.Update(existingEmployer);
-            return 1;
 
+            return 1;
         }
+
+        private async Task AddMessageToQueueAsync(CrmEmployerEventBase employerData)
+        {
+            await _messageQueueService.PushEmployerAupaBlankEmailMessageAsync(new SendEmployerAupaBlankEmail
+            {
+                Name = employerData.Name,
+                Owner = employerData.owneridname,
+                ContactEmail = employerData.ContactEmail,
+                ContactPhone = employerData.ContactTelephone1,
+                CrmId = new Guid(employerData.accountid)
+            });
+        }
+
         private async Task<int> CreateOrUpdateContactAsync(CrmContactEventBase employerData)
         {
             if (employerData.parentcustomerid == null) return -1;
@@ -252,6 +284,12 @@ namespace Sfa.Tl.Matching.Application.Services
             await _employerRepository.Update(existingEmployer);
 
             return 1;
+        }
+
+        private static bool IsAupaMissing(IEnumerable<ValidationFailure> validationFailures)
+        {
+            return validationFailures.Count(vf => vf.PropertyName == "sfa_aupa"
+                                                  && vf.ErrorCode == "InvalidFormat") > 0;
         }
     }
 }
