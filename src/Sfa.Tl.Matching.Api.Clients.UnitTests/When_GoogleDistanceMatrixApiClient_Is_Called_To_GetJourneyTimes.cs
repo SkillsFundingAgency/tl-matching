@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Api.Clients.UnitTests.Factories;
 using Sfa.Tl.Matching.Models.Configuration;
@@ -17,7 +18,11 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         public When_GoogleDistanceMatrixApiClient_Is_Called_To_GetJourneyTimes()
         {
             var httpClient = new GoogleDistanceMatrixHttpClientFactory().Get();
-            _googleDistanceMatrixApiClient = new GoogleDistanceMatrixApiClient(httpClient,
+            var logger = new NullLogger<GoogleDistanceMatrixApiClient>();
+
+            _googleDistanceMatrixApiClient = new GoogleDistanceMatrixApiClient(
+                logger,
+                httpClient,
                 new MatchingConfiguration
                 {
                     GoogleMapsApiKey = "TEST_KEY", 

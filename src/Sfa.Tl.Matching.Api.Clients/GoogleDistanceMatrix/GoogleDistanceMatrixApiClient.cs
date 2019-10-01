@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -8,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Sfa.Tl.Matching.Models.Configuration;
@@ -19,13 +19,15 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
     {
         private readonly HttpClient _httpClient;
         private readonly MatchingConfiguration _configuration;
+        private readonly ILogger<GoogleDistanceMatrixApiClient> _logger;
         private readonly string _baseUrl;
         private static readonly object ListLocker = new object();
 
-        public GoogleDistanceMatrixApiClient(HttpClient httpClient, MatchingConfiguration configuration)
+        public GoogleDistanceMatrixApiClient(ILogger<GoogleDistanceMatrixApiClient> logger, HttpClient httpClient, MatchingConfiguration configuration)
         {
             _httpClient = httpClient;
             _configuration = configuration;
+            _logger = logger;
 
             _baseUrl = _configuration.GoogleMapsApiBaseUrl.TrimEnd('/');
             _httpClient.BaseAddress = new Uri(_baseUrl);
@@ -39,39 +41,33 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
         {
             const int batchSize = 100; //Max client-side elements: 100
             var batches = CreateBatches(destinations, batchSize);
-            var results = new List<GoogleDistanceMatrixResponse>();
-            var distanceSearchResults = new List<JourneyInfoDto>();
-
-            var stopwatch = Stopwatch.StartNew();
+            var distanceSearchResults = new List<JourneyInfoDto>(batches.Count);
 
             Parallel.ForEach(batches, batch =>
             {
-                var response = SearchBatchAsync(latitude, longitude, batch.Value, travelMode).GetAwaiter().GetResult();
+                var (_, value) = batch;
+                var response = SearchBatchAsync(latitude, longitude, value, travelMode).GetAwaiter().GetResult();
                 if (response != null)
                 {
-                    var batchResults = BuildResultAsync(response, batch.Value).GetAwaiter().GetResult();
-                    distanceSearchResults.AddRange(batchResults);
+                    var batchResults = BuildResultAsync(response, value).GetAwaiter().GetResult();
                     lock (ListLocker)
                     {
-                        results.Add(response);
+                        distanceSearchResults.AddRange(batchResults);
                     }
                 }
             });
-
-            stopwatch.Stop();
-            Console.WriteLine($"Have {results.Count} results from {batches.Count} batches of {batchSize} in {stopwatch.ElapsedMilliseconds:#,###}ms");
 
             return Task.FromResult<IList<JourneyInfoDto>>(distanceSearchResults);
         }
 
         private Task<IList<JourneyInfoDto>> BuildResultAsync(GoogleDistanceMatrixResponse response, IList<LocationDto> venues)
         {
-            var results = new List<JourneyInfoDto>();
+            var results = new List<JourneyInfoDto>(response.DestinationAddresses.Length);
 
             if (string.Compare(response.Status, "OK", StringComparison.OrdinalIgnoreCase) != 0)
             {
                 var message = $"Failure response from google api - {response.Status}";
-                Console.WriteLine(message);
+                _logger.LogError(message);
                 throw new Exception(message);
             }
             
@@ -82,16 +78,19 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
 
                 try
                 {
-                    results.Add(new JourneyInfoDto
+                    if (element.Status == "OK")
                     {
-                        DestinationId = venues?[i].Id ?? -1,
-                        TravelTime = element.Duration?.Value ?? -1,
-                        TravelDistance = element.Distance?.Value ?? -1
-                    });
+                        results.Add(new JourneyInfoDto
+                        {
+                            DestinationId = venues?[i].Id ?? -1,
+                            TravelTime = element.Duration?.Value ?? 0,
+                            TravelDistance = element.Distance?.Value ?? 0
+                        });
+                    }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(e);
+                    _logger.LogError($"Error adding results from google distance matrix api - {ex}");
                     throw;
                 }
             }
@@ -114,36 +113,25 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             return batches;
         }
 
-        private async Task<GoogleDistanceMatrixResponse> SearchBatchAsync(decimal latitude, decimal longitude, IList<LocationDto> venues, string travelMode)
+        private async Task<GoogleDistanceMatrixResponse> SearchBatchAsync(decimal latitude, decimal longitude, IList<LocationDto> destinations, string travelMode)
         {
             try
             {
-                //https://developers.google.com/maps/documentation/distance-matrix/intro
-
-                //Call:
-                //http://maps.googleapis.com/maps/api/distancematrix/outputFormat?parameters
-                //var uri = "distancematrix";
-                //NOTE: Assumes api url already has ending /
                 var uriBuilder = new StringBuilder($@"{_baseUrl}/distancematrix/json?");
 
-                uriBuilder.Append($"units=imperial");
+                uriBuilder.Append("units=imperial");
                 uriBuilder.Append($"&origins={latitude}%2C{longitude}");
                 uriBuilder.Append($"&mode={travelMode}");
                 uriBuilder.Append("&destinations=");
 
-                //Using polyline:
                 uriBuilder.Append("enc:");
-                var polyline = EncodePolyline(venues);
+                var polyline = EncodePolyline(destinations);
                 uriBuilder.Append(WebUtility.UrlEncode(polyline));
                 uriBuilder.Append(":");
                 
                 uriBuilder.Append($"&key={_configuration.GoogleMapsApiKey}");
 
-                var stopwatch = Stopwatch.StartNew();
-
                 var response = await _httpClient.GetAsync(uriBuilder.ToString());
-
-                stopwatch.Stop();
 
                 response.EnsureSuccessStatusCode();
 
@@ -159,14 +147,13 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
                     }
                 };
 
-                var result =
-                    JsonConvert.DeserializeObject<GoogleDistanceMatrixResponse>(jsonResponse, serializerSettings);
-
-                return result;
+                return JsonConvert
+                    .DeserializeObject<GoogleDistanceMatrixResponse>(
+                        jsonResponse, serializerSettings);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failure calling google api - {ex}");
+                _logger.LogError($"Failure calling google api - {ex}");
                 throw;
             }
         }

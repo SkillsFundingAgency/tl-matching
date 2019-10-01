@@ -18,14 +18,14 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         public long? TravelTimeByDriving { get; set; }
         public string TravelTimeByDrivingDisplay =>
-            TravelTimeByDriving.HasValue
+            TravelTimeByDriving.HasValue && TravelTimeByDriving.Value > 0
                 ? TimeSpan.FromSeconds(TravelTimeByDriving.Value)
                     .Humanize()
                 : null;
 
         public long? TravelTimeByPublicTransport { get; set; }
         public string TravelTimeByPublicTransportDisplay =>
-            TravelTimeByPublicTransport.HasValue
+            TravelTimeByPublicTransport.HasValue && TravelTimeByPublicTransport.Value > 0
                 ? TimeSpan.FromSeconds(TravelTimeByPublicTransport.Value)
                     .Humanize()
                 : null;
