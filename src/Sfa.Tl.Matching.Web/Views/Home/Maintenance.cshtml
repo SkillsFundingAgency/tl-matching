@@ -11,7 +11,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-        <form asp-action="SaveServiceStatusHistory" novalidate>
+        <form asp-route="SaveServiceStatusHistory" novalidate>
             <input asp-for="IsOnline" type="hidden" />
 
             <p class="govuk-body">The service is currently @Model.BodyDisplayText.</p>

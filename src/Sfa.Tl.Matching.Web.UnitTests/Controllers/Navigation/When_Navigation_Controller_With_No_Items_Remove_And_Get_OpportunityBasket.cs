@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
 
             var navigationController = new NavigationController(opportunityService, backLinkService);
 
-            _result = navigationController.RemoveOpportunityItemAndGetOpportunityBasket(1, 2).GetAwaiter().GetResult();
+            _result = navigationController.RemoveOpportunityItemAndGetOpportunityBasketAsync(1, 2).GetAwaiter().GetResult();
         }
 
         [Fact]

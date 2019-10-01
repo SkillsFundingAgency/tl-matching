@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
             
             var navigationController = new NavigationController(_opportunityService,backLinkService);
 
-            _result = navigationController.SaveEmployerOpportunity(1).GetAwaiter().GetResult();
+            _result = navigationController.SaveEmployerOpportunityAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]

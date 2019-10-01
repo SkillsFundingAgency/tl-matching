@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("remove-opportunityItem/{opportunityId}-{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
-        public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasket(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasketAsync(int opportunityId, int opportunityItemId)
         {
             await _opportunityService.DeleteOpportunityItemAsync(opportunityId, opportunityItemId);
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("get-placement-or-employer/{opportunityId}-{opportunityItemId}", Name = "GetPlacementOrEmployer")]
-        public async Task<IActionResult> GetPlacementOrEmployer(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetPlacementOrEmployerAsync(int opportunityId, int opportunityItemId)
         {
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
             var viewModel = await _opportunityService.GetCheckAnswersAsync(opportunityItemId);
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("check-answers-or-edit-employer/{opportunityItemId}", Name = "GetCheckAnswersOrEditEmployer")]
-        public async Task<IActionResult> GetCheckAnswersOrEditEmployer(int opportunityItemId)
+        public async Task<IActionResult> GetCheckAnswersOrEditEmployerAsync(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetCheckAnswersAsync(opportunityItemId);
             var opportunities = await _opportunityService.GetOpportunityBasketAsync(viewModel.OpportunityId);
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("save-employer-opportunity/{opportunityId}", Name = "SaveEmployerOpportunity")]
-        public async Task<IActionResult> SaveEmployerOpportunity(int opportunityId)
+        public async Task<IActionResult> SaveEmployerOpportunityAsync(int opportunityId)
         {
             await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
