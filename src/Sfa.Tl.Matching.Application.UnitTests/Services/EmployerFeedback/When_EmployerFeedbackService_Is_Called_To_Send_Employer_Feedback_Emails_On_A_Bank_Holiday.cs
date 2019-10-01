@@ -30,6 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
+        private readonly IRepository<BackgroundProcessHistory> _backgroundProcesshistoryRepository;
         private readonly int _result;
 
         public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails_On_A_Bank_Holiday(
@@ -90,10 +91,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 mapper, testFixture.Configuration, testFixture.Logger,
                 _dateTimeProvider, 
                 _emailService, _emailHistoryService, bankHolidayRepository, 
-                _opportunityRepository);
+                _opportunityRepository, _backgroundProcesshistoryRepository);
 
             _result = employerFeedbackService
-                .SendEmployerFeedbackEmailsAsync("TestUser")
+                .SendFeedbackEmailsAsync("TestUser")
                 .GetAwaiter().GetResult();
         }
 

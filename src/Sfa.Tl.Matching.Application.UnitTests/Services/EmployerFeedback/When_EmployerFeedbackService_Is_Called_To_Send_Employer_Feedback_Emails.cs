@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IRepository<BackgroundProcessHistory> _backgroundProcesshistoryRepository;
         private readonly int _result;
 
         public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails(
@@ -63,6 +65,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             var mapper = new Mapper(config);
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
+            _backgroundProcesshistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
+
             _opportunityRepository.GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>())
                 .Returns(new EmployerFeedbackDtoListBuilder().Build());
 
@@ -90,23 +94,26 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), testFixture.Configuration.EmployerFeedbackTimeSpan)
                 .Returns(DateTime.Parse("2019-8-15 23:59:59"));
 
+            _backgroundProcesshistoryRepository.Create(Arg.Any<BackgroundProcessHistory>()).Returns(Task.FromResult(1));
+
+            _backgroundProcesshistoryRepository
+                .GetSingleOrDefault(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>())
+                .Returns(Task.FromResult(new BackgroundProcessHistory
+                {
+                    Id = 1,
+                    ProcessType = "Test",
+                    Status = "Pending"
+                }));
+
             var employerFeedbackService = new EmployerFeedbackService(
                 mapper, _testFixture.Configuration, _testFixture.Logger,
                 _dateTimeProvider, 
                 _emailService, _emailHistoryService, bankHolidayRepository, 
-                _opportunityRepository);
+                _opportunityRepository, _backgroundProcesshistoryRepository);
 
             _result = employerFeedbackService
-                .SendEmployerFeedbackEmailsAsync("TestUser")
+                .SendFeedbackEmailsAsync("TestUser")
                 .GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_DateTimeProvider_AddWorkingDays_Is_Called_Exactly_Once()
-        {
-            _dateTimeProvider
-                .Received(1)
-                .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), Arg.Any<string>());
         }
 
         [Fact]

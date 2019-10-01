@@ -31,6 +31,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             ILogger<GenericRepository<BankHoliday>> bankHolidayLogger,
             ILogger<OpportunityRepository> opportunityLogger,
             ILogger<GenericRepository<Domain.Models.Provider>> opportunityItemLogger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> backgroundHistoryLogger,
             IDateTimeProvider dateTimeProvider,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
@@ -44,6 +45,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             var bankHolidayRepo = new GenericRepository<BankHoliday>(bankHolidayLogger, dbContext);
             var opportunityRepo = new OpportunityRepository(opportunityLogger, dbContext);
             var opportunityItemRepo = new GenericRepository<Domain.Models.Provider>(opportunityItemLogger, dbContext);
+            var backgroundProcessHistoryRepository = new GenericRepository<BackgroundProcessHistory>(
+                backgroundHistoryLogger, dbContext);
 
             var config = new MapperConfiguration(c =>
             {
@@ -67,10 +70,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             await ProviderFeedbackInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity);
 
             var sut = new ProviderFeedbackService(mapper, configuration, logger, dateTimeProvider, emailService,
-                emailHistoryService, bankHolidayRepo, opportunityRepo, opportunityItemRepo);
+                emailHistoryService, bankHolidayRepo, opportunityRepo, opportunityItemRepo, backgroundProcessHistoryRepository);
 
             //Act
-            var emailsCount = await sut.SendProviderFeedbackEmailsAsync("test system");
+            var emailsCount = await sut.SendFeedbackEmailsAsync("test system");
 
             //Assert
             emailsCount.Should().Be(1);
@@ -95,6 +98,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             ILogger<GenericRepository<BankHoliday>> bankHolidayLogger,
             ILogger<OpportunityRepository> opportunityLogger,
             ILogger<GenericRepository<Domain.Models.Provider>> opportunityItemLogger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> backgroundHistoryLogger,
             IDateTimeProvider dateTimeProvider,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
@@ -108,6 +112,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             var bankHolidayRepo = new GenericRepository<BankHoliday>(bankHolidayLogger, dbContext);
             var opportunityRepo = new OpportunityRepository(opportunityLogger, dbContext);
             var opportunityItemRepo = new GenericRepository<Domain.Models.Provider>(opportunityItemLogger, dbContext);
+            var backgroundProcessHistoryRepository = new GenericRepository<BackgroundProcessHistory>(
+                backgroundHistoryLogger, dbContext);
 
             provider.SecondaryContactEmail = string.Empty;
 
@@ -138,10 +144,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             await ProviderFeedbackInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity);
 
             var sut = new ProviderFeedbackService(mapper, configuration, logger, dateTimeProvider, emailService,
-                emailHistoryService, bankHolidayRepo, opportunityRepo, opportunityItemRepo);
+                emailHistoryService, bankHolidayRepo, opportunityRepo, opportunityItemRepo, backgroundProcessHistoryRepository);
 
             //Act
-            var emailsCount = await sut.SendProviderFeedbackEmailsAsync("test system");
+            var emailsCount = await sut.SendFeedbackEmailsAsync("test system");
 
             //Assert
             emailsCount.Should().Be(1);
@@ -166,6 +172,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             ILogger<GenericRepository<BankHoliday>> bankHolidayLogger,
             ILogger<OpportunityRepository> opportunityLogger,
             ILogger<GenericRepository<Domain.Models.Provider>> opportunityItemLogger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> backgroundHistoryLogger,
             IDateTimeProvider dateTimeProvider,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
@@ -179,6 +186,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             var bankHolidayRepo = new GenericRepository<BankHoliday>(bankHolidayLogger, dbContext);
             var opportunityRepo = new OpportunityRepository(opportunityLogger, dbContext);
             var opportunityItemRepo = new GenericRepository<Domain.Models.Provider>(opportunityItemLogger, dbContext);
+            var backgroundProcessHistoryRepository = new GenericRepository<BackgroundProcessHistory>(
+                backgroundHistoryLogger, dbContext);
 
             var config = new MapperConfiguration(c =>
             {
@@ -202,10 +211,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             await ProviderFeedbackInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity);
 
             var sut = new ProviderFeedbackService(mapper, configuration, logger, dateTimeProvider, emailService,
-                emailHistoryService, bankHolidayRepo, opportunityRepo, opportunityItemRepo);
+                emailHistoryService, bankHolidayRepo, opportunityRepo, opportunityItemRepo, backgroundProcessHistoryRepository);
 
             //Act
-            var emailsCount = await sut.SendProviderFeedbackEmailsAsync("test system");
+            var emailsCount = await sut.SendFeedbackEmailsAsync("test system");
 
             //Assert
             emailsCount.Should().Be(1);

@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Interfaces.ServiceFactory;
+using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
@@ -21,14 +22,14 @@ namespace Sfa.Tl.Matching.Functions
             TimerInfo timer,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IProviderFeedbackService providerFeedbackService,
+            [Inject] IFeedbackFactory<ProviderFeedbackService> providerFeedbackService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             try
             {
                 var stopwatch = Stopwatch.StartNew();
 
-                var emailsSent = await providerFeedbackService.SendProviderFeedbackEmailsAsync("System");
+                var emailsSent = await providerFeedbackService.Create.SendFeedbackEmailsAsync("System");
 
                 stopwatch.Stop();
 
@@ -56,13 +57,13 @@ namespace Sfa.Tl.Matching.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IProviderFeedbackService providerFeedbackService)
+            [Inject] IFeedbackFactory<ProviderFeedbackService> providerFeedbackService)
         {
             logger.LogInformation($"Function {context.FunctionName} triggered");
 
             var stopwatch = Stopwatch.StartNew();
 
-            var emailsSent = await providerFeedbackService.SendProviderFeedbackEmailsAsync("System");
+            var emailsSent = await providerFeedbackService.Create.SendFeedbackEmailsAsync("System");
 
             stopwatch.Stop();
 

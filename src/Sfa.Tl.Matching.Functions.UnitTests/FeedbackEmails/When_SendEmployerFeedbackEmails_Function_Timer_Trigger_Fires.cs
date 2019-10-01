@@ -3,6 +3,8 @@ using Microsoft.Azure.WebJobs.Extensions.Timers;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Interfaces.ServiceFactory;
+using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
@@ -11,7 +13,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
 {
     public class When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires
     {
-        private readonly IEmployerFeedbackService _employerFeedbackService;
+        private readonly IFeedbackFactory<EmployerFeedbackService> _employerFeedbackService;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
         public When_SendEmployerFeedbackEmails_Function_Timer_Trigger_Fires()
@@ -20,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            _employerFeedbackService = Substitute.For<IEmployerFeedbackService>();
+            _employerFeedbackService = Substitute.For<IFeedbackFactory<EmployerFeedbackService>>();
 
             var employerFeedback = new EmployerFeedback();
             employerFeedback.SendEmployerFeedbackEmailsAsync(
@@ -35,8 +37,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
         public void SendFeedbackEmailsAsync_Is_Called_Exactly_Once()
         {
             _employerFeedbackService
-                .Received(1)
-                .SendEmployerFeedbackEmailsAsync(
+                .Received(1).Create
+                .SendFeedbackEmailsAsync(
                     Arg.Is<string>(x => x == "System"));
         }
 

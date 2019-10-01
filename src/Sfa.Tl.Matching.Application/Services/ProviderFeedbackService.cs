@@ -13,16 +13,10 @@ using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
-
-    public class ProviderFeedbackService : IProviderFeedbackService
+    public class ProviderFeedbackService : FeedbackService
     {
         private readonly IMapper _mapper;
-        private readonly MatchingConfiguration _configuration;
         private readonly ILogger<ProviderFeedbackService> _logger;
-        private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
-        private readonly IRepository<BankHoliday> _bankHolidayRepository;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<Provider> _providerRepository;
 
@@ -35,29 +29,22 @@ namespace Sfa.Tl.Matching.Application.Services
             IEmailHistoryService emailHistoryService,
             IRepository<BankHoliday> bankHolidayRepository,
             IOpportunityRepository opportunityRepository,
-            IRepository<Provider> providerRepository
-            )
+            IRepository<Provider> providerRepository,
+            IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository
+            ) : base(configuration, emailService, emailHistoryService, dateTimeProvider, bankHolidayRepository, backgroundProcessHistoryRepository)
         {
             _mapper = mapper;
-            _configuration = configuration;
             _logger = logger;
-            _dateTimeProvider = dateTimeProvider;
-            _emailService = emailService;
-            _emailHistoryService = emailHistoryService;
-            _bankHolidayRepository = bankHolidayRepository;
             _opportunityRepository = opportunityRepository;
             _providerRepository = providerRepository;
         }
 
-        public async Task<int> SendProviderFeedbackEmailsAsync(string userName)
+        public override async Task<int> SendFeedbackEmailsAsync(string userName)
         {
-            var referralDate =
-                _dateTimeProvider.GetReferralDateAsync(GetBankHolidays, _configuration.EmployerFeedbackTimeSpan);
-
             var emailsSent = 0;
-            if (referralDate != null)
+            if (ReferralDate != null)
             {
-                emailsSent = await SendProviderFeedbackEmailsAsync(referralDate.Value, userName);
+                emailsSent = await SendProviderFeedbackEmailsAsync(ReferralDate.Value, userName);
             }
 
             return emailsSent;
@@ -69,6 +56,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
             try
             {
+                var historyId = await CreateBackgroundProcessHistory(BackgroundProcessType.ProviderFeedbackEmail);
+
                 foreach (var referral in referrals)
                 {
                     var tokens = new Dictionary<string, string>
@@ -77,21 +66,23 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "company_name", referral.Companyname}
                     };
 
-                    await SendEmailAsync(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
-                        referral.ProviderPrimaryContactEmail, "Your industry placement progress – ESFA", tokens,
+                    await SendEmail(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
+                        referral.ProviderPrimaryContactEmail, tokens,
                         userName);
 
                     if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactName))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContactName;
 
-                        await SendEmailAsync(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
-                            referral.ProviderSecondaryContactEmail, "Your industry placement progress – ESFA", tokens,
+                        await SendEmail(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
+                            referral.ProviderSecondaryContactEmail, tokens,
                             userName);
                     }
                 }
 
                 await SetProviderFeedbackSentOnDateAsync(referrals.Select(r => r.ProviderId), userName);
+
+                await UpdateBackgroundProcessHistory(historyId, referrals.Count);
 
                 return referrals.Count;
             }
@@ -119,31 +110,5 @@ namespace Sfa.Tl.Matching.Application.Services
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
-
-        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId,
-            string toAddress, string subject,
-            IDictionary<string, string> tokens, string createdBy)
-        {
-            if (!_configuration.SendEmailEnabled)
-            {
-                return;
-            }
-
-            await _emailService.SendEmailAsync(template.ToString(),
-                toAddress,
-                tokens);
-
-            await _emailHistoryService.SaveEmailHistoryAsync(template.ToString(),
-                tokens,
-                opportunityId,
-                toAddress,
-                createdBy);
-        }
-
-        private List<DateTime> GetBankHolidays => _bankHolidayRepository.GetManyAsync(d => d.Date <= DateTime.Today)
-            .Select(d => d.Date)
-            .OrderBy(d => d.Date)
-            .ToList();
-
     }
 }
