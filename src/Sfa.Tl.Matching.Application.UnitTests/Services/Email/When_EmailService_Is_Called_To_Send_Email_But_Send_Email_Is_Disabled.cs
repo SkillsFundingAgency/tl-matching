@@ -39,9 +39,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             var emailService = new EmailService(configuration, _notificationsApi, emailTemplateRepository, logger);
 
-            const string subject = "A test email";
             const string toAddress = "test@test.com";
-            const string replyToAddress = "reply@test.com";
             var tokens = new Dictionary<string, string>
             {
                 { "contactname",  "name" }
