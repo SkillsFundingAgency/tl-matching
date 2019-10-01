@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [InlineData("Invalid Business Name")]
         public void Then_View_Result_Is_Returned_With_Model_State_Error_For_CompanyName(string companyName)
         {
-            var result = _employerController.SaveOpportunityCompanyName(new FindEmployerViewModel { CompanyName = companyName, SelectedEmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111") }).GetAwaiter().GetResult();
+            var result = _employerController.SaveOpportunityCompanyNameAsync(new FindEmployerViewModel { CompanyName = companyName, SelectedEmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111") }).GetAwaiter().GetResult();
 
             result.Should().BeAssignableTo<ViewResult>();
             _employerController.ViewData.ModelState.Should().ContainSingle();

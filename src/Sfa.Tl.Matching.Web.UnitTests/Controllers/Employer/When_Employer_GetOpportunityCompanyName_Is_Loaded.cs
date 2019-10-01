@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var employerController = new EmployerController(_employerService, opportunityService, referralService, mapper);
 
-            _result = employerController.GetOpportunityCompanyName(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
+            _result = employerController.GetOpportunityCompanyNameAsync(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]

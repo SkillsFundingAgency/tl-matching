@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "LoadWhoIsEmployer")]
-        public async Task<IActionResult> GetOpportunityCompanyName(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetOpportunityCompanyNameAsync(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
 
@@ -52,8 +52,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("who-is-employer/{opportunityId}-{opportunityItemId}")]
-        public async Task<IActionResult> SaveOpportunityCompanyName(FindEmployerViewModel viewModel)
+        [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "SaveOpportunityCompanyName")]
+        public async Task<IActionResult> SaveOpportunityCompanyNameAsync(FindEmployerViewModel viewModel)
         {
             var username = HttpContext.User.GetUserName();
 

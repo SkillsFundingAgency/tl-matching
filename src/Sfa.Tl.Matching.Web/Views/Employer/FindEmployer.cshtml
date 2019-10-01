@@ -27,7 +27,7 @@
                 </div>
             </div>
         }
-            <form asp-action="SaveOpportunityCompanyName" id="findEmployer" novalidate>
+            <form asp-route="SaveOpportunityCompanyName" id="findEmployer" novalidate>
                 <input asp-for="OpportunityId" type="hidden" />
                 <input asp-for="OpportunityItemId" type="hidden" />
                 <input asp-for="SelectedEmployerCrmId" type="hidden" />

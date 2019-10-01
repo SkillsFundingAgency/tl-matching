@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 .AddUserName("Current User")
                 .Build();
 
-            _result = controllerWithClaims.SaveOpportunityCompanyName(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveOpportunityCompanyNameAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
