@@ -94,10 +94,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), testFixture.Configuration.EmployerFeedbackTimeSpan)
                 .Returns(DateTime.Parse("2019-8-15 23:59:59"));
 
-            _backgroundProcesshistoryRepository.Create(Arg.Any<BackgroundProcessHistory>()).Returns(Task.FromResult(1));
+            _backgroundProcesshistoryRepository.CreateAsync(Arg.Any<BackgroundProcessHistory>()).Returns(Task.FromResult(1));
 
             _backgroundProcesshistoryRepository
-                .GetSingleOrDefault(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>())
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>())
                 .Returns(Task.FromResult(new BackgroundProcessHistory
                 {
                     Id = 1,

@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public abstract Task<int> SendFeedbackEmailsAsync(string userName);
 
-        public async Task SendEmail(EmailTemplateName template, int? opportunityId,
+        public async Task SendEmailAsync(EmailTemplateName template, int? opportunityId,
             string toAddress, IDictionary<string, string> tokens, string createdBy)
         {
             if (!_configuration.SendEmailEnabled)
@@ -45,19 +45,19 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            await _emailService.SendEmail(template.ToString(),
+            await _emailService.SendEmailAsync(template.ToString(),
                 toAddress,
                 tokens);
 
-            await _emailHistoryService.SaveEmailHistory(template.ToString(),
+            await _emailHistoryService.SaveEmailHistoryAsync(template.ToString(),
                 tokens,
                 opportunityId,
                 toAddress,
                 createdBy);
         }
 
-        public async Task<int> CreateBackgroundProcessHistory(BackgroundProcessType backgroundProcessType) =>
-            await _backgroundProcessHistoryRepository.Create(
+        public async Task<int> CreateBackgroundProcessHistoryAsync(BackgroundProcessType backgroundProcessType) =>
+            await _backgroundProcessHistoryRepository.CreateAsync(
                 new BackgroundProcessHistory
                 {
                     ProcessType = backgroundProcessType.ToString(),
@@ -65,16 +65,16 @@ namespace Sfa.Tl.Matching.Application.Services
                     CreatedBy = "System"
                 });
 
-        public async Task UpdateBackgroundProcessHistory(int backgroundProcessHistoryId, int count)
+        public async Task UpdateBackgroundProcessHistoryAync(int backgroundProcessHistoryId, int count)
         {
-            var backgroundProcessHistory = await _backgroundProcessHistoryRepository.GetSingleOrDefault(p => p.Id == backgroundProcessHistoryId);
+            var backgroundProcessHistory = await _backgroundProcessHistoryRepository.GetSingleOrDefaultAsync(p => p.Id == backgroundProcessHistoryId);
 
             backgroundProcessHistory.RecordCount = count;
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Complete.ToString();
             backgroundProcessHistory.ModifiedBy = "System";
             backgroundProcessHistory.ModifiedOn = _dateTimeProvider.UtcNow();
 
-            await _backgroundProcessHistoryRepository.UpdateWithSpecifedColumnsOnly(backgroundProcessHistory,
+            await _backgroundProcessHistoryRepository.UpdateWithSpecifedColumnsOnlyAsync(backgroundProcessHistory,
                 history => history.RecordCount,
                 history => history.Status, 
                 history => history.ModifiedBy, 
@@ -83,7 +83,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public DateTime? ReferralDate => _dateTimeProvider.GetReferralDateAsync(GetBankHolidays, _configuration.EmployerFeedbackTimeSpan);
 
-        public List<DateTime> GetBankHolidays => _bankHolidayRepository.GetMany(d => d.Date <= DateTime.Today)
+        public List<DateTime> GetBankHolidays => _bankHolidayRepository.GetManyAsync(d => d.Date <= DateTime.Today)
             .Select(d => d.Date)
             .OrderBy(d => d.Date)
             .ToList();

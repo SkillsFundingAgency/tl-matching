@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             try
             {
-                var historyId = await CreateBackgroundProcessHistory(BackgroundProcessType.EmployerFeedbackEmail);
+                var historyId = await CreateBackgroundProcessHistoryAsync(BackgroundProcessType.EmployerFeedbackEmail);
 
                 foreach (var referral in referrals)
                 {
@@ -63,12 +63,12 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
                     };
 
-                    await SendEmail(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.EmployerContactEmail, tokens, userName);
+                    await SendEmailAsync(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.EmployerContactEmail, tokens, userName);
                 }
 
                 await SetEmployerFeedbackAsSentAsync(referrals.Select(r => r.OpportunityId), userName);
 
-                await UpdateBackgroundProcessHistory(historyId, referrals.Count);
+                await UpdateBackgroundProcessHistoryAync(historyId, referrals.Count);
 
                 return referrals.Count;
             }
