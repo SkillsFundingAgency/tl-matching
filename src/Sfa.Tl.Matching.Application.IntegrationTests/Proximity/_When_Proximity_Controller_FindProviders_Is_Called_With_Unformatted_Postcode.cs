@@ -19,11 +19,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 {
-    public class When_Proximity_Controller_FindProviders_Is_Called_With_Unformated_Postcode
+    public class When_Proximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode
     {
         private readonly IActionResult _result;
 
-        public When_Proximity_Controller_FindProviders_Is_Called_With_Unformated_Postcode()
+        public When_Proximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode()
         {
             const string requestPostcode = "cV12 Wt";
             var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
         }
 
         [Fact]
-        public void Then_Result_Postcode_Is_Correctly_Formated()
+        public void Then_Result_Postcode_Is_Correctly_Formatted()
         {
             var redirect = _result as RedirectToRouteResult;
             redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");
