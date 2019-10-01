@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions
     public class Proximity
     {
         [FunctionName("BackFillProviderPostTown")]
-        public async Task BackFillProviderPostTown(
+        public async Task BackFillProviderPostTownAsync(
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
             TimerInfo timer,
             ExecutionContext context,
@@ -40,16 +40,16 @@ namespace Sfa.Tl.Matching.Functions
 
                 var providerVenues = new List<ProviderVenue>();
 
-                foreach (var providerVenue in providerVenueRepository.GetMany(pv => pv.Town == null || pv.Town == "" || pv.Town == " "))
+                foreach (var providerVenue in providerVenueRepository.GetManyAsync(pv => pv.Town == null || pv.Town == "" || pv.Town == " "))
                 {
-                    var googleAddressdetail = await googleMapApiClient.GetAddressDetails(providerVenue.Postcode);
+                    var googleAddressdetail = await googleMapApiClient.GetAddressDetailsAsync(providerVenue.Postcode);
 
                     providerVenue.Town = googleAddressdetail;
 
                     providerVenues.Add(providerVenue);
                 }
 
-                await providerVenueRepository.UpdateMany(providerVenues);
+                await providerVenueRepository.UpdateManyAsync(providerVenues);
 
                 stopwatch.Stop();
 
@@ -63,10 +63,10 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
-                    FunctionName = nameof(BackFillProviderPostTown),
+                    FunctionName = nameof(BackFillProviderPostTownAsync),
                     RowNumber = -1
                 });
                 throw;
@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("BackFillEmployerPostTown")]
-        public async Task BackFillEmployerPostTown(
+        public async Task BackFillEmployerPostTownAsync(
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
             TimerInfo timer,
             ExecutionContext context,
@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 var opportunityItems = new List<OpportunityItem>();
 
-                foreach (var opportunityItem in opportunityItemRepository.GetMany(io => io.Town == null || io.Town == "" || io.Town == " "))
+                foreach (var opportunityItem in opportunityItemRepository.GetManyAsync(io => io.Town == null || io.Town == "" || io.Town == " "))
                 {
                     var (isValidPostcode, postcode) = await locationApiClient.IsValidPostcodeAsync(opportunityItem.Postcode, true);
 
@@ -103,14 +103,14 @@ namespace Sfa.Tl.Matching.Functions
 
                         logger.LogError(errormessage);
 
-                        await functionlogRepository.Create(new FunctionLog
+                        await functionlogRepository.CreateAsync(new FunctionLog
                         {
                             ErrorMessage = errormessage,
-                            FunctionName = nameof(BackFillEmployerPostTown),
+                            FunctionName = nameof(BackFillEmployerPostTownAsync),
                             RowNumber = opportunityItem.Id
                         });
                     }
-                    var googleAddressdetail = await googleMapApiClient.GetAddressDetails(postcode);
+                    var googleAddressdetail = await googleMapApiClient.GetAddressDetailsAsync(postcode);
 
                     opportunityItem.Town = googleAddressdetail;
                     opportunityItem.Postcode = postcode;
@@ -119,7 +119,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 }
 
-                await opportunityItemRepository.UpdateMany(opportunityItems);
+                await opportunityItemRepository.UpdateManyAsync(opportunityItems);
 
                 stopwatch.Stop();
 
@@ -133,10 +133,10 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
-                    FunctionName = nameof(BackFillEmployerPostTown),
+                    FunctionName = nameof(BackFillEmployerPostTownAsync),
                     RowNumber = -1
                 });
                 throw;
@@ -144,7 +144,7 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("BackFillProximityData")]
-        public async Task BackFillProximityData(
+        public async Task BackFillProximityDataAsync(
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
             TimerInfo timer,
             ExecutionContext context,
@@ -159,7 +159,7 @@ namespace Sfa.Tl.Matching.Functions
                 var stopwatch = Stopwatch.StartNew();
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
-                var providerVenues = await providerVenueRepository.GetMany(venue => venue.Location == null ||
+                var providerVenues = await providerVenueRepository.GetManyAsync(venue => venue.Location == null ||
                                                                                     venue.Longitude == null ||
                                                                                     venue.Latitude == null ||
                                                                                     !EF.Functions.Like(venue.Postcode, "% %") ||
@@ -187,16 +187,16 @@ namespace Sfa.Tl.Matching.Functions
 
                         logger.LogError(errormessage);
 
-                        await functionlogRepository.Create(new FunctionLog
+                        await functionlogRepository.CreateAsync(new FunctionLog
                         {
                             ErrorMessage = errormessage,
-                            FunctionName = nameof(BackFillProximityData),
+                            FunctionName = nameof(BackFillProximityDataAsync),
                             RowNumber = venue.Id
                         });
                     }
                 }
 
-                await providerVenueRepository.UpdateMany(providerVenues);
+                await providerVenueRepository.UpdateManyAsync(providerVenues);
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -209,10 +209,10 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
-                    FunctionName = nameof(BackFillProximityData),
+                    FunctionName = nameof(BackFillProximityDataAsync),
                     RowNumber = -1
                 });
                 throw;

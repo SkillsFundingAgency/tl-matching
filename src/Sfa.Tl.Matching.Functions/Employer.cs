@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions
     public static class Employer
     {
         [FunctionName("ImportEmployer")]
-        public static async Task ImportEmployer(
+        public static async Task ImportEmployerAsync(
             [BlobTrigger("employer/{name}", Connection = "BlobStorageConnectionString")]ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tSize: {stream.Length} Bytes");
 
             var stopwatch = Stopwatch.StartNew();
-            var createdRecords = await fileImportService.BulkImport(new EmployerStagingFileImportDto
+            var createdRecords = await fileImportService.BulkImportAsync(new EmployerStagingFileImportDto
             {
                 FileDataStream = stream,
                 CreatedBy = blockBlob.GetCreatedByMetadata()
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("EmployerCreatedHandler")]
-        public static async Task<IActionResult> EmployerCreatedHandler(
+        public static async Task<IActionResult> EmployerCreatedHandlerAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = nameof(QualificationSearchColumns),
@@ -98,7 +98,7 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("EmployerUpdatedHandler")]
-        public static async Task<IActionResult> EmployerUpdatedHandler(
+        public static async Task<IActionResult> EmployerUpdatedHandlerAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = nameof(QualificationSearchColumns),
@@ -144,7 +144,7 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("ContactUpdatedHandler")]
-        public static async Task<IActionResult> ContactUpdatedHandler(
+        public static async Task<IActionResult> ContactUpdatedHandlerAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
@@ -179,7 +179,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = nameof(QualificationSearchColumns),

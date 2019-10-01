@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId, IEnumerable<int> itemIds)
+        public async Task<IList<OpportunityReferralDto>> GetProviderOpportunitiesAsync(int opportunityId, IEnumerable<int> itemIds)
         {
             var data = await (from op in _dbContext.Opportunity
                               join oi in _dbContext.OpportunityItem on op.Id equals oi.OpportunityId
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return data;
         }
 
-        public async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId, IEnumerable<int> itemIds)
+        public async Task<EmployerReferralDto> GetEmployerReferralsAsync(int opportunityId, IEnumerable<int> itemIds)
         {
             var data = await (from op in _dbContext.Opportunity
                               join emp in _dbContext.Employer on op.EmployerCrmId equals emp.CrmId
@@ -128,7 +128,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return data;
         }
 
-        public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId)
+        public async Task<OpportunityBasketViewModel> GetOpportunityBasketAsync(int opportunityId)
         {
             var opportunityBasket = await (from o in _dbContext.Opportunity
                                            join e in _dbContext.Employer

@@ -97,7 +97,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (viewModel.IsSaveAndAddVenue)
             {
-                var providerId = await _providerService.CreateProvider(viewModel);
+                var providerId = await _providerService.CreateProviderAsync(viewModel);
                 return RedirectToRoute("AddVenue", new
                 {
                     providerId
@@ -145,7 +145,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return await PerformSaveAndFinish(viewModel);
 
             var providerId = viewModel.Id;
-            await _providerService.UpdateProviderDetail(viewModel);
+            await _providerService.UpdateProviderDetailAsync(viewModel);
 
             return RedirectToRoute("AddVenue", new
             {
@@ -180,7 +180,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(nameof(ProviderDetail), viewModel);
             }
 
-            await _providerService.UpdateProviderDetail(viewModel);
+            await _providerService.UpdateProviderDetailAsync(viewModel);
 
             return RedirectToAction(nameof(SearchProvider));
         }

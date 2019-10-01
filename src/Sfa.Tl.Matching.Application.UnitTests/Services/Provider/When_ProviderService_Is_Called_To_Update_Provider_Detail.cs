@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var mapper = new Mapper(config);
 
             _repository = Substitute.For<IRepository<Domain.Models.Provider>>();
-            _repository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
+            _repository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>())
                 .Returns(new ValidProviderBuilder().Build());
 
             var referenceRepository = Substitute.For<IRepository<ProviderReference>>();
@@ -63,28 +63,28 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
                 DisplayName = "display name"
             };
 
-            providerService.UpdateProviderDetail(viewModel).GetAwaiter().GetResult();
+            providerService.UpdateProviderDetailAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_ProviderRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
             _repository.Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>());
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Provider, bool>>>());
         }
 
         [Fact]
         public void Then_ProviderRepository_Update_Is_Called_Exactly_Once()
         {
             _repository.Received(1)
-                .Update(Arg.Any<Domain.Models.Provider>());
+                .UpdateAsync(Arg.Any<Domain.Models.Provider>());
         }
         
         [Fact]
         public void Then_ProviderRepository_Update_Is_Called_With_Expected_Values()
         {
             _repository.Received(1)
-                .Update(Arg.Is<Domain.Models.Provider>(
+                .UpdateAsync(Arg.Is<Domain.Models.Provider>(
                     p => p.Id == 1 &&
                          p.UkPrn == 123 &&
                          p.Name == "ProviderName" &&

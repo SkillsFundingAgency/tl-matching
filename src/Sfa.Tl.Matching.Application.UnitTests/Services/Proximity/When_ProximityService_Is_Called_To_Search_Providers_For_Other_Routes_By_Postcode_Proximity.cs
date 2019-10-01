@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
 
             _searchProvider = Substitute.For<ISearchProvider>();
             _searchProvider
-                .SearchProvidersForOtherRoutesByPostcodeProximity(dto)
+                .SearchProvidersForOtherRoutesByPostcodeProximityAsync(dto)
                 .Returns(new SearchResultsByRouteBuilder().Build());
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
             
             var service = new ProximityService(_searchProvider, _locationApiClient, googleDistanceMatrixApiClient);
 
-            _result = service.SearchProvidersForOtherRoutesByPostcodeProximity(dto).GetAwaiter().GetResult();
+            _result = service.SearchProvidersForOtherRoutesByPostcodeProximityAsync(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         [Fact]
         public void Then_The_ISearchProvider_Is_Called_Exactly_Once()
         {
-            _searchProvider.Received(1).SearchProvidersForOtherRoutesByPostcodeProximity(Arg.Any<ProviderSearchParametersDto>());
+            _searchProvider.Received(1).SearchProvidersForOtherRoutesByPostcodeProximityAsync(Arg.Any<ProviderSearchParametersDto>());
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_ProviderService_CreateProvider_Called()
         {
-            _providerService.Received(1).CreateProvider(Arg.Any<CreateProviderDetailViewModel>());
+            _providerService.Received(1).CreateProviderAsync(Arg.Any<CreateProviderDetailViewModel>());
         }
     }
 }

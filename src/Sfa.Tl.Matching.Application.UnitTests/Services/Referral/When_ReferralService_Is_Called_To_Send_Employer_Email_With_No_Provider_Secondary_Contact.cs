@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var emailHistoryService = Substitute.For<IEmailHistoryService>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
             
-            backgroundProcessHistoryRepo.GetSingleOrDefault(
+            backgroundProcessHistoryRepo.GetSingleOrDefaultAsync(
                 Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
                 {
                     Id = 1,
@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 });
 
             opportunityRepository
-                .GetEmployerReferrals(
+                .GetEmployerReferralsAsync(
                     Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new ValidEmployerReferralDtoBuilder()
                     .Build());
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("placements_list")

@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderReference
             var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
             var providerReference = new Functions.ProviderReference();
-            providerReference.ImportProviderReference(
+            providerReference.ImportProviderReferenceAsync(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
                 new NullLogger<Functions.ProviderReference>(),
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderReference
         {
             _referenceDataService
                 .Received(1)
-                .SynchronizeProviderReference(_minValue);
+                .SynchronizeProviderReferenceAsync(_minValue);
         }
     }
 }

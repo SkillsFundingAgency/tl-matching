@@ -8,14 +8,14 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IEmployerService
     {
-        Task<bool> ValidateCompanyNameAndCrmId(Guid employerCrmId, string companyName);
+        Task<bool> ValidateCompanyNameAndCrmIdAsync(Guid employerCrmId, string companyName);
         IEnumerable<EmployerSearchResultDto> Search(string companyName);
         Task<EmployerDetailsViewModel> GetOpportunityEmployerDetailAsync(int opportunityId, int opportunityItemId);
         Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityId, int opportunityItemId);
         Task<int> GetInProgressEmployerOpportunityCountAsync(string username);
         Task<SavedEmployerOpportunityViewModel> GetSavedEmployerOpportunitiesAsync(string username);
 
-        Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunity(int opportunityId, string username);
+        Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunityAsync(int opportunityId, string username);
 
         Task<string> GetEmployerOpportunityOwnerAsync(Guid employerCrmId);
         Task<int> HandleEmployerCreatedAsync(string payload);

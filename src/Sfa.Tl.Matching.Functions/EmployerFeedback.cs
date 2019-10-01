@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Functions
     public class EmployerFeedback
     {
         [FunctionName("SendEmployerFeedbackEmails")]
-        public async Task SendEmployerFeedbackEmails(
+        public async Task SendEmployerFeedbackEmailsAsync(
             [TimerTrigger("%EmployerFeedbackTrigger%")]
             TimerInfo timer,
             ExecutionContext context,
@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = context.FunctionName,
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Functions
 
         // ReSharper disable once UnusedMember.Global
         [FunctionName("ManualSendEmployerFeedbackEmails")]
-        public async Task<IActionResult> ManualSendEmployerFeedbackEmails(
+        public async Task<IActionResult> ManualSendEmployerFeedbackEmailsAsync(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,

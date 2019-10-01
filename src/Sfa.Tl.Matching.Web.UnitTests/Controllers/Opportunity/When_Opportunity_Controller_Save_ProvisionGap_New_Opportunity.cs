@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_UpdateOpportunity_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().UpdateOpportunity(Arg.Any<ProviderSearchDto>());
+            _opportunityService.DidNotReceive().UpdateOpportunityAsync(Arg.Any<ProviderSearchDto>());
         }
 
         [Fact]

@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
             _dataProcessor = Substitute.For<IDataProcessor<LearningAimReferenceStaging>>();
 
             _repository = Substitute.For<IBulkInsertRepository<LearningAimReferenceStaging>>();
-            _repository.MergeFromStaging().Returns(2);
+            _repository.MergeFromStagingAsync().Returns(2);
             
             _stagingFileImportDto = new LearningAimReferenceStagingFileImportDto
             {
@@ -43,12 +43,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
 
             _fileReaderResults = Build(2);
 
-            _fileReader.ValidateAndParseFile(_stagingFileImportDto)
+            _fileReader.ValidateAndParseFileAsync(_stagingFileImportDto)
                 .Returns(Task.FromResult(_fileReaderResults));
 
             var service = new FileImportService<LearningAimReferenceStagingFileImportDto, LearningAimReferenceStagingDto, LearningAimReferenceStaging>(logger, mapper, _fileReader, _repository, _dataProcessor);
 
-            _result = service.BulkImport(_stagingFileImportDto).GetAwaiter().GetResult();
+            _result = service.BulkImportAsync(_stagingFileImportDto).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _fileReader
                 .Received(1)
-                .ValidateAndParseFile(_stagingFileImportDto);
+                .ValidateAndParseFileAsync(_stagingFileImportDto);
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
         {
             _repository
                 .Received(1)
-                .BulkInsert(Arg.Any<IList<LearningAimReferenceStaging>>());
+                .BulkInsertAsync(Arg.Any<IList<LearningAimReferenceStaging>>());
         }
 
         [Fact]

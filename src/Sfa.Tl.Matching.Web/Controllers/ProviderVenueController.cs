@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(viewModel);
             }
 
-            var venue = await _providerVenueService.GetVenue(viewModel.ProviderId, viewModel.Postcode);
+            var venue = await _providerVenueService.GetVenueAsync(viewModel.ProviderId, viewModel.Postcode);
 
             int venueId;
             if (venue != null)

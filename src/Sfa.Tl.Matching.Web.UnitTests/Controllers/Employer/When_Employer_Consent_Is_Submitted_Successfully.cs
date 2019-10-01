@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_ConfirmOpportunities_Is_Called_Exactly_Once()
         {
-            _referralService.Received(1).ConfirmOpportunities(1, "username");
+            _referralService.Received(1).ConfirmOpportunitiesAsync(1, "username");
         }
 
         [Fact]

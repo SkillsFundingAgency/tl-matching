@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
             var filePath = Path.Combine(_testExecutionDirectory, DataFilePath);
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                _createdRecordCount = await _testFixture.FileImportService.BulkImport(new LearningAimReferenceStagingFileImportDto
+                _createdRecordCount = await _testFixture.FileImportService.BulkImportAsync(new LearningAimReferenceStagingFileImportDto
                 {
                     FileDataStream = stream,
                     CreatedBy = nameof(LearningAimReferenceTestFixture)

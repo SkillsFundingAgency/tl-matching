@@ -36,8 +36,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetPlacementOrEmployer(int opportunityId, int opportunityItemId)
         {
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
-            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-            var opportunities = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
+            var viewModel = await _opportunityService.GetCheckAnswersAsync(opportunityItemId);
+            var opportunities = await _opportunityService.GetOpportunityBasketAsync(viewModel.OpportunityId);
 
             switch (opportunities.ReferralCount)
             {
@@ -58,8 +58,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers-or-edit-employer/{opportunityItemId}", Name = "GetCheckAnswersOrEditEmployer")]
         public async Task<IActionResult> GetCheckAnswersOrEditEmployer(int opportunityItemId)
         {
-            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-            var opportunities = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
+            var viewModel = await _opportunityService.GetCheckAnswersAsync(opportunityItemId);
+            var opportunities = await _opportunityService.GetOpportunityBasketAsync(viewModel.OpportunityId);
 
             if (opportunities.ReferralCount == 0 && opportunities.ProvisionGapCount == 1)
             {
@@ -83,11 +83,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{Postcode}/{SelectedRouteId}", Name = "GetBackLink")]
         public async Task<IActionResult> BackLink(SearchParametersViewModel viewModel)
         {
-            var prevUrl = await _backLinkService.GetBackLink(HttpContext.User.GetUserName());
+            var prevUrl = await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
 
             if (prevUrl.Contains("provider-results-for-opportunity") && viewModel.OpportunityId != 0)
             {
-                await _backLinkService.GetBackLink(HttpContext.User.GetUserName());
+                await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
 
                 return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
                 {

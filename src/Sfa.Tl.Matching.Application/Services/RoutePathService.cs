@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public IQueryable<Route> GetRoutes()
         {
-            return _routeRepository.GetMany();
+            return _routeRepository.GetManyAsync();
         }
     }
 }

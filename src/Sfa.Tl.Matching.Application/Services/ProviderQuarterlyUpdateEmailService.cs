@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task RequestProviderQuarterlyUpdateAsync(string userName)
         {
-            var backgroundProcessHistoryId = await _backgroundProcessHistoryRepository.Create(
+            var backgroundProcessHistoryId = await _backgroundProcessHistoryRepository.CreateAsync(
                 new BackgroundProcessHistory
                 {
                     ProcessType = BackgroundProcessType.ProviderFeedbackRequest.ToString(),
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var backgroundProcessHistory =
                 await _backgroundProcessHistoryRepository
-                    .GetSingleOrDefault(p => p.Id == backgroundProcessHistoryId);
+                    .GetSingleOrDefaultAsync(p => p.Id == backgroundProcessHistoryId);
 
             if (backgroundProcessHistory == null ||
                 backgroundProcessHistory.Status != BackgroundProcessHistoryStatus.Pending.ToString())
@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 var providers = await ((IProviderRepository)_providerRepository).GetProvidersWithFundingAsync();
 
-                await UpdateBackgroundProcessHistory(backgroundProcessHistory,
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistory,
                     providers.Count,
                     BackgroundProcessHistoryStatus.Processing,
                     userName);
@@ -131,13 +131,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     tokens.Add("secondary_contact_details", secondaryDetailsBuilder.ToString());
 
-                    await SendEmail(EmailTemplateName.ProviderQuarterlyUpdate, null, toAddress,
+                    await SendEmailAsync(EmailTemplateName.ProviderQuarterlyUpdate, null, toAddress,
                         "Industry Placement Matching Provider Update", tokens, userName);
 
                     numberOfProviderEmailsSent++;
                 }
 
-                await UpdateBackgroundProcessHistory(backgroundProcessHistory,
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistory,
                     numberOfProviderEmailsSent,
                     BackgroundProcessHistoryStatus.Complete,
                     userName);
@@ -149,7 +149,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 _logger.LogError(ex, errorMessage);
 
-                await UpdateBackgroundProcessHistory(backgroundProcessHistory,
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistory,
                     numberOfProviderEmailsSent,
                     BackgroundProcessHistoryStatus.Error,
                     userName,
@@ -159,7 +159,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return numberOfProviderEmailsSent;
         }
 
-        private async Task SendEmail(EmailTemplateName template, int? opportunityId,
+        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId,
             string toAddress, string subject,
             IDictionary<string, string> tokens, string createdBy)
         {
@@ -168,18 +168,18 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            await _emailService.SendEmail(template.ToString(),
+            await _emailService.SendEmailAsync(template.ToString(),
                     toAddress,
                     tokens);
 
-            await _emailHistoryService.SaveEmailHistory(template.ToString(),
+            await _emailHistoryService.SaveEmailHistoryAsync(template.ToString(),
                 tokens,
                 opportunityId,
                 toAddress,
                 createdBy);
         }
 
-        private async Task UpdateBackgroundProcessHistory(
+        private async Task UpdateBackgroundProcessHistoryAsync(
             BackgroundProcessHistory backgroundProcessHistory,
             int providerCount, BackgroundProcessHistoryStatus historyStatus,
             string userName, string errorMessage = null)
@@ -189,7 +189,7 @@ namespace Sfa.Tl.Matching.Application.Services
             backgroundProcessHistory.StatusMessage = errorMessage;
             backgroundProcessHistory.ModifiedBy = userName;
             backgroundProcessHistory.ModifiedOn = _dateTimeProvider.UtcNow();
-            await _backgroundProcessHistoryRepository.Update(backgroundProcessHistory);
+            await _backgroundProcessHistoryRepository.UpdateAsync(backgroundProcessHistory);
         }
     }
 }

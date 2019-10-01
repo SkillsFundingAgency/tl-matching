@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
                 Method = HttpMethod.Get.ToString()
             };
             var bankHolidayGenerator = new Functions.BankHolidayGenerator();
-            bankHolidayGenerator.ManualGenerateBankHolidays(
+            bankHolidayGenerator.ManualGenerateBankHolidaysAsync(
                 request,
                 new ExecutionContext(),
                 new NullLogger<Functions.BankHolidayGenerator>(),
@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
         {
             _bankHolidayBulkInsertRepository
                 .Received(1)
-                .BulkInsert(Arg.Any<IList<BankHoliday>>());
+                .BulkInsertAsync(Arg.Any<IList<BankHoliday>>());
         }
     }
 }

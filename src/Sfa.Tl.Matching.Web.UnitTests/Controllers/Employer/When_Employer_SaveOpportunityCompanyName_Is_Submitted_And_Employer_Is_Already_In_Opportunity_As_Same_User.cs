@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_SaveOpportunityCompanyName_Is_Submitted_And_Employer_Is_Already_In_Opportunity_As_Same_User()
         {
             var employerService = Substitute.For<IEmployerService>();
-            employerService.ValidateCompanyNameAndCrmId(Arg.Any<Guid>(), Arg.Any<string>())
+            employerService.ValidateCompanyNameAndCrmIdAsync(Arg.Any<Guid>(), Arg.Any<string>())
                 .Returns(true);
             employerService.GetEmployerOpportunityOwnerAsync(Arg.Any<Guid>())
                 .Returns("Same User");

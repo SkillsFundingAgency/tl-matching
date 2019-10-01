@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _employerCrmId = dto.EmployerCrmId;
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunity(1).Returns(dto);
+            _opportunityService.GetOpportunityAsync(1).Returns(dto);
 
             var opportunityController = new OpportunityController(_opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_GetOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetOpportunity(1);
+            _opportunityService.Received(1).GetOpportunityAsync(1);
         }
 
         [Fact]

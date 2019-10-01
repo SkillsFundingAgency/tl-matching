@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             var mapper = new Mapper(config);
 
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
-            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
+            _providerVenueRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new Domain.Models.ProviderVenue
                 {
                     ProviderId = ProviderId,
@@ -40,13 +40,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
             var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository, locationService, googleMapApiClient);
 
-            _result = providerVenueService.GetVenue(ProviderId, Postcode).GetAwaiter().GetResult();
+            _result = providerVenueService.GetVenueAsync(ProviderId, Postcode).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_ProviderVenueRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _providerVenueRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
+            _providerVenueRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
         }
 
         [Fact]

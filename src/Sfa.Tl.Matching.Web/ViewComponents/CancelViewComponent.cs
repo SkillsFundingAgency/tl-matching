@@ -17,12 +17,12 @@ namespace Sfa.Tl.Matching.Web.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(int opportunityId, int opportunityItemId)
         {
             const string viewName = "Cancel";
-            var viewModel = await GetViewModel(opportunityId, opportunityItemId);
+            var viewModel = await GetViewModelAsync(opportunityId, opportunityItemId);
 
             return View(viewName, viewModel);
         }
 
-        private async Task<CancelViewModel> GetViewModel(int opportunityId, int opportunityItemId)
+        private async Task<CancelViewModel> GetViewModelAsync(int opportunityId, int opportunityItemId)
         {
             var viewModel = new CancelViewModel();
             if (opportunityId == 0) return viewModel;

@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _opportunityRepository
                 .Received(1)
-                .UpdateManyWithSpecifedColumnsOnly(Arg.Any<IList<Domain.Models.Opportunity>>(),
+                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Any<IList<Domain.Models.Opportunity>>(),
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>(),
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>(),
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>()
@@ -134,7 +134,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _opportunityRepository
                 .Received(1)
-                .UpdateManyWithSpecifedColumnsOnly(Arg.Is<IList<Domain.Models.Opportunity>>(
+                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Is<IList<Domain.Models.Opportunity>>(
                         o => o.Count == 1
                              && o[0].Id == 1
                              && o[0].EmployerFeedbackSentOn == new DateTime(2019, 9, 1)
@@ -151,7 +151,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>());
         }
 
@@ -160,7 +160,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Is<string>(
+                .SendEmailAsync(Arg.Is<string>(
                         templateName => templateName == "EmployerFeedback"),
                     Arg.Is<string>(toAddress => toAddress == "primary.contact@employer.co.uk"),
                     Arg.Any<IDictionary<string, string>>());
@@ -176,7 +176,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)));
@@ -187,7 +187,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailHistoryService
                 .Received(1)
-                .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(),
+                .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(),
                     Arg.Any<string>(), Arg.Any<string>());
         }
         
@@ -196,7 +196,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailHistoryService
                 .Received(1)
-                .SaveEmailHistory(
+                .SaveEmailHistoryAsync(
                     Arg.Is<string>(templateName => templateName == "EmployerFeedback"),
 
                     Arg.Any<IDictionary<string, string>>(),

@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Functions
         private const string Subject = "Employer with a blank AUPA status";
 
         [FunctionName("SendEmployerAupaBlankEmail")]
-        public async Task SendEmployerAupaBlankEmail([QueueTrigger(QueueName.EmployerAupaBlankEmailQueue, Connection = "BlobStorageConnectionString")]SendEmployerAupaBlankEmail employerAupaBlankEmail,
+        public async Task SendEmployerAupaBlankEmailAsync([QueueTrigger(QueueName.EmployerAupaBlankEmailQueue, Connection = "BlobStorageConnectionString")]SendEmployerAupaBlankEmail employerAupaBlankEmail,
             ExecutionContext context,
             ILogger logger,
             [Inject] MatchingConfiguration matchingConfiguration,
@@ -43,9 +43,9 @@ namespace Sfa.Tl.Matching.Functions
                 };
 
                 var supportInboxEmail = matchingConfiguration.SupportInboxEmail;
-                await emailService.SendEmail(EmailTemplateName.EmployerAupaBlank.ToString(), supportInboxEmail, tokens);
+                await emailService.SendEmailAsync(EmailTemplateName.EmployerAupaBlank.ToString(), supportInboxEmail, tokens);
 
-                await emailHistoryService.SaveEmailHistory(EmailTemplateName.EmployerAupaBlank.ToString(),
+                await emailHistoryService.SaveEmailHistoryAsync(EmailTemplateName.EmployerAupaBlank.ToString(),
                     tokens,
                     null,
                     supportInboxEmail,
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = context.FunctionName,

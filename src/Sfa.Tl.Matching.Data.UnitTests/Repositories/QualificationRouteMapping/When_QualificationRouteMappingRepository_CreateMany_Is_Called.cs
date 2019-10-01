@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
                 var data = new ValidQualificationRouteMappingListBuilder().Build();
 
                 var repository = new QualificationRouteMappingRepository(logger, dbContext);
-                _result = repository.CreateMany(data)
+                _result = repository.CreateManyAsync(data)
                     .GetAwaiter().GetResult();
             }
         }

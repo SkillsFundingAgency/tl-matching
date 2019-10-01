@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory
                 var data = new ValidBackgroundProcessHistoryListBuilder().Build();
 
                 var repository = new GenericRepository<Domain.Models.BackgroundProcessHistory>(logger, dbContext);
-                _result = repository.CreateMany(data)
+                _result = repository.CreateManyAsync(data)
                     .GetAwaiter().GetResult();
             }
         }

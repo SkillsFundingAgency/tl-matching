@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
 
-            var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
+            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
                                                  && oi.IsSelectedForReferral).Select(oi => oi.Id);
 
@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                         select oi.Id
                 ).ToList();
 
-            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>());
         }
 
@@ -115,7 +115,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
 
-            var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
+            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
                                                  && oi.IsSelectedForReferral).Select(oi => oi.Id);
 
@@ -139,10 +139,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 ).ToList();
 
             //Assert
-            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>());
 
-            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("employer_business_name")));
 
         }
@@ -175,7 +175,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             
             var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
-            var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
+            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
                                                  && oi.IsSelectedForReferral).Select(oi => oi.Id);
 
@@ -202,22 +202,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                         select oi.Id
                 ).ToList();
 
-            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>());
 
-            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == opportunity.Employer.CompanyName.ToTitleCase()));
 
-            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_name") && tokens["employer_contact_name"] == opportunity.EmployerContact.ToTitleCase()));
 
-            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_number") && tokens["employer_contact_number"] == opportunity.EmployerContactPhone));
 
-            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("employer_contact_email") && tokens["employer_contact_email"] == opportunity.EmployerContactEmail));
 
@@ -251,7 +251,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
 
-            var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
+            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
                                                  && oi.IsSelectedForReferral
                                                  && !oi.IsCompleted).Select(oi => oi.Id);
@@ -279,7 +279,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
-            await emailService.Received(4).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(4).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>());
 
             var processStatus = dbContext.BackgroundProcessHistory
@@ -337,7 +337,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
 
-            var itemIds = itemRepo.GetMany(oi => oi.Opportunity.Id == opportunity.Id
+            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
                                                  && oi.IsSelectedForReferral).Select(oi => oi.Id);
 
@@ -361,7 +361,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 ).ToList();
 
             //Assert
-            await emailService.Received(2).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(2).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("employer_business_name")));
 
         }

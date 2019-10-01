@@ -71,11 +71,11 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
                     };
 
-                    await SendEmail(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.EmployerContactEmail,
+                    await SendEmailAsync(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.EmployerContactEmail,
                         "Your industry placement progress – ESFA", tokens, userName);
                 }
 
-                await SetEmployerFeedbackAsSent(referrals.Select(r => r.OpportunityId), userName);
+                await SetEmployerFeedbackAsSentAsync(referrals.Select(r => r.OpportunityId), userName);
 
                 return referrals.Count;
             }
@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        private async Task SetEmployerFeedbackAsSent(IEnumerable<int> opportunityIds, string userName)
+        private async Task SetEmployerFeedbackAsSentAsync(IEnumerable<int> opportunityIds, string userName)
         {
             var itemsToBeCompleted = opportunityIds.Select(id => new UsernameForFeedbackSentDto
             {
@@ -98,13 +98,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updates = _mapper.Map<List<Opportunity>>(itemsToBeCompleted);
 
-            await _opportunityRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+            await _opportunityRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
                 x => x.EmployerFeedbackSentOn,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
 
-        private async Task SendEmail(EmailTemplateName template, int? opportunityId,
+        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId,
             string toAddress, string subject,
             IDictionary<string, string> tokens, string createdBy)
         {
@@ -113,18 +113,18 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            await _emailService.SendEmail(template.ToString(),
+            await _emailService.SendEmailAsync(template.ToString(),
                 toAddress,
                 tokens);
 
-            await _emailHistoryService.SaveEmailHistory(template.ToString(),
+            await _emailHistoryService.SaveEmailHistoryAsync(template.ToString(),
                 tokens,
                 opportunityId,
                 toAddress,
                 createdBy);
         }
 
-        private List<DateTime> GetBankHolidays => _bankHolidayRepository.GetMany(d => d.Date <= DateTime.Today)
+        private List<DateTime> GetBankHolidays => _bankHolidayRepository.GetManyAsync(d => d.Date <= DateTime.Today)
             .Select(d => d.Date)
             .OrderBy(d => d.Date)
             .ToList();

@@ -40,9 +40,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return (valid, postcodeResult);
         }
 
-        public async Task<ProviderVenueDetailViewModel> GetVenue(int providerId, string postcode)
+        public async Task<ProviderVenueDetailViewModel> GetVenueAsync(int providerId, string postcode)
         {
-            var venue = await _providerVenueRepository.GetSingleOrDefault(pv => pv.ProviderId == providerId && pv.Postcode == postcode);
+            var venue = await _providerVenueRepository.GetSingleOrDefaultAsync(pv => pv.ProviderId == providerId && pv.Postcode == postcode);
 
             var dto = venue == null ? null : _mapper.Map<ProviderVenue, ProviderVenueDetailViewModel>(venue);
 
@@ -53,24 +53,24 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var providerVenue = _mapper.Map<ProviderVenue>(viewModel);
 
-            await GetGeoLocationData(viewModel, providerVenue);
+            await GetGeoLocationDataAsync(viewModel, providerVenue);
 
-            await GetGoogleAddressDetails(providerVenue);
+            await GetGoogleAddressDetailsAsync(providerVenue);
 
             if (string.IsNullOrWhiteSpace(providerVenue.Name))
             {
                 providerVenue.Name = providerVenue.Postcode;
             }
 
-            return await _providerVenueRepository.Create(providerVenue);
+            return await _providerVenueRepository.CreateAsync(providerVenue);
         }
 
-        private async Task GetGoogleAddressDetails(ProviderVenue providerVenue)
+        private async Task GetGoogleAddressDetailsAsync(ProviderVenue providerVenue)
         {
-            providerVenue.Town = await _googleMapApiClient.GetAddressDetails(providerVenue.Postcode);
+            providerVenue.Town = await _googleMapApiClient.GetAddressDetailsAsync(providerVenue.Postcode);
         }
 
-        private async Task GetGeoLocationData(AddProviderVenueViewModel viewModel, ProviderVenue providerVenue)
+        private async Task GetGeoLocationDataAsync(AddProviderVenueViewModel viewModel, ProviderVenue providerVenue)
         {
             var geoLocationData = await _locationApiClient.GetGeoLocationDataAsync(viewModel.Postcode, true);
 
@@ -84,18 +84,18 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int providerVenueId)
         {
-            var viewModel = await _providerVenueRepository.GetVenueWithQualifications(providerVenueId);
+            var viewModel = await _providerVenueRepository.GetVenueWithQualificationsAsync(providerVenueId);
 
             return viewModel;
         }
 
         public async Task UpdateVenueAsync(ProviderVenueDetailViewModel viewModel)
         {
-            var trackedEntity = await _providerVenueRepository.GetSingleOrDefault(v => v.Id == viewModel.Id);
+            var trackedEntity = await _providerVenueRepository.GetSingleOrDefaultAsync(v => v.Id == viewModel.Id);
 
             trackedEntity = _mapper.Map(viewModel, trackedEntity);
 
-            await _providerVenueRepository.Update(trackedEntity);
+            await _providerVenueRepository.UpdateAsync(trackedEntity);
         }
 
         public async Task UpdateVenueAsync(RemoveProviderVenueViewModel viewModel)
@@ -103,7 +103,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var providerVenue = _mapper.Map<RemoveProviderVenueViewModel, ProviderVenue>(viewModel);
             providerVenue.IsRemoved = true;
 
-            await _providerVenueRepository.UpdateWithSpecifedColumnsOnly(providerVenue,
+            await _providerVenueRepository.UpdateWithSpecifedColumnsOnlyAsync(providerVenue,
                 x => x.IsRemoved,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
@@ -111,13 +111,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<RemoveProviderVenueViewModel> GetRemoveProviderVenueViewModelAsync(int providerVenueId)
         {
-            var providerVenue = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == providerVenueId);
+            var providerVenue = await _providerVenueRepository.GetSingleOrDefaultAsync(p => p.Id == providerVenueId);
             return _mapper.Map<ProviderVenue, RemoveProviderVenueViewModel>(providerVenue);
         }
 
         public async Task<string> GetVenuePostcodeAsync(int providerVenueId)
         {
-            var providerVenue = await _providerVenueRepository.GetSingleOrDefault(p => p.Id == providerVenueId);
+            var providerVenue = await _providerVenueRepository.GetSingleOrDefaultAsync(p => p.Id == providerVenueId);
             return providerVenue.Postcode;
         }
     }

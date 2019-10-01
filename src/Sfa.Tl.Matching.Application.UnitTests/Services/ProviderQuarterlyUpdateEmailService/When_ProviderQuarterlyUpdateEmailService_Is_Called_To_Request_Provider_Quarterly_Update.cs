@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
             _backgroundProcessHistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
 
             _backgroundProcessHistoryRepository
-                .Create(Arg.Any<BackgroundProcessHistory>())
+                .CreateAsync(Arg.Any<BackgroundProcessHistory>())
                 .Returns(1);
 
             providerRepository
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _backgroundProcessHistoryRepository
                 .Received(1)
-                .Create(Arg.Is<BackgroundProcessHistory>(request =>
+                .CreateAsync(Arg.Is<BackgroundProcessHistory>(request =>
                     request.RecordCount == 0 &&
                     request.Status == BackgroundProcessHistoryStatus.Pending.ToString() && 
                     request.CreatedBy == "TestUser"));
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .DidNotReceive()
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
         }
     }
 }

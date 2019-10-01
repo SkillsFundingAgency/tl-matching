@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Qualification
                 var data = new ValidQualificationListBuilder().Build();
 
                 var repository = new GenericRepository<Domain.Models.Qualification>(logger, dbContext);
-                _result = repository.CreateMany(data)
+                _result = repository.CreateManyAsync(data)
                     .GetAwaiter().GetResult();
             }
         }

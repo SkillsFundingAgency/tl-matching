@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_SaveOpportunityCompanyName_Is_Submitted_Invalid_Employer()
         {
             var employerService = Substitute.For<IEmployerService>();
-            employerService.ValidateCompanyNameAndCrmId(Arg.Any<Guid>(), Arg.Any<string>())
+            employerService.ValidateCompanyNameAndCrmIdAsync(Arg.Any<Guid>(), Arg.Any<string>())
                 .Returns(false);
             var opportunityService = Substitute.For<IOpportunityService>();
 

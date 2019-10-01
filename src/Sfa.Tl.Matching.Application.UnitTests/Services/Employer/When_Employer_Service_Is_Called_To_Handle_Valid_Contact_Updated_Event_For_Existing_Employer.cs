@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
+            _employerRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new Domain.Models.Employer());
 
             var employerService = new EmployerService(_employerRepository, opportunityRepository, mapper, new CrmEmployerEventDataValidator(),
@@ -42,8 +42,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         [Fact]
         public void Then_The_Employer_Record_Should_Be_Updated()
         {
-            _employerRepository.DidNotReceive().Create(Arg.Any<Domain.Models.Employer>());
-            _employerRepository.Received(1).Update(Arg.Is<Domain.Models.Employer>(
+            _employerRepository.DidNotReceive().CreateAsync(Arg.Any<Domain.Models.Employer>());
+            _employerRepository.Received(1).UpdateAsync(Arg.Is<Domain.Models.Employer>(
                 e =>
                         e.PrimaryContact == "Test" &&
                         e.Email == "Test@test.com" &&

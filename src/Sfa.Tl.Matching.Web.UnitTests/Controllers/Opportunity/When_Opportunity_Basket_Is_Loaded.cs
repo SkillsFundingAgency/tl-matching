@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var mapper = new Mapper(config);
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunityBasket(1).Returns(new OpportunityBasketViewModel
+            _opportunityService.GetOpportunityBasketAsync(1).Returns(new OpportunityBasketViewModel
             {
                 OpportunityId = 1,
                 CompanyName = "Company Name",
@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             Received.InOrder(() =>
                 {
                     _opportunityService.Received(1).ClearOpportunityItemsSelectedForReferralAsync(1);
-                    _opportunityService.Received(1).GetOpportunityBasket(1);
+                    _opportunityService.Received(1).GetOpportunityBasketAsync(1);
 
                 });
         }

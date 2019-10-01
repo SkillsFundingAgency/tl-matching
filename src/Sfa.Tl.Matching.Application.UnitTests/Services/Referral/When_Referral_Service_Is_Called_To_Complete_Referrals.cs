@@ -39,10 +39,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             var sut = new ReferralService(messageQueueService, repo, backgroundProcessHistoryRepository);
 
-            repo.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(opportunity.OpportunityItem.AsQueryable());
+            repo.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(opportunity.OpportunityItem.AsQueryable());
 
             //Act
-            await sut.ConfirmOpportunities(opportunity.Id, "username");
+            await sut.ConfirmOpportunitiesAsync(opportunity.Id, "username");
 
             //Assert
             

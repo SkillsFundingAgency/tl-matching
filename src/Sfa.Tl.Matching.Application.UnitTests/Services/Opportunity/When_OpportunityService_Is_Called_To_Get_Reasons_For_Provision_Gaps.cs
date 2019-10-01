@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 provisionGapRepository, referralRepository, googleMapApiClient, 
                 opportunityPipelineReportWriter, dateTimeProvider);
 
-            var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
+            var result = await sut.GetOpportunityBasketAsync(opportunityItem.OpportunityId);
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
                 .Should().ContainAny("Employer had a bad experience with them",
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 provisionGapRepository, referralRepository, googleMapApiClient, 
                 opportunityPipelineReportWriter, dateTimeProvider);
 
-            var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
+            var result = await sut.GetOpportunityBasketAsync(opportunityItem.OpportunityId);
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
                 .Should().Contain("Employer had a bad experience with them");
@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 provisionGapRepository, referralRepository, googleMapApiClient, 
                 opportunityPipelineReportWriter, dateTimeProvider);
 
-            var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
+            var result = await sut.GetOpportunityBasketAsync(opportunityItem.OpportunityId);
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
                 .Should().Contain("Providers do not have students doing the right course");
@@ -161,7 +161,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 provisionGapRepository, referralRepository, googleMapApiClient, 
                 opportunityPipelineReportWriter, dateTimeProvider);
 
-            var result = await sut.GetOpportunityBasket(opportunityItem.OpportunityId);
+            var result = await sut.GetOpportunityBasketAsync(opportunityItem.OpportunityId);
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
                 .Should().Contain("Providers are too far away");

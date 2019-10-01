@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             _provisionGapRepository
-                .GetSingleOrDefault(Arg.Any<Expression<Func<ProvisionGap, bool>>>())
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<ProvisionGap, bool>>>())
                 .Returns(new ValidProvisionGapBuilder().Build());
 
             var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, 
@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _provisionGapRepository
                 .Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<ProvisionGap, bool>>>());
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<ProvisionGap, bool>>>());
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _provisionGapRepository
                 .Received(1)
-                .Update(Arg.Is<ProvisionGap>(
+                .UpdateAsync(Arg.Is<ProvisionGap>(
                     p => p.OpportunityItemId ==  1 &&
                     p.NoSuitableStudent.Value &&
                     p.HadBadExperience.Value &&

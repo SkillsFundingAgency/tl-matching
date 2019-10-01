@@ -30,14 +30,14 @@ namespace Sfa.Tl.Matching.Application.Services
 
         }
 
-        public async Task SendEmail(string templateName, string toAddress, IDictionary<string, string> personalisationTokens)
+        public async Task SendEmailAsync(string templateName, string toAddress, IDictionary<string, string> personalisationTokens)
         {
             if (!_configuration.SendEmailEnabled)
             {
                 return;
             }
 
-            var emailTemplate = await _emailTemplateRepository.GetSingleOrDefault(t => t.TemplateName == templateName);
+            var emailTemplate = await _emailTemplateRepository.GetSingleOrDefaultAsync(t => t.TemplateName == templateName);
             if (emailTemplate == null)
             {
                 _logger.LogWarning($"Email template {templateName} not found. No emails sent.");
@@ -57,11 +57,11 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 _logger.LogInformation($"Sending {templateName} email to {recipient}");
 
-                await SendEmailViaNotificationsApi(recipient, templateId, personalisationTokens);
+                await SendEmailViaNotificationsApiAsync(recipient, templateId, personalisationTokens);
             }
         }
 
-        private async Task SendEmailViaNotificationsApi(string recipient, string templateId, 
+        private async Task SendEmailViaNotificationsApiAsync(string recipient, string templateId, 
             IDictionary<string, string> personalisationTokens)
         {
             try

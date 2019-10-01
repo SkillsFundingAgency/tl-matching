@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            _referralRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(
+            _referralRepository.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(
                 new List<Domain.Models.Referral>
                 {
                     new Domain.Models.Referral
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _referralRepository
                 .Received(1)
-                .GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>());
+                .GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>());
         }
 
         [Fact]

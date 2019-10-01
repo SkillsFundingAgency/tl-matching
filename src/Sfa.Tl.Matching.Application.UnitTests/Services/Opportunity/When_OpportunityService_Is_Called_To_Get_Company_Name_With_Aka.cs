@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 }
             };
 
-            _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(),
+            _opportunityRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(),
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>())
                 .Returns(opportunity);
 
@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityRepository
                 .Received(1)
-                .GetSingleOrDefault(
+                .GetSingleOrDefaultAsync(
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(),
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>()
             );

@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_OpportunityService_GetOpportunityBasket_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().GetOpportunityBasket(1);
+            _opportunityService.DidNotReceive().GetOpportunityBasketAsync(1);
         }
 
         [Fact]

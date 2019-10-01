@@ -7,6 +7,6 @@ namespace Sfa.Tl.Matching.Api.Clients.ProviderReference
 {
     public interface IProviderReferenceDataClient
     {
-        Task<List<ProviderRecordStructure>> GetAll(DateTime lastUpdateDate);
+        Task<List<ProviderRecordStructure>> GetAllAsync(DateTime lastUpdateDate);
     }
 }

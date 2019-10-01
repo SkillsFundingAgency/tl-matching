@@ -6,6 +6,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IFileReader<in TImportDto, TDto> where TDto : class, new()  where TImportDto : FileImportDto
     {
-        Task<IList<TDto>> ValidateAndParseFile(TImportDto fileImportDto);
+        Task<IList<TDto>> ValidateAndParseFileAsync(TImportDto fileImportDto);
     }
 }

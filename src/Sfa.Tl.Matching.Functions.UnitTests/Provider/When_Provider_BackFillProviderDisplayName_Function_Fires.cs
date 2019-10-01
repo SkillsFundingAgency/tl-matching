@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Provider
 
                 var providerFunctions = new Functions.Provider();
 
-                providerFunctions.BackFillProviderDisplayName(new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null),
+                providerFunctions.BackFillProviderDisplayNameAsync(new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null),
                     new ExecutionContext(), new NullLogger<Functions.Provider>(), providerRepository,
                     Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
 

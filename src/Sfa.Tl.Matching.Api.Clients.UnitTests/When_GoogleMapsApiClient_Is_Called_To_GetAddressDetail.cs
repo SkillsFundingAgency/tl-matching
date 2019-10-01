@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         [Fact]
         public async Task Then_PostTown_Is_Returned_Correctly()
         {
-            var addressDetails = await _googleMapsApiClient.GetAddressDetails("CV12WT");
+            var addressDetails = await _googleMapsApiClient.GetAddressDetailsAsync("CV12WT");
             addressDetails.Should().NotBeNull();
             addressDetails.Should().Be("Coventry");
         }

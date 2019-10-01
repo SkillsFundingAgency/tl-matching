@@ -99,7 +99,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             _opportunityService
                 .DidNotReceive()
-                .UpdateOpportunity(Arg.Any<ProviderSearchDto>());
+                .UpdateOpportunityAsync(Arg.Any<ProviderSearchDto>());
         }
 
         [Fact]

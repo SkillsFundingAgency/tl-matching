@@ -76,13 +76,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             emailsCount.Should().Be(1);
 
             await emailService.Received(1)
-                .SendEmail(Arg.Is<string>(
+                .SendEmailAsync(Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                 Arg.Is<string>(toAddress => toAddress == provider.PrimaryContactEmail),
                 Arg.Any<IDictionary<string, string>>());
 
             await emailService.Received(1)
-                .SendEmail(Arg.Is<string>(
+                .SendEmailAsync(Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                     Arg.Is<string>(toAddress => toAddress == provider.SecondaryContactEmail),
                     Arg.Any<IDictionary<string, string>>());
@@ -147,13 +147,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             emailsCount.Should().Be(1);
 
             await emailService.Received(1)
-                .SendEmail(Arg.Is<string>(
+                .SendEmailAsync(Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                 Arg.Is<string>(toAddress => toAddress == provider.PrimaryContactEmail),
                 Arg.Any<IDictionary<string, string>>());
 
             await emailService.DidNotReceive()
-                .SendEmail(Arg.Is<string>(
+                .SendEmailAsync(Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                     Arg.Is<string>(toAddress => toAddress == provider.SecondaryContactEmail),
                     Arg.Any<IDictionary<string, string>>());
@@ -211,12 +211,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             emailsCount.Should().Be(1);
 
             await emailService.Received(1)
-                .SendEmail(Arg.Is<string>(
+                .SendEmailAsync(Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                 Arg.Is<string>(toAddress => toAddress == provider.PrimaryContactEmail),
                 Arg.Any<IDictionary<string, string>>());
 
-            await emailService.Received(2).SendEmail(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(2).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("contact_name") && tokens["contact_name"] == $"{provider.SecondaryContact}"));
         }

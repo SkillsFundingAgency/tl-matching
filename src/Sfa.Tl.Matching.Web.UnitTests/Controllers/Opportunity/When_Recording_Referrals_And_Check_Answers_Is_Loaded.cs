@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var dto = new ValidCheckAnswersDtoBuilder().Build();
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetCheckAnswers(OpportunityItemId).Returns(dto);
+            _opportunityService.GetCheckAnswersAsync(OpportunityItemId).Returns(dto);
 
             var opportunityController = new OpportunityController(_opportunityService,  mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_GetCheckAnswers_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetCheckAnswers(OpportunityItemId);
+            _opportunityService.Received(1).GetCheckAnswersAsync(OpportunityItemId);
         }
 
         [Fact]

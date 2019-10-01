@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var employerService = Substitute.For<IEmployerService>();
             var referralService = Substitute.For<IReferralService>();
 
-            employerService.ValidateCompanyNameAndCrmId(new Guid("11111111-1111-1111-1111-111111111111"), "").Returns(false);
+            employerService.ValidateCompanyNameAndCrmIdAsync(new Guid("11111111-1111-1111-1111-111111111111"), "").Returns(false);
 
             var employerController = new EmployerController(employerService, opportunityService, referralService, mapper);
 

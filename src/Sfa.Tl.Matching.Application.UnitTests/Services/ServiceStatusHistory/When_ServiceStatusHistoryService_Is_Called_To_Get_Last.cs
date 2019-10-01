@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
                 new GenericRepository<Domain.Models.ServiceStatusHistory>(NullLogger<GenericRepository<Domain.Models.ServiceStatusHistory>>.Instance, mockContext);
 
             var serviceStatusHistoryService = new ServiceStatusHistoryService(mapper, serviceStatusHistoryRepository);
-            _result = serviceStatusHistoryService.GetLatestServiceStatusHistory()
+            _result = serviceStatusHistoryService.GetLatestServiceStatusHistoryAsync()
                 .GetAwaiter().GetResult();
         }
 

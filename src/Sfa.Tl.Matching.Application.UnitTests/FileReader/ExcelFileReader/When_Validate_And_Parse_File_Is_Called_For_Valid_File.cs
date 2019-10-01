@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
             using (var stream = File.Open(filePath, FileMode.Open))
             {
 
-                _result = excelfileReader.ValidateAndParseFile(new EmployerStagingFileImportDto
+                _result = excelfileReader.ValidateAndParseFileAsync(new EmployerStagingFileImportDto
                 {
                     FileDataStream = stream
                 }).GetAwaiter().GetResult();
@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader
         [Fact]
         public void Then_FunctionLog_Repository_Create_Many_Is_Called_With_Empty_List()
         {
-            _functionLogRepository.Received(1).CreateMany(Arg.Is<List<FunctionLog>>(logs => logs.Count == 0));
+            _functionLogRepository.Received(1).CreateManyAsync(Arg.Is<List<FunctionLog>>(logs => logs.Count == 0));
         }
 
         [Fact]

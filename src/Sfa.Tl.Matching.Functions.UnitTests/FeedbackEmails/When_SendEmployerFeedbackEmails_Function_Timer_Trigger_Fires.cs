@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
             _employerFeedbackService = Substitute.For<IEmployerFeedbackService>();
 
             var employerFeedback = new EmployerFeedback();
-            employerFeedback.SendEmployerFeedbackEmails(
+            employerFeedback.SendEmployerFeedbackEmailsAsync(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
                 new NullLogger<EmployerFeedback>(),
@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
         {
             _functionLogRepository
                 .DidNotReceiveWithAnyArgs()
-                .Create(Arg.Any<FunctionLog>());
+                .CreateAsync(Arg.Any<FunctionLog>());
         }
     }
 }

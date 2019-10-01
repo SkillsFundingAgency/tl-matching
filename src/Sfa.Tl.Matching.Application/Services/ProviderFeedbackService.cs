@@ -77,7 +77,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "company_name", referral.Companyname}
                     };
 
-                    await SendEmail(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
+                    await SendEmailAsync(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
                         referral.ProviderPrimaryContactEmail, "Your industry placement progress – ESFA", tokens,
                         userName);
 
@@ -85,13 +85,13 @@ namespace Sfa.Tl.Matching.Application.Services
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContactName;
 
-                        await SendEmail(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
+                        await SendEmailAsync(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
                             referral.ProviderSecondaryContactEmail, "Your industry placement progress – ESFA", tokens,
                             userName);
                     }
                 }
 
-                await SetProviderFeedbackSentOnDate(referrals.Select(r => r.ProviderId), userName);
+                await SetProviderFeedbackSentOnDateAsync(referrals.Select(r => r.ProviderId), userName);
 
                 return referrals.Count;
             }
@@ -104,7 +104,7 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        private async Task SetProviderFeedbackSentOnDate(IEnumerable<int> providerIds, string userName)
+        private async Task SetProviderFeedbackSentOnDateAsync(IEnumerable<int> providerIds, string userName)
         {
             var itemsToBeCompleted = providerIds.Select(id => new UsernameForFeedbackSentDto
             {
@@ -114,13 +114,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updates = _mapper.Map<List<Provider>>(itemsToBeCompleted);
 
-            await _providerRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+            await _providerRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
                 x => x.ProviderFeedbackSentOn,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
 
-        private async Task SendEmail(EmailTemplateName template, int? opportunityId,
+        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId,
             string toAddress, string subject,
             IDictionary<string, string> tokens, string createdBy)
         {
@@ -129,18 +129,18 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            await _emailService.SendEmail(template.ToString(),
+            await _emailService.SendEmailAsync(template.ToString(),
                 toAddress,
                 tokens);
 
-            await _emailHistoryService.SaveEmailHistory(template.ToString(),
+            await _emailHistoryService.SaveEmailHistoryAsync(template.ToString(),
                 tokens,
                 opportunityId,
                 toAddress,
                 createdBy);
         }
 
-        private List<DateTime> GetBankHolidays => _bankHolidayRepository.GetMany(d => d.Date <= DateTime.Today)
+        private List<DateTime> GetBankHolidays => _bankHolidayRepository.GetManyAsync(d => d.Date <= DateTime.Today)
             .Select(d => d.Date)
             .OrderBy(d => d.Date)
             .ToList();

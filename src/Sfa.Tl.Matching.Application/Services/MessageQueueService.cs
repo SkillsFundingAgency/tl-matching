@@ -51,12 +51,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task PushMessageAsync(string message, string queueName)
         {
-            var queue = await GetQueue(queueName);
+            var queue = await GetQueueAsync(queueName);
             await queue.AddMessageAsync(new CloudQueueMessage(message));
             _logger.LogInformation($"Added Message to Message Queue {queueName} => {message}");
         }
 
-        private async Task<CloudQueue> GetQueue(string queueName)
+        private async Task<CloudQueue> GetQueueAsync(string queueName)
         {
             var storageAccount = CloudStorageAccount.Parse(_configuration.BlobStorageConnectionString);
             var client = storageAccount.CreateCloudQueueClient();

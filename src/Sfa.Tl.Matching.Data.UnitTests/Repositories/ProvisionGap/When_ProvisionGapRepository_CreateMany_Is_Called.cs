@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProvisionGap
                 var data = new ValidProvisionGapListBuilder().Build();
 
                 var repository = new GenericRepository<Domain.Models.ProvisionGap>(logger, dbContext);
-                _result = repository.CreateMany(data)
+                _result = repository.CreateManyAsync(data)
                     .GetAwaiter().GetResult();
             }
         }

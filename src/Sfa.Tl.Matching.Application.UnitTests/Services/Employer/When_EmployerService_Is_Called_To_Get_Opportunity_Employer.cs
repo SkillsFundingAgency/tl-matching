@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(),
+            _opportunityRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(),
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, FindEmployerViewModel>>>())
                 .Returns(new FindEmployerViewModelBuilder().BuildWithEmployer());
 
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         {
             _opportunityRepository
                 .Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(),
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>(),
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, FindEmployerViewModel>>>());
         }
 

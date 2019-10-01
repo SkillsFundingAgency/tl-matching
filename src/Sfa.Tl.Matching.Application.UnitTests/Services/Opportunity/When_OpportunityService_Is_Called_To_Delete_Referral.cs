@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            _referralRepository.GetFirstOrDefault(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>())
+            _referralRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>())
                 .Returns(new Domain.Models.Referral
                 {
                     Id = ReferralId,
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_Delete_Referral_Is_Called_Exactly_Once()
         {
-            _referralRepository.Received(1).Delete(Arg.Any<Domain.Models.Referral>());
+            _referralRepository.Received(1).DeleteAsync(Arg.Any<Domain.Models.Referral>());
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _referralRepository
                 .Received()
-                .Delete(Arg.Is<Domain.Models.Referral>(
+                .DeleteAsync(Arg.Is<Domain.Models.Referral>(
                     r => r.Id == ReferralId));
         }
     }

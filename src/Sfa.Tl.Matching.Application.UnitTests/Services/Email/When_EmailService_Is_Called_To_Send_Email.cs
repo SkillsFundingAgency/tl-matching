@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             };
 
             _emailTemplateRepository = Substitute.For<IRepository<EmailTemplate>>();
-            _emailTemplateRepository.GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>()).Returns(emailTemplate);
+            _emailTemplateRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>()).Returns(emailTemplate);
 
             var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, logger);
 
@@ -52,13 +52,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             const string templateName = "TestTemplate";
 
-            emailService.SendEmail(templateName, _toAddress, tokens).GetAwaiter().GetResult();
+            emailService.SendEmailAsync(templateName, _toAddress, tokens).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_EmailTemplateRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _emailTemplateRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
+            _emailTemplateRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
         }
 
         [Fact]

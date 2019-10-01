@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _viewModel.SelectedEmployerCrmId = new Guid("33333333-3333-3333-3333-333333333333");
 
             _employerService = Substitute.For<IEmployerService>();
-            _employerService.ValidateCompanyNameAndCrmId(_employerCrmId, CompanyName).Returns(true);
+            _employerService.ValidateCompanyNameAndCrmIdAsync(_employerCrmId, CompanyName).Returns(true);
             _employerService.GetEmployerOpportunityOwnerAsync(Arg.Any<Guid>())
                 .Returns((string)null);
 
@@ -73,13 +73,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_GetEmployer_Is_Called_Exactly_Once()
         {
-            _employerService.Received(1).ValidateCompanyNameAndCrmId(_employerCrmId, CompanyName);
+            _employerService.Received(1).ValidateCompanyNameAndCrmIdAsync(_employerCrmId, CompanyName);
         }
 
         [Fact]
         public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<CompanyNameDto>());
+            _opportunityService.Received(1).UpdateOpportunityAsync(Arg.Any<CompanyNameDto>());
         }
 
         [Fact]

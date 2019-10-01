@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.OpportunityItem
                 var data = new ValidOpportunityItemListBuilder().Build();
 
                 var repository = new GenericRepository<Domain.Models.OpportunityItem>(logger, dbContext);
-                _result = repository.CreateMany(data)
+                _result = repository.CreateManyAsync(data)
                     .GetAwaiter().GetResult();
             }
         }

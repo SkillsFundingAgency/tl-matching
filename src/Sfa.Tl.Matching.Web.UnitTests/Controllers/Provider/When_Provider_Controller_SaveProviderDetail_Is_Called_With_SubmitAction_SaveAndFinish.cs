@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_ProviderService_UpdateProviderDetail_Called()
         {
-            _providerService.Received(1).UpdateProviderDetail(Arg.Any<ProviderDetailViewModel>());
+            _providerService.Received(1).UpdateProviderDetailAsync(Arg.Any<ProviderDetailViewModel>());
         }
     }
 }

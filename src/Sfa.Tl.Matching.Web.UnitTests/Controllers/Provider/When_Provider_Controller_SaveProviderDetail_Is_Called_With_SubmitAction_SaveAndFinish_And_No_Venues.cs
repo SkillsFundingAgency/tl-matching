@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_ProviderService_UpdateProviderDetail_Called()
         {
-            _providerService.DidNotReceive().UpdateProviderDetail(Arg.Any<ProviderDetailViewModel>());
+            _providerService.DidNotReceive().UpdateProviderDetailAsync(Arg.Any<ProviderDetailViewModel>());
         }
 
         [Fact]

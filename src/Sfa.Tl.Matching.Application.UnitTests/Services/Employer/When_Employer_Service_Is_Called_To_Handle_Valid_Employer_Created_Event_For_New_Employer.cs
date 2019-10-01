@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
+            _employerRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns((Domain.Models.Employer)null);
 
             _messageQueueService = Substitute.For<IMessageQueueService>();
@@ -48,8 +48,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         [Fact]
         public void Then_The_Employer_Record_Should_Be_Created()
         {
-            _employerRepository.DidNotReceive().Update(Arg.Any<Domain.Models.Employer>());
-            _employerRepository.Received(1).Create(Arg.Is<Domain.Models.Employer>(e =>
+            _employerRepository.DidNotReceive().UpdateAsync(Arg.Any<Domain.Models.Employer>());
+            _employerRepository.Received(1).CreateAsync(Arg.Is<Domain.Models.Employer>(e =>
                 e.CrmId == _employerEventBase.accountid.ToGuid() &&
                 e.Aupa == "Aware" &&
                 e.CompanyName == "Test" &&

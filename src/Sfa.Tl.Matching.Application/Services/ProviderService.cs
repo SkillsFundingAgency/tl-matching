@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<ProviderSearchResultItemViewModel>> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel searchParameters)
         {
-            return await _repository.GetMany(p => searchParameters.UkPrn == null || p.UkPrn == searchParameters.UkPrn.Value)
+            return await _repository.GetManyAsync(p => searchParameters.UkPrn == null || p.UkPrn == searchParameters.UkPrn.Value)
                                     .OrderBy(p => p.Name)
                                     .ProjectTo<ProviderSearchResultItemViewModel>(_mapper.ConfigurationProvider)
                                     .ToListAsync();
@@ -37,13 +37,13 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<int> GetProvidersWithFundingCountAsync()
         {
             return await _repository
-                .GetMany(p => p.IsCdfProvider)
+                .GetManyAsync(p => p.IsCdfProvider)
                 .CountAsync();
         }
 
         public async Task<ProviderSearchResultDto> SearchAsync(long ukPrn)
         {
-            var provider = await _repository.GetSingleOrDefault(p => p.UkPrn == ukPrn);
+            var provider = await _repository.GetSingleOrDefaultAsync(p => p.UkPrn == ukPrn);
             var dto = _mapper.Map<Provider, ProviderSearchResultDto>(provider);
 
             return dto;
@@ -51,14 +51,14 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<ProviderSearchResultDto> SearchReferenceDataAsync(long ukPrn)
         {
-            var providerReference = await _referenceRepository.GetSingleOrDefault(pr => pr.UkPrn == ukPrn);
+            var providerReference = await _referenceRepository.GetSingleOrDefaultAsync(pr => pr.UkPrn == ukPrn);
             return _mapper.Map<ProviderReference, ProviderSearchResultDto>(providerReference);
         }
 
         public async Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId)
         {
             var provider = await _repository
-                .GetMany(p => p.Id == providerId)
+                .GetManyAsync(p => p.Id == providerId)
                 .Select(p => new ProviderDetailViewModel
                 {
                     Id = p.Id,
@@ -96,25 +96,25 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
 
-            await _repository.UpdateWithSpecifedColumnsOnly(provider,
+            await _repository.UpdateWithSpecifedColumnsOnlyAsync(provider,
                 x => x.IsCdfProvider,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
 
-        public async Task UpdateProviderDetail(ProviderDetailViewModel viewModel)
+        public async Task UpdateProviderDetailAsync(ProviderDetailViewModel viewModel)
         {
-            var trackedEntity = await _repository.GetSingleOrDefault(p => p.Id == viewModel.Id);
+            var trackedEntity = await _repository.GetSingleOrDefaultAsync(p => p.Id == viewModel.Id);
             trackedEntity = _mapper.Map(viewModel, trackedEntity);
 
-            await _repository.Update(trackedEntity);
+            await _repository.UpdateAsync(trackedEntity);
         }
 
-        public async Task<int> CreateProvider(CreateProviderDetailViewModel viewModel)
+        public async Task<int> CreateProviderAsync(CreateProviderDetailViewModel viewModel)
         {
             var provider = _mapper.Map<CreateProviderDetailViewModel, Provider>(viewModel);
 
-            return await _repository.Create(provider);
+            return await _repository.CreateAsync(provider);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             try
             {
-                var employerReferral = await GetEmployerReferrals(opportunityId, itemIds);
+                var employerReferral = await GetEmployerReferralsAsync(opportunityId, itemIds);
                 var sb = new StringBuilder();
 
                 if (employerReferral == null) return;
@@ -92,10 +92,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("placements_list", sb.ToString());
 
-                await SendEmail(EmailTemplateName.EmployerReferralV3, opportunityId, employerReferral.EmployerContactEmail,
+                await SendEmailAsync(EmailTemplateName.EmployerReferralV3, opportunityId, employerReferral.EmployerContactEmail,
                     "Your industry placement referral – ESFA", tokens, employerReferral.CreatedBy);
 
-                await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
+                await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
                     BackgroundProcessHistoryStatus.Complete, username);
             }
             catch (Exception ex)
@@ -103,7 +103,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 var errorMessage = $"Error sending employer referral emails. {ex.Message} " +
                                    $"Opportunity id {opportunityId}";
 
-                await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData,
+                await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData,
                     backgroundProcessHistoryId,
                     1,
                     BackgroundProcessHistoryStatus.Error,
@@ -116,7 +116,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             if (await GetBackgroundProcessHistoryData(backgroundProcessHistoryId) == null) return;
 
-            var referrals = await GetOpportunityReferrals(opportunityId, itemIds);
+            var referrals = await GetOpportunityReferralsAsync(opportunityId, itemIds);
 
             const string emailSubject = "Industry Placement Matching Referral";
 
@@ -144,23 +144,23 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "number_of_placements", placements }
                     };
 
-                    await SendEmail(EmailTemplateName.ProviderReferralV3, opportunityId, referral.ProviderPrimaryContactEmail,
+                    await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId, referral.ProviderPrimaryContactEmail,
                         emailSubject, tokens, referral.CreatedBy);
 
                     if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmail(EmailTemplateName.ProviderReferralV3, opportunityId,
+                        await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId,
                             referral.ProviderSecondaryContactEmail,
                             emailSubject, tokens, referral.CreatedBy);
                     }
 
-                    await CompleteSelectedReferrals(opportunityId, referral.OpportunityItemId, username);
+                    await CompleteSelectedReferralsAsync(opportunityId, referral.OpportunityItemId, username);
                 }
 
-                await CompleteRemainingItems(opportunityId, username);
+                await CompleteRemainingItemsAsync(opportunityId, username);
 
-                await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
+                await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
                     BackgroundProcessHistoryStatus.Complete, username);
             }
             catch (Exception ex)
@@ -168,7 +168,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 var errorMessage = $"Error sending provider referral emails. {ex.Message} " +
                                    $"Opportunity id {opportunityId}";
 
-                await UpdateBackgroundProcessHistory(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
+                await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
                     BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
         }
@@ -202,9 +202,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return sb.ToString();
         }
 
-        private async Task CompleteSelectedReferrals(int opportunityId, int itemId, string username)
+        private async Task CompleteSelectedReferralsAsync(int opportunityId, int itemId, string username)
         {
-            var selectedOpportunityItemIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+            var selectedOpportunityItemIds = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
                                                                                       && oi.Id == itemId
                                                                                       && oi.IsSaved
                                                                                       && oi.IsSelectedForReferral
@@ -213,13 +213,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (selectedOpportunityItemIds.Count > 0)
             {
-                await SetOpportunityItemsAsCompleted(selectedOpportunityItemIds, username);
+                await SetOpportunityItemsAsCompletedAsync(selectedOpportunityItemIds, username);
             }
         }
 
-        private async Task CompleteRemainingItems(int opportunityId, string username)
+        private async Task CompleteRemainingItemsAsync(int opportunityId, string username)
         {
-            var remainingOpportunities = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+            var remainingOpportunities = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
                                                                                   && oi.IsSaved
                                                                                   && !oi.IsSelectedForReferral
                                                                                   && !oi.IsCompleted);
@@ -235,11 +235,11 @@ namespace Sfa.Tl.Matching.Application.Services
                 var provisionIds = provisionItems.Select(oi => oi.Id).ToList();
 
                 if (provisionIds.Count > 0)
-                    await SetOpportunityItemsAsCompleted(provisionIds, username);
+                    await SetOpportunityItemsAsCompletedAsync(provisionIds, username);
             }
         }
 
-        private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds, string username)
+        private async Task SetOpportunityItemsAsCompletedAsync(IEnumerable<int> opportunityItemIds, string username)
         {
             var itemsToBeCompleted = opportunityItemIds.Select(id => new OpportunityItemIsSelectedWithUsernameForCompleteDto
             {
@@ -249,20 +249,20 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
                 x => x.IsCompleted,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
 
-        private async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId, IEnumerable<int> itemIds)
+        private async Task<EmployerReferralDto> GetEmployerReferralsAsync(int opportunityId, IEnumerable<int> itemIds)
         {
-            return await _opportunityRepository.GetEmployerReferrals(opportunityId, itemIds);
+            return await _opportunityRepository.GetEmployerReferralsAsync(opportunityId, itemIds);
         }
 
-        private async Task<IList<OpportunityReferralDto>> GetOpportunityReferrals(int opportunityId, IEnumerable<int> itemIds)
+        private async Task<IList<OpportunityReferralDto>> GetOpportunityReferralsAsync(int opportunityId, IEnumerable<int> itemIds)
         {
-            return await _opportunityRepository.GetProviderOpportunities(opportunityId, itemIds);
+            return await _opportunityRepository.GetProviderOpportunitiesAsync(opportunityId, itemIds);
         }
 
         private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
@@ -272,7 +272,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 : "at least 1";
         }
 
-        private async Task SendEmail(EmailTemplateName template, int? opportunityId,
+        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId,
             string toAddress, string subject,
             IDictionary<string, string> tokens, string createdBy)
         {
@@ -281,18 +281,18 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            await _emailService.SendEmail(template.ToString(),
+            await _emailService.SendEmailAsync(template.ToString(),
                 toAddress,
                 tokens);
 
-            await _emailHistoryService.SaveEmailHistory(template.ToString(),
+            await _emailHistoryService.SaveEmailHistoryAsync(template.ToString(),
                 tokens,
                 opportunityId,
                 toAddress,
                 createdBy);
         }
 
-        private async Task UpdateBackgroundProcessHistory(
+        private async Task UpdateBackgroundProcessHistoryAsync(
             Func<int, Task<BackgroundProcessHistory>> data,
             int backgroundProcessHistoryId,
             int providerCount, BackgroundProcessHistoryStatus historyStatus,
@@ -306,7 +306,7 @@ namespace Sfa.Tl.Matching.Application.Services
             backgroundProcessHistory.ModifiedBy = userName;
             backgroundProcessHistory.ModifiedOn = _dateTimeProvider.UtcNow();
 
-            await _backgroundProcessHistoryRepository.UpdateWithSpecifedColumnsOnly(backgroundProcessHistory,
+            await _backgroundProcessHistoryRepository.UpdateWithSpecifedColumnsOnlyAsync(backgroundProcessHistory,
                 history => history.RecordCount,
                 history => history.Status,
                 history => history.StatusMessage,
@@ -314,13 +314,13 @@ namespace Sfa.Tl.Matching.Application.Services
                 history => history.ModifiedOn);
         }
 
-        private Func<int, Task<BackgroundProcessHistory>> GetBackgroundProcessHistoryData => BackgroundProcessHistoryData;
+        private Func<int, Task<BackgroundProcessHistory>> GetBackgroundProcessHistoryData => BackgroundProcessHistoryDataAsync;
 
-        private async Task<BackgroundProcessHistory> BackgroundProcessHistoryData(int backgroundProcessHistoryId)
+        private async Task<BackgroundProcessHistory> BackgroundProcessHistoryDataAsync(int backgroundProcessHistoryId)
         {
             var backgroundProcessHistory =
                 await _backgroundProcessHistoryRepository
-                    .GetSingleOrDefault(p => p.Id == backgroundProcessHistoryId);
+                    .GetSingleOrDefaultAsync(p => p.Id == backgroundProcessHistoryId);
 
             if (backgroundProcessHistory == null ||
                 backgroundProcessHistory.Status != BackgroundProcessHistoryStatus.Pending.ToString())

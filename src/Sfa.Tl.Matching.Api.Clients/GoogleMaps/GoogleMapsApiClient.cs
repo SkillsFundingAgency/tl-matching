@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleMaps
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<string> GetAddressDetails(string postcode)
+        public async Task<string> GetAddressDetailsAsync(string postcode)
         {
             if (string.IsNullOrWhiteSpace(_matchingConfiguration.GoogleMapsApiKey)) return null;
             

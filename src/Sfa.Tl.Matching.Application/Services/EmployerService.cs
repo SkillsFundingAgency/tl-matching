@@ -41,11 +41,11 @@ namespace Sfa.Tl.Matching.Application.Services
             _messageQueueService = messageQueueService;
         }
 
-        public async Task<bool> ValidateCompanyNameAndCrmId(Guid employerCrmId, string companyName)
+        public async Task<bool> ValidateCompanyNameAndCrmIdAsync(Guid employerCrmId, string companyName)
         {
             if (employerCrmId == Guid.Empty || string.IsNullOrEmpty(companyName)) return false;
 
-            var employer = await _employerRepository.GetSingleOrDefault(
+            var employer = await _employerRepository.GetSingleOrDefaultAsync(
                 e => e.CrmId == employerCrmId && companyName.ToLetterOrDigit() == e.CompanyNameSearch,
                 e => e.CrmId);
 
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public IEnumerable<EmployerSearchResultDto> Search(string companyName)
         {
             var searchResults = _employerRepository
-                .GetMany(e => EF.Functions.Like(e.CompanyNameSearch, $"%{companyName.ToLetterOrDigit()}%"))
+                .GetManyAsync(e => EF.Functions.Like(e.CompanyNameSearch, $"%{companyName.ToLetterOrDigit()}%"))
                 .OrderBy(e => e.CompanyName)
                 .Select(e => new EmployerSearchResultDto
                 {
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<FindEmployerViewModel> GetOpportunityEmployerAsync(int opportunityId, int opportunityItemId)
         {
-            return await _opportunityRepository.GetSingleOrDefault(
+            return await _opportunityRepository.GetSingleOrDefaultAsync(
                 o => o.Id == opportunityId,
                 o => new FindEmployerViewModel
                 {
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<EmployerDetailsViewModel> GetOpportunityEmployerDetailAsync(int opportunityId, int opportunityItemId)
         {
-            var employerCrmId = await _opportunityRepository.GetSingleOrDefault(
+            var employerCrmId = await _opportunityRepository.GetSingleOrDefaultAsync(
                 opportunity => opportunity.Id == opportunityId,
                 o => o.EmployerCrmId);
 
@@ -92,7 +92,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 throw new InvalidOperationException("Unable to Find any Employer Details for current Opportunity. Please go back to Find Employer Screen and select an employer");
 
             //1 first try getting from current Opportunity if its not null
-            var employerDetails = await _opportunityRepository.GetSingleOrDefault(
+            var employerDetails = await _opportunityRepository.GetSingleOrDefaultAsync(
                     o => o.Id == opportunityId &&
                          !string.IsNullOrEmpty(o.EmployerContact) &&
                          !string.IsNullOrEmpty(o.EmployerContactEmail) &&
@@ -113,7 +113,7 @@ namespace Sfa.Tl.Matching.Application.Services
             if (employerDetails != null) return employerDetails;
 
             //2 then try and find from any previous completed Opportunities using employerCrmId
-            employerDetails = await _opportunityRepository.GetFirstOrDefault(
+            employerDetails = await _opportunityRepository.GetFirstOrDefaultAsync(
                     o => o.EmployerCrmId == employerCrmId &&
                         !string.IsNullOrEmpty(o.EmployerContact) &&
                         !string.IsNullOrEmpty(o.EmployerContactEmail) &&
@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Application.Services
             if (employerDetails != null) return employerDetails;
 
             //3 Finally we cant find employer details in existing Opportunities so now try to load it from Employer Table 
-            return await _employerRepository.GetSingleOrDefault(
+            return await _employerRepository.GetSingleOrDefaultAsync(
                     e => e.CrmId == employerCrmId,
                     e => new EmployerDetailsViewModel
                     {
@@ -149,7 +149,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> GetInProgressEmployerOpportunityCountAsync(string username)
         {
-            var savedCount = await _opportunityRepository.Count(o => o.OpportunityItem.Any(oi => oi.IsSaved &&
+            var savedCount = await _opportunityRepository.CountAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved &&
                                                                                              !oi.IsCompleted)
                                                                  && o.CreatedBy == username);
 
@@ -158,7 +158,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<SavedEmployerOpportunityViewModel> GetSavedEmployerOpportunitiesAsync(string username)
         {
-            var employerOpportunities = await _opportunityRepository.GetMany(o => o.OpportunityItem.Any(oi => oi.IsSaved
+            var employerOpportunities = await _opportunityRepository.GetManyAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved
                                                                                                               && !oi.IsCompleted)
                                                                                   && o.CreatedBy == username)
                 .Select(eo => new EmployerOpportunityViewModel
@@ -176,15 +176,15 @@ namespace Sfa.Tl.Matching.Application.Services
             return viewModel;
         }
 
-        public async Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunity(int opportunityId, string username)
+        public async Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunityAsync(int opportunityId, string username)
         {
             var opportunityCount = _opportunityRepository.GetEmployerOpportunityCount(opportunityId);
-            var employerCount = _opportunityRepository.GetMany(o =>
+            var employerCount = _opportunityRepository.GetManyAsync(o =>
                 o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted)
                 && o.CreatedBy == username).ToList();
 
             var removeEmployerDto =
-                await _opportunityRepository.GetSingleOrDefault(op => op.Id == opportunityId,
+                await _opportunityRepository.GetSingleOrDefaultAsync(op => op.Id == opportunityId,
                     op => new RemoveEmployerDto
                     {
                         OpportunityCount = opportunityCount,
@@ -197,7 +197,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<string> GetEmployerOpportunityOwnerAsync(Guid employerCrmId)
         {
-            var opportunity = await _opportunityRepository.GetFirstOrDefault(
+            var opportunity = await _opportunityRepository.GetFirstOrDefaultAsync(
                 o => o.EmployerCrmId == employerCrmId
                      && o.OpportunityItem.Any(oi => oi.IsSaved &&
                                                     !oi.IsCompleted));
@@ -235,7 +235,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 if (!isAupaMissing) return -1;
             }
 
-            var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employerData.accountid.ToGuid());
+            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.accountid.ToGuid());
 
             if (isAupaMissing)
             {
@@ -249,11 +249,11 @@ namespace Sfa.Tl.Matching.Application.Services
             if (existingEmployer == null)
             {
                 var employer = _mapper.Map<Employer>(employerData);
-                return await _employerRepository.Create(employer);
+                return await _employerRepository.CreateAsync(employer);
             }
 
             existingEmployer = _mapper.Map(employerData, existingEmployer);
-            await _employerRepository.Update(existingEmployer);
+            await _employerRepository.UpdateAsync(existingEmployer);
 
             return 1;
         }
@@ -274,14 +274,14 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             if (employerData.parentcustomerid == null) return -1;
 
-            var existingEmployer = await _employerRepository.GetSingleOrDefault(emp => emp.CrmId == employerData.parentcustomerid.id.ToGuid());
+            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.parentcustomerid.id.ToGuid());
 
             if (existingEmployer == null) return -1;
 
             existingEmployer.PrimaryContact = employerData.fullname;
             existingEmployer.Phone = employerData.telephone1;
             existingEmployer.Email = employerData.emailaddress1;
-            await _employerRepository.Update(existingEmployer);
+            await _employerRepository.UpdateAsync(existingEmployer);
 
             return 1;
         }

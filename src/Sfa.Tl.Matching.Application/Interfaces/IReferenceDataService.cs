@@ -5,6 +5,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IReferenceDataService
     {
-        Task<int> SynchronizeProviderReference(DateTime lastUpdateDate);
+        Task<int> SynchronizeProviderReferenceAsync(DateTime lastUpdateDate);
     }
 }

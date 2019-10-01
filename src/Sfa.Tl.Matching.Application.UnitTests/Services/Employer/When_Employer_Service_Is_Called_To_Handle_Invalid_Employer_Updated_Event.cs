@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
+            _employerRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new Domain.Models.Employer());
 
             _messageQueueService = Substitute.For<IMessageQueueService>();
@@ -40,8 +40,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         [Fact]
         public void Then_The_Employer_Record_Should_NOT_Be_Created_OR_Updated()
         {
-            _employerRepository.DidNotReceive().Create(Arg.Any<Domain.Models.Employer>());
-            _employerRepository.DidNotReceive().Update(Arg.Any<Domain.Models.Employer>());
+            _employerRepository.DidNotReceive().CreateAsync(Arg.Any<Domain.Models.Employer>());
+            _employerRepository.DidNotReceive().UpdateAsync(Arg.Any<Domain.Models.Employer>());
 
             _messageQueueService.Received(1)
                 .PushEmployerAupaBlankEmailMessageAsync(Arg.Any<SendEmployerAupaBlankEmail>());

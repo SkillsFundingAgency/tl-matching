@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
             };
 
             var employerFeedback = new EmployerFeedback();
-            employerFeedback.ManualSendEmployerFeedbackEmails(
+            employerFeedback.ManualSendEmployerFeedbackEmailsAsync(
                 request,
                 new ExecutionContext(),
                 new NullLogger<EmployerFeedback>(),

@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
             _emailHistoryRepository = Substitute.For<IRepository<Domain.Models.EmailHistory>>();
             _emailTemplateRepository = Substitute.For<IRepository<EmailTemplate>>();
 
-            _emailTemplateRepository.GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>()).Returns(emailTemplate);
+            _emailTemplateRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>()).Returns(emailTemplate);
 
             var emailHistoryService = new EmailHistoryService(_emailHistoryRepository, _emailTemplateRepository, mapper, logger);
 
@@ -46,14 +46,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
             };
             
             emailHistoryService
-                .SaveEmailHistory("TemplateName", tokens, 2, toAddress, createdBy)
+                .SaveEmailHistoryAsync("TemplateName", tokens, 2, toAddress, createdBy)
                 .GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_EmailTemplateRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _emailTemplateRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
+            _emailTemplateRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
         {
             _emailHistoryRepository
                 .Received(1)
-                .Create(Arg.Any<Domain.Models.EmailHistory>());
+                .CreateAsync(Arg.Any<Domain.Models.EmailHistory>());
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
         {
             _emailHistoryRepository
                 .Received(1)
-                .Create(Arg.Is<Domain.Models.EmailHistory>(email =>
+                .CreateAsync(Arg.Is<Domain.Models.EmailHistory>(email =>
                     email.OpportunityId == 2));
         }
 
@@ -78,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
         {
             _emailHistoryRepository
                 .Received(1)
-                .Create(Arg.Is<Domain.Models.EmailHistory>(email =>
+                .CreateAsync(Arg.Is<Domain.Models.EmailHistory>(email =>
                     email.EmailTemplateId == 1));
         }
 
@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
         {
             _emailHistoryRepository
                 .Received(1)
-                .Create(Arg.Is<Domain.Models.EmailHistory>(email =>
+                .CreateAsync(Arg.Is<Domain.Models.EmailHistory>(email =>
                     email.SentTo == "test@test.com"));
         }
 
@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
         {
             _emailHistoryRepository
                 .Received(1)
-                .Create(Arg.Is<Domain.Models.EmailHistory>(email =>
+                .CreateAsync(Arg.Is<Domain.Models.EmailHistory>(email =>
                     email.CreatedBy == "CreatedBy"));
         }
     }

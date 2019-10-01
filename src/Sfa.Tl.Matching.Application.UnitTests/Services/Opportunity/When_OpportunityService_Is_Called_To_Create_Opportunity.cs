@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
-            _opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
+            _opportunityRepository.CreateAsync(Arg.Any<Domain.Models.Opportunity>())
                 .Returns(OpportunityId);
 
             var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, 
@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityRepository
                 .Received(1)
-                .Create(Arg.Is<Domain.Models.Opportunity>(opportunity =>
+                .CreateAsync(Arg.Is<Domain.Models.Opportunity>(opportunity =>
                     opportunity.EmployerCrmId == new Guid("11111111-1111-1111-1111-111111111111") && 
                     opportunity.EmployerContact == "Employer Contact" &&
                     opportunity.EmployerContactEmail == "employer.contact@employer.co.uk" &&

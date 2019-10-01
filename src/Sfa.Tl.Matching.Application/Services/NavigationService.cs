@@ -21,13 +21,13 @@ namespace Sfa.Tl.Matching.Application.Services
             _userCacheRepository = userCacheRepository;
         }
 
-        public async Task AddCurrentUrl(string path, string username)
+        public async Task AddCurrentUrlAsync(string path, string username)
         {
             try
             {
                 if (!ExcludedUrls.ExcludedList.Any(path.Contains))
                 {
-                    await AddUrlToBackLinkHistory(username, path);
+                    await AddUrlToBackLinkHistoryAsync(username, path);
                 }
             }
             catch (Exception exception)
@@ -36,9 +36,9 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        public async Task<string> GetBackLink(string username)
+        public async Task<string> GetBackLinkAsync(string username)
         {
-            var (data, userUrlsList) = await GetBackLinkData(username);
+            var (data, userUrlsList) = await GetBackLinkDataAsync(username);
 
             var prevUrl = GetNext(userUrlsList.Select(x => x.Url), userUrlsList.FirstOrDefault()?.Url);
 
@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             data.Value = userUrlsList;
 
-            await CreateOrUpdate(data, new UserCacheDto
+            await CreateOrUpdateAsync(data, new UserCacheDto
             {
                 Key = CacheTypes.BackLink,
                 Value = userUrlsList
@@ -55,20 +55,20 @@ namespace Sfa.Tl.Matching.Application.Services
             return prevUrl;
         }
 
-        private async Task AddUrlToBackLinkHistory(string username, string currentUrl)
+        private async Task AddUrlToBackLinkHistoryAsync(string username, string currentUrl)
         {
-            var (userCache, urlList) = await GetBackLinkData(username);
+            var (userCache, urlList) = await GetBackLinkDataAsync(username);
 
             if (urlList.FirstOrDefault()?.Url == currentUrl) return;
 
-            await CreateBackLinkData(userCache, urlList, currentUrl);
+            await CreateBackLinkDataAsync(userCache, urlList, currentUrl);
 
             if (currentUrl.Contains("Start"))
-                await DeleteOrphanedUrls(userCache);
+                await DeleteOrphanedUrlsAsync(userCache);
 
         }
 
-        private async Task CreateBackLinkData(UserCache data, List<CurrentUrl> urlList, string currentUrl)
+        private async Task CreateBackLinkDataAsync(UserCache data, List<CurrentUrl> urlList, string currentUrl)
         {
             urlList.Add(new CurrentUrl
             {
@@ -76,32 +76,32 @@ namespace Sfa.Tl.Matching.Application.Services
                 Url = currentUrl
             });
 
-            await CreateOrUpdate(data, new UserCacheDto
+            await CreateOrUpdateAsync(data, new UserCacheDto
             {
                 Key = CacheTypes.BackLink,
                 Value = urlList
             });
         }
 
-        private async Task CreateOrUpdate(UserCache data, UserCacheDto dto)
+        private async Task CreateOrUpdateAsync(UserCache data, UserCacheDto dto)
         {
             var userCacheItem = _mapper.Map<UserCache>(dto);
 
             if (data == null)
             {
-                await _userCacheRepository.Create(userCacheItem);
+                await _userCacheRepository.CreateAsync(userCacheItem);
             }
             else
             {
                 userCacheItem.Id = data.Id;
-                await _userCacheRepository.UpdateWithSpecifedColumnsOnly(userCacheItem,
+                await _userCacheRepository.UpdateWithSpecifedColumnsOnlyAsync(userCacheItem,
                     cache => cache.UrlHistory,
                     cache => cache.ModifiedBy,
                     cache => cache.ModifiedOn);
             }
         }
 
-        private async Task DeleteOrphanedUrls(UserCache data)
+        private async Task DeleteOrphanedUrlsAsync(UserCache data)
         {
             var userUrlsList = UserBackLinks(data);
 
@@ -109,7 +109,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             userUrlsList.RemoveRange(0, userUrlsList.Count - 1);
 
-            await CreateOrUpdate(data, new UserCacheDto
+            await CreateOrUpdateAsync(data, new UserCacheDto
             {
                 Key = CacheTypes.BackLink,
                 Value = userUrlsList
@@ -119,9 +119,9 @@ namespace Sfa.Tl.Matching.Application.Services
         private static Func<List<CurrentUrl>, int> GetCounter => items => items.Count == 0 ? 1 : items.Max(url => url.Id) + 1;
         private static Func<UserCache, List<CurrentUrl>> UserBackLinks => data => data != null ? data.Value.OrderByDescending(x => x.Id).ToList() : new List<CurrentUrl>();
         private static T GetNext<T>(IEnumerable<T> list, T current) => list.SkipWhile(x => !x.Equals(current)).Skip(1).First();
-        private async Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkData(string username)
+        private async Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkDataAsync(string username)
         {
-            var data = await _userCacheRepository.GetFirstOrDefault(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink.ToString());
+            var data = await _userCacheRepository.GetFirstOrDefaultAsync(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink.ToString());
 
             return (data, UserBackLinks(data));
         }

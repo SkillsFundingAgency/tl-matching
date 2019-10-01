@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Data.Interfaces
 {
     public interface IBulkInsertRepository<T> where T : BaseEntity, new()
     {
-        Task BulkInsert(IList<T> entities);
-        Task<int> MergeFromStaging();
+        Task BulkInsertAsync(IList<T> entities);
+        Task<int> MergeFromStagingAsync();
     }
 }

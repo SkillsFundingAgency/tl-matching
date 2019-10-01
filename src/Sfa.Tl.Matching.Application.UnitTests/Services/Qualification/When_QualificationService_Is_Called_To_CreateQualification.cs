@@ -43,15 +43,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
 
             var qualificationRepository = Substitute.For<IRepository<Domain.Models.Qualification>>();
             qualificationRepository
-                .Create(Arg.Do<Domain.Models.Qualification>(
+                .CreateAsync(Arg.Do<Domain.Models.Qualification>(
                 q => q.Id = 1))
                 .Returns(1);
-            qualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
+            qualificationRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Qualification, bool>>>())
                 .Returns(new Domain.Models.Qualification());
 
             _qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
             _qualificationRouteMappingRepository
-                .CreateMany(Arg.Do<IList<QualificationRouteMapping>>(
+                .CreateManyAsync(Arg.Do<IList<QualificationRouteMapping>>(
                         qrpm => qrpm.First().Qualification.Id = 1))
                 .Returns(1);
 
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         {
             _qualificationRouteMappingRepository
                 .Received(1)
-                .CreateMany(Arg.Any<IList<QualificationRouteMapping>>());
+                .CreateManyAsync(Arg.Any<IList<QualificationRouteMapping>>());
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         {
             _qualificationRouteMappingRepository
                 .Received(1)
-                .CreateMany(Arg.Is<IList<QualificationRouteMapping>>(
+                .CreateManyAsync(Arg.Is<IList<QualificationRouteMapping>>(
                     qrpm => qrpm.Count == 1 &&
                             qrpm.First().Qualification.LarsId == "10042982" &&
                             qrpm.First().Qualification.ShortTitle == "short title" &&

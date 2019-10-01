@@ -82,7 +82,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             await sut.SaveProviderDetail(viewModel);
 
             //Assert
-            var expectedResult = await repo.GetSingleOrDefault(x => x.Id == provider.Id);
+            var expectedResult = await repo.GetSingleOrDefaultAsync(x => x.Id == provider.Id);
 
             provider.IsTLevelProvider.Should().BeFalse();
             expectedResult.IsTLevelProvider.Should().BeTrue();

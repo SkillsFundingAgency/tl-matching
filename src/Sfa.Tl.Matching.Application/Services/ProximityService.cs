@@ -25,24 +25,24 @@ namespace Sfa.Tl.Matching.Application.Services
             _googleDistanceMatrixApiClient = googleDistanceMatrixApiClient;
         }
 
-        public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto)
+        public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderSearchParametersDto dto)
         {
             var geoLocationData = await _locationApiClient.GetGeoLocationDataAsync(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 
-            var searchResults = await _searchProvider.SearchProvidersByPostcodeProximity(dto);
+            var searchResults = await _searchProvider.SearchProvidersByPostcodeProximityAsync(dto);
 
             //Call google search here
             if (searchResults != null && searchResults.Any())
             {
-                return await FilterByTravelTime(decimal.Parse(dto.Latitude), decimal.Parse(dto.Longitude), searchResults);
+                return await FilterByTravelTimeAsync(decimal.Parse(dto.Latitude), decimal.Parse(dto.Longitude), searchResults);
             }
 
             return searchResults ?? new List<SearchResultsViewModelItem>();
         }
 
-        private async Task<IList<SearchResultsViewModelItem>> FilterByTravelTime(decimal startPointLatitude, decimal startPointLongitude, IList<SearchResultsViewModelItem> searchResults)
+        private async Task<IList<SearchResultsViewModelItem>> FilterByTravelTimeAsync(decimal startPointLatitude, decimal startPointLongitude, IList<SearchResultsViewModelItem> searchResults)
         {
             var destinations = searchResults
                 //.Where(v => v.Latitude != 0 && v.Longitude != 0)
@@ -91,20 +91,20 @@ namespace Sfa.Tl.Matching.Application.Services
             return results;
         }
 
-        public async Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximity(ProviderSearchParametersDto dto)
+        public async Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto)
         {
             var geoLocationData = await _locationApiClient.GetGeoLocationDataAsync(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 
-            var searchResults = await _searchProvider.SearchProvidersForOtherRoutesByPostcodeProximity(dto);
+            var searchResults = await _searchProvider.SearchProvidersForOtherRoutesByPostcodeProximityAsync(dto);
 
             var results = searchResults.Any() ? searchResults : new List<SearchResultsByRouteViewModelItem>();
 
             return results;
         }
 
-        public async Task<(bool, string)> IsValidPostcode(string postcode)
+        public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)
         {
             return await _locationApiClient.IsValidPostcodeAsync(postcode, true);
         }

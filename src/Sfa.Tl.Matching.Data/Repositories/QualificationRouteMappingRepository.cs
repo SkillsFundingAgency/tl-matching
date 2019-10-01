@@ -16,12 +16,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public override async Task<int> CreateMany(IList<QualificationRouteMapping> entities)
+        public override async Task<int> CreateManyAsync(IList<QualificationRouteMapping> entities)
         {
             var mappingList = entities.ToList();
 
             //First Save All Mapping for Existing Qualification
-            var recordCount = await base.CreateMany(mappingList.Where(mapping => mapping.QualificationId > 0).ToList());
+            var recordCount = await base.CreateManyAsync(mappingList.Where(mapping => mapping.QualificationId > 0).ToList());
 
             var list = mappingList.Where(mapping => mapping.Qualification != null)
                                   .GroupBy(mapping => mapping.Qualification, new QualificationEqualityComparer()).ToList();

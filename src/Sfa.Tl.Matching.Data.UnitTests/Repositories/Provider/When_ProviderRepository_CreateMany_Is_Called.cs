@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider
                 var data = new ValidProviderListBuilder().Build();
 
                 var repository = new GenericRepository<Domain.Models.Provider>(logger, dbContext);
-                _result = repository.CreateMany(data)
+                _result = repository.CreateManyAsync(data)
                     .GetAwaiter().GetResult();
             }
         }

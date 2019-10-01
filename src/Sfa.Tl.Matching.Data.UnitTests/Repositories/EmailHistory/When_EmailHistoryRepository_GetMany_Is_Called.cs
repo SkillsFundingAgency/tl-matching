@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory
                 dbContext.SaveChanges();
 
                 var repository = new GenericRepository<Domain.Models.EmailHistory>(logger, dbContext);
-                _result = repository.GetMany().ToList();
+                _result = repository.GetManyAsync().ToList();
             }
         }
 

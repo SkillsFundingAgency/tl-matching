@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
                 CreatedBy = "CreatedBy"
             };
 
-            _opportunityRepository.GetFirstOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>())
+            _opportunityRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>())
                 .Returns(opportunity);
 
             var employerService = new EmployerService(employerRepository, _opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>(),
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         {
             _opportunityRepository
                 .Received(1)
-                .GetFirstOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
+                .GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
         }
 
         [Fact]

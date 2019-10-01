@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Functions
     public class ReferralEmails
     {
         [FunctionName("SendEmployerReferralEmails")]
-        public async Task SendEmployerReferralEmails([QueueTrigger(QueueName.EmployerReferralEmailQueue, Connection = "BlobStorageConnectionString")]SendEmployerReferralEmail employerReferralEmailData, 
+        public async Task SendEmployerReferralEmailsAsync([QueueTrigger(QueueName.EmployerReferralEmailQueue, Connection = "BlobStorageConnectionString")]SendEmployerReferralEmail employerReferralEmailData, 
             ExecutionContext context,
             ILogger logger,
             [Inject] IReferralEmailService referralEmailService,
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = context.FunctionName,
@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Functions
         }
 
         [FunctionName("SendProviderReferralEmails")]
-        public async Task SendProviderReferralEmails([QueueTrigger(QueueName.ProviderReferralEmailQueue, Connection = "BlobStorageConnectionString")]SendProviderReferralEmail providerReferralEmailData,
+        public async Task SendProviderReferralEmailsAsync([QueueTrigger(QueueName.ProviderReferralEmailQueue, Connection = "BlobStorageConnectionString")]SendProviderReferralEmail providerReferralEmailData,
             ExecutionContext context,
             ILogger logger,
             [Inject] IReferralEmailService referralEmailService,
@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = context.FunctionName,

@@ -20,9 +20,9 @@ namespace Sfa.Tl.Matching.Application.Services
             _serviceStatusHistoryRepository = serviceStatusHistoryRepository;
         }
 
-        public async Task<ServiceStatusHistoryViewModel> GetLatestServiceStatusHistory()
+        public async Task<ServiceStatusHistoryViewModel> GetLatestServiceStatusHistoryAsync()
         {
-            var serviceStatusHistory = await _serviceStatusHistoryRepository.GetMany(ssh => true)
+            var serviceStatusHistory = await _serviceStatusHistoryRepository.GetManyAsync(ssh => true)
                 .OrderByDescending(ssh => ssh.Id)
                 .Select(ssh => new { ssh.Id, ssh.IsOnline })
                 .FirstOrDefaultAsync();
@@ -38,12 +38,12 @@ namespace Sfa.Tl.Matching.Application.Services
             return viewModel;
         }
 
-        public async Task<int> SaveServiceStatusHistory(ServiceStatusHistoryViewModel viewModel)
+        public async Task<int> SaveServiceStatusHistoryAsync(ServiceStatusHistoryViewModel viewModel)
         {
             viewModel.IsOnline = !viewModel.IsOnline;
             var serviceStatusHistory = _mapper.Map<ServiceStatusHistoryViewModel, ServiceStatusHistory>(viewModel);
 
-            return await _serviceStatusHistoryRepository.Create(serviceStatusHistory);
+            return await _serviceStatusHistoryRepository.CreateAsync(serviceStatusHistory);
         }
     }
 }

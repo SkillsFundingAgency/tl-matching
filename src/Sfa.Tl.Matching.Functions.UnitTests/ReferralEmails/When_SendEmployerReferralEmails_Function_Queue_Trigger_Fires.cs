@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ReferralEmails
             var employerReferralEmailFunctions = new Functions.ReferralEmails();
 
             //Act
-            await employerReferralEmailFunctions.SendEmployerReferralEmails(data, context, logger, referralEmailService,
+            await employerReferralEmailFunctions.SendEmployerReferralEmailsAsync(data, context, logger, referralEmailService,
                 functionLogRepo);
 
             //Assert

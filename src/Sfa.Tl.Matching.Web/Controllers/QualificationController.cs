@@ -123,7 +123,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("search-short-title", Name = "SearchShortTitle")]
         public async Task<IActionResult> SearchShortTitle(string query)
         {
-            var shortTitles = await _qualificationService.SearchShortTitle(query);
+            var shortTitles = await _qualificationService.SearchShortTitleAsync(query);
 
             return Ok(shortTitles);
         }

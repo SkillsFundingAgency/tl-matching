@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
             };
 
             var providerFeedback = new Functions.ProviderFeedback();
-            providerFeedback.ManualSendProviderFeedbackEmails(
+            providerFeedback.ManualSendProviderFeedbackEmailsAsync(
                 request,
                 new ExecutionContext(),
                 new NullLogger<Functions.ProviderFeedback>(),

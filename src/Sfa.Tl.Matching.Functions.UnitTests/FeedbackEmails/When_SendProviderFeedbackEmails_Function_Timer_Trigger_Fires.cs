@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
             _providerFeedbackService = Substitute.For<IProviderFeedbackService>();
 
             var providerFeedback = new Functions.ProviderFeedback();
-            providerFeedback.SendProviderFeedbackEmails(
+            providerFeedback.SendProviderFeedbackEmailsAsync(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
                 new NullLogger<Functions.ProviderFeedback>(),
@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.FeedbackEmails
         {
             _functionLogRepository
                 .DidNotReceiveWithAnyArgs()
-                .Create(Arg.Any<FunctionLog>());
+                .CreateAsync(Arg.Any<FunctionLog>());
         }
     }
 }

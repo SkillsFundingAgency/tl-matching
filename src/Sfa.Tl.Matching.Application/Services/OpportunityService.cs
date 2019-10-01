@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.Services
             dto.Id = 0;
             var opportunity = _mapper.Map<Opportunity>(dto);
 
-            var opportunityId = await _opportunityRepository.Create(opportunity);
+            var opportunityId = await _opportunityRepository.CreateAsync(opportunity);
 
             return opportunityId;
         }
@@ -63,16 +63,16 @@ namespace Sfa.Tl.Matching.Application.Services
             dto.OpportunityItemId = 0;
             var opportunityItem = _mapper.Map<OpportunityItem>(dto);
 
-            opportunityItem.Town = await _googleMapApiClient.GetAddressDetails(opportunityItem.Postcode);
+            opportunityItem.Town = await _googleMapApiClient.GetAddressDetailsAsync(opportunityItem.Postcode);
 
-            var opportunityItemId = await _opportunityItemRepository.Create(opportunityItem);
+            var opportunityItemId = await _opportunityItemRepository.CreateAsync(opportunityItem);
 
             return opportunityItemId;
         }
 
-        public async Task<OpportunityDto> GetOpportunity(int opportunityId)
+        public async Task<OpportunityDto> GetOpportunityAsync(int opportunityId)
         {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == opportunityId,
+            var opportunity = await _opportunityRepository.GetSingleOrDefaultAsync(o => o.Id == opportunityId,
                 navigationPropertyPath: o => o.Employer);
 
             var dto = _mapper.Map<OpportunityDto>(opportunity);
@@ -80,9 +80,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId)
+        public async Task<OpportunityItemDto> GetOpportunityItemAsync(int opportunityItemId)
         {
-            var opportunityItem = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == opportunityItemId);
+            var opportunityItem = await _opportunityItemRepository.GetSingleOrDefaultAsync(o => o.Id == opportunityItemId);
 
             var dto = _mapper.Map<OpportunityItemDto>(opportunityItem);
 
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<PlacementInformationSaveDto> GetPlacementInformationAsync(int opportunityItemId)
         {
-            var placementInformation = await _opportunityItemRepository.GetSingleOrDefault(
+            var placementInformation = await _opportunityItemRepository.GetSingleOrDefaultAsync(
                 o => o.Id == opportunityItemId,
                 oi => oi.ProvisionGap,
                 (Expression<Func<OpportunityItem, object>>)(oi => oi.Opportunity), oi => oi.Opportunity.Employer);
@@ -101,9 +101,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public async Task<CheckAnswersViewModel> GetCheckAnswers(int opportunityItemId)
+        public async Task<CheckAnswersViewModel> GetCheckAnswersAsync(int opportunityItemId)
         {
-            var dto = await _opportunityItemRepository.GetSingleOrDefault(oi => oi.Id == opportunityItemId,
+            var dto = await _opportunityItemRepository.GetSingleOrDefaultAsync(oi => oi.Id == opportunityItemId,
                 oi => new CheckAnswersViewModel
                 {
                     OpportunityItemId = oi.Id,
@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public List<ReferralDto> GetReferrals(int opportunityItemId)
         {
-            var referrals = _referralRepository.GetMany(r => r.OpportunityItemId == opportunityItemId)
+            var referrals = _referralRepository.GetManyAsync(r => r.OpportunityItemId == opportunityItemId)
                 .OrderBy(r => r.DistanceFromEmployer)
                 .Select(r => new ReferralDto
                 {
@@ -149,9 +149,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return referrals;
         }
 
-        public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId)
+        public async Task<OpportunityBasketViewModel> GetOpportunityBasketAsync(int opportunityId)
         {
-            var viewModel = await _opportunityRepository.GetOpportunityBasket(opportunityId);
+            var viewModel = await _opportunityRepository.GetOpportunityBasketAsync(opportunityId);
 
             if (viewModel == null) return new OpportunityBasketViewModel();
 
@@ -162,7 +162,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<ConfirmDeleteOpportunityItemViewModel> GetConfirmDeleteOpportunityItemAsync(int opportunityItemId)
         {
-            return await _opportunityItemRepository.GetSingleOrDefault(
+            return await _opportunityItemRepository.GetSingleOrDefaultAsync(
                  oi => oi.Id == opportunityItemId,
                  oi => new ConfirmDeleteOpportunityItemViewModel
                  {
@@ -180,7 +180,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<bool> IsReferralOpportunityItemAsync(int opportunityItemId)
         {
-            return await _referralRepository.GetMany(o => o.OpportunityItemId == opportunityItemId).AnyAsync();
+            return await _referralRepository.GetManyAsync(o => o.OpportunityItemId == opportunityItemId).AnyAsync();
         }
 
         public async Task<bool> IsNewReferralAsync(int opportunityItemId)
@@ -204,20 +204,20 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> GetSavedOpportunityItemCountAsync(int opportunityId)
         {
-            return await _opportunityItemRepository.Count(o => o.OpportunityId == opportunityId && o.IsSaved);
+            return await _opportunityItemRepository.CountAsync(o => o.OpportunityId == opportunityId && o.IsSaved);
         }
 
         public async Task<int> GetReferredOpportunityItemCountAsync(int opportunityId)
         {
-            return await _opportunityItemRepository.Count(o => o.OpportunityId == opportunityId
+            return await _opportunityItemRepository.CountAsync(o => o.OpportunityId == opportunityId
                                                                && o.IsSaved
                                                                && o.IsSelectedForReferral
                                                                && !o.IsCompleted);
         }
 
-        public async Task UpdateReferrals(OpportunityItemDto dto)
+        public async Task UpdateReferralsAsync(OpportunityItemDto dto)
         {
-            var existingReferrals = _referralRepository.GetMany(r => r.OpportunityItemId == dto.OpportunityItemId)
+            var existingReferrals = _referralRepository.GetManyAsync(r => r.OpportunityItemId == dto.OpportunityItemId)
                 .ToList();
 
             var newReferrals = _mapper.Map<List<Referral>>(dto.Referral);
@@ -232,52 +232,52 @@ namespace Sfa.Tl.Matching.Application.Services
             Referral Find(Referral referral) => existingReferrals.First(r => r.Id == referral.Id);
 
             var deleteReferrals = toBeDeleted.Select(Find).ToList();
-            await _referralRepository.DeleteMany(deleteReferrals);
+            await _referralRepository.DeleteManyAsync(deleteReferrals);
 
-            await _referralRepository.CreateMany(toBeAdded);
+            await _referralRepository.CreateManyAsync(toBeAdded);
 
             var updateReferrals = same.Select(Find).ToList();
-            await _referralRepository.UpdateMany(updateReferrals);
+            await _referralRepository.UpdateManyAsync(updateReferrals);
         }
 
-        public async Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityDto
+        public async Task UpdateOpportunityAsync<T>(T dto) where T : BaseOpportunityDto
         {
-            var trackedEntity = await _opportunityRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityId);
+            var trackedEntity = await _opportunityRepository.GetSingleOrDefaultAsync(o => o.Id == dto.OpportunityId);
 
             trackedEntity = _mapper.Map(dto, trackedEntity);
 
-            await _opportunityRepository.Update(trackedEntity);
+            await _opportunityRepository.UpdateAsync(trackedEntity);
         }
 
         public async Task UpdateOpportunityItemAsync<T>(T dto) where T : BaseOpportunityDto
         {
-            var trackedEntity = await _opportunityItemRepository.GetSingleOrDefault(o => o.Id == dto.OpportunityItemId);
+            var trackedEntity = await _opportunityItemRepository.GetSingleOrDefaultAsync(o => o.Id == dto.OpportunityItemId);
             trackedEntity = _mapper.Map(dto, trackedEntity);
 
-            await _opportunityItemRepository.Update(trackedEntity);
+            await _opportunityItemRepository.UpdateAsync(trackedEntity);
         }
 
         public async Task UpdateProvisionGapAsync(PlacementInformationSaveDto dto)
         {
-            var provisionGap = await _provisionGapRepository.GetSingleOrDefault(p => p.OpportunityItemId == dto.OpportunityItemId);
+            var provisionGap = await _provisionGapRepository.GetSingleOrDefaultAsync(p => p.OpportunityItemId == dto.OpportunityItemId);
 
             if (provisionGap != null)
             {
                 provisionGap = _mapper.Map(dto, provisionGap);
-                await _provisionGapRepository.Update(provisionGap);
+                await _provisionGapRepository.UpdateAsync(provisionGap);
             }
         }
 
         public async Task DeleteOpportunityItemAsync(int opportunityId, int opportunityItemId)
         {
-            var referralItems = _referralRepository.GetMany(referral => referral.OpportunityItemId == opportunityItemId);
-            var provisionGaps = _provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opportunityItemId);
+            var referralItems = _referralRepository.GetManyAsync(referral => referral.OpportunityItemId == opportunityItemId);
+            var provisionGaps = _provisionGapRepository.GetManyAsync(gap => gap.OpportunityItemId == opportunityItemId);
 
-            await _referralRepository.DeleteMany(referralItems.ToList());
-            await _provisionGapRepository.DeleteMany(provisionGaps.ToList());
-            await _opportunityItemRepository.Delete(opportunityItemId);
+            await _referralRepository.DeleteManyAsync(referralItems.ToList());
+            await _provisionGapRepository.DeleteManyAsync(provisionGaps.ToList());
+            await _opportunityItemRepository.DeleteAsync(opportunityItemId);
 
-            var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId);
+            var opportunityItems = _opportunityItemRepository.GetManyAsync(item => item.OpportunityId == opportunityId);
             if (!opportunityItems.Any(item => item.IsSaved))
             {
                 var items = opportunityItems
@@ -286,51 +286,51 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 foreach (var opitem in items)
                 {
-                    await _referralRepository.DeleteMany(_referralRepository.GetMany(rf => rf.OpportunityItemId == opitem.Id).ToList());
-                    await _provisionGapRepository.DeleteMany(_provisionGapRepository.GetMany(gap => gap.OpportunityItemId == opitem.Id).ToList());
-                    await _opportunityItemRepository.Delete(opitem);
+                    await _referralRepository.DeleteManyAsync(_referralRepository.GetManyAsync(rf => rf.OpportunityItemId == opitem.Id).ToList());
+                    await _provisionGapRepository.DeleteManyAsync(_provisionGapRepository.GetManyAsync(gap => gap.OpportunityItemId == opitem.Id).ToList());
+                    await _opportunityItemRepository.DeleteAsync(opitem);
                 }
 
-                await _opportunityRepository.Delete(opportunityId);
+                await _opportunityRepository.DeleteAsync(opportunityId);
             }
         }
 
         public async Task DeleteEmployerOpportunityItemAsync(int opportunityId)
         {
-            var opportunity = await _opportunityRepository.GetFirstOrDefault(opp => opp.Id == opportunityId);
+            var opportunity = await _opportunityRepository.GetFirstOrDefaultAsync(opp => opp.Id == opportunityId);
 
             if (opportunity == null) return;
 
-            await DeleteOpportunityItems(opportunityId, true);
-            await DeleteOpportunityItems(opportunityId, false);
+            await DeleteOpportunityItemsAsync(opportunityId, true);
+            await DeleteOpportunityItemsAsync(opportunityId, false);
 
-            var completedOpportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId && item.IsSaved && item.IsCompleted);
+            var completedOpportunityItems = _opportunityItemRepository.GetManyAsync(item => item.OpportunityId == opportunityId && item.IsSaved && item.IsCompleted);
 
             if (!completedOpportunityItems.Any())
             {
-                await _opportunityRepository.Delete(opportunity);
+                await _opportunityRepository.DeleteAsync(opportunity);
             }
         }
 
-        private async Task DeleteOpportunityItems(int opportunityId, bool isSaved)
+        private async Task DeleteOpportunityItemsAsync(int opportunityId, bool isSaved)
         {
-            var opportunityItems = _opportunityItemRepository.GetMany(item => item.OpportunityId == opportunityId && item.IsSaved == isSaved && !item.IsCompleted);
+            var opportunityItems = _opportunityItemRepository.GetManyAsync(item => item.OpportunityId == opportunityId && item.IsSaved == isSaved && !item.IsCompleted);
 
             foreach (var opportunityItem in opportunityItems)
             {
-                await _referralRepository.DeleteMany(_referralRepository
-                    .GetMany(rf => rf.OpportunityItemId == opportunityItem.Id).ToList());
+                await _referralRepository.DeleteManyAsync(_referralRepository
+                    .GetManyAsync(rf => rf.OpportunityItemId == opportunityItem.Id).ToList());
 
-                await _provisionGapRepository.DeleteMany(_provisionGapRepository
-                    .GetMany(gap => gap.OpportunityItemId == opportunityItem.Id).ToList());
+                await _provisionGapRepository.DeleteManyAsync(_provisionGapRepository
+                    .GetManyAsync(gap => gap.OpportunityItemId == opportunityItem.Id).ToList());
 
-                await _opportunityItemRepository.Delete(opportunityItem);
+                await _opportunityItemRepository.DeleteAsync(opportunityItem);
             }
         }
 
         public async Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId)
         {
-            var opportunityItemsToBeReset = _opportunityItemRepository.GetMany(
+            var opportunityItemsToBeReset = _opportunityItemRepository.GetManyAsync(
                         op => op.OpportunityId == opportunityId
                               && op.IsSelectedForReferral
                               && !op.IsCompleted)
@@ -343,13 +343,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var opportunityItemsToBeUpdated = _mapper.Map<List<OpportunityItem>>(opportunityItemsToBeReset);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(opportunityItemsToBeUpdated,
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(opportunityItemsToBeUpdated,
                 x => x.IsSelectedForReferral,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
 
-        public async Task ContinueWithOpportunities(ContinueOpportunityViewModel viewModel)
+        public async Task ContinueWithOpportunitiesAsync(ContinueOpportunityViewModel viewModel)
         {
             var allProvisionGaps =
                 viewModel.SelectedOpportunity.All(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString());
@@ -358,7 +358,7 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 var ids = viewModel.SelectedOpportunity.Select(oi => oi.Id);
 
-                await SetOpportunityItemsAsCompleted(ids);
+                await SetOpportunityItemsAsCompletedAsync(ids);
                 return;
             }
 
@@ -366,12 +366,12 @@ namespace Sfa.Tl.Matching.Application.Services
                 .Select(oi => oi.Id).ToList();
 
             if (referralIds.Any())
-                await SetOpportunityItemsAsReferral(referralIds);
+                await SetOpportunityItemsAsReferralAsync(referralIds);
         }
 
         public async Task<string> GetCompanyNameWithAkaAsync(int? opportunityId)
         {
-            var opportunity = await _opportunityRepository.GetSingleOrDefault(
+            var opportunity = await _opportunityRepository.GetSingleOrDefaultAsync(
                 o => o.Id == opportunityId,
                 (Expression<Func<Opportunity, object>>)(o => o.Employer));
 
@@ -401,14 +401,14 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task DeleteReferralAsync(int referralId)
         {
-            var referral = await _referralRepository.GetFirstOrDefault(r => r.Id == referralId);
+            var referral = await _referralRepository.GetFirstOrDefaultAsync(r => r.Id == referralId);
 
             if (referral == null) return;
 
-            await _referralRepository.Delete(referral);
+            await _referralRepository.DeleteAsync(referral);
         }
 
-        private async Task SetOpportunityItemsAsCompleted(IEnumerable<int> opportunityItemIds)
+        private async Task SetOpportunityItemsAsCompletedAsync(IEnumerable<int> opportunityItemIds)
         {
             var itemsToBeCompleted = opportunityItemIds.Select(id => new OpportunityItemIsSelectedForCompleteDto
             {
@@ -417,13 +417,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
                 x => x.IsCompleted,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
         }
 
-        private async Task SetOpportunityItemsAsReferral(IEnumerable<int> opportunityItemIds)
+        private async Task SetOpportunityItemsAsReferralAsync(IEnumerable<int> opportunityItemIds)
         {
             var itemsForReferral = opportunityItemIds.Select(id => new OpportunityItemIsSelectedForReferralDto
             {
@@ -433,7 +433,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updates = _mapper.Map<List<OpportunityItem>>(itemsForReferral);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnly(updates,
+            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
                 x => x.IsSelectedForReferral,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);

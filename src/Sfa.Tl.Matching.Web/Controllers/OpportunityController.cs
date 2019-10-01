@@ -98,7 +98,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchResultProviderCount = saveReferralViewModel.SearchResultProviderCount
             };
             await _opportunityService.UpdateOpportunityItemAsync(providerSearchDto);
-            await _opportunityService.UpdateReferrals(opportunityItemDto);
+            await _opportunityService.UpdateReferralsAsync(opportunityItemDto);
 
             return RedirectToRoute("GetPlacementInformation", new { saveReferralViewModel.OpportunityItemId });
         }
@@ -145,7 +145,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("check-answers/{opportunityItemId}", Name = "GetCheckAnswers")]
         public async Task<IActionResult> GetCheckAnswers(int opportunityItemId)
         {
-            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
+            var viewModel = await _opportunityService.GetCheckAnswersAsync(opportunityItemId);
 
             return View("CheckAnswers", viewModel);
         }
@@ -169,7 +169,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
-            var viewModel = await _opportunityService.GetOpportunityBasket(opportunityId);
+            var viewModel = await _opportunityService.GetOpportunityBasketAsync(opportunityId);
 
             viewModel.OpportunityItemId = opportunityItemId != 0 ? opportunityItemId
                 : viewModel.OpportunityItemId =
@@ -184,7 +184,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("emails-sent/{opportunityId}", Name = "EmailSentReferrals_Get")]
         public async Task<IActionResult> ReferralEmailSent(int opportunityId)
         {
-            var dto = await _opportunityService.GetOpportunity(opportunityId);
+            var dto = await _opportunityService.GetOpportunityAsync(opportunityId);
             var viewModel = _mapper.Map<SentViewModel>(dto);
             viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
 
@@ -200,13 +200,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 Validate(viewModel);
                 if (!ModelState.IsValid)
                 {
-                    var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
+                    var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasketAsync(viewModel.OpportunityId);
 
                     return View(nameof(OpportunityBasket), opportunityBasketViewModel);
                 }
             }
 
-            await _opportunityService.ContinueWithOpportunities(viewModel);
+            await _opportunityService.ContinueWithOpportunitiesAsync(viewModel);
 
             return viewModel.SubmitAction == "CompleteProvisionGaps" ?
                 RedirectToRoute("Start") :
@@ -259,7 +259,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task Validate(PlacementInformationSaveViewModel viewModel)
         {
-            var opportunityItem = await _opportunityService.GetOpportunityItem(viewModel.OpportunityItemId);
+            var opportunityItem = await _opportunityService.GetOpportunityItemAsync(viewModel.OpportunityItemId);
             if (opportunityItem != null)
             {
                 viewModel.Postcode = opportunityItem.Postcode;

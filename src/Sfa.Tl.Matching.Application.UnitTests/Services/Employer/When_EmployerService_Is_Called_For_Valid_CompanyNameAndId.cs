@@ -26,21 +26,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>(),
+            _employerRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>(),
                                                     Arg.Any<Expression<Func<Domain.Models.Employer, Guid>>>())
                                 .Returns(new Guid("11111111-1111-1111-1111-111111111111"));
 
             var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>(),
                 Substitute.For<IMessageQueueService>());
 
-            _employerResult = employerService.ValidateCompanyNameAndCrmId(_employerCrmId, CompanyName).GetAwaiter().GetResult();
+            _employerResult = employerService.ValidateCompanyNameAndCrmIdAsync(_employerCrmId, CompanyName).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetEmployer_Is_Called_Exactly_Once()
         {
             _employerRepository.Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>(),
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>(),
                                     Arg.Any<Expression<Func<Domain.Models.Employer, Guid>>>());
         }
 

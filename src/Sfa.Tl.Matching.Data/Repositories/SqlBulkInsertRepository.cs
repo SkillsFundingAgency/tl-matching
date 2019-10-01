@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _matchingConfiguration = matchingConfiguration;
         }
 
-        public async Task BulkInsert(IList<T> entities)
+        public async Task BulkInsertAsync(IList<T> entities)
         {
             var dataTable = entities.ToDataTable();
 
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public async Task<int> MergeFromStaging()
+        public async Task<int> MergeFromStagingAsync()
         {
             int numberOfRecordsAffected;
 

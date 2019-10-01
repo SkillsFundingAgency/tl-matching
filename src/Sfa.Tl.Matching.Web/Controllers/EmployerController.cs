@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var dto = _mapper.Map<CompanyNameDto>(viewModel);
 
-            await _opportunityService.UpdateOpportunity(dto);
+            await _opportunityService.UpdateOpportunityAsync(dto);
 
             return RedirectToRoute("GetEmployerDetails", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
-            await _opportunityService.UpdateOpportunity(employerDetailDto);
+            await _opportunityService.UpdateOpportunityAsync(employerDetailDto);
 
             var isReferralOpportunityItem = await _opportunityService.IsReferralOpportunityItemAsync(viewModel.OpportunityItemId);
 
@@ -120,7 +120,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var employerDetailDto = _mapper.Map<EmployerDetailDto>(viewModel);
 
-            await _opportunityService.UpdateOpportunity(employerDetailDto);
+            await _opportunityService.UpdateOpportunityAsync(employerDetailDto);
 
             return RedirectToRoute("GetEmployerConsent", new { viewModel.OpportunityId, viewModel.OpportunityItemId });
         }
@@ -139,7 +139,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("confirm-remove-employer/{opportunityId}", Name = "ConfirmDelete")]
         public async Task<IActionResult> ConfirmDelete(int opportunityId)
         {
-            var dto = await _employerService.GetConfirmDeleteEmployerOpportunity(opportunityId,
+            var dto = await _employerService.GetConfirmDeleteEmployerOpportunityAsync(opportunityId,
                 HttpContext.User.GetUserName());
 
             var viewModel = new RemoveEmployerViewModel
@@ -186,7 +186,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid)
                 return View(await GetEmployerConsentViewModel(viewModel.OpportunityId, viewModel.OpportunityItemId));
 
-            await _referralService.ConfirmOpportunities(viewModel.OpportunityId, HttpContext.User.GetUserName());
+            await _referralService.ConfirmOpportunitiesAsync(viewModel.OpportunityId, HttpContext.User.GetUserName());
 
             return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
         }
@@ -208,7 +208,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private async Task ValidateAsync(FindEmployerViewModel viewModel, string currentUser)
         {
             var isValidEmployer =
-                await _employerService.ValidateCompanyNameAndCrmId(viewModel.SelectedEmployerCrmId, viewModel.CompanyName);
+                await _employerService.ValidateCompanyNameAndCrmIdAsync(viewModel.SelectedEmployerCrmId, viewModel.CompanyName);
 
             if (!isValidEmployer)
             {

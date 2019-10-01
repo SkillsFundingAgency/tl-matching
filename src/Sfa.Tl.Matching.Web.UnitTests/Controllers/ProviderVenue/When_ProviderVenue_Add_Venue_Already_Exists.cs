@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         {
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerVenueService.IsValidPostcodeAsync("CV1 2WT").Returns((true, "CV1 2WT"));
-            _providerVenueService.GetVenue(1, "CV1 2WT").Returns(new ProviderVenueDetailViewModel
+            _providerVenueService.GetVenueAsync(1, "CV1 2WT").Returns(new ProviderVenueDetailViewModel
             {
                 Id = 1
             });

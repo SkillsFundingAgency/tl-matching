@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             };
 
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
-            _opportunityItemRepository.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+            _opportunityItemRepository.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(new List<OpportunityItem>
                 {
                     new OpportunityItem
@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     }
                 }.AsQueryable());
 
-            opportunityRepo.GetProviderOpportunities(Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
+            opportunityRepo.GetProviderOpportunitiesAsync(Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new List<OpportunityReferralDto>
                 {
                     new OpportunityReferralDto
@@ -126,7 +126,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     }
                 });
 
-            backgroundProcessHistoryRepo.GetSingleOrDefault(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
+            backgroundProcessHistoryRepo.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
             {
                 Id = 1,
                 Status = BackgroundProcessHistoryStatus.Pending.ToString()
@@ -147,7 +147,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_Exactly_Once()
         {
             _opportunityItemRepository.Received(1)
-                .UpdateManyWithSpecifedColumnsOnly(Arg.Any<IList<OpportunityItem>>(),
+                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Any<IList<OpportunityItem>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>()
@@ -158,7 +158,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Four_Items_With_Expected_Values()
         {
             _opportunityItemRepository.Received(1)
-                .UpdateManyWithSpecifedColumnsOnly(Arg.Is<IList<OpportunityItem>>(
+                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
                         o => o.Count == 4
                              && o[0].Id == 1
                              && o[0].IsCompleted

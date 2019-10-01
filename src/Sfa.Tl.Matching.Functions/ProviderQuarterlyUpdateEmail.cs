@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Functions
     public class ProviderQuarterlyUpdateEmail
     {
         [FunctionName("SendProviderQuarterlyUpdateEmails")]
-        public async Task SendProviderQuarterlyUpdateEmails([QueueTrigger(QueueName.ProviderQuarterlyRequestQueue, Connection = "BlobStorageConnectionString")]SendProviderFeedbackEmail providerRequestData, 
+        public async Task SendProviderQuarterlyUpdateEmailsAsync([QueueTrigger(QueueName.ProviderQuarterlyRequestQueue, Connection = "BlobStorageConnectionString")]SendProviderFeedbackEmail providerRequestData, 
             ExecutionContext context,
             ILogger logger,
             [Inject] IProviderQuarterlyUpdateEmailService providerQuarterlyUpdateEmailService,
@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = context.FunctionName,
