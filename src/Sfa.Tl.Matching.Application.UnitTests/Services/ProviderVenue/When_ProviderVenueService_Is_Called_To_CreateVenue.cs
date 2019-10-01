@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             var mapper = new Mapper(config);
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
 
-            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
+            _providerVenueRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new Domain.Models.ProviderVenue());
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             });
 
             _googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
-            _googleMapApiClient.GetAddressDetails(Arg.Is<string>(s => s == FormattedPostcode)).Returns("Coventry");
+            _googleMapApiClient.GetAddressDetailsAsync(Arg.Is<string>(s => s == FormattedPostcode)).Returns("Coventry");
 
             var providerVenueService = new ProviderVenueService(mapper, _providerVenueRepository, _locationApiClient, _googleMapApiClient);
 
@@ -78,13 +78,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         [Fact]
         public void Then_GoogleMapApiClient_GetAddressDetails_Is_Called_Exactly_Once()
         {
-            _googleMapApiClient.Received(1).GetAddressDetails(FormattedPostcode);
+            _googleMapApiClient.Received(1).GetAddressDetailsAsync(FormattedPostcode);
         }
 
         [Fact]
         public void Then_ProviderVenueRepository_Create_Is_Called_Exactly_Once()
         {
-            _providerVenueRepository.Received(1).Create(Arg.Is<Domain.Models.ProviderVenue>(venue =>
+            _providerVenueRepository.Received(1).CreateAsync(Arg.Is<Domain.Models.ProviderVenue>(venue =>
                 venue.Postcode == FormattedPostcode &&
                 venue.Town == "Coventry" &&
                 venue.Name == FormattedPostcode &&

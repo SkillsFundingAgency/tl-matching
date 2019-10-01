@@ -135,7 +135,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
         {
-            var searchResults = await _proximityService.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto
+            var searchResults = await _proximityService.SearchProvidersByPostcodeProximityAsync(new ProviderSearchParametersDto
             {
                 Postcode = viewModel.Postcode,
                 SelectedRouteId = viewModel.SelectedRouteId,
@@ -143,7 +143,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var additionalResults = searchResults.Any() 
                 ? new List<SearchResultsByRouteViewModelItem>()
-                : await _proximityService.SearchProvidersForOtherRoutesByPostcodeProximity(new ProviderSearchParametersDto
+                : await _proximityService.SearchProvidersForOtherRoutesByPostcodeProximityAsync(new ProviderSearchParametersDto
                 {
                     Postcode = viewModel.Postcode,
                     SelectedRouteId = viewModel.SelectedRouteId,
@@ -215,7 +215,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 result = false;
             }
 
-            var (isValid, formattedPostcode) = await _proximityService.IsValidPostcode(viewModel.Postcode);
+            var (isValid, formattedPostcode) = await _proximityService.IsValidPostcodeAsync(viewModel.Postcode);
             if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
             {
                 ModelState.AddModelError("Postcode", "You must enter a real postcode");
