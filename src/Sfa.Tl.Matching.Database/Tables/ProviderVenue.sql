@@ -19,7 +19,3 @@
 	CONSTRAINT [PK_ProviderVenue] PRIMARY KEY ([Id]),
 	CONSTRAINT [FK_ProviderVenue_Provider] FOREIGN KEY ([ProviderId]) REFERENCES [Provider]([Id]),
 )
-GO
-
-CREATE SPATIAL INDEX [SPATIAL_ProviderVenue_Location] 
-   ON [dbo].[ProviderVenue](Location); 
