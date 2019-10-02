@@ -7,7 +7,7 @@
 @section backButton{
     @if (Model.IsFromAddVenue)
     {
-        <a asp-route="AddProviderVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
+        <a asp-route="AddVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
     }
     else
     {
@@ -42,7 +42,7 @@
             <span class="govuk-caption-m">@Model.ProviderName</span>
             <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
             <p class="govuk-body">
-                <a id="tl-remove" asp-controller="ProviderVenue" asp-action="GetConfirmRemoveProviderVenue" asp-route-providerVenueId="@Model.Id" class="govuk-link">Remove venue</a>
+                <a id="tl-remove" asp-controller="ProviderVenue" asp-action="ConfirmRemoveProviderVenue" asp-route-providerVenueId="@Model.Id" class="govuk-link">Remove venue</a>
             </p>
 
             <div class="govuk-form-group">

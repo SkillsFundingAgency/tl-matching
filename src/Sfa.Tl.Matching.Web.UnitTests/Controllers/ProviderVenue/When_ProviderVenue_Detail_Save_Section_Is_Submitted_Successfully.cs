@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 SubmitAction = "SaveSection"
             };
 
-            _result = controllerWithClaims.SaveProviderVenueDetail(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.ProviderVenueDetail(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
