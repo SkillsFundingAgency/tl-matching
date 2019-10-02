@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("remove-opportunityItem/{opportunityId}-{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
-        public async Task<IActionResult> RemoveAndGetOpportunityBasketAsync(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasketAsync(int opportunityId, int opportunityItemId)
         {
             await _opportunityService.DeleteOpportunityItemAsync(opportunityId, opportunityItemId);
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{Postcode}/{SelectedRouteId}", Name = "GetBackLink")]
-        public async Task<IActionResult> GetBackLink(SearchParametersViewModel viewModel)
+        public async Task<IActionResult> BackLink(SearchParametersViewModel viewModel)
         {
             var prevUrl = await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
 
