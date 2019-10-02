@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-search", Name = "SearchEmployer")]
-        public IActionResult Search(string query)
+        public IActionResult SearchEmployer(string query)
         {
             var employers = _employerService.Search(query);
 
@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "LoadWhoIsEmployer")]
+        [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "GetOpportunityCompanyName")]
         public async Task<IActionResult> GetOpportunityCompanyNameAsync(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-details/{opportunityId}-{opportunityItemId}", Name = "GetEmployerDetails")]
-        public async Task<IActionResult> GetOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetEmployerDetails(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
 
@@ -79,7 +79,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("employer-details/{opportunityId}-{opportunityItemId}")]
+        [Route("employer-details/{opportunityId}-{opportunityItemId}", Name = "SaveOpportunityEmployerDetails")]
         public async Task<IActionResult> SaveOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
@@ -101,7 +101,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("check-employer-details/{opportunityId}-{opportunityItemId}", Name = "CheckEmployerDetails")]
+        [Route("check-employer-details/{opportunityId}-{opportunityItemId}", Name = "GetCheckOpportunityEmployerDetails")]
         public async Task<IActionResult> GetCheckOpportunityEmployerDetails(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
@@ -110,7 +110,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("check-employer-details/{opportunityId}-{opportunityItemId}")]
+        [Route("check-employer-details/{opportunityId}-{opportunityItemId}", Name = "SaveCheckOpportunityEmployerDetails")]
         public async Task<IActionResult> SaveCheckOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
@@ -127,12 +127,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("saved-opportunities", Name = "GetSavedEmployerOpportunity")]
-        public async Task<IActionResult> SavedEmployerOpportunity()
+        public async Task<IActionResult> GetSavedEmployerOpportunity()
         {
             var username = HttpContext.User.GetUserName();
             var viewModel = await _employerService.GetSavedEmployerOpportunitiesAsync(username);
 
-            return View(viewModel);
+            return View("SavedEmployerOpportunity", viewModel);
         }
 
         [HttpGet]
@@ -172,11 +172,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
-        public async Task<IActionResult> EmployerConsent(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetEmployerConsent(int opportunityId, int opportunityItemId)
         {
             var viewModel = await GetEmployerConsentViewModel(opportunityId, opportunityItemId);
 
-            return View(viewModel);
+            return View("EmployerConsent", viewModel);
         }
 
         [HttpPost]
