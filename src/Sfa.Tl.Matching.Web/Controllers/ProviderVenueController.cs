@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _providerVenueService = providerVenueService;
         }
 
-        [Route("add-venue/{providerId}", Name = "AddVenue")]
+        [Route("add-venue/{providerId}", Name = "AddProviderVenue")]
         public IActionResult AddProviderVenue(int providerId)
         {
             return View(new AddProviderVenueViewModel { ProviderId = providerId });
@@ -28,10 +28,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("add-venue/{providerId}", Name = "CreateVenue")]
-        public async Task<IActionResult> AddProviderVenue(AddProviderVenueViewModel viewModel)
+        public async Task<IActionResult> CreateVenue(AddProviderVenueViewModel viewModel)
         {
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View("AddProviderVenue", viewModel);
 
             var (isValid, formattedPostcode) = await _providerVenueService.IsValidPostcodeAsync(viewModel.Postcode);
             viewModel.Postcode = formattedPostcode;
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
             {
                 ModelState.AddModelError("Postcode", "You must enter a real postcode");
-                return View(viewModel);
+                return View("AddProviderVenue", viewModel);
             }
 
             var venue = await _providerVenueService.GetVenueAsync(viewModel.ProviderId, viewModel.Postcode);
@@ -54,23 +54,23 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
         
         [Route("venue-overview/{providerVenueId}", Name = "GetProviderVenueDetail")]
-        public async Task<IActionResult> ProviderVenueDetail(int providerVenueId, int providerId = 0)
+        public async Task<IActionResult> GetProviderVenueDetail(int providerVenueId, int providerId = 0)
         {
             var isFromAddVenue = providerId == 0;
             var viewModel = await Populate(providerVenueId);
             viewModel.IsFromAddVenue = isFromAddVenue;
 
-            return View(viewModel);
+            return View("ProviderVenueDetail", viewModel);
         }
 
         [HttpPost]
         [Route("venue-overview/{providerVenueId}", Name = "SaveProviderVenueDetail")]
-        public async Task<IActionResult> ProviderVenueDetail(ProviderVenueDetailViewModel viewModel)
+        public async Task<IActionResult> SaveProviderVenueDetail(ProviderVenueDetailViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 viewModel = await Populate(viewModel.Id);
-                return View(viewModel);
+                return View("ProviderVenueDetail", viewModel);
             }
 
             await _providerVenueService.UpdateVenueAsync(viewModel);
@@ -91,11 +91,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("remove-venue/{providerVenueId}", Name = "GetConfirmRemoveProviderVenue")]
-        public async Task<IActionResult> ConfirmRemoveProviderVenue(int providerVenueId)
+        public async Task<IActionResult> GetConfirmRemoveProviderVenue(int providerVenueId)
         {
             var viewModel = await _providerVenueService.GetRemoveProviderVenueViewModelAsync(providerVenueId);
 
-            return View(viewModel);
+            return View("ConfirmRemoveProviderVenue", viewModel);
         }
 
         [HttpPost]

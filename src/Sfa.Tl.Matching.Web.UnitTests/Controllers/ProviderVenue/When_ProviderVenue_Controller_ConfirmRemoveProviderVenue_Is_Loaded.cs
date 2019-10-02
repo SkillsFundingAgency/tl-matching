@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             
             var providerVenueController = new ProviderVenueController(_providerVenueService);
 
-            _result = providerVenueController.ConfirmRemoveProviderVenue(1).GetAwaiter().GetResult();
+            _result = providerVenueController.GetConfirmRemoveProviderVenue(1).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _result.Should().BeOfType<RedirectToRouteResult>();
 
             var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("EmailSentReferrals_Get");
+            redirect?.RouteName.Should().BeEquivalentTo("GetReferralEmailSent");
             redirect?.RouteValues["id"].Should().Be(1);
         }
     }

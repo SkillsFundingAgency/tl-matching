@@ -188,7 +188,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             await _referralService.ConfirmOpportunitiesAsync(viewModel.OpportunityId, HttpContext.User.GetUserName());
 
-            return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetReferralEmailSent", new { id = viewModel.OpportunityId });
         }
 
         private async Task<EmployerConsentViewModel> GetEmployerConsentViewModel(int opportunityId, int opportunityItemId)
