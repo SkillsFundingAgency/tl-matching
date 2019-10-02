@@ -14,10 +14,12 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
     public class When_GoogleDistanceMatrixApiClient_Is_Called_To_GetJourneyTimes
     {
         private readonly GoogleDistanceMatrixApiClient _googleDistanceMatrixApiClient;
+        private readonly long _arrivalTimeSeconds;
 
         public When_GoogleDistanceMatrixApiClient_Is_Called_To_GetJourneyTimes()
         {
-            var httpClient = new GoogleDistanceMatrixHttpClientFactory().Get();
+            _arrivalTimeSeconds = 1570014314;
+            var httpClient = new GoogleDistanceMatrixHttpClientFactory().Get(arrivalTimeSeconds: _arrivalTimeSeconds);
             var logger = new NullLogger<GoogleDistanceMatrixApiClient>();
 
             _googleDistanceMatrixApiClient = new GoogleDistanceMatrixApiClient(
@@ -51,7 +53,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 
             var journeyTimes = await _googleDistanceMatrixApiClient
                 .GetJourneyTimesAsync(origin.Latitude, origin.Longitude,
-                    destinations, TravelMode.Driving);
+                    destinations, TravelMode.Driving, _arrivalTimeSeconds);
 
             journeyTimes.Should().NotBeNull();
             journeyTimes.Count.Should().Be(1);

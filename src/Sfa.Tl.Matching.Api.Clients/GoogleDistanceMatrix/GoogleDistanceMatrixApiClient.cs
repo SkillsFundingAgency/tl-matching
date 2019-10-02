@@ -36,25 +36,16 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
         }
 
         public async Task<IDictionary<int, JourneyInfoDto>> GetJourneyTimesAsync(decimal latitude, decimal longitude,
-            IList<LocationDto> destinations, string travelMode)
+            IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
         {
             const int batchSize = 100; //Max client-side elements: 100
             var batches = CreateBatches(destinations, batchSize);
             var distanceSearchResults = new Dictionary<int, JourneyInfoDto>(batches.Count);
-
-            var nowOffset = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero);
-            var nowUnixSeconds = nowOffset.ToUnixTimeSeconds();
-
-            var tomorrowMorning = DateTime.Today.AddDays(1).AddHours(10);
-            tomorrowMorning = new DateTime(tomorrowMorning.Ticks, DateTimeKind.Utc);
-            var arrivalTimeOffset = new DateTimeOffset(tomorrowMorning, TimeSpan.Zero);
-            var arrivalTimeSeconds = arrivalTimeOffset.ToUnixTimeSeconds();
-            //TODO: Calculate arrival time and put into uri
-
+            
             foreach (var batch in batches)
             {
                 var (_, value) = batch;
-                var response = SearchBatchAsync(latitude, longitude, value, travelMode).GetAwaiter().GetResult();
+                var response = SearchBatchAsync(latitude, longitude, value, travelMode, arrivalTimeSeconds).GetAwaiter().GetResult();
                 if (response != null)
                 {
                     var batchResults = await BuildResultAsync(response, value);
@@ -70,7 +61,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
 
             return distanceSearchResults;
         }
-
+        
         private Task<IDictionary<int, JourneyInfoDto>> BuildResultAsync(GoogleDistanceMatrixResponse response, IList<LocationDto> destinations)
         {
             var results = new Dictionary<int, JourneyInfoDto>(response.DestinationAddresses.Length);
@@ -124,7 +115,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             return batches;
         }
 
-        private async Task<GoogleDistanceMatrixResponse> SearchBatchAsync(decimal latitude, decimal longitude, IList<LocationDto> destinations, string travelMode)
+        private async Task<GoogleDistanceMatrixResponse> SearchBatchAsync(decimal latitude, decimal longitude, IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
         {
             try
             {
@@ -133,6 +124,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
                 uriBuilder.Append("units=imperial");
                 uriBuilder.Append($"&origins={latitude}%2C{longitude}");
                 uriBuilder.Append($"&mode={travelMode}");
+                uriBuilder.Append($"&arrival_time={arrivalTimeSeconds}");
                 uriBuilder.Append("&destinations=");
 
                 uriBuilder.Append("enc:");

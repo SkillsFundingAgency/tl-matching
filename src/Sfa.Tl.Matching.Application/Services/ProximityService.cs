@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,10 +57,12 @@ namespace Sfa.Tl.Matching.Application.Services
                     Longitude = v.Longitude
                 }).ToList();
 
+            var arrivalTimeSeconds = GetArrivalTime();
+
             var journeyResults =
                 await Task.WhenAll(
-                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(startPointLatitude, startPointLongitude, destinations, TravelMode.Driving),
-                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(startPointLatitude, startPointLongitude, destinations, TravelMode.Transit));
+                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(startPointLatitude, startPointLongitude, destinations, TravelMode.Driving, arrivalTimeSeconds),
+                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(startPointLatitude, startPointLongitude, destinations, TravelMode.Transit, arrivalTimeSeconds));
 
             var journeyTimesByCar = journeyResults[0];
             var journeyTimesByPublicTransport = journeyResults[1];
@@ -111,6 +114,22 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)
         {
             return await _locationApiClient.IsValidPostcodeAsync(postcode, true);
+        }
+
+        private long GetArrivalTime()
+        {
+            var dateNextWednesday =
+                DateTime.Now.AddDays(((int)DayOfWeek.Wednesday - (int)DateTime.Now.DayOfWeek + 7) % 7).Date;
+            var ukTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+
+            var hour = ukTimeZone.IsDaylightSavingTime(dateNextWednesday) ? 8 : 9;
+            var nineAmWednesday = new DateTime(dateNextWednesday.Year, dateNextWednesday.Month, dateNextWednesday.Day,
+                hour, 0, 0, DateTimeKind.Utc);
+
+            //var convertBack = TimeZoneInfo.ConvertTime(nineAmWednesday, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+
+            var arrivalTimeOffset = new DateTimeOffset(nineAmWednesday, TimeSpan.Zero);
+            return arrivalTimeOffset.ToUnixTimeSeconds();
         }
     }
 }
