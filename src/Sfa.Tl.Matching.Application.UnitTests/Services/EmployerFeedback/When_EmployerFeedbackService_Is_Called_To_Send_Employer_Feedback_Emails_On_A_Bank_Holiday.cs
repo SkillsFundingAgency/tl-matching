@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         private readonly int _result;
 
         public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails_On_A_Bank_Holiday(
-            EmployerFeedbackFixture testFixture, IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
+            EmployerFeedbackFixture testFixture)
         {
             _dateTimeProvider = Substitute.For<IDateTimeProvider>();
             _dateTimeProvider
@@ -86,7 +86,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             IRepository<BankHoliday> bankHolidayRepository =
                 new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
 
-            var employerFeedbackService = new EmployerFeedbackService(
+        var backgroundProcessHistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
+
+        var employerFeedbackService = new EmployerFeedbackService(
                 mapper, testFixture.Configuration, testFixture.Logger,
                 _dateTimeProvider, 
                 _emailService, _emailHistoryService, bankHolidayRepository, 
