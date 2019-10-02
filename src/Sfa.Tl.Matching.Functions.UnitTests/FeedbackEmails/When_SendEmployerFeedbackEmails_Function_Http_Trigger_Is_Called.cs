@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Interfaces.ServiceFactory;
 using Sfa.Tl.Matching.Application.Services;
 using Xunit;

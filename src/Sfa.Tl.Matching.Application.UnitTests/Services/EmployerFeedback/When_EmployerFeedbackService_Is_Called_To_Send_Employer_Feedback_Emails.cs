@@ -27,11 +27,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         : IClassFixture<EmployerFeedbackFixture>
     {
         private readonly EmployerFeedbackFixture _testFixture;
-        private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
-        private readonly IRepository<BackgroundProcessHistory> _backgroundProcesshistoryRepository;
         private readonly int _result;
 
         public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails(
@@ -39,14 +37,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _testFixture = testFixture;
 
-            _dateTimeProvider = Substitute.For<IDateTimeProvider>();
-            _dateTimeProvider
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
+            dateTimeProvider
                 .UtcNow()
                 .Returns(new DateTime(2019, 9, 1));
-            _dateTimeProvider
+            dateTimeProvider
                 .AddWorkingDays(Arg.Any<DateTime>(), Arg.Any<TimeSpan>(), Arg.Any<IList<DateTime>>())
                 .Returns(DateTime.Parse("2019-8-15 23:59:59"));
-            _dateTimeProvider
+            dateTimeProvider
                 .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>())
                 .Returns(false);
 
@@ -59,13 +57,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("UtcNowResolver")
                         ? new UtcNowResolver<UsernameForFeedbackSentDto, Domain.Models.Opportunity>(
-                            _dateTimeProvider)
+                            dateTimeProvider)
                         : null);
             });
             var mapper = new Mapper(config);
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            _backgroundProcesshistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
+            var backgroundProcessHistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
 
             _opportunityRepository.GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>())
                 .Returns(new EmployerFeedbackDtoListBuilder().Build());
@@ -90,13 +88,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             IRepository<BankHoliday> bankHolidayRepository =
                 new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
 
-            _dateTimeProvider
+            dateTimeProvider
                 .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), testFixture.Configuration.EmployerFeedbackTimeSpan)
                 .Returns(DateTime.Parse("2019-8-15 23:59:59"));
 
-            _backgroundProcesshistoryRepository.CreateAsync(Arg.Any<BackgroundProcessHistory>()).Returns(Task.FromResult(1));
+            backgroundProcessHistoryRepository.CreateAsync(Arg.Any<BackgroundProcessHistory>()).Returns(Task.FromResult(1));
 
-            _backgroundProcesshistoryRepository
+            backgroundProcessHistoryRepository
                 .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>())
                 .Returns(Task.FromResult(new BackgroundProcessHistory
                 {
@@ -107,9 +105,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 
             var employerFeedbackService = new EmployerFeedbackService(
                 mapper, _testFixture.Configuration, _testFixture.Logger,
-                _dateTimeProvider, 
+                dateTimeProvider, 
                 _emailService, _emailHistoryService, bankHolidayRepository, 
-                _opportunityRepository, _backgroundProcesshistoryRepository);
+                _opportunityRepository, backgroundProcessHistoryRepository);
 
             _result = employerFeedbackService
                 .SendFeedbackEmailsAsync("TestUser")
