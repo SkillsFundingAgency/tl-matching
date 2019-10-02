@@ -5,25 +5,29 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
 {
     public class JourneyTimesBuilder
     {
-        public IList<JourneyInfoDto> BuildDrivingResults() =>
-            new List<JourneyInfoDto>
+        public IDictionary<int, JourneyInfoDto> BuildDrivingResults() =>
+            new Dictionary<int, JourneyInfoDto>
             {
-                new JourneyInfoDto
                 {
-                    DestinationId = 1,
-                    TravelDistance = 2500,
-                    TravelTime = 30 * 60
+                    1, new JourneyInfoDto
+                    {
+                        DestinationId = 1,
+                        TravelDistance = 2500,
+                        TravelTime = 30 * 60
+                    }
                 }
             };
 
-        public IList<JourneyInfoDto> BuildPublicTransportResults() =>
-            new List<JourneyInfoDto>
+        public IDictionary<int, JourneyInfoDto> BuildPublicTransportResults() =>
+            new Dictionary<int, JourneyInfoDto>
             {
-                new JourneyInfoDto
                 {
-                    DestinationId = 2,
-                    TravelDistance = 2500,
-                    TravelTime = 30 * 60
+                    2, new JourneyInfoDto
+                    {
+                        DestinationId = 2,
+                        TravelDistance = 2500,
+                        TravelTime = 30 * 60
+                    }
                 }
             };
     }

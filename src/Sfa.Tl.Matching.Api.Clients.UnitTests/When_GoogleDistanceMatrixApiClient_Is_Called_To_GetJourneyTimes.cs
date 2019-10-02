@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
                 httpClient,
                 new MatchingConfiguration
                 {
-                    GoogleMapsApiKey = "TEST_KEY", 
+                    GoogleMapsApiKey = "TEST_KEY",
                     GoogleMapsApiBaseUrl = "https://example.com/"
                 });
         }
@@ -41,9 +41,14 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 
             var destinations = new List<LocationDto>
             {
-                new LocationDto {Latitude = 51.50354M, Longitude = -0.127695M}
+                new LocationDto
+                {
+                    Id = 1,
+                    Latitude = 51.50354M,
+                    Longitude = -0.127695M
+                }
             };
-            
+
             var journeyTimes = await _googleDistanceMatrixApiClient
                 .GetJourneyTimesAsync(origin.Latitude, origin.Longitude,
                     destinations, TravelMode.Driving);
@@ -51,8 +56,9 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
             journeyTimes.Should().NotBeNull();
             journeyTimes.Count.Should().Be(1);
 
-            journeyTimes.First().TravelTime.Should().Be(7603);
-            journeyTimes.First().TravelDistance.Should().Be(172648);
+            journeyTimes.First().Key.Should().Be(1);
+            journeyTimes.First().Value.TravelTime.Should().Be(7603);
+            journeyTimes.First().Value.TravelDistance.Should().Be(172648);
         }
     }
 }

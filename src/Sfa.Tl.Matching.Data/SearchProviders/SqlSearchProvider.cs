@@ -37,7 +37,8 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
 
             //TODO: If javascript on then will need to search by radius first, otherwise this is ignored
             //var searchRadius = dto.SearchRadius != 0 ? dto.SearchRadius : 25;
-            //var searchRadiusInMeters = searchRadius * MilesToMeters;
+            var searchRadius = 70;
+            var searchRadiusInMeters = searchRadius * MilesToMeters;
 
             var result = await (from provider in _matchingDbContext.Provider
                                 join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId
@@ -45,8 +46,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                 join qualificationRouteMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals qualificationRouteMapping.QualificationId
                                 orderby providerVenue.Location.Distance(employerLocation)
                                 where qualificationRouteMapping.RouteId == dto.SelectedRouteId 
-                                      //TODO: Only search by distance for non-javascript search
-                                      //&& providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters 
+                                      && providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters 
                                       && provider.IsCdfProvider
                                       && provider.IsEnabledForReferral
                                       && providerVenue.IsEnabledForReferral

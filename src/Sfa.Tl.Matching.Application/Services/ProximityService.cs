@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
@@ -33,10 +34,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var searchResults = await _searchProvider.SearchProvidersByPostcodeProximityAsync(dto);
 
-            //Call google search here
             if (searchResults != null && searchResults.Any())
             {
-                return await FilterByTravelTimeAsync(decimal.Parse(dto.Latitude), decimal.Parse(dto.Longitude), searchResults);
+                var filteredResults = await FilterByTravelTimeAsync(decimal.Parse(dto.Latitude), decimal.Parse(dto.Longitude), searchResults);
+                Debug.WriteLine($"Search results for {dto.Postcode} route {dto.SelectedRouteId} - {searchResults.Count} results, {filteredResults.Count} filtered results");
+                return filteredResults;
             }
 
             return searchResults ?? new List<SearchResultsViewModelItem>();
@@ -65,11 +67,11 @@ namespace Sfa.Tl.Matching.Application.Services
             const int oneHour = 60 * 60;
             var results = searchResults
                 .Where(s =>
-                        journeyTimesByCar.Any(d => d.DestinationId == s.ProviderVenueId &&
-                                                   d.TravelTime < oneHour) 
+                        journeyTimesByCar.Any(d => d.Key == s.ProviderVenueId &&
+                                                   d.Value.TravelTime < oneHour) 
                         ||
-                        journeyTimesByPublicTransport.Any(d => d.DestinationId == s.ProviderVenueId &&
-                                                               d.TravelTime < oneHour)
+                        journeyTimesByPublicTransport.Any(d => d.Key == s.ProviderVenueId &&
+                                                               d.Value.TravelTime < oneHour)
                     )
                 .Select(r => new SearchResultsViewModelItem
                 {
@@ -82,8 +84,10 @@ namespace Sfa.Tl.Matching.Application.Services
                     Distance = r.Distance,
                     IsTLevelProvider = r.IsTLevelProvider,
                     QualificationShortTitles = r.QualificationShortTitles,
-                    TravelTimeByDriving = journeyTimesByCar.SingleOrDefault(g => g.DestinationId == r.ProviderVenueId)?.TravelTime,
-                    TravelTimeByPublicTransport = journeyTimesByPublicTransport.SingleOrDefault(g => g.DestinationId == r.ProviderVenueId)?.TravelTime,
+                    TravelTimeByPublicTransport = journeyTimesByPublicTransport.TryGetValue(r.ProviderVenueId, out var tVal)
+                            ? tVal.TravelTime: (long?)null,
+                    TravelTimeByDriving = journeyTimesByCar.TryGetValue(r.ProviderVenueId, out var dVal)
+                        ? dVal.TravelTime : (long?)null,
                     Latitude = r.Latitude,
                     Longitude = r.Longitude
                 }).OrderBy(r => r.Distance).ToList();
