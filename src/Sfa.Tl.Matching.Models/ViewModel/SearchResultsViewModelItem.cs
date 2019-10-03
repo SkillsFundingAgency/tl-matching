@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Humanizer;
+using Humanizer.Localisation;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
@@ -20,14 +21,14 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string TravelTimeByDrivingDisplay =>
             TravelTimeByDriving.HasValue && TravelTimeByDriving.Value > 0
                 ? TimeSpan.FromSeconds(TravelTimeByDriving.Value)
-                    .Humanize()
+                    .Humanize(2, minUnit: TimeUnit.Minute)
                 : null;
 
         public long? TravelTimeByPublicTransport { get; set; }
         public string TravelTimeByPublicTransportDisplay =>
             TravelTimeByPublicTransport.HasValue && TravelTimeByPublicTransport.Value > 0
                 ? TimeSpan.FromSeconds(TravelTimeByPublicTransport.Value)
-                    .Humanize()
+                    .Humanize(2, minUnit: TimeUnit.Minute)
                 : null;
 
         public decimal Latitude { get; set; }
