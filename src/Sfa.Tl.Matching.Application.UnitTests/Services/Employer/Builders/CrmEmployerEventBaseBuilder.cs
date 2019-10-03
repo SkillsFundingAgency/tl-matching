@@ -36,13 +36,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
             };
         }
 
-        internal CrmEmployerEventBaseBuilder WithNullAupaStatus()
-        {
-            _crmEmployerEventBase.sfa_aupa = null;
-
-            return this;
-        }
-
         internal CrmEmployerEventBaseBuilder WithZeroAupaStatus()
         {
             _crmEmployerEventBase.sfa_aupa = new SfaAupa { Value = 0 };
