@@ -13,12 +13,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 {
-    public class When_Employer_Service_Is_Called_To_Handle_Invalid_Employer_Updated_Event
+    public class When_Employer_Service_Is_Called_To_Handle_Invalid_Aupa_Null_Employer_Created_Event
     {
         private readonly IRepository<Domain.Models.Employer> _employerRepository;
         private readonly IMessageQueueService _messageQueueService;
 
-        public When_Employer_Service_Is_Called_To_Handle_Invalid_Employer_Updated_Event()
+        public When_Employer_Service_Is_Called_To_Handle_Invalid_Aupa_Null_Employer_Created_Event()
         {
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
@@ -30,11 +30,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), new CrmEmployerEventDataValidator(),
                 _messageQueueService);
 
-            var employerEventBase = CrmEmployerEventBaseBuilder.Build(false);
+            var employerEventBase = new CrmEmployerEventBaseBuilder()
+                .WithNullAupaStatus().Build();
 
             var data = JsonConvert.SerializeObject(employerEventBase, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
-            
-            employerService.HandleEmployerUpdatedAsync(data).GetAwaiter().GetResult();
+
+            employerService.HandleEmployerCreatedAsync(data).GetAwaiter().GetResult();
         }
 
         [Fact]

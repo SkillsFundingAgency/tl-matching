@@ -217,6 +217,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return await CreateOrUpdateEmployerAsync(updatedEvent);
         }
+
         public async Task<int> HandleContactUpdatedAsync(string payload)
         {
             var createdEvent = JsonConvert.DeserializeObject<CrmContactUpdatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });

@@ -8,38 +8,44 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Command;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 {
-    public class When_Employer_Service_Is_Called_To_Handle_Valid_Contact_Updated_Event_For_New_Employer
+    public class When_Employer_Service_Is_Called_To_Handle_Invalid_Aupa_Zero_Employer_Created_Event
     {
         private readonly IRepository<Domain.Models.Employer> _employerRepository;
+        private readonly IMessageQueueService _messageQueueService;
 
-        public When_Employer_Service_Is_Called_To_Handle_Valid_Contact_Updated_Event_For_New_Employer()
+        public When_Employer_Service_Is_Called_To_Handle_Invalid_Aupa_Zero_Employer_Created_Event()
         {
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
             _employerRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
-                .Returns((Domain.Models.Employer)null);
+                .Returns(new Domain.Models.Employer());
 
+            _messageQueueService = Substitute.For<IMessageQueueService>();
             var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), new CrmEmployerEventDataValidator(),
-                Substitute.For<IMessageQueueService>());
+                _messageQueueService);
 
             var employerEventBase = new CrmEmployerEventBaseBuilder()
-                .WithValidAupaStatus().Build();
+                .WithZeroAupaStatus().Build();
 
             var data = JsonConvert.SerializeObject(employerEventBase, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
 
-            employerService.HandleContactUpdatedAsync(data).GetAwaiter().GetResult();
+            employerService.HandleEmployerCreatedAsync(data).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_The_Employer_Record_Should_Be_Created()
+        public void Then_The_Employer_Record_Should_NOT_Be_Created_OR_Updated()
         {
             _employerRepository.DidNotReceive().CreateAsync(Arg.Any<Domain.Models.Employer>());
             _employerRepository.DidNotReceive().UpdateAsync(Arg.Any<Domain.Models.Employer>());
+
+            _messageQueueService.Received(1)
+                .PushEmployerAupaBlankEmailMessageAsync(Arg.Any<SendEmployerAupaBlankEmail>());
         }
     }
 }
