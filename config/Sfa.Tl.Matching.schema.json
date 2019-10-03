@@ -105,7 +105,8 @@
       "environmentVariable": "SqlConnectionString"
     },
 	"SupportInboxEmail": {
-      "type": "boolean",
+      "minLength": 1,
+      "type": "string",
       "environmentVariable": "SupportInboxEmail"
     }
   },
