@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         public void Then_Result_Is_Redirect_To_Provider_Detail_With_Correct_Route_Values()
         {
             var redirect = _result as RedirectToActionResult;
-            redirect?.ActionName.Should().BeEquivalentTo("ProviderDetail");
+            redirect?.ActionName.Should().BeEquivalentTo("AddProviderDetail");
             redirect?.RouteValues
                 .Should()
                 .Contain(new KeyValuePair<string, object>("UkPrn", 123));

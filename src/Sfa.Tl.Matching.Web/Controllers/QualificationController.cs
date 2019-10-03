@@ -51,17 +51,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("add-qualification/{providerId}", Name = "CreateQualification")]
-        public async Task<IActionResult> AddQualification(AddQualificationViewModel viewModel)
+        public async Task<IActionResult> CreateQualification(AddQualificationViewModel viewModel)
         {
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View("AddQualification", viewModel);
 
             var isValid = await _qualificationService.IsValidLarIdAsync(viewModel.LarId);
 
             if (string.IsNullOrWhiteSpace(viewModel.LarId) || !isValid)
             {
                 ModelState.AddModelError("LarId", "Enter a learning aim reference (LAR) that has 8 characters");
-                return View(viewModel);
+                return View("AddQualification", viewModel);
             }
 
             var qualification = await _qualificationService.GetQualificationAsync(viewModel.LarId);
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 if (!isValidLar)
                 {
                     ModelState.AddModelError("LarId", "You must enter a real learning aim reference (LAR)");
-                    return View(viewModel);
+                    return View("AddQualification", viewModel);
                 }
 
                 return RedirectToRoute("MissingQualification",
@@ -91,9 +91,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("edit-qualifications", Name = "EditQualifications")]
-        public IActionResult SearchQualifications()
+        public IActionResult EditQualifications()
         {
-            return View(new QualificationSearchViewModel());
+            return View("SearchQualifications", new QualificationSearchViewModel());
         }
 
         [HttpPost]
@@ -104,13 +104,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError("SearchTerms", "You must enter 2 or more letters for your search");
 
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View("SearchQualifications",viewModel);
 
             var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
 
             PopulateRoutesForQualificationSearchItem(searchResult);
 
-            return View(searchResult);
+            return View("SearchQualifications", searchResult);
         }
 
         private static bool IsValidSearchTerm(QualificationSearchViewModel viewModel)
@@ -157,7 +157,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             //Get title from service, based on LAR
             var title = await _qualificationService.GetLarTitleAsync(larId);
 
-            return View(new MissingQualificationViewModel
+            return View("MissingQualification", new MissingQualificationViewModel
             {
                 ProviderVenueId = providerVenueId,
                 LarId = larId,
@@ -169,14 +169,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "SaveMissingQualification")]
-        public async Task<IActionResult> MissingQualification(MissingQualificationViewModel viewModel)
+        public async Task<IActionResult> SaveMissingQualification(MissingQualificationViewModel viewModel)
         {
             Validate(viewModel);
 
             if (!ModelState.IsValid)
             {
                 viewModel.Routes = GetRoutes(viewModel);
-                return View(viewModel);
+                return View("MissingQualification", viewModel);
             }
 
             var qualificationId = await _qualificationService.CreateQualificationAsync(viewModel);

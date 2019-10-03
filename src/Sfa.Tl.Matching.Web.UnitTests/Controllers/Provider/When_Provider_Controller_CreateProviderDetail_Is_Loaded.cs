@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var providerController = new ProviderController(providerService, new MatchingConfiguration());
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
 
-            _result = controllerWithClaims.ProviderDetail(new AddProviderViewModel
+            _result = controllerWithClaims.AddProviderDetail(new AddProviderViewModel
             {
                 UkPrn = 123,
                 Name = "Provider name"

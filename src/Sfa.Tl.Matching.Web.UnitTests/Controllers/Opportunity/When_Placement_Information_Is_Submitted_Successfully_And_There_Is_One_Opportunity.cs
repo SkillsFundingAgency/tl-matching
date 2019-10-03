@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("LoadWhoIsEmployer");
+            result?.RouteName.Should().Be("GetOpportunityCompanyName");
             result?.RouteValues["opportunityId"].Should().Be(1);
             result?.RouteValues["opportunityItemId"].Should().Be(2);
         }

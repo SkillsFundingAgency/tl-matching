@@ -4,7 +4,7 @@
 }
 
 @section backButton{
-    <a asp-controller="Provider" asp-action="SearchProvider" class="govuk-back-link" id="tl-back">Back</a>
+    <a asp-controller="Provider" asp-action="SearchProviderByUkPrn" class="govuk-back-link" id="tl-back">Back</a>
 }
 
 <div class="govuk-grid-row">
@@ -238,7 +238,7 @@
             }
             else
             {
-                <p class="govuk-body"><a id="tl-add-venue" class="govuk-link" asp-route="AddVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
+                <p class="govuk-body"><a id="tl-add-venue" class="govuk-link" asp-route="AddProviderVenue" asp-route-ProviderId="@Model.Id">Add a venue</a></p>
                 <button id="tl-save-finish" type="submit" class="govuk-button" name="SubmitAction" value="SaveAndFinish">Save and finish</button>
             }
         </form>
