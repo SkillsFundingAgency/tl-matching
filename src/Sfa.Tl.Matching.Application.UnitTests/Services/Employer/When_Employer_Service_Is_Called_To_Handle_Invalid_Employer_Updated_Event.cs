@@ -30,10 +30,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), new CrmEmployerEventDataValidator(),
                 _messageQueueService);
 
-            var employerEventBase = CrmEmployerEventBaseBuilder.Buiild(false);
+            var employerEventBase = CrmEmployerEventBaseBuilder.Build(false);
 
             var data = JsonConvert.SerializeObject(employerEventBase, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
-
+            
             employerService.HandleEmployerUpdatedAsync(data).GetAwaiter().GetResult();
         }
 

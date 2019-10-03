@@ -289,7 +289,8 @@ namespace Sfa.Tl.Matching.Application.Services
         private static bool IsAupaMissing(IEnumerable<ValidationFailure> validationFailures)
         {
             return validationFailures.Count(vf => vf.PropertyName == "sfa_aupa"
-                                                  && vf.ErrorCode == "InvalidFormat") > 0;
+                                                  && (vf.ErrorCode == "InvalidFormat" 
+                                                      || vf.ErrorCode == "MissingMandatoryData")) > 0;
         }
     }
 }
