@@ -70,7 +70,9 @@ namespace Sfa.Tl.Matching.Functions
                 {
                     requestBody = await streamReader.ReadToEndAsync();
                 }
-
+                
+                logger.LogInformation($"RequestBody={requestBody}");
+                
                 var updatedRecords = await employerService.HandleEmployerCreatedAsync(requestBody);
 
                 stopwatch.Stop();
@@ -116,6 +118,8 @@ namespace Sfa.Tl.Matching.Functions
                 {
                     requestBody = await streamReader.ReadToEndAsync();
                 }
+
+                logger.LogInformation($"RequestBody={requestBody}");
 
                 var updatedRecords = await employerService.HandleEmployerUpdatedAsync(requestBody);
 
