@@ -135,7 +135,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             //if First Opp (saved opportunity items == 0) then LoadWhoIsEmployer else if referral then check answer of if provisiongap then OpportunityBasket
             return opportunityItemCount == 0 ?
-                RedirectToRoute("LoadWhoIsEmployer", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
+                RedirectToRoute("GetOpportunityCompanyName", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
                 : viewModel.OpportunityType == OpportunityType.Referral ?
                     RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId })
                     : await SaveCheckAnswers(viewModel.OpportunityId, viewModel.OpportunityItemId);

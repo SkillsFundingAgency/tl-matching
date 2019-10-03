@@ -7,11 +7,11 @@
 @section backButton{
     @if (Model.IsFromAddVenue)
     {
-        <a asp-route="AddVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
+        <a asp-route="AddProviderVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
     }
     else
     {
-        <a asp-controller="Provider" asp-action="ProviderDetail" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
+        <a asp-controller="Provider" asp-action="AddProviderDetail" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
     }
 }
 
@@ -42,7 +42,7 @@
             <span class="govuk-caption-m">@Model.ProviderName</span>
             <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
             <p class="govuk-body">
-                <a id="tl-remove" asp-route="GetConfirmRemoveProviderVenue" asp-route-providerVenueId="@Model.Id" class="govuk-link">Remove venue</a>
+                <a id="tl-remove" asp-controller="ProviderVenue" asp-action="GetConfirmRemoveProviderVenue" asp-route-providerVenueId="@Model.Id" class="govuk-link">Remove venue</a>
             </p>
 
             <div class="govuk-form-group">
@@ -108,8 +108,8 @@
                             <td class="govuk-table__cell">@Model.Qualifications[i].LarsId</td>
                             <td class="govuk-table__cell">@Model.Qualifications[i].Title</td>
                             <td class="govuk-table__cell">
-                                <a asp-route="RemoveQualification" asp-route-providerVenueId="@Model.Id" 
-                                   asp-route-qualificationId="@Model.Qualifications[i].Id" 
+                                <a asp-controller="Qualification" asp-action="RemoveQualification" 
+                                   asp-route-providerVenueId="@Model.Id" asp-route-qualificationId="@Model.Qualifications[i].Id" 
                                    class="govuk-link">Remove qualification</a>
                                 <input type="hidden" asp-for="@Model.Qualifications[i].LarsId" name="Qualifications[@i].LarsId" />
                                 <input type="hidden" asp-for="@Model.Qualifications[i].Title" name="Qualifications[@i].Title" />

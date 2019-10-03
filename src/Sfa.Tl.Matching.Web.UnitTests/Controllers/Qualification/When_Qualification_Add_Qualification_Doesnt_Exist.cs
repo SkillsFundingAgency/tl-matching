@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 Postcode = "CV1 2WT"
             };
 
-            _result = controllerWithClaims.AddQualificationAsync(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.CreateQualification(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

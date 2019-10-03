@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
 
-            _result = providerVenueController.ProviderVenueDetailAsync(1).GetAwaiter().GetResult();
+            _result = providerVenueController.GetProviderVenueDetail(1).GetAwaiter().GetResult();
         }
 
         [Fact]

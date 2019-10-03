@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.EmployerConsentAsync(new EmployerConsentViewModel
+            _result = controllerWithClaims.SaveEmployerConsent(new EmployerConsentViewModel
             {
                 OpportunityId = 1
             }).GetAwaiter().GetResult();
