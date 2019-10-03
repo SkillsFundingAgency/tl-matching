@@ -27,7 +27,6 @@ namespace Sfa.Tl.Matching.Functions
             [Inject] IEmailHistoryService emailHistoryService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
-            logger.LogInformation($"SendEmailEnabled={matchingConfiguration.SendEmailEnabled}");
             if (!matchingConfiguration.SendEmailEnabled) return;
 
             var stopwatch = Stopwatch.StartNew();
@@ -44,7 +43,6 @@ namespace Sfa.Tl.Matching.Functions
                 };
 
                 var supportInboxEmail = matchingConfiguration.SupportInboxEmail;
-                logger.LogInformation($"Sending email to SupportInboxEmail={supportInboxEmail}");
 
                 await emailService.SendEmailAsync(EmailTemplateName.EmployerAupaBlank.ToString(), supportInboxEmail, tokens);
 
@@ -53,8 +51,6 @@ namespace Sfa.Tl.Matching.Functions
                     null,
                     supportInboxEmail,
                     "System");
-
-                logger.LogInformation("Sent successfully");
             }
             catch (Exception e)
             {
