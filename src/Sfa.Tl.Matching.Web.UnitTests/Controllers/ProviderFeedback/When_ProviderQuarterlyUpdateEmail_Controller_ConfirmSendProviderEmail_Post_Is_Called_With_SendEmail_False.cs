@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
                 ProviderCount = 100,
                 SendEmail = false
             };
-            _result = controllerWithClaims.ConfirmSendProviderEmail(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.ConfirmSendProviderEmailAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

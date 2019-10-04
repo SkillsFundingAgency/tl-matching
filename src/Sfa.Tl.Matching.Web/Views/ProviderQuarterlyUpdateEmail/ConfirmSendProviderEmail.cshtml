@@ -23,8 +23,7 @@
         }
 
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        <form asp-controller="ProviderQuarterlyUpdateEmail" asp-action="ConfirmSendProviderEmail">
-
+        <form asp-route="SendProviderEmail">
             <div class="govuk-form-group" sfa-validation-for="SendEmail" sfa-validationerror-class="govuk-form-group--error">
                 <span class="govuk-error-message" asp-validation-for="SendEmail"></span>
                 <div class="govuk-radios">

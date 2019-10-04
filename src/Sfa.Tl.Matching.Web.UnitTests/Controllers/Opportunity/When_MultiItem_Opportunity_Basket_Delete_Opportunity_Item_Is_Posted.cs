@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("CreatedBy")
                 .Build();
 
-            _result = controllerWithClaims.DeleteOpportunityItem(new DeleteOpportunityItemViewModel { OpportunityId = 1, OpportunityItemId = 2, BasketItemCount = 2 }).GetAwaiter().GetResult();
+            _result = controllerWithClaims.DeleteOpportunityItemAsync(new DeleteOpportunityItemViewModel { OpportunityId = 1, OpportunityItemId = 2, BasketItemCount = 2 }).GetAwaiter().GetResult();
         }
 
         [Fact]

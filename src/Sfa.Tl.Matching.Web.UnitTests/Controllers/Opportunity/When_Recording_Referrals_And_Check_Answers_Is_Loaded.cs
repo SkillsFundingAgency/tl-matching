@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName(CreatedBy)
                 .Build();
 
-            _result = controllerWithClaims.GetCheckAnswers(OpportunityItemId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.GetCheckAnswersAsync(OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]

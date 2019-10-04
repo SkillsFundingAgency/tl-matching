@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
 
-            _result = providerController.SaveProviderDetail(new ProviderDetailViewModel
+            _result = providerController.SaveProviderDetailAsync(new ProviderDetailViewModel
             {
                 Id = 1,
                 SubmitAction = "SaveAndAddVenue"

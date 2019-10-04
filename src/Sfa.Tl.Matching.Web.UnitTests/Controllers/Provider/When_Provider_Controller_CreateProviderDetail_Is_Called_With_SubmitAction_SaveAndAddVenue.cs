@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
 
-            _result = controllerWithClaims.CreateProviderDetail(new CreateProviderDetailViewModel
+            _result = controllerWithClaims.CreateProviderDetailAsync(new CreateProviderDetailViewModel
             {
                 SubmitAction = "SaveAndAddVenue"
             }).GetAwaiter().GetResult();

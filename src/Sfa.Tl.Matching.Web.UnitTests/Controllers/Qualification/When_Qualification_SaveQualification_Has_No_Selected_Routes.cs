@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 }
             };
 
-            _result = controllerWithClaims.SaveQualification(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveQualificationAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
                 .AddEmail(adminEmail)
                 .Build();
 
-            _result = controllerWithClaims.ConfirmSendProviderEmail().GetAwaiter().GetResult();
+            _result = controllerWithClaims.ConfirmSendProviderEmailAsync().GetAwaiter().GetResult();
         }
 
         [Fact]

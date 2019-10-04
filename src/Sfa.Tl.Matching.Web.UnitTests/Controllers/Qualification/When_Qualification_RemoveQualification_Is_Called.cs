@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 .AddEmail("email@address.com")
                 .Build();
             
-            _result = controllerWithClaims.RemoveQualification(1, 2).GetAwaiter().GetResult();
+            _result = controllerWithClaims.RemoveQualificationAsync(1, 2).GetAwaiter().GetResult();
         }
 
         [Fact]

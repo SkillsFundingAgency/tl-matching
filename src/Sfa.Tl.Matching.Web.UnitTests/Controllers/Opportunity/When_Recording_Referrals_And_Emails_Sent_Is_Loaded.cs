@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("CreatedBy")
                 .Build();
 
-            _result = controllerWithClaims.ReferralEmailSent(1).GetAwaiter().GetResult();
+            _result = controllerWithClaims.ReferralEmailSentAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 });
 
             var opportunityController = new OpportunityController(_opportunityService, mapper);
-            _result = opportunityController.DownloadOpportunitySpreadsheet(1).GetAwaiter().GetResult();
+            _result = opportunityController.DownloadOpportunitySpreadsheetAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]

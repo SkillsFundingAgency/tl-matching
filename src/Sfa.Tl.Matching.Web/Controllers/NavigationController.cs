@@ -101,6 +101,5 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return Redirect(prevUrl);
         }
-
     }
 }

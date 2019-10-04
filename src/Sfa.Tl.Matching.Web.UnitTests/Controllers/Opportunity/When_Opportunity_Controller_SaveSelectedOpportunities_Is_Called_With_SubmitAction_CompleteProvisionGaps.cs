@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityController = new OpportunityController(_opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(_opportunityController).Build();
 
-            _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel
+            _result = controllerWithClaims.SaveSelectedOpportunitiesAsync(new ContinueOpportunityViewModel
             {
                 SubmitAction = "CompleteProvisionGaps"
             }).GetAwaiter().GetResult();

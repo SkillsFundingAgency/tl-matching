@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
 
             var viewModel = new ProviderSearchParametersViewModel { UkPrn = 12345467 };
-            _result = controllerWithClaims.SearchProvider(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SearchProviderAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

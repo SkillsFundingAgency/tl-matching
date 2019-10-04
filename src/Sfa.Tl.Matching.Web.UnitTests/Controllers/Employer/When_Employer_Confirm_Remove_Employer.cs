@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             employerService.GetConfirmDeleteEmployerOpportunityAsync(Arg.Any<int>(), Arg.Any<string>()).Returns(dto);
 
             //Act
-            var result = await sut.ConfirmDelete(opportunity.Id) as ViewResult;
+            var result = await sut.ConfirmDeleteAsync(opportunity.Id) as ViewResult;
 
             //Assert
             result.Should().NotBeNull();
@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             employerService.GetConfirmDeleteEmployerOpportunityAsync(Arg.Any<int>(), Arg.Any<string>()).Returns(dto);
 
             //Act
-            var result = await sut.ConfirmDelete(opportunity.Id) as ViewResult;
+            var result = await sut.ConfirmDeleteAsync(opportunity.Id) as ViewResult;
 
             //Assert
             result?.Model.Should().BeOfType<RemoveEmployerViewModel>();
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             employerService.GetConfirmDeleteEmployerOpportunityAsync(Arg.Any<int>(), Arg.Any<string>()).Returns(dto);
 
             //Act
-            var result = await sut.ConfirmDelete(opportunity.Id) as ViewResult;
+            var result = await sut.ConfirmDeleteAsync(opportunity.Id) as ViewResult;
 
             //Assert
             var viewModel = result?.Model as RemoveEmployerViewModel;
@@ -97,7 +97,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             employerService.GetConfirmDeleteEmployerOpportunityAsync(Arg.Any<int>(), Arg.Any<string>()).Returns(dto);
             
             //Act
-            var result = await sut.ConfirmDelete(opportunity.Id) as ViewResult;
+            var result = await sut.ConfirmDeleteAsync(opportunity.Id) as ViewResult;
 
             //Assert
             var viewModel = result.GetViewModel<RemoveEmployerViewModel>();
