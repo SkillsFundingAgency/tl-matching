@@ -243,7 +243,6 @@ namespace Sfa.Tl.Matching.Application.Services
                          && o.OpportunityItem.Count(oi => oi.Referral.Any()) > 0);
 
                 if (existingReferrals == null) return -1;
-
                 await AddMessageToQueueAsync(employerData);
 
                 return -1;
