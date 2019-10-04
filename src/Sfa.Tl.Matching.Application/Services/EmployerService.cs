@@ -238,8 +238,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (isAupaMissing)
             {
-                var existingReferrals = _opportunityRepository.GetFirstOrDefaultAsync(
-                    o => o.EmployerCrmId == employerData.accountid.ToGuid());
+                var existingReferrals = await _opportunityRepository.GetFirstOrDefaultAsync(
+                    o => o.EmployerCrmId == employerData.accountid.ToGuid()
+                         && o.OpportunityItem.Count(oi => oi.Referral.Any()) > 0);
 
                 if (existingReferrals == null) return -1;
 
