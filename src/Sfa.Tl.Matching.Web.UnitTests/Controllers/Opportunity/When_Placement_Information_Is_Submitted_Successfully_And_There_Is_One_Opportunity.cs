@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.SavePlacementInformation(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SavePlacementInformationAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

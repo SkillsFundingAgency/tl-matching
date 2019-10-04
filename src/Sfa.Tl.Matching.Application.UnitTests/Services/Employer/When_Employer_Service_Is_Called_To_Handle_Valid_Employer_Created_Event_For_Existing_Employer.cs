@@ -37,7 +37,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var employerService = new EmployerService(_employerRepository, opportunityRepository, mapper, new CrmEmployerEventDataValidator(),
                 _messageQueueService);
 
-            _employerEventBase = CrmEmployerEventBaseBuilder.Buiild(true);
+            _employerEventBase = new CrmEmployerEventBaseBuilder()
+                .WithValidAupaStatus().Build();
 
             var data = JsonConvert.SerializeObject(_employerEventBase, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
 

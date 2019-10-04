@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.SaveProvisionGap(new SaveProvisionGapViewModel
+            _result = controllerWithClaims.SaveProvisionGapAsync(new SaveProvisionGapViewModel
             {
                 OpportunityId = 0,
                 OpportunityItemId = 0,

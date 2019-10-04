@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             var viewModel = await Populate(providerVenueId);
             viewModel.IsFromAddVenue = isFromAddVenue;
 
-            return View("ProviderVenueDetail",viewModel);
+            return View("ProviderVenueDetail", viewModel);
         }
 
         [HttpPost]
@@ -100,7 +100,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("remove-venue/{providerVenueId}", Name = "ConfirmRemoveProviderVenue")]
-        public async Task<IActionResult> ConfirmRemoveProviderVenue(RemoveProviderVenueViewModel viewModel)
+        public async Task<IActionResult> ConfirmRemoveProviderVenueAsync(RemoveProviderVenueViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {

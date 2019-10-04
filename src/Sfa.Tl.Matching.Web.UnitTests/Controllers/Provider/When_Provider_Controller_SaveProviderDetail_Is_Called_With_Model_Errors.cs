@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             _providerService = Substitute.For<IProviderService>();
             _providerController = new ProviderController(_providerService, new MatchingConfiguration());
 
-            _result = _providerController.SaveProviderDetail(new ProviderDetailViewModel()).GetAwaiter().GetResult();
+            _result = _providerController.SaveProviderDetailAsync(new ProviderDetailViewModel()).GetAwaiter().GetResult();
         }
 
         [Fact]

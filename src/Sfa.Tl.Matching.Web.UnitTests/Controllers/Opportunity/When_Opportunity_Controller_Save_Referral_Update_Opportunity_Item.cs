@@ -90,7 +90,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             tempData.Add("SelectedProviders", serializeObject);
             controllerWithClaims.TempData = tempData;
 
-            _result = controllerWithClaims.SaveReferral().GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveReferralAsync().GetAwaiter().GetResult();
         }
 
         [Fact]

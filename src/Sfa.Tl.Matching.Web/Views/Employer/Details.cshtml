@@ -34,7 +34,7 @@
 
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-        <form asp-action="SaveOpportunityEmployerDetails" novalidate>
+        <form asp-route="SaveOpportunityEmployerDetails" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="OpportunityItemId" type="hidden" />
             <input asp-for="CompanyName" type="hidden" />

@@ -217,6 +217,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return await CreateOrUpdateEmployerAsync(updatedEvent);
         }
+
         public async Task<int> HandleContactUpdatedAsync(string payload)
         {
             var createdEvent = JsonConvert.DeserializeObject<CrmContactUpdatedEvent>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
@@ -235,16 +236,19 @@ namespace Sfa.Tl.Matching.Application.Services
                 if (!isAupaMissing) return -1;
             }
 
-            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.accountid.ToGuid());
-
             if (isAupaMissing)
             {
-                if (existingEmployer == null) return -1;
+                var existingReferrals = _opportunityRepository.GetFirstOrDefaultAsync(
+                    o => o.EmployerCrmId == employerData.accountid.ToGuid());
+
+                if (existingReferrals == null) return -1;
 
                 await AddMessageToQueueAsync(employerData);
 
                 return -1;
             }
+
+            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.accountid.ToGuid());
 
             if (existingEmployer == null)
             {
@@ -289,7 +293,8 @@ namespace Sfa.Tl.Matching.Application.Services
         private static bool IsAupaMissing(IEnumerable<ValidationFailure> validationFailures)
         {
             return validationFailures.Count(vf => vf.PropertyName == "sfa_aupa"
-                                                  && vf.ErrorCode == "InvalidFormat") > 0;
+                                                  && (vf.ErrorCode == "InvalidFormat" 
+                                                      || vf.ErrorCode == "MissingMandatoryData")) > 0;
         }
     }
 }

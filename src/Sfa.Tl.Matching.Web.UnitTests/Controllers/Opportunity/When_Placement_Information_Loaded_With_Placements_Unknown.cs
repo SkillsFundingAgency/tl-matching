@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             var opportunityController = new OpportunityController(opportunityService,  mapper);
 
-            _result = opportunityController.GetPlacementInformation(OpportunityItemId).GetAwaiter().GetResult();
+            _result = opportunityController.GetPlacementInformationAsync(OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]

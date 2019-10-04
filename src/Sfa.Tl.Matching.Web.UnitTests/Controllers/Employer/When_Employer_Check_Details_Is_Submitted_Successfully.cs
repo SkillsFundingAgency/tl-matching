@@ -66,7 +66,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.SaveCheckOpportunityEmployerDetails(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveCheckOpportunityEmployerDetailsAsync(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

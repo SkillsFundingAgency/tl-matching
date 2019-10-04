@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-details/{opportunityId}-{opportunityItemId}", Name = "GetEmployerDetails")]
-        public async Task<IActionResult> GetEmployerDetails(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetOpportunityEmployerDetailsAsync(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
 
@@ -80,7 +80,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("employer-details/{opportunityId}-{opportunityItemId}", Name = "SaveOpportunityEmployerDetails")]
-        public async Task<IActionResult> SaveOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
+        public async Task<IActionResult> SaveOpportunityEmployerDetailsAsync(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
 
@@ -137,7 +137,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("confirm-remove-employer/{opportunityId}", Name = "ConfirmDelete")]
-        public async Task<IActionResult> ConfirmDelete(int opportunityId)
+        public async Task<IActionResult> ConfirmDeleteAsync(int opportunityId)
         {
             var dto = await _employerService.GetConfirmDeleteEmployerOpportunityAsync(opportunityId,
                 HttpContext.User.GetUserName());
@@ -150,14 +150,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 EmployerCount = dto.EmployerCount
             };
 
-            return View(viewModel);
+            return View("ConfirmDelete", viewModel);
         }
 
         [HttpGet]
         [Route("remove-employer/{opportunityId}", Name = "DeleteEmployer")]
-        public async Task<IActionResult> DeleteEmployer(int opportunityId)
+        public async Task<IActionResult> DeleteEmployerAsync(int opportunityId)
         {
-
             await _opportunityService.DeleteEmployerOpportunityItemAsync(opportunityId);
 
             var employerOpportunities =

@@ -28,13 +28,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("search-ukprn", Name = "SearchProvider")]
-        public async Task<IActionResult> SearchProvider()
+        public async Task<IActionResult> SearchProviderAsync()
         {
             var model = await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel());
 
             model.SearchParameters.ShowAllProvider = false;
 
-            return View(model);
+            return View("SearchProvider", model);
         }
 
         [HttpPost]
@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("create-provider/{ukPrn}/{name}", Name = "CreateProviderDetail")]
-        public async Task<IActionResult> CreateProviderDetail(CreateProviderDetailViewModel viewModel)
+        public async Task<IActionResult> CreateProviderDetailAsync(CreateProviderDetailViewModel viewModel)
         {
             if (viewModel.IsSaveSection)
                 return await PerformSaveSection(viewModel);
@@ -128,7 +128,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("provider-overview/{providerId}", Name = "SaveProviderDetail")]
-        public async Task<IActionResult> SaveProviderDetail(ProviderDetailViewModel viewModel)
+        public async Task<IActionResult> SaveProviderDetailAsync(ProviderDetailViewModel viewModel)
         {
             if (viewModel.IsSaveSection)
                 return await PerformSaveSection(viewModel);

@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             _employerController = new EmployerController(employerService, opportunityService, referralService, mapper);
 
-            _result = _employerController.SaveCheckOpportunityEmployerDetails(viewModel).GetAwaiter().GetResult();
+            _result = _employerController.SaveCheckOpportunityEmployerDetailsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

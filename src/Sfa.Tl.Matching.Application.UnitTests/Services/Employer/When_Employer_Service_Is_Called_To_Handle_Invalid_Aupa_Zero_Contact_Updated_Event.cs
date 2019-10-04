@@ -12,11 +12,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
 {
-    public class When_Employer_Service_Is_Called_To_Handle_Invalid_Contact_Updated_Event
+    public class When_Employer_Service_Is_Called_To_Handle_Invalid_Aupa_Zero_Contact_Updated_Event
     {
         private readonly IRepository<Domain.Models.Employer> _employerRepository;
 
-        public When_Employer_Service_Is_Called_To_Handle_Invalid_Contact_Updated_Event()
+        public When_Employer_Service_Is_Called_To_Handle_Invalid_Aupa_Zero_Contact_Updated_Event()
         {
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
@@ -27,7 +27,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), new CrmEmployerEventDataValidator(),
                 Substitute.For<IMessageQueueService>());
 
-            var employerEventBase = CrmEmployerEventBaseBuilder.Buiild(false);
+            var employerEventBase = new CrmEmployerEventBaseBuilder()
+                .WithZeroAupaStatus().Build();
 
             var data = JsonConvert.SerializeObject(employerEventBase, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
 
