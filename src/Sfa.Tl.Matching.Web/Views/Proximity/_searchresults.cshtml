@@ -1,4 +1,5 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
+﻿@using Sfa.Tl.Matching.Application.Extensions
+@model Sfa.Tl.Matching.Models.ViewModel.SearchViewModel
 
 <h2 class="govuk-body">
     @{ var result = Model.SearchResults.SearchResultProviderCount == 1 ? "result" : "results"; }
@@ -65,13 +66,13 @@
                                     <ul>
                                         <li id="tl-travel-times">
                                             <p class="govuk-body govuk-!-font-weight-bold">@($"{searchResult.Distance:#0.0}") miles</p>
-                                            @if (!string.IsNullOrEmpty(@searchResult.TravelTimeByPublicTransportDisplay))
+                                            @if (@searchResult?.TravelTimeByPublicTransport > 0)
                                             {
-                                                <p class="govuk-body">Public transport: @searchResult.TravelTimeByPublicTransportDisplay</p>
+                                                <p class="govuk-body">Public transport: @searchResult.TravelTimeByPublicTransport.ToReadableString()</p>
                                             }
-                                            @if (!string.IsNullOrEmpty(@searchResult.TravelTimeByDrivingDisplay))
+                                            @if (@searchResult?.TravelTimeByDriving > 0)
                                             {
-                                                <p class="govuk-body">Car: @searchResult.TravelTimeByDrivingDisplay</p>
+                                                <p class="govuk-body">Car: @searchResult.TravelTimeByDriving.ToReadableString()</p>
                                             }
                                         </li>
                                     </ul>
