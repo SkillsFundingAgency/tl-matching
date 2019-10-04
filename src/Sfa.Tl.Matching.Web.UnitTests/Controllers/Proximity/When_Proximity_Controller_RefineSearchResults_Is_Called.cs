@@ -41,7 +41,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             {
                 Postcode = "CV12WT",
                 SelectedRouteId = 1,
-                SearchRadius = 10,
                 CompanyNameWithAka = "CompanyName (AlsoKnownAs)"
             };
 

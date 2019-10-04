@@ -50,7 +50,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var viewModel = new SearchParametersViewModel
             {
                 RoutesSelectList = mapper.Map<SelectListItem[]>(routes),
-                SearchRadius = searchRadius,
                 SelectedRouteId = selectedRouteId,
                 Postcode = postcode
             };
