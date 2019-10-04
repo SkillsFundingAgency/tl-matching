@@ -21,10 +21,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         public When_Employer_Service_Is_Called_To_Handle_Invalid_Aupa_Null_Employer_Updated_Event()
         {
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
+           
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
-
-            _employerRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
-                .Returns(new Domain.Models.Employer());
+            opportunityRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>())
+                .Returns(new Domain.Models.Opportunity());
 
             _messageQueueService = Substitute.For<IMessageQueueService>();
             var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), new CrmEmployerEventDataValidator(),
