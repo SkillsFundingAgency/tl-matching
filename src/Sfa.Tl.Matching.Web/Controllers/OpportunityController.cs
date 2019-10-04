@@ -165,7 +165,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-opportunities/{opportunityId}-{opportunityItemId}", Name = "GetOpportunityBasket")]
-        public async Task<IActionResult> OpportunityBasketAsync(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetOpportunityBasketAsync(int opportunityId, int opportunityItemId)
         {
             await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
@@ -181,8 +181,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("emails-sent/{opportunityId}", Name = "EmailSentReferrals_Get")]
-        public async Task<IActionResult> ReferralEmailSentAsync(int opportunityId)
+        [Route("emails-sent/{opportunityId}", Name = "GetReferralEmailSent")]
+        public async Task<IActionResult> GetReferralEmailSentAsync(int opportunityId)
         {
             var dto = await _opportunityService.GetOpportunityAsync(opportunityId);
             var viewModel = _mapper.Map<SentViewModel>(dto);
@@ -215,7 +215,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("remove-opportunity/{opportunityItemId}", Name = "GetConfirmDeleteOpportunityItem")]
-        public async Task<IActionResult> ConfirmDeleteOpportunityItemAsync(int opportunityItemId)
+        public async Task<IActionResult> GetConfirmDeleteOpportunityItemAsync(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetConfirmDeleteOpportunityItemAsync(opportunityItemId);
 

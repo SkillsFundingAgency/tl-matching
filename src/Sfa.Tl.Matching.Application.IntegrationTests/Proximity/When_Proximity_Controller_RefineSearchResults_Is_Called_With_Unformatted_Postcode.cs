@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
                 SearchRadius = 10
             };
 
-            _result = proximityController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
+            _result = proximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

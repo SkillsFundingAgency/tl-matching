@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetProviderResults")]
-        public async Task<IActionResult> GetProviderResults(SearchParametersViewModel searchParametersViewModel)
+        public async Task<IActionResult> GetProviderResultsAsync(SearchParametersViewModel searchParametersViewModel)
         {
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
 
@@ -90,7 +90,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}", Name = "RefineSearchResults")]
-        public async Task<IActionResult> RefineSearchResults(SearchParametersViewModel viewModel)
+        public async Task<IActionResult> RefineSearchResultsAsync(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
             {
@@ -108,7 +108,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}", Name = "ValidateProviderSearchResult")]
-        public async Task<IActionResult> ValidateProviderSearchResult(SaveReferralViewModel viewModel)
+        public async Task<IActionResult> ValidateProviderSearchResultAsync(SaveReferralViewModel viewModel)
         {
             if (viewModel.SelectedProvider.Any(p => p.IsSelected))
             {

@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 CompanyNameWithAka = "CompanyName (AlsoKnownAs)"
             };
 
-            _result = proximityController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
+            _result = proximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

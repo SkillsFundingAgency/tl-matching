@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("check-employer-details/{opportunityId}-{opportunityItemId}", Name = "CheckEmployerDetails")]
-        public async Task<IActionResult> CheckEmployerDetails(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> CheckEmployerDetailsAsync(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
 
@@ -111,7 +111,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("check-employer-details/{opportunityId}-{opportunityItemId}", Name = "SaveCheckOpportunityEmployerDetails")]
-        public async Task<IActionResult> SaveCheckOpportunityEmployerDetails(EmployerDetailsViewModel viewModel)
+        public async Task<IActionResult> SaveCheckOpportunityEmployerDetailsAsync(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
 
@@ -127,7 +127,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("saved-opportunities", Name = "GetSavedEmployerOpportunity")]
-        public async Task<IActionResult> GetSavedEmployerOpportunity()
+        public async Task<IActionResult> GetSavedEmployerOpportunityAsync()
         {
             var username = HttpContext.User.GetUserName();
             var viewModel = await _employerService.GetSavedEmployerOpportunitiesAsync(username);
@@ -171,7 +171,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
-        public async Task<IActionResult> GetEmployerConsent(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetEmployerConsentAsync(int opportunityId, int opportunityItemId)
         {
             var viewModel = await GetEmployerConsentViewModel(opportunityId, opportunityItemId);
 
@@ -180,14 +180,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("permission/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerConsent")]
-        public async Task<IActionResult> SaveEmployerConsent(EmployerConsentViewModel viewModel)
+        public async Task<IActionResult> SaveEmployerConsentAsync(EmployerConsentViewModel viewModel)
         {
             if (!ModelState.IsValid)
                 return View("EmployerConsent", await GetEmployerConsentViewModel(viewModel.OpportunityId, viewModel.OpportunityItemId));
 
             await _referralService.ConfirmOpportunitiesAsync(viewModel.OpportunityId, HttpContext.User.GetUserName());
 
-            return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetReferralEmailSent", new { id = viewModel.OpportunityId });
         }
 
         private async Task<EmployerConsentViewModel> GetEmployerConsentViewModel(int opportunityId, int opportunityItemId)

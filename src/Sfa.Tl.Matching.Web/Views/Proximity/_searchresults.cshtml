@@ -17,7 +17,7 @@
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 <p class="govuk-hint">Choose one or more providers for this opportunity</p>
 
-<form id="tl-result-form" asp-controller="Proximity" asp-action="ValidateProviderSearchResult">
+<form id="tl-result-form" asp-controller="Proximity" asp-action="ValidateProviderSearchResultAsync">
     <input asp-for="SearchParameters.Postcode" name="Postcode" type="hidden" />
     <input asp-for="SearchParameters.SelectedRouteId" name="SelectedRouteId" type="hidden" />
     <input asp-for="SearchResults.SearchResultProviderCount" name="SearchResultProviderCount" type="hidden" />
