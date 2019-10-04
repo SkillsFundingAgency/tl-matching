@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{Postcode}/{SelectedRouteId}", Name = "GetBackLink")]
-        public async Task<IActionResult> GetBackLink(SearchParametersViewModel viewModel)
+        public async Task<IActionResult> GetBackLinkAsync(SearchParametersViewModel viewModel)
         {
             var prevUrl = await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
 
