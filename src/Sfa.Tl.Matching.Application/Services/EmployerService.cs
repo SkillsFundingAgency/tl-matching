@@ -236,16 +236,19 @@ namespace Sfa.Tl.Matching.Application.Services
                 if (!isAupaMissing) return -1;
             }
 
-            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.accountid.ToGuid());
-
             if (isAupaMissing)
             {
-                if (existingEmployer == null) return -1;
+                var existingReferrals = _opportunityRepository.GetFirstOrDefaultAsync(
+                    o => o.EmployerCrmId == employerData.accountid.ToGuid());
+
+                if (existingReferrals == null) return -1;
 
                 await AddMessageToQueueAsync(employerData);
 
                 return -1;
             }
+
+            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.accountid.ToGuid());
 
             if (existingEmployer == null)
             {
