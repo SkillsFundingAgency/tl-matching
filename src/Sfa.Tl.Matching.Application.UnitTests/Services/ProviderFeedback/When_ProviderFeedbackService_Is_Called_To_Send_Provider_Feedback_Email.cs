@@ -135,11 +135,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>())
                 .Returns(false);
 
-            var expectedResults = new Dictionary<string, string>
-            {
-                {"employer_contact_name", "Employer Contact"},
-            };
-
             await ProviderFeedbackInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity);
 
             var sut = new ProviderFeedbackService(mapper, configuration, logger, dateTimeProvider, emailService,
