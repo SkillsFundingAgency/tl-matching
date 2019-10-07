@@ -3,19 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using AutoFixture.Xunit2;
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
+using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
@@ -51,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                         new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
                             httpcontextAccesor)
                         : type.Name.Contains("LoggedInUserNameResolver")
-                            ? (object) new
+                            ? (object)new
                                 LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
                                     httpcontextAccesor)
                             : type.Name.Contains("UtcNowResolver")
@@ -139,7 +147,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var referralService = new ReferralEmailService(mapper, configuration, dateTimeProvider, emailService,
                 opportunityRepo, _opportunityItemRepository, backgroundProcessHistoryRepo);
 
-            referralService.SendProviderReferralEmailAsync(1, itemIds, 1,  httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
+            referralService.SendProviderReferralEmailAsync(1, itemIds, 1, httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -173,6 +181,59 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>());
+        }
+
+        [Theory, AutoDomainData]
+        public async Task Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values(
+            MatchingConfiguration configuration,
+            IDateTimeProvider dateTimeProvider,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue providerVenue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            [Frozen] IEmailService emailService,
+            [Frozen] IEmailHistoryService emailHistoryService,
+            ILogger<GenericRepository<OpportunityItem>> itemLogger,
+            ILogger<OpportunityRepository> oppLogger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> backgroundLogger,
+            MatchingDbContext dbContext,
+            HttpContext httpContext,
+            HttpContextAccessor httpContextAccessor
+            )
+        {
+            //Arrange
+            dateTimeProvider.UtcNow().Returns(new DateTime(2019, 1, 1));
+            httpContextAccessor.HttpContext = httpContext;
+
+            var config =
+                MapperConfig<OpportunityMapper, OpportunityItemIsSelectedWithUsernameForCompleteDto, OpportunityItem>
+                    .Config(httpContextAccessor, dateTimeProvider);
+
+            var mapper = new Mapper(config);
+
+            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, providerVenue, opportunity, backgroundProcessHistory);
+
+            var opportunityRepository = new OpportunityRepository(oppLogger, dbContext);
+            var opportunityItemRepository = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
+            var backgroundProcessHistoryRepo = new GenericRepository<BackgroundProcessHistory>(backgroundLogger, dbContext);
+
+            var referralService = new ReferralEmailService(mapper, configuration, dateTimeProvider, emailService,
+                emailHistoryService, opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo);
+
+            var itemIds = opportunity.OpportunityItem.Select(oi => oi.Id).ToList();
+
+            //Act
+            await referralService.SendProviderReferralEmailAsync(opportunity.Id,
+                itemIds, backgroundProcessHistory.Id,
+                httpContext.User.GetUserName());
+
+            //Assert
+            var completedItems = dbContext.OpportunityItem.Where(oi => itemIds.Contains(oi.Id));
+
+            completedItems.Select(x => x.IsCompleted).Should().Contain(true);
+
+            completedItems.Where(x => x.IsCompleted).Select(x => x.ModifiedBy).Should()
+                .Contain(httpContext.User.GetUserName());
         }
     }
 }
