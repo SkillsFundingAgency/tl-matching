@@ -52,8 +52,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var viewModel = new SearchParametersViewModel
             {
                 Postcode = requestPostcode,
-                SelectedRouteId = 1,
-                SearchRadius = 10
+                SelectedRouteId = 1
             };
 
             _result = proximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();

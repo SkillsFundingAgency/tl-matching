@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             searchButton.Type.Should().Be("submit");
 
             var searchCount = documentHtml.GetElementById("tl-search-count");
-            searchCount.TextContent.Should().Be("1");
+            searchCount.TextContent.Should().Be("2");
 
             var searchSkillArea = documentHtml.GetElementById("tl-search-skillarea");
             searchSkillArea.TextContent.Should().Be("Agriculture, environmental and animal care");
@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 
             var noProvidersLink = documentHtml.GetElementById("tl-search-nosuitable") as IHtmlAnchorElement;
             noProvidersLink.Text.Should().Be("No suitable providers? Let us know");
-            noProvidersLink.PathName.Should().Be($"/1-provisiongap-opportunities-within-one-hour-of-CV1%202WT-for-route-1");
+            noProvidersLink.PathName.Should().Be($"/2-provisiongap-opportunities-within-one-hour-of-CV1%202WT-for-route-1");
 
             var searchResults = documentHtml.QuerySelector(".tl-search-results") as IHtmlOrderedListElement;
             AssertSearchResult(searchResults, 0);

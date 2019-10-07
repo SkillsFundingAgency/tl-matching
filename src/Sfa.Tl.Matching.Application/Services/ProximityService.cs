@@ -37,15 +37,15 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (searchResults != null && searchResults.Any())
             {
-                var filteredResults = await FilterByTravelTimeAsync(decimal.Parse(dto.Latitude), decimal.Parse(dto.Longitude), searchResults);
-                Debug.WriteLine($"Search results for {dto.Postcode} route {dto.SelectedRouteId} - {searchResults.Count} results, {filteredResults.Count} filtered results");
-                return filteredResults;
+                Debug.Write($"Search results for {dto.Postcode} route {dto.SelectedRouteId} - {searchResults.Count} results, ");
+                searchResults = await FilterByTravelTimeAsync(dto.Postcode, decimal.Parse(dto.Latitude), decimal.Parse(dto.Longitude), searchResults);
+                Debug.WriteLine($" {searchResults.Count} filtered results");
             }
 
             return searchResults ?? new List<SearchResultsViewModelItem>();
         }
 
-        private async Task<IList<SearchResultsViewModelItem>> FilterByTravelTimeAsync(decimal startPointLatitude, decimal startPointLongitude, IList<SearchResultsViewModelItem> searchResults)
+        private async Task<IList<SearchResultsViewModelItem>> FilterByTravelTimeAsync(string originPostcode, decimal originLatitude, decimal originLongitude, IList<SearchResultsViewModelItem> searchResults)
         {
             var destinations = searchResults
                 //.Where(v => v.Latitude != 0 && v.Longitude != 0)
@@ -61,8 +61,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var journeyResults =
                 await Task.WhenAll(
-                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(startPointLatitude, startPointLongitude, destinations, TravelMode.Driving, arrivalTimeSeconds),
-                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(startPointLatitude, startPointLongitude, destinations, TravelMode.Transit, arrivalTimeSeconds));
+                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(originPostcode, originLatitude, originLongitude, destinations, TravelMode.Driving, arrivalTimeSeconds),
+                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(originPostcode, originLatitude, originLongitude, destinations, TravelMode.Transit, arrivalTimeSeconds));
 
             var journeyTimesByCar = journeyResults[0];
             var journeyTimesByPublicTransport = journeyResults[1];

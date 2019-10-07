@@ -79,8 +79,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             _result = proximityController.GetProviderResultsAsync(new SearchParametersViewModel
             {
                 SelectedRouteId = RouteId,
-                Postcode = Postcode,
-                SearchRadius = SearchRadius
+                Postcode = Postcode
             }).GetAwaiter().GetResult();
         }
 

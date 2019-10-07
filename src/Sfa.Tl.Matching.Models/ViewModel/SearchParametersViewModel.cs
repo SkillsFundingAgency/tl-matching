@@ -10,7 +10,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public const int ZeroResultsSearchRadius = 30;
         [Required(ErrorMessage = "You must enter a postcode")]
         public string Postcode { get; set; }
-        public int SearchRadius { get; set; }
         public int? SelectedRouteId { get; set; }
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
