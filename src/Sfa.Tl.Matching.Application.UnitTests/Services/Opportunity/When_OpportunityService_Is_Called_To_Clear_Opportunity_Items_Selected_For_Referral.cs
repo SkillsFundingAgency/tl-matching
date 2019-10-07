@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
     {
         
         [Theory, AutoDomainData]
-        public async Task When_OpportunityService_Is_Called_To_Clear_Items_Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values(
+        public async Task Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values(
             IDateTimeProvider dateTimeProvider,
             Domain.Models.Provider provider,
             Domain.Models.ProviderVenue providerVenue,

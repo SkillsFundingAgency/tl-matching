@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
 {
@@ -15,6 +16,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
             BackgroundProcessHistory backgroundProcessHistory,
             bool isSaved = true, bool isSelectedForReferral = true)
         {
+            backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
+
             await dbContext.AddAsync(provider);
             await dbContext.AddAsync(venue);
             await dbContext.AddAsync(opportunity);
@@ -28,11 +31,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
             {
                 opportunityItem.IsSaved = isSaved;
                 opportunityItem.IsCompleted = false;
+                opportunityItem.OpportunityType = "Referral";
                 opportunityItem.IsSelectedForReferral = isSelectedForReferral;
 
                 dbContext.Entry(opportunityItem).Property("IsSaved").IsModified = true;
                 dbContext.Entry(opportunityItem).Property("IsCompleted").IsModified = true;
                 dbContext.Entry(opportunityItem).Property("IsSelectedForReferral").IsModified = true;
+                dbContext.Entry(opportunityItem).Property("OpportunityType").IsModified = true;
             }
 
             await dbContext.SaveChangesAsync();
