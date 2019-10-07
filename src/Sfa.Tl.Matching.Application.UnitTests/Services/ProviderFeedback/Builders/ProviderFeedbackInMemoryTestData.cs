@@ -29,13 +29,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builde
                 opportunityItem.IsSaved = isSaved;
                 opportunityItem.IsCompleted = true;
                 opportunityItem.IsSelectedForReferral = isSelectedForReferral;
-                opportunityItem.ModifiedOn = DateTime.Today.AddDays(-15);
                 opportunityItem.OpportunityType = "Referral";
 
                 dbContext.Entry(opportunityItem).Property("IsSaved").IsModified = true;
                 dbContext.Entry(opportunityItem).Property("IsCompleted").IsModified = true;
                 dbContext.Entry(opportunityItem).Property("IsSelectedForReferral").IsModified = true;
-                dbContext.Entry(opportunityItem).Property("ModifiedOn").IsModified = true;
                 dbContext.Entry(opportunityItem).Property("OpportunityType").IsModified = true;
             }
 

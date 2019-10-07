@@ -28,6 +28,8 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 
             var employer = fixture.Create<Employer>();
             fixture.Customize<Opportunity>(composer => composer.With(op => op.EmployerCrmId, employer.CrmId));
+
+            fixture.Customize<OpportunityItem>(composer => composer.With(oi => oi.ModifiedOn, new DateTime(2019, 9, 1)));
         }
     }
 }
