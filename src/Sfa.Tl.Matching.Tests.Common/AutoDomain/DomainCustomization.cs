@@ -2,8 +2,6 @@
 using AutoFixture;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
-using Sfa.Tl.Matching.Models.EmailDeliveryStatus;
-
 
 namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
@@ -15,12 +13,8 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.Customizations.Add(new NumericSequenceGenerator());
 
             fixture.Customize<MatchingConfiguration>(composer =>
-                composer
-                    .With(config => config.SendEmailEnabled, true)
-                    .With(config => config.EmployerFeedbackTimeSpan, "-10.00:00:00")
-                    .With(config => config.EmailDeliveryStatusToken, Guid.Parse("72b561ed-a7f3-4c0c-82a9-aae800a51de7"))    
-                );
-                
+                composer.With(config => config.SendEmailEnabled, true)
+                    .With(config => config.EmployerFeedbackTimeSpan, "-10.00:00:00"));
 
             fixture.Customize<Provider>(composer => composer.With(p => p.IsCdfProvider, true)
                 .With(p => p.IsEnabledForReferral, true));
@@ -36,8 +30,6 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 
             fixture.Customize<OpportunityItem>(composer => composer.With(oi => oi.ModifiedOn, new DateTime(2019, 9, 1)));
 
-            fixture.Customize<EmailDeliveryStatusPayLoad>(composer => composer
-                .With(payload => payload.status, "delivered"));
         }
     }
 }
