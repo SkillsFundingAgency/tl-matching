@@ -7,9 +7,9 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
     public static class MapperConfig<TMapper, TSource, TDest>
     {
-        public static MapperConfiguration Config(HttpContextAccessor httpContextAccessor, IDateTimeProvider dateTimeProvider)
+        public static Mapper CreateMapper(HttpContextAccessor httpContextAccessor, IDateTimeProvider dateTimeProvider)
         {
-            return new MapperConfiguration(c =>
+            var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(TMapper).Assembly);
                 c.ConstructServicesUsing(type =>
@@ -21,6 +21,8 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                                 new UtcNowResolver<TSource, TDest>(dateTimeProvider) :
                                 null);
             });
+
+            return new Mapper(config);
         }
     }
 }

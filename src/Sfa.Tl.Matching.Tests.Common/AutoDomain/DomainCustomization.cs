@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoFixture;
+using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 
@@ -16,8 +20,11 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                 composer.With(config => config.SendEmailEnabled, true)
                     .With(config => config.EmployerFeedbackTimeSpan, "-10.00:00:00"));
 
-            fixture.Customize<Provider>(composer => composer.With(p => p.IsCdfProvider, true)
-                .With(p => p.IsEnabledForReferral, true));
+            fixture.Customize<Provider>(composer =>
+                composer.With(p => p.IsCdfProvider, true)
+                .With(p => p.IsEnabledForReferral, true)
+                .With(p => p.ProviderFeedbackSentOn, () => null)
+                );
 
             fixture.Customize<ProviderVenue>(composer => composer.With(pv => pv.IsRemoved, false)
                 .With(pv => pv.IsEnabledForReferral, true));
