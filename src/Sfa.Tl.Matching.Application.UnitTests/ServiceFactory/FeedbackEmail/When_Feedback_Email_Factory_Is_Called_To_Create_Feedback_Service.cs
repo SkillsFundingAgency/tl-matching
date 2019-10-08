@@ -5,7 +5,7 @@ using Sfa.Tl.Matching.Application.Services.ServiceFactory;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.ServiceFactory.FeedbaclEmail
+namespace Sfa.Tl.Matching.Application.UnitTests.ServiceFactory.FeedbackEmail
 {
     public class When_Feedback_Email_Factory_Is_Called_To_Create_Feedback_Service
     {
