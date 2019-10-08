@@ -1,8 +1,7 @@
 ﻿using AutoFixture.Xunit2;
 using FluentAssertions;
-using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces.ServiceFactory;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.Services.ServiceFactory;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
@@ -12,12 +11,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.ServiceFactory.FeedbaclEmail
     {
 
         [Theory, AutoDomainData]
-        public void Then_Create_Provider_Feedback_Service(
-            [Frozen] IFeedbackFactory<ProviderFeedbackService> factory,
-            ProviderFeedbackService service)
+        public void Then_Create_Provider_Feedback_Service([Frozen] FeedbackFactory<ProviderFeedbackService> factory)
         {
-            factory.Create.Returns(service);
-
             var instance = factory.Create;
 
             instance.Should().BeOfType<ProviderFeedbackService>();
@@ -25,12 +20,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.ServiceFactory.FeedbaclEmail
         }
 
         [Theory, AutoDomainData]
-        public void Then_Create_Employer_Feedback_Service(
-            [Frozen] IFeedbackFactory<EmployerFeedbackService> factory,
-            EmployerFeedbackService service)
+        public void Then_Create_Employer_Feedback_Service([Frozen] FeedbackFactory<EmployerFeedbackService> factory)
         {
-            factory.Create.Returns(service);
-
             var instance = factory.Create;
 
             instance.Should().BeOfType<EmployerFeedbackService>();

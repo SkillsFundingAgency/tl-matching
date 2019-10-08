@@ -31,7 +31,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             ILogger<OpportunityRepository> opportunityLogger,
             ILogger<GenericRepository<Domain.Models.Provider>> opportunityItemLogger,
             ILogger<GenericRepository<BackgroundProcessHistory>> backgroundHistoryLogger,
-            IDateTimeProvider dateTimeProvider,
             IEmailService emailService,
             IEmailHistoryService emailHistoryService,
             MatchingDbContext dbContext,
@@ -41,6 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         )
         {
             //Arrange
+            var dateTimeProvider = Substitute.For<IDateTimeProvider>();
             var bankHolidayRepo = new GenericRepository<BankHoliday>(bankHolidayLogger, dbContext);
             var opportunityRepo = new OpportunityRepository(opportunityLogger, dbContext);
             var opportunityItemRepo = new GenericRepository<Domain.Models.Provider>(opportunityItemLogger, dbContext);
