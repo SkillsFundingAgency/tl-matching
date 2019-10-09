@@ -42,14 +42,14 @@ namespace Sfa.Tl.Matching.Functions
                     { "crm_id", crmId.ToString() }
                 };
 
-                var supportInboxEmail = matchingConfiguration.SupportInboxEmail;
+                var matchingServiceSupportEmailAddress = matchingConfiguration.MatchingServiceSupportEmailAddress;
 
-                await emailService.SendEmailAsync(EmailTemplateName.EmployerAupaBlank.ToString(), supportInboxEmail, tokens);
+                await emailService.SendEmailAsync(EmailTemplateName.EmployerAupaBlank.ToString(), matchingServiceSupportEmailAddress, tokens);
 
                 await emailHistoryService.SaveEmailHistoryAsync(EmailTemplateName.EmployerAupaBlank.ToString(),
                     tokens,
                     null,
-                    supportInboxEmail,
+                    matchingServiceSupportEmailAddress,
                     "System");
             }
             catch (Exception e)
