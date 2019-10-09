@@ -106,8 +106,6 @@
     <None Include="PostDeployment\Backfill Employer Feedback Sent.sql" />
     <Build Include="Tables\UserCache.sql" />
     <None Include="PostDeployment\Update Opportunity Table EmployerCrmIds.sql" />
-    <None Include="PostDeployment\Update Opportunity Table EmployerFeedbackSentOn.sql" />
-    <None Include="PostDeployment\Remove EmployerFeedbackSent From Opportunity.sql" />
     <Build Include="Views\MatchingServiceOpportunityReport.sql" />
     <Build Include="Views\MatchingServiceProviderOpportunityReport.sql" />
     <Build Include="Tables\UserProfile.sql" />
