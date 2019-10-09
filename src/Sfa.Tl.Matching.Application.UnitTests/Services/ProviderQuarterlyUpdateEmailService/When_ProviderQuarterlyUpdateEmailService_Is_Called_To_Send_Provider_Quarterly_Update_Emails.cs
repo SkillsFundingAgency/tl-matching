@@ -40,12 +40,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
 
             _backgroundProcessHistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
             _backgroundProcessHistoryRepository
-                .GetSingleOrDefault(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>())
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>())
                 .Returns(new BackgroundProcessHistoryBuilder().Build());
 
             _receivedProviderFeedbackRequestHistories = new List<BackgroundProcessHistory>();
             _backgroundProcessHistoryRepository
-                .Update(Arg.Do<BackgroundProcessHistory>
+                .UpdateAsync(Arg.Do<BackgroundProcessHistory>
                 (x => _receivedProviderFeedbackRequestHistories.Add(
                     new BackgroundProcessHistory
                     {
@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _backgroundProcessHistoryRepository
                 .Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>());
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>());
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _backgroundProcessHistoryRepository
                 .ReceivedWithAnyArgs(2)
-                .Update(Arg.Any<BackgroundProcessHistory>());
+                .UpdateAsync(Arg.Any<BackgroundProcessHistory>());
         }
 
         [Fact]
@@ -98,7 +98,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
             //Can't check Status here because NSubstitute only remembers the last one
             _backgroundProcessHistoryRepository
                 .Received()
-                .Update(Arg.Is<BackgroundProcessHistory>(
+                .UpdateAsync(Arg.Is<BackgroundProcessHistory>(
                     p => p.Id == 1
                          && p.RecordCount == 1
                          && p.ModifiedBy == "TestUser"
@@ -130,7 +130,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
         }
 
         [Fact]
@@ -138,12 +138,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Is<string>(
+                .SendEmailAsync(Arg.Is<string>(
                         templateName => templateName == "ProviderQuarterlyUpdate"),
                     Arg.Is<string>(toAddress => toAddress == "primary.contact@provider.co.uk"),
-                    Arg.Is<string>(subject => subject == "Industry Placement Matching Provider Update"),
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Is<string>(replyToAddress => replyToAddress == ""));
+                    Arg.Any<IDictionary<string, string>>());
         }
 
         [Fact]
@@ -172,12 +170,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
 
             _emailService
                 .Received(1)
-                .SendEmail(Arg.Any<string>(),
-                    Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)),
-                    Arg.Any<string>());
+                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)));
         }
 
         [Fact]
@@ -185,7 +181,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailHistoryService
                 .Received(1)
-                .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
+                .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Fact]

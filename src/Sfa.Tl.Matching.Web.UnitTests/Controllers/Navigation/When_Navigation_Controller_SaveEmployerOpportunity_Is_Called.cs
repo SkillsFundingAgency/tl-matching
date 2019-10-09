@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Filters;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
@@ -11,17 +10,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
     public class When_Navigation_Controller_SaveEmployerOpportunity_Is_Called
     {
         private readonly IOpportunityService _opportunityService;
-        private readonly INavigationService _backLinkService;
         private readonly IActionResult _result;
 
         public When_Navigation_Controller_SaveEmployerOpportunity_Is_Called()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            _backLinkService = Substitute.For<INavigationService>();
+            var backLinkService = Substitute.For<INavigationService>();
             
-            var navigationController = new NavigationController(_opportunityService,_backLinkService);
+            var navigationController = new NavigationController(_opportunityService,backLinkService);
 
-            _result = navigationController.SaveEmployerOpportunity(1).GetAwaiter().GetResult();
+            _result = navigationController.SaveEmployerOpportunityAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]

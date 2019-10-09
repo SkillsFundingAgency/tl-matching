@@ -12,27 +12,27 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 
         Task<int> GetSavedOpportunityItemCountAsync(int opportunityId);
         Task<int> GetReferredOpportunityItemCountAsync(int opportunityId);
-        Task<OpportunityDto> GetOpportunity(int opportunityId);
-        Task<OpportunityItemDto> GetOpportunityItem(int opportunityItemId);
+        Task<OpportunityDto> GetOpportunityAsync(int opportunityId);
+        Task<OpportunityItemDto> GetOpportunityItemAsync(int opportunityItemId);
         Task<PlacementInformationSaveDto> GetPlacementInformationAsync(int opportunityItemId);
         List<ReferralDto> GetReferrals(int opportunityItemId);
-        Task<CheckAnswersViewModel> GetCheckAnswers(int id);
-        Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
+        Task<CheckAnswersViewModel> GetCheckAnswersAsync(int id);
+        Task<OpportunityBasketViewModel> GetOpportunityBasketAsync(int opportunityId);
         Task<ConfirmDeleteOpportunityItemViewModel> GetConfirmDeleteOpportunityItemAsync(int opportunityItemId);
 
         Task<bool> IsReferralOpportunityItemAsync(int id);
         Task<bool> IsNewReferralAsync(int opportunityItemId);
         Task<bool> IsNewProvisionGapAsync(int opportunityItemId);
 
-        Task UpdateOpportunity<T>(T dto) where T : BaseOpportunityDto;
+        Task UpdateOpportunityAsync<T>(T dto) where T : BaseOpportunityDto;
         Task UpdateOpportunityItemAsync<T>(T dto) where T : BaseOpportunityDto;
         Task UpdateProvisionGapAsync(PlacementInformationSaveDto dto);
-        Task UpdateReferrals(OpportunityItemDto opportunityItemDto);
+        Task UpdateReferralsAsync(OpportunityItemDto opportunityItemDto);
 
         Task DeleteOpportunityItemAsync(int opportunityId, int opportunityItemId);
         Task ClearOpportunityItemsSelectedForReferralAsync(int opportunityId);
 
-        Task ContinueWithOpportunities(ContinueOpportunityViewModel viewModel);
+        Task ContinueWithOpportunitiesAsync(ContinueOpportunityViewModel viewModel);
         Task<string> GetCompanyNameWithAkaAsync(int? opportunityId);
         Task DeleteEmployerOpportunityItemAsync(int opportunityId);
         Task<FileDownloadDto> GetOpportunitySpreadsheetDataAsync(int opportunityId);

@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
-            _opportunityItemRepository.Count(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+            _opportunityItemRepository.CountAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(2);
 
             var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, 
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityItemRepository
                 .Received(1)
-                .Count(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
+                .CountAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
         }
 
         [Fact]

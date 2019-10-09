@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dto = new OpportunityItemBuilder()
                 .Build();
 
-            _opportunityItemRepository.GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
+            _opportunityItemRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>())
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityItemRepository
                 .Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>());

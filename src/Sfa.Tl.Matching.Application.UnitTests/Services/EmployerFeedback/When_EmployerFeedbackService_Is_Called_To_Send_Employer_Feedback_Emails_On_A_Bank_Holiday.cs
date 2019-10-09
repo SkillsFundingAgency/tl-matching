@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 c.AddMaps(typeof(OpportunityMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains("UtcNowResolver")
-                        ? new UtcNowResolver<OpportunityItemWithUsernameForEmployerFeedbackSentDto, OpportunityItem>(
+                        ? new UtcNowResolver<UsernameForFeedbackSentDto, OpportunityItem>(
                             _dateTimeProvider)
                         : null);
             });
@@ -86,11 +86,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             IRepository<BankHoliday> bankHolidayRepository =
                 new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
 
-            var employerFeedbackService = new EmployerFeedbackService(
+        var backgroundProcessHistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
+
+        var employerFeedbackService = new EmployerFeedbackService(
                 mapper, testFixture.Configuration, testFixture.Logger,
                 _dateTimeProvider, 
                 _emailService, _emailHistoryService, bankHolidayRepository, 
-                _opportunityRepository, _opportunityItemRepository);
+                _opportunityRepository, backgroundProcessHistoryRepository);
 
             _result = employerFeedbackService
                 .SendFeedbackEmailsAsync("TestUser")
@@ -102,7 +104,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _dateTimeProvider
                 .Received(1)
-                .IsHoliday(Arg.Any<DateTime>(), Arg.Any<IList<DateTime>>());
+                .GetReferralDateAsync(Arg.Any<IList<DateTime>>(), Arg.Any<string>());
         }
 
         [Fact]
@@ -125,7 +127,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _opportunityItemRepository
                 .DidNotReceive()
-                .UpdateManyWithSpecifedColumnsOnly(Arg.Any<IList<OpportunityItem>>(),
+                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Any<IList<OpportunityItem>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>()
@@ -137,8 +139,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailService
                 .DidNotReceive()
-                .SendEmail(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>());
         }
         
         [Fact]
@@ -146,7 +148,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailHistoryService
                 .DidNotReceive()
-                .SaveEmailHistory(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(),
+                .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(),
                     Arg.Any<string>(), Arg.Any<string>());
         }
        

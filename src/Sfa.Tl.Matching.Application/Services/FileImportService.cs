@@ -36,11 +36,11 @@ namespace Sfa.Tl.Matching.Application.Services
             _dataProcessor = dataProcessor;
         }
 
-        public async Task<int> BulkImport(TImportDto fileImportDto)
+        public async Task<int> BulkImportAsync(TImportDto fileImportDto)
         {
             _logger.LogInformation($"Processing { nameof(TImportDto) }.");
 
-            var dataDtos = await _fileReader.ValidateAndParseFile(fileImportDto);
+            var dataDtos = await _fileReader.ValidateAndParseFileAsync(fileImportDto);
 
             if (dataDtos == null || !dataDtos.Any())
             {
@@ -57,9 +57,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
             _logger.LogInformation($"Saving { entities.Count } { nameof(TEntity) }.");
 
-            await _repository.BulkInsert(entities);
+            await _repository.BulkInsertAsync(entities);
 
-            var numberOfRecordsAffected = await _repository.MergeFromStaging();
+            var numberOfRecordsAffected = await _repository.MergeFromStagingAsync();
 
             _dataProcessor.PostProcessingHandler(entities);
 

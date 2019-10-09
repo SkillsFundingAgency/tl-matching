@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                                 ProviderSecondaryContact = null,
                                 ProviderSecondaryContactEmail = null,
                                 ProviderSecondaryContactPhone = null,
-                                ProviderVenuePostCode = "ProviderPostcode"
+                                ProviderVenuePostcode = "ProviderPostcode"
                             }
                         }
                     }

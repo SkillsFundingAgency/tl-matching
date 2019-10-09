@@ -69,28 +69,28 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 }
             };
 
-            opportunityService.UpdateReferrals(dto).GetAwaiter().GetResult();
+            opportunityService.UpdateReferralsAsync(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_DeleteMany_Is_Called_Exactly_Once()
         {
             _referralRepository.Received(1)
-                .DeleteMany(Arg.Any<IList<Domain.Models.Referral>>());
+                .DeleteManyAsync(Arg.Any<IList<Domain.Models.Referral>>());
         }
 
         [Fact]
         public void Then_CreateMany_Is_Called_Exactly_Once()
         {
             _referralRepository.Received(1)
-                .CreateMany(Arg.Any<IList<Domain.Models.Referral>>());
+                .CreateManyAsync(Arg.Any<IList<Domain.Models.Referral>>());
         }
 
         [Fact]
         public void Then_UpdateMany_Is_Called_Exactly_Once()
         {
             _referralRepository.Received(1)
-                .UpdateMany(Arg.Any<IList<Domain.Models.Referral>>());
+                .UpdateManyAsync(Arg.Any<IList<Domain.Models.Referral>>());
         }
     }
 }

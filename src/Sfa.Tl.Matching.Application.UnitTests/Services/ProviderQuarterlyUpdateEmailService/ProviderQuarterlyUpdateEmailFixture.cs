@@ -16,8 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             Configuration = new MatchingConfiguration
             {
-                SendEmailEnabled = true,
-                NotificationsSystemId = "TLevelsIndustryPlacement"
+                SendEmailEnabled = true
             };
 
             DateTimeProvider = Substitute.For<IDateTimeProvider>();

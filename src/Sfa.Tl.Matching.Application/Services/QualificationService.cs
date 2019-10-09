@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (qualificationRouteMappings?.Count > 0)
             {
-                await _qualificationRouteMappingRepository.CreateMany(qualificationRouteMappings);
+                await _qualificationRouteMappingRepository.CreateManyAsync(qualificationRouteMappings);
             }
 
             return qualification.Id;
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<QualificationSearchResultViewModel> GetQualificationByIdAsync(int id)
         {
-            return await _qualificationRepository.GetSingleOrDefault(
+            return await _qualificationRepository.GetSingleOrDefaultAsync(
                 p => p.Id == id,
                 q => new QualificationSearchResultViewModel
                 {
@@ -70,13 +70,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<QualificationDetailViewModel> GetQualificationAsync(string larId)
         {
-            var qualification = await _qualificationRepository.GetSingleOrDefault(p => p.LarsId == larId);
+            var qualification = await _qualificationRepository.GetSingleOrDefaultAsync(p => p.LarsId == larId);
             return _mapper.Map<Qualification, QualificationDetailViewModel>(qualification);
         }
 
         public async Task<string> GetLarTitleAsync(string larId)
         {
-            var lar = await _learningAimReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);
+            var lar = await _learningAimReferenceRepository.GetSingleOrDefaultAsync(l => l.LarId == larId);
             return lar?.Title;
         }
 
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 };
 
             var searchResult = await _qualificationRepository
-                .GetMany(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
+                .GetManyAsync(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
                 .OrderBy(q => q.Id)
                 .Select(q => new QualificationSearchResultViewModel
                 {
@@ -114,7 +114,7 @@ namespace Sfa.Tl.Matching.Application.Services
             };
         }
 
-        public async Task<IList<QualificationShortTitleSearchResultViewModel>> SearchShortTitle(string shortTitle)
+        public async Task<IList<QualificationShortTitleSearchResultViewModel>> SearchShortTitleAsync(string shortTitle)
         {
             var shortTitleSearch = shortTitle.ToQualificationSearch();
 
@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 return new List<QualificationShortTitleSearchResultViewModel>();
 
             var searchResults = await _qualificationRepository
-                .GetMany(q => EF.Functions.Like(q.ShortTitleSearch, $"%{shortTitleSearch}%"))
+                .GetManyAsync(q => EF.Functions.Like(q.ShortTitleSearch, $"%{shortTitleSearch}%"))
                 .Select(q => new QualificationShortTitleSearchResultViewModel
                 {
                     ShortTitle = q.ShortTitle
@@ -136,12 +136,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task UpdateQualificationAsync(SaveQualificationViewModel viewModel)
         {
-            var qualification = await _qualificationRepository.GetSingleOrDefault(v => v.Id == viewModel.QualificationId);
+            var qualification = await _qualificationRepository.GetSingleOrDefaultAsync(v => v.Id == viewModel.QualificationId);
             qualification = _mapper.Map(viewModel, qualification);
-            await _qualificationRepository.Update(qualification);
+            await _qualificationRepository.UpdateAsync(qualification);
 
             var existingMappings = _qualificationRouteMappingRepository
-                .GetMany(r => r.QualificationId == viewModel.QualificationId)
+                .GetManyAsync(r => r.QualificationId == viewModel.QualificationId)
                 .ToList();
 
             var comparer = new QualificationRouteMappingEqualityComparer();
@@ -156,17 +156,17 @@ namespace Sfa.Tl.Matching.Application.Services
                 existingMappings.First(r => r.Id == qrpm.Id);
 
             var deleteMappings = toBeDeleted.Select(Find).ToList();
-            await _qualificationRouteMappingRepository.DeleteMany(deleteMappings);
+            await _qualificationRouteMappingRepository.DeleteManyAsync(deleteMappings);
 
             foreach (var toBeAddedItem in toBeAdded)
             {
-                await _qualificationRouteMappingRepository.Create(toBeAddedItem);
+                await _qualificationRouteMappingRepository.CreateAsync(toBeAddedItem);
             }
         }
 
         public async Task<bool> IsValidOfqualLarIdAsync(string larId)
         {
-            var lar = await _learningAimReferenceRepository.GetSingleOrDefault(l => l.LarId == larId);
+            var lar = await _learningAimReferenceRepository.GetSingleOrDefaultAsync(l => l.LarId == larId);
             return lar != null;
         }
 
@@ -175,9 +175,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return await Task.FromResult(larId?.Length == 8);
         }
 
-        public async Task<int> UpdateQualificationsSearchColumns()
+        public async Task<int> UpdateQualificationsSearchColumnsAsync()
         {
-            var qualificationsFromDb = _qualificationRepository.GetMany()
+            var qualificationsFromDb = _qualificationRepository.GetManyAsync()
                 .Where(q => string.IsNullOrEmpty(q.ShortTitleSearch) || string.IsNullOrEmpty(q.QualificationSearch))
                 .ToList();
 
@@ -191,7 +191,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     qualification.ModifiedBy = "System";
                 }
 
-                await _qualificationRepository.UpdateMany(qualificationsFromDb);
+                await _qualificationRepository.UpdateManyAsync(qualificationsFromDb);
             }
 
             return qualificationsFromDb.Count;

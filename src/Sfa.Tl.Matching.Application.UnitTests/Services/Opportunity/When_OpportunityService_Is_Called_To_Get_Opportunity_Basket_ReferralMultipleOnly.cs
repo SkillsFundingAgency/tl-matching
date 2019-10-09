@@ -39,13 +39,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 .AddReferralItem()
                 .Build();
 
-            _opportunityRepository.GetOpportunityBasket(1).Returns(viewModel);
+            _opportunityRepository.GetOpportunityBasketAsync(1).Returns(viewModel);
 
             var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, 
                 provisionGapRepository, referralRepository, googleMapApiClient,
                 opportunityPipelineReportWriter, dateTimeProvider);
 
-            _result = opportunityService.GetOpportunityBasket(1)
+            _result = opportunityService.GetOpportunityBasketAsync(1)
                 .GetAwaiter().GetResult();
         }
 
@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityRepository
                 .Received(1)
-                .GetOpportunityBasket(1);
+                .GetOpportunityBasketAsync(1);
         }
 
         [Fact]

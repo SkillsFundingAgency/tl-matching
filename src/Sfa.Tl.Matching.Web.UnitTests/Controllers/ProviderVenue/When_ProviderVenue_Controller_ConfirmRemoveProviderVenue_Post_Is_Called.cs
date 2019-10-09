@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 ProviderId = 1,
                 ProviderVenueId = 1
             };
-            _result = providerVenueController.ConfirmRemoveProviderVenue(viewModel).GetAwaiter().GetResult();
+            _result = providerVenueController.ConfirmRemoveProviderVenueAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

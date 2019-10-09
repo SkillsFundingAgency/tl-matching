@@ -68,13 +68,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_ViewModel_SearchRadius_Should_Be_Default_Search_Radius()
-        {
-            var viewModel = _result.GetViewModel<SearchParametersViewModel>();
-            viewModel.SearchRadius.Should().Be(SearchParametersViewModel.DefaultSearchRadius);
-        }
-
-        [Fact]
         public void Then_ViewModel_CompanyNameWithAka_Should_Have_Expected_Value()
         {
             var viewModel = _result.GetViewModel<SearchParametersViewModel>();

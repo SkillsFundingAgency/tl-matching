@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -55,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
-            _opportunityRepository.Create(Arg.Any<Domain.Models.Opportunity>())
+            _opportunityRepository.CreateAsync(Arg.Any<Domain.Models.Opportunity>())
                 .Returns(OpportunityId);
 
             var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, 
@@ -64,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var dto = new OpportunityDto
             {
-                EmployerId = 1,
+                EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer contact",
                 EmployerContactEmail = "employer.contact@employer.co.uk",
                 EmployerContactPhone = "020 123 4567"
@@ -78,8 +79,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityRepository
                 .Received(1)
-                .Create(Arg.Is<Domain.Models.Opportunity>(opportunity =>
-                    opportunity.EmployerId == 1 && 
+                .CreateAsync(Arg.Is<Domain.Models.Opportunity>(opportunity =>
+                    opportunity.EmployerCrmId == new Guid("11111111-1111-1111-1111-111111111111") && 
                     opportunity.EmployerContact == "Employer Contact" &&
                     opportunity.EmployerContactEmail == "employer.contact@employer.co.uk" &&
                     opportunity.EmployerContactPhone == "020 123 4567" &&

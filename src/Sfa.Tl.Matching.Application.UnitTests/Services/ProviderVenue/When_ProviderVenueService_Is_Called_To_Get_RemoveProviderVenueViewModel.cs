@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             var locationService = Substitute.For<ILocationApiClient>();
 
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
-            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
+            _providerVenueRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new ValidProviderVenueBuilder().Build());
 
             var service = new ProviderVenueService(mapper, _providerVenueRepository, locationService, googleMapApiClient);
@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         public void Then_ProviderVenueRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
             _providerVenueRepository.Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
         }
 
         [Fact]

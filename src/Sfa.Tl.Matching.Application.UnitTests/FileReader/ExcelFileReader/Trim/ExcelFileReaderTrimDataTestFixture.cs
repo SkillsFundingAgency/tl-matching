@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.ExcelFileReader.Trim
             var filePath = Path.Combine(TestHelper.GetTestExecutionDirectory(), $"FileReader\\ExcelFileReader\\Trim\\{typeof(TDto).Name.Replace("Dto", string.Empty)}-Trim.xlsx");
             using (var stream = File.Open(filePath, FileMode.Open))
             {
-                Results = excelfileReader.ValidateAndParseFile(new TImportDto
+                Results = excelfileReader.ValidateAndParseFileAsync(new TImportDto
                 {
                     FileDataStream = stream
                 }).GetAwaiter().GetResult();

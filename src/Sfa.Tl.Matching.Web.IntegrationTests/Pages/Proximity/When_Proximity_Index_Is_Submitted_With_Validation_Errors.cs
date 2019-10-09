@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
                 });
 
             Assert.Equal(HttpStatusCode.OK, pageResponse.StatusCode);
-            
+
             response.EnsureSuccessStatusCode();
 
             var responseContent = await HtmlHelpers.GetDocumentAsync(response);

@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             var qualificationController = new QualificationController(mapper, _providerVenueService, qualificationService, providerQualificationService, routePathService);
 
-            _result = qualificationController.AddQualification(1)
+            _result = qualificationController.AddQualificationAsync(1)
                 .GetAwaiter().GetResult();
         }
 

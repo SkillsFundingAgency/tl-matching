@@ -31,7 +31,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         private const string ProviderVenueDisplayName = "Provider venue display name";
         
         private const string Postcode = "SW1A 2AA";
-        private const int SearchRadius = 10;
         private readonly int _selectedRouteId;
 
         public When_Proximity_Controller_Results_Is_Loaded_With_Existing_Opportunity()
@@ -61,8 +60,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
             _proximityService = Substitute.For<IProximityService>();
             _proximityService
-                .SearchProvidersByPostcodeProximity(Arg.Is<ProviderSearchParametersDto>(a =>
-                    a.Postcode == Postcode && a.SearchRadius == SearchRadius && a.SelectedRouteId == RouteId))
+                .SearchProvidersByPostcodeProximityAsync(Arg.Is<ProviderSearchParametersDto>(a =>
+                    a.Postcode == Postcode && a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
             var routePathService = Substitute.For<IRoutePathService>();
@@ -90,7 +89,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             {
                 SelectedRouteId = RouteId,
                 Postcode = Postcode,
-                SearchRadius = SearchRadius,
                 OpportunityId = OpportunityId,
                 OpportunityItemId = OpportunityItemId
             }).GetAwaiter().GetResult();
@@ -101,10 +99,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         {
             _proximityService
                 .Received(1)
-                .SearchProvidersByPostcodeProximity(
+                .SearchProvidersByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
                         a => a.Postcode == Postcode && 
-                             a.SearchRadius == SearchRadius && 
                              a.SelectedRouteId == RouteId));
         }
 
@@ -114,7 +111,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         {
             _proximityService
                 .DidNotReceive()
-                .SearchProvidersForOtherRoutesByPostcodeProximity(
+                .SearchProvidersForOtherRoutesByPostcodeProximityAsync(
                     Arg.Any<ProviderSearchParametersDto>());
         }
 
@@ -137,7 +134,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         {
             var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
             searchParametersViewModel.Postcode.Should().Be(Postcode);
-            searchParametersViewModel.SearchRadius.Should().Be(SearchRadius);
             searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
         }
 

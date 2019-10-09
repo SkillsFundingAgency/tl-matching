@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
             _bankHolidayBulkInsertRepository = Substitute.For<IBulkInsertRepository<BankHoliday>>();
 
             var bankHolidayGenerator = new Functions.BankHolidayGenerator();
-            bankHolidayGenerator.GenerateBankHolidays(
+            bankHolidayGenerator.GenerateBankHolidaysAsync(
                 new TimerInfo(timerSchedule, new ScheduleStatus()),
                 new ExecutionContext(),
                 new NullLogger<Functions.BankHolidayGenerator>(),
@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
         {
             _bankHolidayBulkInsertRepository
                 .Received(1)
-                .BulkInsert(Arg.Any<IList<BankHoliday>>());
+                .BulkInsertAsync(Arg.Any<IList<BankHoliday>>());
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.BankHolidayGenerator
         {
             _functionLogRepository
                 .DidNotReceiveWithAnyArgs()
-                .Create(Arg.Any<FunctionLog>());
+                .CreateAsync(Arg.Any<FunctionLog>());
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             _repository = Substitute.For<IRepository<Domain.Models.Provider>>();
             var referenceRepository = Substitute.For<IRepository<ProviderReference>>();
 
-            _repository.Create(Arg.Any<Domain.Models.Provider>())
+            _repository.CreateAsync(Arg.Any<Domain.Models.Provider>())
                 .Returns(ProviderId);
 
             var providerService = new ProviderService(mapper, _repository, referenceRepository);
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
                 DisplayName = "Display name"
             };
 
-            _result = providerService.CreateProvider(viewModel).GetAwaiter().GetResult();
+            _result = providerService.CreateProviderAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -64,14 +64,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         public void Then_ProviderRepository_Update_Is_Called_Exactly_Once()
         {
             _repository.Received(1)
-                .Create(Arg.Any<Domain.Models.Provider>());
+                .CreateAsync(Arg.Any<Domain.Models.Provider>());
         }
 
         [Fact]
         public void Then_ProviderRepository_Update_Is_Called_With_Expected_Values()
         {
             _repository.Received(1)
-                .Create(Arg.Is<Domain.Models.Provider>(
+                .CreateAsync(Arg.Is<Domain.Models.Provider>(
                     p => p.UkPrn == 123 &&
                          p.Name == "ProviderName" &&
                          p.DisplayName == "Display Name"));

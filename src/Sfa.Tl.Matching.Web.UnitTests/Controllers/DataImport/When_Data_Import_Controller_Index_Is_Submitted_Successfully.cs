@@ -56,6 +56,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
         [Fact]
         public void Then_Service_Upload_Is_Called_Exactly_Once() =>
-            _dataBlobUploadService.ReceivedWithAnyArgs(1).Upload(_dataUploadDto);
+            _dataBlobUploadService.ReceivedWithAnyArgs(1).UploadAsync(_dataUploadDto);
     }
 }

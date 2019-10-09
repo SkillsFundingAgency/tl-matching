@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             _opportunityItemRepository
-                .GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(new OpportunityItemBuilder().Build());
 
             var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, provisionGapRepository, 
@@ -58,13 +58,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         public void Then_Update_Is_Called_Exactly_Once()
         {
             _opportunityItemRepository.Received(1)
-                .Update(Arg.Any<OpportunityItem>());
+                .UpdateAsync(Arg.Any<OpportunityItem>());
         }
 
         [Fact]
         public void Then_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _opportunityItemRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
+            _opportunityItemRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
         }
     }
 }

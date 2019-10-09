@@ -28,36 +28,36 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("search-ukprn", Name = "SearchProvider")]
-        public async Task<IActionResult> SearchProvider()
+        public async Task<IActionResult> SearchProviderAsync()
         {
             var model = await SearchProvidersWithFundingAsync(new ProviderSearchParametersViewModel());
 
             model.SearchParameters.ShowAllProvider = false;
 
-            return View(model);
+            return View("SearchProvider", model);
         }
 
         [HttpPost]
         [Route("search-ukprn", Name = "SearchProviderByUkPrn")]
-        public async Task<IActionResult> SearchProvider(ProviderSearchParametersViewModel viewModel)
+        public async Task<IActionResult> SearchProviderAsync(ProviderSearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid)
-                return View(GetProviderSearchViewModel(viewModel));
+                return View("SearchProvider", GetProviderSearchViewModel(viewModel));
 
             if (!viewModel.UkPrn.HasValue)
             {
                 ModelState.AddModelError(nameof(ProviderSearchParametersViewModel.UkPrn),
                     "You must enter a UKPRN");
-                return View(GetProviderSearchViewModel(viewModel));
+                return View("SearchProvider", GetProviderSearchViewModel(viewModel));
             }
 
             var searchResult = await _providerService.SearchAsync(viewModel.UkPrn.Value);
             if (IsValidProviderSearch(searchResult))
-                return View(await SearchProvidersWithFundingAsync(viewModel));
+                return View("SearchProvider", await SearchProvidersWithFundingAsync(viewModel));
 
             searchResult = await _providerService.SearchReferenceDataAsync(viewModel.UkPrn.Value);
 
-            return View(IsValidProviderSearch(searchResult) ?
+            return View("SearchProvider", IsValidProviderSearch(searchResult) ?
                 GetProviderSearchUkRlpViewModel(viewModel, searchResult) :
                 GetProviderSearchViewModel(viewModel));
         }
@@ -77,7 +77,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("create-provider/{ukPrn}/{name}", Name = "AddProviderDetail")]
         public IActionResult ProviderDetail(AddProviderViewModel viewModel)
         {
-            return View(new ProviderDetailViewModel
+            return View("ProviderDetail", new ProviderDetailViewModel
             {
                 Name = viewModel.Name,
                 DisplayName = viewModel.Name.ToTitleCase(),
@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("create-provider/{ukPrn}/{name}", Name = "CreateProviderDetail")]
-        public async Task<IActionResult> CreateProviderDetail(CreateProviderDetailViewModel viewModel)
+        public async Task<IActionResult> CreateProviderDetailAsync(CreateProviderDetailViewModel viewModel)
         {
             if (viewModel.IsSaveSection)
                 return await PerformSaveSection(viewModel);
@@ -97,7 +97,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (viewModel.IsSaveAndAddVenue)
             {
-                var providerId = await _providerService.CreateProvider(viewModel);
+                var providerId = await _providerService.CreateProviderAsync(viewModel);
                 return RedirectToRoute("AddVenue", new
                 {
                     providerId
@@ -105,7 +105,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             if (!viewModel.IsCdfProvider)
-                return RedirectToAction(nameof(SearchProvider));
+                return RedirectToRoute("SearchProvider");
 
             return RedirectToAction(nameof(ProviderDetail), new AddProviderViewModel
             {
@@ -128,7 +128,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("provider-overview/{providerId}", Name = "SaveProviderDetail")]
-        public async Task<IActionResult> SaveProviderDetail(ProviderDetailViewModel viewModel)
+        public async Task<IActionResult> SaveProviderDetailAsync(ProviderDetailViewModel viewModel)
         {
             if (viewModel.IsSaveSection)
                 return await PerformSaveSection(viewModel);
@@ -145,7 +145,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return await PerformSaveAndFinish(viewModel);
 
             var providerId = viewModel.Id;
-            await _providerService.UpdateProviderDetail(viewModel);
+            await _providerService.UpdateProviderDetailAsync(viewModel);
 
             return RedirectToRoute("AddVenue", new
             {
@@ -180,9 +180,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(nameof(ProviderDetail), viewModel);
             }
 
-            await _providerService.UpdateProviderDetail(viewModel);
+            await _providerService.UpdateProviderDetailAsync(viewModel);
 
-            return RedirectToAction(nameof(SearchProvider));
+            return RedirectToRoute("SearchProvider");
         }
 
         private async Task<ProviderSearchViewModel> SearchProvidersWithFundingAsync(ProviderSearchParametersViewModel viewModel)

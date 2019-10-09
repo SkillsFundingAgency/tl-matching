@@ -27,19 +27,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             //Arrange
             opportunityItem.IsSaved = true;
 
-            opportunityItemRepo.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(new List<OpportunityItem>
+            opportunityItemRepo.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(new List<OpportunityItem>
             {
                 opportunityItem
             }.AsQueryable());
 
-            referralRepo.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(opportunityItem.Referral.AsQueryable());
-            provisionGapRepo.GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(opportunityItem.ProvisionGap.AsQueryable());
+            referralRepo.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(opportunityItem.Referral.AsQueryable());
+            provisionGapRepo.GetManyAsync(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(opportunityItem.ProvisionGap.AsQueryable());
 
             //Act
             await sut.DeleteOpportunityItemAsync(opportunityItem.OpportunityId, opportunityItem.OpportunityId);
 
             //Assert
-            await opportunityRepo.DidNotReceive().Delete(Arg.Any<int>());
+            await opportunityRepo.DidNotReceive().DeleteAsync(Arg.Any<int>());
 
         }
 
@@ -54,19 +54,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             //Arrange
             opportunityItem.IsSaved = true;
 
-            opportunityItemRepo.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(new List<OpportunityItem>
+            opportunityItemRepo.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(new List<OpportunityItem>
             {
                 opportunityItem
             }.AsQueryable());
 
-            referralRepo.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(opportunityItem.Referral.AsQueryable());
-            provisionGapRepo.GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(opportunityItem.ProvisionGap.AsQueryable());
+            referralRepo.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(opportunityItem.Referral.AsQueryable());
+            provisionGapRepo.GetManyAsync(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(opportunityItem.ProvisionGap.AsQueryable());
 
             //Act
             await sut.DeleteOpportunityItemAsync(opportunityItem.OpportunityId, opportunityItem.OpportunityId);
 
             //Assert
-            await opportunityRepo.DidNotReceive().Delete(Arg.Any<int>());
+            await opportunityRepo.DidNotReceive().DeleteAsync(Arg.Any<int>());
         }
 
         [Theory, AutoDomainData]
@@ -80,19 +80,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             //Arrange
             opportunityItem.IsSaved = true;
 
-            opportunityItemRepo.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(new List<OpportunityItem>
+            opportunityItemRepo.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(new List<OpportunityItem>
             {
                 opportunityItem
             }.AsQueryable());
 
-            referralRepo.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(opportunityItem.Referral.AsQueryable());
-            provisionGapRepo.GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(opportunityItem.ProvisionGap.AsQueryable());
+            referralRepo.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(opportunityItem.Referral.AsQueryable());
+            provisionGapRepo.GetManyAsync(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(opportunityItem.ProvisionGap.AsQueryable());
 
             //Act
             await sut.DeleteOpportunityItemAsync(opportunityItem.OpportunityId, opportunityItem.OpportunityId);
 
             //Assert
-            await referralRepo.Received(1).DeleteMany(Arg.Any<List<Domain.Models.Referral>>());
+            await referralRepo.Received(1).DeleteManyAsync(Arg.Any<List<Domain.Models.Referral>>());
         }
 
         [Theory, AutoDomainData]
@@ -106,19 +106,19 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             //Arrange
             opportunityItem.IsSaved = true;
 
-            opportunityItemRepo.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(new List<OpportunityItem>
+            opportunityItemRepo.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(new List<OpportunityItem>
             {
                 opportunityItem
             }.AsQueryable());
 
-            referralRepo.GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(opportunityItem.Referral.AsQueryable());
-            provisionGapRepo.GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(opportunityItem.ProvisionGap.AsQueryable());
+            referralRepo.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(opportunityItem.Referral.AsQueryable());
+            provisionGapRepo.GetManyAsync(Arg.Any<Expression<Func<ProvisionGap, bool>>>()).Returns(opportunityItem.ProvisionGap.AsQueryable());
 
             //Act
             await sut.DeleteOpportunityItemAsync(opportunityItem.OpportunityId, opportunityItem.OpportunityId);
             
             //Assert
-            await provisionGapRepo.Received(1).DeleteMany(Arg.Any<List<ProvisionGap>>());
+            await provisionGapRepo.Received(1).DeleteManyAsync(Arg.Any<List<ProvisionGap>>());
         }
     }
 }

@@ -29,6 +29,25 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             };
         }
 
+        public ProviderVenue BuildWithOneDisabledVenue()
+        {
+            var location = CreatePointLocation((double)Latitude, (double)Longitude);
+
+            return new ProviderVenue
+            {
+                Provider = BuildProvider(true),
+                Postcode = "CV1 2WT",
+                Name = "CV1 2WT",
+                Latitude = Latitude,
+                Longitude = Longitude,
+                Location = location,
+                IsEnabledForReferral = false,
+                IsRemoved = false,
+                Source = "Test",
+                ProviderQualification = BuildProviderQualifications()
+            };
+        }
+
         public ProviderVenue BuildOneVenueWithDisabledProvider()
         {
             var location = CreatePointLocation((double)Latitude, (double)Longitude);

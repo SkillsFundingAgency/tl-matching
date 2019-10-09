@@ -66,13 +66,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.SaveCheckOpportunityEmployerDetails(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveCheckOpportunityEmployerDetailsAsync(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_SaveEmployerDetail_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).UpdateOpportunity(Arg.Is<EmployerDetailDto>(a => 
+            _opportunityService.Received(1).UpdateOpportunityAsync(Arg.Is<EmployerDetailDto>(a => 
                 a.EmployerContact == Contact && 
                 a.EmployerContactEmail == ContactEmail &&
                 a.EmployerContactPhone == ContactPhone &&

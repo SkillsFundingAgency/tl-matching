@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
                 dbContext.SaveChanges();
 
                 var repository = new ProviderVenueRepository(logger, dbContext);
-                _result = repository.GetVenueWithQualifications(Id)
+                _result = repository.GetVenueWithQualificationsAsync(Id)
                     .GetAwaiter().GetResult();
             }
         }

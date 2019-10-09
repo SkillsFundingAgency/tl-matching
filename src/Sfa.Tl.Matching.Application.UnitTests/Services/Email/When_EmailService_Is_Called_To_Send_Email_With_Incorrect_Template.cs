@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
+using Notify.Interfaces;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using SFA.DAS.Notifications.Api.Client;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
     public class When_EmailService_Is_Called_To_Send_Email_With_Incorrect_Template
     {
         private readonly ILogger<EmailService> _logger;
-        private readonly INotificationsApi _notificationsApi;
+        private readonly IAsyncNotificationClient _notificationsApi;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
 
         public When_EmailService_Is_Called_To_Send_Email_With_Incorrect_Template()
@@ -26,20 +26,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 SendEmailEnabled = true
             };
 
-            _notificationsApi = Substitute.For<INotificationsApi>();
+            _notificationsApi = Substitute.For<IAsyncNotificationClient>();
 
             _logger = Substitute.For<ILogger<EmailService>>();
 
             _emailTemplateRepository = Substitute.For<IRepository<EmailTemplate>>();
             _emailTemplateRepository
-                .GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>())
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>())
                 .ReturnsNull();
 
             var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, _logger);
 
-            const string subject = "A test email";
             const string toAddress = "test@test.com";
-            const string replyToAddress = "reply@test.com";
             var tokens = new Dictionary<string, string>
             {
                 { "contactname",  "name" }
@@ -47,13 +45,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             const string templateName = "MissingTestTemplate";
 
-            emailService.SendEmail(templateName, toAddress, subject, tokens, replyToAddress).GetAwaiter().GetResult();
+            emailService.SendEmailAsync(templateName, toAddress, tokens).GetAwaiter().GetResult();
         }
-        
+
         [Fact]
         public void Then_EmailTemplateRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _emailTemplateRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
+            _emailTemplateRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
         }
 
         [Fact]
@@ -66,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 null,
                 Arg.Any<Func<object, Exception, string>>());
         }
-        
+
         [Fact]
         public void Then_EmailTemplateRepository_Logger_Is_Called_With_Expected_Message()
         {
@@ -81,7 +79,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         [Fact]
         public void Then_NotificationsApi_SendEmail_Is_Not_Called()
         {
-            _notificationsApi.DidNotReceive().SendEmail(Arg.Any<SFA.DAS.Notifications.Api.Types.Email>());
+            _notificationsApi.DidNotReceive().SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Any<Dictionary<string, dynamic>>());
         }
 
     }

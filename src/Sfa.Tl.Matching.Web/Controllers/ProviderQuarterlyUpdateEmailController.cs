@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("send-provider-email", Name = "ConfirmSendProviderEmail")]
-        public async Task<IActionResult> ConfirmSendProviderEmail()
+        public async Task<IActionResult> ConfirmSendProviderEmailAsync()
         {
             if (!HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail))
             {
@@ -34,12 +34,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
 
             var viewModel = await GetConfirmSendProviderEmailViewModel();
-            return View(viewModel);
+            return View("ConfirmSendProviderEmail", viewModel);
         }
 
         [HttpPost]
         [Route("send-provider-email", Name = "SendProviderEmail")]
-        public async Task<IActionResult> ConfirmSendProviderEmail(ConfirmSendProviderEmailViewModel viewModel)
+        public async Task<IActionResult> ConfirmSendProviderEmailAsync(ConfirmSendProviderEmailViewModel viewModel)
         {
             if (!HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail))
             {
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View(await GetConfirmSendProviderEmailViewModel(viewModel));
+                return View("ConfirmSendProviderEmail", await GetConfirmSendProviderEmailViewModel(viewModel));
             }
 
             if (viewModel.SendEmail.GetValueOrDefault())

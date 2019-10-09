@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var providerController = new ProviderController(providerService, new MatchingConfiguration());
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
 
-            _result = controllerWithClaims.SearchProvider().GetAwaiter().GetResult();
+            _result = controllerWithClaims.SearchProviderAsync().GetAwaiter().GetResult();
         }
 
         [Fact]

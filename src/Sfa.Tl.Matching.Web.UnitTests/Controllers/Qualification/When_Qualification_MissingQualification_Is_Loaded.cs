@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             var qualificationController = new QualificationController(mapper, providerVenueService, _qualificationService, providerQualificationService, _routePathService);
 
-            _result = qualificationController.MissingQualification(1, "12345678")
+            _result = qualificationController.MissingQualificationAsync(1, "12345678")
                 .GetAwaiter().GetResult();
         }
 

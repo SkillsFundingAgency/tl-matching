@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,11 +21,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId, IEnumerable<int> itemIds)
+        public async Task<IList<OpportunityReferralDto>> GetProviderOpportunitiesAsync(int opportunityId, IEnumerable<int> itemIds)
         {
             var data = await (from op in _dbContext.Opportunity
                               join oi in _dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                              join emp in _dbContext.Employer on op.EmployerId equals emp.Id
+                              join emp in _dbContext.Employer on op.EmployerCrmId equals emp.CrmId
                               join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
                               join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                               join p in _dbContext.Provider on pv.ProviderId equals p.Id
@@ -73,10 +71,10 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return data;
         }
 
-        public async Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId, IEnumerable<int> itemIds)
+        public async Task<EmployerReferralDto> GetEmployerReferralsAsync(int opportunityId, IEnumerable<int> itemIds)
         {
             var data = await (from op in _dbContext.Opportunity
-                              join emp in _dbContext.Employer on op.EmployerId equals emp.Id
+                              join emp in _dbContext.Employer on op.EmployerCrmId equals emp.CrmId
                               where op.Id == opportunityId
                               select new EmployerReferralDto
                               {
@@ -121,7 +119,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                 ProviderSecondaryContactEmail = p.SecondaryContactEmail,
                                                 ProviderSecondaryContactPhone = p.SecondaryContactPhone,
                                                 ProviderVenueTown = pv.Town,
-                                                ProviderVenuePostCode = pv.Postcode
+                                                ProviderVenuePostcode = pv.Postcode
                                             })
                                       })
                               }
@@ -130,11 +128,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return data;
         }
 
-        public async Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId)
+        public async Task<OpportunityBasketViewModel> GetOpportunityBasketAsync(int opportunityId)
         {
             var opportunityBasket = await (from o in _dbContext.Opportunity
                                            join e in _dbContext.Employer
-                                               on o.EmployerId equals e.Id
+                                               on o.EmployerCrmId equals e.CrmId
                                            where o.Id == opportunityId
                                            select new OpportunityBasketViewModel
                                            {
@@ -184,7 +182,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             var dto = await (from o in _dbContext.Opportunity
                              join e in _dbContext.Employer
-                                 on o.EmployerId equals e.Id
+                                 on o.EmployerCrmId equals e.CrmId
                              where o.Id == opportunityId
                              select new OpportunityReportDto
                              {
@@ -236,27 +234,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
         }
 
-        public async Task<List<MatchingServiceOpportunityReportDto>> GetMatchingServiceOpportunityReportAsync()
+        public async Task<List<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync()
         {
-            return await QueryFromSqlAsync<MatchingServiceOpportunityReportDto>("MatchingServiceOpportunityReport.sql");
+            return await _dbContext.MatchingServiceOpportunityReport.OrderBy(o => new { o.OpportunityItemId }).ThenByDescending(o => new { o.OpportunityType, o.IsCompleted, o.IsSaved }).ToListAsync();
         }
 
-        public async Task<List<MatchingServiceProviderOpportunityReportDto>> GetMatchingServiceProviderOpportunityReportAsync()
+        public async Task<List<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync()
         {
-            return await QueryFromSqlAsync<MatchingServiceProviderOpportunityReportDto>("MatchingServiceProviderOpportunityReport.sql");
-        }
-
-        private async Task<List<T>> QueryFromSqlAsync<T>(string sqlFileName) where T : class
-        {
-            string sqlCommnad;
-            var resourceName = $"{typeof(OpportunityRepository).Namespace}.{sqlFileName}";
-            using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-            using (var streamReader = new StreamReader(templateStream ?? throw new InvalidOperationException($"Could not find {sqlFileName} file")))
-            {
-                sqlCommnad = streamReader.ReadToEnd();
-            }
-
-            return await _dbContext.Query<T>().FromSql(sqlCommnad).ToListAsync();
+            return await _dbContext.MatchingServiceProviderOpportunityReport.ToListAsync();
         }
 
         public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
@@ -265,7 +250,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              join oi in _dbContext.OpportunityItem
                                  on o.Id equals oi.OpportunityId
                              where oi.IsCompleted
-                                   && !oi.EmployerFeedbackSent
+                                   && o.EmployerFeedbackSentOn == null 
                                    && oi.ModifiedOn.HasValue
                                    && oi.ModifiedOn.Value <= referralDate
                                    && o.OpportunityItem.Count(x => x.IsCompleted) == 1
@@ -286,7 +271,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             var dto = await (from o in _dbContext.Opportunity
                              join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
-                             join e in _dbContext.Employer on o.EmployerId equals e.Id
+                             join e in _dbContext.Employer on o.EmployerCrmId equals e.CrmId
                              join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
                              join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                              join p in _dbContext.Provider on pv.ProviderId equals p.Id
@@ -295,6 +280,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                    && oi.ModifiedOn.HasValue
                                    && oi.ModifiedOn.Value <= referralDate
                                    && oi.OpportunityType == OpportunityType.Referral.ToString()
+                                   && p.ProviderFeedbackSentOn == null
                              select new ProviderFeedbackDto
                              {
                                  OpportunityId = o.Id,
@@ -305,42 +291,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                  ProviderPrimaryContactEmail = p.PrimaryContactEmail,
                                  ProviderSecondaryContactName = p.SecondaryContact,
                                  ProviderSecondaryContactEmail = p.SecondaryContactEmail,
-                                 IsProviderFeedbackEmailSent = oi.ProviderFeedbackSent
-                             }).ToListAsync();
+                                 ProviderFeedbackEmailSentOn = p.ProviderFeedbackSentOn
+                             })
+                            .GroupBy(feedbackDto => feedbackDto.ProviderId)
+                            .Select(data => data.FirstOrDefault())
+                            .Select(feedbackDto => feedbackDto)
+                            .ToListAsync();
 
             return dto;
-        }
-
-        public IList<ProviderFeedbackDto> GetDistinctReferralsForProviderFeedbackAsync(IList<ProviderFeedbackDto> dto)
-        {
-            var compareList = (from leftComparer in dto
-                from rightComparer in dto
-                where leftComparer.ProviderId == rightComparer.ProviderId && leftComparer.IsProviderFeedbackEmailSent
-                select rightComparer).ToList();
-
-            var distinctList = dto.Except(compareList)
-                .GroupBy(feedbackDto => feedbackDto.ProviderId)
-                .Select(data => data.FirstOrDefault())
-                .Select(result =>
-                {
-                    if (result != null)
-                        return new ProviderFeedbackDto
-                        {
-                            ProviderId = result.ProviderId,
-                            IsProviderFeedbackEmailSent = result.IsProviderFeedbackEmailSent,
-                            OpportunityItemId = result.OpportunityItemId,
-                            ProviderPrimaryContactEmail = result.ProviderPrimaryContactEmail,
-                            OpportunityId = result.OpportunityId,
-                            Companyname = result.Companyname,
-                            ProviderPrimaryContactName = result.ProviderPrimaryContactName,
-                            ProviderSecondaryContactEmail = result.ProviderSecondaryContactEmail,
-                            ProviderSecondaryContactName = result.ProviderSecondaryContactName
-                        };
-
-                    return new ProviderFeedbackDto();
-                }).ToList();
-
-            return distinctList;
         }
 
         private static string GetReasons(IEnumerable<ProvisionGap> provisionGaps)

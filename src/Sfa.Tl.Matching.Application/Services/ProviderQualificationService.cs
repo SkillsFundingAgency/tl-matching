@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> CreateProviderQualificationAsync(AddQualificationViewModel viewModel)
         {
-            var providerQualification = await _providerQualificationRepository.GetSingleOrDefault(
+            var providerQualification = await _providerQualificationRepository.GetSingleOrDefaultAsync(
                 pq => pq.ProviderVenueId == viewModel.ProviderVenueId
                       && pq.QualificationId == viewModel.QualificationId);
 
@@ -32,18 +32,18 @@ namespace Sfa.Tl.Matching.Application.Services
             }
 
             providerQualification = _mapper.Map<ProviderQualification>(viewModel);
-            return await _providerQualificationRepository.Create(providerQualification);
+            return await _providerQualificationRepository.CreateAsync(providerQualification);
         }
 
         public async Task RemoveProviderQualificationAsync(int providerVenueId, int qualificationId)
         {
-            var providerQualifications = await _providerQualificationRepository.GetMany(
+            var providerQualifications = await _providerQualificationRepository.GetManyAsync(
                 pq => pq.ProviderVenueId == providerVenueId
                       && pq.QualificationId == qualificationId).ToListAsync();
 
             if (providerQualifications != null)
             {
-                await _providerQualificationRepository.DeleteMany(providerQualifications);
+                await _providerQualificationRepository.DeleteManyAsync(providerQualifications);
             }
         }
     }

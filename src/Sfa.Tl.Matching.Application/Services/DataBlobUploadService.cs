@@ -20,9 +20,9 @@ namespace Sfa.Tl.Matching.Application.Services
             _configuration = configuration;
         }
 
-        public async Task Upload(DataUploadDto dto)
+        public async Task UploadAsync(DataUploadDto dto)
         {
-            var blobContainer = await GetContainer(dto.ImportType.ToString().ToLowerInvariant());
+            var blobContainer = await GetContainerAsync(dto.ImportType.ToString().ToLowerInvariant());
 
             var blockBlob = blobContainer.GetBlockBlobReference(dto.FileName);
             blockBlob.AddCreatedByMetadata(dto.UserName);
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _logger.LogInformation($"successfuly uploaded {dto.FileName} to {dto.ImportType} folder");
         }
 
-        private async Task<CloudBlobContainer> GetContainer(string containerName)
+        private async Task<CloudBlobContainer> GetContainerAsync(string containerName)
         {
             var storageAccount = CloudStorageAccount.Parse(_configuration.BlobStorageConnectionString);
             var client = storageAccount.CreateCloudBlobClient();

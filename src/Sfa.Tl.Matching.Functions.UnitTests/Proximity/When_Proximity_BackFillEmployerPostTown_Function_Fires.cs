@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         public When_Proximity_BackFillEmployerPostTown_Function_Fires()
         {
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
-            _opportunityItemRepository.GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+            _opportunityItemRepository.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(new List<OpportunityItem>{ new OpportunityItem
                 {
                     Postcode = "CV1 2WT",
@@ -30,22 +30,23 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
                 }}.AsQueryable());
 
             _googleMapsApiClient = Substitute.For<IGoogleMapApiClient>();
-            _googleMapsApiClient.GetAddressDetails("CV1 2WT").Returns("Coventry");
+            _googleMapsApiClient.GetAddressDetailsAsync("CV1 2WT").Returns("Coventry");
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
-            _locationApiClient.IsValidPostCode(Arg.Any<string>()).Returns((true, "CV1 2WT"));
+            _locationApiClient.IsValidPostcodeAsync(Arg.Any<string>(), Arg.Any<bool>()).Returns((true, "CV1 2WT"));
 
             var proximityfunctions = new Functions.Proximity();
 
-            proximityfunctions.BackFillEmployerPostTown(new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null), new ExecutionContext(), new NullLogger<Functions.Proximity>(), _locationApiClient, _googleMapsApiClient, _opportunityItemRepository, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
+            proximityfunctions.BackFillEmployerPostTownAsync(new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null), new ExecutionContext(), new NullLogger<Functions.Proximity>(), _locationApiClient, _googleMapsApiClient, _opportunityItemRepository, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void LocationApiClient_IsValidPostCode_Is_Called_Exactly_Once()
+        public void LocationApiClient_IsValidPostcode_Is_Called_Exactly_Once()
         {
             _locationApiClient
                 .Received(1)
-                .IsValidPostCode(Arg.Is<string>(s => s == "CV1 2WT"));
+                .IsValidPostcodeAsync(Arg.Is<string>(s => s == "CV1 2WT"),
+                    Arg.Is<bool>(b => b));
         }
 
         [Fact]
@@ -53,15 +54,15 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         {
             _googleMapsApiClient
                 .Received(1)
-                .GetAddressDetails(Arg.Is<string>(s => s == "CV1 2WT"));
+                .GetAddressDetailsAsync(Arg.Is<string>(s => s == "CV1 2WT"));
         }
 
         [Fact]
-        public void opportunityItemRepository_UpdateMany_Is_Called_Exactly_Once()
+        public void OpportunityItemRepository_UpdateMany_Is_Called_Exactly_Once()
         {
             _opportunityItemRepository
                 .Received(1)
-                .UpdateMany(Arg.Is<IList<OpportunityItem>>(pv => pv.Count == 1 && pv.First().Town == "Coventry"));
+                .UpdateManyAsync(Arg.Is<IList<OpportunityItem>>(pv => pv.Count == 1 && pv.First().Town == "Coventry"));
         }
     }
 }

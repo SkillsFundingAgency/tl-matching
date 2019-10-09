@@ -7,7 +7,6 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
@@ -17,7 +16,7 @@ namespace Sfa.Tl.Matching.Functions
     public static class MatchingServiceReport
     {
         [FunctionName("GetMatchingServiceOpportunityReport")]
-        public static async Task<IActionResult> GetMatchingServiceOpportunityReport(
+        public static async Task<IActionResult> GetMatchingServiceOpportunityReportAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, 
         ExecutionContext context,
         ILogger logger, 
@@ -47,7 +46,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = "MatchingServiceReport",
@@ -57,7 +56,7 @@ namespace Sfa.Tl.Matching.Functions
             }        }
 
         [FunctionName("GetMatchingServiceProviderOpportunityReport")]
-        public static async Task<IActionResult> GetMatchingServiceProviderOpportunityReport(
+        public static async Task<IActionResult> GetMatchingServiceProviderOpportunityReportAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, 
         ExecutionContext context,
         ILogger logger, 
@@ -87,7 +86,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = "MatchingServiceReport",
@@ -97,12 +96,12 @@ namespace Sfa.Tl.Matching.Functions
             }        }
 
         [FunctionName("GetMatchingServiceEmployerReport")]
-        public static async Task<IActionResult> GetMatchingServiceEmployerReport(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, 
-        ExecutionContext context,
-        ILogger logger, 
-        [Inject] IRepository<Domain.Models.Employer> employerRepository,
-        [Inject] IRepository<FunctionLog> functionlogRepository
+        public static async Task<IActionResult> GetMatchingServiceEmployerReportAsync(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req, 
+            ExecutionContext context,
+            ILogger logger, 
+            [Inject] IRepository<Domain.Models.Employer> employerRepository,
+            [Inject] IRepository<FunctionLog> functionlogRepository
         )
         {
             try
@@ -111,7 +110,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
-                var result = await employerRepository.GetMany().CountAsync();
+                var result = await employerRepository.GetManyAsync().CountAsync();
 
                 stopwatch.Stop();
 
@@ -127,7 +126,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = "MatchingServiceReport",

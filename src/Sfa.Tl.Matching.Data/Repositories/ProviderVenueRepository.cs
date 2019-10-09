@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualifications(int id)
+        public async Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int id)
         {
             var venueWithQualifications = await (from pv in _dbContext.ProviderVenue
                              where pv.Id == id

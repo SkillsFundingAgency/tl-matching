@@ -8,7 +8,6 @@
     <a asp-route="GetBackLink"  
        asp-route-opportunityId="@Model.OpportunityId" 
        asp-route-opportunityItemId="@Model.OpportunityItemId"
-       asp-route-searchRadius="0"
        asp-route-Postcode="0"
        asp-route-SelectedRouteId="0"
        class="govuk-back-link" id="tl-back">Back</a>
@@ -35,7 +34,7 @@
 
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
 
-        <form asp-action="SaveCheckOpportunityEmployerDetails" novalidate>
+        <form asp-action="SaveCheckOpportunityEmployerDetailsAsync" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="OpportunityItemId" type="hidden" />
             <input asp-for="CompanyName" type="hidden" />

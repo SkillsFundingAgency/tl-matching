@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         {
             _routeRepository = Substitute.For<IRepository<Route>>();
 
-            _routeRepository.GetMany().Returns(_routeData);
+            _routeRepository.GetManyAsync().Returns(_routeData);
 
             IRoutePathService service = new RoutePathService(_routeRepository);
 
@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         {
             _routeRepository
                 .Received(1)
-                .GetMany();
+                .GetManyAsync();
         }
 
         [Fact]

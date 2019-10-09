@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public When_Employer_SaveOpportunityCompanyName_Is_Submitted_And_Employer_Is_Already_In_Opportunity_As_Same_User()
         {
             var employerService = Substitute.For<IEmployerService>();
-            employerService.ValidateCompanyNameAndId(Arg.Any<int>(), Arg.Any<string>())
+            employerService.ValidateCompanyNameAndCrmIdAsync(Arg.Any<Guid>(), Arg.Any<string>())
                 .Returns(true);
-            employerService.GetEmployerOpportunityOwnerAsync(Arg.Any<int>())
+            employerService.GetEmployerOpportunityOwnerAsync(Arg.Any<Guid>())
                 .Returns("Same User");
             var opportunityService = Substitute.For<IOpportunityService>();
             var referralService = Substitute.For<IReferralService>();
@@ -43,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 .AddUserName("Same User")
                 .Build();
 
-            _result = controllerWithClaims.SaveOpportunityCompanyName(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveOpportunityCompanyNameAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

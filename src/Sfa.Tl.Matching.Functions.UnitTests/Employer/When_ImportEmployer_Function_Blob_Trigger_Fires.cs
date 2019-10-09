@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Employer
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
             _employerService = Substitute.For<IFileImportService<EmployerStagingFileImportDto>>();
-            Functions.Employer.ImportEmployer(
+            Functions.Employer.ImportEmployerAsync(
                 blobStream,
                 "test",
                 context,
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Employer
         {
             _employerService
                 .Received(1)
-                .BulkImport(Arg.Any<EmployerStagingFileImportDto>());
+                .BulkImportAsync(Arg.Any<EmployerStagingFileImportDto>());
         }
     }
 }

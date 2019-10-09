@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             var providerRepository = Substitute.For<IRepository<Domain.Models.Provider>>();
 
             _providerReferenceRepository = Substitute.For<IRepository<ProviderReference>>();
-            _providerReferenceRepository.GetSingleOrDefault(Arg.Any<Expression<Func<ProviderReference, bool>>>())
+            _providerReferenceRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<ProviderReference, bool>>>())
                 .Returns(new ValidProviderReferenceBuilder().Build());
 
             var service = new ProviderService(mapper, providerRepository, _providerReferenceRepository);
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         public void Then_ProviderReferenceRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
             _providerReferenceRepository.Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<ProviderReference, bool>>>());
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<ProviderReference, bool>>>());
         }
         
         [Fact]

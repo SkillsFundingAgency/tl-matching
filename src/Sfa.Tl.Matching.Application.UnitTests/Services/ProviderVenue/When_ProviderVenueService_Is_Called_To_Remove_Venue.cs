@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             var locationService = Substitute.For<ILocationApiClient>();
 
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
-            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
+            _providerVenueRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new ValidProviderVenueBuilder().Build());
 
             var service = new ProviderVenueService(mapper, _providerVenueRepository, locationService, googleMapApiClient);
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         public void Then_ProviderVenueRepository_UpdateWithSpecifedColumnsOnly_Is_Called_Exactly_Once()
         {
             _providerVenueRepository.Received(1)
-                .UpdateWithSpecifedColumnsOnly(Arg.Any<Domain.Models.ProviderVenue>(),
+                .UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<Domain.Models.ProviderVenue>(),
                     Arg.Any<Expression<Func<Domain.Models.ProviderVenue, object>>[]>());
         }
 
@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         public void Then_ProviderVenueRepository_UpdateWithSpecifedColumnsOnly_Is_Called_With_Expected_Values()
         {
             _providerVenueRepository.Received(1)
-                .UpdateWithSpecifedColumnsOnly(Arg.Is<Domain.Models.ProviderVenue>(
+                .UpdateWithSpecifedColumnsOnlyAsync(Arg.Is<Domain.Models.ProviderVenue>(
                     pv =>
                         pv.Id == 1 &&
                         pv.IsRemoved

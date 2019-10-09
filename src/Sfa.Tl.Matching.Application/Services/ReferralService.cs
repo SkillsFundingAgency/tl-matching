@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.Services
         }
 
 
-        public async Task ConfirmOpportunities(int opportunityId, string username)
+        public async Task ConfirmOpportunitiesAsync(int opportunityId, string username)
         {
             var itemIds = GetOpportunityItemIds(opportunityId);
             await RequestReferralEmailsAsync(opportunityId, itemIds.ToList(), username);
@@ -38,21 +38,21 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 OpportunityId = opportunityId,
                 ItemIds = itemIds,
-                BackgroundProcessHistoryId = await CreateAndGetBackgroundProcessId(BackgroundProcessType.EmployerReferralEmail, username)
+                BackgroundProcessHistoryId = await CreateAndGetBackgroundProcessIdAsync(BackgroundProcessType.EmployerReferralEmail, username)
             });
 
             await _messageQueueService.PushProviderReferralEmailMessageAsync(new SendProviderReferralEmail
             {
                 OpportunityId = opportunityId,
                 ItemIds = itemIds,
-                BackgroundProcessHistoryId = await CreateAndGetBackgroundProcessId(BackgroundProcessType.ProviderReferralEmail, username)
+                BackgroundProcessHistoryId = await CreateAndGetBackgroundProcessIdAsync(BackgroundProcessType.ProviderReferralEmail, username)
             });
         }
 
 
-        private async Task<int> CreateAndGetBackgroundProcessId(BackgroundProcessType processType, string username)
+        private async Task<int> CreateAndGetBackgroundProcessIdAsync(BackgroundProcessType processType, string username)
         {
-            return await _backgroundProcessHistoryRepository.Create(
+            return await _backgroundProcessHistoryRepository.CreateAsync(
                 new BackgroundProcessHistory
                 {
                     ProcessType = processType.ToString(),
@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private IEnumerable<int> GetOpportunityItemIds(int opportunityId)
         {
-            var itemIds = _opportunityItemRepository.GetMany(oi => oi.Opportunity.Id == opportunityId
+            var itemIds = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
                                                                    && oi.IsSaved
                                                                    && oi.IsSelectedForReferral
                                                                    && !oi.IsCompleted)

@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Functions
     {
         // ReSharper disable once UnusedMember.Global
         [FunctionName("ManualUpdateQualificationSearchColumns")]
-        public async Task<IActionResult> ManualUpdateQualificationSearchColumns(
+        public async Task<IActionResult> ManualUpdateQualificationSearchColumnsAsync(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
                 var stopwatch = Stopwatch.StartNew();
-                var updatedRecords = await qualificationService.UpdateQualificationsSearchColumns();
+                var updatedRecords = await qualificationService.UpdateQualificationsSearchColumnsAsync();
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = nameof(QualificationSearchColumns),

@@ -17,9 +17,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public bool IsSaved { get; set; }
         public bool IsSelectedForReferral { get; set; }
         public bool IsCompleted { get; set; }
-        public bool EmployerFeedbackSent { get; set; }
-        public bool ProviderFeedbackSent { get; set; }
-
         public virtual Opportunity Opportunity { get; set; }
         public virtual Route Route { get; set; }
         public virtual ICollection<ProvisionGap> ProvisionGap { get; set; }

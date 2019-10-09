@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -18,6 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         private const int RouteId = 2;
         private readonly IList<SearchResultsByRouteViewModelItem> _result;
         private readonly ILocationApiClient _locationApiClient;
+
         private readonly ISearchProvider _searchProvider;
 
         public When_ProximityService_Is_Called_To_Search_Providers_For_Other_Routes_By_Postcode_Proximity()
@@ -31,20 +33,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
 
             _searchProvider = Substitute.For<ISearchProvider>();
             _searchProvider
-                .SearchProvidersForOtherRoutesByPostcodeProximity(dto)
+                .SearchProvidersForOtherRoutesByPostcodeProximityAsync(dto)
                 .Returns(new SearchResultsByRouteBuilder().Build());
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
-            _locationApiClient.GetGeoLocationData(Postcode).Returns(new PostCodeLookupResultDto
+            _locationApiClient.GetGeoLocationDataAsync(Postcode, true).Returns(new PostcodeLookupResultDto
             {
                 Postcode = Postcode,
                 Longitude = "1.2",
                 Latitude = "1.2"
             });
 
-            var service = new ProximityService(_searchProvider, _locationApiClient);
+            var googleDistanceMatrixApiClient = Substitute.For<IGoogleDistanceMatrixApiClient>();
+            
+            var service = new ProximityService(_searchProvider, _locationApiClient, googleDistanceMatrixApiClient);
 
-            _result = service.SearchProvidersForOtherRoutesByPostcodeProximity(dto).GetAwaiter().GetResult();
+            _result = service.SearchProvidersForOtherRoutesByPostcodeProximityAsync(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -65,13 +69,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         [Fact]
         public void Then_The_LocationService_Is_Called_Exactly_Once()
         {
-            _locationApiClient.Received(1).GetGeoLocationData(Postcode);
+            _locationApiClient.Received(1).GetGeoLocationDataAsync(Postcode, true);
         }
 
         [Fact]
         public void Then_The_ISearchProvider_Is_Called_Exactly_Once()
         {
-            _searchProvider.Received(1).SearchProvidersForOtherRoutesByPostcodeProximity(Arg.Any<ProviderSearchParametersDto>());
+            _searchProvider.Received(1).SearchProvidersForOtherRoutesByPostcodeProximityAsync(Arg.Any<ProviderSearchParametersDto>());
         }
     }
 }

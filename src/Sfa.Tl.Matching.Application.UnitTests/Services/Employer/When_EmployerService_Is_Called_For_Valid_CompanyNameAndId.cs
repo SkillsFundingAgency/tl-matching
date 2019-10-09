@@ -4,6 +4,7 @@ using AutoMapper;
 using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Event;
@@ -16,29 +17,31 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         private readonly IRepository<Domain.Models.Employer> _employerRepository;
         private readonly bool _employerResult;
 
-        private const int EmployerId = 1;
+        private readonly Guid _employerCrmId = new Guid("11111111-1111-1111-1111-111111111111");
         private const string CompanyName = "CompanyName";
 
         public When_EmployerService_Is_Called_For_Valid_CompanyNameAndId()
         {
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
+
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>(),
-                                                    Arg.Any<Expression<Func<Domain.Models.Employer, int>>>())
-                                .Returns(100);
+            _employerRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>(),
+                                                    Arg.Any<Expression<Func<Domain.Models.Employer, Guid>>>())
+                                .Returns(new Guid("11111111-1111-1111-1111-111111111111"));
 
-            var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>());
+            var employerService = new EmployerService(_employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>(),
+                Substitute.For<IMessageQueueService>());
 
-            _employerResult = employerService.ValidateCompanyNameAndId(EmployerId, CompanyName).GetAwaiter().GetResult();
+            _employerResult = employerService.ValidateCompanyNameAndCrmIdAsync(_employerCrmId, CompanyName).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetEmployer_Is_Called_Exactly_Once()
         {
             _employerRepository.Received(1)
-                .GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>(),
-                                    Arg.Any<Expression<Func<Domain.Models.Employer, int>>>());
+                .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>(),
+                                    Arg.Any<Expression<Func<Domain.Models.Employer, Guid>>>());
         }
 
         [Fact]

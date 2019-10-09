@@ -24,9 +24,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
             var config = new MapperConfiguration(c => c.AddMaps(typeof(ServiceStatusHistoryMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var serviceStatusHistories = new List<Domain.Models.ServiceStatusHistory>
-            {
-            }.AsQueryable();
+            var serviceStatusHistories = new List<Domain.Models.ServiceStatusHistory>()
+                .AsQueryable();
 
             var mockSet = Substitute.For<DbSet<Domain.Models.ServiceStatusHistory>, IAsyncEnumerable<Domain.Models.ServiceStatusHistory>, IQueryable<Domain.Models.ServiceStatusHistory>>();
 
@@ -47,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
                 new GenericRepository<Domain.Models.ServiceStatusHistory>(NullLogger<GenericRepository<Domain.Models.ServiceStatusHistory>>.Instance, mockContext);
 
             var serviceStatusHistoryService = new ServiceStatusHistoryService(mapper, serviceStatusHistoryRepository);
-            _result = serviceStatusHistoryService.GetLatestServiceStatusHistory()
+            _result = serviceStatusHistoryService.GetLatestServiceStatusHistoryAsync()
                 .GetAwaiter().GetResult();
         }
 

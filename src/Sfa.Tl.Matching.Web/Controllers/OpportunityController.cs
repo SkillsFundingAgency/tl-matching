@@ -28,8 +28,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _mapper = mapper;
         }
 
-        [Route("{SearchResultProviderCount}-provisiongap-opportunities-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "SaveProvisionGap")]
-        public async Task<IActionResult> SaveProvisionGap(SaveProvisionGapViewModel viewModel)
+        [Route("{SearchResultProviderCount}-provisiongap-opportunities-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}", Name = "SaveProvisionGap")]
+        public async Task<IActionResult> SaveProvisionGapAsync(SaveProvisionGapViewModel viewModel)
         {
             var opportunityDto = _mapper.Map<OpportunityDto>(viewModel);
             var opportunityItemDto = _mapper.Map<OpportunityItemDto>(viewModel);
@@ -66,9 +66,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("referral-create", Name = "SaveReferral")]
-        public async Task<IActionResult> SaveReferral(string viewModel)
+        public async Task<IActionResult> SaveReferralAsync()
         {
-            var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(viewModel);
+            var selectedProviders = TempData["SelectedProviders"] as string;
+            var saveReferralViewModel = JsonConvert.DeserializeObject<SaveReferralViewModel>(selectedProviders);
 
             var opportunityDto = _mapper.Map<OpportunityDto>(saveReferralViewModel);
             var opportunityItemDto = _mapper.Map<OpportunityItemDto>(saveReferralViewModel);
@@ -97,14 +98,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchResultProviderCount = saveReferralViewModel.SearchResultProviderCount
             };
             await _opportunityService.UpdateOpportunityItemAsync(providerSearchDto);
-            await _opportunityService.UpdateReferrals(opportunityItemDto);
+            await _opportunityService.UpdateReferralsAsync(opportunityItemDto);
 
             return RedirectToRoute("GetPlacementInformation", new { saveReferralViewModel.OpportunityItemId });
         }
 
         [HttpGet]
         [Route("placement-information/{opportunityItemId}", Name = "GetPlacementInformation")]
-        public async Task<IActionResult> GetPlacementInformation(int opportunityItemId)
+        public async Task<IActionResult> GetPlacementInformationAsync(int opportunityItemId)
         {
             var dto = await _opportunityService.GetPlacementInformationAsync(opportunityItemId);
 
@@ -114,8 +115,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("placement-information/{opportunityItemId}")]
-        public async Task<IActionResult> SavePlacementInformation(PlacementInformationSaveViewModel viewModel)
+        [Route("placement-information/{opportunityItemId}", Name = "SavePlacementInformation")]
+        public async Task<IActionResult> SavePlacementInformationAsync(PlacementInformationSaveViewModel viewModel)
         {
             await Validate(viewModel);
 
@@ -142,9 +143,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("check-answers/{opportunityItemId}", Name = "GetCheckAnswers")]
-        public async Task<IActionResult> GetCheckAnswers(int opportunityItemId)
+        public async Task<IActionResult> GetCheckAnswersAsync(int opportunityItemId)
         {
-            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
+            var viewModel = await _opportunityService.GetCheckAnswersAsync(opportunityItemId);
 
             return View("CheckAnswers", viewModel);
         }
@@ -164,11 +165,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-opportunities/{opportunityId}-{opportunityItemId}", Name = "GetOpportunityBasket")]
-        public async Task<IActionResult> OpportunityBasket(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> OpportunityBasketAsync(int opportunityId, int opportunityItemId)
         {
             await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
-            var viewModel = await _opportunityService.GetOpportunityBasket(opportunityId);
+            var viewModel = await _opportunityService.GetOpportunityBasketAsync(opportunityId);
 
             viewModel.OpportunityItemId = opportunityItemId != 0 ? opportunityItemId
                 : viewModel.OpportunityItemId =
@@ -176,36 +177,36 @@ namespace Sfa.Tl.Matching.Web.Controllers
                         ? viewModel.ReferralItems.LastOrDefault()?.OpportunityItemId :
                         viewModel.ProvisionGapItems.LastOrDefault()?.OpportunityItemId) ?? 0;
 
-            return View(viewModel);
+            return View("OpportunityBasket", viewModel);
         }
 
         [HttpGet]
         [Route("emails-sent/{opportunityId}", Name = "EmailSentReferrals_Get")]
-        public async Task<IActionResult> ReferralEmailSent(int opportunityId)
+        public async Task<IActionResult> ReferralEmailSentAsync(int opportunityId)
         {
-            var dto = await _opportunityService.GetOpportunity(opportunityId);
+            var dto = await _opportunityService.GetOpportunityAsync(opportunityId);
             var viewModel = _mapper.Map<SentViewModel>(dto);
             viewModel.EmployerCrmRecord = dto.EmployerCrmId.ToString();
 
-            return View(viewModel);
+            return View("ReferralEmailSent", viewModel);
         }
 
         [HttpPost]
         [Route("employer-opportunities/{opportunityId}-{opportunityItemId}", Name = "SaveSelectedOpportunities")]
-        public async Task<IActionResult> SaveSelectedOpportunities(ContinueOpportunityViewModel viewModel)
+        public async Task<IActionResult> SaveSelectedOpportunitiesAsync(ContinueOpportunityViewModel viewModel)
         {
             if (viewModel.SubmitAction == "SaveSelectedOpportunities")
             {
                 Validate(viewModel);
                 if (!ModelState.IsValid)
                 {
-                    var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
+                    var opportunityBasketViewModel = await _opportunityService.GetOpportunityBasketAsync(viewModel.OpportunityId);
 
-                    return View(nameof(OpportunityBasket), opportunityBasketViewModel);
+                    return View("OpportunityBasket", opportunityBasketViewModel);
                 }
             }
 
-            await _opportunityService.ContinueWithOpportunities(viewModel);
+            await _opportunityService.ContinueWithOpportunitiesAsync(viewModel);
 
             return viewModel.SubmitAction == "CompleteProvisionGaps" ?
                 RedirectToRoute("Start") :
@@ -214,15 +215,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("remove-opportunity/{opportunityItemId}", Name = "GetConfirmDeleteOpportunityItem")]
-        public async Task<IActionResult> ConfirmDeleteOpportunityItem(int opportunityItemId)
+        public async Task<IActionResult> ConfirmDeleteOpportunityItemAsync(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetConfirmDeleteOpportunityItemAsync(opportunityItemId);
 
-            return View(viewModel);
+            return View("ConfirmDeleteOpportunityItem", viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteOpportunityItem(DeleteOpportunityItemViewModel viewModel)
+        public async Task<IActionResult> DeleteOpportunityItemAsync(DeleteOpportunityItemViewModel viewModel)
         {
             await _opportunityService.DeleteOpportunityItemAsync(viewModel.OpportunityId, viewModel.OpportunityItemId);
 
@@ -233,7 +234,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("download-opportunity/{opportunityId}", Name = "DownloadOpportunitySpreadsheet")]
-        public async Task<IActionResult> DownloadOpportunitySpreadsheet(int opportunityId)
+        public async Task<IActionResult> DownloadOpportunitySpreadsheetAsync(int opportunityId)
         {
             var downloadedFileInfo = await _opportunityService.GetOpportunitySpreadsheetDataAsync(opportunityId);
 
@@ -244,7 +245,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("remove-referral/{referralId}-{opportunityItemId}", Name = "DeleteReferral")]
-        public async Task<IActionResult> DeleteReferral(int referralId, int opportunityItemId)
+        public async Task<IActionResult> DeleteReferralAsync(int referralId, int opportunityItemId)
         {
             await _opportunityService.DeleteReferralAsync(referralId);
             return RedirectToRoute("GetCheckAnswers", new { opportunityItemId });
@@ -258,7 +259,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task Validate(PlacementInformationSaveViewModel viewModel)
         {
-            var opportunityItem = await _opportunityService.GetOpportunityItem(viewModel.OpportunityItemId);
+            var opportunityItem = await _opportunityService.GetOpportunityItemAsync(viewModel.OpportunityItemId);
             if (opportunityItem != null)
             {
                 viewModel.Postcode = opportunityItem.Postcode;

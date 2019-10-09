@@ -37,11 +37,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             dateTimeProvider.UtcNow().Returns(new DateTime(2019, 1, 1));
 
             _locationApiClient = Substitute.For<ILocationApiClient>();
-            _locationApiClient.IsValidPostCode(Arg.Any<string>())
+            _locationApiClient.IsValidPostcodeAsync(Arg.Any<string>(), Arg.Any<bool>())
                 .Returns(callinfo => callinfo.Arg<string>() == "CV1 2WT"
                     ? (true, "CV1 2WT")
                     : (false, null));
-            
+
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(ProviderVenueMapper).Assembly);
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             var mapper = new Mapper(config);
 
             _providerVenueRepository = Substitute.For<IProviderVenueRepository>();
-            _providerVenueRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
+            _providerVenueRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>())
                 .Returns(new ValidProviderVenueBuilder().Build());
 
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
@@ -79,30 +79,31 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         }
 
         [Fact]
-        public void LocationApiClient_IsValidPostCode_Is_Called_Exactly_Once()
+        public void LocationApiClient_IsValidPostcode_Is_Called_Exactly_Once()
         {
             _locationApiClient
                 .Received(1)
-                .IsValidPostCode(Arg.Is<string>(s => s == "CV1 2WT"));
+                .IsValidPostcodeAsync(Arg.Is<string>(s => s == "CV1 2WT"),
+                    Arg.Is<bool>(b => b));
         }
 
         [Fact]
         public void Then_ProviderVenueRepository_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _providerVenueRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
+            _providerVenueRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
         }
 
         [Fact]
         public void Then_ProviderVenueRepository_Update_Is_Called_Exactly_Once()
         {
-            _providerVenueRepository.Received(1).Update(Arg.Any<Domain.Models.ProviderVenue>());
+            _providerVenueRepository.Received(1).UpdateAsync(Arg.Any<Domain.Models.ProviderVenue>());
         }
         
         [Fact]
         public void Then_ProviderVenueRepository_Update_Is_Called_With_Expected_Values()
         {
             _providerVenueRepository.Received(1)
-                .Update(Arg.Is<Domain.Models.ProviderVenue>(
+                .UpdateAsync(Arg.Is<Domain.Models.ProviderVenue>(
                     pv => pv.Id == 1 &&
                     pv.Postcode == "CV1 2WT" &&
                     pv.Name == "CV1 2WT" &&

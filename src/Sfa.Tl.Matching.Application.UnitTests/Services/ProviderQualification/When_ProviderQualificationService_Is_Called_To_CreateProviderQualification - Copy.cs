@@ -46,9 +46,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
             var mapper = new Mapper(config);
 
             _providerQualificationRepository = Substitute.For<IRepository<Domain.Models.ProviderQualification>>();
-            _providerQualificationRepository.Create(Arg.Any<Domain.Models.ProviderQualification>())
+            _providerQualificationRepository.CreateAsync(Arg.Any<Domain.Models.ProviderQualification>())
                 .Returns(1);
-            _providerQualificationRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.ProviderQualification, bool>>>())
+            _providerQualificationRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderQualification, bool>>>())
                 .Returns((Domain.Models.ProviderQualification)null);
 
             var providerQualificationService = new ProviderQualificationService(mapper, _providerQualificationRepository);
@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
         {
             _providerQualificationRepository
                 .Received(1)
-                .Create(Arg.Any<Domain.Models.ProviderQualification>());
+                .CreateAsync(Arg.Any<Domain.Models.ProviderQualification>());
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
         {
             _providerQualificationRepository
                 .Received()
-                .Create(Arg.Is<Domain.Models.ProviderQualification>(
+                .CreateAsync(Arg.Is<Domain.Models.ProviderQualification>(
                     p => p.ProviderVenueId == 1 &&
                          p.QualificationId == 2
                         ));

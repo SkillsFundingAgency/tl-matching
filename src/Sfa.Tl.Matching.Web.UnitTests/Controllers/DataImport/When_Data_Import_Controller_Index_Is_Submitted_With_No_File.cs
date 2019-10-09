@@ -54,6 +54,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
         [Fact]
         public void Then_Service_Upload_Is_Not_Called() =>
-            _dataBlobUploadService.DidNotReceive().Upload(_dataUploadDto);
+            _dataBlobUploadService.DidNotReceive().UploadAsync(_dataUploadDto);
     }
 }

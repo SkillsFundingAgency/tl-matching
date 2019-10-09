@@ -8,6 +8,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task PushProviderQuarterlyRequestMessageAsync(SendProviderFeedbackEmail providerRequest);
         Task PushProviderReferralEmailMessageAsync(SendProviderReferralEmail providerReferralEmail);
         Task PushEmployerReferralEmailMessageAsync(SendEmployerReferralEmail employerReferralEmail);
-
+        Task PushEmployerAupaBlankEmailMessageAsync(SendEmployerAupaBlankEmail employerAupaBlankEmail);
     }
 }

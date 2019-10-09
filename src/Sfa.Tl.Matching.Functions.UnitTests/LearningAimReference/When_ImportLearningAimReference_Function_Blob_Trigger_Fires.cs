@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimReference
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
             _fileImportService = Substitute.For<IFileImportService<LearningAimReferenceStagingFileImportDto>>();
-            Functions.LearningAimReference.ImportLearningAimReference(
+            Functions.LearningAimReference.ImportLearningAimReferenceAsync(
                 blobStream,
                 "test",
                 context,
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimReference
         {
             _fileImportService
                 .Received(1)
-                .BulkImport(Arg.Any<LearningAimReferenceStagingFileImportDto>());
+                .BulkImportAsync(Arg.Any<LearningAimReferenceStagingFileImportDto>());
         }
     }
 }

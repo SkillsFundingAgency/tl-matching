@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             
             _googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
-            _googleMapApiClient.GetAddressDetails(Arg.Is<string>(s => s == "AA1 1AA")).Returns("Coventry");
+            _googleMapApiClient.GetAddressDetailsAsync(Arg.Is<string>(s => s == "AA1 1AA")).Returns("Coventry");
 
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
             var referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
-            _opportunityItemRepository.Create(Arg.Any<OpportunityItem>())
+            _opportunityItemRepository.CreateAsync(Arg.Any<OpportunityItem>())
                 .Returns(OpportunityItemId);
 
             var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, 
@@ -94,7 +94,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityItemRepository
                 .Received(1)
-                .Create(Arg.Is<OpportunityItem>(opportunityItem =>
+                .CreateAsync(Arg.Is<OpportunityItem>(opportunityItem =>
                     opportunityItem.OpportunityId == OpportunityId &&
                     opportunityItem.OpportunityType == OpportunityType.Referral.ToString() &&
                     opportunityItem.RouteId == 5 &&
@@ -109,7 +109,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     opportunityItem.IsSaved &&
                     opportunityItem.IsSelectedForReferral &&
                     opportunityItem.IsCompleted &&
-                    opportunityItem.EmployerFeedbackSent &&
                     opportunityItem.CreatedBy == "adminUserName"
             ));
         }
@@ -123,7 +122,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_GoogleMapApiClient_GetAddressDetails_Is_Called_Exactly_Once()
         {
-            _googleMapApiClient.Received(1).GetAddressDetails(Arg.Is<string>(s => s == "AA1 1AA"));
+            _googleMapApiClient.Received(1).GetAddressDetailsAsync(Arg.Is<string>(s => s == "AA1 1AA"));
         }
     }
 }

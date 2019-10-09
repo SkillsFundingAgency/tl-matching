@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
-            _opportunityRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(new Domain.Models.Opportunity { Id = OpportunityId });
+            _opportunityRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>()).Returns(new Domain.Models.Opportunity { Id = OpportunityId });
 
             var opportunityService = new OpportunityService(mapper, _opportunityRepository, opportunityItemRepository, 
                 provisionGapRepository, referralRepository, googleMapApiClient,
@@ -52,13 +52,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 ModifiedBy = ModifiedBy
             };
 
-            opportunityService.UpdateOpportunity(dto).GetAwaiter().GetResult();
+            opportunityService.UpdateOpportunityAsync(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_Update_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.Received(1).Update(Arg.Is<Domain.Models.Opportunity>(opportunity =>
+            _opportunityRepository.Received(1).UpdateAsync(Arg.Is<Domain.Models.Opportunity>(opportunity =>
                 opportunity.Id == OpportunityId &&
                 opportunity.EmployerContact == Contact &&
                 opportunity.EmployerContactEmail == ContactEmail &&
@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
+            _opportunityRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
         }
     }
 }

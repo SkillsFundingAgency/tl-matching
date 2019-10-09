@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         public When_Proximity_BackFillProviderPostTown_Function_Fires()
         {
             _providerVenueRepository = Substitute.For<IRepository<ProviderVenue>>();
-            _providerVenueRepository.GetMany(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
+            _providerVenueRepository.GetManyAsync(Arg.Any<Expression<Func<ProviderVenue, bool>>>())
                 .Returns(new List<ProviderVenue>{ new ProviderVenue
                 {
                     Postcode = "CV1 2WT",
@@ -29,19 +29,19 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
                 }}.AsQueryable());
 
             _googleMapsApiClient = Substitute.For<IGoogleMapApiClient>();
-            _googleMapsApiClient.GetAddressDetails("CV1 2WT").Returns("Coventry");
+            _googleMapsApiClient.GetAddressDetailsAsync("CV1 2WT").Returns("Coventry");
 
             var proximityfunctions = new Functions.Proximity();
 
-            proximityfunctions.BackFillProviderPostTown(new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null), new ExecutionContext(), new NullLogger<Functions.Proximity>(), _googleMapsApiClient, _providerVenueRepository, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
+            proximityfunctions.BackFillProviderPostTownAsync(new TimerInfo(new ConstantSchedule(TimeSpan.Zero), null), new ExecutionContext(), new NullLogger<Functions.Proximity>(), _googleMapsApiClient, _providerVenueRepository, Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void GetGeoLocationData_Is_Called_Exactly_Once()
+        public void GetAddressDetails_Is_Called_Exactly_Once()
         {
             _googleMapsApiClient
                 .Received(1)
-                .GetAddressDetails(Arg.Is<string>(s => s == "CV1 2WT"));
+                .GetAddressDetailsAsync(Arg.Is<string>(s => s == "CV1 2WT"));
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Proximity
         {
             _providerVenueRepository
                 .Received(1)
-                .UpdateMany(Arg.Is<IList<ProviderVenue>>(pv => pv.Count == 1 && pv.First().Town == "Coventry"));
+                .UpdateManyAsync(Arg.Is<IList<ProviderVenue>>(pv => pv.Count == 1 && pv.First().Town == "Coventry"));
         }
     }
 }

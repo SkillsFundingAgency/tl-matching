@@ -7,8 +7,8 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProximityService
     {
-        Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximity(ProviderSearchParametersDto dto);
-        Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximity(ProviderSearchParametersDto dto);
-        Task<(bool, string)> IsValidPostCode(string postCode);
+        Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderSearchParametersDto dto);
+        Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto);
+        Task<(bool, string)> IsValidPostcodeAsync(string postcode);
     }
 }

@@ -10,12 +10,9 @@
         asp-route="GetProviderResults"
         asp-route-opportunityId="@Model.OpportunityId"
         asp-route-opportunityItemId="@Model.OpportunityItemId"
-        asp-route-searchRadius="@Model.SearchRadius"
-        asp-route-Postcode="@Model.Postcode"
         asp-route-SelectedRouteId="@Model.RouteId">Back</a>*@
     <a asp-route="GetBackLink" asp-route-opportunityId="@Model.OpportunityId"
        asp-route-opportunityItemId="@Model.OpportunityItemId"
-       asp-route-searchRadius="@Model.SearchRadius"
        asp-route-Postcode="@Model.Postcode"
        asp-route-SelectedRouteId="@Model.RouteId"
        class="govuk-back-link"
@@ -23,7 +20,7 @@
     @await Component.InvokeAsync("Cancel", new { opportunityId = @Model.OpportunityId, opportunityItemId = @Model.OpportunityItemId })
 }
 
-<form asp-action="SavePlacementInformation" novalidate>
+<form asp-route="SavePlacementInformation" novalidate>
     <input asp-for="OpportunityId" type="hidden" />
     <input asp-for="OpportunityItemId" type="hidden" />
     <input asp-for="OpportunityType" type="hidden" />

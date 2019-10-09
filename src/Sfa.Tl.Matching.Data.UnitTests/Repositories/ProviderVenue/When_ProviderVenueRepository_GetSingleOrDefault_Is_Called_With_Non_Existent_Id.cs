@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
                 dbContext.SaveChanges();
 
                 var repository = new GenericRepository<Domain.Models.ProviderVenue>(logger, dbContext);
-                _result = repository.GetSingleOrDefault(x => x.Id == 2)
+                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 2)
                     .GetAwaiter().GetResult();
             }
         }

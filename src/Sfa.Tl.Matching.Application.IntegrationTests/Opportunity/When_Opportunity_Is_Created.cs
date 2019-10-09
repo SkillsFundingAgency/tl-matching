@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 
             var opportunityDto = new OpportunityDto
             {
-                EmployerId = null,
+                EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = EmployerContact
             };
 

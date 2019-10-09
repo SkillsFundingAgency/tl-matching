@@ -19,14 +19,14 @@ namespace Sfa.Tl.Matching.Api.Clients.ProviderReference
             _providerQueryPortTypeClient = providerQueryPortTypeClient;
         }
 
-        public async Task<List<ProviderRecordStructure>> GetAll(DateTime lastUpdateDate)
+        public async Task<List<ProviderRecordStructure>> GetAllAsync(DateTime lastUpdateDate)
         {
             var results = new List<ProviderRecordStructure>();
             var query = GetQuery(lastUpdateDate);
 
             _logger.LogInformation("Downloading providers from UKRLP service...");
 
-            var response = await RetrieveAll(query);
+            var response = await RetrieveAllAsync(query);
 
             _logger.LogInformation($"UKRLP service returned {response.ProviderQueryResponse.MatchingProviderRecords.LongLength} providers");
 
@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Api.Clients.ProviderReference
             return query;
         }
 
-        private async Task<response> RetrieveAll(ProviderQueryParam query)
+        private async Task<response> RetrieveAllAsync(ProviderQueryParam query)
         {
             try
             {

@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             _opportunityItemRepository
-                .GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+                .GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(new OpportunityItemListBuilder().Build().AsQueryable());
 
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
@@ -77,14 +77,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityItemRepository
                 .Received(1)
-                .GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
+                .GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
         }
 
         [Fact]
         public void Then_UpdateMany_Is_Called_Exactly_Once()
         {
             _opportunityItemRepository.Received(1)
-                .UpdateManyWithSpecifedColumnsOnly(Arg.Any<IList<OpportunityItem>>(),
+                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Any<IList<OpportunityItem>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, object>>>()
@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values()
         {
             _opportunityItemRepository.Received(1)
-                .UpdateManyWithSpecifedColumnsOnly(Arg.Is<IList<OpportunityItem>>(
+                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
                     o => o.Count == 2
                          && o.All(x => x.IsSelectedForReferral == false)
                          && o.All(x => x.ModifiedBy == "TestUser")

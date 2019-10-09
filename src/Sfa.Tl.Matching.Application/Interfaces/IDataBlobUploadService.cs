@@ -5,6 +5,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IDataBlobUploadService
     {
-        Task Upload(DataUploadDto dto);
+        Task UploadAsync(DataUploadDto dto);
     }
 }

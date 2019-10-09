@@ -35,15 +35,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
 
             _opportunityItemRepository
-                .GetMany(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
+                .GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(SetOpportunityItem().AsQueryable());
 
             _referralRepository
-                .GetMany(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>())
+                .GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>())
                 .Returns(SetReferrals().AsQueryable());
 
             _provisionGapRepository
-                .GetMany(Arg.Any<Expression<Func<ProvisionGap, bool>>>())
+                .GetManyAsync(Arg.Any<Expression<Func<ProvisionGap, bool>>>())
                 .Returns(SetProvisionGaps().AsQueryable());
 
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
@@ -61,25 +61,25 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_Delete_Opportunity_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.Received(1).Delete(Arg.Any<int>());
+            _opportunityRepository.Received(1).DeleteAsync(Arg.Any<int>());
         }
 
         [Fact]
         public void Then_Delete_Opportunity_Item_Is_Called_Twice()
         {
-            _opportunityItemRepository.Received(2).Delete(Arg.Any<OpportunityItem>());
+            _opportunityItemRepository.Received(2).DeleteAsync(Arg.Any<OpportunityItem>());
         }
 
         [Fact]
         public void Then_Delete_Referral_Is_Called_Thrice()
         {
-            _referralRepository.Received(3).DeleteMany(Arg.Any<List<Domain.Models.Referral>>());
+            _referralRepository.Received(3).DeleteManyAsync(Arg.Any<List<Domain.Models.Referral>>());
         }
 
         [Fact]
         public void Then_Delete_Provision_Gap_Is_Called_Thrice()
         {
-            _provisionGapRepository.Received(3).DeleteMany(Arg.Any<List<ProvisionGap>>());
+            _provisionGapRepository.Received(3).DeleteManyAsync(Arg.Any<List<ProvisionGap>>());
         }
 
         private static IEnumerable<OpportunityItem> SetOpportunityItem()

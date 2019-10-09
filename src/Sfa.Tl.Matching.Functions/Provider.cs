@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Functions
     public class Provider
     {
         [FunctionName("BackFillProviderDisplayName")]
-        public async Task BackFillProviderDisplayName(
+        public async Task BackFillProviderDisplayNameAsync(
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
             TimerInfo timer,
             ExecutionContext context,
@@ -32,9 +32,9 @@ namespace Sfa.Tl.Matching.Functions
 
                 var providers = new List<Domain.Models.Provider>();
 
-                if (providerRepository.GetMany(p => string.IsNullOrWhiteSpace(p.DisplayName)).Any())
+                if (providerRepository.GetManyAsync(p => string.IsNullOrWhiteSpace(p.DisplayName)).Any())
                 {
-                    foreach (var provider in providerRepository.GetMany(p => true))
+                    foreach (var provider in providerRepository.GetManyAsync(p => true))
                     {
                         var displayName =
                             string.IsNullOrWhiteSpace(provider.DisplayName)
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Functions
                         }
                     }
 
-                    await providerRepository.UpdateMany(providers);
+                    await providerRepository.UpdateManyAsync(providers);
                 }
 
                 stopwatch.Stop();
@@ -64,10 +64,10 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.Create(new FunctionLog
+                await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
-                    FunctionName = nameof(BackFillProviderDisplayName),
+                    FunctionName = nameof(BackFillProviderDisplayNameAsync),
                     RowNumber = -1
                 });
                 throw;

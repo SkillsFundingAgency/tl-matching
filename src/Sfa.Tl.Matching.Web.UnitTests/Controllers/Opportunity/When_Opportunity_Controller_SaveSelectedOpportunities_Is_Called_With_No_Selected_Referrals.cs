@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Referrals()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunityBasket(1);
+            _opportunityService.GetOpportunityBasketAsync(1);
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityController = new OpportunityController(_opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(_opportunityController).Build();
 
-            _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel
+            _result = controllerWithClaims.SaveSelectedOpportunitiesAsync(new ContinueOpportunityViewModel
             {
                 SubmitAction = "SaveSelectedOpportunities",
                 SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
@@ -55,13 +55,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_OpportunityService_GetOpportunityBasket_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetOpportunityBasket(1);
+            _opportunityService.Received(1).GetOpportunityBasketAsync(1);
         }
 
         [Fact]
         public void Then_OpportunityService_ContinueWithOpportunities_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().ContinueWithOpportunities(Arg.Any<ContinueOpportunityViewModel>());
+            _opportunityService.DidNotReceive().ContinueWithOpportunitiesAsync(Arg.Any<ContinueOpportunityViewModel>());
         }
 
         [Fact]

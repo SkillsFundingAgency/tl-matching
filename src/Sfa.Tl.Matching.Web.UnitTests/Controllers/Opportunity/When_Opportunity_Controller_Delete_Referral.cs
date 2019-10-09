@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("CreatedBy")
                 .Build();
 
-            _result = controllerWithClaims.DeleteReferral(ReferralIdToDelete, OpportunityItemId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.DeleteReferralAsync(ReferralIdToDelete, OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]

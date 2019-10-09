@@ -8,7 +8,6 @@
     <a asp-route="GetBackLink" 
        asp-route-opportunityId="@Model.OpportunityId" 
        asp-route-opportunityItemId="@Model.OpportunityItemId"
-       asp-route-searchRadius="0"
        asp-route-Postcode="0"
        asp-route-SelectedRouteId="0"
        class="govuk-back-link" id="tl-back">Back</a>
@@ -30,7 +29,6 @@
                     <td class="govuk-table__cell">
                         <a asp-route="GetProviderResults"
                            asp-route-opportunityId="@Model.OpportunityId"
-                           asp-route-searchRadius="@Model.SearchRadius"
                            asp-route-postcode="@Model.Postcode"
                            asp-route-selectedRouteId="@Model.RouteId"
                            class="govuk-link tl-float-right" id="tl-change-link">Change<span class="govuk-visually-hidden"> the type of placement</span></a>
@@ -42,7 +40,6 @@
                     <td class="govuk-table__cell">
                         <a asp-route="GetProviderResults"
                            asp-route-opportunityId="@Model.OpportunityId"
-                           asp-route-searchRadius="@Model.SearchRadius"
                            asp-route-postcode="@Model.Postcode"
                            asp-route-selectedRouteId="@Model.RouteId"
                            class="govuk-link tl-float-right" id="tl-change-link">Change<span class="govuk-visually-hidden"> the postcode of the workplace</span></a>
@@ -88,7 +85,7 @@
                         @if (Model.Providers.Count() > 1)
                         {
                             <td class="govuk-table__cell">
-                                <a asp-action="DeleteReferral" asp-route-referralId="@Model.Providers[i].ReferralId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link">Remove</a>
+                                <a asp-route="DeleteReferral" asp-route-referralId="@Model.Providers[i].ReferralId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link">Remove</a>
                             </td>
                         }
                     </tr>
@@ -102,7 +99,6 @@
                asp-route="GetProviderResults"
                asp-route-opportunityId="@Model.OpportunityId"
                asp-route-opportunityItemId="@Model.OpportunityItemId"
-               asp-route-searchRadius="@Model.SearchRadius"
                asp-route-Postcode="@Model.Postcode"
                asp-route-SelectedRouteId="@Model.RouteId">Change providers</a>
         </p>

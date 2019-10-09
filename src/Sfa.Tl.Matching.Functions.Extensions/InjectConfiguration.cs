@@ -6,10 +6,8 @@ using Microsoft.Azure.WebJobs.Host.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Http;
-using SFA.DAS.Http.TokenGenerators;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Client.Configuration;
+using Notify.Client;
+using Notify.Interfaces;
 using Sfa.Tl.Matching.Api.Clients.Calendar;
 using Sfa.Tl.Matching.Api.Clients.Connected_Services.Sfa.Tl.Matching.UkRlp.Api.Client;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
@@ -20,9 +18,9 @@ using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Interfaces.FeedbackFactory;
+using Sfa.Tl.Matching.Application.Interfaces.ServiceFactory;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.Services.FeedbackFactory;
+using Sfa.Tl.Matching.Application.Services.ServiceFactory;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
@@ -84,7 +82,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             RegisterApplicationServices(services);
 
-            RegisterNotificationsApi(services, _configuration.NotificationsApiClientConfiguration);
+            RegisterNotificationsApi(services, _configuration.GovNotifyApiKey);
 
             RegisterApiClient(services);
         }
@@ -176,9 +174,12 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailHistoryService, EmailHistoryService>();
-            //services.AddTransient<IEmployerFeedbackService, EmployerFeedbackService>();
-            //services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
-            services.AddTransient(typeof(IFeedbackServiceFactory<>), typeof(FeedbackServiceFactory<>));
+            
+            services.AddTransient(typeof(IFeedbackFactory<>), typeof(FeedbackFactory<>));
+
+            services.AddTransient<ProviderFeedbackService>();
+            services.AddTransient<EmployerFeedbackService>();
+
             services.AddTransient<IProviderQuarterlyUpdateEmailService, ProviderQuarterlyUpdateEmailService>();
             services.AddTransient<IProximityService, ProximityService>();
             services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
@@ -189,14 +190,9 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         }
 
-        private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
+        private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)
         {
-            var httpClient = string.IsNullOrWhiteSpace(apiConfiguration.ClientId)
-                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(apiConfiguration)).Build()
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(apiConfiguration)).Build();
-
-            services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
-                new NotificationsApi(httpClient, apiConfiguration));
+            services.AddTransient<IAsyncNotificationClient, NotificationClient>(provider => new NotificationClient(apiKey));
         }
 
         private static void RegisterApiClient(IServiceCollection services)

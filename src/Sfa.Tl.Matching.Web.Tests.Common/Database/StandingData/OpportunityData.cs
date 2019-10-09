@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
             return new Opportunity
             {
                 Id = OpportunityReferralSingleId,
-                EmployerId = 1,
+                EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
@@ -106,7 +106,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
             return new Opportunity
             {
                 Id = OpportunityReferralMultipleId,
-                EmployerId = 1,
+                EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
@@ -191,7 +191,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
             return new Opportunity
             {
                 Id = OpportunityProvisionGapSingleId,
-                EmployerId = 1,
+                EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
@@ -237,7 +237,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
             return new Opportunity
             {
                 Id = OpportunityReferralSingleAndProvisionGapId,
-                EmployerId = 1,
+                EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
@@ -313,7 +313,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
             return new Opportunity
             {
                 Id = OpportunityMultipleReferralAndProvisionGapId,
-                EmployerId = 1,
+                EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",
@@ -421,7 +421,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 new Opportunity
                 {
                     Id = Opportunity1Id,
-                    EmployerId = 1,
+                    EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                     EmployerContact = "Employer Contact",
                     EmployerContactEmail = "employer-contact@email.com",
                     EmployerContactPhone = "01474 787878",
@@ -499,7 +499,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
             return new Opportunity
             {
                 Id = OpportunityProviderMultipleId,
-                EmployerId = 1,
+                EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                 EmployerContact = "Employer Contact",
                 EmployerContactEmail = "employer-contact@email.com",
                 EmployerContactPhone = "01474 787878",

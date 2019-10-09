@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         [Fact]
         public void Then_FunctionLog_Repository_Create_Many_Is_Called_With_Empty_List()
         {
-            _fixture.FunctionLogRepository.Received(1).CreateMany(Arg.Is<List<FunctionLog>>(logs => logs.Count == 0));
+            _fixture.FunctionLogRepository.Received(1).CreateManyAsync(Arg.Is<List<FunctionLog>>(logs => logs.Count == 0));
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         [Fact]
         public void Then_Repository_Create_Many_Is_Called_With_Only_One_Item()
         {
-            _fixture.Repository.Received(1).BulkInsert(Arg.Is<IList<LearningAimReferenceStaging>>(arg => arg.Count == 1));
+            _fixture.Repository.Received(1).BulkInsertAsync(Arg.Is<IList<LearningAimReferenceStaging>>(arg => arg.Count == 1));
         }
     }
 }

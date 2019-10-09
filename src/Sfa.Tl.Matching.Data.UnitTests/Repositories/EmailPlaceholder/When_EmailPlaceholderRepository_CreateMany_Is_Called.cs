@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailPlaceholder
                 var data = new ValidEmailPlaceholderListBuilder().Build();
 
                 var repository = new GenericRepository<Domain.Models.EmailPlaceholder>(logger, dbContext);
-                _result = repository.CreateMany(data)
+                _result = repository.CreateManyAsync(data)
                     .GetAwaiter().GetResult();
             }
         }

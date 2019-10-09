@@ -1,4 +1,5 @@
-﻿using Sfa.Tl.Matching.Models.ViewModel;
+﻿using System;
+using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
 {
@@ -8,7 +9,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
         {
             OpportunityItemId = 1,
             OpportunityId = 2,
-            SelectedEmployerId = 3,
+            SelectedEmployerCrmId = new Guid("33333333-3333-3333-3333-333333333333"),
             CompanyName = "CompanyName",
             PreviousCompanyName = "CompanyName"
         };

@@ -4,6 +4,7 @@ using AutoMapper;
 using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Event;
@@ -27,12 +28,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
                 CreatedBy = "CreatedBy"
             };
 
-            _opportunityRepository.GetFirstOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>())
+            _opportunityRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>())
                 .Returns(opportunity);
 
-            var employerService = new EmployerService(employerRepository, _opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>());
+            var employerService = new EmployerService(employerRepository, _opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>(),
+                Substitute.For<IMessageQueueService>());
 
-            _result = employerService.GetEmployerOpportunityOwnerAsync(1).GetAwaiter().GetResult();
+            _result = employerService.GetEmployerOpportunityOwnerAsync(new Guid("11111111-1111-1111-1111-111111111111")).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -40,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         {
             _opportunityRepository
                 .Received(1)
-                .GetFirstOrDefault(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
+                .GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Opportunity, bool>>>());
         }
 
         [Fact]

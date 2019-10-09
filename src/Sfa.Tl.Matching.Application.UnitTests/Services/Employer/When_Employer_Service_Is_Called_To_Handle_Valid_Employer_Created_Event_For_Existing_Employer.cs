@@ -5,10 +5,12 @@ using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Event;
 using Xunit;
 
@@ -17,6 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
     public class When_Employer_Service_Is_Called_To_Handle_Valid_Employer_Created_Event_For_Existing_Employer
     {
         private readonly IRepository<Domain.Models.Employer> _employerRepository;
+        private readonly IMessageQueueService _messageQueueService;
         private readonly CrmEmployerEventBase _employerEventBase;
 
         public When_Employer_Service_Is_Called_To_Handle_Valid_Employer_Created_Event_For_Existing_Employer()
@@ -27,12 +30,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             _employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            _employerRepository.GetSingleOrDefault(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
+            _employerRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new Domain.Models.Employer());
 
-            var employerService = new EmployerService(_employerRepository, opportunityRepository, mapper, new CrmEmployerEventDataValidator());
+            _messageQueueService = Substitute.For<IMessageQueueService>();
+            var employerService = new EmployerService(_employerRepository, opportunityRepository, mapper, new CrmEmployerEventDataValidator(),
+                _messageQueueService);
 
-            _employerEventBase = CrmEmployerEventBaseBuilder.Buiild(true);
+            _employerEventBase = new CrmEmployerEventBaseBuilder()
+                .WithValidAupaStatus().Build();
 
             var data = JsonConvert.SerializeObject(_employerEventBase, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
 
@@ -42,9 +48,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         [Fact]
         public void Then_The_Employer_Record_Should_Be_Updated()
         {
-            _employerRepository.DidNotReceive().Create(Arg.Any<Domain.Models.Employer>());
+            _employerRepository.DidNotReceive().CreateAsync(Arg.Any<Domain.Models.Employer>());
 
-            _employerRepository.Received(1).Update(Arg.Is<Domain.Models.Employer>(e =>
+            _employerRepository.Received(1).UpdateAsync(Arg.Is<Domain.Models.Employer>(e =>
                 e.CrmId == _employerEventBase.accountid.ToGuid() &&
                 e.Aupa == "Aware" &&
                 e.CompanyName == "Test" &&
@@ -55,6 +61,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
                 e.Phone == "0123456789" &&
                 e.Owner == "Test"
                 ));
+
+            _messageQueueService.DidNotReceive()
+                .PushEmployerAupaBlankEmailMessageAsync(Arg.Any<SendEmployerAupaBlankEmail>());
         }
     }
 }

@@ -55,8 +55,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 OpportunityId = opportunityId ?? 0,
                 SelectedRouteId = null,
-                Postcode = null,
-                SearchRadius = SearchParametersViewModel.DefaultSearchRadius
+                Postcode = null
             };
 
             return View(nameof(Index), await GetSearchParametersViewModelAsync(viewModel));
@@ -66,7 +65,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("find-providers/{opportunityId?}")]
         public async Task<IActionResult> FindProviders(SearchParametersViewModel viewModel)
         {
-            viewModel.SearchRadius = SearchParametersViewModel.DefaultSearchRadius;
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
             {
                 return View(nameof(Index), await GetSearchParametersViewModelAsync(viewModel));
@@ -76,14 +74,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 SelectedRouteId = viewModel.SelectedRouteId,
                 Postcode = viewModel.Postcode,
-                SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId,
                 CompanyNameWithAka = viewModel.CompanyNameWithAka
             });
         }
 
-        [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetProviderResults")]
+        [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetProviderResults")]
         public async Task<IActionResult> Results(SearchParametersViewModel searchParametersViewModel)
         {
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
@@ -92,7 +89,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}")]
+        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}")]
         public async Task<IActionResult> RefineSearchResults(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
@@ -110,16 +107,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-{SearchRadius}-miles-of-{Postcode}-for-route-{SelectedRouteId}")]
+        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}")]
         public async Task<IActionResult> ValidateProviderSearchResult(SaveReferralViewModel viewModel)
         {
             if (viewModel.SelectedProvider.Any(p => p.IsSelected))
             {
                 viewModel.SelectedProvider = viewModel.SelectedProvider.Where(p => p.IsSelected).ToArray();
 
-                var selectedProviders = JsonConvert.SerializeObject(viewModel);
+                TempData["SelectedProviders"] = JsonConvert.SerializeObject(viewModel);
 
-                return RedirectToRoute("SaveReferral", new { viewModel = selectedProviders });
+                return RedirectToRoute("SaveReferral");
             }
 
             ModelState.AddModelError("SearchResults.Results[0].IsSelected", "You must select at least one provider");
@@ -128,7 +125,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 Postcode = viewModel.Postcode,
                 SelectedRouteId = viewModel.SelectedRouteId,
-                SearchRadius = viewModel.SearchRadius,
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId,
                 CompanyNameWithAka = viewModel.CompanyNameWithAka
@@ -139,20 +135,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
         {
-            var searchResults = await _proximityService.SearchProvidersByPostcodeProximity(new ProviderSearchParametersDto
+            var searchResults = await _proximityService.SearchProvidersByPostcodeProximityAsync(new ProviderSearchParametersDto
             {
                 Postcode = viewModel.Postcode,
                 SelectedRouteId = viewModel.SelectedRouteId,
-                SearchRadius = viewModel.SearchRadius
             });
 
             var additionalResults = searchResults.Any() 
                 ? new List<SearchResultsByRouteViewModelItem>()
-                : await _proximityService.SearchProvidersForOtherRoutesByPostcodeProximity(new ProviderSearchParametersDto
+                : await _proximityService.SearchProvidersForOtherRoutesByPostcodeProximityAsync(new ProviderSearchParametersDto
                 {
                     Postcode = viewModel.Postcode,
                     SelectedRouteId = viewModel.SelectedRouteId,
-                    SearchRadius = SearchParametersViewModel.DefaultSearchRadius
+                    SearchRadius = SearchParametersViewModel.ZeroResultsSearchRadius
                 });
 
             var resultsViewModel = new SearchViewModel
@@ -202,7 +197,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 RoutesSelectList = _mapper.Map<SelectListItem[]>(routes),
                 SelectedRouteId = viewModel.SelectedRouteId,
-                SearchRadius = viewModel.SearchRadius != 0 ? viewModel.SearchRadius : SearchParametersViewModel.DefaultSearchRadius,
                 Postcode = viewModel.Postcode?.Trim(),
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId,
@@ -221,7 +215,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 result = false;
             }
 
-            var (isValid, formatedPostCode) = await _proximityService.IsValidPostCode(viewModel.Postcode);
+            var (isValid, formattedPostcode) = await _proximityService.IsValidPostcodeAsync(viewModel.Postcode);
             if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
             {
                 ModelState.AddModelError("Postcode", "You must enter a real postcode");
@@ -229,13 +223,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             }
             else
             {
-                viewModel.Postcode = formatedPostCode;
-            }
-
-            if (viewModel.SearchRadius < 5 || viewModel.SearchRadius > 25)
-            {
-                ModelState.AddModelError("SearchRadius", "You must select a valid SearchRadius");
-                result = false;
+                viewModel.Postcode = formattedPostcode;
             }
 
             return result;

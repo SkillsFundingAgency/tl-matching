@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
                 dbContext.SaveChanges();
 
                 var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
-                _result = repository.GetMany().ToList();
+                _result = repository.GetManyAsync().ToList();
             }
         }
 

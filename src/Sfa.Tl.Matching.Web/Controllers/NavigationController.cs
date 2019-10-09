@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("remove-opportunityItem/{opportunityId}-{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
-        public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasket(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> RemoveOpportunityItemAndGetOpportunityBasketAsync(int opportunityId, int opportunityItemId)
         {
             await _opportunityService.DeleteOpportunityItemAsync(opportunityId, opportunityItemId);
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
@@ -33,11 +33,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("get-placement-or-employer/{opportunityId}-{opportunityItemId}", Name = "GetPlacementOrEmployer")]
-        public async Task<IActionResult> GetPlacementOrEmployer(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetPlacementOrEmployerAsync(int opportunityId, int opportunityItemId)
         {
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
-            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-            var opportunities = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
+            var viewModel = await _opportunityService.GetCheckAnswersAsync(opportunityItemId);
+            var opportunities = await _opportunityService.GetOpportunityBasketAsync(viewModel.OpportunityId);
 
             switch (opportunities.ReferralCount)
             {
@@ -56,10 +56,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("check-answers-or-edit-employer/{opportunityItemId}", Name = "GetCheckAnswersOrEditEmployer")]
-        public async Task<IActionResult> GetCheckAnswersOrEditEmployer(int opportunityItemId)
+        public async Task<IActionResult> GetCheckAnswersOrEditEmployerAsync(int opportunityItemId)
         {
-            var viewModel = await _opportunityService.GetCheckAnswers(opportunityItemId);
-            var opportunities = await _opportunityService.GetOpportunityBasket(viewModel.OpportunityId);
+            var viewModel = await _opportunityService.GetCheckAnswersAsync(opportunityItemId);
+            var opportunities = await _opportunityService.GetOpportunityBasketAsync(viewModel.OpportunityId);
 
             if (opportunities.ReferralCount == 0 && opportunities.ProvisionGapCount == 1)
             {
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("save-employer-opportunity/{opportunityId}", Name = "SaveEmployerOpportunity")]
-        public async Task<IActionResult> SaveEmployerOpportunity(int opportunityId)
+        public async Task<IActionResult> SaveEmployerOpportunityAsync(int opportunityId)
         {
             await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
@@ -80,20 +80,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{SearchRadius}/{Postcode}/{SelectedRouteId}", Name = "GetBackLink")]
+        [Route("get-back-link/{OpportunityId}/{OpportunityItemId}/{Postcode}/{SelectedRouteId}", Name = "GetBackLink")]
         public async Task<IActionResult> BackLink(SearchParametersViewModel viewModel)
         {
-            var prevUrl = await _backLinkService.GetBackLink(HttpContext.User.GetUserName());
+            var prevUrl = await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
 
             if (prevUrl.Contains("provider-results-for-opportunity") && viewModel.OpportunityId != 0)
             {
-                await _backLinkService.GetBackLink(HttpContext.User.GetUserName());
+                await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
 
                 return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
                 {
                     SelectedRouteId = viewModel.SelectedRouteId,
                     Postcode = viewModel.Postcode,
-                    SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
                     OpportunityId = viewModel.OpportunityId,
                     OpportunityItemId = viewModel.OpportunityItemId,
                     CompanyNameWithAka = viewModel.CompanyNameWithAka
@@ -102,6 +101,5 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return Redirect(prevUrl);
         }
-
     }
 }

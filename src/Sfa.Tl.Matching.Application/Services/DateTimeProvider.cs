@@ -44,5 +44,17 @@ namespace Sfa.Tl.Matching.Application.Services
             return holidays != null &&
                    holidays.Any(hol => hol.Date == date.Date);
         }
+
+        public DateTime? GetReferralDateAsync(IList<DateTime> bankHolidays, string timeSpan)
+        {
+            var employerFeedbackTimespan = TimeSpan.Parse(timeSpan);
+
+            if (IsHoliday(UtcNow().Date, bankHolidays))
+                return null;
+
+            var referralDate = AddWorkingDays(UtcNow().Date, employerFeedbackTimespan, bankHolidays);
+
+            return referralDate;
+        }
     }
 }

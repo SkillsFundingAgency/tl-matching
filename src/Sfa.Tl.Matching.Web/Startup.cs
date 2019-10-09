@@ -2,7 +2,6 @@
 using System.Globalization;
 using AutoMapper;
 using FluentValidation;
-using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Notify.Client;
+using Notify.Interfaces;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -24,11 +25,8 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Domain.Models;
-using SFA.DAS.Http;
-using SFA.DAS.Http.TokenGenerators;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Client.Configuration;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
@@ -201,11 +199,12 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
+            services.AddHttpClient<IGoogleDistanceMatrixApiClient, GoogleDistanceMatrixApiClient>();
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
 
-            RegisterNotificationsApi(services, MatchingConfiguration.NotificationsApiClientConfiguration);
+            RegisterNotificationsApi(services, MatchingConfiguration.GovNotifyApiKey);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }
@@ -237,14 +236,9 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IRepository<UserCache>, GenericRepository<UserCache>>();
         }
 
-        private static void RegisterNotificationsApi(IServiceCollection services, NotificationsApiClientConfiguration apiConfiguration)
+        private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)
         {
-            var httpClient = string.IsNullOrWhiteSpace(apiConfiguration.ClientId)
-                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(apiConfiguration)).Build()
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(apiConfiguration)).Build();
-
-            services.AddTransient<INotificationsApi, NotificationsApi>(provider =>
-                new NotificationsApi(httpClient, apiConfiguration));
+            services.AddTransient<IAsyncNotificationClient, NotificationClient>(provider => new NotificationClient(apiKey));
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -267,11 +261,9 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<INavigationService, NavigationService>();
             services.AddTransient<BackLinkFilter>();
             services.AddTransient<ServiceUnavailableFilterAttribute>();
-
+            
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
-
             services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
         }
     }

@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BankHoliday
                 var data = new ValidBankHolidayListBuilder().Build();
 
                 var repository = new GenericRepository<Domain.Models.BankHoliday>(logger, dbContext);
-                _result = repository.CreateMany(data)
+                _result = repository.CreateManyAsync(data)
                     .GetAwaiter().GetResult();
             }
         }

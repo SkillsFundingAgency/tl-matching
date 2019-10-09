@@ -27,9 +27,9 @@ namespace Sfa.Tl.Matching.Application.Services
             _logger = logger;
         }
         
-        public async Task SaveEmailHistory(string emailTemplateName, IDictionary<string, string> tokens, int? opportunityId, string emailAddress, string createdBy)
+        public async Task SaveEmailHistoryAsync(string emailTemplateName, IDictionary<string, string> tokens, int? opportunityId, string emailAddress, string createdBy)
         {
-            var emailTemplate = await _emailTemplateRepository.GetSingleOrDefault(t => t.TemplateName == emailTemplateName);
+            var emailTemplate = await _emailTemplateRepository.GetSingleOrDefaultAsync(t => t.TemplateName == emailTemplateName);
 
             var placeholders = ConvertTokensToEmailPlaceholderDtos(tokens, createdBy);
 
@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 SentTo = emailAddress,
                 CreatedBy = createdBy
             };
-            await _emailHistoryRepository.Create(emailHistory);
+            await _emailHistoryRepository.CreateAsync(emailHistory);
         }
 
         private IEnumerable<EmailPlaceholderDto> ConvertTokensToEmailPlaceholderDtos(IDictionary<string, string> tokens, string createdBy)

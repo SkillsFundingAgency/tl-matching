@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.EmployerConsent(new EmployerConsentViewModel
+            _result = controllerWithClaims.EmployerConsentAsync(new EmployerConsentViewModel
             {
                 OpportunityId = 1
             }).GetAwaiter().GetResult();
@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_ConfirmOpportunities_Is_Called_Exactly_Once()
         {
-            _referralService.Received(1).ConfirmOpportunities(1, "username");
+            _referralService.Received(1).ConfirmOpportunitiesAsync(1, "username");
         }
 
         [Fact]

@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory
                 dbContext.SaveChanges();
 
                 var repository = new GenericRepository<Domain.Models.BackgroundProcessHistory>(logger, dbContext);
-                _result = repository.GetSingleOrDefault(x => x.Id == 1)
+                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
                     .GetAwaiter().GetResult();
             }
         }

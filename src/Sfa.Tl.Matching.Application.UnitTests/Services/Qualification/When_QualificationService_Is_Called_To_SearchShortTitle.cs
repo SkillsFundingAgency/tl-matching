@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                     learningAimReferenceRepository);
 
                 _searchResults = service
-                    .SearchShortTitle("sport")
+                    .SearchShortTitleAsync("sport")
                     .GetAwaiter().GetResult();
             }
         }

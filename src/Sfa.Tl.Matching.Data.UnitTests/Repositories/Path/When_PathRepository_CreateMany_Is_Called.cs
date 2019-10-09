@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
                 var data = new ValidPathListBuilder().Build();
 
                 var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
-                _result = repository.CreateMany(data)
+                _result = repository.CreateManyAsync(data)
                     .GetAwaiter().GetResult();
             }
         }

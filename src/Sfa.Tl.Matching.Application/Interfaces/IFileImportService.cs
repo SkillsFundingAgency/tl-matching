@@ -5,6 +5,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IFileImportService<in TImportDto> where TImportDto : FileImportDto
     {
-        Task<int> BulkImport(TImportDto fileImportDto);
+        Task<int> BulkImportAsync(TImportDto fileImportDto);
     }
 }

@@ -1,14 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Data
 {
     // ReSharper disable UnusedMember.Global
     public class MatchingDbContext : DbContext
     {
-        public MatchingDbContext(DbContextOptions options)
-            : base(options)
+        public MatchingDbContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -33,14 +31,20 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Route> Route { get; set; }
         public virtual DbSet<FunctionLog> FunctionLog { get; set; }
         public virtual DbSet<ServiceStatusHistory> ServiceStatusHistory { get; set; }
-        public DbQuery<MatchingServiceOpportunityReportDto> ServiceOpportunityReport { get; set; }
-        public DbQuery<MatchingServiceProviderOpportunityReportDto> ServiceProviderOpportunityReport { get; set; }
+        public virtual DbQuery<MatchingServiceOpportunityReport> MatchingServiceOpportunityReport { get; set; }
+        public virtual DbQuery<MatchingServiceProviderOpportunityReport> MatchingServiceProviderOpportunityReport { get; set; }
         public virtual DbSet<UserCache> UserCache { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserCache>()
                 .Property(b => b.UrlHistory).HasColumnName("Value");
+
+            modelBuilder.Entity<Opportunity>()
+                .HasOne(o => o.Employer)
+                .WithMany(e => e.Opportunity)
+                .HasPrincipalKey(e => e.CrmId)
+                .HasForeignKey(o => o.EmployerCrmId);
         }
     }
 }

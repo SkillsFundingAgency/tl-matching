@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             var dto = new ValidConfirmDeleteOpportunityItemViewModelBuilder().Build();
 
-            _opportunityItemRepository.GetSingleOrDefault(
+            _opportunityItemRepository.GetSingleOrDefaultAsync(
                     Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, ConfirmDeleteOpportunityItemViewModel>>>())
                 .Returns(dto);
@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             _opportunityItemRepository
                 .Received(1)
-                .GetSingleOrDefault(
+                .GetSingleOrDefaultAsync(
                     Arg.Any<Expression<Func<OpportunityItem, bool>>>(),
                     Arg.Any<Expression<Func<OpportunityItem, ConfirmDeleteOpportunityItemViewModel>>>());
         }

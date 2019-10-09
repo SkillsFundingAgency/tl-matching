@@ -9,15 +9,14 @@ namespace Sfa.Tl.Matching.Data.Interfaces
 {
     public interface IOpportunityRepository : IRepository<Opportunity>
     {
-        Task<IList<OpportunityReferralDto>> GetProviderOpportunities(int opportunityId, IEnumerable<int> itemIds);
-        Task<EmployerReferralDto> GetEmployerReferrals(int opportunityId, IEnumerable<int> itemIds);
-        Task<OpportunityBasketViewModel> GetOpportunityBasket(int opportunityId);
+        Task<IList<OpportunityReferralDto>> GetProviderOpportunitiesAsync(int opportunityId, IEnumerable<int> itemIds);
+        Task<EmployerReferralDto> GetEmployerReferralsAsync(int opportunityId, IEnumerable<int> itemIds);
+        Task<OpportunityBasketViewModel> GetOpportunityBasketAsync(int opportunityId);
         Task<OpportunityReportDto> GetPipelineOpportunitiesAsync(int opportunityId);
         int GetEmployerOpportunityCount(int opportunityId);
         Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate);
         Task<IList<ProviderFeedbackDto>> GetAllReferralsForProviderFeedbackAsync(DateTime referralDate);
-        IList<ProviderFeedbackDto> GetDistinctReferralsForProviderFeedbackAsync(IList<ProviderFeedbackDto> dto);
-        Task<List<MatchingServiceOpportunityReportDto>> GetMatchingServiceOpportunityReportAsync();
-        Task<List<MatchingServiceProviderOpportunityReportDto>> GetMatchingServiceProviderOpportunityReportAsync();
+        Task<List<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync();
+        Task<List<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync();
     }
 }

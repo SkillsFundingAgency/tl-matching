@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -29,10 +30,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             var employerRepository = Substitute.For<IRepository<Domain.Models.Employer>>();
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
 
-            employerRepository.GetMany(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
+            employerRepository.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new SearchResultsBuilder().Build().AsQueryable());
 
-            var employerService = new EmployerService(employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>());
+            var employerService = new EmployerService(employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>(),
+                Substitute.For<IMessageQueueService>());
 
             const string companyName = "Co";
 

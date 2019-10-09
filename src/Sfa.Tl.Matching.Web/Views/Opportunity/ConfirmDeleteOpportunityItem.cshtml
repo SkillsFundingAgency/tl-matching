@@ -9,7 +9,6 @@
     <a asp-route="GetBackLink" 
        asp-route-opportunityId="@Model.OpportunityId" 
        asp-route-opportunityItemId="@Model.OpportunityItemId"
-       asp-route-searchRadius="0"
        asp-route-Postcode="0"
        asp-route-SelectedRouteId="0"
        class="govuk-back-link" id="tl-back">Back</a>
@@ -48,7 +47,7 @@
             @Model.DeleteWarningText
         </p>
 
-        <form asp-action="DeleteOpportunityItem" novalidate>
+        <form asp-action="DeleteOpportunityItemAsync" novalidate>
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="OpportunityItemId" type="hidden" />
             <input asp-for="BasketItemCount" type="hidden" />

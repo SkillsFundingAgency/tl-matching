@@ -6,10 +6,10 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services.FeedbackFactory;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -17,8 +17,9 @@ namespace Sfa.Tl.Matching.Application.Services
     public class EmployerFeedbackService : FeedbackService
     {
         private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IMapper _mapper;
         private readonly ILogger<EmployerFeedbackService> _logger;
-
+        
         public EmployerFeedbackService(
             IMapper mapper,
             MatchingConfiguration configuration,
@@ -28,21 +29,20 @@ namespace Sfa.Tl.Matching.Application.Services
             IEmailHistoryService emailHistoryService,
             IRepository<BankHoliday> bankHolidayRepository,
             IOpportunityRepository opportunityRepository,
-            IRepository<OpportunityItem> opportunityItemRepository) : base(mapper, configuration, dateTimeProvider,
-            emailService, emailHistoryService, bankHolidayRepository, opportunityItemRepository)
+            IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository) 
+            : base(configuration, emailService, emailHistoryService, dateTimeProvider, bankHolidayRepository, backgroundProcessHistoryRepository)
         {
+            _mapper = mapper;
             _logger = logger;
             _opportunityRepository = opportunityRepository;
         }
 
         public override async Task<int> SendFeedbackEmailsAsync(string userName)
         {
-            var referralDate = await GetReferralDateAsync();
-
             var emailsSent = 0;
-            if (referralDate != null)
+            if (ReferralDate != null)
             {
-                emailsSent = await SendEmployerFeedbackEmailsAsync(referralDate.Value, userName);
+                emailsSent = await SendEmployerFeedbackEmailsAsync(ReferralDate.Value, userName);
             }
 
             return emailsSent;
@@ -54,6 +54,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
             try
             {
+                var historyId = await CreateBackgroundProcessHistoryAsync(BackgroundProcessType.EmployerFeedbackEmail);
+
                 foreach (var referral in referrals)
                 {
                     var tokens = new Dictionary<string, string>
@@ -61,13 +63,12 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
                     };
 
-                    await SendEmail(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.EmployerContactEmail,
-                        "Your industry placement progress – ESFA", tokens, userName);
+                    await SendEmailAsync(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.EmployerContactEmail, tokens, userName);
                 }
 
-                await SetOpportunityItemsEmployerFeedbackAsSent(
-                    referrals.Select(r => r.OpportunityItemId),
-                    userName);
+                await SetEmployerFeedbackAsSentAsync(referrals.Select(r => r.OpportunityId), userName);
+
+                await UpdateBackgroundProcessHistoryAync(historyId, referrals.Count);
 
                 return referrals.Count;
             }
@@ -78,6 +79,22 @@ namespace Sfa.Tl.Matching.Application.Services
                 _logger.LogError(ex, errorMessage);
                 throw;
             }
+        }
+
+        private async Task SetEmployerFeedbackAsSentAsync(IEnumerable<int> opportunityIds, string userName)
+        {
+            var itemsToBeCompleted = opportunityIds.Select(id => new UsernameForFeedbackSentDto
+            {
+                Id = id,
+                Username = userName
+            });
+
+            var updates = _mapper.Map<List<Opportunity>>(itemsToBeCompleted);
+
+            await _opportunityRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
+                x => x.EmployerFeedbackSentOn,
+                x => x.ModifiedOn,
+                x => x.ModifiedBy);
         }
     }
 }

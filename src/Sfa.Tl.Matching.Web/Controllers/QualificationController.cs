@@ -38,11 +38,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("add-qualification/{providerVenueId}", Name = "AddQualification")]
-        public async Task<IActionResult> AddQualification(int providerVenueId)
+        public async Task<IActionResult> AddQualificationAsync(int providerVenueId)
         {
             var postcode = await _providerVenueService.GetVenuePostcodeAsync(providerVenueId);
 
-            return View(new AddQualificationViewModel
+            return View("AddQualification", new AddQualificationViewModel
             {
                 ProviderVenueId = providerVenueId,
                 Postcode = postcode
@@ -51,17 +51,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("add-qualification/{providerId}", Name = "CreateQualification")]
-        public async Task<IActionResult> AddQualification(AddQualificationViewModel viewModel)
+        public async Task<IActionResult> AddQualificationAsync(AddQualificationViewModel viewModel)
         {
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View("AddQualification", viewModel);
 
             var isValid = await _qualificationService.IsValidLarIdAsync(viewModel.LarId);
 
             if (string.IsNullOrWhiteSpace(viewModel.LarId) || !isValid)
             {
                 ModelState.AddModelError("LarId", "Enter a learning aim reference (LAR) that has 8 characters");
-                return View(viewModel);
+                return View("AddQualification", viewModel);
             }
 
             var qualification = await _qualificationService.GetQualificationAsync(viewModel.LarId);
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 if (!isValidLar)
                 {
                     ModelState.AddModelError("LarId", "You must enter a real learning aim reference (LAR)");
-                    return View(viewModel);
+                    return View("AddQualification", viewModel);
                 }
 
                 return RedirectToRoute("MissingQualification",
@@ -93,44 +93,38 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("edit-qualifications", Name = "EditQualifications")]
         public IActionResult SearchQualifications()
         {
-            return View(new QualificationSearchViewModel());
+            return View("SearchQualifications", new QualificationSearchViewModel());
         }
 
         [HttpPost]
         [Route("edit-qualifications", Name = "SearchQualifications")]
-        public async Task<IActionResult> SearchQualifications(QualificationSearchViewModel viewModel)
+        public async Task<IActionResult> SearchQualificationsAsync(QualificationSearchViewModel viewModel)
         {
             if (IsValidSearchTerm(viewModel))
                 ModelState.AddModelError("SearchTerms", "You must enter 2 or more letters for your search");
 
             if (!ModelState.IsValid)
-                return View(viewModel);
+                return View("SearchQualifications", viewModel);
 
             var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
 
             PopulateRoutesForQualificationSearchItem(searchResult);
 
-            return View(searchResult);
-        }
-
-        private static bool IsValidSearchTerm(QualificationSearchViewModel viewModel)
-        {
-            return viewModel.SearchTerms.IsAllSpecialCharactersOrNumbers() ||
-                   viewModel.SearchTerms.ToLetter().Length < 2;
+            return View("SearchQualifications", searchResult);
         }
 
         [HttpGet]
         [Route("search-short-title", Name = "SearchShortTitle")]
-        public async Task<IActionResult> SearchShortTitle(string query)
+        public async Task<IActionResult> SearchShortTitleAsync(string query)
         {
-            var shortTitles = await _qualificationService.SearchShortTitle(query);
+            var shortTitles = await _qualificationService.SearchShortTitleAsync(query);
 
             return Ok(shortTitles);
         }
 
         [HttpPost]
         [Route("save-qualification", Name = "SaveQualification")]
-        public async Task<IActionResult> SaveQualification(SaveQualificationViewModel viewModel)
+        public async Task<IActionResult> SaveQualificationAsync(SaveQualificationViewModel viewModel)
         {
             Validate(viewModel);
 
@@ -152,12 +146,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "MissingQualification")]
-        public async Task<IActionResult> MissingQualification(int providerVenueId, string larId)
+        public async Task<IActionResult> MissingQualificationAsync(int providerVenueId, string larId)
         {
             //Get title from service, based on LAR
             var title = await _qualificationService.GetLarTitleAsync(larId);
 
-            return View(new MissingQualificationViewModel
+            return View("MissingQualification", new MissingQualificationViewModel
             {
                 ProviderVenueId = providerVenueId,
                 LarId = larId,
@@ -169,14 +163,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "SaveMissingQualification")]
-        public async Task<IActionResult> MissingQualification(MissingQualificationViewModel viewModel)
+        public async Task<IActionResult> MissingQualificationAsync(MissingQualificationViewModel viewModel)
         {
             Validate(viewModel);
 
             if (!ModelState.IsValid)
             {
                 viewModel.Routes = GetRoutes(viewModel);
-                return View(viewModel);
+                return View("MissingQualification", viewModel);
             }
 
             var qualificationId = await _qualificationService.CreateQualificationAsync(viewModel);
@@ -194,11 +188,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("remove-qualification/{providerVenueId}/{qualificationId}", Name = "RemoveQualification")]
-        public async Task<IActionResult> RemoveQualification(int providerVenueId, int qualificationId)
+        public async Task<IActionResult> RemoveQualificationAsync(int providerVenueId, int qualificationId)
         {
             await _providerQualificationService.RemoveProviderQualificationAsync(providerVenueId, qualificationId);
 
             return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId });
+        }
+
+        private static bool IsValidSearchTerm(QualificationSearchViewModel viewModel)
+        {
+            return viewModel.SearchTerms.IsAllSpecialCharactersOrNumbers() ||
+                   viewModel.SearchTerms.ToLetter().Length < 2;
         }
 
         private IList<RouteViewModel> GetRoutes(MissingQualificationViewModel viewModel = null)

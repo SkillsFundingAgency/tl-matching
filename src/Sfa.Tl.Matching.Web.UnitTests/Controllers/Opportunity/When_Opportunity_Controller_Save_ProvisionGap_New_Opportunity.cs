@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.SaveProvisionGap(new SaveProvisionGapViewModel
+            _result = controllerWithClaims.SaveProvisionGapAsync(new SaveProvisionGapViewModel
             {
                 OpportunityId = 0,
                 OpportunityItemId = 0,
@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_UpdateOpportunity_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().UpdateOpportunity(Arg.Any<ProviderSearchDto>());
+            _opportunityService.DidNotReceive().UpdateOpportunityAsync(Arg.Any<ProviderSearchDto>());
         }
 
         [Fact]

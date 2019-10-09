@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.Filters
                     var path = context.HttpContext.Request.Path.ToString();
                     var username = context.HttpContext.User.GetUserName();
 
-                    await _navigationService.AddCurrentUrl(path, username);
+                    await _navigationService.AddCurrentUrlAsync(path, username);
                 }
 
                 await next();
@@ -156,7 +156,7 @@ namespace Sfa.Tl.Matching.Web.Filters
 
     //    private async Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkData(string username)
     //    {
-    //        var data = await _userCacheRepository.GetFirstOrDefault(x => x.CreatedBy == username);
+    //        var data = await _userCacheRepository.GetFirstOrDefaultAsync(x => x.CreatedBy == username);
 
     //        return (data, CommandHelper.UserBackLinks(data));
     //    }
@@ -211,7 +211,7 @@ namespace Sfa.Tl.Matching.Web.Filters
 
     //    private async Task<(UserCache usercache, List<CurrentUrl> urlList)> GetBackLinkData(string username)
     //    {
-    //        var data = await _userCacheRepository.GetFirstOrDefault(x => x.CreatedBy == username);
+    //        var data = await _userCacheRepository.GetFirstOrDefaultAsync(x => x.CreatedBy == username);
 
     //        return (data, CommandHelper.UserBackLinks(data));
     //    }

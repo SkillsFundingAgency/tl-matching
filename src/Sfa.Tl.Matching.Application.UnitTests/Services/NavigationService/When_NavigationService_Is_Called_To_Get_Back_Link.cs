@@ -47,15 +47,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             var sut = new Application.Services.NavigationService(mapper, repo);
 
             //Act
-            await sut.AddCurrentUrl("/Start", username);
-            await sut.AddCurrentUrl("/find-providers", username);
-            await sut.AddCurrentUrl("/test-url", username);
+            await sut.AddCurrentUrlAsync("/Start", username);
+            await sut.AddCurrentUrlAsync("/find-providers", username);
+            await sut.AddCurrentUrlAsync("/test-url", username);
 
             //Assert
-            var prevUrl = await sut.GetBackLink(username);
+            var prevUrl = await sut.GetBackLinkAsync(username);
             prevUrl.Should().Be("/find-providers");
 
-            prevUrl = await sut.GetBackLink(username);
+            prevUrl = await sut.GetBackLinkAsync(username);
             prevUrl.Should().Be("/Start");
         }
 
@@ -88,11 +88,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             var sut = new Application.Services.NavigationService(mapper, repo);
 
             //Act
-            await sut.AddCurrentUrl("/Start", username);
-            await sut.AddCurrentUrl("/find-providers", username);
-            await sut.AddCurrentUrl("/test-url", username);
+            await sut.AddCurrentUrlAsync("/Start", username);
+            await sut.AddCurrentUrlAsync("/find-providers", username);
+            await sut.AddCurrentUrlAsync("/test-url", username);
 
-            var addedItem = await repo.GetFirstOrDefault(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink.ToString());
+            var addedItem = await repo.GetFirstOrDefaultAsync(x => x.CreatedBy == username && x.Key == CacheTypes.BackLink.ToString());
 
             //Assert
             addedItem.Should().NotBeNull();
@@ -128,11 +128,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             var sut = new Application.Services.NavigationService(mapper, repo);
 
             //Act
-            await sut.AddCurrentUrl("/Start", username);
-            await sut.AddCurrentUrl("/find-providers", username);
-            await sut.AddCurrentUrl("/test-url", username);
+            await sut.AddCurrentUrlAsync("/Start", username);
+            await sut.AddCurrentUrlAsync("/find-providers", username);
+            await sut.AddCurrentUrlAsync("/test-url", username);
 
-            var addedItem = await repo.GetFirstOrDefault(x => x.CreatedBy == "invalid user" && x.Key == CacheTypes.BackLink.ToString());
+            var addedItem = await repo.GetFirstOrDefaultAsync(x => x.CreatedBy == "invalid user" && x.Key == CacheTypes.BackLink.ToString());
 
             //Assert
             addedItem.Should().BeNull();

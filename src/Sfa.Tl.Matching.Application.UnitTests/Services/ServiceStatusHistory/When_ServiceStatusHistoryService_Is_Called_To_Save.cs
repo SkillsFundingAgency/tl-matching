@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
             _serviceStatusHistoryRepository = Substitute.For<IRepository<Domain.Models.ServiceStatusHistory>>();
 
             var serviceStatusHistoryService = new ServiceStatusHistoryService(mapper, _serviceStatusHistoryRepository);
-            serviceStatusHistoryService.SaveServiceStatusHistory(new ServiceStatusHistoryViewModel
+            serviceStatusHistoryService.SaveServiceStatusHistoryAsync(new ServiceStatusHistoryViewModel
             {
                 IsOnline = true
             }).GetAwaiter().GetResult();
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
         {
             _serviceStatusHistoryRepository
                 .Received(1)
-                .Create(Arg.Any<Domain.Models.ServiceStatusHistory>());
+                .CreateAsync(Arg.Any<Domain.Models.ServiceStatusHistory>());
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
         {
             _serviceStatusHistoryRepository
                 .Received(1)
-                .Create(Arg.Is<Domain.Models.ServiceStatusHistory>(mh =>
+                .CreateAsync(Arg.Is<Domain.Models.ServiceStatusHistory>(mh =>
                     !mh.IsOnline));
         }
 
@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
         {
             _serviceStatusHistoryRepository
                 .Received(1)
-                .Create(Arg.Is<Domain.Models.ServiceStatusHistory>(mh =>
+                .CreateAsync(Arg.Is<Domain.Models.ServiceStatusHistory>(mh =>
                     mh.CreatedBy == "CreatedBy"));
         }
     }

@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
             _controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
 
-            _result = _controllerWithClaims.SaveProviderDetail(new ProviderDetailViewModel
+            _result = _controllerWithClaims.SaveProviderDetailAsync(new ProviderDetailViewModel
             {
                 Id = 1,
                 SubmitAction = "SaveAndFinish"
@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_ProviderService_UpdateProviderDetail_Called()
         {
-            _providerService.DidNotReceive().UpdateProviderDetail(Arg.Any<ProviderDetailViewModel>());
+            _providerService.DidNotReceive().UpdateProviderDetailAsync(Arg.Any<ProviderDetailViewModel>());
         }
 
         [Fact]

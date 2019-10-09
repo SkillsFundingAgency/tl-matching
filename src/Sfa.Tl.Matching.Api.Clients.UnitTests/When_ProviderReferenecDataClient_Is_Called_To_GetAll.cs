@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
                 .Returns(Task.FromResult(r));
 
             var providerReferenceDataClient = new ProviderReferenceDataClient(logger, _client);
-            _result = providerReferenceDataClient.GetAll(lastUpdateDate).GetAwaiter().GetResult();
+            _result = providerReferenceDataClient.GetAllAsync(lastUpdateDate).GetAwaiter().GetResult();
         }
 
         [Fact]

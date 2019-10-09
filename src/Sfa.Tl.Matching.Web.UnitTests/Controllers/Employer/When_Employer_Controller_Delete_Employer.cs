@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             employerService.GetSavedEmployerOpportunitiesAsync(Arg.Any<string>()).Returns(viewModel);
 
             //Act
-            var result = await sut.DeleteEmployer(opportunityId) as RedirectToRouteResult;
+            var result = await sut.DeleteEmployerAsync(opportunityId) as RedirectToRouteResult;
 
             //Assert
             result.Should().NotBeNull();
@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             employerService.GetSavedEmployerOpportunitiesAsync(Arg.Any<string>()).Returns(new SavedEmployerOpportunityViewModel());
 
             //Act
-            var result = await sut.DeleteEmployer(opportunityId) as RedirectToRouteResult;
+            var result = await sut.DeleteEmployerAsync(opportunityId) as RedirectToRouteResult;
 
             //Assert
             result.Should().NotBeNull();

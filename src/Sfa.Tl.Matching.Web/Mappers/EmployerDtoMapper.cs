@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.OpportunityItemId, opt => opt.Ignore())
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom<LoggedInUserNameResolver<FindEmployerViewModel, CompanyNameDto>>())
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom<UtcNowResolver<FindEmployerViewModel, CompanyNameDto>>())
-                .ForMember(m => m.EmployerId, o => o.MapFrom(s => s.SelectedEmployerId))
+                .ForMember(m => m.EmployerCrmId, o => o.MapFrom(s => s.SelectedEmployerCrmId))
                 .ForMember(m => m.HasChanged, o => o.MapFrom(src => src.CompanyName != src.PreviousCompanyName))
                 ;
 

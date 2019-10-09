@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,18 +26,18 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         private const int OpportunityId = 1;
         private const int OpportunityItemId = 2;
-        private const int EmployerId = 3;
+        private readonly Guid _employerCrmId = new Guid("33333333-3333-3333-3333-333333333333");
 
         public When_Employer_SaveOpportunityCompanyName_Is_Submitted_Successfully()
         {
             _viewModel.OpportunityId = OpportunityId;
             _viewModel.OpportunityItemId = OpportunityItemId;
             _viewModel.CompanyName = CompanyName;
-            _viewModel.SelectedEmployerId = 3;
+            _viewModel.SelectedEmployerCrmId = new Guid("33333333-3333-3333-3333-333333333333");
 
             _employerService = Substitute.For<IEmployerService>();
-            _employerService.ValidateCompanyNameAndId(EmployerId, CompanyName).Returns(true);
-            _employerService.GetEmployerOpportunityOwnerAsync(Arg.Any<int>())
+            _employerService.ValidateCompanyNameAndCrmIdAsync(_employerCrmId, CompanyName).Returns(true);
+            _employerService.GetEmployerOpportunityOwnerAsync(Arg.Any<Guid>())
                 .Returns((string)null);
 
             _opportunityService = Substitute.For<IOpportunityService>();
@@ -66,19 +67,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.SaveOpportunityCompanyName(_viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveOpportunityCompanyNameAsync(_viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetEmployer_Is_Called_Exactly_Once()
         {
-            _employerService.Received(1).ValidateCompanyNameAndId(EmployerId, CompanyName);
+            _employerService.Received(1).ValidateCompanyNameAndCrmIdAsync(_employerCrmId, CompanyName);
         }
 
         [Fact]
         public void Then_UpdateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).UpdateOpportunity(Arg.Any<CompanyNameDto>());
+            _opportunityService.Received(1).UpdateOpportunityAsync(Arg.Any<CompanyNameDto>());
         }
 
         [Fact]

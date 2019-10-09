@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("CreatedBy")
                 .Build();
 
-            _result = controllerWithClaims.ConfirmDeleteOpportunityItem(1).GetAwaiter().GetResult();
+            _result = controllerWithClaims.ConfirmDeleteOpportunityItemAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]

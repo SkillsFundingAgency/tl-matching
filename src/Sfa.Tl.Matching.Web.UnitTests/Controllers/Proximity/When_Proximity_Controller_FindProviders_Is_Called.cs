@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             IMapper mapper = new Mapper(config);
 
             var proximityService = Substitute.For<IProximityService>();
-            proximityService.IsValidPostCode(Arg.Any<string>()).Returns((true, "CV1 2WT"));
+            proximityService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, "CV1 2WT"));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
@@ -50,7 +50,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var viewModel = new SearchParametersViewModel
             {
                 RoutesSelectList = mapper.Map<SelectListItem[]>(routes),
-                SearchRadius = searchRadius,
                 SelectedRouteId = selectedRouteId,
                 Postcode = postcode
             };

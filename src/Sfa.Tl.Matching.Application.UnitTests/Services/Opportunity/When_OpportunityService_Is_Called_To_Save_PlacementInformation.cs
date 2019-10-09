@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 RouteId = RouteId
             };
 
-            _opportunityItemRepository.GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(opportunityItem);
+            _opportunityItemRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(opportunityItem);
 
             var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, 
                 provisionGapRepository, referralRepository, googleMapApiClient,
@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_Update_Is_Called_Exactly_Once_With_1_Placement()
         {
-            _opportunityItemRepository.Received(1).Update(Arg.Is<OpportunityItem>(opportunityItem => 
+            _opportunityItemRepository.Received(1).UpdateAsync(Arg.Is<OpportunityItem>(opportunityItem => 
                 opportunityItem.Id == OpportunityItemId &&
                 opportunityItem.JobRole == JobRole &&
                 opportunityItem.PlacementsKnown == PlacementsKnown &&
@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_GetSingleOrDefault_Is_Called_Exactly_Once()
         {
-            _opportunityItemRepository.Received(1).GetSingleOrDefault(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
+            _opportunityItemRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>());
         }
     }
 }

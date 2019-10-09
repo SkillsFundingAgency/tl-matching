@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _opportunityController = new OpportunityController(_opportunityService, mapper);
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(_opportunityController).Build();
 
-            _result = controllerWithClaims.SaveSelectedOpportunities(new ContinueOpportunityViewModel
+            _result = controllerWithClaims.SaveSelectedOpportunitiesAsync(new ContinueOpportunityViewModel
             {
                 SubmitAction = "CompleteProvisionGaps",
                 SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
@@ -57,13 +57,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_OpportunityService_ContinueWithOpportunities_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).ContinueWithOpportunities(Arg.Any<ContinueOpportunityViewModel>());
+            _opportunityService.Received(1).ContinueWithOpportunitiesAsync(Arg.Any<ContinueOpportunityViewModel>());
         }
 
         [Fact]
         public void Then_OpportunityService_ContinueWithOpportunities_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().GetOpportunityBasket(1);
+            _opportunityService.DidNotReceive().GetOpportunityBasketAsync(1);
         }
 
         [Fact]

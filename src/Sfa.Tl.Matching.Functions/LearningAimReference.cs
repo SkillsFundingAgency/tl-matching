@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Functions
     public static class LearningAimReference
     {
         [FunctionName("ImportLearningAimReference")]
-        public static async Task ImportLearningAimReference(
+        public static async Task ImportLearningAimReferenceAsync(
             [BlobTrigger("learningaimreference/{name}", Connection = "BlobStorageConnectionString")]ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions
 
             var stopwatch = Stopwatch.StartNew();
             
-            var createdRecords = await fileImportService.BulkImport(new LearningAimReferenceStagingFileImportDto
+            var createdRecords = await fileImportService.BulkImportAsync(new LearningAimReferenceStagingFileImportDto
             {
                 FileDataStream = stream,
                 CreatedBy = blockBlob.GetCreatedByMetadata()

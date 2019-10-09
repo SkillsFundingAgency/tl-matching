@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
             _functionLogRepository = functionLogRepository;
         }
 
-        public async Task<IList<TDto>> ValidateAndParseFile(TImportDto fileImportDto)
+        public async Task<IList<TDto>> ValidateAndParseFileAsync(TImportDto fileImportDto)
         {
             var dtos = new List<TDto>();
 
@@ -98,7 +98,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     startIndex++;
                 }
 
-                await _functionLogRepository.CreateMany(validationErrors);
+                await _functionLogRepository.CreateManyAsync(validationErrors);
             }
 
             return dtos;

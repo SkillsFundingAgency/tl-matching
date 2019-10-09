@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Notifications.Api.Client.Configuration;
-using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Application.Configuration;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
 {
@@ -16,14 +15,22 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
 
         protected override void ConfigureConfiguration(IServiceCollection services)
         {
-            MatchingConfiguration = new MatchingConfiguration
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.test.json", true)
+                .Build();
+
+            if (configuration["EnvironmentName"] == "__EnvironmentName__")
             {
-                PostcodeRetrieverBaseUrl = "https://postcodes.io/postcodes",
-                NotificationsApiClientConfiguration = new NotificationsApiClientConfiguration
-                {
-                    ApiBaseUrl = "http://localhost:56133/"
-                }
-            };
+                configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.local.json")
+                    .Build();
+            }
+
+            MatchingConfiguration = ConfigurationLoader.Load(
+                configuration["EnvironmentName"],
+                configuration["ConfigurationStorageConnectionString"],
+                configuration["Version"],
+                configuration["ServiceName"]);
         }
 
         protected override bool ConfigurationIsLocalOrDev()
