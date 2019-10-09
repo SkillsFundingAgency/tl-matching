@@ -14,7 +14,6 @@
 	[IsSaved]					BIT NOT NULL DEFAULT 0,
 	[IsSelectedForReferral]		BIT NOT NULL DEFAULT 0,
 	[IsCompleted]				BIT NOT NULL DEFAULT 0,
-	[EmployerFeedbackSent]		BIT NOT NULL DEFAULT 0,
 	[CreatedOn]					DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy]					NVARCHAR(50) NULL, 
 	[ModifiedOn]				DATETIME2 NULL, 
