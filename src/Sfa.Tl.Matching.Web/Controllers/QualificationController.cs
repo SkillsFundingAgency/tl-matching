@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("add-qualification/{providerId}", Name = "CreateQualification")]
-        public async Task<IActionResult> AddQualificationAsync(AddQualificationViewModel viewModel)
+        public async Task<IActionResult> CreateQualificationAsync(AddQualificationViewModel viewModel)
         {
             if (!ModelState.IsValid)
                 return View("AddQualification", viewModel);
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("edit-qualifications", Name = "EditQualifications")]
-        public IActionResult SearchQualifications()
+        public IActionResult EditQualifications()
         {
             return View("SearchQualifications", new QualificationSearchViewModel());
         }
@@ -163,7 +163,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "SaveMissingQualification")]
-        public async Task<IActionResult> MissingQualificationAsync(MissingQualificationViewModel viewModel)
+        public async Task<IActionResult> SaveMissingQualificationAsync(MissingQualificationViewModel viewModel)
         {
             Validate(viewModel);
 

@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var employerController = new EmployerController(_employerService, null, referralService, mapper);
 
-            _result = employerController.Search(query);
+            _result = employerController.SearchEmployer(query);
         }
 
         [Fact]

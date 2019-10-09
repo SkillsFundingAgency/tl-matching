@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data;
@@ -14,8 +13,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback.Builde
             Domain.Models.Opportunity opportunity,
             bool isSaved = true, bool isSelectedForReferral = true)
         {
-            provider.ProviderFeedbackSentOn = null;
-
             await dbContext.AddAsync(provider);
             await dbContext.AddAsync(venue);
             await dbContext.AddAsync(opportunity);

@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                         new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
                             httpcontextAccesor)
                         : type.Name.Contains("LoggedInUserNameResolver")
-                            ? (object) new
+                            ? (object)new
                                 LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
                                     httpcontextAccesor)
                             : type.Name.Contains("UtcNowResolver")
@@ -140,7 +140,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var referralService = new ReferralEmailService(mapper, configuration, dateTimeProvider, emailService,
                 emailHistoryService, opportunityRepo, _opportunityItemRepository, backgroundProcessHistoryRepo);
 
-            referralService.SendProviderReferralEmailAsync(1, itemIds, 1,  httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
+            referralService.SendProviderReferralEmailAsync(1, itemIds, 1, httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
         }
 
         [Fact]

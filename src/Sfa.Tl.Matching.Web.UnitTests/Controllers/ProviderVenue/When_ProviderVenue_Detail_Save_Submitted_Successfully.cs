@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 }
             };
 
-            _result = providerVenueController.ProviderVenueDetailAsync(viewModel).GetAwaiter().GetResult();
+            _result = providerVenueController.SaveProviderVenueDetailAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

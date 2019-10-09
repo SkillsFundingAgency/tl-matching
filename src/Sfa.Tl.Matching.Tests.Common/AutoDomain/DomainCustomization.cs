@@ -15,10 +15,12 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.Customize<MatchingConfiguration>(composer =>
                 composer.With(config => config.SendEmailEnabled, true)
                     .With(config => config.EmployerFeedbackTimeSpan, "-10.00:00:00"));
-                
 
-            fixture.Customize<Provider>(composer => composer.With(p => p.IsCdfProvider, true)
-                .With(p => p.IsEnabledForReferral, true));
+            fixture.Customize<Provider>(composer =>
+                composer.With(p => p.IsCdfProvider, true)
+                .With(p => p.IsEnabledForReferral, true)
+                .With(p => p.ProviderFeedbackSentOn, () => null)
+                );
 
             fixture.Customize<ProviderVenue>(composer => composer.With(pv => pv.IsRemoved, false)
                 .With(pv => pv.IsEnabledForReferral, true));
@@ -30,6 +32,7 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.Customize<Opportunity>(composer => composer.With(op => op.EmployerCrmId, employer.CrmId));
 
             fixture.Customize<OpportunityItem>(composer => composer.With(oi => oi.ModifiedOn, new DateTime(2019, 9, 1)));
+
         }
     }
 }

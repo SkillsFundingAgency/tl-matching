@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 Postcode = "CV1 2WT"
             };
 
-            _result = providerVenueController.AddProviderVenueAsync(viewModel).GetAwaiter().GetResult();
+            _result = providerVenueController.CreateVenueAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

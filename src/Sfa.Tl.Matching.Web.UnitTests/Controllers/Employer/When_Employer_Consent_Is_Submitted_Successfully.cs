@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.EmployerConsentAsync(new EmployerConsentViewModel
+            _result = controllerWithClaims.SaveEmployerConsentAsync(new EmployerConsentViewModel
             {
                 OpportunityId = 1
             }).GetAwaiter().GetResult();
@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _result.Should().BeOfType<RedirectToRouteResult>();
 
             var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("EmailSentReferrals_Get");
+            redirect?.RouteName.Should().BeEquivalentTo("GetReferralEmailSent");
             redirect?.RouteValues["id"].Should().Be(1);
         }
     }
