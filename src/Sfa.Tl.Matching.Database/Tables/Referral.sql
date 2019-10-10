@@ -4,6 +4,8 @@
 	[OpportunityItemId] INT NOT NULL,
 	[ProviderVenueId] INT NOT NULL,
 	[DistanceFromEmployer] DECIMAL(18, 2) NOT NULL,
+	[JourneyTimeByCar] [int] NULL,
+	[JourneyTimeByPublicTransport] [int] NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 

@@ -111,6 +111,7 @@
     <Build Include="Indexes\SPATIAL_ProviderVenue_Location.sql" />
     <Build Include="Indexes\IX_ProviderQualification_ProviderVenueId.sql" />
     <Build Include="Indexes\IX_QualificationRouteMapping_RouteId.sql" />
+    <None Include="PostDeployment\Remove SearchRadius From OpportunityItem.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

@@ -11,4 +11,5 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Remove Obsolete Tables.sql"
 :r ".\Update Qualification Title length.sql"
 :r ".\Update Opportunity Table EmployerCrmIds.sql"
+:r ".\Remove SearchRadius From OpportunityItem.sql"
 :r ".\Seed UserProfile.sql"
