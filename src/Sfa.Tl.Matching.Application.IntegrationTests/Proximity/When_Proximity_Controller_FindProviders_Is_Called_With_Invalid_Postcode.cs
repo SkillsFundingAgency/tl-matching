@@ -38,7 +38,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             IMapper mapper = new Mapper(config);
 
             var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), 
-                new LocationApiClient(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }),
+                new LocationApiClient(new HttpClient(), 
+                    new MatchingConfiguration
+                    {
+                        PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
+                    }),
                 Substitute.For<IGoogleDistanceMatrixApiClient>());
 
             var routePathService = Substitute.For<IRoutePathService>();
