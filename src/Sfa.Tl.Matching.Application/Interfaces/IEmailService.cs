@@ -5,6 +5,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(string templateName, string toAddress, IDictionary<string, string> personalisationTokens);
+        Task SendEmailAsync(int? opportunityId, string templateName, string toAddress, IDictionary<string, string> personalisationTokens, string createdBy);
     }
 }

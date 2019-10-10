@@ -42,13 +42,9 @@ namespace Sfa.Tl.Matching.Functions
 
                 var matchingServiceSupportEmailAddress = matchingConfiguration.MatchingServiceSupportEmailAddress;
 
-                await emailService.SendEmailAsync(EmailTemplateName.EmployerAupaBlank.ToString(), matchingServiceSupportEmailAddress, tokens);
+                await emailService.SendEmailAsync(null, EmailTemplateName.EmployerAupaBlank.ToString(),
+                    matchingServiceSupportEmailAddress, tokens, "System");
 
-                await emailHistoryService.SaveEmailHistoryAsync(EmailTemplateName.EmployerAupaBlank.ToString(),
-                    tokens,
-                    null,
-                    matchingServiceSupportEmailAddress,
-                    "System");
             }
             catch (Exception e)
             {

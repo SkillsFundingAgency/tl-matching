@@ -27,7 +27,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
     {
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly int _result;
@@ -47,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .Returns(true);
 
             _emailService = Substitute.For<IEmailService>();
-            _emailHistoryService = Substitute.For<IEmailHistoryService>();
+            var emailHistoryService = Substitute.For<IEmailHistoryService>();
 
             var config = new MapperConfiguration(c =>
             {
@@ -91,7 +90,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         var employerFeedbackService = new EmployerFeedbackService(
                 mapper, testFixture.Configuration, testFixture.Logger,
                 _dateTimeProvider, 
-                _emailService, _emailHistoryService, bankHolidayRepository, 
+                _emailService, emailHistoryService, bankHolidayRepository, 
                 _opportunityRepository, backgroundProcessHistoryRepository);
 
             _result = employerFeedbackService
@@ -139,19 +138,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailService
                 .DidNotReceive()
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>());
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
         
-        [Fact]
-        public void Then_EmailHistoryService_SaveEmailHistory_Is_Not_Called()
-        {
-            _emailHistoryService
-                .DidNotReceive()
-                .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(),
-                    Arg.Any<string>(), Arg.Any<string>());
-        }
-       
         [Fact]
         public void Then_Result_Has_Expected_Value()
         {

@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .DidNotReceive()
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
     }
 }

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Notify.Interfaces;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Configuration;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
@@ -19,7 +21,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
 
         public When_EmailHistoryService_Is_Called_To_Save_Email_History()
         {
-            var logger = Substitute.For<ILogger<EmailHistoryService>>();
+            var logger = Substitute.For<ILogger<EmailService>>();
+            var notificationApi = Substitute.For<IAsyncNotificationClient>();
+
+            var configuration = new MatchingConfiguration
+            {
+                SendEmailEnabled = true,
+                GovNotifyApiKey = "TestApiKey"
+            };
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailHistoryMapper).Assembly));
             var mapper = new Mapper(config);
@@ -36,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
 
             _emailTemplateRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>()).Returns(emailTemplate);
 
-            var emailHistoryService = new EmailHistoryService(_emailHistoryRepository, _emailTemplateRepository, mapper, logger);
+            var emailHistoryService = new EmailService(configuration, notificationApi,  _emailTemplateRepository, _emailHistoryRepository, mapper, logger);
 
             var toAddress = "test@test.com";
             var createdBy = "CreatedBy";
@@ -46,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
             };
             
             emailHistoryService
-                .SaveEmailHistoryAsync("TemplateName", tokens, 2, toAddress, createdBy)
+                .SendEmailAsync(2, "TemplateName", toAddress, tokens, createdBy)
                 .GetAwaiter().GetResult();
         }
 
