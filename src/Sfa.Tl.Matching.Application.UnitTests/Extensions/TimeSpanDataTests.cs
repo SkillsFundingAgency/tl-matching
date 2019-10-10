@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentAssertions;
-using Humanizer.Localisation;
 using Sfa.Tl.Matching.Application.Extensions;
 using Xunit;
 
@@ -9,7 +8,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
     [Trait("TimeSpan", "Data Tests")]
     public class TimeSpanExtensionsTests
     {
-        [Theory(DisplayName = "SecondsToReadableString Real World Examples Data Tests")]
+        [Theory(DisplayName = "RoundToNearestMinuteData Tests")]
         [InlineData(0, 0)]
         [InlineData(29, 0)]
         [InlineData(30, 60)]
