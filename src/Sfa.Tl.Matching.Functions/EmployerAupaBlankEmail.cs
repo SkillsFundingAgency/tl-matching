@@ -16,8 +16,6 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class EmployerAupaBlankEmail
     {
-        private const string Subject = "Employer with a blank AUPA status";
-
         [FunctionName("SendEmployerAupaBlankEmail")]
         public async Task SendEmployerAupaBlankEmailAsync([QueueTrigger(QueueName.EmployerAupaBlankEmailQueue, Connection = "BlobStorageConnectionString")]SendEmployerAupaBlankEmail employerAupaBlankEmail,
             ExecutionContext context,
