@@ -59,8 +59,8 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
             journeyTimes.Count.Should().Be(1);
 
             journeyTimes.First().Key.Should().Be(1);
-            journeyTimes.First().Value.TravelTime.Should().Be(7603);
-            journeyTimes.First().Value.TravelDistance.Should().Be(172648);
+            journeyTimes.First().Value.JourneyTime.Should().Be(7603);
+            journeyTimes.First().Value.JourneyDistance.Should().Be(172648);
         }
     }
 }

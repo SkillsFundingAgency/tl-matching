@@ -85,8 +85,8 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
                         results[destinations[i].Id] = new JourneyInfoDto
                         {
                             DestinationId = destinations[i].Id,
-                            TravelTime = element.Duration?.Value ?? 0,
-                            TravelDistance = element.Distance?.Value ?? 0
+                            JourneyTime = element.Duration?.Value ?? 0,
+                            JourneyDistance = element.Distance?.Value ?? 0
                         };
                     }
                 }

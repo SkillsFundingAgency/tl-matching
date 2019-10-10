@@ -55,15 +55,15 @@
 
                                 <div class="timeline">
                                     <ul>
-                                        <li id="tl-travel-times">
+                                        <li id="tl-journey-times">
                                             <p class="govuk-body govuk-!-font-weight-bold">@($"{searchResult.Distance:#0.0}") miles</p>
-                                            @if (@searchResult?.TravelTimeByPublicTransport > 0)
+                                            @if (@searchResult?.JourneyTimeByPublicTransport > 0)
                                             {
-                                                <p class="govuk-body">Public transport: @searchResult.TravelTimeByPublicTransport.ToReadableString()</p>
+                                                <p class="govuk-body">Public transport: @searchResult.JourneyTimeByPublicTransport.ToReadableString()</p>
                                             }
-                                            @if (@searchResult?.TravelTimeByDriving > 0)
+                                            @if (@searchResult?.JourneyTimeByDriving > 0)
                                             {
-                                                <p class="govuk-body">Car: @searchResult.TravelTimeByDriving.ToReadableString()</p>
+                                                <p class="govuk-body">Car: @searchResult.JourneyTimeByDriving.ToReadableString()</p>
                                             }
                                         </li>
                                     </ul>

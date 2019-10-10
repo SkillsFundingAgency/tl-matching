@@ -38,14 +38,14 @@ namespace Sfa.Tl.Matching.Application.Services
             if (searchResults != null && searchResults.Any())
             {
                 Debug.Write($"Search results for {dto.Postcode} route {dto.SelectedRouteId} - {searchResults.Count} results, ");
-                searchResults = await FilterByTravelTimeAsync(dto.Postcode, searchResults);
+                searchResults = await FilterByJourneyTimeAsync(dto.Postcode, searchResults);
                 Debug.WriteLine($" {searchResults.Count} filtered results");
             }
 
             return searchResults ?? new List<SearchResultsViewModelItem>();
         }
 
-        private async Task<IList<SearchResultsViewModelItem>> FilterByTravelTimeAsync(string originPostcode, IList<SearchResultsViewModelItem> searchResults)
+        private async Task<IList<SearchResultsViewModelItem>> FilterByJourneyTimeAsync(string originPostcode, IList<SearchResultsViewModelItem> searchResults)
         {
             var destinations = searchResults
                 //.Where(v => v.Latitude != 0 && v.Longitude != 0)
@@ -71,10 +71,10 @@ namespace Sfa.Tl.Matching.Application.Services
             var results = searchResults
                 .Where(s =>
                         journeyTimesByCar.Any(d => d.Key == s.ProviderVenueId &&
-                                                   d.Value.TravelTime < oneHour) 
+                                                   d.Value.JourneyTime < oneHour) 
                         ||
                         journeyTimesByPublicTransport.Any(d => d.Key == s.ProviderVenueId &&
-                                                               d.Value.TravelTime < oneHour)
+                                                               d.Value.JourneyTime < oneHour)
                     )
                 .Select(r => new SearchResultsViewModelItem
                 {
@@ -87,10 +87,10 @@ namespace Sfa.Tl.Matching.Application.Services
                     Distance = r.Distance,
                     IsTLevelProvider = r.IsTLevelProvider,
                     QualificationShortTitles = r.QualificationShortTitles,
-                    TravelTimeByPublicTransport = journeyTimesByPublicTransport.TryGetValue(r.ProviderVenueId, out var tVal)
-                            ? tVal.TravelTime: (long?)null,
-                    TravelTimeByDriving = journeyTimesByCar.TryGetValue(r.ProviderVenueId, out var dVal)
-                        ? dVal.TravelTime : (long?)null,
+                    JourneyTimeByPublicTransport = journeyTimesByPublicTransport.TryGetValue(r.ProviderVenueId, out var tVal)
+                            ? tVal.JourneyTime: (long?)null,
+                    JourneyTimeByDriving = journeyTimesByCar.TryGetValue(r.ProviderVenueId, out var dVal)
+                        ? dVal.JourneyTime : (long?)null,
                     Latitude = r.Latitude,
                     Longitude = r.Longitude
                 }).OrderBy(r => r.Distance).ToList();

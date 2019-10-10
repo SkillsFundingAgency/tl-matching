@@ -12,8 +12,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
                     1, new JourneyInfoDto
                     {
                         DestinationId = 1,
-                        TravelDistance = 2500,
-                        TravelTime = 30 * 60
+                        JourneyDistance = 2500,
+                        JourneyTime = 30 * 60
                     }
                 }
             };
@@ -25,8 +25,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity.Builders
                     2, new JourneyInfoDto
                     {
                         DestinationId = 2,
-                        TravelDistance = 2500,
-                        TravelTime = 30 * 60
+                        JourneyDistance = 2500,
+                        JourneyTime = 30 * 60
                     }
                 }
             };
