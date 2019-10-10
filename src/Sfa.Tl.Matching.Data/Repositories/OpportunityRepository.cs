@@ -230,13 +230,17 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public int GetEmployerOpportunityCount(int opportunityId)
         {
-            return _dbContext.OpportunityItem.Count(item =>
-                item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
+            return _dbContext.OpportunityItem.Count(item => item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
         }
 
         public async Task<List<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync()
         {
-            return await _dbContext.MatchingServiceOpportunityReport.OrderBy(o => new { o.OpportunityItemId }).ThenByDescending(o => new { o.OpportunityType, o.IsCompleted, o.IsSaved }).ToListAsync();
+            return await _dbContext.MatchingServiceOpportunityReport
+                .OrderBy(o => o.OpportunityItemId)
+                .ThenByDescending(o => o.OpportunityType)
+                .ThenByDescending(o => o.IsCompleted)
+                .ThenByDescending(o => o.IsSaved)
+                .ToListAsync();
         }
 
         public async Task<List<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync()
@@ -250,7 +254,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              join oi in _dbContext.OpportunityItem
                                  on o.Id equals oi.OpportunityId
                              where oi.IsCompleted
-                                   && o.EmployerFeedbackSentOn == null 
+                                   && o.EmployerFeedbackSentOn == null
                                    && oi.ModifiedOn.HasValue
                                    && oi.ModifiedOn.Value <= referralDate
                                    && o.OpportunityItem.Count(x => x.IsCompleted) == 1
