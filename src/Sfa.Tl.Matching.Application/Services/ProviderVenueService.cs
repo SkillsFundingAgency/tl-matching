@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)
         {
-            var (valid, postcodeResult) = await _locationApiClient.IsValidPostcodeAsync(postcode);
+            var (valid, postcodeResult) = await _locationApiClient.IsValidPostcodeAsync(postcode, true);
 
             if (!valid)
                 (valid, postcodeResult) = await _locationApiClient.IsTerminatedPostcodeAsync(postcode);

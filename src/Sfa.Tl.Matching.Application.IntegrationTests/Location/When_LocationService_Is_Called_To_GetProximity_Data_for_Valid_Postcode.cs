@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
             {
                 PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
             });
-            _postcodeLookupResultDto = locationService.GetGeoLocationDataAsync("CV1 2WT").GetAwaiter().GetResult();
+            _postcodeLookupResultDto = locationService.GetGeoLocationDataAsync("CV1 2WT", false).GetAwaiter().GetResult();
         }
 
         [Fact]
