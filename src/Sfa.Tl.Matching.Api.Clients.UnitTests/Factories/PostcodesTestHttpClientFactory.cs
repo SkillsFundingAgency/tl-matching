@@ -3,7 +3,7 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
 {
-    public class PostcodesHttpClientFactory : HttpClientFactory
+    public class PostcodesTestHttpClientFactory : TestHttpClientFactory
     {
         public HttpClient Get(string requestPostcode, PostcodeLookupResultDto responseData)
         {

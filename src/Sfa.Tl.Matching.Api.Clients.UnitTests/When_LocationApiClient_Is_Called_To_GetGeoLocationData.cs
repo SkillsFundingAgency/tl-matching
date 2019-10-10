@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
                 Longitude = "-1.234"
             };
 
-            var httpClient = new PostcodesHttpClientFactory()
+            var httpClient = new PostcodesTestHttpClientFactory()
                 .Get("CV1 2WT", responseData);
 
             _locationApiClient = new LocationApiClient(httpClient,

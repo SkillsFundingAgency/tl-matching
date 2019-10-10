@@ -3,7 +3,7 @@ using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
 {
-    public class GoogleMapsHttpClientFactory : HttpClientFactory
+    public class GoogleMapsTestHttpClientFactory : TestHttpClientFactory
     {
         public HttpClient Get(string requestPostcode = "CV12WT", string responseTown = "Coventry")
         {
