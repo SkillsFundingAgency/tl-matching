@@ -36,8 +36,6 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         public async Task Then_JourneyTimes_Are_Returned_Correctly()
         {
             var originPostcode = "CV1 2WT";
-            var originLatitude = 52.400997M;
-            var originLongitude = -1.508122M;
 
             var destinations = new List<LocationDto>
             {
@@ -51,8 +49,11 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
             };
 
             var journeyTimes = await _googleDistanceMatrixApiClient
-                .GetJourneyTimesAsync(originPostcode, originLatitude, originLongitude,
-                    destinations, TravelMode.Driving, _arrivalTimeSeconds);
+                .GetJourneyTimesAsync(
+                    originPostcode, 
+                    destinations, 
+                    TravelMode.Driving, 
+                    _arrivalTimeSeconds);
 
             journeyTimes.Should().NotBeNull();
             journeyTimes.Count.Should().Be(1);
