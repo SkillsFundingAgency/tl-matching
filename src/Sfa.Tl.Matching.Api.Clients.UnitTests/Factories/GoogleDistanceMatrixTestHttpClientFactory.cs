@@ -4,7 +4,7 @@ using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
 {
-    public class GoogleDistanceMatrixHttpClientFactory : HttpClientFactory
+    public class GoogleDistanceMatrixTestHttpClientFactory : TestHttpClientFactory
     {
         public HttpClient Get(string originPostcode = "CV1 2WT",
             decimal originLatitude = 52.400997M, 

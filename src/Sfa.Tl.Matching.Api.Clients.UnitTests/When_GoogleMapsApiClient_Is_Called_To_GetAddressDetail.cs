@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 
         public When_GoogleMapsApiClient_Is_Called_To_GetAddressDetail()
         {
-            var httpClient = new GoogleMapsHttpClientFactory().Get();
+            var httpClient = new GoogleMapsTestHttpClientFactory().Get();
             _googleMapsApiClient = new GoogleMapApiClient(httpClient,
                 new MatchingConfiguration
                 {

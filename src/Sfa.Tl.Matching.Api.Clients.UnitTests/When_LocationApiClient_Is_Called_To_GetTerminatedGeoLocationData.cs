@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
                 Longitude = "-1.234"
             };
 
-            var httpClient = new TerminatedPostcodesHttpClientFactory()
+            var httpClient = new TerminatedPostcodesTestHttpClientFactory()
                 .Get("S70 2YW", responseData);
 
             _locationApiClient = new LocationApiClient(httpClient,

@@ -6,9 +6,8 @@ using Newtonsoft.Json;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
 {
-    public abstract class HttpClientFactory
+    public abstract class TestHttpClientFactory
     {
-
         protected HttpClient CreateClient(object response, string uri, string contentType = "application/json")
         {
             var serialised = JsonConvert.SerializeObject(response);
