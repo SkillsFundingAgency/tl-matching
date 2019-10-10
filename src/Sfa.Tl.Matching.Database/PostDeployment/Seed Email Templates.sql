@@ -13,7 +13,8 @@ USING (VALUES
 	(N'ProviderReferralV3', N'0868baf1-0ef0-4976-8d77-da19e3d79761'),
 	(N'EmployerReferralV3', N'66fffc15-2a48-4143-a729-b484f5c26980'),
 	(N'ProviderFeedback', N'8249a0b6-40a5-46dd-a370-13c6a9651d2c'),
-	(N'EmployerAupaBlank', N'18c53f52-25b3-4f77-89fc-582dc545d0ed')
+	(N'EmployerAupaBlank', N'18c53f52-25b3-4f77-89fc-582dc545d0ed'),
+	(N'FailedEmail', N'1489537d-d026-4da5-9d7d-cc979e9f0a28')
   )
   AS Source ([TemplateName], [TemplateId]) 
 ON Target.[TemplateName] = Source.[TemplateName] 
