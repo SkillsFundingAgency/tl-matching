@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         public When_GoogleDistanceMatrixApiClient_Is_Called_To_GetJourneyTimes()
         {
             _arrivalTimeSeconds = 1570014314;
-            var httpClient = new GoogleDistanceMatrixHttpClientFactory().Get(arrivalTimeSeconds: _arrivalTimeSeconds);
+            var httpClient = new GoogleDistanceMatrixTestHttpClientFactory().Get(arrivalTimeSeconds: _arrivalTimeSeconds);
             var logger = new NullLogger<GoogleDistanceMatrixApiClient>();
 
             _googleDistanceMatrixApiClient = new GoogleDistanceMatrixApiClient(
