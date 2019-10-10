@@ -10,6 +10,8 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string ProviderVenueName { get; set; }
         public string Postcode { get; set; }
         public decimal DistanceFromEmployer { get; set; }
+        public int? JourneyTimeByCar { get; set; }
+        public int? JourneyTimeByPublicTransport { get; set; }
         public string DisplayText =>
             ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, Postcode, ProviderDisplayName, false);
     }

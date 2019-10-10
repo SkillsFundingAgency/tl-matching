@@ -115,6 +115,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                         ProviderVenueTown = "Provider town",
                         ProviderVenuePostcode = "Provider postcode",
                         DistanceFromEmployer = "3.5",
+                        JourneyTimeByCar = 1200,
+                        JourneyTimeByPublicTransport = 1800,
                         JobRole = "Job role",
                         CompanyName = "Companyname",
                         EmployerContact = "Employer contact",

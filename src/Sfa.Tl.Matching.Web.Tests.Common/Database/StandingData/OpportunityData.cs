@@ -91,6 +91,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 Id = ReferralSingleId,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
+                                JourneyTimeByCar = 1200,
+                                JourneyTimeByPublicTransport = 1800,
                                 CreatedOn = new DateTime(2019, 1, 1),
                                 CreatedBy = "Dev Surname",
                             }
@@ -137,6 +139,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 Id = ReferralMultiple1Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
+                                JourneyTimeByCar = 1200,
+                                JourneyTimeByPublicTransport = 1800,
                                 CreatedOn = new DateTime(2019, 1, 2),
                                 CreatedBy = "Dev Surname",
                             },
@@ -145,6 +149,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 Id = ReferralMultiple3Id,
                                 ProviderVenueId = 2,
                                 DistanceFromEmployer = 2.5m,
+                                JourneyTimeByCar = 1200,
+                                JourneyTimeByPublicTransport = 1800,
                                 CreatedOn = new DateTime(2019, 1, 2),
                                 CreatedBy = "Dev Surname",
                             }
@@ -174,6 +180,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 Id = ReferralMultiple2Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
+                                JourneyTimeByCar = 1200,
+                                JourneyTimeByPublicTransport = 1800,
                                 CreatedOn = new DateTime(2019, 1, 3),
                                 CreatedBy = "Dev Surname",
                             }
@@ -265,6 +273,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 Id = ReferralSingle1Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
+                                JourneyTimeByCar = 1200,
+                                JourneyTimeByPublicTransport = 1800,
                                 CreatedOn = new DateTime(2018, 11, 5, 16, 22, 11),
                                 CreatedBy = "Dev Surname",
                             }
@@ -339,6 +349,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 Id = ReferralAndProvisionGapMultiple1Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
+                                JourneyTimeByCar = 1200,
+                                JourneyTimeByPublicTransport = 1800,
                                 CreatedOn = new DateTime(2019, 4, 7, 22, 59, 0),
                                 CreatedBy = "Dev Surname",
                             }
@@ -368,6 +380,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 Id = ReferralAndProvisionGapMultiple2Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
+                                JourneyTimeByCar = 1200,
+                                JourneyTimeByPublicTransport = 1800,
                                 CreatedOn = new DateTime(2019, 1, 8),
                                 CreatedBy = "Dev Surname",
                             }
@@ -444,6 +458,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                     Id = Referral1Id,
                                     ProviderVenueId = 1,
                                     DistanceFromEmployer = 1.23m,
+                                    JourneyTimeByCar = 1200,
+                                    JourneyTimeByPublicTransport = 1800,
                                     CreatedOn = new DateTime(2019, 1, 10),
                                     CreatedBy = "Dev Surname",
                                 }
@@ -473,6 +489,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                     Id = Referral2Id,
                                     ProviderVenueId = 1,
                                     DistanceFromEmployer = 1.23m,
+                                    JourneyTimeByCar = 1200,
+                                    JourneyTimeByPublicTransport = 1800,
                                     CreatedOn = new DateTime(2019, 1, 11),
                                     CreatedBy = "Dev Surname",
                                 }
@@ -520,6 +538,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 Id = ProviderReferral1Id,
                                 ProviderVenueId = 1,
                                 DistanceFromEmployer = 1.23m,
+                                JourneyTimeByCar = 1200,
+                                JourneyTimeByPublicTransport = 1800,
                                 CreatedOn = new DateTime(2019, 1, 12),
                                 CreatedBy = "Dev Surname",
                             },
@@ -528,6 +548,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 Id = ProviderReferral2Id,
                                 ProviderVenueId = 2,
                                 DistanceFromEmployer = 2.93m,
+                                JourneyTimeByCar = 1200,
+                                JourneyTimeByPublicTransport = 1800,
                                 CreatedOn = new DateTime(2019, 1, 12),
                                 CreatedBy = "Dev Surname",
                             }

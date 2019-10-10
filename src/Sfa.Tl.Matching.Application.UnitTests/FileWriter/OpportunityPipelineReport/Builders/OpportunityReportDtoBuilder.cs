@@ -31,6 +31,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.OpportunityPipelineRe
                 ProviderVenueName = "ProviderVenueName",
                 ProviderVenueTownAndPostcode = "London SW1 1AB",
                 DistanceFromEmployer = 1.5M,
+                JourneyTimeByCar = 1200,
+                JourneyTimeByPublicTransport = 1800,
                 PrimaryContact = "Primary contact",
                 PrimaryContactEmail = "Primary contact email",
                 PrimaryContactPhone = "Primary contact telephone",

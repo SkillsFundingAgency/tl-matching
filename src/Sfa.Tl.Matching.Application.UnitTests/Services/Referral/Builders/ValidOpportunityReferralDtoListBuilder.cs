@@ -22,6 +22,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                 EmployerContactPhone = "020 123 4567",
                 EmployerContactEmail = "employer.contact@employer.co.uk",
                 DistanceFromEmployer = "3.5",
+                JourneyTimeByCar = 1200,
+                JourneyTimeByPublicTransport = 1800,
                 Postcode = "AA1 1AA",
                 Town = "Town",
                 JobRole = "Testing Job Title",

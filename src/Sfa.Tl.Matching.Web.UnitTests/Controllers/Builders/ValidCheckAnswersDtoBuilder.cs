@@ -16,9 +16,23 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             CompanyNameAka = "AlsoKnownAs",
             RouteName = "RouteName",
             Providers = new List<ReferralsViewModel>
-            {                 
-                new ReferralsViewModel { Name = "Provider1", DistanceFromEmployer = 1.3m, Postcode = "AA1 1AA" },
-                new ReferralsViewModel { Name = "Provider2", DistanceFromEmployer = 31.6m, Postcode = "BB1 1BB" }
+            {
+                new ReferralsViewModel
+                {
+                    Name = "Provider1",
+                    DistanceFromEmployer = 1.3m,
+                    JourneyTimeByCar = 600,
+                    JourneyTimeByPublicTransport = 900,
+                    Postcode = "AA1 1AA"
+                },
+                new ReferralsViewModel
+                {
+                    Name = "Provider2", 
+                    DistanceFromEmployer = 31.6m,
+                    JourneyTimeByCar = 1200,
+                    JourneyTimeByPublicTransport = 1800,
+                    Postcode = "BB1 1BB"
+                }
             }
         };
     }

@@ -28,6 +28,8 @@
                         <div class="govuk-checkboxes__item">
                             <input type="hidden" asp-for="@searchResult.Distance" name="SelectedProvider[@i].DistanceFromEmployer" />
                             <input type="hidden" asp-for="@searchResult.ProviderVenueId" name="SelectedProvider[@i].ProviderVenueId" />
+                            <input type="hidden" asp-for="@searchResult.JourneyTimeByCar" name="SelectedProvider[@i].JourneyTimeByCar" />
+                            <input type="hidden" asp-for="@searchResult.JourneyTimeByPublicTransport" name="SelectedProvider[@i].JourneyTimeByPublicTransport" />
 
                             @* DO NOT DELETE - asp-for needs to be Model.SearchResults.Results[i].IsSelected *@
                             <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.SearchResults.Results[i].IsSelected" name="SelectedProvider[@i].IsSelected" />

@@ -47,6 +47,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
             CreateMap<SelectedProviderViewModel, ReferralDto>()
                 .ForMember(m => m.ProviderVenueId, o => o.MapFrom(x => x.ProviderVenueId))
                 .ForMember(m => m.DistanceFromEmployer, o => o.MapFrom(x => x.DistanceFromEmployer))
+                .ForMember(m => m.JourneyTimeByCar, o => o.MapFrom(x => x.JourneyTimeByCar))
+                .ForMember(m => m.JourneyTimeByPublicTransport, o => o.MapFrom(x => x.JourneyTimeByPublicTransport))
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
         }

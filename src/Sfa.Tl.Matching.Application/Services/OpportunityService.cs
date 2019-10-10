@@ -121,6 +121,8 @@ namespace Sfa.Tl.Matching.Application.Services
                         ReferralId = r.Id,
                         Postcode = r.ProviderVenue.Postcode,
                         DistanceFromEmployer = r.DistanceFromEmployer,
+                        JourneyTimeByCar = r.JourneyTimeByCar,
+                        JourneyTimeByPublicTransport = r.JourneyTimeByPublicTransport,
                         Name = r.ProviderVenue.Provider.Name,
                         ProviderDisplayName = r.ProviderVenue.Provider.DisplayName,
                         ProviderVenueName = r.ProviderVenue.Name
@@ -139,6 +141,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     Name = r.ProviderVenue.Provider.Name,
                     Postcode = r.ProviderVenue.Postcode,
                     DistanceFromEmployer = r.DistanceFromEmployer,
+                    JourneyTimeByCar = r.JourneyTimeByCar,
+                    JourneyTimeByPublicTransport = r.JourneyTimeByPublicTransport,
                     ProviderVenueId = r.ProviderVenueId,
                     ProviderDisplayName = r.ProviderVenue.Provider.DisplayName,
                     ProviderVenueName = r.ProviderVenue.Name
