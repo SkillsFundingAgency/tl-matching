@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
             string destinationPostcode = "SW1A 2AA",
             long arrivalTimeSeconds = 1570014314)
         {
-            var response = new GoogleDistanceMatrixResponse
+            var response = new GoogleJourneyTimeResponse
             {
                 DestinationAddresses = new[]
                 {

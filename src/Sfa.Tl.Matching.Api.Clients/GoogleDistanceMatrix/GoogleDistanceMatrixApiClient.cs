@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             return distanceSearchResults;
         }
         
-        private Task<IDictionary<int, JourneyInfoDto>> BuildResultAsync(GoogleDistanceMatrixResponse response, IList<LocationDto> destinations)
+        private Task<IDictionary<int, JourneyInfoDto>> BuildResultAsync(GoogleJourneyTimeResponse response, IList<LocationDto> destinations)
         {
             var results = new Dictionary<int, JourneyInfoDto>(response.DestinationAddresses.Length);
 
@@ -115,7 +115,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             return batches;
         }
 
-        private async Task<GoogleDistanceMatrixResponse> SearchBatchAsync(string origin, IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
+        private async Task<GoogleJourneyTimeResponse> SearchBatchAsync(string origin, IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
         {
             try
             {
@@ -154,7 +154,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
                 };
 
                 return JsonConvert
-                    .DeserializeObject<GoogleDistanceMatrixResponse>(
+                    .DeserializeObject<GoogleJourneyTimeResponse>(
                         jsonResponse, serializerSettings);
             }
             catch (Exception ex)
