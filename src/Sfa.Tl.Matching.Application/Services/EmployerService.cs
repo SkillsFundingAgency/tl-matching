@@ -253,10 +253,14 @@ namespace Sfa.Tl.Matching.Application.Services
             if (existingEmployer == null)
             {
                 var employer = _mapper.Map<Employer>(employerData);
+                employer.CreatedBy = "System";
+                employer.CreatedOn = DateTime.UtcNow;
                 return await _employerRepository.CreateAsync(employer);
             }
 
             existingEmployer = _mapper.Map(employerData, existingEmployer);
+            existingEmployer.ModifiedBy = "System";
+            existingEmployer.ModifiedOn = DateTime.UtcNow;
             await _employerRepository.UpdateAsync(existingEmployer);
 
             return 1;
@@ -285,6 +289,9 @@ namespace Sfa.Tl.Matching.Application.Services
             existingEmployer.PrimaryContact = employerData.fullname;
             existingEmployer.Phone = employerData.telephone1;
             existingEmployer.Email = employerData.emailaddress1;
+            existingEmployer.ModifiedBy = "System";
+            existingEmployer.ModifiedOn = DateTime.UtcNow;
+
             await _employerRepository.UpdateAsync(existingEmployer);
 
             return 1;
