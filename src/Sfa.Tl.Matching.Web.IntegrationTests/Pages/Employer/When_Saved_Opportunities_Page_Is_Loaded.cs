@@ -10,8 +10,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
     public class When_Saved_Opportunities_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Saved opportunities";
-        private const int OpportunityId = 1010;
-        private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 

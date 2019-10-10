@@ -10,8 +10,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
     public class When_Provider_Search_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Find a provider";
-        private const int OpportunityId = 0;
-        private const int OpportunityItemId = 0;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
