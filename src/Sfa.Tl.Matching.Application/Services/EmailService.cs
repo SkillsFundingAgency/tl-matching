@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 var tokens = personalisationTokens.Select(x => new { key = x.Key, val = (dynamic)x.Value })
                     .ToDictionary(item => item.key, item => item.val);
 
-                await _notificationClient.SendEmailAsync(recipient, templateId, tokens);
+                var emailresponse = await _notificationClient.SendEmailAsync(recipient, templateId, tokens);
 
             }
             catch (Exception ex)
