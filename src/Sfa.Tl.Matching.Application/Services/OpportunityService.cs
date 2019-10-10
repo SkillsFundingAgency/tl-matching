@@ -112,7 +112,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     JobRole = oi.JobRole,
                     Placements = oi.Placements,
                     RouteId = oi.RouteId,
-                    SearchRadius = oi.SearchRadius,
                     RouteName = oi.Route.Name,
                     CompanyName = oi.Opportunity.Employer.CompanyName,
                     CompanyNameAka = oi.Opportunity.Employer.AlsoKnownAs,

@@ -9,7 +9,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
         {
             OpportunityId = 1,
             OpportunityItemId = 2,
-            SearchRadius = 3,
             JobRole = "JobRole",
             Placements = 2,
             Postcode = "AA1 1AA",

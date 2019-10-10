@@ -55,7 +55,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 OpportunityId = opportunityItemDto.OpportunityId,
                 OpportunityItemId = opportunityItemDto.OpportunityItemId,
-                SearchRadius = viewModel.SearchRadius,
                 Postcode = viewModel.Postcode,
                 RouteId = viewModel.SelectedRouteId ?? 0,
                 SearchResultProviderCount = viewModel.SearchResultProviderCount
@@ -92,7 +91,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 OpportunityId = saveReferralViewModel.OpportunityId,
                 OpportunityItemId = saveReferralViewModel.OpportunityItemId,
-                SearchRadius = saveReferralViewModel.SearchRadius,
                 Postcode = saveReferralViewModel.Postcode,
                 RouteId = saveReferralViewModel.SelectedRouteId ?? 0,
                 SearchResultProviderCount = saveReferralViewModel.SearchResultProviderCount
@@ -263,7 +261,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (opportunityItem != null)
             {
                 viewModel.Postcode = opportunityItem.Postcode;
-                viewModel.SearchRadius = opportunityItem.SearchRadius;
                 viewModel.RouteId = opportunityItem.RouteId;
             }
 

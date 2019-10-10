@@ -46,7 +46,6 @@
 //            dto.ProviderSecondaryContactEmail.Should().BeEquivalentTo("secondary@contact.co.uk");
 //            dto.ProviderVenuePostcode.Should().BeEquivalentTo("AA1 1AA");
 //            dto.RouteName.Should().BeEquivalentTo("Test Route");
-//            dto.SearchRadius.Should().Be(10);
 //            dto.Postcode.Should().BeEquivalentTo("AA1 1AA");
 //            dto.JobRole.Should().BeEquivalentTo("Testing Job Title");
 //            dto.CompanyName.Should().BeEquivalentTo("Company");

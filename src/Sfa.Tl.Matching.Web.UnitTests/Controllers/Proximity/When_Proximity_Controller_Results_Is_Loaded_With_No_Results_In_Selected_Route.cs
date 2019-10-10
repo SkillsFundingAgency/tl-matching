@@ -23,7 +23,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
         private const int RouteId = 1;
         private const string Postcode = "SW1A 2AA";
-        private const int SearchRadius = 10;
         private readonly int _selectedRouteId;
 
         public When_Proximity_Controller_Results_Is_Loaded_With_No_Results_In_Selected_Route()
@@ -55,7 +54,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 .SearchProvidersByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
                         a => a.Postcode == Postcode && 
-                             a.SearchRadius == SearchRadius && 
                              a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 

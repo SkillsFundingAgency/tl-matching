@@ -75,7 +75,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 OpportunityType = OpportunityType.Referral,
                 RouteId = 5,
                 Postcode = "AA1 1AA",
-                SearchRadius = 10,
                 JobRole = "Test Title",
                 PlacementsKnown = true,
                 Placements = 3,
@@ -100,7 +99,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     opportunityItem.RouteId == 5 &&
                     opportunityItem.Postcode == "AA1 1AA" &&
                     opportunityItem.Town == "Coventry" &&
-                    opportunityItem.SearchRadius == 10 &&
                     opportunityItem.JobRole == "Test Title" &&
                     opportunityItem.PlacementsKnown.HasValue &&
                     opportunityItem.PlacementsKnown.Value &&

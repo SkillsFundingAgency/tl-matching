@@ -47,7 +47,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 OpportunityId = OpportunityId,
                 OpportunityItemId = OpportunityItemId,
                 RouteId = 1,
-                SearchRadius = 10,
                 Postcode = "OX1 1AA"
             };
 

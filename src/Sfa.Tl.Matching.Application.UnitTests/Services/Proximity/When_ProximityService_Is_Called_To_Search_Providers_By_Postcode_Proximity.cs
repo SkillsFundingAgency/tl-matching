@@ -15,7 +15,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
     public class When_ProximityService_Is_Called_To_Search_Providers_By_Postcode_Proximity
     {
         private const string Postcode = "SW1A 2AA";
-        private const int SearchRadius = 5;
         private const int RouteId = 2;
         private readonly IList<SearchResultsViewModelItem> _result;
         private readonly ILocationApiClient _locationApiClient;
@@ -27,7 +26,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
             var dto = new ProviderSearchParametersDto
             {
                 Postcode = Postcode,
-                SearchRadius = SearchRadius,
                 SelectedRouteId = RouteId
             };
 

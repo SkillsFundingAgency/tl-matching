@@ -36,7 +36,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.OpportunityItem
             _result.RouteId.Should().Be(1);
             _result.OpportunityType.Should().Be(OpportunityType.Referral.ToString());
             _result.Postcode.Should().BeEquivalentTo("AA1 1AA");
-            _result.SearchRadius.Should().Be(10);
             _result.JobRole.Should().BeEquivalentTo("Testing Job Title");
             _result.PlacementsKnown.Should().BeTrue();
             _result.SearchResultProviderCount.Should().Be(12);

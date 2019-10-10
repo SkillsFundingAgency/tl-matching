@@ -54,7 +54,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   EmployerContact = op.EmployerContact,
                                   EmployerContactPhone = op.EmployerContactPhone,
                                   EmployerContactEmail = op.EmployerContactEmail,
-                                  SearchRadius = oi.SearchRadius,
                                   DistanceFromEmployer = re.DistanceFromEmployer.ToString("0.0"),
                                   Postcode = oi.Postcode,
                                   Town = oi.Town,

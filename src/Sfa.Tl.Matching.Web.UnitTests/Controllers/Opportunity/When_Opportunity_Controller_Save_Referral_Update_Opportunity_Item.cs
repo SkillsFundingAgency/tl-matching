@@ -62,7 +62,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 SearchResultProviderCount = 2,
                 SelectedRouteId = 1,
                 Postcode = "cv12wt",
-                SearchRadius = 10,
                 OpportunityId = opportunityId,
                 OpportunityItemId = opportunityItemId,
                 SelectedProvider = new[]
