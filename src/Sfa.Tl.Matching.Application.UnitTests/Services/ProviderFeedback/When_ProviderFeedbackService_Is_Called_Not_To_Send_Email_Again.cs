@@ -73,16 +73,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             emailsCount.Should().Be(0);
 
             await emailService.DidNotReceive()
-                .SendEmailAsync(Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                 Arg.Is<string>(toAddress => toAddress == provider.PrimaryContactEmail),
-                Arg.Any<IDictionary<string, string>>());
+                Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
             await emailService.DidNotReceive()
-                .SendEmailAsync(Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                     Arg.Is<string>(toAddress => toAddress == provider.SecondaryContactEmail),
-                    Arg.Any<IDictionary<string, string>>());
+                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         

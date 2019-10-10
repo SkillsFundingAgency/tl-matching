@@ -45,15 +45,10 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            await _emailService.SendEmailAsync(template.ToString(),
+            await _emailService.SendEmailAsync(opportunityId, template.ToString(),
                 toAddress,
-                tokens);
-
-            await _emailHistoryService.SaveEmailHistoryAsync(template.ToString(),
-                tokens,
-                opportunityId,
-                toAddress,
-                createdBy);
+                tokens, createdBy);
+            
         }
 
         public async Task<int> CreateBackgroundProcessHistoryAsync(BackgroundProcessType backgroundProcessType) =>

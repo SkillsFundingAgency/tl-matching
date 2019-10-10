@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Notify.Interfaces;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -31,6 +33,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             _notificationsApi = Substitute.For<IAsyncNotificationClient>();
 
             var logger = Substitute.For<ILogger<EmailService>>();
+            var emailHistoryRepository = Substitute.For<IRepository<Domain.Models.EmailHistory>>();
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailHistoryMapper).Assembly));
+            var mapper = new Mapper(config);
 
             var emailTemplate = new EmailTemplate
             {
@@ -42,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             _emailTemplateRepository = Substitute.For<IRepository<EmailTemplate>>();
             _emailTemplateRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>()).Returns(emailTemplate);
 
-            var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, logger);
+            var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, emailHistoryRepository, mapper, logger);
 
             _toAddress = "test@test.com";
             var tokens = new Dictionary<string, string>
@@ -52,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             const string templateName = "TestTemplate";
 
-            emailService.SendEmailAsync(templateName, _toAddress, tokens).GetAwaiter().GetResult();
+            emailService.SendEmailAsync(null, templateName, _toAddress, tokens, "System").GetAwaiter().GetResult();
         }
 
         [Fact]

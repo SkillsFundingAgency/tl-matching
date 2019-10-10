@@ -81,15 +81,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .DidNotReceiveWithAnyArgs()
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
-        }
-
-        [Fact]
-        public void Then_EmailHistoryService_SaveEmailHistory_Is_Not_Called()
-        {
-            _emailHistoryService
-                .DidNotReceiveWithAnyArgs()
-                .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Fact]

@@ -72,16 +72,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             emailsCount.Should().Be(1);
 
             await emailService.Received(1)
-                .SendEmailAsync(Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                 Arg.Is<string>(toAddress => toAddress == provider.PrimaryContactEmail),
-                Arg.Any<IDictionary<string, string>>());
+                Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
             await emailService.Received(1)
-                .SendEmailAsync(Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                     Arg.Is<string>(toAddress => toAddress == provider.SecondaryContactEmail),
-                    Arg.Any<IDictionary<string, string>>());
+                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Theory, AutoDomainData]
@@ -135,16 +135,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             emailsCount.Should().Be(1);
 
             await emailService.Received(1)
-                .SendEmailAsync(Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                 Arg.Is<string>(toAddress => toAddress == provider.PrimaryContactEmail),
-                Arg.Any<IDictionary<string, string>>());
+                Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
             await emailService.DidNotReceive()
-                .SendEmailAsync(Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                     Arg.Is<string>(toAddress => toAddress == provider.SecondaryContactEmail),
-                    Arg.Any<IDictionary<string, string>>());
+                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Theory, AutoDomainData]
@@ -196,14 +196,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             emailsCount.Should().Be(1);
 
             await emailService.Received(1)
-                .SendEmailAsync(Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                 Arg.Is<string>(toAddress => toAddress == provider.PrimaryContactEmail),
-                Arg.Any<IDictionary<string, string>>());
+                Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
-            await emailService.Received(2).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("contact_name") && tokens["contact_name"] == $"{provider.SecondaryContact}"));
+                    tokens.ContainsKey("contact_name") && tokens["contact_name"] == $"{provider.SecondaryContact}"), Arg.Any<string>());
         }
 
         [Theory, AutoDomainData]
@@ -259,14 +259,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             emailsCount.Should().Be(1);
             
             await emailService.Received(1)
-                .SendEmailAsync(Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "ProviderFeedback"),
                 Arg.Is<string>(toAddress => toAddress == provider.PrimaryContactEmail),
-                Arg.Any<IDictionary<string, string>>());
+                Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
-            await emailService.Received(2).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("contact_name") && tokens["contact_name"] == $"{provider.SecondaryContact}"));
+                    tokens.ContainsKey("contact_name") && tokens["contact_name"] == $"{provider.SecondaryContact}"), Arg.Any<string>());
         }
     }
 }

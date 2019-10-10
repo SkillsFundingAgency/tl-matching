@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 )));
 
             _emailService
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>())
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>())
                 .Throws(new Exception());
 
             var providerFeedbackService = new Application.Services.ProviderQuarterlyUpdateEmailService(
@@ -138,7 +138,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Fact]
@@ -153,14 +153,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                             "Error sending provider quarterly update emails.")),
                 Arg.Any<Exception>(),
                 Arg.Any<Func<object, Exception, string>>());
-        }
-
-        [Fact]
-        public void Then_EmailHistoryService_SaveEmailHistory_Is_Not_Called()
-        {
-            _emailHistoryService
-                .DidNotReceiveWithAnyArgs()
-                .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Fact]
