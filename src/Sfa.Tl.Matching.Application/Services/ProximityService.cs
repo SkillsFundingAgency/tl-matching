@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     QualificationShortTitles = r.QualificationShortTitles,
                     JourneyTimeByPublicTransport = journeyTimesByPublicTransport.TryGetValue(r.ProviderVenueId, out var tVal)
                             ? tVal.JourneyTime: (long?)null,
-                    JourneyTimeByDriving = journeyTimesByCar.TryGetValue(r.ProviderVenueId, out var dVal)
+                    JourneyTimeByCar = journeyTimesByCar.TryGetValue(r.ProviderVenueId, out var dVal)
                         ? dVal.JourneyTime : (long?)null,
                     Latitude = r.Latitude,
                     Longitude = r.Longitude

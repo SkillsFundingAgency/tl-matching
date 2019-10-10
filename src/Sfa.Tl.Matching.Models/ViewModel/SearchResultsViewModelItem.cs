@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public string ProviderVenueName { get; set; }
         public bool IsTLevelProvider { get; set; }
 
-        public long? JourneyTimeByDriving { get; set; }
+        public long? JourneyTimeByCar { get; set; }
         public long? JourneyTimeByPublicTransport { get; set; }
         
         public decimal Latitude { get; set; }

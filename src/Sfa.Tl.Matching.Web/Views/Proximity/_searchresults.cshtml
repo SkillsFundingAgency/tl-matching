@@ -61,9 +61,9 @@
                                             {
                                                 <p class="govuk-body">Public transport: @searchResult.JourneyTimeByPublicTransport.ToReadableString()</p>
                                             }
-                                            @if (@searchResult?.JourneyTimeByDriving > 0)
+                                            @if (@searchResult?.JourneyTimeByCar > 0)
                                             {
-                                                <p class="govuk-body">Car: @searchResult.JourneyTimeByDriving.ToReadableString()</p>
+                                                <p class="govuk-body">Car: @searchResult.JourneyTimeByCar.ToReadableString()</p>
                                             }
                                         </li>
                                     </ul>
