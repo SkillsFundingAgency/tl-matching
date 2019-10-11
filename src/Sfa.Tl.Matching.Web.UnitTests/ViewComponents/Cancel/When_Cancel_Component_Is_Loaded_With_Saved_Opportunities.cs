@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.ViewComponents.Cancel
             viewViewComponentResult.ViewName.Should().Be("Cancel");
             viewViewComponentResult?.ViewData.Model.Should().NotBeNull();
             var viewModel = viewViewComponentResult?.ViewData.Model.As<CancelViewModel>();
-            viewModel.CancelText.Should().Be("Cancel this opportunity");
+            viewModel.CancelText.Should().Be("Go back to all opportunities");
         }
     }
 }
