@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Notify.Interfaces;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.NotificationCallback;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -65,6 +67,26 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await SendEmailViaNotificationsApiAsync(opportunityId, recipient, emailTemplate, personalisationTokens, createdBy);
             }
+        }
+
+        public async Task<int> HandleEmailStatusAsync(string payload)
+        {
+            var callbackData = JsonConvert.DeserializeObject<CallbackPayLoad>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+
+            var data = await _emailHistoryRepository.GetFirstOrDefaultAsync(history =>
+                history.NotificationId == callbackData.id.ToString());
+
+            data.Status = callbackData.status;
+            data.ModifiedOn = DateTime.UtcNow;
+            data.ModifiedBy = "System";
+
+            await _emailHistoryRepository.UpdateWithSpecifedColumnsOnlyAsync(data, 
+                history => history.Status,
+                history => history.ModifiedOn,
+                history => history.ModifiedBy);
+
+            return 1;
+
         }
 
         private async Task SendEmailViaNotificationsApiAsync(int? opportunityId, string recipient, EmailTemplate emailTemplate,
