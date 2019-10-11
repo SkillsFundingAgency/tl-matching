@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Domain.Models
 {
     public class EmailHistory : BaseEntity
     {
-        public string NotificationId { get; set; }
+        public Guid NotificationId { get; set; }
         public int? OpportunityId { get; set; }
         public int EmailTemplateId { get; set; }
         public string SentTo { get; set; }
