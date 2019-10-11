@@ -3,7 +3,7 @@
 	
 	WITH CTE AS (
 		SELECT
-			oi.id AS OpportunityItemId,
+			oi.Id AS OpportunityItemId,
 			count(p.Id) AS ProviderCount
 		from [Provider] AS P
 			INNER JOIN ProviderVenue AS pv ON pv.ProviderId = p.Id
@@ -12,7 +12,7 @@
 		GROUP BY oi.id
 	)
 	SELECT
-		oi.id AS OpportunityItemId,
+		oi.Id AS OpportunityItemId,
 		oi.OpportunityType,
 		oi.IsCompleted,
 		oi.IsSaved,
