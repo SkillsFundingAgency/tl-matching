@@ -76,11 +76,13 @@ namespace Sfa.Tl.Matching.Application.Services
             var data = await _emailHistoryRepository.GetFirstOrDefaultAsync(history =>
                 history.NotificationId == callbackData.id);
 
+            if (data == null) return -1;
+
             data.Status = callbackData.status;
             data.ModifiedOn = DateTime.UtcNow;
             data.ModifiedBy = "System";
 
-            await _emailHistoryRepository.UpdateWithSpecifedColumnsOnlyAsync(data, 
+            await _emailHistoryRepository.UpdateWithSpecifedColumnsOnlyAsync(data,
                 history => history.Status,
                 history => history.ModifiedOn,
                 history => history.ModifiedBy);
