@@ -52,9 +52,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 .Select(v => new LocationDto
                 {
                     Id = v.ProviderVenueId,
-                    Postcode = v.ProviderVenuePostcode,
-                    Latitude = v.Latitude,
-                    Longitude = v.Longitude
+                    Postcode = v.ProviderVenuePostcode
                 }).ToList();
 
             var arrivalTimeSeconds = GetArrivalTime();
@@ -90,9 +88,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     JourneyTimeByPublicTransport = journeyTimesByPublicTransport.TryGetValue(r.ProviderVenueId, out var tVal)
                             ? tVal.JourneyTime: (long?)null,
                     JourneyTimeByCar = journeyTimesByCar.TryGetValue(r.ProviderVenueId, out var dVal)
-                        ? dVal.JourneyTime : (long?)null,
-                    Latitude = r.Latitude,
-                    Longitude = r.Longitude
+                        ? dVal.JourneyTime : (long?)null
                 }).OrderBy(r => r.Distance).ToList();
 
             return results;

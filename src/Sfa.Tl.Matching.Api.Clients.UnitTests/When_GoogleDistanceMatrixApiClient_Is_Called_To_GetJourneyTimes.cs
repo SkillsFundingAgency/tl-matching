@@ -42,9 +42,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
                 new LocationDto
                 {
                     Id = 1,
-                    Postcode = "SW1A 2AA",
-                    Latitude = 51.50354M,
-                    Longitude = -0.127695M
+                    Postcode = "SW1A 2AA"
                 }
             };
 
