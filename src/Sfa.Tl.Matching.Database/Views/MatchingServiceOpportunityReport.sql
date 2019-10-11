@@ -39,7 +39,7 @@
 		INNER JOIN [Route] as rt on rt.Id = oi.RouteId
 		LEFT JOIN CTE ON cte.OpportunityItemId = oi.Id
 		LEFT JOIN UserProfile as rl on o.CreatedBy = rl.Username
-		LEFT JOIN Employer as e on  e.Id = o.EmployerId
+		LEFT JOIN Employer as e on  e.CrmId = o.EmployerCrmId
 	WHERE 
 		oi.IsSaved = 1
 	--ORDER BY 
