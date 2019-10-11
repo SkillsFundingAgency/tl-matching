@@ -74,7 +74,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var callbackData = JsonConvert.DeserializeObject<CallbackPayLoad>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
 
             var data = await _emailHistoryRepository.GetFirstOrDefaultAsync(history =>
-                history.NotificationId == callbackData.id.ToString());
+                history.NotificationId == callbackData.id);
 
             data.Status = callbackData.status;
             data.ModifiedOn = DateTime.UtcNow;
@@ -118,14 +118,15 @@ namespace Sfa.Tl.Matching.Application.Services
             string createdBy)
         {
             var placeholders = ConvertTokensToEmailPlaceholderDtos(tokens, createdBy);
-
             var emailPlaceholders = _mapper.Map<IList<EmailPlaceholder>>(placeholders);
+
+            Guid.TryParse(notificationId, out var emailNotificationId);
 
             _logger.LogInformation($"Saving {emailPlaceholders.Count} {nameof(EmailPlaceholder)} items.");
 
             var emailHistory = new EmailHistory
             {
-                NotificationId = notificationId,
+                NotificationId = emailNotificationId,
                 OpportunityId = opportunityId,
                 EmailTemplateId = emailTemplateId,
                 EmailPlaceholder = emailPlaceholders,
