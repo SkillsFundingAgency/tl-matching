@@ -44,11 +44,10 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             
             foreach (var batch in batches)
             {
-                var (_, value) = batch;
-                var response = SearchBatchAsync(originPostcode, value, travelMode, arrivalTimeSeconds).GetAwaiter().GetResult();
+                var response = await SearchBatchAsync(originPostcode, batch, travelMode, arrivalTimeSeconds);
                 if (response != null)
                 {
-                    var batchResults = await BuildResultAsync(response, value);
+                    var batchResults = await BuildResultAsync(response, batch);
                     foreach (var (i, journeyInfoDto) in batchResults)
                     {
                         if (!distanceSearchResults.ContainsKey(i))
@@ -100,15 +99,13 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             return Task.FromResult((IDictionary<int, JourneyInfoDto>)results);
         }
 
-        private Dictionary<int, IList<LocationDto>> CreateBatches(IList<LocationDto> venues, int batchSize)
+        private IList<IList<LocationDto>> CreateBatches(IList<LocationDto> venues, int batchSize)
         {
-            var batches = new Dictionary<int, IList<LocationDto>>();
+            var batches = new List<IList<LocationDto>>();
             var items = venues;
-            var batchNo = 0;
             while (items.Any())
             {
-                var batch = items.Take(batchSize);
-                batches.Add(++batchNo, batch.ToList());
+                batches.Add(items.Take(batchSize).ToList());
                 items = items.Skip(batchSize).ToList();
             }
 
