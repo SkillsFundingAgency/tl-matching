@@ -88,7 +88,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             await emailHistoryRepository.Received(1).GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.EmailHistory, bool>>>());
 
             await emailHistoryRepository.Received(1).UpdateWithSpecifedColumnsOnlyAsync(
-                Arg.Any<Domain.Models.EmailHistory>(), Arg.Any<Expression<Func<Domain.Models.EmailHistory, object>>[]>());
+                Arg.Is<Domain.Models.EmailHistory>(history =>
+                    history.Status == "permanent-failure" && history.ModifiedBy == "System"),
+                Arg.Any<Expression<Func<Domain.Models.EmailHistory, object>>[]>());
 
             await messageQueueService.Received(1).PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
 
