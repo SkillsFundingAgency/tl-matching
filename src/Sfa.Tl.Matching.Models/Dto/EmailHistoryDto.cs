@@ -1,13 +1,13 @@
 ﻿// ReSharper disable UnusedMember.Global
 
-using System.Security.Policy;
+using System;
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
     // ReSharper disable once UnusedMember.Global
     public class EmailHistoryDto
     {
-        public string NotificationId { get; set; }
+        public Guid? NotificationId { get; set; }
         public int? OpportunityId { get; set; }
         public int EmailTemplateId { get; set; }
         public string SentTo { get; set; }

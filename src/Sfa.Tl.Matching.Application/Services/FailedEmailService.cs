@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Humanizer;
@@ -42,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (!emailHistoryDto.OpportunityId.HasValue)
             {
-                _logger.LogInformation($"Notification Id={failedEmailData.NotificationId} does not have an opportunity id");
+                _logger.LogInformation($"Notification Id={failedEmailData.NotificationId} does not have an Opportunity Id");
                 return;
             }
 
