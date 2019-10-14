@@ -17,7 +17,7 @@
 		oi.IsCompleted,
 		oi.IsSaved,
 		CAST(CASE WHEN oi.IsSaved = 1 and oi.IsCompleted = 0 THEN 1 ELSE 0 END AS BIT) AS PipelineOpportunity,
-		o.EmployerId,
+		e.Id AS EmployerId,
 		e.CompanyName,
 		e.Aupa,
 		e.Owner,
