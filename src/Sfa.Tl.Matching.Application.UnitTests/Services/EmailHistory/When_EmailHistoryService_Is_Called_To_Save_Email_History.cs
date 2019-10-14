@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
