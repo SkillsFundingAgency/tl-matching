@@ -186,6 +186,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IReferralEmailService, ReferralEmailService>();
             services.AddTransient<IFailedEmailService, FailedEmailService>();
+            services.AddTransient<INotificationCallbackService, NotificationCallbackService>();
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

@@ -1,7 +1,9 @@
 ﻿using System;
 using AutoFixture;
+using NSubstitute;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.NotificationCallback;
 
 namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
@@ -30,6 +32,9 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.Customize<Opportunity>(composer => composer.With(op => op.EmployerCrmId, employer.CrmId));
 
             fixture.Customize<OpportunityItem>(composer => composer.With(oi => oi.ModifiedOn, new DateTime(2019, 9, 1)));
+            fixture.Customize<CallbackPayLoad>(composer => composer
+                .With(payload => payload.status, "delivered"));
+
         }
     }
 }

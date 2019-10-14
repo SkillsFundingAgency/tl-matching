@@ -7,8 +7,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IEmailService emailService,
+            [Inject] INotificationCallbackService callbackService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             try
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Functions
                     requestBody = await streamReader.ReadToEndAsync();
                 }
 
-                var updatedRecords = await emailService.HandleEmailStatusAsync(requestBody);
+                var updatedRecords = await callbackService.HandleNotificationCallbackAsync(requestBody);
 
                 stopwatch.Stop();
 
