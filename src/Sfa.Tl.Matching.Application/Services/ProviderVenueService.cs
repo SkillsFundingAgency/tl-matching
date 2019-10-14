@@ -34,9 +34,6 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var (valid, postcodeResult) = await _locationApiClient.IsValidPostcodeAsync(postcode);
 
-            if (!valid)
-                (valid, postcodeResult) = await _locationApiClient.IsTerminatedPostcodeAsync(postcode);
-
             return (valid, postcodeResult);
         }
 
