@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IEmailHistoryService
     {
-        Task SaveEmailHistoryAsync(string emailTemplateName, IDictionary<string, string> tokens, int? opportunityId, string emailAddress, string createdBy);
+        Task SaveEmailHistoryAsync(Guid notificationId, int emailTemplateId, IDictionary<string, string> tokens, int? opportunityId, string emailAddress, string createdBy);
         Task<EmailHistoryDto> GetEmailHistoryAsync(Guid notificationId);
     }
 }

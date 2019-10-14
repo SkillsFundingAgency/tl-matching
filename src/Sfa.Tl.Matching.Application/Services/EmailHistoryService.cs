@@ -15,23 +15,19 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly ILogger<EmailHistoryService> _logger;
         private readonly IMapper _mapper;
         private readonly IRepository<EmailHistory> _emailHistoryRepository;
-        private readonly IRepository<EmailTemplate> _emailTemplateRepository;
-
+        
         public EmailHistoryService(IRepository<EmailHistory> emailHistoryRepository,
-            IRepository<EmailTemplate> emailTemplateRepository,
             IMapper mapper,
             ILogger<EmailHistoryService> logger)
         {
             _emailHistoryRepository = emailHistoryRepository;
-            _emailTemplateRepository = emailTemplateRepository;
             _mapper = mapper;
             _logger = logger;
         }
         
-        public async Task SaveEmailHistoryAsync(string emailTemplateName, IDictionary<string, string> tokens, int? opportunityId, string emailAddress, string createdBy)
+        public async Task SaveEmailHistoryAsync(Guid notificatonId, int emailTemplateId, IDictionary<string, string> tokens,
+            int? opportunityId, string emailAddress, string createdBy)
         {
-            var emailTemplate = await _emailTemplateRepository.GetSingleOrDefaultAsync(t => t.TemplateName == emailTemplateName);
-
             var placeholders = ConvertTokensToEmailPlaceholderDtos(tokens, createdBy);
 
             var emailPlaceholders = _mapper.Map<IList<EmailPlaceholder>>(placeholders);
@@ -39,8 +35,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var emailHistory = new EmailHistory
             {
+                NotificationId = notificatonId,
                 OpportunityId = opportunityId,
-                EmailTemplateId = emailTemplate.Id,
+                EmailTemplateId = emailTemplateId,
                 EmailPlaceholder = emailPlaceholders,
                 SentTo = emailAddress,
                 CreatedBy = createdBy
