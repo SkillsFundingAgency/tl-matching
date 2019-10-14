@@ -6,7 +6,6 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.NotificationCallback;
-
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class NotificationCallbackService : INotificationCallbackService
@@ -53,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             await _messageQueueService.PushFailedEmailMessageAsync(new SendFailedEmail
             {
-                NotificationId = emailHistory.NotificationId
+                NotificationId = emailHistory.NotificationId.Value
             });
         }
     }
