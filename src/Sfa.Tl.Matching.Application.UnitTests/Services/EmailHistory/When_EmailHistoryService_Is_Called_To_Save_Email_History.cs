@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Notify.Interfaces;
 using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -23,6 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
         {
             var logger = Substitute.For<ILogger<EmailService>>();
             var notificationApi = Substitute.For<IAsyncNotificationClient>();
+            var messageQueueService = Substitute.For<IMessageQueueService>();
 
             var configuration = new MatchingConfiguration
             {
@@ -45,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
 
             _emailTemplateRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>()).Returns(emailTemplate);
 
-            var emailHistoryService = new EmailService(configuration, notificationApi,  _emailTemplateRepository, _emailHistoryRepository, mapper, logger);
+            var emailHistoryService = new EmailService(configuration, notificationApi,  _emailTemplateRepository, _emailHistoryRepository, mapper, logger, messageQueueService);
 
             var toAddress = "test@test.com";
             var createdBy = "CreatedBy";

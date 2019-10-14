@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task SendFailedEmailAsync(SendFailedEmail failedEmailData)
         {
             var failedEmailDto = await _emailService.GetFailedEmailAsync(failedEmailData.NotificationId);
-            var emailHistoryDto = await _emailHistoryService.GetEmailHistoryAsync(new Guid(failedEmailData.NotificationId));
+            var emailHistoryDto = await _emailHistoryService.GetEmailHistoryAsync(failedEmailData.NotificationId);
             var emailTemplateName = (EmailTemplateName)emailHistoryDto.EmailTemplateId;
 
             if (!emailHistoryDto.OpportunityId.HasValue)
