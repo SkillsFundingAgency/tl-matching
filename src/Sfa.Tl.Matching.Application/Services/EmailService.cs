@@ -9,6 +9,7 @@ using Notify.Interfaces;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.NotificationCallback;
@@ -20,6 +21,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IRepository<EmailHistory> _emailHistoryRepository;
         private readonly MatchingConfiguration _configuration;
         private readonly ILogger<EmailService> _logger;
+        private readonly IMessageQueueService _messageQueueService;
         private readonly IAsyncNotificationClient _notificationClient;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
         private readonly IMapper _mapper;
@@ -29,7 +31,8 @@ namespace Sfa.Tl.Matching.Application.Services
             IRepository<EmailTemplate> emailTemplateRepository,
             IRepository<EmailHistory> emailHistoryRepository,
             IMapper mapper,
-            ILogger<EmailService> logger)
+            ILogger<EmailService> logger,
+            IMessageQueueService messageQueueService)
         {
             _emailHistoryRepository = emailHistoryRepository;
             _configuration = configuration;
@@ -37,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _mapper = mapper;
             _notificationClient = notificationClient;
             _logger = logger;
-
+            _messageQueueService = messageQueueService;
         }
 
         public async Task SendEmailAsync(int? opportunityId, string templateName, string toAddress, IDictionary<string, string> personalisationTokens, string createdBy)
@@ -65,7 +68,7 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 _logger.LogInformation($"Sending {templateName} email to {recipient}");
 
-                await SendEmailViaNotificationsApiAsync(opportunityId, recipient, emailTemplate, personalisationTokens, createdBy);
+                await SendEmailViaNotificationsApiAndSavehistoryAsync(opportunityId, recipient, emailTemplate, personalisationTokens, createdBy);
             }
         }
 
@@ -73,12 +76,18 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var callbackData = JsonConvert.DeserializeObject<CallbackPayLoad>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
 
+            return await UpdateEmailStatus(callbackData.id, callbackData.status);
+            
+        }
+
+        private async Task<int> UpdateEmailStatus(Guid notificationId, string status)
+        {
             var data = await _emailHistoryRepository.GetFirstOrDefaultAsync(history =>
-                history.NotificationId == callbackData.id);
+                history.NotificationId == notificationId);
 
             if (data == null) return -1;
 
-            data.Status = callbackData.status;
+            data.Status = status;
             data.ModifiedOn = DateTime.UtcNow;
             data.ModifiedBy = "System";
 
@@ -87,20 +96,30 @@ namespace Sfa.Tl.Matching.Application.Services
                 history => history.ModifiedOn,
                 history => history.ModifiedBy);
 
-            return 1;
+            if(data.Status!="delivered")
+                await SendFailedEmailAsync(data);
 
+            return 1;
         }
 
-        public async Task<FailedEmailDto> GetFailedEmailAsync(string notificationId)
+        private async Task SendFailedEmailAsync(EmailHistory emailHistory)
         {
-            var notification = await _notificationClient.GetNotificationByIdAsync(notificationId);
+            await _messageQueueService.PushFailedEmailMessageAsync(new SendFailedEmail
+            {
+                NotificationId = emailHistory.NotificationId
+            });
+        }
+
+        public async Task<FailedEmailDto> GetFailedEmailAsync(Guid notificationId)
+        {
+            var notification = await _notificationClient.GetNotificationByIdAsync(notificationId.ToString());
 
             var dto = _mapper.Map<FailedEmailDto>(notification);
 
             return dto;
         }
 		
-        private async Task SendEmailViaNotificationsApiAsync(int? opportunityId, string recipient, EmailTemplate emailTemplate,
+        private async Task SendEmailViaNotificationsApiAndSavehistoryAsync(int? opportunityId, string recipient, EmailTemplate emailTemplate,
             IDictionary<string, string> personalisationTokens, string createdBy)
         {
             try
