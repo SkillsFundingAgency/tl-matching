@@ -91,6 +91,15 @@ namespace Sfa.Tl.Matching.Application.Services
 
         }
 
+        public async Task<FailedEmailDto> GetFailedEmailAsync(string notificationId)
+        {
+            var notification = await _notificationClient.GetNotificationByIdAsync(notificationId);
+
+            var dto = _mapper.Map<FailedEmailDto>(notification);
+
+            return dto;
+        }
+		
         private async Task SendEmailViaNotificationsApiAsync(int? opportunityId, string recipient, EmailTemplate emailTemplate,
             IDictionary<string, string> personalisationTokens, string createdBy)
         {

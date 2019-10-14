@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -45,6 +46,15 @@ namespace Sfa.Tl.Matching.Application.Services
                 CreatedBy = createdBy
             };
             await _emailHistoryRepository.CreateAsync(emailHistory);
+        }
+
+        public async Task<EmailHistoryDto> GetEmailHistoryAsync(Guid notificationId)
+        {
+            var emailHistory = await _emailHistoryRepository.GetSingleOrDefaultAsync(eh => eh.NotificationId == notificationId);
+
+            var dto = _mapper.Map<EmailHistoryDto>(emailHistory);
+
+            return dto;
         }
 
         private IEnumerable<EmailPlaceholderDto> ConvertTokensToEmailPlaceholderDtos(IDictionary<string, string> tokens, string createdBy)

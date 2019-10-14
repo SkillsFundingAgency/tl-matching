@@ -14,7 +14,6 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IRepository<BankHoliday> _bankHolidayRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
@@ -29,7 +28,6 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _configuration = configuration;
             _emailService = emailService;
-            _emailHistoryService = emailHistoryService;
             _dateTimeProvider = dateTimeProvider;
             _bankHolidayRepository = bankHolidayRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;

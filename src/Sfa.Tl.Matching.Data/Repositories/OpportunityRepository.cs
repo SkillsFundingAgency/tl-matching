@@ -308,6 +308,32 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return dto;
         }
 
+        public async Task<FailedEmailBodyDto> GetFailedOpportunityEmailAsync(int opportunityId, string sentTo)
+        {
+            var dto = await (from o in _dbContext.Opportunity
+                             join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
+                             join e in _dbContext.Employer on o.EmployerCrmId equals e.CrmId
+                             join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
+                             join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                             join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                             where o.Id == opportunityId &&
+                                   (p.PrimaryContactEmail == sentTo ||
+                                    p.SecondaryContactEmail == sentTo ||
+                                    e.Email == sentTo)
+                             select new FailedEmailBodyDto
+                             {
+                                 PrimaryContactEmail = p.PrimaryContactEmail,
+                                 SecondaryContactEmail = p.SecondaryContactEmail,
+                                 EmployerEmail = e.Email,
+                                 ProviderDisplayName = p.DisplayName,
+                                 ProviderVenuePostcode = pv.Postcode,
+                                 ProviderVenueName = pv.Name,
+                             })
+                          .FirstOrDefaultAsync();
+
+            return dto;
+        }
+
         private static string GetReasons(IEnumerable<ProvisionGap> provisionGaps)
         {
             var reasons = new List<string>();
