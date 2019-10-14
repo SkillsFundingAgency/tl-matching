@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -14,40 +13,30 @@ using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Functions
 {
-    public class EmployerAupaBlankEmail
+    public class FailedEmailNotification
     {
-        [FunctionName("SendEmployerAupaBlankEmail")]
-        public async Task SendEmployerAupaBlankEmailAsync([QueueTrigger(QueueName.EmployerAupaBlankEmailQueue, Connection = "BlobStorageConnectionString")]SendEmployerAupaBlankEmail employerAupaBlankEmail,
+        [FunctionName("SendFailedEmailNotification")]
+        public async Task SendFailedEmailNotification(
+            [QueueTrigger(QueueName.FailedEmailQueue, Connection = "BlobStorageConnectionString")]
+            SendFailedEmail failedEmailData,
             ExecutionContext context,
             ILogger logger,
             [Inject] MatchingConfiguration matchingConfiguration,
-            [Inject] IEmailService emailService,
+            [Inject] IFailedEmailService failedEmailService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             if (!matchingConfiguration.SendEmailEnabled) return;
 
             var stopwatch = Stopwatch.StartNew();
 
-            var crmId = employerAupaBlankEmail.CrmId;
-
             try
             {
-                var tokens = new Dictionary<string, string>
-                {
-                    { "employer_business_name", employerAupaBlankEmail.Name },
-                    { "employer_owner", employerAupaBlankEmail.Owner },
-                    { "crm_id", crmId.ToString() }
-                };
-
-                var matchingServiceSupportEmailAddress = matchingConfiguration.MatchingServiceSupportEmailAddress;
-
-                await emailService.SendEmailAsync(null, EmailTemplateName.EmployerAupaBlank.ToString(),
-                    matchingServiceSupportEmailAddress, tokens, "System");
-
+                await failedEmailService.SendFailedEmailAsync(failedEmailData);
             }
             catch (Exception e)
             {
-                var errormessage = $"Error sending employer Aupa email for crm id, {crmId}. Internal Error Message {e}";
+                var errormessage =
+                    $"Error sending failed email notification for Notification Id: {failedEmailData.NotificationId}. Internal Error Message {e}";
 
                 logger.LogError(errormessage);
 
