@@ -3,7 +3,7 @@
 	SELECT 
 		count(oi.Id) OpportunityItemCount, 
 		R.[Name] AS RouteName, 
-		pv.postcode AS ProviderVenuePostCode, 
+		pv.Postcode AS ProviderVenuePostCode, 
 		p.[Name] AS ProviderName
 	FROM OpportunityItem AS OI
 	INNER JOIN Referral AS RF ON OI.id = RF.OpportunityItemId
@@ -13,4 +13,4 @@
 	WHERE 
 		oi.IsSaved = 1
 	GROUP BY 
-		R.[Name], pv.postcode, p.[Name], p.id
+		R.[Name], pv.Postcode, p.[Name], p.id
