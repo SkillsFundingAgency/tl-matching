@@ -1,10 +1,12 @@
-﻿namespace Sfa.Tl.Matching.Models.Extensions
+﻿using System;
+
+namespace Sfa.Tl.Matching.Models.Extensions
 {
     public static class ProviderDisplayExtensions
     {
         public static string GetDisplayText(string venueName, string postcode, string displayName, bool includePartOf = true)
         {
-            return venueName == postcode
+            return string.Compare(venueName, postcode, StringComparison.InvariantCultureIgnoreCase) == 0
                 ? $"{displayName} ({postcode})"
                 : includePartOf ? 
                     $"{venueName} part of {displayName} ({postcode})"
@@ -13,10 +15,9 @@
 
         public static string GetProviderEmailDisplayText(string venueName, string postcode, string displayName)
         {
-            return venueName == postcode
+            return string.Compare(venueName, postcode, StringComparison.InvariantCultureIgnoreCase) == 0
                 ? $"{displayName}"
                 : $"{venueName}";
         }
-
     }
 }
