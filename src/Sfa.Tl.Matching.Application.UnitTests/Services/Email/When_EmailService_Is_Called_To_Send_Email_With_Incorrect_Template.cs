@@ -13,7 +13,6 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Xunit;
-
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 {
     public class When_EmailService_Is_Called_To_Send_Email_With_Incorrect_Template
@@ -24,12 +23,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
         public When_EmailService_Is_Called_To_Send_Email_With_Incorrect_Template()
         {
-            var emailHistoryRepository = Substitute.For<IRepository<Domain.Models.EmailHistory>>();
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailHistoryMapper).Assembly));
             var mapper = new Mapper(config);
-            var messageQueueService = Substitute.For<IMessageQueueService>();
-
-
+            var emailHistoryService = Substitute.For<IEmailHistoryService>();
             var configuration = new MatchingConfiguration
             {
                 SendEmailEnabled = true
@@ -44,8 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>())
                 .ReturnsNull();
 
-            var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, emailHistoryRepository, mapper, _logger, messageQueueService);
-
+            var emailService = new EmailService(configuration, emailHistoryService, _notificationsApi, _emailTemplateRepository, mapper, _logger);
             const string toAddress = "test@test.com";
             var tokens = new Dictionary<string, string>
             {
@@ -91,6 +86,5 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             _notificationsApi.DidNotReceive().SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<Dictionary<string, dynamic>>());
         }
-
     }
 }
