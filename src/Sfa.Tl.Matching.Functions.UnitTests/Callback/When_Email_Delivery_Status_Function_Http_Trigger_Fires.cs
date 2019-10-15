@@ -16,18 +16,18 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Callback;
 using Sfa.Tl.Matching.Models.Command;
-using Sfa.Tl.Matching.Models.NotificationCallback;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Functions.UnitTests.NotificationCallback
+namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
 {
-    public class When_Notification_Callback_Function_Http_Trigger_Fires
+    public class When_Email_Delivery_Status_Function_Http_Trigger_Fires
     {
         [Theory, AutoDomainData]
         public async void Then_Update_Email_History_With_Status(
-            CallbackPayLoad payLoad,
+            EmailDeliveryStatusPayLoad payLoad,
             EmailHistory emailHistory,
             ExecutionContext context,
             ILogger logger,
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.NotificationCallback
         {
             //Arrange
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
-            var notificationService = new NotificationCallbackService(emailHistoryRepository, messageQueueService);
+            var notificationService = new EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
             var query = new Dictionary<string, StringValues>();
             query.TryAdd("content-type", "application/json");
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.NotificationCallback
                 .Returns(emailHistory);
 
             //Act
-            var result = await Functions.NotificationCallback.Run(HttpRequestSetup(query, serializedPayLoad), context, logger,
+            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(HttpRequestSetup(query, serializedPayLoad), context, logger,
                 notificationService, functionlogRepository) as OkObjectResult;
 
             //Assert
@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.NotificationCallback
 
         [Theory, AutoDomainData]
         public async void Then_Do_Not_Update_Email_History_If_No_Record_Found(
-            CallbackPayLoad payLoad,
+            EmailDeliveryStatusPayLoad payLoad,
             ExecutionContext context,
             ILogger logger,
             IRepository<EmailHistory> emailHistoryRepository,
@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.NotificationCallback
         {
             //Arrange
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
-            var notificationService = new NotificationCallbackService(emailHistoryRepository, messageQueueService);
+            var notificationService = new EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
             var query = new Dictionary<string, StringValues>();
             query.TryAdd("content-type", "application/json");
@@ -90,7 +90,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.NotificationCallback
                 .Returns(Task.FromResult<EmailHistory>(null));
 
             //Act
-            var result = await Functions.NotificationCallback.Run(HttpRequestSetup(query, serializedPayLoad), context, logger,
+            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(HttpRequestSetup(query, serializedPayLoad), context, logger,
                 notificationService, functionlogRepository) as OkObjectResult;
 
             //Arrange
@@ -109,7 +109,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.NotificationCallback
         [InlineAutoDomainData("temporary-failure")]
         public async void Then_Update_Email_History_With_Failed_Statusand_Push_To_Failed_Email_Queue(
             string status,
-            CallbackPayLoad payLoad,
+            EmailDeliveryStatusPayLoad payLoad,
             EmailHistory emailHistory,
             ExecutionContext context,
             ILogger logger,
@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.NotificationCallback
             //Arrange
             payLoad.status = status;
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
-            var notificationService = new NotificationCallbackService(emailHistoryRepository, messageQueueService);
+            var notificationService = new EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
             var query = new Dictionary<string, StringValues>();
             query.TryAdd("content-type", "application/json");
@@ -131,7 +131,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.NotificationCallback
                 .Returns(emailHistory);
 
             //Act
-            var result = await Functions.NotificationCallback.Run(HttpRequestSetup(query, serializedPayLoad), context, logger,
+            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(HttpRequestSetup(query, serializedPayLoad), context, logger,
                 notificationService, functionlogRepository) as OkObjectResult;
 
             //Assert

@@ -4,30 +4,30 @@ using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Callback;
 using Sfa.Tl.Matching.Models.Command;
-using Sfa.Tl.Matching.Models.NotificationCallback;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
-    public class NotificationCallbackService : INotificationCallbackService
+    public class EmailDeliveryStatusService : IEmailDeliveryStatusService
     {
         private readonly IRepository<EmailHistory> _emailHistoryRepository;
         private readonly IMessageQueueService _messageQueueService;
 
-        public NotificationCallbackService(IRepository<EmailHistory> emailHistoryRepository, IMessageQueueService messageQueueService)
+        public EmailDeliveryStatusService(IRepository<EmailHistory> emailHistoryRepository, IMessageQueueService messageQueueService)
         {
             _emailHistoryRepository = emailHistoryRepository;
             _messageQueueService = messageQueueService;
         }
 
-        public async Task<int> HandleNotificationCallbackAsync(string payload)
+        public async Task<int> HandleEmailDeliveryStatusAsync(string payload)
         {
-            var callbackData = JsonConvert.DeserializeObject<CallbackPayLoad>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+            var callbackData = JsonConvert.DeserializeObject<EmailDeliveryStatusPayLoad>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
 
             return await UpdateEmailStatus(callbackData);
         }
 
-        private async Task<int> UpdateEmailStatus(CallbackPayLoad payLoad)
+        private async Task<int> UpdateEmailStatus(EmailDeliveryStatusPayLoad payLoad)
         {
             var data = await _emailHistoryRepository.GetFirstOrDefaultAsync(history =>
                 history.NotificationId == payLoad.id);

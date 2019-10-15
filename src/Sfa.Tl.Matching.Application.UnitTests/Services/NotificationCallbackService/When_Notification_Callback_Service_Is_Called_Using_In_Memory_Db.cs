@@ -10,8 +10,8 @@ using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Callback;
 using Sfa.Tl.Matching.Models.Command;
-using Sfa.Tl.Matching.Models.NotificationCallback;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
             ILogger<GenericRepository<Domain.Models.EmailHistory>> emailHistoryLogger,
             IMessageQueueService messageQueueService,
-            CallbackPayLoad payload
+            EmailDeliveryStatusPayLoad payload
         )
         {
             //Arrange
@@ -44,12 +44,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             var emailHistoryRepository =
                 new GenericRepository<Domain.Models.EmailHistory>(emailHistoryLogger, dbContext);
 
-            var sut = new Application.Services.NotificationCallbackService(emailHistoryRepository, messageQueueService);
+            var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
             //Act
-            await sut.HandleNotificationCallbackAsync(serializedPayLoad);
+            await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
 
             //Assert
             var data = dbContext.EmailHistory.FirstOrDefault(em => em.NotificationId == payload.id);
@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
             ILogger<GenericRepository<Domain.Models.EmailHistory>> emailHistoryLogger,
             IMessageQueueService messageQueueService,
-            CallbackPayLoad payload
+            EmailDeliveryStatusPayLoad payload
         )
         {
             //Arrange
@@ -90,12 +90,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             var emailHistoryRepository =
                 new GenericRepository<Domain.Models.EmailHistory>(emailHistoryLogger, dbContext);
 
-            var sut = new Application.Services.NotificationCallbackService(emailHistoryRepository, messageQueueService);
+            var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
             //Act
-            await sut.HandleNotificationCallbackAsync(serializedPayLoad);
+            await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
 
             //Assert
             var data = dbContext.EmailHistory.FirstOrDefault(em => em.NotificationId == payload.id);
@@ -117,7 +117,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
             ILogger<GenericRepository<Domain.Models.EmailHistory>> emailHistoryLogger,
             IMessageQueueService messageQueueService,
-            CallbackPayLoad payload
+            EmailDeliveryStatusPayLoad payload
         )
         {
             //Arrange
@@ -126,12 +126,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             var emailHistoryRepository =
                 new GenericRepository<Domain.Models.EmailHistory>(emailHistoryLogger, dbContext);
 
-            var sut = new Application.Services.NotificationCallbackService(emailHistoryRepository, messageQueueService);
+            var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
             //Act
-            await sut.HandleNotificationCallbackAsync(serializedPayLoad);
+            await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
 
             //Assert
             var data = dbContext.EmailHistory.FirstOrDefault(em => em.NotificationId == payload.id);
