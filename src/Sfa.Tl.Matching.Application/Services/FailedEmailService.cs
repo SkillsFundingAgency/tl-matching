@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     { "email_type", emailTemplateName.Humanize() },
                     { "body", GetFailedEmailBody(emailBodyDto) },
-                    { "reason", failedEmailDto.Reason },
+                    { "reason", failedEmailDto.FailedEmailType.Humanize() },
                     { "sender_username", emailHistoryDto.CreatedBy },
                     { "failed_email_body", failedEmailDto.Body }
                 };

@@ -13,14 +13,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
 {
-    public class When_FailedEmailService_Is_Called_To_Send_Email
+    public class When_FailedEmailService_Is_Called_To_Send_Email_With_Invalid_Email
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
 
         private readonly Guid _notificationId = new Guid("a8de2d8c-23ae-4c2f-980a-0a8a3231938f");
 
-        public When_FailedEmailService_Is_Called_To_Send_Email()
+        public When_FailedEmailService_Is_Called_To_Send_Email_With_Invalid_Email()
         {
             var configuration = new MatchingConfiguration
             {
@@ -34,8 +34,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
                 new FailedEmailDto
                 {
                     Body = "Body",
-                    Reason = "Reason",
-                    Subject = "Subject"
+                    Subject = "Subject",
+                    FailedEmailType = FailedEmailType.PermanentFailure // TODO AU Add unit tests for this
                 });
 
             _emailService.GetEmailHistoryAsync(_notificationId).Returns(
@@ -97,7 +97,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
             _emailService.Received(1).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("email_type") && tokens["email_type"] == "Employer referral v 3"
-                    && tokens.ContainsKey("reason") && tokens["reason"] == "Reason"
+                    && tokens.ContainsKey("reason") && tokens["reason"] == "Email address does not exist"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
                     && tokens.ContainsKey("failed_email_body") && tokens["failed_email_body"] == "Body")
                 , Arg.Any<string>());
