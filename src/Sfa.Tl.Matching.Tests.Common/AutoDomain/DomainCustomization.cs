@@ -1,6 +1,5 @@
 ﻿using System;
 using AutoFixture;
-using NSubstitute;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.NotificationCallback;

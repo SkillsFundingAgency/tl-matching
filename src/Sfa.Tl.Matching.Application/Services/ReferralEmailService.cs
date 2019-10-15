@@ -89,8 +89,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("placements_list", sb.ToString());
 
-                await SendEmailAsync(EmailTemplateName.EmployerReferralV3, opportunityId, employerReferral.EmployerContactEmail,
-                    "Your industry placement referral – ESFA", tokens, employerReferral.CreatedBy);
+                await SendEmailAsync(EmailTemplateName.EmployerReferralV3, opportunityId, employerReferral.EmployerContactEmail, tokens, employerReferral.CreatedBy);
 
                 await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
                     BackgroundProcessHistoryStatus.Complete, username);
@@ -141,15 +140,13 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "number_of_placements", placements }
                     };
 
-                    await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId, referral.ProviderPrimaryContactEmail,
-                        emailSubject, tokens, referral.CreatedBy);
+                    await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy);
 
                     if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
                         await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId,
-                            referral.ProviderSecondaryContactEmail,
-                            emailSubject, tokens, referral.CreatedBy);
+                            referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
                     }
 
                     await CompleteSelectedReferralsAsync(opportunityId, referral.OpportunityItemId, username);
@@ -270,8 +267,7 @@ namespace Sfa.Tl.Matching.Application.Services
         }
 
         private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId,
-            string toAddress, string subject,
-            IDictionary<string, string> tokens, string createdBy)
+            string toAddress, IDictionary<string, string> tokens, string createdBy)
         {
             if (!_configuration.SendEmailEnabled)
             {
