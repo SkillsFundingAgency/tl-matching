@@ -114,6 +114,7 @@
     <Build Include="Indexes\SPATIAL_ProviderVenue_Location.sql" />
     <Build Include="Indexes\IX_ProviderQualification_ProviderVenueId.sql" />
     <Build Include="Indexes\IX_QualificationRouteMapping_RouteId.sql" />
+    <Build Include="Views\MatchingServiceProviderEmployerReport.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
