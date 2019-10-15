@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -28,9 +29,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
             //Act
-            await sut.HandleNotificationCallbackAsync(serializedPayLoad);
+            var emailCount = await sut.HandleNotificationCallbackAsync(serializedPayLoad);
 
             //Assert
+            emailCount.Should().Be(1);
+
             await emailHistoryRepository.Received(1).GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.EmailHistory, bool>>>());
 
             await emailHistoryRepository.Received(1).UpdateWithSpecifedColumnsOnlyAsync(
@@ -95,6 +98,5 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             await messageQueueService.Received(1).PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
 
         }
-
     }
 }

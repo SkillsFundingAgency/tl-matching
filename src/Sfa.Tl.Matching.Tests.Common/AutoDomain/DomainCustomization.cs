@@ -37,6 +37,14 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.Customize<CallbackPayLoad>(composer => composer
                 .With(payload => payload.status, "delivered"));
 
+            var opportunity = fixture.Create<Opportunity>();
+
+            fixture.Customize<EmailHistory>(composer => composer
+                .With(em => em.Opportunity, opportunity)
+                .With(em => em.Status, string.Empty)
+                .With(em => em.ModifiedBy, () => null)
+                .With(em => em.ModifiedOn, () => null)
+            );
         }
     }
 }
