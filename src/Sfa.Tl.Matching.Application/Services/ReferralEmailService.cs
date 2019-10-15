@@ -21,7 +21,6 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
@@ -31,7 +30,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     MatchingConfiguration configuration,
                     IDateTimeProvider dateTimeProvider,
                     IEmailService emailService,
-                    IEmailHistoryService emailHistoryService,
                     IOpportunityRepository opportunityRepository,
                     IRepository<OpportunityItem> opportunityItemRepository,
                     IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
@@ -40,7 +38,6 @@ namespace Sfa.Tl.Matching.Application.Services
             _configuration = configuration;
             _dateTimeProvider = dateTimeProvider;
             _emailService = emailService;
-            _emailHistoryService = emailHistoryService;
             _opportunityRepository = opportunityRepository;
             _opportunityItemRepository = opportunityItemRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;

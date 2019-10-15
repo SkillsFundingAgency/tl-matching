@@ -32,7 +32,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             ILogger<GenericRepository<Domain.Models.Provider>> opportunityItemLogger,
             ILogger<GenericRepository<BackgroundProcessHistory>> backgroundHistoryLogger,
             IEmailService emailService,
-            IEmailHistoryService emailHistoryService,
             MatchingDbContext dbContext,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -64,7 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             await ProviderFeedbackInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity);
 
             var sut = new ProviderFeedbackService(mapper, configuration, logger, dateTimeProvider, emailService,
-                emailHistoryService, bankHolidayRepo, opportunityRepo, opportunityItemRepo, backgroundProcessHistoryRepository);
+                bankHolidayRepo, opportunityRepo, opportunityItemRepo, backgroundProcessHistoryRepository);
 
             //Act
             var emailsCount = await sut.SendFeedbackEmailsAsync("test system");

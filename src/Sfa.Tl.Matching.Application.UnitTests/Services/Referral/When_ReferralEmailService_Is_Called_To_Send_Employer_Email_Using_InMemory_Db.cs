@@ -36,7 +36,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                         [Frozen] Domain.Models.ProviderVenue venue,
                         [Frozen] BackgroundProcessHistory backgroundProcessHistory,
                         [Frozen] IEmailService emailService,
-                        [Frozen] IEmailHistoryService emailHistoryService,
                         ILogger<OpportunityRepository> logger,
                         ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
                         ILogger<GenericRepository<OpportunityItem>> itemLogger
@@ -52,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             //Act
             await sut.SendEmployerReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
@@ -73,7 +72,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
             [Frozen] IEmailService emailService,
-            [Frozen] IEmailHistoryService emailHistoryService,
             ILogger<OpportunityRepository> logger,
             ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
             ILogger<GenericRepository<OpportunityItem>> itemLogger
@@ -88,7 +86,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
@@ -124,7 +122,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                             [Frozen] Domain.Models.ProviderVenue venue,
                             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
                             [Frozen] IEmailService emailService,
-                            [Frozen] IEmailHistoryService emailHistoryService,
                             ILogger<OpportunityRepository> logger,
                             ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
                             ILogger<GenericRepository<OpportunityItem>> itemLogger
@@ -139,7 +136,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
@@ -181,7 +178,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
             [Frozen] IEmailService emailService,
-            [Frozen] IEmailHistoryService emailHistoryService,
             ILogger<OpportunityRepository> logger,
             ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
             ILogger<GenericRepository<OpportunityItem>> itemLogger
@@ -196,7 +192,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
@@ -229,7 +225,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
             [Frozen] IEmailService emailService,
-            [Frozen] IEmailHistoryService emailHistoryService,
             ILogger<OpportunityRepository> logger,
             ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
             ILogger<GenericRepository<OpportunityItem>> itemLogger
@@ -244,7 +239,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
@@ -277,7 +272,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                         [Frozen] Domain.Models.ProviderVenue venue,
                         [Frozen] BackgroundProcessHistory backgroundProcessHistory,
                         [Frozen] IEmailService emailService,
-                        [Frozen] IEmailHistoryService emailHistoryService,
                         ILogger<OpportunityRepository> logger,
                         ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
                         ILogger<GenericRepository<OpportunityItem>> itemLogger
@@ -293,7 +287,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, emailHistoryService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved

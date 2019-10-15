@@ -23,9 +23,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
         public When_EmailService_Is_Called_To_Send_Email_With_Incorrect_Template()
         {
+            var emailHistoryRepository = Substitute.For<IRepository<Domain.Models.EmailHistory>>();
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailHistoryMapper).Assembly));
             var mapper = new Mapper(config);
-            var emailHistoryService = Substitute.For<IEmailHistoryService>();
             var configuration = new MatchingConfiguration
             {
                 SendEmailEnabled = true
@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>())
                 .ReturnsNull();
 
-            var emailService = new EmailService(configuration, emailHistoryService, _notificationsApi, _emailTemplateRepository, mapper, _logger);
+            var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, emailHistoryRepository, mapper, _logger);
             const string toAddress = "test@test.com";
             var tokens = new Dictionary<string, string>
             {

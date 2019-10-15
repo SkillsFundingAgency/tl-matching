@@ -28,7 +28,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
     {
         private readonly EmployerFeedbackFixture _testFixture;
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly int _result;
 
@@ -49,8 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .Returns(false);
 
             _emailService = Substitute.For<IEmailService>();
-            _emailHistoryService = Substitute.For<IEmailHistoryService>();
-
+            
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(OpportunityMapper).Assembly);
@@ -106,7 +104,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
             var employerFeedbackService = new EmployerFeedbackService(
                 mapper, _testFixture.Configuration, _testFixture.Logger,
                 dateTimeProvider,
-                _emailService, _emailHistoryService, bankHolidayRepository,
+                _emailService, bankHolidayRepository,
                 _opportunityRepository, backgroundProcessHistoryRepository);
 
             _result = employerFeedbackService

@@ -26,11 +26,10 @@ namespace Sfa.Tl.Matching.Application.Services
             ILogger<EmployerFeedbackService> logger,
             IDateTimeProvider dateTimeProvider,
             IEmailService emailService,
-            IEmailHistoryService emailHistoryService,
             IRepository<BankHoliday> bankHolidayRepository,
             IOpportunityRepository opportunityRepository,
             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository) 
-            : base(configuration, emailService, emailHistoryService, dateTimeProvider, bankHolidayRepository, backgroundProcessHistoryRepository)
+            : base(configuration, emailService, dateTimeProvider, bankHolidayRepository, backgroundProcessHistoryRepository)
         {
             _mapper = mapper;
             _logger = logger;
