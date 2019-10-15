@@ -246,7 +246,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IValidator<CrmEmployerEventBase>, CrmEmployerEventDataValidator>();
 
             services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<IEmailHistoryService, EmailHistoryService>();
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IOpportunityService, OpportunityService>();

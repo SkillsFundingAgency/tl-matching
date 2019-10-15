@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Notify.Interfaces;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Configuration;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
@@ -16,14 +20,30 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
 
         public When_EmailHistoryService_Is_Called_To_Save_Email_History()
         {
-            var logger = Substitute.For<ILogger<EmailHistoryService>>();
+            var configuration = new MatchingConfiguration
+            {
+                SendEmailEnabled = true,
+                GovNotifyApiKey = "TestApiKey"
+            };
+
+            var logger = Substitute.For<ILogger<EmailService>>();
+            var notificationsApi = Substitute.For<IAsyncNotificationClient>();
+            var emailTemplateRepository = Substitute.For<IRepository<EmailTemplate>>();
+
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailHistoryMapper).Assembly));
             var mapper = new Mapper(config);
 
             _emailHistoryRepository = Substitute.For<IRepository<Domain.Models.EmailHistory>>();
-            
+            var emailTemplate = new EmailTemplate
+            {
+                Id = 1,
+                TemplateId = "1599768C-7D3D-43AB-8548-82A4E5349468",
+                TemplateName = "TemplateName"
+            };
 
-            var emailHistoryService = new EmailHistoryService(_emailHistoryRepository, mapper, logger);
+            emailTemplateRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>()).Returns(emailTemplate);
+
+            var emailService = new EmailService(configuration, notificationsApi, emailTemplateRepository, _emailHistoryRepository, mapper, logger);
 
             var toAddress = "test@test.com";
             var createdBy = "CreatedBy";
@@ -31,12 +51,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailHistory
             {
                 { "contactname",  "name" }
             };
-            
-            emailHistoryService
-                .SaveEmailHistoryAsync(new Guid(), 1 , tokens, 2, toAddress, createdBy)
-                .GetAwaiter().GetResult();
+
+            emailService.SendEmailAsync(2, "Test Template", toAddress, tokens, createdBy).GetAwaiter().GetResult();
+
         }
-        
+
         [Fact]
         public void Then_EmailHistoryRepository_Create_Is_Called_Exactly_Once()
         {

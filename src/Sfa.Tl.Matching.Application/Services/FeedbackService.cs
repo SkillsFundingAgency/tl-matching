@@ -20,7 +20,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         protected FeedbackService(MatchingConfiguration configuration,
             IEmailService emailService,
-            IEmailHistoryService emailHistoryService,
             IDateTimeProvider dateTimeProvider,
             IRepository<BankHoliday> bankHolidayRepository,
             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository

@@ -16,7 +16,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
     public class When_FailedEmailService_Is_Called_To_Send_Email
     {
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
 
         private readonly Guid _notificationId = new Guid("a8de2d8c-23ae-4c2f-980a-0a8a3231938f");
@@ -39,8 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
                     Subject = "Subject"
                 });
 
-            _emailHistoryService = Substitute.For<IEmailHistoryService>();
-            _emailHistoryService.GetEmailHistoryAsync(_notificationId).Returns(
+            _emailService.GetEmailHistoryAsync(_notificationId).Returns(
                 new EmailHistoryDto
                 {
                     NotificationId = _notificationId,
@@ -69,7 +67,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
 
             var failedEmailService = new FailedEmailService(configuration,
                 _emailService,
-                _emailHistoryService,
                 _opportunityRepository,
                 logger);
 
@@ -85,7 +82,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
         [Fact]
         public void Then_EmailHistoryService_GetFailedEmailAsync_Is_Called_Exactly_Once()
         {
-            _emailHistoryService.Received(1).GetEmailHistoryAsync(_notificationId);
+            _emailService.Received(1).GetEmailHistoryAsync(_notificationId);
         }
 
         [Fact]

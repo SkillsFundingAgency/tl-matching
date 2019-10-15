@@ -18,7 +18,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
     {
         private readonly ProviderQuarterlyUpdateEmailFixture _testFixture;
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IProviderRepository _providerRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
         private readonly IList<BackgroundProcessHistory> _receivedProviderFeedbackRequestHistories;
@@ -29,8 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
             _testFixture = testFixture;
 
             _emailService = Substitute.For<IEmailService>();
-            _emailHistoryService = Substitute.For<IEmailHistoryService>();
-
+            
             var messageQueueService = Substitute.For<IMessageQueueService>();
             
             _providerRepository = Substitute.For<IProviderRepository>();
@@ -59,8 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
 
             var providerFeedbackService = new Application.Services.ProviderQuarterlyUpdateEmailService(
                 _testFixture.Configuration, _testFixture.Logger,
-                    _emailService, _emailHistoryService,
-                    _providerRepository, _backgroundProcessHistoryRepository,
+                    _emailService, _providerRepository, _backgroundProcessHistoryRepository,
                     messageQueueService, _testFixture.DateTimeProvider);
 
             _result = providerFeedbackService

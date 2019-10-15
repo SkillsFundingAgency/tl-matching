@@ -17,7 +17,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
     public class When_ReferralService_Is_Called_To_Send_Employer_Email
     {
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
 
         public When_ReferralService_Is_Called_To_Send_Employer_Email()
@@ -33,7 +32,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
             _emailService = Substitute.For<IEmailService>();
-            _emailHistoryService = Substitute.For<IEmailHistoryService>();
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             
             backgroundProcessHistoryRepo.GetSingleOrDefaultAsync(
@@ -57,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             };
 
             var referralEmailService = new ReferralEmailService(mapper, configuration, datetimeProvider, _emailService,
-                _emailHistoryService, _opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo);
+                _opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo);
 
             referralEmailService.SendEmployerReferralEmailAsync(1, itemIds, 1, "system").GetAwaiter().GetResult();
         }

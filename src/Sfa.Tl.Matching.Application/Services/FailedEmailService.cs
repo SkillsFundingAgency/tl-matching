@@ -16,19 +16,16 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly ILogger<FailedEmailService> _logger;
 
         public FailedEmailService(MatchingConfiguration configuration,
             IEmailService emailService,
-            IEmailHistoryService emailHistoryService,
             IOpportunityRepository opportunityRepository,
             ILogger<FailedEmailService> logger)
         {
             _configuration = configuration;
             _emailService = emailService;
-            _emailHistoryService = emailHistoryService;
             _opportunityRepository = opportunityRepository;
             _logger = logger;
         }
@@ -36,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task SendFailedEmailAsync(SendFailedEmail failedEmailData)
         {
             var failedEmailDto = await _emailService.GetFailedEmailAsync(failedEmailData.NotificationId);
-            var emailHistoryDto = await _emailHistoryService.GetEmailHistoryAsync(failedEmailData.NotificationId);
+            var emailHistoryDto = await _emailService.GetEmailHistoryAsync(failedEmailData.NotificationId);
             var emailTemplateName = (EmailTemplateName)emailHistoryDto.EmailTemplateId;
 
             if (!emailHistoryDto.OpportunityId.HasValue)

@@ -10,27 +10,28 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
+
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly MatchingConfiguration _configuration;
         private readonly ILogger<EmailService> _logger;
         private readonly IAsyncNotificationClient _notificationClient;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
+        private readonly IRepository<EmailHistory> _emailHistoryRepository;
         private readonly IMapper _mapper;
 
         public EmailService(MatchingConfiguration configuration,
-            IEmailHistoryService emailHistoryService,
             IAsyncNotificationClient notificationClient,
             IRepository<EmailTemplate> emailTemplateRepository,
+            IRepository<EmailHistory> emailHistoryRepository,
             IMapper mapper,
             ILogger<EmailService> logger)
         {
-            _emailHistoryService = emailHistoryService;
             _configuration = configuration;
             _emailTemplateRepository = emailTemplateRepository;
+            _emailHistoryRepository = emailHistoryRepository;
             _mapper = mapper;
             _notificationClient = notificationClient;
             _logger = logger;
@@ -51,7 +52,8 @@ namespace Sfa.Tl.Matching.Application.Services
             }
 
             _logger.LogInformation($"Sending {templateName} email to {toAddress}");
-            await SendEmailViaNotificationsApiAndSaveHistoryAsync(opportunityId, toAddress, emailTemplate, personalisationTokens, createdBy);
+
+            await SendEmailAndSaveHistoryAsync(opportunityId, toAddress, emailTemplate, personalisationTokens, createdBy);
         }
 
         public async Task<FailedEmailDto> GetFailedEmailAsync(Guid notificationId)
@@ -62,22 +64,75 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        private async Task SendEmailViaNotificationsApiAndSaveHistoryAsync(int? opportunityId, string recipient, EmailTemplate emailTemplate,
+        public async Task<EmailHistoryDto> GetEmailHistoryAsync(Guid notificationId)
+        {
+            var emailHistory = await _emailHistoryRepository.GetSingleOrDefaultAsync(eh => eh.NotificationId == notificationId);
+
+            var dto = _mapper.Map<EmailHistoryDto>(emailHistory);
+
+            return dto;
+        }
+
+        private async Task SendEmailAndSaveHistoryAsync(int? opportunityId, string recipient, EmailTemplate emailTemplate,
             IDictionary<string, string> personalisationTokens, string createdBy)
         {
             try
             {
                 var tokens = personalisationTokens.Select(x => new { key = x.Key, val = (dynamic)x.Value })
                     .ToDictionary(item => item.key, item => item.val);
+
                 var emailresponse = await _notificationClient.SendEmailAsync(recipient, emailTemplate.TemplateId, tokens);
+
                 Guid.TryParse(emailresponse.id, out var notificationId);
-                await _emailHistoryService.SaveEmailHistoryAsync(notificationId, emailTemplate.Id, personalisationTokens, opportunityId,
+
+                await SaveEmailHistoryAsync(notificationId, emailTemplate.Id, personalisationTokens, opportunityId,
                     recipient, createdBy);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error sending email template {emailTemplate.TemplateId} to {recipient}");
             }
+        }
+
+        private async Task SaveEmailHistoryAsync(Guid notificatonId, int emailTemplateId,
+            IDictionary<string, string> tokens,
+            int? opportunityId, string emailAddress, string createdBy)
+        {
+            var placeholders = ConvertTokensToEmailPlaceholderDtos(tokens, createdBy);
+
+            var emailPlaceholders = _mapper.Map<IList<EmailPlaceholder>>(placeholders);
+
+            _logger.LogInformation($"Saving {emailPlaceholders.Count} {nameof(EmailPlaceholder)} items.");
+
+            var emailHistory = new EmailHistory
+            {
+                NotificationId = notificatonId,
+                OpportunityId = opportunityId,
+                EmailTemplateId = emailTemplateId,
+                EmailPlaceholder = emailPlaceholders,
+                SentTo = emailAddress,
+                CreatedBy = createdBy
+            };
+
+            await _emailHistoryRepository.CreateAsync(emailHistory);
+        }
+
+        private static IEnumerable<EmailPlaceholderDto> ConvertTokensToEmailPlaceholderDtos(IDictionary<string, string> tokens, string createdBy)
+        {
+            var placeholders = new List<EmailPlaceholderDto>();
+
+            foreach (var (key, value) in tokens)
+            {
+                placeholders.Add(
+                    new EmailPlaceholderDto
+                    {
+                        Key = key,
+                        Value = value,
+                        CreatedBy = createdBy
+                    });
+            }
+
+            return placeholders;
         }
     }
 }
