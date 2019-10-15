@@ -14,14 +14,14 @@ using Sfa.Tl.Matching.Functions.Extensions;
 
 namespace Sfa.Tl.Matching.Functions
 {
-    public static class NotificationCallback
+    public static class EmailDeliveryStatus
     {
-        [FunctionName("NotificationCallback")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+        [FunctionName("EmailDeliveryStatusHandler")]
+        public static async Task<IActionResult> EmailDeliveryStatusHandlerAsync(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             ExecutionContext context,
             ILogger logger,
-            [Inject] INotificationCallbackService callbackService,
+            [Inject] IEmailDeliveryStatusService callbackService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             try
@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Functions
                     requestBody = await streamReader.ReadToEndAsync();
                 }
 
-                var updatedRecords = await callbackService.HandleNotificationCallbackAsync(requestBody);
+                var updatedRecords = await callbackService.HandleEmailDeliveryStatusAsync(requestBody);
 
                 stopwatch.Stop();
 
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Functions
                 await functionlogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
-                    FunctionName = nameof(NotificationCallback),
+                    FunctionName = nameof(EmailDeliveryStatus),
                     RowNumber = -1
                 });
                 throw;
