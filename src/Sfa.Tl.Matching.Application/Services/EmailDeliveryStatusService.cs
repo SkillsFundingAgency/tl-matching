@@ -22,6 +22,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> HandleEmailDeliveryStatusAsync(string payload)
         {
+            if (string.IsNullOrEmpty(payload)) return -1;
+
             var callbackData = JsonConvert.DeserializeObject<EmailDeliveryStatusPayLoad>(payload,
                 new JsonSerializerSettings
                 {

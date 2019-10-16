@@ -137,5 +137,37 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
 
         }
+
+        [Theory]
+        [InlineAutoDomainData(null)]
+        [InlineAutoDomainData("")]
+        [InlineAutoDomainData("")]
+        public async Task Then_Do_Not_Update_Email_History_If_PayLoad_Is_Null_Or_Empty(
+            string payload,
+            IRepository<Domain.Models.EmailHistory> emailHistoryRepository,
+            Domain.Models.EmailHistory emailHistory,
+            IMessageQueueService messageQueueService)
+        {
+            //Arrange
+            emailHistoryRepository
+                .GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.EmailHistory, bool>>>())
+                .Returns(emailHistory);
+
+            var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
+
+            //Act
+            var result = await sut.HandleEmailDeliveryStatusAsync(payload);
+
+            //Assert
+            result.Should().Be(-1);
+
+            await emailHistoryRepository.DidNotReceive().GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.EmailHistory, bool>>>());
+
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(
+                Arg.Any<Domain.Models.EmailHistory>(),
+                Arg.Any<Expression<Func<Domain.Models.EmailHistory, object>>[]>());
+
+            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+        }
     }
 }
