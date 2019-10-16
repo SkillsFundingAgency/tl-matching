@@ -22,7 +22,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> HandleEmailDeliveryStatusAsync(string payload)
         {
-            var callbackData = JsonConvert.DeserializeObject<EmailDeliveryStatusPayLoad>(payload, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore });
+            var callbackData = JsonConvert.DeserializeObject<EmailDeliveryStatusPayLoad>(payload,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore
+                });
 
             return await UpdateEmailStatus(callbackData);
         }
