@@ -18,6 +18,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Callback;
 using Sfa.Tl.Matching.Models.Command;
+using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
@@ -27,11 +28,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
     {
         [Theory, AutoDomainData]
         public async void Then_Update_Email_History_With_Status(
+            MatchingConfiguration matchingConfiguration,
             EmailDeliveryStatusPayLoad payLoad,
             EmailHistory emailHistory,
             ExecutionContext context,
             ILogger logger,
-            IRepository<EmailHistory> emailHistoryRepository, 
+            IRepository<EmailHistory> emailHistoryRepository,
             IMessageQueueService messageQueueService,
             IRepository<FunctionLog> functionlogRepository
 
@@ -47,14 +49,22 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
             emailHistoryRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<EmailHistory, bool>>>())
                 .Returns(emailHistory);
 
+            var httpRequest = HttpRequestSetup(query, serializedPayLoad);
+
             //Act
-            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(HttpRequestSetup(query, serializedPayLoad), context, logger,
+            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(httpRequest, context, logger,
+                matchingConfiguration,
                 notificationService, functionlogRepository) as OkObjectResult;
 
             //Assert
+            httpRequest.Headers.TryGetValue("Authorization", out var token);
+
+            token.Should().Equal($"Bearer {matchingConfiguration.EmailDeliveryStatusToken}");
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(200);
             result.Value.Should().Be("1 records updated.");
+
+            
 
             await emailHistoryRepository.Received(1).UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
                 Arg.Any<Expression<Func<EmailHistory, object>>[]>());
@@ -65,11 +75,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
                 Arg.Any<Expression<Func<EmailHistory, object>>[]>());
 
             await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
-
+            
         }
 
         [Theory, AutoDomainData]
         public async void Then_Do_Not_Update_Email_History_If_No_Record_Found(
+            MatchingConfiguration matchingConfiguration,
             EmailDeliveryStatusPayLoad payLoad,
             ExecutionContext context,
             ILogger logger,
@@ -90,7 +101,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
                 .Returns(Task.FromResult<EmailHistory>(null));
 
             //Act
-            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(HttpRequestSetup(query, serializedPayLoad), context, logger,
+            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
                 notificationService, functionlogRepository) as OkObjectResult;
 
             //Arrange
@@ -104,11 +116,58 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
             await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
         }
 
+        [Theory, AutoDomainData]
+        public async void Then_Do_Not_Update_Email_History_If_Authorization_Failed(
+            MatchingConfiguration matchingConfiguration,
+            EmailDeliveryStatusPayLoad payLoad,
+            EmailHistory emailHistory,
+            ExecutionContext context,
+            ILogger logger,
+            IRepository<EmailHistory> emailHistoryRepository,
+            IMessageQueueService messageQueueService,
+            IRepository<FunctionLog> functionlogRepository
+
+        )
+        {
+            //Arrange
+            matchingConfiguration.EmailDeliveryStatusToken = Guid.NewGuid();
+            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
+            var notificationService = new EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
+
+            var query = new Dictionary<string, StringValues>();
+            query.TryAdd("content-type", "application/json");
+
+            emailHistoryRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<EmailHistory, bool>>>())
+                .Returns(emailHistory);
+
+            //Act
+            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
+                notificationService, functionlogRepository) as BadRequestObjectResult;
+
+            //Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(400);
+            result.Should().BeOfType<BadRequestObjectResult>();
+            
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
+                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
+
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(
+                Arg.Is<EmailHistory>(eh =>
+                    eh.Status == "delivered" && eh.ModifiedBy == "System"),
+                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
+
+            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+
+        }
+
         [Theory]
         [InlineAutoDomainData("permanent-failure")]
         [InlineAutoDomainData("temporary-failure")]
         public async void Then_Update_Email_History_With_Failed_Statusand_Push_To_Failed_Email_Queue(
             string status,
+            MatchingConfiguration matchingConfiguration,
             EmailDeliveryStatusPayLoad payLoad,
             EmailHistory emailHistory,
             ExecutionContext context,
@@ -131,7 +190,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
                 .Returns(emailHistory);
 
             //Act
-            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(HttpRequestSetup(query, serializedPayLoad), context, logger,
+            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
                 notificationService, functionlogRepository) as OkObjectResult;
 
             //Assert
@@ -154,8 +214,11 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
         private static HttpRequest HttpRequestSetup(Dictionary<string, StringValues> query, string body)
         {
             var reqMock = Substitute.For<HttpRequest>();
-            
+            var headers = new Dictionary<string, StringValues> { { "Authorization", "Bearer 72b561ed-a7f3-4c0c-82a9-aae800a51de7" } };
+
+
             reqMock.Query.Returns(new QueryCollection(query));
+            reqMock.Headers.Returns(new HeaderDictionary(headers));
 
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
@@ -164,9 +227,9 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
             writer.Flush();
 
             stream.Position = 0;
-            
+
             reqMock.Body.Returns(stream);
-            
+
             return reqMock;
 
         }

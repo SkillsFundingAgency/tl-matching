@@ -14,8 +14,11 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.Customizations.Add(new NumericSequenceGenerator());
 
             fixture.Customize<MatchingConfiguration>(composer =>
-                composer.With(config => config.SendEmailEnabled, true)
-                    .With(config => config.EmployerFeedbackTimeSpan, "-10.00:00:00"));
+                composer
+                    .With(config => config.SendEmailEnabled, true)
+                    .With(config => config.EmployerFeedbackTimeSpan, "-10.00:00:00")
+                    .With(config => config.EmailDeliveryStatusToken, Guid.Parse("72b561ed-a7f3-4c0c-82a9-aae800a51de7"))    
+                );
 
             fixture.Customize<Provider>(composer =>
                 composer.With(p => p.IsCdfProvider, true)

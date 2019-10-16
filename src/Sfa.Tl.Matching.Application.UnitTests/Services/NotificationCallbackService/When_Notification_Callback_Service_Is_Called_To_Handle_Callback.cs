@@ -98,5 +98,44 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             await messageQueueService.Received(1).PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
 
         }
+
+        [Theory]
+        [InlineAutoDomainData("delivered")]
+        [InlineAutoDomainData("permanent-failure")]
+        public async Task Then_Do_Not_Update_Email_History_If_Notification_Id_Doesnt_Exists_In_Callback_PayLoad(
+            string status,
+            IRepository<Domain.Models.EmailHistory> emailHistoryRepository,
+            IMessageQueueService messageQueueService,
+            EmailDeliveryStatusPayLoad payload
+        )
+        {
+            //Arrange
+            payload.id = Guid.Empty;
+            payload.status = status;
+
+            emailHistoryRepository
+                .GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.EmailHistory, bool>>>())
+                .Returns((Domain.Models.EmailHistory)null);
+
+            var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
+
+            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+
+            //Act
+            var result = await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
+
+            //Assert
+            result.Should().Be(-1);
+
+            await emailHistoryRepository.Received(1).GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.EmailHistory, bool>>>());
+
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(
+                Arg.Is<Domain.Models.EmailHistory>(history =>
+                    history.Status == status && history.ModifiedBy == "System"),
+                Arg.Any<Expression<Func<Domain.Models.EmailHistory, object>>[]>());
+
+            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+
+        }
     }
 }
