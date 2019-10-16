@@ -6,6 +6,6 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
 {
     public interface IGoogleDistanceMatrixApiClient
     {
-        Task<IDictionary<int, JourneyInfoDto>> GetJourneyTimesAsync(string originPostcode, IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds);
+        Task<IDictionary<int, JourneyInfoDto>> GetJourneyTimesAsync(string originPostcode, double originLatitude, double originLongitude, IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds);
     }
 }

@@ -44,11 +44,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
                 });
 
             _googleDistanceMatrixApiClient = Substitute.For<IGoogleDistanceMatrixApiClient>();
-            _googleDistanceMatrixApiClient.GetJourneyTimesAsync(Arg.Any<string>(), 
+            _googleDistanceMatrixApiClient.GetJourneyTimesAsync(Arg.Any<string>(),
+                    Arg.Any<double>(), Arg.Any<double>(),
                     Arg.Any<IList<LocationDto>>(), TravelMode.Driving, 
                     Arg.Any<long>())
                 .Returns(new JourneyTimesBuilder().BuildDrivingResults());
             _googleDistanceMatrixApiClient.GetJourneyTimesAsync(Arg.Any<string>(), 
+                    Arg.Any<double>(), Arg.Any<double>(),
                     Arg.Any<IList<LocationDto>>(), TravelMode.Transit, 
                     Arg.Any<long>())
                 .Returns(new JourneyTimesBuilder().BuildPublicTransportResults());
@@ -88,6 +90,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         {
             _googleDistanceMatrixApiClient.Received(1).GetJourneyTimesAsync(
                 Arg.Any<string>(),
+                Arg.Any<double>(), Arg.Any<double>(),
                 Arg.Any<IList<LocationDto>>(),
                 Arg.Is<string>(m => m == "driving"),
                 Arg.Any<long>());
@@ -98,6 +101,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Proximity
         {
             _googleDistanceMatrixApiClient.Received(1).GetJourneyTimesAsync(
                 Arg.Any<string>(), 
+                    Arg.Any<double>(), Arg.Any<double>(),
                 Arg.Any<IList<LocationDto>>(),
                 Arg.Is<string>(m => m == "transit"),
                 Arg.Any<long>());

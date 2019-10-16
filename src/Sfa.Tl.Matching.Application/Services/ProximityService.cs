@@ -38,15 +38,19 @@ namespace Sfa.Tl.Matching.Application.Services
             if (searchResults != null && searchResults.Any())
             {
                 Debug.Write($"Search results for {dto.Postcode} route {dto.SelectedRouteId} - {searchResults.Count} results, ");
-                searchResults = await FilterByJourneyTimeAsync(dto.Postcode, searchResults);
+                searchResults = await FilterByJourneyTimeAsync(dto, searchResults);
                 Debug.WriteLine($" {searchResults.Count} filtered results");
             }
 
             return searchResults ?? new List<SearchResultsViewModelItem>();
         }
 
-        private async Task<IList<SearchResultsViewModelItem>> FilterByJourneyTimeAsync(string originPostcode, IList<SearchResultsViewModelItem> searchResults)
+        private async Task<IList<SearchResultsViewModelItem>> FilterByJourneyTimeAsync(ProviderSearchParametersDto searchParameters, IList<SearchResultsViewModelItem> searchResults)
         {
+            var originPostcode = searchParameters.Postcode;
+            var originLatitude = double.Parse(searchParameters.Latitude);
+            var originLongitude = double.Parse(searchParameters.Longitude);
+            
             var destinations = searchResults
                 //.Where(v => v.Latitude != 0 && v.Longitude != 0)
                 .Select(v => new LocationDto
@@ -59,8 +63,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var journeyResults =
                 await Task.WhenAll(
-                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(originPostcode, destinations, TravelMode.Driving, arrivalTimeSeconds),
-                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(originPostcode, destinations, TravelMode.Transit, arrivalTimeSeconds));
+                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(originPostcode, originLatitude, originLongitude, destinations, TravelMode.Driving, arrivalTimeSeconds),
+                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(originPostcode, originLatitude, originLongitude, destinations, TravelMode.Transit, arrivalTimeSeconds));
 
             var journeyTimesByCar = journeyResults[0];
             var journeyTimesByPublicTransport = journeyResults[1];

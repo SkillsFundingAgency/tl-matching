@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -35,16 +36,19 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<IDictionary<int, JourneyInfoDto>> GetJourneyTimesAsync(string originPostcode, 
+        public async Task<IDictionary<int, JourneyInfoDto>> GetJourneyTimesAsync(
+            string originPostcode, 
+            double originLatitude, double originLongitude, 
             IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
         {
-            const int batchSize = 100; //Max client-side elements: 100
+            //Max client-side elements: 100, minus one for the second origin
+            const int batchSize = 99; 
             var batches = CreateBatches(destinations, batchSize);
             var distanceSearchResults = new Dictionary<int, JourneyInfoDto>(batches.Count);
             
             foreach (var batch in batches)
             {
-                var response = await SearchBatchAsync(originPostcode, batch, travelMode, arrivalTimeSeconds);
+                var response = await SearchBatchAsync(originPostcode, originLatitude, originLongitude, batch, travelMode, arrivalTimeSeconds);
                 if (response != null)
                 {
                     var batchResults = await BuildResultAsync(response, batch);
@@ -81,12 +85,17 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
                 {
                     if (element.Status == "OK" && destinations[i].Id > 0)
                     {
+                        Debug.WriteLine($"Result for {destinations[i].Postcode} - {element.Distance?.Text} - {element.Duration?.Text}");
                         results[destinations[i].Id] = new JourneyInfoDto
                         {
                             DestinationId = destinations[i].Id,
                             JourneyTime = element.Duration?.Value ?? 0,
                             JourneyDistance = element.Distance?.Value ?? 0
                         };
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"GOOGLE::No result for {destinations[i].Postcode}");
                     }
                 }
                 catch (Exception ex)
@@ -112,7 +121,10 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             return batches;
         }
 
-        private async Task<GoogleJourneyTimeResponse> SearchBatchAsync(string origin, IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
+        private async Task<GoogleJourneyTimeResponse> SearchBatchAsync(
+            string origin, 
+            double originLatitude, double originLongitude,
+            IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
         {
             try
             {
@@ -120,6 +132,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
 
                 uriBuilder.Append("units=imperial");
                 uriBuilder.Append($"&origins={WebUtility.UrlEncode(origin)}");
+                uriBuilder.Append($"|{originLatitude},{originLongitude}");
 
                 uriBuilder.Append($"&mode={travelMode}");
                 uriBuilder.Append($"&arrival_time={arrivalTimeSeconds}");
@@ -133,6 +146,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
                 }
 
                 uriBuilder.Append($"&key={_configuration.GoogleMapsApiKey}");
+                Debug.WriteLine(uriBuilder);
 
                 var response = await _httpClient.GetAsync(uriBuilder.ToString());
 
