@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Functions
 
             stopwatch.Stop();
 
-            logger.LogInformation($"Function {context.FunctionName} sent emails\n" +
+            logger.LogInformation($"Function {context.FunctionName} sent email\n" +
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
         }
     }
