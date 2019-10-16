@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
 
             data.Should().NotBeNull();
             data?.NotificationId.Should().Be(payload.id);
-            data?.Status.Should().Be(payload.status);
+            data?.Status.Should().Be("delivered");
             data?.ModifiedBy.Should().Be("System");
 
             await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
@@ -67,6 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
         [Theory]
         [InlineAutoDomainData("permanent-failure")]
         [InlineAutoDomainData("temporary-failure")]
+        [InlineAutoDomainData("not-a-delivered-status-but-invalid-status")]
         public async Task Then_Update_Email_History_With_Status_And_Push_To_Failed_Email_Queue(
             string status,
             MatchingDbContext dbContext,
@@ -154,6 +155,46 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             existingData.Select(history => history.ModifiedBy).Should().Equal(new List<string> { null, null });
             existingData.Select(history => history.ModifiedOn).Should().Equal(new List<string> { null, null });
             
+            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+        }
+
+        [Theory]
+        [InlineAutoDomainData(null)]
+        [InlineAutoDomainData("")]
+        [InlineAutoDomainData("")]
+        public async Task Then_Do_Not_Update_Email_History_If_PayLoad_Is_Null_Or_Empty(
+            string payload,
+            MatchingDbContext dbContext,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] Domain.Models.EmailHistory emailHistory,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            ILogger<GenericRepository<Domain.Models.EmailHistory>> emailHistoryLogger,
+            IMessageQueueService messageQueueService)
+        {
+            //Arrange
+            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+
+            dbContext.Add(emailHistory);
+            dbContext.SaveChanges();
+
+            var emailHistoryRepository =
+                new GenericRepository<Domain.Models.EmailHistory>(emailHistoryLogger, dbContext);
+
+            var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
+
+            //Act
+            var result = await sut.HandleEmailDeliveryStatusAsync(payload);
+
+            //Assert
+
+            result.Should().Be(-1);
+
+            var existingData = dbContext.EmailHistory.Where(history => history.OpportunityId == opportunity.Id).ToList();
+            existingData.Select(history => history.ModifiedBy).Should().Equal(new List<string> { null, null });
+            existingData.Select(history => history.ModifiedOn).Should().Equal(new List<string> { null, null });
+
             await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
         }
 
