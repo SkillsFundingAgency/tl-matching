@@ -317,19 +317,18 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             var dto = await (from o in _dbContext.Opportunity
                              join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
-                             join e in _dbContext.Employer on o.EmployerCrmId equals e.CrmId
                              join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
                              join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                              join p in _dbContext.Provider on pv.ProviderId equals p.Id
                              where o.Id == opportunityId &&
                                    (p.PrimaryContactEmail == sentTo ||
                                     p.SecondaryContactEmail == sentTo ||
-                                    e.Email == sentTo)
+                                    o.EmployerContactEmail == sentTo)
                              select new FailedEmailBodyDto
                              {
                                  PrimaryContactEmail = p.PrimaryContactEmail,
                                  SecondaryContactEmail = p.SecondaryContactEmail,
-                                 EmployerEmail = e.Email,
+                                 EmployerEmail = o.EmployerContactEmail,
                                  ProviderDisplayName = p.DisplayName,
                                  ProviderVenuePostcode = pv.Postcode,
                                  ProviderVenueName = pv.Name,
