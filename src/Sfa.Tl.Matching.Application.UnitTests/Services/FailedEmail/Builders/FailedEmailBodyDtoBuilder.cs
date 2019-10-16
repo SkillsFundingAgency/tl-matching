@@ -18,6 +18,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail.Builders
             };
         }
 
+        public FailedEmailBodyDtoBuilder AddEmployerEmail()
+        {
+            _failedEmailBodyDto.EmployerEmail = "employer@email.com";
+
+            return this;
+        }
+
         public FailedEmailBodyDto Build() => _failedEmailBodyDto;
     }
 }

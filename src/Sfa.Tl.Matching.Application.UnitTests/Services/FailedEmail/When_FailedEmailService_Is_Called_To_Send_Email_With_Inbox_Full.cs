@@ -52,7 +52,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityRepository.GetFailedOpportunityEmailAsync(OpportunityId, "sent-to@email.com").Returns(
-                new FailedEmailBodyDtoBuilder().Build());
+                new FailedEmailBodyDtoBuilder()
+                    .AddEmployerEmail().Build());
 
             var sendFailedEmailData = new SendFailedEmail
             {
@@ -93,7 +94,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("email_type") && tokens["email_type"] == "Provider referral v 3"
-                    && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
+                    && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\nEmployer contact: employer@email.com\r\n"
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Inbox not accepting messages right now"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
                     && tokens.ContainsKey("failed_email_body") && tokens["failed_email_body"] == "Body")
