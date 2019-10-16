@@ -1,5 +1,4 @@
-﻿using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Notify.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;

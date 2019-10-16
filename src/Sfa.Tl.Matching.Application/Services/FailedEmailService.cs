@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     { "failed_email_body", failedEmailDto.Body }
                 };
 
-            await _emailService.SendEmailAsync(null, EmailTemplateName.FailedEmail.ToString(),
+            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId.Value, EmailTemplateName.FailedEmail.ToString(),
                 _configuration.MatchingServiceSupportEmailAddress, tokens, "System");
         }
 

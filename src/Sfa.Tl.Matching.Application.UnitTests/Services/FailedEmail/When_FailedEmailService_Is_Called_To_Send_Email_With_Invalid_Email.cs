@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Configuration;
@@ -17,14 +18,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
-
         private readonly Guid _notificationId = new Guid("a8de2d8c-23ae-4c2f-980a-0a8a3231938f");
+        public const int OpportunityId = 1;
+        private const string SupportEmailAddress = "support@service.com";
 
         public When_FailedEmailService_Is_Called_To_Send_Email_With_Invalid_Email()
         {
             var configuration = new MatchingConfiguration
             {
-                MatchingServiceSupportEmailAddress = "support@service.com"
+                MatchingServiceSupportEmailAddress = SupportEmailAddress
             };
 
             var logger = Substitute.For<ILogger<FailedEmailService>>();
@@ -35,14 +37,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
                 {
                     Body = "Body",
                     Subject = "Subject",
-                    FailedEmailType = FailedEmailType.PermanentFailure // TODO AU Add unit tests for this
+                    FailedEmailType = FailedEmailType.PermanentFailure
                 });
 
             _emailService.GetEmailHistoryAsync(_notificationId).Returns(
                 new EmailHistoryDto
                 {
                     NotificationId = _notificationId,
-                    OpportunityId = 1,
+                    OpportunityId = OpportunityId,
                     SentTo = "sent-to@email.com",
                     EmailTemplateId = (int)EmailTemplateName.EmployerReferralV3,
                     CreatedBy = "CreatedBy"
@@ -50,15 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityRepository.GetFailedOpportunityEmailAsync(1, "sent-to@email.com").Returns(
-                new FailedEmailBodyDto
-                {
-                    PrimaryContactEmail = "primary-contact@email.com",
-                    SecondaryContactEmail = "secondary-contact@email.com",
-                    ProviderDisplayName = "Provider Display Name",
-                    ProviderVenueName = "Provider Venue Name",
-                    EmployerEmail = "employer@email.com",
-                    ProviderVenuePostcode = "AB1 1AA"
-                });
+                new FailedEmailBodyDtoBuilder().Build());
 
             var sendFailedEmailData = new SendFailedEmail
             {
@@ -88,15 +82,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
         [Fact]
         public void Then_OpportunityRepository_GetFailedOpportunityEmailAsync_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.Received(1).GetFailedOpportunityEmailAsync(1, "sent-to@email.com");
+            _opportunityRepository.Received(1).GetFailedOpportunityEmailAsync(OpportunityId, "sent-to@email.com");
         }
 
         [Fact]
         public void Then_EmailService_SendEmailAsync_Is_Called_Exactly_Once()
         {
-            _emailService.Received(1).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+            _emailService.Received(1).SendEmailAsync(OpportunityId,
+                EmailTemplateName.FailedEmail.ToString(),
+                SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("email_type") && tokens["email_type"] == "Employer referral v 3"
+                    && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Email address does not exist"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
                     && tokens.ContainsKey("failed_email_body") && tokens["failed_email_body"] == "Body")
