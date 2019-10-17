@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
+using Sfa.Tl.Matching.Application.UnitTests.InMemoryDb;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
         )
         {
             //Arrange
-            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             dbContext.Add(emailHistory);
             dbContext.SaveChanges();
@@ -82,7 +82,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
         )
         {
             //Arrange
-            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             dbContext.Add(emailHistory);
             dbContext.SaveChanges();
@@ -129,7 +129,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
         )
         {
             //Arrange
-            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             dbContext.Add(emailHistory);
             dbContext.SaveChanges();
@@ -174,7 +174,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
             IMessageQueueService messageQueueService)
         {
             //Arrange
-            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             dbContext.Add(emailHistory);
             dbContext.SaveChanges();
@@ -211,7 +211,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackSer
         )
         {
             //Arrange
-            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             var emailHistoryRepository =
                 new GenericRepository<Domain.Models.EmailHistory>(emailHistoryLogger, dbContext);

@@ -9,7 +9,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders;
+using Sfa.Tl.Matching.Application.UnitTests.InMemoryDb;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
@@ -101,7 +101,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
@@ -164,7 +164,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
@@ -239,7 +239,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Arrange
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
@@ -320,7 +320,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             provider.SecondaryContact = secondaryContactName;
             provider.SecondaryContactEmail = secondaryContactEmail;
 
-            await ReferralsInMemoryTestData.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             var repo = new OpportunityRepository(logger, dbContext);
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);

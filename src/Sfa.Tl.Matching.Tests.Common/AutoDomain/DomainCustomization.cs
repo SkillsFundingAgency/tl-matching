@@ -1,8 +1,10 @@
 ﻿using System;
 using AutoFixture;
+using Notify.Models.Responses;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Callback;
 using Sfa.Tl.Matching.Models.Configuration;
+
 
 namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
@@ -48,6 +50,10 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                 .With(em => em.ModifiedBy, () => null)
                 .With(em => em.ModifiedOn, () => null)
             );
+
+            fixture.Customize<EmailNotificationResponse>(composer => composer
+                .With(response => response.id, Guid.NewGuid().ToString));
+
         }
     }
 }

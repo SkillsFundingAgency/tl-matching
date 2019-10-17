@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
     public class When_Email_Delivery_Status_Function_Http_Trigger_Fires
     {
         [Theory, AutoDomainData]
-        public async void Then_Update_Email_History_With_Status(
+        public async void Then_Update_Email_History_With_Status_And_Do_Not_Push_To_Failed_Email_Queue(
             MatchingConfiguration matchingConfiguration,
             EmailDeliveryStatusPayLoad payLoad,
             EmailHistory emailHistory,
