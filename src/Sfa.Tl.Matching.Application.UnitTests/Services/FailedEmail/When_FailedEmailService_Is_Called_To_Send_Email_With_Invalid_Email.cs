@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
                     NotificationId = _notificationId,
                     OpportunityId = OpportunityId,
                     SentTo = "sent-to@email.com",
-                    EmailTemplateId = (int)EmailTemplateName.EmployerReferralV3,
+                    EmailTemplateId = (int)EmailTemplateName.EmployerReferralV4,
                     CreatedBy = "CreatedBy"
                 });
 
@@ -92,7 +92,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail
                 EmailTemplateName.FailedEmail.ToString(),
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("email_type") && tokens["email_type"] == "Employer referral v 3"
+                    tokens.ContainsKey("email_type") && tokens["email_type"] == "Employer referral v 4"
                     && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Email address does not exist"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"

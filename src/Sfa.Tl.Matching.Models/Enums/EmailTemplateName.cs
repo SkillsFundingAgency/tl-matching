@@ -6,10 +6,12 @@
         EmployerReferral,
         EmployerReferralComplex,
         EmployerReferralV3,
+        EmployerReferralV4,
         ProviderQuarterlyUpdate,
         ProviderReferral,
         ProviderReferralComplex,
         ProviderReferralV3,
+        ProviderReferralV4,
         ProviderFeedback,
         EmployerAupaBlank,
         FailedEmail
