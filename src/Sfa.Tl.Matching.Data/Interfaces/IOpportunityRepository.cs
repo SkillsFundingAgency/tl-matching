@@ -18,6 +18,6 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<IList<ProviderFeedbackDto>> GetAllReferralsForProviderFeedbackAsync(DateTime referralDate);
         Task<List<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync();
         Task<List<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync();
-        Task<FailedEmailBodyDto> GetFailedOpportunityEmailAsync(int opportunityId, string sentTo);
+        Task<EmailBodyDto> GetFailedOpportunityEmailAsync(int opportunityId, string sentTo);
     }
 }

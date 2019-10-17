@@ -1,23 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
+using Humanizer;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Command;
+using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.EmailDeliveryStatus;
+using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class EmailDeliveryStatusService : IEmailDeliveryStatusService
     {
-        private readonly IRepository<EmailHistory> _emailHistoryRepository;
+        private readonly MatchingConfiguration _configuration;
+        private readonly IEmailService _emailService;
+        private readonly IOpportunityRepository _opportunityRepository;
         private readonly IMessageQueueService _messageQueueService;
+        private readonly ILogger<EmailDeliveryStatusService> _logger;
 
-        public EmailDeliveryStatusService(IRepository<EmailHistory> emailHistoryRepository, IMessageQueueService messageQueueService)
+        public EmailDeliveryStatusService(MatchingConfiguration configuration,
+            IEmailService emailService,
+            IOpportunityRepository opportunityRepository,
+            IMessageQueueService messageQueueService,
+            ILogger<EmailDeliveryStatusService> logger)
         {
-            _emailHistoryRepository = emailHistoryRepository;
+            _configuration = configuration;
+            _emailService = emailService;
+            _opportunityRepository = opportunityRepository;
             _messageQueueService = messageQueueService;
+            _logger = logger;
         }
 
         public async Task<int> HandleEmailDeliveryStatusAsync(string payload)
@@ -30,37 +47,63 @@ namespace Sfa.Tl.Matching.Application.Services
                     NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore
                 });
 
-            return await UpdateEmailStatus(callbackData);
+            if (callbackData.status != "delivered")
+                await PushEmailDeliveryStatusAsync(callbackData.id);
+
+            return await _emailService.UpdateEmailStatus(callbackData);
         }
 
-        private async Task<int> UpdateEmailStatus(EmailDeliveryStatusPayLoad payLoad)
+        public async Task SendEmailDeliveryStatusAsync(Guid notificationId)
         {
-            var data = await _emailHistoryRepository.GetFirstOrDefaultAsync(history =>
-                history.NotificationId == payLoad.id);
+            var failedEmailDto = await _emailService.GetFailedEmailAsync(notificationId);
+            var emailHistoryDto = await _emailService.GetEmailHistoryAsync(notificationId);
 
-            if (data == null) return -1;
+            // TODO AU Get emailTemplateName
+            var emailTemplateName = (EmailTemplateName)emailHistoryDto.EmailTemplateId;
 
-            data.Status = payLoad.status;
-            data.ModifiedOn = DateTime.UtcNow;
-            data.ModifiedBy = "System";
+            if (!emailHistoryDto.OpportunityId.HasValue)
+            {
+                _logger.LogInformation($"Notification Id={notificationId} does not have an Opportunity Id");
+                return;
+            }
 
-            await _emailHistoryRepository.UpdateWithSpecifedColumnsOnlyAsync(data,
-                history => history.Status,
-                history => history.ModifiedOn,
-                history => history.ModifiedBy);
+            var emailBodyDto = await _opportunityRepository.GetFailedOpportunityEmailAsync(emailHistoryDto.OpportunityId.Value,
+                emailHistoryDto.SentTo);
 
-            if (data.Status != "delivered")
-                await PushEmailDeliveryStatusAsync(data);
+            var tokens = new Dictionary<string, string>
+            {
+                { "email_type", emailTemplateName.Humanize() },
+                { "body", GetEmailBody(emailBodyDto) },
+                { "reason", failedEmailDto.FailedEmailType.Humanize() },
+                { "sender_username", emailHistoryDto.CreatedBy },
+                { "failed_email_body", failedEmailDto.Body }
+            };
 
-            return 1;
+            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId.Value, EmailTemplateName.FailedEmail.ToString(),
+                _configuration.MatchingServiceSupportEmailAddress, tokens, "System");
         }
 
-        private async Task PushEmailDeliveryStatusAsync(EmailHistory emailHistory)
+        private async Task PushEmailDeliveryStatusAsync(Guid notificationId)
         {
             await _messageQueueService.PushFailedEmailMessageAsync(new SendFailedEmail
             {
-                NotificationId = emailHistory.NotificationId.GetValueOrDefault()
+                NotificationId = notificationId
             });
+        }
+
+        private static string GetEmailBody(EmailBodyDto dto)
+        {
+            var body = new StringBuilder();
+            if (!string.IsNullOrEmpty(dto.ProviderName))
+                body.AppendLine($"Provider name: {dto.ProviderName}");
+            if (!string.IsNullOrEmpty(dto.PrimaryContactEmail))
+                body.AppendLine($"Provider primary contact: {dto.PrimaryContactEmail}");
+            if (!string.IsNullOrEmpty(dto.SecondaryContactEmail))
+                body.AppendLine($"Provider secondary contact: {dto.SecondaryContactEmail}");
+            if (!string.IsNullOrEmpty(dto.EmployerEmail))
+                body.AppendLine($"Employer contact: {dto.EmployerEmail}");
+
+            return body.ToString();
         }
     }
 }

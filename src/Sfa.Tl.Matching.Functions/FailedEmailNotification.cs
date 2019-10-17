@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] MatchingConfiguration matchingConfiguration,
-            [Inject] IFailedEmailService failedEmailService,
+            [Inject] IEmailDeliveryStatusService emailDeliveryStatusService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             if (!matchingConfiguration.SendEmailEnabled) return;
@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Functions
 
             try
             {
-                await failedEmailService.SendFailedEmailAsync(failedEmailData);
+                await emailDeliveryStatusService.SendEmailDeliveryStatusAsync(failedEmailData.NotificationId);
             }
             catch (Exception e)
             {

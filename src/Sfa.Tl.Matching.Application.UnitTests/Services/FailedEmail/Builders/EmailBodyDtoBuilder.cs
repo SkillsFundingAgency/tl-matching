@@ -2,13 +2,13 @@
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail.Builders
 {
-    internal class FailedEmailBodyDtoBuilder
+    internal class EmailBodyDtoBuilder
     {
-        private readonly FailedEmailBodyDto _failedEmailBodyDto;
+        private readonly EmailBodyDto _emailBodyDto;
 
-        public FailedEmailBodyDtoBuilder()
+        public EmailBodyDtoBuilder()
         {
-            _failedEmailBodyDto = new FailedEmailBodyDto
+            _emailBodyDto = new EmailBodyDto
             {
                 PrimaryContactEmail = "primary-contact@email.com",
                 SecondaryContactEmail = "secondary-contact@email.com",
@@ -18,13 +18,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail.Builders
             };
         }
 
-        public FailedEmailBodyDtoBuilder AddEmployerEmail()
+        public EmailBodyDtoBuilder AddEmployerEmail()
         {
-            _failedEmailBodyDto.EmployerEmail = "employer@email.com";
+            _emailBodyDto.EmployerEmail = "employer@email.com";
 
             return this;
         }
 
-        public FailedEmailBodyDto Build() => _failedEmailBodyDto;
+        public EmailBodyDto Build() => _emailBodyDto;
     }
 }

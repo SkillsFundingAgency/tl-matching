@@ -305,7 +305,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return dto;
         }
 
-        public async Task<FailedEmailBodyDto> GetFailedOpportunityEmailAsync(int opportunityId, string sentTo)
+        public async Task<EmailBodyDto> GetFailedOpportunityEmailAsync(int opportunityId, string sentTo)
         {
             var dto = await (from o in _dbContext.Opportunity
                              join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
@@ -316,7 +316,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                    (p.PrimaryContactEmail == sentTo ||
                                     p.SecondaryContactEmail == sentTo ||
                                     o.EmployerContactEmail == sentTo)
-                             select new FailedEmailBodyDto
+                             select new EmailBodyDto
                              {
                                  PrimaryContactEmail = p.PrimaryContactEmail,
                                  SecondaryContactEmail = p.SecondaryContactEmail,
