@@ -17,12 +17,12 @@ You do not need to do anything else. Keep this email as a reminder of this emplo
 
 # If you have not yet spoken to the employer
 Please contact them within the next 2 to 3 working days, even if you do not have suitable students for them at present. Doing so makes it more likely you’ll receive placement opportunities in the future.
- 
-Employer name:  ((employer_business_name))
-Contact name: ((employer_contact_name))
-Telephone: ((employer_contact_number))
-E-mail: ((employer_contact_email))
-Number of potential placements: ((number_of_placements)) 
+
+* Employer name:  ((employer_business_name))
+* Contact name: ((employer_contact_name))
+* Telephone: ((employer_contact_number))
+* E-mail: ((employer_contact_email))
+* Number of potential placements: ((number_of_placements)) 
 
 Industry Placements – Employer Support Team
 National Apprenticeship Service
