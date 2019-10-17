@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class FailedEmailBodyDto
+    public class EmailBodyDto
     {
         public string PrimaryContactEmail { get; set; }
         public string SecondaryContactEmail { get; set; }
