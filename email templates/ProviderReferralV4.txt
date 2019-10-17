@@ -4,18 +4,15 @@ You are receiving this email because ((provider_name)) gets capacity and deliver
 
 Our records show that you are one of the main contacts for industry placements and that ((provider_name)) has students doing ((route)) courses ((venue_text)) who are looking for industry placements.
 
-# If this is wrong
-Please email [support.industryplacementmatching@education.gov.uk](mailto:support.industryplacementmatching@education.gov.uk?subject=Update+from+provider) so that we can update our records.
-
-# If this is right
-We have found an employer:
+# We have found an employer for you
+The employer is:
 * in ((employer_town_postcode)), which is ((search_radius)) miles from you 
 ((job_role_list))
 
 # If you have already spoken to this employer
 You do not need to do anything else. Keep this email as a reminder of this employer’s placement requirements. 
 
-# If you have not yet spoken to the employer
+# If you have not yet spoken to this employer
 Please contact them within the next 2 to 3 working days, even if you do not have suitable students for them at present. Doing so makes it more likely you’ll receive placement opportunities in the future.
 
 * Employer name:  ((employer_business_name))
@@ -23,6 +20,9 @@ Please contact them within the next 2 to 3 working days, even if you do not have
 * Telephone: ((employer_contact_number))
 * E-mail: ((employer_contact_email))
 * Number of potential placements: ((number_of_placements)) 
+
+# If any of this is wrong
+Please email [support.industryplacementmatching@education.gov.uk](mailto:support.industryplacementmatching@education.gov.uk?subject=Update+from+provider) so that we can update our records.
 
 Industry Placements – Employer Support Team
 National Apprenticeship Service

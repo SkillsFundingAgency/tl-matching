@@ -196,7 +196,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("job_role_list")
-                                  && tokens["job_role_list"] == "* who is looking for this job role: Testing Job Title"), Arg.Any<string>());
+                                  && tokens["job_role_list"] == "* looking for this job role: Testing Job Title"), Arg.Any<string>());
         }
 
         [Fact]
