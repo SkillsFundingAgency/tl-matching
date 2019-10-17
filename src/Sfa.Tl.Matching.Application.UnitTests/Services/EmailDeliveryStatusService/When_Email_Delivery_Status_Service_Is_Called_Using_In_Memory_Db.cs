@@ -28,9 +28,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
-            [Frozen] Domain.Models.EmailHistory emailHistory,
+            [Frozen] EmailHistory emailHistory,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-            ILogger<GenericRepository<Domain.Models.EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
             IMessageQueueService messageQueueService,
             EmailDeliveryStatusPayLoad payload
         )
@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             payload.id = emailHistory.NotificationId.GetValueOrDefault();
 
             var emailHistoryRepository =
-                new GenericRepository<Domain.Models.EmailHistory>(emailHistoryLogger, dbContext);
+                new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
 
             var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
@@ -74,9 +74,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
-            [Frozen] Domain.Models.EmailHistory emailHistory,
+            [Frozen] EmailHistory emailHistory,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-            ILogger<GenericRepository<Domain.Models.EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
             IMessageQueueService messageQueueService,
             EmailDeliveryStatusPayLoad payload
         )
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             payload.id = emailHistory.NotificationId.GetValueOrDefault();
 
             var emailHistoryRepository =
-                new GenericRepository<Domain.Models.EmailHistory>(emailHistoryLogger, dbContext);
+                new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
 
             var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
@@ -121,9 +121,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
-            [Frozen] Domain.Models.EmailHistory emailHistory,
+            [Frozen] EmailHistory emailHistory,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-            ILogger<GenericRepository<Domain.Models.EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
             IMessageQueueService messageQueueService,
             EmailDeliveryStatusPayLoad payload
         )
@@ -138,7 +138,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             payload.id = Guid.Empty;
 
             var emailHistoryRepository =
-                new GenericRepository<Domain.Models.EmailHistory>(emailHistoryLogger, dbContext);
+                new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
 
             var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
@@ -168,9 +168,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
-            [Frozen] Domain.Models.EmailHistory emailHistory,
+            [Frozen] EmailHistory emailHistory,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-            ILogger<GenericRepository<Domain.Models.EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
             IMessageQueueService messageQueueService)
         {
             //Arrange
@@ -180,7 +180,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             dbContext.SaveChanges();
 
             var emailHistoryRepository =
-                new GenericRepository<Domain.Models.EmailHistory>(emailHistoryLogger, dbContext);
+                new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
 
             var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
@@ -205,7 +205,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-            ILogger<GenericRepository<Domain.Models.EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
             IMessageQueueService messageQueueService,
             EmailDeliveryStatusPayLoad payload
         )
@@ -214,7 +214,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             var emailHistoryRepository =
-                new GenericRepository<Domain.Models.EmailHistory>(emailHistoryLogger, dbContext);
+                new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
 
             var sut = new Application.Services.EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
 
