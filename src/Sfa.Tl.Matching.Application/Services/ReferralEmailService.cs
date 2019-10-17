@@ -128,8 +128,8 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "venue_text", referral.VenueText },
                         { "search_radius", referral.DistanceFromEmployer },
                         { "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
-                            ? $"* who is looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
-                            : $"* who is looking for this job role: {referral.JobRole}" },
+                            ? $"* looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
+                            : $"* looking for this job role: {referral.JobRole}" },
                         { "employer_business_name", referral.CompanyName.ToTitleCase() },
                         { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
                         { "employer_contact_number", referral.EmployerContactPhone },
