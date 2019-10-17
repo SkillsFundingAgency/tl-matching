@@ -1,6 +1,6 @@
 ﻿using Sfa.Tl.Matching.Models.Dto;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.FailedEmail.Builders
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusService.Builders
 {
     internal class EmailBodyDtoBuilder
     {
