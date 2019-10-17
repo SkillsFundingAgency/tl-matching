@@ -67,8 +67,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<EmailHistoryDto> GetEmailHistoryAsync(Guid notificationId)
         {
-            var emailHistory = await _emailHistoryRepository.GetSingleOrDefaultAsync(eh => eh.NotificationId == notificationId);
-
+            var emailHistory = await _emailHistoryRepository.GetSingleOrDefaultAsync(eh => eh.NotificationId == notificationId,
+                navigationPropertyPath: eh => eh.EmailTemplate);
+            
             var dto = _mapper.Map<EmailHistoryDto>(emailHistory);
 
             return dto;
