@@ -6,14 +6,14 @@ using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Models.Callback;
 using Sfa.Tl.Matching.Models.Command;
+using Sfa.Tl.Matching.Models.EmailDeliveryStatus;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.NotificationCallbackService
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusService
 {
-    public class When_Notification_Callback_Service_Is_Called_To_Handle_Callback
+    public class When_Email_Delivery_Status_Service_Is_Called_To_Handle_Callback
     {
 
         [Theory, AutoDomainData]

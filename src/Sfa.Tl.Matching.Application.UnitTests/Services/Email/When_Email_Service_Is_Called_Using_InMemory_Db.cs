@@ -111,7 +111,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             //Assert
             Guid.TryParse(emailNotificationResponse.id, out var notificationId);
             var emailHistory = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
-            
+
             emailHistory.Should().BeNull();
 
         }

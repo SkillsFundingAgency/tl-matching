@@ -4,8 +4,8 @@ using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Callback;
 using Sfa.Tl.Matching.Models.Command;
+using Sfa.Tl.Matching.Models.EmailDeliveryStatus;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
