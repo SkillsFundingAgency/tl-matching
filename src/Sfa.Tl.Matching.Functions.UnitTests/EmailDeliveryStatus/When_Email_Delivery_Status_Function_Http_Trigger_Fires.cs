@@ -16,13 +16,13 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Callback;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.EmailDeliveryStatus;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
+namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
 {
     public class When_Email_Delivery_Status_Function_Http_Trigger_Fires
     {
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
             var httpRequest = HttpRequestSetup(query, serializedPayLoad);
 
             //Act
-            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(httpRequest, context, logger,
+            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(httpRequest, context, logger,
                 matchingConfiguration,
                 notificationService, functionlogRepository) as OkObjectResult;
 
@@ -101,7 +101,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
                 .Returns(Task.FromResult<EmailHistory>(null));
 
             //Act
-            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
                 HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
                 notificationService, functionlogRepository) as OkObjectResult;
 
@@ -141,7 +141,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
                 .Returns(emailHistory);
 
             //Act
-            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
                 HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
                 notificationService, functionlogRepository) as BadRequestObjectResult;
 
@@ -190,7 +190,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.Callback
                 .Returns(emailHistory);
 
             //Act
-            var result = await EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
                 HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
                 notificationService, functionlogRepository) as OkObjectResult;
 

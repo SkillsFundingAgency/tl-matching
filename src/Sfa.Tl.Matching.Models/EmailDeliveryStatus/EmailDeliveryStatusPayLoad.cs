@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sfa.Tl.Matching.Models.Callback
+namespace Sfa.Tl.Matching.Models.EmailDeliveryStatus
 {
     public class EmailDeliveryStatusPayLoad
     {

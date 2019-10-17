@@ -2,8 +2,8 @@
 using AutoFixture;
 using Notify.Models.Responses;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Callback;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.EmailDeliveryStatus;
 
 
 namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
