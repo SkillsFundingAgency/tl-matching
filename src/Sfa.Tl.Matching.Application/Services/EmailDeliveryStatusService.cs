@@ -50,12 +50,12 @@ namespace Sfa.Tl.Matching.Application.Services
                 history => history.ModifiedBy);
 
             if (data.Status != "delivered")
-                await SendFailedEmailAsync(data);
+                await PushEmailDeliveryStatusAsync(data);
 
             return 1;
         }
 
-        private async Task SendFailedEmailAsync(EmailHistory emailHistory)
+        private async Task PushEmailDeliveryStatusAsync(EmailHistory emailHistory)
         {
             await _messageQueueService.PushFailedEmailMessageAsync(new SendFailedEmail
             {
