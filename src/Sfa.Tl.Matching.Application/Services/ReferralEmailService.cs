@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("placements_list", sb.ToString());
 
-                await SendEmailAsync(EmailTemplateName.EmployerReferralV3, opportunityId, employerReferral.EmployerContactEmail, tokens, employerReferral.CreatedBy);
+                await SendEmailAsync(EmailTemplateName.EmployerReferralV4, opportunityId, employerReferral.EmployerContactEmail, tokens, employerReferral.CreatedBy);
 
                 await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
                     BackgroundProcessHistoryStatus.Complete, username);
@@ -138,12 +138,13 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "number_of_placements", placements }
                     };
 
-                    await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy);
+                    const EmailTemplateName template = EmailTemplateName.ProviderReferralV4;
+                    await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy);
 
                     if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId,
+                        await SendEmailAsync(template, opportunityId,
                             referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
                     }
 

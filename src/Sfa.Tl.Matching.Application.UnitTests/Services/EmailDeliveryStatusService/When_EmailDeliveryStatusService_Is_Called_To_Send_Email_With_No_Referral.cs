@@ -90,7 +90,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("summary") && tokens["summary"] == "There was an error sending an email from the industry placement matching service."
-                    && tokens.ContainsKey("email_type") && tokens["email_type"] == "employer referral confirmation"
+                    tokens.ContainsKey("email_type") && tokens["email_type"] == "Employer referral v 4"
                     && tokens.ContainsKey("body") && tokens["body"] == string.Empty
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Email address does not exist"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"

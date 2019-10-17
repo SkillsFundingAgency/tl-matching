@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                     SentTo = "sent-to@email.com",
                     Status = "unknown-failure",
                     EmailTemplateId = 7,
-                    EmailTemplateName = "ProviderReferralV3",
+                    EmailTemplateName = "ProviderReferralV4",
                     CreatedBy = "CreatedBy"
                 });
 
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("summary") && tokens["summary"] == "We cannot determine whether or not the following email was sent."
-                    && tokens.ContainsKey("email_type") && tokens["email_type"] == "provider referral"
+                    tokens.ContainsKey("email_type") && tokens["email_type"] == "Provider referral v 4"
                     && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Inbox not accepting messages right now"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
