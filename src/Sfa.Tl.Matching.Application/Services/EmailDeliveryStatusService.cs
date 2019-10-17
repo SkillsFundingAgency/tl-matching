@@ -58,8 +58,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var failedEmailDto = await _emailService.GetFailedEmailAsync(notificationId);
             var emailHistoryDto = await _emailService.GetEmailHistoryAsync(notificationId);
 
-            // TODO AU Get emailTemplateName
-            var emailTemplateName = (EmailTemplateName)emailHistoryDto.EmailTemplateId;
+            Enum.TryParse(emailHistoryDto.EmailTemplateName, out EmailTemplateName emailTemplateName);
 
             if (!emailHistoryDto.OpportunityId.HasValue)
             {
