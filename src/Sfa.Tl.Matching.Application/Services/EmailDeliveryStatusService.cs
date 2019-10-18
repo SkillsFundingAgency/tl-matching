@@ -44,13 +44,16 @@ namespace Sfa.Tl.Matching.Application.Services
             var callbackData = JsonConvert.DeserializeObject<EmailDeliveryStatusPayLoad>(payload,
                 new JsonSerializerSettings
                 {
-                    NullValueHandling = NullValueHandling.Ignore, MissingMemberHandling = MissingMemberHandling.Ignore
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
                 });
 
-            if (callbackData.status != "delivered")
+            var updatedCount = await _emailService.UpdateEmailStatus(callbackData);
+
+            if (callbackData.status != "delivered" && updatedCount != -1)
                 await PushEmailDeliveryStatusAsync(callbackData.id);
 
-            return await _emailService.UpdateEmailStatus(callbackData);
+            return updatedCount;
         }
 
         public async Task SendEmailDeliveryStatusAsync(Guid notificationId)
