@@ -16,7 +16,10 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
         public long? JourneyTimeByCar { get; set; }
         public long? JourneyTimeByPublicTransport { get; set; }
-        
+
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+
         public IEnumerable<string> QualificationShortTitles { get; set; }
     }
 }

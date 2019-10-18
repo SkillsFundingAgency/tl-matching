@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly ILocationApiClient _locationApiClient;
         private readonly IGoogleDistanceMatrixApiClient _googleDistanceMatrixApiClient;
 
-        public ProximityService(ISearchProvider searchProvider, 
+        public ProximityService(ISearchProvider searchProvider,
             ILocationApiClient locationApiClient,
             IGoogleDistanceMatrixApiClient googleDistanceMatrixApiClient)
         {
@@ -50,13 +50,15 @@ namespace Sfa.Tl.Matching.Application.Services
             var originPostcode = searchParameters.Postcode;
             var originLatitude = double.Parse(searchParameters.Latitude);
             var originLongitude = double.Parse(searchParameters.Longitude);
-            
+
             var destinations = searchResults
                 //.Where(v => v.Latitude != 0 && v.Longitude != 0)
                 .Select(v => new LocationDto
                 {
                     Id = v.ProviderVenueId,
-                    Postcode = v.ProviderVenuePostcode
+                    Postcode = v.ProviderVenuePostcode,
+                    Latitude = v.Latitude ?? 0,
+                    Longitude = v.Longitude ?? 0
                 }).ToList();
 
             var arrivalTimeSeconds = GetArrivalTime();
@@ -69,11 +71,17 @@ namespace Sfa.Tl.Matching.Application.Services
             var journeyTimesByCar = journeyResults[0];
             var journeyTimesByPublicTransport = journeyResults[1];
 
+            await Task.WhenAll(
+                CheckAndMergeFailedResultsUsingLatLongSearch(destinations, journeyTimesByCar, originPostcode,
+                    originLatitude, originLongitude, TravelMode.Driving, arrivalTimeSeconds),
+                CheckAndMergeFailedResultsUsingLatLongSearch(destinations, journeyTimesByPublicTransport,
+                    originPostcode, originLatitude, originLongitude, TravelMode.Transit, arrivalTimeSeconds));
+
             const int oneHour = 60 * 60;
             var results = searchResults
                 .Where(s =>
                         journeyTimesByCar.Any(d => d.Key == s.ProviderVenueId &&
-                                                   d.Value.JourneyTime < oneHour) 
+                                                   d.Value.JourneyTime < oneHour)
                         ||
                         journeyTimesByPublicTransport.Any(d => d.Key == s.ProviderVenueId &&
                                                                d.Value.JourneyTime < oneHour)
@@ -90,12 +98,32 @@ namespace Sfa.Tl.Matching.Application.Services
                     IsTLevelProvider = r.IsTLevelProvider,
                     QualificationShortTitles = r.QualificationShortTitles,
                     JourneyTimeByPublicTransport = journeyTimesByPublicTransport.TryGetValue(r.ProviderVenueId, out var tVal)
-                            ? tVal.JourneyTime: (long?)null,
+                            ? tVal.JourneyTime : (long?)null,
                     JourneyTimeByCar = journeyTimesByCar.TryGetValue(r.ProviderVenueId, out var dVal)
                         ? dVal.JourneyTime : (long?)null
                 }).OrderBy(r => r.Distance).ToList();
 
             return results;
+        }
+
+        private async Task CheckAndMergeFailedResultsUsingLatLongSearch(List<LocationDto> destinations, IDictionary<int, JourneyInfoDto> journeys, string originPostcode, double originLatitude, double originLongitude, string travelMode, long arrivalTimeSeconds)
+        {
+            var missingDestinations = destinations
+                .Where(d => journeys.All(j => d.Id != j.Key))
+                .ToList();
+
+            if (missingDestinations.Any())
+            {
+                var journeyTimes =
+                    await _googleDistanceMatrixApiClient.GetJourneyTimesAsync(originPostcode, originLatitude, originLongitude, missingDestinations, TravelMode.Driving, arrivalTimeSeconds, true);
+
+                foreach (var newResult in journeyTimes)
+                {
+                    Debug.WriteLine(
+                        $"{travelMode} - found extra journey {newResult.Key} - distance {newResult.Value.JourneyDistance} time {newResult.Value.JourneyTime}");
+                    journeys.TryAdd(newResult.Key, newResult.Value);
+                }
+            }
         }
 
         public async Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto)

@@ -37,18 +37,22 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
         }
 
         public async Task<IDictionary<int, JourneyInfoDto>> GetJourneyTimesAsync(
-            string originPostcode, 
-            double originLatitude, double originLongitude, 
-            IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
+            string originPostcode,
+            double originLatitude,
+            double originLongitude,
+            IList<LocationDto> destinations,
+            string travelMode,
+            long arrivalTimeSeconds,
+            bool useLatLongSearch = false)
         {
             //Max client-side elements: 100, minus one for the second origin
-            const int batchSize = 99; 
+            const int batchSize = 99;
             var batches = CreateBatches(destinations, batchSize);
             var distanceSearchResults = new Dictionary<int, JourneyInfoDto>(batches.Count);
-            
+
             foreach (var batch in batches)
             {
-                var response = await SearchBatchAsync(originPostcode, originLatitude, originLongitude, batch, travelMode, arrivalTimeSeconds);
+                var response = await SearchBatchAsync(originPostcode, originLatitude, originLongitude, batch, travelMode, arrivalTimeSeconds, useLatLongSearch);
                 if (response != null)
                 {
                     var batchResults = await BuildResultAsync(response, batch);
@@ -64,7 +68,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
 
             return distanceSearchResults;
         }
-        
+
         private Task<IDictionary<int, JourneyInfoDto>> BuildResultAsync(GoogleJourneyTimeResponse response, IList<LocationDto> destinations)
         {
             var results = new Dictionary<int, JourneyInfoDto>(response.DestinationAddresses.Length);
@@ -122,17 +126,20 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
         }
 
         private async Task<GoogleJourneyTimeResponse> SearchBatchAsync(
-            string origin, 
+            string origin,
             double originLatitude, double originLongitude,
-            IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
+            IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds,
+            bool useLatLongSearch = false)
         {
             try
             {
                 var uriBuilder = new StringBuilder($@"{_baseUrl}/distancematrix/json?");
 
                 uriBuilder.Append("units=imperial");
-                uriBuilder.Append($"&origins={WebUtility.UrlEncode(origin)}");
-                uriBuilder.Append($"|{originLatitude},{originLongitude}");
+
+                uriBuilder.Append(useLatLongSearch
+                    ? $"&origins={originLatitude},{originLongitude}"
+                    : $"&origins={WebUtility.UrlEncode(origin)}");
 
                 uriBuilder.Append($"&mode={travelMode}");
                 uriBuilder.Append($"&arrival_time={arrivalTimeSeconds}");
@@ -142,7 +149,9 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
                 {
                     if (i > 0) uriBuilder.Append("%7C");
 
-                    uriBuilder.Append($"{WebUtility.UrlEncode(destinations[i].Postcode)}");
+                    uriBuilder.Append(useLatLongSearch
+                        ? $"{destinations[i].Latitude}%2C{destinations[i].Longitude}"
+                        : $"{WebUtility.UrlEncode(destinations[i].Postcode)}");
                 }
 
                 uriBuilder.Append($"&key={_configuration.GoogleMapsApiKey}");

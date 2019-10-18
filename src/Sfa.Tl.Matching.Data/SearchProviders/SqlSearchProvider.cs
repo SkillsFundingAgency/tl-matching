@@ -58,7 +58,9 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                     Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
                                     providerVenue.Postcode,
                                     providerVenue.Town,
-                                    provider.IsTLevelProvider
+                                    provider.IsTLevelProvider,
+                                    providerVenue.Latitude,
+                                    providerVenue.Longitude
                                 }).Distinct().ToListAsync();
 
             var venueIds = result.Select(v => v.ProviderVenueId);
@@ -83,6 +85,8 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                 ProviderVenueName = r.ProviderVenueName,
                 Distance = r.Distance,
                 IsTLevelProvider = r.IsTLevelProvider,
+                Latitude = r.Latitude,
+                Longitude = r.Longitude,
                 QualificationShortTitles = qualificationShortTitles.Where(q => q.ProviderVenueId == r.ProviderVenueId).Select(q => q.QualificationShortTitle)
             }).OrderBy(r => r.Distance).ToList();
         }
