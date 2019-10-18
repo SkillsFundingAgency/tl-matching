@@ -23,12 +23,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("remove-opportunityItem/{opportunityId}-{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
         public async Task<IActionResult> RemoveAndGetOpportunityBasketAsync(int opportunityId, int opportunityItemId)
         {
-            await _opportunityService.DeleteOpportunityItemAsync(opportunityId, opportunityItemId);
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
 
-            return opportunityItemCount == 0
-                ? RedirectToRoute("Start")
-                : RedirectToRoute("GetOpportunityBasket", new { opportunityId, opportunityItemId });
+            if (opportunityItemCount == 0)
+            {
+                await _opportunityService.DeleteOpportunityItemAsync(opportunityId, opportunityItemId);
+                return RedirectToRoute("Start");
+            }
+
+            return RedirectToRoute("GetOpportunityBasket", new {opportunityId, opportunityItemId});
         }
 
         [HttpGet]

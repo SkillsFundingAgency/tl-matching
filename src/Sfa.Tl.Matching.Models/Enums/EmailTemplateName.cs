@@ -1,5 +1,4 @@
-﻿
-namespace Sfa.Tl.Matching.Models.Enums
+﻿namespace Sfa.Tl.Matching.Models.Enums
 {
     public enum EmailTemplateName
     {
@@ -7,10 +6,12 @@ namespace Sfa.Tl.Matching.Models.Enums
         EmployerReferral,
         EmployerReferralComplex,
         EmployerReferralV3,
+        EmployerReferralV4,
         ProviderQuarterlyUpdate,
         ProviderReferral,
         ProviderReferralComplex,
         ProviderReferralV3,
+        ProviderReferralV4,
         ProviderFeedback,
         EmployerAupaBlank,
         FailedEmail

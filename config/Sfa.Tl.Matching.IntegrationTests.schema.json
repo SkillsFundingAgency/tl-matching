@@ -40,6 +40,10 @@
       "type": "boolean",
       "environmentVariable": "SendEmailEnabled"
     },
+	"EmailDeliveryStatusToken": {
+      "type": "string",
+      "environmentVariable": "EmailDeliveryStatusToken"
+    },
     "GoogleMapsApiBaseUrl": {
       "minLength": 1,
       "type": "string",

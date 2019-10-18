@@ -8,18 +8,19 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
 {
-    public class When_Navigation_Controller_With_No_Items_Remove_And_Get_OpportunityBasket
+    public class When_Navigation_Controller_Cancel_Is_Called_For_First_Unsaved_OpportunityItem
     {
         private readonly IActionResult _result;
+        private readonly IOpportunityService _opportunityService;
 
-        public When_Navigation_Controller_With_No_Items_Remove_And_Get_OpportunityBasket()
+        public When_Navigation_Controller_Cancel_Is_Called_For_First_Unsaved_OpportunityItem()
         {
-            var opportunityService = Substitute.For<IOpportunityService>();
+            _opportunityService = Substitute.For<IOpportunityService>();
             var backLinkService = Substitute.For<INavigationService>();
             
-            opportunityService.GetSavedOpportunityItemCountAsync(Arg.Any<int>()).Returns(Task.FromResult(0));
+            _opportunityService.GetSavedOpportunityItemCountAsync(Arg.Any<int>()).Returns(Task.FromResult(0));
 
-            var navigationController = new NavigationController(opportunityService, backLinkService);
+            var navigationController = new NavigationController(_opportunityService, backLinkService);
 
             _result = navigationController.RemoveAndGetOpportunityBasketAsync(1, 2).GetAwaiter().GetResult();
         }
@@ -31,7 +32,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Navigation
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("Start");
-            result?.RouteName.Should().NotBe("GetOpportunityBasket");
+        }
+
+        [Fact]
+        public void Then_DeleteOpportunityItem_should_Be_Called_exeactly_Once()
+        {
+            _opportunityService.Received(1).DeleteOpportunityItemAsync(Arg.Any<int>(), Arg.Any<int>());
         }
     }
 }

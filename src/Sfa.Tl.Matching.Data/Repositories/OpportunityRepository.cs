@@ -236,7 +236,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return _dbContext.OpportunityItem.Count(item => item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
         }
 
-        public async Task<List<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync()
+        public async Task<IList<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync()
         {
             return await _dbContext.MatchingServiceOpportunityReport
                 .OrderBy(o => o.OpportunityItemId)
@@ -246,9 +246,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync()
+        public async Task<IList<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync()
         {
             return await _dbContext.MatchingServiceProviderOpportunityReport.ToListAsync();
+        }
+
+        public async Task<IList<MatchingServiceProviderEmployerReport>> GetMatchingServiceProviderEmployerReportAsync()
+        {
+            return await _dbContext.MatchingServiceProviderEmployerReport.ToListAsync();
         }
 
         public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
@@ -308,23 +313,22 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return dto;
         }
 
-        public async Task<FailedEmailBodyDto> GetFailedOpportunityEmailAsync(int opportunityId, string sentTo)
+        public async Task<EmailBodyDto> GetFailedOpportunityEmailAsync(int opportunityId, string sentTo)
         {
             var dto = await (from o in _dbContext.Opportunity
                              join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
-                             join e in _dbContext.Employer on o.EmployerCrmId equals e.CrmId
                              join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
                              join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
                              join p in _dbContext.Provider on pv.ProviderId equals p.Id
                              where o.Id == opportunityId &&
                                    (p.PrimaryContactEmail == sentTo ||
                                     p.SecondaryContactEmail == sentTo ||
-                                    e.Email == sentTo)
-                             select new FailedEmailBodyDto
+                                    o.EmployerContactEmail == sentTo)
+                             select new EmailBodyDto
                              {
                                  PrimaryContactEmail = p.PrimaryContactEmail,
                                  SecondaryContactEmail = p.SecondaryContactEmail,
-                                 EmployerEmail = e.Email,
+                                 EmployerEmail = o.EmployerContactEmail,
                                  ProviderDisplayName = p.DisplayName,
                                  ProviderVenuePostcode = pv.Postcode,
                                  ProviderVenueName = pv.Name,

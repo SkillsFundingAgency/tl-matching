@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Sfa.Tl.Matching.Models.Configuration
 {
     public class MatchingConfiguration
@@ -7,6 +9,7 @@ namespace Sfa.Tl.Matching.Models.Configuration
         public string AuthorisedAdminUserEmail { get; set; }
         public string BlobStorageConnectionString { get; set; }
         public string GovNotifyApiKey { get; set; }
+        public Guid EmailDeliveryStatusToken { get; set; }
         public bool SendEmailEnabled { get; set; }
         public string PostcodeRetrieverBaseUrl { get; set; }
         public string SqlConnectionString { get; set; }

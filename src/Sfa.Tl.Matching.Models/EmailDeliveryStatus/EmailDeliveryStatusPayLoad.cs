@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Sfa.Tl.Matching.Models.NotificationCallback
+namespace Sfa.Tl.Matching.Models.EmailDeliveryStatus
 {
-    public class CallbackPayLoad
+    public class EmailDeliveryStatusPayLoad
     {
         public Guid id { get; set; }
         public string reference { get; set; }

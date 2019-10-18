@@ -33,7 +33,7 @@
     "resources": [
         {
             "apiVersion": "2017-05-10",
-            "name": "sql-database",
+            "name": "sql-database-test",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -63,7 +63,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "sql-server-firewall-rules",
+            "name": "sql-server-firewall-rules-test",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {

@@ -10,6 +10,7 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Models.EmailDeliveryStatus;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -66,11 +67,31 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<EmailHistoryDto> GetEmailHistoryAsync(Guid notificationId)
         {
-            var emailHistory = await _emailHistoryRepository.GetSingleOrDefaultAsync(eh => eh.NotificationId == notificationId);
-
+            var emailHistory = await _emailHistoryRepository.GetSingleOrDefaultAsync(eh => eh.NotificationId == notificationId,
+                navigationPropertyPath: eh => eh.EmailTemplate);
+            
             var dto = _mapper.Map<EmailHistoryDto>(emailHistory);
 
             return dto;
+        }
+
+        public async Task<int> UpdateEmailStatus(EmailDeliveryStatusPayLoad payLoad)
+        {
+            var data = await _emailHistoryRepository.GetFirstOrDefaultAsync(history =>
+                history.NotificationId == payLoad.id);
+
+            if (data == null) return -1;
+
+            data.Status = payLoad.status;
+            data.ModifiedOn = DateTime.UtcNow;
+            data.ModifiedBy = "System";
+
+            await _emailHistoryRepository.UpdateWithSpecifedColumnsOnlyAsync(data,
+                history => history.Status,
+                history => history.ModifiedOn,
+                history => history.ModifiedBy);
+
+            return 1;
         }
 
         private async Task SendEmailAndSaveHistoryAsync(int? opportunityId, string recipient, EmailTemplate emailTemplate,

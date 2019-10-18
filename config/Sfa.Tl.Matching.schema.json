@@ -62,6 +62,10 @@
       "type": "string",
       "environmentVariable": "GovNotifyAPIKey"
     },
+	"EmailDeliveryStatusToken": {
+      "type": "string",
+      "environmentVariable": "EmailDeliveryStatusToken"
+    },
     "SendEmailEnabled": {
       "type": "boolean",
       "environmentVariable": "SendEmailEnabled"

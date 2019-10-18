@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("placements_list", sb.ToString());
 
-                await SendEmailAsync(EmailTemplateName.EmployerReferralV3, opportunityId, employerReferral.EmployerContactEmail, tokens, employerReferral.CreatedBy);
+                await SendEmailAsync(EmailTemplateName.EmployerReferralV4, opportunityId, employerReferral.EmployerContactEmail, tokens, employerReferral.CreatedBy);
 
                 await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
                     BackgroundProcessHistoryStatus.Complete, username);
@@ -130,8 +130,8 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "venue_text", referral.VenueText },
                         { "search_radius", referral.DistanceFromEmployer },
                         { "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
-                            ? $"* who is looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
-                            : $"* who is looking for this job role: {referral.JobRole}" },
+                            ? $"* looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
+                            : $"* looking for this job role: {referral.JobRole}" },
                         { "employer_business_name", referral.CompanyName.ToTitleCase() },
                         { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
                         { "employer_contact_number", referral.EmployerContactPhone },
@@ -140,12 +140,13 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "number_of_placements", placements }
                     };
 
-                    await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy);
+                    const EmailTemplateName template = EmailTemplateName.ProviderReferralV4;
+                    await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy);
 
                     if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId,
+                        await SendEmailAsync(template, opportunityId,
                             referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
                     }
 

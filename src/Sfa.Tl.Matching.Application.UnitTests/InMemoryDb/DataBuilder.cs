@@ -1,18 +1,20 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
+namespace Sfa.Tl.Matching.Application.UnitTests.InMemoryDb
 {
-    public class ReferralsInMemoryTestData
+    public class DataBuilder
     {
+
         public static async Task SetTestData(MatchingDbContext dbContext,
-            Domain.Models.Provider provider,
-            Domain.Models.ProviderVenue venue,
-            Domain.Models.Opportunity opportunity,
+            Provider provider,
+            ProviderVenue venue,
+            Opportunity opportunity,
             BackgroundProcessHistory backgroundProcessHistory,
             bool isSaved = true, bool isSelectedForReferral = true)
         {
@@ -42,5 +44,30 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
 
             await dbContext.SaveChangesAsync();
         }
+
+        public static async Task SetEmailTemplate(
+            MatchingDbContext dbContext,
+            EmailTemplate emailTemplate)
+        {
+            await dbContext.AddAsync(emailTemplate);
+            
+            await dbContext.SaveChangesAsync();
+
+        }
+
+        public static async Task SetEmailHistory(
+            MatchingDbContext dbContext,
+            EmailHistory emailHistory)
+        {
+            emailHistory.Status = null;
+            emailHistory.ModifiedBy = null;
+            emailHistory.ModifiedOn = null;
+
+            await dbContext.AddAsync(emailHistory);
+
+            await dbContext.SaveChangesAsync();
+
+        }
+
     }
 }
