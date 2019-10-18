@@ -1,235 +1,234 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.IO;
-//using System.Linq.Expressions;
-//using System.Threading.Tasks;
-//using FluentAssertions;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Http.Internal;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.Azure.WebJobs;
-//using Microsoft.Extensions.Logging;
-//using Microsoft.Extensions.Primitives;
-//using Newtonsoft.Json;
-//using NSubstitute;
-//using Sfa.Tl.Matching.Application.Interfaces;
-//using Sfa.Tl.Matching.Application.Services;
-//using Sfa.Tl.Matching.Data.Interfaces;
-//using Sfa.Tl.Matching.Domain.Models;
-//using Sfa.Tl.Matching.Models.Command;
-//using Sfa.Tl.Matching.Models.Configuration;
-//using Sfa.Tl.Matching.Models.EmailDeliveryStatus;
-//using Sfa.Tl.Matching.Tests.Common.AutoDomain;
-//using Xunit;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
+using NSubstitute;
+using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Services;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Command;
+using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.EmailDeliveryStatus;
+using Sfa.Tl.Matching.Tests.Common.AutoDomain;
+using Xunit;
 
-//namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
-//{
-//    public class When_Email_Delivery_Status_Function_Http_Trigger_Fires
-//    {
-//        [Theory, AutoDomainData]
-//        public async void Then_Update_Email_History_With_Status_And_Do_Not_Push_To_Failed_Email_Queue(
-//            MatchingConfiguration matchingConfiguration,
-//            EmailDeliveryStatusPayLoad payLoad,
-//            ExecutionContext context,
-//            IMessageQueueService messageQueueService,
-//            IRepository<FunctionLog> functionlogRepository,
-//            IEmailService emailService,
-//            IOpportunityRepository opportunityRepository,
-//            ILogger<EmailDeliveryStatusService> logger
+namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
+{
+    public class When_Email_Delivery_Status_Function_Http_Trigger_Fires
+    {
+        [Theory, AutoDomainData]
+        public async void Then_Update_Email_History_With_Status_And_Do_Not_Push_To_Failed_Email_Queue(
+            MatchingConfiguration matchingConfiguration,
+            EmailDeliveryStatusPayLoad payLoad,
+            ExecutionContext context,
+            IMessageQueueService messageQueueService,
+            IRepository<FunctionLog> functionlogRepository,
+            IEmailService emailService,
+            IOpportunityRepository opportunityRepository,
+            ILogger<EmailDeliveryStatusService> logger
 
-//        )
-//        {
-//            //Arrange
-//            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
-//            var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
-//                opportunityRepository, messageQueueService, logger);
+        )
+        {
+            //Arrange
+            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
+            var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
+                opportunityRepository, messageQueueService, logger);
 
-//            var query = new Dictionary<string, StringValues>();
-//            query.TryAdd("content-type", "application/json");
+            emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
 
-//            var httpRequest = HttpRequestSetup(query, serializedPayLoad);
+            var query = new Dictionary<string, StringValues>();
+            query.TryAdd("content-type", "application/json");
 
-//            //Act
-//            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(httpRequest, context, logger,
-//                matchingConfiguration,
-//                notificationService, functionlogRepository) as OkObjectResult;
+            var httpRequest = HttpRequestSetup(query, serializedPayLoad);
 
-//            //Assert
-//            httpRequest.Headers.TryGetValue("Authorization", out var token);
+            //Act
+            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(httpRequest, context, logger,
+                matchingConfiguration,
+                notificationService, functionlogRepository) as OkObjectResult;
 
-//            token.Should().Equal($"Bearer {matchingConfiguration.EmailDeliveryStatusToken}");
-//            result.Should().NotBeNull();
-//            result.StatusCode.Should().Be(200);
-//            result.Value.Should().Be("1 records updated.");
+            //Assert
+            httpRequest.Headers.TryGetValue("Authorization", out var token);
 
+            token.Should().Equal($"Bearer {matchingConfiguration.EmailDeliveryStatusToken}");
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(200);
+            result.Value.Should().Be("1 records updated.");
+
+            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+
+        }
+
+        [Theory, AutoDomainData]
+        public async void Then_Do_Not_Update_Email_History_If_No_Record_Found(
+            MatchingConfiguration matchingConfiguration,
+            EmailDeliveryStatusPayLoad payLoad,
+            ExecutionContext context,
+            IRepository<EmailHistory> emailHistoryRepository,
+            IMessageQueueService messageQueueService,
+            IEmailService emailService,
+            IOpportunityRepository opportunityRepository,
+            IRepository<FunctionLog> functionlogRepository,
+            ILogger<EmailDeliveryStatusService> logger
+
+        )
+        {
+            //Arrange
+            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
+            var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
+                opportunityRepository, messageQueueService, logger);
             
+            emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(-1);
 
-//            await emailHistoryRepository.Received(1).UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
-//                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
+            var query = new Dictionary<string, StringValues>();
+            query.TryAdd("content-type", "application/json");
 
-//            await emailHistoryRepository.Received(1).UpdateWithSpecifedColumnsOnlyAsync(
-//                Arg.Is<EmailHistory>(eh =>
-//                    eh.Status == "delivered" && eh.ModifiedBy == "System"),
-//                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
+            emailHistoryRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<EmailHistory, bool>>>())
+                .Returns(Task.FromResult<EmailHistory>(null));
 
-//            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
-            
-//        }
+            //Act
+            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
+                notificationService, functionlogRepository) as OkObjectResult;
 
-//        [Theory, AutoDomainData]
-//        public async void Then_Do_Not_Update_Email_History_If_No_Record_Found(
-//            MatchingConfiguration matchingConfiguration,
-//            EmailDeliveryStatusPayLoad payLoad,
-//            ExecutionContext context,
-//            ILogger logger,
-//            IRepository<EmailHistory> emailHistoryRepository,
-//            IMessageQueueService messageQueueService,
-//            IRepository<FunctionLog> functionlogRepository
+            //Arrange
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(200);
+            result.Value.Should().Be("-1 records updated.");
 
-//        )
-//        {
-//            //Arrange
-//            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
-//            var notificationService = new EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
+                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
 
-//            var query = new Dictionary<string, StringValues>();
-//            query.TryAdd("content-type", "application/json");
+            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+        }
 
-//            emailHistoryRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<EmailHistory, bool>>>())
-//                .Returns(Task.FromResult<EmailHistory>(null));
+        [Theory, AutoDomainData]
+        public async void Then_Do_Not_Update_Email_History_If_Authorization_Failed(
+            MatchingConfiguration matchingConfiguration,
+            EmailDeliveryStatusPayLoad payLoad,
+            EmailHistory emailHistory,
+            ExecutionContext context,
+            IRepository<EmailHistory> emailHistoryRepository,
+            IMessageQueueService messageQueueService,
+            IEmailService emailService,
+            IOpportunityRepository opportunityRepository,
+            IRepository<FunctionLog> functionlogRepository,
+            ILogger<EmailDeliveryStatusService> logger
 
-//            //Act
-//            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
-//                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
-//                notificationService, functionlogRepository) as OkObjectResult;
+        )
+        {
+            //Arrange
+            matchingConfiguration.EmailDeliveryStatusToken = Guid.NewGuid();
+            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
+            var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
+                opportunityRepository, messageQueueService, logger);
 
-//            //Arrange
-//            result.Should().NotBeNull();
-//            result.StatusCode.Should().Be(200);
-//            result.Value.Should().Be("-1 records updated.");
+            emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(-1);
 
-//            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
-//                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
+            var query = new Dictionary<string, StringValues>();
+            query.TryAdd("content-type", "application/json");
 
-//            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
-//        }
+            emailHistoryRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<EmailHistory, bool>>>())
+                .Returns(emailHistory);
 
-//        [Theory, AutoDomainData]
-//        public async void Then_Do_Not_Update_Email_History_If_Authorization_Failed(
-//            MatchingConfiguration matchingConfiguration,
-//            EmailDeliveryStatusPayLoad payLoad,
-//            EmailHistory emailHistory,
-//            ExecutionContext context,
-//            ILogger logger,
-//            IRepository<EmailHistory> emailHistoryRepository,
-//            IMessageQueueService messageQueueService,
-//            IRepository<FunctionLog> functionlogRepository
+            //Act
+            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
+                notificationService, functionlogRepository) as BadRequestObjectResult;
 
-//        )
-//        {
-//            //Arrange
-//            matchingConfiguration.EmailDeliveryStatusToken = Guid.NewGuid();
-//            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
-//            var notificationService = new EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
+            //Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(400);
+            result.Should().BeOfType<BadRequestObjectResult>();
 
-//            var query = new Dictionary<string, StringValues>();
-//            query.TryAdd("content-type", "application/json");
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
+                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
 
-//            emailHistoryRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<EmailHistory, bool>>>())
-//                .Returns(emailHistory);
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(
+                Arg.Is<EmailHistory>(eh =>
+                    eh.Status == "delivered" && eh.ModifiedBy == "System"),
+                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
 
-//            //Act
-//            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
-//                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
-//                notificationService, functionlogRepository) as BadRequestObjectResult;
+            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
 
-//            //Assert
-//            result.Should().NotBeNull();
-//            result.StatusCode.Should().Be(400);
-//            result.Should().BeOfType<BadRequestObjectResult>();
-            
-//            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
-//                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
+        }
 
-//            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(
-//                Arg.Is<EmailHistory>(eh =>
-//                    eh.Status == "delivered" && eh.ModifiedBy == "System"),
-//                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
+        [Theory]
+        [InlineAutoDomainData("permanent-failure")]
+        [InlineAutoDomainData("temporary-failure")]
+        public async void Then_Update_Email_History_With_Failed_Status_And_Push_To_Failed_Email_Queue(
+            string status,
+            MatchingConfiguration matchingConfiguration,
+            EmailDeliveryStatusPayLoad payLoad,
+            EmailHistory emailHistory,
+            ExecutionContext context,
+            IRepository<EmailHistory> emailHistoryRepository,
+            IMessageQueueService messageQueueService,
+            IEmailService emailService,
+            IOpportunityRepository opportunityRepository,
+            IRepository<FunctionLog> functionlogRepository,
+            ILogger<EmailDeliveryStatusService> logger
 
-//            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+        )
+        {
+            //Arrange
+            payLoad.status = status;
+            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
+            var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
+                opportunityRepository, messageQueueService, logger);
 
-//        }
+            emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
 
-//        [Theory]
-//        [InlineAutoDomainData("permanent-failure")]
-//        [InlineAutoDomainData("temporary-failure")]
-//        public async void Then_Update_Email_History_With_Failed_Statusand_Push_To_Failed_Email_Queue(
-//            string status,
-//            MatchingConfiguration matchingConfiguration,
-//            EmailDeliveryStatusPayLoad payLoad,
-//            EmailHistory emailHistory,
-//            ExecutionContext context,
-//            ILogger logger,
-//            IRepository<EmailHistory> emailHistoryRepository,
-//            IMessageQueueService messageQueueService,
-//            IRepository<FunctionLog> functionlogRepository
+            var query = new Dictionary<string, StringValues>();
+            query.TryAdd("content-type", "application/json");
 
-//        )
-//        {
-//            //Arrange
-//            payLoad.status = status;
-//            var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
-//            var notificationService = new EmailDeliveryStatusService(emailHistoryRepository, messageQueueService);
+            emailHistoryRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<EmailHistory, bool>>>())
+                .Returns(emailHistory);
 
-//            var query = new Dictionary<string, StringValues>();
-//            query.TryAdd("content-type", "application/json");
+            //Act
+            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
+                notificationService, functionlogRepository) as OkObjectResult;
 
-//            emailHistoryRepository.GetFirstOrDefaultAsync(Arg.Any<Expression<Func<EmailHistory, bool>>>())
-//                .Returns(emailHistory);
+            //Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(200);
+            result.Value.Should().Be("1 records updated.");
 
-//            //Act
-//            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
-//                HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
-//                notificationService, functionlogRepository) as OkObjectResult;
+            await messageQueueService.Received(1).PushFailedEmailMessageAsync(Arg.Is<SendFailedEmail>(email => email.NotificationId == payLoad.id));
 
-//            //Assert
-//            result.Should().NotBeNull();
-//            result.StatusCode.Should().Be(200);
-//            result.Value.Should().Be("1 records updated.");
+        }
 
-//            await emailHistoryRepository.Received(1).UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
-//                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
-
-//            await emailHistoryRepository.Received(1).UpdateWithSpecifedColumnsOnlyAsync(
-//                Arg.Is<EmailHistory>(eh =>
-//                    eh.Status == status && eh.ModifiedBy == "System"),
-//                Arg.Any<Expression<Func<EmailHistory, object>>[]>());
-
-//            await messageQueueService.Received(1).PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
-
-//        }
-
-//        private static HttpRequest HttpRequestSetup(Dictionary<string, StringValues> query, string body)
-//        {
-//            var reqMock = Substitute.For<HttpRequest>();
-//            var headers = new Dictionary<string, StringValues> { { "Authorization", "Bearer 72b561ed-a7f3-4c0c-82a9-aae800a51de7" } };
+        private static HttpRequest HttpRequestSetup(Dictionary<string, StringValues> query, string body)
+        {
+            var reqMock = Substitute.For<HttpRequest>();
+            var headers = new Dictionary<string, StringValues> { { "Authorization", "Bearer 72b561ed-a7f3-4c0c-82a9-aae800a51de7" } };
 
 
-//            reqMock.Query.Returns(new QueryCollection(query));
-//            reqMock.Headers.Returns(new HeaderDictionary(headers));
+            reqMock.Query.Returns(new QueryCollection(query));
+            reqMock.Headers.Returns(new HeaderDictionary(headers));
 
-//            var stream = new MemoryStream();
-//            var writer = new StreamWriter(stream);
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
 
-//            writer.Write(body);
-//            writer.Flush();
+            writer.Write(body);
+            writer.Flush();
 
-//            stream.Position = 0;
+            stream.Position = 0;
 
-//            reqMock.Body.Returns(stream);
+            reqMock.Body.Returns(stream);
 
-//            return reqMock;
+            return reqMock;
 
-//        }
-//    }
-//}
+        }
+    }
+}
