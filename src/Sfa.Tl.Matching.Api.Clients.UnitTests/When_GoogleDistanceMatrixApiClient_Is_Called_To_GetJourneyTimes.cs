@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         public When_GoogleDistanceMatrixApiClient_Is_Called_To_GetJourneyTimes()
         {
             _arrivalTimeSeconds = 1570014314;
-            var httpClient = new GoogleDistanceMatrixHttpClientFactory().Get(arrivalTimeSeconds: _arrivalTimeSeconds);
+            var httpClient = new GoogleDistanceMatrixTestHttpClientFactory().Get(arrivalTimeSeconds: _arrivalTimeSeconds);
             var logger = new NullLogger<GoogleDistanceMatrixApiClient>();
 
             _googleDistanceMatrixApiClient = new GoogleDistanceMatrixApiClient(
@@ -36,30 +36,29 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         public async Task Then_JourneyTimes_Are_Returned_Correctly()
         {
             var originPostcode = "CV1 2WT";
-            var originLatitude = 52.400997M;
-            var originLongitude = -1.508122M;
 
             var destinations = new List<LocationDto>
             {
                 new LocationDto
                 {
                     Id = 1,
-                    Postcode = "SW1A 2AA",
-                    Latitude = 51.50354M,
-                    Longitude = -0.127695M
+                    Postcode = "SW1A 2AA"
                 }
             };
 
             var journeyTimes = await _googleDistanceMatrixApiClient
-                .GetJourneyTimesAsync(originPostcode, originLatitude, originLongitude,
-                    destinations, TravelMode.Driving, _arrivalTimeSeconds);
+                .GetJourneyTimesAsync(
+                    originPostcode, 
+                    destinations, 
+                    TravelMode.Driving, 
+                    _arrivalTimeSeconds);
 
             journeyTimes.Should().NotBeNull();
             journeyTimes.Count.Should().Be(1);
 
             journeyTimes.First().Key.Should().Be(1);
-            journeyTimes.First().Value.TravelTime.Should().Be(7603);
-            journeyTimes.First().Value.TravelDistance.Should().Be(172648);
+            journeyTimes.First().Value.JourneyTime.Should().Be(7603);
+            journeyTimes.First().Value.JourneyDistance.Should().Be(172648);
         }
     }
 }

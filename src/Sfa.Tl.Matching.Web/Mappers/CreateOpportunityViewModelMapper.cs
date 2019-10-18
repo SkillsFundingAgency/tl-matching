@@ -23,7 +23,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
-                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
                 .ForPath(o => o.OpportunityType, opt => opt.MapFrom(x => OpportunityType.ProvisionGap))
                 .ForAllOtherMembers(config => config.Ignore())
@@ -39,7 +38,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
                 .ForMember(m => m.RouteId, o => o.MapFrom(s => s.SelectedRouteId))
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
-                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
                 .ForPath(o => o.OpportunityType, opt => opt.MapFrom(x => OpportunityType.Referral))
                 .ForMember(m => m.Referral, o => o.MapFrom(s => s.SelectedProvider.Where(p => p.IsSelected)))
@@ -49,6 +47,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
             CreateMap<SelectedProviderViewModel, ReferralDto>()
                 .ForMember(m => m.ProviderVenueId, o => o.MapFrom(x => x.ProviderVenueId))
                 .ForMember(m => m.DistanceFromEmployer, o => o.MapFrom(x => x.DistanceFromEmployer))
+                .ForMember(m => m.JourneyTimeByCar, o => o.MapFrom(x => x.JourneyTimeByCar))
+                .ForMember(m => m.JourneyTimeByPublicTransport, o => o.MapFrom(x => x.JourneyTimeByPublicTransport))
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
         }

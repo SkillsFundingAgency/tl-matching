@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
 
         public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderSearchParametersDto dto)
         {
-            _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
+            _logger.LogInformation($"Searching for providers near postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
 
             if (string.IsNullOrWhiteSpace(dto.Latitude) || string.IsNullOrWhiteSpace(dto.Longitude))
                 throw new InvalidOperationException("Latitude and Longitude can not be null");
@@ -35,8 +35,6 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
             var employerLocation = geometryFactory.CreatePoint(new Coordinate(double.Parse(dto.Longitude), double.Parse(dto.Latitude)));
 
-            //TODO: If javascript on then will need to search by radius first, otherwise this is ignored
-            //var searchRadius = dto.SearchRadius != 0 ? dto.SearchRadius : 25;
             var searchRadius = 70;
             var searchRadiusInMeters = searchRadius * MilesToMeters;
 
@@ -60,8 +58,6 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                     Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
                                     providerVenue.Postcode,
                                     providerVenue.Town,
-                                    providerVenue.Latitude,
-                                    providerVenue.Longitude,
                                     provider.IsTLevelProvider
                                 }).Distinct().ToListAsync();
 
@@ -87,15 +83,13 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                 ProviderVenueName = r.ProviderVenueName,
                 Distance = r.Distance,
                 IsTLevelProvider = r.IsTLevelProvider,
-                Latitude = r.Latitude ?? 0,
-                Longitude = r.Longitude ?? 0,
                 QualificationShortTitles = qualificationShortTitles.Where(q => q.ProviderVenueId == r.ProviderVenueId).Select(q => q.QualificationShortTitle)
             }).OrderBy(r => r.Distance).ToList();
         }
 
         public async Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto)
         {
-            _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route other than {dto.SelectedRouteId}");
+            _logger.LogInformation($"Searching for providers within radius {dto.AlternativeRoutesSearchRadius} of postcode '{dto.Postcode}' with route other than {dto.SelectedRouteId}");
 
             if (string.IsNullOrWhiteSpace(dto.Latitude) || string.IsNullOrWhiteSpace(dto.Longitude))
                 throw new InvalidOperationException("Latitude and Longitude can not be null");
@@ -103,7 +97,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
             var employerLocation = geometryFactory.CreatePoint(new Coordinate(double.Parse(dto.Longitude), double.Parse(dto.Latitude)));
 
-            var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
+            var searchRadiusInMeters = dto.AlternativeRoutesSearchRadius * MilesToMeters;
 
             var result = await (from provider in _matchingDbContext.Provider
                 join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId

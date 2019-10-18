@@ -21,7 +21,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const int Placements = 5;
         private const int OpportunityItemId = 1;
         private const string Postcode = "AA1 1AA";
-        private const int Distance = 10;
         private const int RouteId = 1;
 
         public When_OpportunityService_Is_Called_To_Save_PlacementInformation_With_Empty_Job_Title()
@@ -37,11 +36,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
-            var opportunityItem = new OpportunityItem { Id = OpportunityItemId, Postcode = Postcode, SearchRadius = Distance, RouteId = RouteId };
+            var opportunityItem = new OpportunityItem
+            {
+                Id = OpportunityItemId,
+                Postcode = Postcode,
+                RouteId = RouteId
+            };
 
             _opportunityItemRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>()).Returns(opportunityItem);
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, 
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository,
                 provisionGapRepository, referralRepository, googleMapApiClient,
                 opportunityPipelineReportWriter, dateTimeProvider);
 
@@ -59,13 +63,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         [Fact]
         public void Then_Update_Is_Called_Exactly_Once_With_1_Placement()
         {
-            _opportunityItemRepository.Received(1).UpdateAsync(Arg.Is<OpportunityItem>(opportunityItem => 
+            _opportunityItemRepository.Received(1).UpdateAsync(Arg.Is<OpportunityItem>(opportunityItem =>
                 opportunityItem.Id == OpportunityItemId &&
                 opportunityItem.JobRole == "None given" &&
                 opportunityItem.PlacementsKnown == PlacementsKnown &&
                 opportunityItem.Placements == Placements &&
                 opportunityItem.Postcode == Postcode &&
-                opportunityItem.SearchRadius == Distance &&
                 opportunityItem.RouteId == RouteId));
         }
 

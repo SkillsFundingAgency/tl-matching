@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.ViewComponents
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
             if (opportunityItemCount == 0) return viewModel;
 
-            viewModel.CancelText = "Cancel this opportunity";
+            viewModel.CancelText = "Go back to all opportunities";
 
             return viewModel;
         }

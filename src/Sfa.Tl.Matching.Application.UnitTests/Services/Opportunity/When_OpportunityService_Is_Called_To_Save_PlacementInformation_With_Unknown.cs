@@ -21,7 +21,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         private const int Placements = 5;
         private const int OpportunityItemId = 1;
         private const string Postcode = "AA1 1AA";
-        private const int Distance = 1;
         private const int RouteId = 1;
 
         public When_OpportunityService_Is_Called_To_Save_PlacementInformation_With_Unknown()
@@ -41,7 +40,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             {
                 Id = OpportunityItemId,
                 Postcode = Postcode,
-                SearchRadius = Distance,
                 RouteId = RouteId
             };
 

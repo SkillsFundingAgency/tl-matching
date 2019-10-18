@@ -59,8 +59,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 OpportunityItemId = 0,
                 SearchResultProviderCount = 0,
                 SelectedRouteId = 1,
-                Postcode = "cv12wt",
-                SearchRadius = 10
+                Postcode = "cv12wt"
             }).GetAwaiter().GetResult();
         }
 

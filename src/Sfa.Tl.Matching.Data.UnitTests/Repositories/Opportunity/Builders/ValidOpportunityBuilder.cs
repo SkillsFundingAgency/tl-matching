@@ -70,6 +70,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                             //Id = 1,
                             ProviderVenueId = 1,
                             DistanceFromEmployer = 3.5M,
+                            JourneyTimeByCar = 1200,
+                            JourneyTimeByPublicTransport = 1800,
                             ProviderVenue = new Domain.Models.ProviderVenue
                             {
                                 Id = 1,

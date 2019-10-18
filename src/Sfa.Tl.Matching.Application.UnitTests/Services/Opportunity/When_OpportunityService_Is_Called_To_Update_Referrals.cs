@@ -64,7 +64,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     new ReferralDto
                     {
                         ProviderVenueId = 1,
-                        DistanceFromEmployer = 3.5M
+                        DistanceFromEmployer = 3.5M,
+                        JourneyTimeByCar = 1200,
+                        JourneyTimeByPublicTransport = 1800,
                     }
                 }
             };

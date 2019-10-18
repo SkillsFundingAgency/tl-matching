@@ -30,7 +30,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
                 Postcode = "SW1 1AB",
                 ProviderVenueName = "ProviderVenueName",
                 ProviderVenueTownAndPostcode = "London SW1 1AB",
-                DistanceFromEmployer = 1.5M
+                DistanceFromEmployer = 1.5M,
+                JourneyTimeByCar = 1200,
+                JourneyTimeByPublicTransport = 1800,
             });
 
             return this;

@@ -14,14 +14,12 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IRepository<BankHoliday> _bankHolidayRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         protected FeedbackService(MatchingConfiguration configuration,
             IEmailService emailService,
-            IEmailHistoryService emailHistoryService,
             IDateTimeProvider dateTimeProvider,
             IRepository<BankHoliday> bankHolidayRepository,
             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository
@@ -29,7 +27,6 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             _configuration = configuration;
             _emailService = emailService;
-            _emailHistoryService = emailHistoryService;
             _dateTimeProvider = dateTimeProvider;
             _bankHolidayRepository = bankHolidayRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
@@ -45,15 +42,10 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            await _emailService.SendEmailAsync(template.ToString(),
+            await _emailService.SendEmailAsync(opportunityId, template.ToString(),
                 toAddress,
-                tokens);
-
-            await _emailHistoryService.SaveEmailHistoryAsync(template.ToString(),
-                tokens,
-                opportunityId,
-                toAddress,
-                createdBy);
+                tokens, createdBy);
+            
         }
 
         public async Task<int> CreateBackgroundProcessHistoryAsync(BackgroundProcessType backgroundProcessType) =>

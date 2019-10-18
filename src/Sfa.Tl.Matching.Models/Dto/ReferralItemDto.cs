@@ -13,6 +13,8 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ProviderVenueTownAndPostcode { get; set; }
         public string ProviderVenueName { get; set; }
         public decimal DistanceFromEmployer { get; set; }
+        public int? JourneyTimeByCar { get; set; }
+        public int? JourneyTimeByPublicTransport { get; set; }
         public string PlacementsDetail =>
             PlacementsKnown.GetValueOrDefault()
                 ? Placements.ToString()

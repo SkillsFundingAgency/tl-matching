@@ -26,6 +26,8 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                 .Customize(new HttpContextCustomization())
                 .Customize(new HttpContextAccessorCustomization())
                 .Customize(new MapperCustomization())
+                .Customize(new FactoryServiceCustomizations())
+                .Customize(new EmailHistoryCustomization())
                 .Customize(autoNSubstituteCustomization);
 
         }

@@ -62,7 +62,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 SearchResultProviderCount = 2,
                 SelectedRouteId = 1,
                 Postcode = "cv12wt",
-                SearchRadius = 10,
                 OpportunityId = opportunityId,
                 OpportunityItemId = opportunityItemId,
                 SelectedProvider = new[]
@@ -71,12 +70,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                     {
                         ProviderVenueId = 1,
                         DistanceFromEmployer = 1.2m,
+                        JourneyTimeByCar = 600,
+                        JourneyTimeByPublicTransport = 900,
                         IsSelected = false
                     },
                     new SelectedProviderViewModel
                     {
                         ProviderVenueId = 2,
                         DistanceFromEmployer = 3.4m,
+                        JourneyTimeByCar = 1200,
+                        JourneyTimeByPublicTransport = 1800,
                         IsSelected = true
                     }
                 }

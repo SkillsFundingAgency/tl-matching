@@ -62,6 +62,10 @@
       "type": "string",
       "environmentVariable": "GovNotifyAPIKey"
     },
+	"EmailDeliveryStatusToken": {
+      "type": "string",
+      "environmentVariable": "EmailDeliveryStatusToken"
+    },
     "SendEmailEnabled": {
       "type": "boolean",
       "environmentVariable": "SendEmailEnabled"
@@ -108,6 +112,11 @@
       "minLength": 1,
       "type": "string",
       "environmentVariable": "SupportInboxEmail"
+    },
+	"MatchingServiceSupportEmailAddress": {
+      "minLength": 1,
+      "type": "string",
+      "environmentVariable": "MatchingServiceSupportEmailAddress"
     }
   },
   "additionalProperties": false,

@@ -12,7 +12,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string RouteName { get; set; }
         public string Town { get; set; }
         public string Postcode { get; set; }
-        public short SearchRadius { get; set; }
         public string JobRole { get; set; }
         public bool? PlacementsKnown { get; set; }
         public bool? IsReferral { get; set; }

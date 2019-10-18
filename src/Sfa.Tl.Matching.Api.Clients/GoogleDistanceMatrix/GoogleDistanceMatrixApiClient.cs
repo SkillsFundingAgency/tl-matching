@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<IDictionary<int, JourneyInfoDto>> GetJourneyTimesAsync(string originPostcode, decimal latitude, decimal longitude,
+        public async Task<IDictionary<int, JourneyInfoDto>> GetJourneyTimesAsync(string originPostcode, 
             IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
         {
             const int batchSize = 100; //Max client-side elements: 100
@@ -44,11 +44,10 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             
             foreach (var batch in batches)
             {
-                var (_, value) = batch;
-                var response = SearchBatchAsync(originPostcode, latitude, longitude, value, travelMode, arrivalTimeSeconds).GetAwaiter().GetResult();
+                var response = await SearchBatchAsync(originPostcode, batch, travelMode, arrivalTimeSeconds);
                 if (response != null)
                 {
-                    var batchResults = await BuildResultAsync(response, value);
+                    var batchResults = await BuildResultAsync(response, batch);
                     foreach (var (i, journeyInfoDto) in batchResults)
                     {
                         if (!distanceSearchResults.ContainsKey(i))
@@ -62,7 +61,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             return distanceSearchResults;
         }
         
-        private Task<IDictionary<int, JourneyInfoDto>> BuildResultAsync(GoogleDistanceMatrixResponse response, IList<LocationDto> destinations)
+        private Task<IDictionary<int, JourneyInfoDto>> BuildResultAsync(GoogleJourneyTimeResponse response, IList<LocationDto> destinations)
         {
             var results = new Dictionary<int, JourneyInfoDto>(response.DestinationAddresses.Length);
 
@@ -85,8 +84,8 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
                         results[destinations[i].Id] = new JourneyInfoDto
                         {
                             DestinationId = destinations[i].Id,
-                            TravelTime = element.Duration?.Value ?? 0,
-                            TravelDistance = element.Distance?.Value ?? 0
+                            JourneyTime = element.Duration?.Value ?? 0,
+                            JourneyDistance = element.Distance?.Value ?? 0
                         };
                     }
                 }
@@ -100,46 +99,37 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
             return Task.FromResult((IDictionary<int, JourneyInfoDto>)results);
         }
 
-        private Dictionary<int, IList<LocationDto>> CreateBatches(IList<LocationDto> venues, int batchSize)
+        private IList<IList<LocationDto>> CreateBatches(IList<LocationDto> venues, int batchSize)
         {
-            var batches = new Dictionary<int, IList<LocationDto>>();
+            var batches = new List<IList<LocationDto>>();
             var items = venues;
-            var batchNo = 0;
             while (items.Any())
             {
-                var batch = items.Take(batchSize);
-                batches.Add(++batchNo, batch.ToList());
+                batches.Add(items.Take(batchSize).ToList());
                 items = items.Skip(batchSize).ToList();
             }
 
             return batches;
         }
 
-        private async Task<GoogleDistanceMatrixResponse> SearchBatchAsync(string origin, decimal latitude, decimal longitude, IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
+        private async Task<GoogleJourneyTimeResponse> SearchBatchAsync(string origin, IList<LocationDto> destinations, string travelMode, long arrivalTimeSeconds)
         {
             try
             {
                 var uriBuilder = new StringBuilder($@"{_baseUrl}/distancematrix/json?");
 
                 uriBuilder.Append("units=imperial");
-                //uriBuilder.Append($"&origins={latitude}%2C{longitude}");
                 uriBuilder.Append($"&origins={WebUtility.UrlEncode(origin)}");
 
                 uriBuilder.Append($"&mode={travelMode}");
                 uriBuilder.Append($"&arrival_time={arrivalTimeSeconds}");
                 uriBuilder.Append("&destinations=");
 
-                //uriBuilder.Append("enc:");
-                //var polyline = EncodePolyline(destinations);
-                //uriBuilder.Append(WebUtility.UrlEncode(polyline));
-                //uriBuilder.Append(":");
                 for (var i = 0; i < destinations.Count; i++)
                 {
                     if (i > 0) uriBuilder.Append("%7C");
 
-                    //uriBuilder.Append($"{venue.Latitude}%2C{venue.Longitude}");
                     uriBuilder.Append($"{WebUtility.UrlEncode(destinations[i].Postcode)}");
-                    //uriBuilder.Append($"{venue.Postcode.Replace(" ", "")}");
                 }
 
                 uriBuilder.Append($"&key={_configuration.GoogleMapsApiKey}");
@@ -161,7 +151,7 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
                 };
 
                 return JsonConvert
-                    .DeserializeObject<GoogleDistanceMatrixResponse>(
+                    .DeserializeObject<GoogleJourneyTimeResponse>(
                         jsonResponse, serializerSettings);
             }
             catch (Exception ex)
@@ -169,49 +159,6 @@ namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
                 _logger.LogError($"Failure calling google api - {ex}");
                 throw;
             }
-        }
-
-        //Implementation from https://gist.github.com/shinyzhu/4617989
-        public string EncodePolyline(IList<LocationDto> points)
-        {
-            var sb = new StringBuilder();
-
-            var encodeDiff = (Action<int>)(diff =>
-            {
-                var shifted = diff << 1;
-                if (diff < 0)
-                    shifted = ~shifted;
-
-                var rem = shifted;
-
-                while (rem >= 0x20)
-                {
-                    sb.Append((char)((0x20 | (rem & 0x1f)) + 63));
-
-                    rem >>= 5;
-                }
-
-                sb.Append((char)(rem + 63));
-            });
-
-            var lastLat = 0;
-            var lastLng = 0;
-
-            foreach (var point in points)
-            {
-                var lat = (int)Math.Round((double)point.Latitude * 1E5);
-                var lng = (int)Math.Round((double)point.Longitude * 1E5);
-
-                if (lat == lastLat || lng == lastLng)
-                    continue;
-
-                encodeDiff(lat - lastLat);
-                encodeDiff(lng - lastLng);
-
-                lastLat = lat;
-                lastLng = lng;
-            }
-            return sb.ToString();
         }
     }
 }

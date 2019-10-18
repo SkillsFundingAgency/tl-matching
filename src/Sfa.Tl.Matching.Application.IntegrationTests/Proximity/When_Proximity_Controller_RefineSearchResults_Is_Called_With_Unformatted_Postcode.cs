@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
                 SelectedRouteId = 1
             };
 
-            _result = proximityController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
+            _result = proximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

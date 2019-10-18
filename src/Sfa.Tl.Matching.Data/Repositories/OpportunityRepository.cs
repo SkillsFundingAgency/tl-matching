@@ -54,8 +54,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   EmployerContact = op.EmployerContact,
                                   EmployerContactPhone = op.EmployerContactPhone,
                                   EmployerContactEmail = op.EmployerContactEmail,
-                                  SearchRadius = oi.SearchRadius,
                                   DistanceFromEmployer = re.DistanceFromEmployer.ToString("0.0"),
+                                  JourneyTimeByCar = re.JourneyTimeByCar,
+                                  JourneyTimeByPublicTransport = re.JourneyTimeByPublicTransport,
                                   Postcode = oi.Postcode,
                                   Town = oi.Town,
                                   JobRole = oi.JobRole,
@@ -210,6 +211,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                           JobRole = oi.JobRole,
                                           Workplace = $"{oi.Town} {oi.Postcode}",
                                           DistanceFromEmployer = re.DistanceFromEmployer,
+                                          JourneyTimeByCar = re.JourneyTimeByCar,
+                                          JourneyTimeByPublicTransport = re.JourneyTimeByPublicTransport,
                                           PlacementsKnown = oi.PlacementsKnown,
                                           Placements = oi.Placements,
                                           Postcode = pv.Postcode,
@@ -233,7 +236,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return _dbContext.OpportunityItem.Count(item => item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
         }
 
-        public async Task<List<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync()
+        public async Task<IList<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync()
         {
             return await _dbContext.MatchingServiceOpportunityReport
                 .OrderBy(o => o.OpportunityItemId)
@@ -243,9 +246,14 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync()
+        public async Task<IList<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync()
         {
             return await _dbContext.MatchingServiceProviderOpportunityReport.ToListAsync();
+        }
+
+        public async Task<IList<MatchingServiceProviderEmployerReport>> GetMatchingServiceProviderEmployerReportAsync()
+        {
+            return await _dbContext.MatchingServiceProviderEmployerReport.ToListAsync();
         }
 
         public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
@@ -301,6 +309,31 @@ namespace Sfa.Tl.Matching.Data.Repositories
                             .Select(data => data.FirstOrDefault())
                             .Select(feedbackDto => feedbackDto)
                             .ToListAsync();
+
+            return dto;
+        }
+
+        public async Task<EmailBodyDto> GetFailedOpportunityEmailAsync(int opportunityId, string sentTo)
+        {
+            var dto = await (from o in _dbContext.Opportunity
+                             join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
+                             join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
+                             join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                             join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                             where o.Id == opportunityId &&
+                                   (p.PrimaryContactEmail == sentTo ||
+                                    p.SecondaryContactEmail == sentTo ||
+                                    o.EmployerContactEmail == sentTo)
+                             select new EmailBodyDto
+                             {
+                                 PrimaryContactEmail = p.PrimaryContactEmail,
+                                 SecondaryContactEmail = p.SecondaryContactEmail,
+                                 EmployerEmail = o.EmployerContactEmail,
+                                 ProviderDisplayName = p.DisplayName,
+                                 ProviderVenuePostcode = pv.Postcode,
+                                 ProviderVenueName = pv.Name,
+                             })
+                          .FirstOrDefaultAsync();
 
             return dto;
         }

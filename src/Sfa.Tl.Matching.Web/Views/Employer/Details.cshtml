@@ -4,7 +4,7 @@
 }
 
 @section backButton{
-    @*<a asp-route="LoadWhoIsEmployer" asp-route-opportunityId="@Model.OpportunityId" class="govuk-back-link" id="tl-back">Back</a>*@
+    @*<a asp-route="GetOpportunityCompanyName" asp-route-opportunityId="@Model.OpportunityId" class="govuk-back-link" id="tl-back">Back</a>*@
     <a asp-route="GetBackLink"  
        asp-route-opportunityId="@Model.OpportunityId" 
        asp-route-opportunityItemId="@Model.OpportunityItemId"
@@ -41,7 +41,7 @@
             <input asp-for="CompanyNameAka" type="hidden" />
 
             <p class="govuk-body">
-                <a asp-route="LoadWhoIsEmployer" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link" id="tl-find-different">Find a different employer</a>
+                <a asp-route="GetOpportunityCompanyName" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link" id="tl-find-different">Find a different employer</a>
             </p>
 
             <partial name="_employerDetailForm" , model="Model" />

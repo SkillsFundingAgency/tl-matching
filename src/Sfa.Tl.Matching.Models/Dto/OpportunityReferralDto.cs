@@ -17,8 +17,9 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ProviderVenuePostcode { get; set; }
         public string ProviderVenueTown { get; set; }
         public string RouteName { get; set; }
-        public short SearchRadius { get; set; }
         public string DistanceFromEmployer { get; set; }
+        public int? JourneyTimeByCar { get; set; }
+        public int? JourneyTimeByPublicTransport { get; set; }
         public string JobRole { get; set; }
         public string Postcode { get; set; }
         public string Town { get; set; }

@@ -20,15 +20,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _providerVenueService = providerVenueService;
         }
 
-        [Route("add-venue/{providerId}", Name = "AddVenue")]
+        [Route("add-venue/{providerId}", Name = "AddProviderVenue")]
         public IActionResult AddProviderVenue(int providerId)
         {
-            return View(new AddProviderVenueViewModel { ProviderId = providerId });
+            return View("AddProviderVenue", new AddProviderVenueViewModel { ProviderId = providerId });
         }
 
         [HttpPost]
         [Route("add-venue/{providerId}", Name = "CreateVenue")]
-        public async Task<IActionResult> AddProviderVenueAsync(AddProviderVenueViewModel viewModel)
+        public async Task<IActionResult> CreateVenueAsync(AddProviderVenueViewModel viewModel)
         {
             if (!ModelState.IsValid)
                 return View("AddProviderVenue", viewModel);
@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
         
         [Route("venue-overview/{providerVenueId}", Name = "GetProviderVenueDetail")]
-        public async Task<IActionResult> ProviderVenueDetailAsync(int providerVenueId, int providerId = 0)
+        public async Task<IActionResult> GetProviderVenueDetailAsync(int providerVenueId, int providerId = 0)
         {
             var isFromAddVenue = providerId == 0;
             var viewModel = await Populate(providerVenueId);
@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("venue-overview/{providerVenueId}", Name = "SaveProviderVenueDetail")]
-        public async Task<IActionResult> ProviderVenueDetailAsync(ProviderVenueDetailViewModel viewModel)
+        public async Task<IActionResult> SaveProviderVenueDetailAsync(ProviderVenueDetailViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("remove-venue/{providerVenueId}", Name = "GetConfirmRemoveProviderVenue")]
-        public async Task<IActionResult> ConfirmRemoveProviderVenueAsync(int providerVenueId)
+        public async Task<IActionResult> GetConfirmRemoveProviderVenueAsync(int providerVenueId)
         {
             var viewModel = await _providerVenueService.GetRemoveProviderVenueViewModelAsync(providerVenueId);
 

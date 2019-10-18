@@ -19,7 +19,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         : IClassFixture<ProviderQuarterlyUpdateEmailFixture>
     {
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IProviderRepository _providerRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
         private readonly IList<BackgroundProcessHistory> _receivedProviderFeedbackRequestHistories;
@@ -29,8 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         public When_ProviderQuarterlyUpdateEmailService_Send_Provider_Quarterly_Update_Emails_Throws_Exception(ProviderQuarterlyUpdateEmailFixture testFixture)
         {
             _emailService = Substitute.For<IEmailService>();
-            _emailHistoryService = Substitute.For<IEmailHistoryService>();
-
+            
             var messageQueueService = Substitute.For<IMessageQueueService>();
             _logger = Substitute.For<ILogger<Application.Services.ProviderQuarterlyUpdateEmailService>>();
 
@@ -60,12 +58,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 )));
 
             _emailService
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>())
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>())
                 .Throws(new Exception());
 
             var providerFeedbackService = new Application.Services.ProviderQuarterlyUpdateEmailService(
                 testFixture.Configuration, _logger, 
-                    _emailService, _emailHistoryService,
+                    _emailService,
                     _providerRepository, _backgroundProcessHistoryRepository,
                     messageQueueService, testFixture.DateTimeProvider);
 
@@ -138,7 +136,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Fact]
@@ -153,14 +151,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                             "Error sending provider quarterly update emails.")),
                 Arg.Any<Exception>(),
                 Arg.Any<Func<object, Exception, string>>());
-        }
-
-        [Fact]
-        public void Then_EmailHistoryService_SaveEmailHistory_Is_Not_Called()
-        {
-            _emailHistoryService
-                .DidNotReceiveWithAnyArgs()
-                .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Fact]

@@ -52,7 +52,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 
             httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _result = controllerWithClaims.SaveProvisionGapAsync(new SaveProvisionGapViewModel { SearchResultProviderCount = 0, SelectedRouteId = 1, Postcode = "cv12wt", SearchRadius = 10 }).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveProvisionGapAsync(new SaveProvisionGapViewModel
+            {
+                SearchResultProviderCount = 0,
+                SelectedRouteId = 1,
+                Postcode = "cv12wt"
+            }).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix
 {
-    public class GoogleDistanceMatrixResponse
+    public class GoogleJourneyTimeResponse
     {
         [JsonProperty("destination_addresses")]
         public string[] DestinationAddresses { get; set; }

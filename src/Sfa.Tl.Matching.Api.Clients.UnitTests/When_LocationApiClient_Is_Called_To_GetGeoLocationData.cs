@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
                 Longitude = "-1.234"
             };
 
-            var httpClient = new PostcodesHttpClientFactory()
+            var httpClient = new PostcodesTestHttpClientFactory()
                 .Get("CV1 2WT", responseData);
 
             _locationApiClient = new LocationApiClient(httpClient,
@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         public async Task Then_Postcode_Is_Returned_Correctly()
         {
             var postcodeData = await _locationApiClient
-                .GetGeoLocationDataAsync("CV12WT");
+                .GetGeoLocationDataAsync("CV12WT", false);
 
             postcodeData.Should().NotBeNull();
             postcodeData.Postcode.Should().Be("CV1 2WT");

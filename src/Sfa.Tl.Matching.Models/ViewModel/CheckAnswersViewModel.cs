@@ -12,7 +12,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
             $"{CompanyName} ({CompanyNameAka})" : CompanyName;
         public string RouteName { get; set; }
         public string Postcode { get; set; }
-        public short SearchRadius { get; set; }
         public int RouteId { get; set; }
         public string JobRole { get; set; }
         public int? Placements { get; set; }

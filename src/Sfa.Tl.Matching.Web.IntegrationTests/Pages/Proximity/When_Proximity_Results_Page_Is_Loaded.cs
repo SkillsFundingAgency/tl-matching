@@ -109,17 +109,17 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             var shortTitleListItem = qualificationList.Children[0] as IHtmlListItemElement;
             shortTitleListItem.TextContent.Should().Be("Short Title");
 
-            var travelTimes = searchResults.Children[itemNumber].QuerySelector("#tl-travel-times");
-            travelTimes.Children.Length.Should().Be(1);
+            var journeyTimes = searchResults.Children[itemNumber].QuerySelector("#tl-journey-times");
+            journeyTimes.Children.Length.Should().Be(1);
 
-            var distanceItem = travelTimes.Children[0] as IHtmlParagraphElement;
+            var distanceItem = journeyTimes.Children[0] as IHtmlParagraphElement;
             distanceItem.TextContent.Should().Be("0.0 miles");
 
-            //var travelTimeByPublicTransportItem = travelTimes.Children[1] as IHtmlParagraphElement;
-            //travelTimeByPublicTransportItem.TextContent.Should().Be("30 minutes");
+            //var journeyTimeByPublicTransportItem = journeyTimes.Children[1] as IHtmlParagraphElement;
+            //journeyTimeByPublicTransportItem.TextContent.Should().Be("30 minutes");
 
-            //var travelTimeByCarItem = travelTimes.Children[2] as IHtmlParagraphElement;
-            //travelTimeByCarItem.TextContent.Should().Be("15 minutes");
+            //var journeyTimeByCarItem = journeyTimes.Children[2] as IHtmlParagraphElement;
+            //journeyTimeByCarItem.TextContent.Should().Be("15 minutes");
         }
     }
 }

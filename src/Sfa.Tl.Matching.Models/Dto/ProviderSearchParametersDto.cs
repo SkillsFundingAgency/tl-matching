@@ -4,7 +4,7 @@
     {
         public string Postcode { get; set; }
 
-        public int SearchRadius { get; set; }
+        public int AlternativeRoutesSearchRadius { get; set; }
 
         public int? SelectedRouteId { get; set; }
 

@@ -53,6 +53,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _result.ReferralItems.First().ProviderName.Should().BeEquivalentTo("Venue name part of Provider display name (AA1 1AA)");
             _result.ReferralItems.First().ProviderVenueTownAndPostcode.Should().Be("Town AA1 1AA");
             _result.ReferralItems.First().DistanceFromEmployer.Should().Be(3.5M);
+            _result.ReferralItems.First().JourneyTimeByCar.Should().Be(1200);
+            _result.ReferralItems.First().JourneyTimeByPublicTransport.Should().Be(1800);
 
             _result.ProvisionGapItems.Should().NotBeNull();
             _result.ProvisionGapItems.Count.Should().Be(1);
