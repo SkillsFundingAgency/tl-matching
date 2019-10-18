@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sfa.Tl.Matching.Data;
@@ -53,5 +54,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.InMemoryDb
             await dbContext.SaveChangesAsync();
 
         }
+
+        public static async Task SetEmailHistory(
+            MatchingDbContext dbContext,
+            EmailHistory emailHistory)
+        {
+            emailHistory.Status = null;
+            emailHistory.ModifiedBy = null;
+            emailHistory.ModifiedOn = null;
+
+            await dbContext.AddAsync(emailHistory);
+
+            await dbContext.SaveChangesAsync();
+
+        }
+
     }
 }
