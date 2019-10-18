@@ -41,16 +41,20 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                 .With(payload => payload.status, "delivered"));
 
             var opportunity = fixture.Create<Opportunity>();
+            var emailTemplate = fixture.Create<EmailTemplate>();
+            var notificationId = Guid.NewGuid();
 
             fixture.Customize<EmailHistory>(composer => composer
                 .With(em => em.Opportunity, opportunity)
+                .With(em=> em.EmailTemplate, emailTemplate)
+                .With(em=> em.EmailTemplateId, emailTemplate.Id)
                 .With(em => em.Status, string.Empty)
                 .With(em => em.ModifiedBy, () => null)
                 .With(em => em.ModifiedOn, () => null)
             );
 
             fixture.Customize<EmailNotificationResponse>(composer => composer
-                .With(response => response.id, Guid.NewGuid().ToString));
+                .With(response => response.id, notificationId.ToString));
 
         }
     }

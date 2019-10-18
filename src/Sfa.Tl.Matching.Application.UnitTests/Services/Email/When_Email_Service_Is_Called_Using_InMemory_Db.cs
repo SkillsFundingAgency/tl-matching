@@ -16,6 +16,7 @@ using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.EmailDeliveryStatus;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
@@ -36,8 +37,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-            EmailTemplate emailTemplate,
-            EmailNotificationResponse emailNotificationResponse
+            [Frozen] EmailHistory emailHistory,
+            [Frozen] EmailNotificationResponse emailNotificationResponse
         )
         {
             //Arrange
@@ -55,20 +56,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 Arg.Any<Dictionary<string, dynamic>>()).Returns(Task.FromResult(emailNotificationResponse));
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
-            await DataBuilder.SetEmailTemplate(dbContext, emailTemplate);
-
+            
             //Act
-            await sut.SendEmailAsync(opportunity.Id, emailTemplate.TemplateName, "test@test.com", tokens, "System");
+            await sut.SendEmailAsync(opportunity.Id, emailHistory.EmailTemplate.TemplateName, "test@test.com", tokens, "System");
 
             //Assert
             Guid.TryParse(emailNotificationResponse.id, out var notificationId);
-            var emailHistory = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+            var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
 
-            emailHistory.Should().NotBeNull();
-            emailHistory.EmailTemplateId.Should().Be(emailTemplate.Id);
-            emailHistory.Status.Should().BeNullOrEmpty();
-            emailHistory.NotificationId.Should().Be(emailNotificationResponse.id);
-            emailHistory.CreatedBy.Should().Be("System");
+            data.Should().NotBeNull();
+            data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
+            data.Status.Should().BeNullOrEmpty();
+            data.NotificationId.Should().Be(emailNotificationResponse.id);
+            data.CreatedBy.Should().Be("System");
+            data.SentTo.Should().Be("test@test.com");
 
         }
 
@@ -113,6 +114,117 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             var emailHistory = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
 
             emailHistory.Should().BeNull();
+
+        }
+
+        [Theory, AutoDomainData]
+        public async Task Then_Update_Email_History_With_Delivery_Status(
+            MatchingConfiguration configuration,
+            [Frozen] MatchingDbContext dbContext,
+            IAsyncNotificationClient notificationClient,
+            ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<EmailService> emailServiceLogger,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            EmailDeliveryStatusPayLoad payLoad,
+            EmailHistory emailHistory
+        )
+        {
+            //Arrange
+            var (templateLogger, historyLogger, mapper) = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger);
+
+            var sut = new EmailService(configuration, notificationClient, templateLogger, historyLogger, mapper,
+                emailServiceLogger);
+
+            emailHistory.NotificationId = payLoad.id;
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetEmailHistory(dbContext, emailHistory);
+
+            //Act
+            await sut.UpdateEmailStatus(payLoad);
+
+            //Assert
+            var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == payLoad.id);
+
+            data.Should().NotBeNull();
+            data.Status.Should().Be(payLoad.status);
+            data.NotificationId.Should().Be(payLoad.id);
+            data.ModifiedBy.Should().Be("System");
+
+        }
+
+        [Theory]
+        [InlineAutoDomainData("delivered")]
+        [InlineAutoDomainData("failure-status")]
+        [InlineAutoDomainData("temporary-failure-status")]
+        [InlineAutoDomainData("temporary-failure-status")]
+        public async Task Then_Send_Email_And_Save_Email_History_And_Update_Email_History_With_Status(
+            string status,
+            MatchingConfiguration configuration,
+            [Frozen] MatchingDbContext dbContext,
+            IAsyncNotificationClient notificationClient,
+            ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<EmailService> emailServiceLogger,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            [Frozen] EmailHistory emailHistory,
+            [Frozen] EmailNotificationResponse emailNotificationResponse,
+            EmailDeliveryStatusPayLoad payLoad
+        )
+        {
+            //Arrange
+            Guid.TryParse(emailNotificationResponse.id, out var notificationId);
+            payLoad.status = status;
+            payLoad.id = notificationId;
+
+            var (templateLogger, historyLogger, mapper) = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger);
+
+            var sut = new EmailService(configuration, notificationClient, templateLogger, historyLogger, mapper,
+                emailServiceLogger);
+
+            var tokens = new Dictionary<string, string>
+            {
+                { "contactname",  "name" }
+            };
+
+            notificationClient.SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Any<Dictionary<string, dynamic>>()).Returns(Task.FromResult(emailNotificationResponse));
+
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+
+            
+            //Act
+            await sut.SendEmailAsync(opportunity.Id, emailHistory.EmailTemplate.TemplateName, "test@test.com", tokens, "System");
+            
+            //Assert
+            var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+
+            data.Should().NotBeNull();
+            data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
+            data.NotificationId.Should().Be(emailNotificationResponse.id);
+            data.CreatedBy.Should().Be("System");
+            data.Status.Should().BeNullOrEmpty();
+            data.ModifiedBy.Should().BeNullOrEmpty();
+            data.ModifiedOn.Should().BeNull();
+
+            //Act - Update Email With Status
+            await sut.UpdateEmailStatus(payLoad);
+
+            data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+
+            data.Should().NotBeNull();
+            data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
+            data.Status.Should().NotBeNullOrEmpty();
+            data.Status.Should().Be(payLoad.status);
+            data.NotificationId.Should().Be(emailNotificationResponse.id);
+            data.CreatedBy.Should().Be("System");
+            data.ModifiedBy.Should().Be("System");
 
         }
 
