@@ -38,6 +38,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
             [Frozen] EmailHistory emailHistory,
+            [Frozen] EmailTemplate emailTemplate,
             [Frozen] EmailNotificationResponse emailNotificationResponse
         )
         {
@@ -56,9 +57,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 Arg.Any<Dictionary<string, dynamic>>()).Returns(Task.FromResult(emailNotificationResponse));
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
-            
+            await DataBuilder.SetEmailTemplate(dbContext, emailTemplate);
             //Act
-            await sut.SendEmailAsync(opportunity.Id, emailHistory.EmailTemplate.TemplateName, "test@test.com", tokens, "System");
+            await sut.SendEmailAsync(opportunity.Id, emailTemplate.TemplateName, "test@test.com", tokens, "System");
 
             //Assert
             Guid.TryParse(emailNotificationResponse.id, out var notificationId);
@@ -174,6 +175,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
             [Frozen] EmailHistory emailHistory,
+            [Frozen] EmailTemplate emailTemplate,
             [Frozen] EmailNotificationResponse emailNotificationResponse,
             EmailDeliveryStatusPayLoad payLoad
         )
@@ -197,10 +199,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 Arg.Any<Dictionary<string, dynamic>>()).Returns(Task.FromResult(emailNotificationResponse));
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetEmailTemplate(dbContext, emailTemplate);
 
-            
             //Act
-            await sut.SendEmailAsync(opportunity.Id, emailHistory.EmailTemplate.TemplateName, "test@test.com", tokens, "System");
+            await sut.SendEmailAsync(opportunity.Id, emailTemplate.TemplateName, "test@test.com", tokens, "System");
             
             //Assert
             var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
