@@ -138,6 +138,63 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         }
 
         [Theory]
+        [InlineAutoDomainData("")]
+        [InlineAutoDomainData(null)]
+        public async Task Then_Update_Email_History_With_Status_And_Push_To_Failed_Email_Queue_If_Status_Is_Null(
+            string status,
+            MatchingDbContext dbContext,
+            MatchingConfiguration configuration,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] EmailHistory emailHistory,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            ILogger<OpportunityRepository> opportunityRepoLogger,
+            IMessageQueueService messageQueueService,
+            EmailDeliveryStatusPayLoad payload,
+            ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<EmailService> emailServiceLogger,
+            IAsyncNotificationClient notificationClient
+        )
+        {
+            //Arrange
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+
+            dbContext.Add(emailHistory);
+            dbContext.SaveChanges();
+
+            payload.status = status;
+            payload.id = emailHistory.NotificationId.GetValueOrDefault();
+
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailService).Assembly));
+            var mapper = new Mapper(config);
+
+            var emailTemplateRepository = new GenericRepository<EmailTemplate>(emailTemplateLogger, dbContext);
+            var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
+            var emailHistoryRepository = new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
+            var emailService = new EmailService(configuration, notificationClient, emailTemplateRepository, emailHistoryRepository, mapper, emailServiceLogger);
+
+            var sut = new Application.Services.EmailDeliveryStatusService(configuration,
+                emailService, opportunityRepository, messageQueueService);
+
+            var serializedPayLoad = JsonConvert.SerializeObject(payload);
+
+            //Act
+            await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
+
+            //Assert
+            var data = dbContext.EmailHistory.FirstOrDefault(em => em.NotificationId == payload.id);
+
+            data.Should().NotBeNull();
+            data?.NotificationId.Should().Be(payload.id);
+            data?.Status.Should().Be("unknown-failure");
+            data?.ModifiedBy.Should().Be("System");
+
+            await messageQueueService.Received(1).PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+        }
+
+        [Theory]
         [InlineAutoDomainData("delivered")]
         [InlineAutoDomainData("permanent-failure")]
         [InlineAutoDomainData("temporary-failure")]

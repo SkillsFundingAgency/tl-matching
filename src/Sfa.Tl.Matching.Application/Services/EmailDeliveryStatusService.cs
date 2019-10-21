@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updatedCount = await _emailService.UpdateEmailStatus(callbackData);
 
-            if (callbackData.status.ToUpper() != "DELIVERED" && updatedCount != -1)
+            if ((string.IsNullOrEmpty(callbackData.status) || callbackData.status.ToUpper() != "DELIVERED") && updatedCount != -1)
                 await PushEmailDeliveryStatusAsync(callbackData.id);
 
             return updatedCount;

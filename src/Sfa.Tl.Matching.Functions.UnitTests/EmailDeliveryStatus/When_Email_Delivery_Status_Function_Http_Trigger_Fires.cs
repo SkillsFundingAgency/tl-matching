@@ -162,6 +162,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
         [Theory]
         [InlineAutoDomainData("permanent-failure")]
         [InlineAutoDomainData("temporary-failure")]
+        [InlineAutoDomainData("")]
+        [InlineAutoDomainData(null)]
         public async void Then_Update_Email_History_With_Failed_Status_And_Push_To_Failed_Email_Queue(
             string status,
             MatchingConfiguration matchingConfiguration,
