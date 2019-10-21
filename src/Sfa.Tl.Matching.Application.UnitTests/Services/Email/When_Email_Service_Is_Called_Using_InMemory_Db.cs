@@ -230,6 +230,77 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
         }
 
+        [Theory]
+        [InlineAutoDomainData("")]
+        [InlineAutoDomainData(null)]
+        public async Task Then_Send_Email_And_Save_Email_History_And_Update_Email_History_If_Status_Is_Null(
+            string status,
+            MatchingConfiguration configuration,
+            [Frozen] MatchingDbContext dbContext,
+            IAsyncNotificationClient notificationClient,
+            ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<EmailService> emailServiceLogger,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            [Frozen] EmailHistory emailHistory,
+            [Frozen] EmailTemplate emailTemplate,
+            [Frozen] EmailNotificationResponse emailNotificationResponse,
+            EmailDeliveryStatusPayLoad payLoad
+        )
+        {
+            //Arrange
+            Guid.TryParse(emailNotificationResponse.id, out var notificationId);
+            payLoad.status = status;
+            payLoad.id = notificationId;
+
+            var (templateLogger, historyLogger, mapper) = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger);
+
+            var sut = new EmailService(configuration, notificationClient, templateLogger, historyLogger, mapper,
+                emailServiceLogger);
+
+            var tokens = new Dictionary<string, string>
+            {
+                { "contactname",  "name" }
+            };
+
+            notificationClient.SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Any<Dictionary<string, dynamic>>()).Returns(Task.FromResult(emailNotificationResponse));
+
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetEmailTemplate(dbContext, emailTemplate);
+
+            //Act
+            await sut.SendEmailAsync(opportunity.Id, emailTemplate.TemplateName, "test@test.com", tokens, "System");
+
+            //Assert
+            var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+
+            data.Should().NotBeNull();
+            data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
+            data.NotificationId.Should().Be(emailNotificationResponse.id);
+            data.CreatedBy.Should().Be("System");
+            data.Status.Should().BeNullOrEmpty();
+            data.ModifiedBy.Should().BeNullOrEmpty();
+            data.ModifiedOn.Should().BeNull();
+
+            //Act - Update Email With Status
+            await sut.UpdateEmailStatus(payLoad);
+
+            data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
+
+            data.Should().NotBeNull();
+            data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
+            data.Status.Should().NotBeNullOrEmpty();
+            data.Status.Should().Be("unknown-failure");
+            data.NotificationId.Should().Be(emailNotificationResponse.id);
+            data.CreatedBy.Should().Be("System");
+            data.ModifiedBy.Should().Be("System");
+
+        }
+
         private (GenericRepository<EmailTemplate>, GenericRepository<EmailHistory>, Mapper) SetUp(
             MatchingDbContext dbContext,
             ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
