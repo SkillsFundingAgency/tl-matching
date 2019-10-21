@@ -36,17 +36,17 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             if (string.IsNullOrEmpty(payload)) return -1;
 
-            var callbackData = JsonConvert.DeserializeObject<EmailDeliveryStatusPayLoad>(payload,
+            var emailDeliveryStatusPayLoad = JsonConvert.DeserializeObject<EmailDeliveryStatusPayLoad>(payload,
                 new JsonSerializerSettings
                 {
                     NullValueHandling = NullValueHandling.Ignore,
                     MissingMemberHandling = MissingMemberHandling.Ignore
                 });
 
-            var updatedCount = await _emailService.UpdateEmailStatus(callbackData);
+            var updatedCount = await _emailService.UpdateEmailStatus(emailDeliveryStatusPayLoad);
 
-            if ((string.IsNullOrEmpty(callbackData.status) || callbackData.status.ToUpper() != "DELIVERED") && updatedCount != -1)
-                await PushEmailDeliveryStatusAsync(callbackData.id);
+            if (emailDeliveryStatusPayLoad.EmailDeliveryStatus.ToUpper() != "DELIVERED" && updatedCount != -1)
+                await PushEmailDeliveryStatusAsync(emailDeliveryStatusPayLoad.id);
 
             return updatedCount;
         }

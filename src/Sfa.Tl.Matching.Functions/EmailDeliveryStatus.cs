@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] MatchingConfiguration matchingConfiguration,
-            [Inject] IEmailDeliveryStatusService callbackService,
+            [Inject] IEmailDeliveryStatusService emailDeliveryStatusService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             try
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Functions
                     requestBody = await streamReader.ReadToEndAsync();
                 }
 
-                var updatedRecords = await callbackService.HandleEmailDeliveryStatusAsync(requestBody);
+                var updatedRecords = await emailDeliveryStatusService.HandleEmailDeliveryStatusAsync(requestBody);
 
                 stopwatch.Stop();
 

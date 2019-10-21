@@ -82,7 +82,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (data == null) return -1;
 
-            data.Status = string.IsNullOrEmpty(payLoad.status) ? "unknown-failure" : payLoad.status;
+            data.Status = payLoad.EmailDeliveryStatus;
             data.ModifiedOn = DateTime.UtcNow;
             data.ModifiedBy = "System";
 

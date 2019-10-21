@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Models.EmailDeliveryStatus
         public DateTime? completed_at { get; set; }
         public DateTime? sent_at { get; set; }
         public string notification_type { get; set; }
+        public string EmailDeliveryStatus => string.IsNullOrEmpty(status) ? "unknown-failure" : status;
 
     }
 }
