@@ -37,7 +37,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             ILogger<OpportunityRepository> opportunityRepoLogger,
             IMessageQueueService messageQueueService,
             EmailDeliveryStatusPayLoad payload,
-            ILogger<Application.Services.EmailDeliveryStatusService> logger,
             ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
             ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
             ILogger<EmailService> emailServiceLogger,
@@ -62,7 +61,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
 
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService, logger);
+                emailService, opportunityRepository, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
@@ -96,7 +95,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             ILogger<OpportunityRepository> opportunityRepoLogger,
             IMessageQueueService messageQueueService,
             EmailDeliveryStatusPayLoad payload,
-            ILogger<Application.Services.EmailDeliveryStatusService> logger,
             ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
             ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
             ILogger<EmailService> emailServiceLogger,
@@ -112,7 +110,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             payload.status = status;
             payload.id = emailHistory.NotificationId.GetValueOrDefault();
 
-
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailService).Assembly));
             var mapper = new Mapper(config);
 
@@ -121,9 +118,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var emailHistoryRepository = new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
             var emailService = new EmailService(configuration, notificationClient, emailTemplateRepository, emailHistoryRepository, mapper, emailServiceLogger);
 
-
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService, logger);
+                emailService, opportunityRepository, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
@@ -157,7 +153,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             EmailDeliveryStatusPayLoad payload,
             MatchingConfiguration configuration,
             ILogger<OpportunityRepository> opportunityRepoLogger,
-            ILogger<Application.Services.EmailDeliveryStatusService> logger,
             ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
             ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
             ILogger<EmailService> emailServiceLogger,
@@ -183,7 +178,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
 
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService, logger);
+                emailService, opportunityRepository, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
@@ -213,11 +208,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] EmailHistory emailHistory,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
             IMessageQueueService messageQueueService, MatchingConfiguration configuration,
             ILogger<OpportunityRepository> opportunityRepoLogger,
-            IEmailService emailService,
-            ILogger<Application.Services.EmailDeliveryStatusService> logger)
+            IEmailService emailService)
         {
             //Arrange
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
@@ -228,7 +221,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
 
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService, logger);
+                emailService, opportunityRepository, messageQueueService);
 
             //Act
             var result = await sut.HandleEmailDeliveryStatusAsync(payload);
@@ -251,13 +244,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             [Frozen] Domain.Models.Provider provider,
             [Frozen] Domain.Models.ProviderVenue venue,
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
             IMessageQueueService messageQueueService,
             EmailDeliveryStatusPayLoad payload,
             MatchingConfiguration configuration,
             ILogger<OpportunityRepository> opportunityRepoLogger,
-            IEmailService emailService,
-            ILogger<Application.Services.EmailDeliveryStatusService> logger
+            IEmailService emailService
         )
         {
             //Arrange
@@ -266,7 +257,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
 
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService, logger);
+                emailService, opportunityRepository, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 

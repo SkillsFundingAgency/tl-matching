@@ -36,13 +36,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
             ILogger<EmailDeliveryStatusService> logger
-
         )
         {
             //Arrange
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
-                opportunityRepository, messageQueueService, logger);
+                opportunityRepository, messageQueueService);
 
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
 
@@ -79,13 +78,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             IOpportunityRepository opportunityRepository,
             IRepository<FunctionLog> functionlogRepository,
             ILogger<EmailDeliveryStatusService> logger
-
         )
         {
             //Arrange
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
-                opportunityRepository, messageQueueService, logger);
+                opportunityRepository, messageQueueService);
             
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(-1);
 
@@ -123,14 +121,13 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             IOpportunityRepository opportunityRepository,
             IRepository<FunctionLog> functionlogRepository,
             ILogger<EmailDeliveryStatusService> logger
-
         )
         {
             //Arrange
             matchingConfiguration.EmailDeliveryStatusToken = Guid.NewGuid();
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
-                opportunityRepository, messageQueueService, logger);
+                opportunityRepository, messageQueueService);
 
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(-1);
 
@@ -177,14 +174,13 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             IOpportunityRepository opportunityRepository,
             IRepository<FunctionLog> functionlogRepository,
             ILogger<EmailDeliveryStatusService> logger
-
         )
         {
             //Arrange
             payLoad.status = status;
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
-                opportunityRepository, messageQueueService, logger);
+                opportunityRepository, messageQueueService);
 
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
 

@@ -12,15 +12,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusService
 {
-    public class When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_Invalid_Email
+    public class When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_Invalid_Email_And_No_Opportunity
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly Guid _notificationId = new Guid("a8de2d8c-23ae-4c2f-980a-0a8a3231938f");
-        public const int OpportunityId = 1;
         private const string SupportEmailAddress = "support@service.com";
 
-        public When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_Invalid_Email()
+        public When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_Invalid_Email_And_No_Opportunity()
         {
             var configuration = new MatchingConfiguration
             {
@@ -40,10 +39,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 new EmailHistoryDto
                 {
                     NotificationId = _notificationId,
-                    OpportunityId = OpportunityId,
+                    OpportunityId = null,
                     SentTo = "sent-to@email.com",
-                    EmailTemplateId = 14,
-                    EmailTemplateName = "EmployerReferralV4",
+                    EmailTemplateId = 11,
+                    EmailTemplateName = "EmployerAupaBlank",
                     CreatedBy = "CreatedBy"
                 });
 
@@ -76,18 +75,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         [Fact]
         public void Then_OpportunityRepository_GetFailedOpportunityEmailAsync_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.Received(1).GetFailedOpportunityEmailAsync(OpportunityId, "sent-to@email.com");
+            _opportunityRepository.DidNotReceive().GetFailedOpportunityEmailAsync(Arg.Any<int>(),
+                Arg.Any<string>());
         }
 
         [Fact]
         public void Then_EmailService_SendEmailAsync_Is_Called_Exactly_Once()
         {
-            _emailService.Received(1).SendEmailAsync(OpportunityId,
+            _emailService.Received(1).SendEmailAsync(null,
                 EmailTemplateName.FailedEmail.ToString(),
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("email_type") && tokens["email_type"] == "Employer referral v 4"
-                    && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
+                    tokens.ContainsKey("email_type") && tokens["email_type"] == "Employer aupa blank"
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Email address does not exist"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
                     && tokens.ContainsKey("failed_email_body") && tokens["failed_email_body"] == "Body")

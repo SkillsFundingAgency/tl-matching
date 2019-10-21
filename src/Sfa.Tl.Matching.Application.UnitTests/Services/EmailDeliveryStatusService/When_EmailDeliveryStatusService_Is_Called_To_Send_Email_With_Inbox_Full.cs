@@ -27,8 +27,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 MatchingServiceSupportEmailAddress = "support@service.com"
             };
 
-            var logger = Substitute.For<ILogger<Application.Services.EmailDeliveryStatusService>>();
-
             _emailService = Substitute.For<IEmailService>();
             _emailService.GetFailedEmailAsync(_notificationId).Returns(
                 new FailedEmailDto
@@ -59,8 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var emailDeliveryStatusService = new Application.Services.EmailDeliveryStatusService(configuration,
                 _emailService,
                 _opportunityRepository,
-                messageQueueService,
-                logger);
+                messageQueueService);
 
             emailDeliveryStatusService.SendEmailDeliveryStatusAsync(_notificationId).GetAwaiter().GetResult();
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusService.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -12,7 +13,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusService
 {
-    public class When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_Invalid_Email
+    public class When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_No_Referral
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
@@ -20,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         public const int OpportunityId = 1;
         private const string SupportEmailAddress = "support@service.com";
 
-        public When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_Invalid_Email()
+        public When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_No_Referral()
         {
             var configuration = new MatchingConfiguration
             {
@@ -50,8 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var messageQueueService = Substitute.For<IMessageQueueService>();
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            _opportunityRepository.GetFailedOpportunityEmailAsync(1, "sent-to@email.com").Returns(
-                new EmailBodyDtoBuilder().Build());
+            _opportunityRepository.GetFailedOpportunityEmailAsync(1, "sent-to@email.com").ReturnsNull();
 
             var emailDeliveryStatusService = new Application.Services.EmailDeliveryStatusService(configuration,
                 _emailService,
@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("email_type") && tokens["email_type"] == "Employer referral v 4"
-                    && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
+                    && tokens.ContainsKey("body") && tokens["body"] == string.Empty
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Email address does not exist"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
                     && tokens.ContainsKey("failed_email_body") && tokens["failed_email_body"] == "Body")

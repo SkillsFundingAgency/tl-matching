@@ -22,19 +22,16 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IMessageQueueService _messageQueueService;
-        private readonly ILogger<EmailDeliveryStatusService> _logger;
 
         public EmailDeliveryStatusService(MatchingConfiguration configuration,
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
-            IMessageQueueService messageQueueService,
-            ILogger<EmailDeliveryStatusService> logger)
+            IMessageQueueService messageQueueService)
         {
             _configuration = configuration;
             _emailService = emailService;
             _opportunityRepository = opportunityRepository;
             _messageQueueService = messageQueueService;
-            _logger = logger;
         }
 
         public async Task<int> HandleEmailDeliveryStatusAsync(string payload)
@@ -63,25 +60,26 @@ namespace Sfa.Tl.Matching.Application.Services
 
             Enum.TryParse(emailHistoryDto.EmailTemplateName, out EmailTemplateName emailTemplateName);
 
-            if (!emailHistoryDto.OpportunityId.HasValue)
+            var emailBody = string.Empty;
+            if (emailHistoryDto.OpportunityId.HasValue)
             {
-                _logger.LogInformation($"Notification Id={notificationId} does not have an Opportunity Id");
-                return;
-            }
+                var emailBodyDto = await _opportunityRepository.GetFailedOpportunityEmailAsync(emailHistoryDto.OpportunityId.Value,
+                    emailHistoryDto.SentTo);
 
-            var emailBodyDto = await _opportunityRepository.GetFailedOpportunityEmailAsync(emailHistoryDto.OpportunityId.Value,
-                emailHistoryDto.SentTo);
+                if (emailBodyDto != null)
+                    emailBody = GetEmailBody(emailBodyDto);
+            }
 
             var tokens = new Dictionary<string, string>
             {
                 { "email_type", emailTemplateName.Humanize() },
-                { "body", GetEmailBody(emailBodyDto) },
+                { "body", emailBody },
                 { "reason", failedEmailDto.FailedEmailType.Humanize() },
                 { "sender_username", emailHistoryDto.CreatedBy },
                 { "failed_email_body", failedEmailDto.Body }
             };
 
-            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId.Value, EmailTemplateName.FailedEmail.ToString(),
+            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId, EmailTemplateName.FailedEmail.ToString(),
                 _configuration.MatchingServiceSupportEmailAddress, tokens, "System");
         }
 
