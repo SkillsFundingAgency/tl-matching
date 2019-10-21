@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Web.Authorisation
         {
             new Claim(ClaimTypes.GivenName, "Dev"),
             new Claim(ClaimTypes.Surname, "Surname"),
-            new Claim(ClaimTypes.Upn, "dev@email.com"),
+            new Claim(ClaimTypes.Upn, "tmatching3@sfa.bis.gov.uk"),
             new Claim(ClaimTypes.Role, RolesExtensions.AdminUser)
         }, "test");
     }
