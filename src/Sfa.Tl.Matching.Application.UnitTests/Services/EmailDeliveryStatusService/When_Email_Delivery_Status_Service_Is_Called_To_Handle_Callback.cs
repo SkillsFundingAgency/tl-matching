@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -18,8 +17,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
     public class When_Email_Delivery_Status_Service_Is_Called_To_Handle_Callback
     {
 
-        [Theory, AutoDomainData]
+        [Theory]
+        [InlineAutoDomainData("delivered")]
+        [InlineAutoDomainData("Delivered")]
+        [InlineAutoDomainData("DELIVERED")]
         public async Task Then_Update_Email_History_With_Status(
+            string status,
             MatchingConfiguration configuration,
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
@@ -31,22 +34,29 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService);
 
+            payload.status = status;
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
+
+            emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
 
             //Act
             var emailCount = await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
-
+            
             //Assert
-            emailCount.Should().BeGreaterOrEqualTo(1);
+            emailCount.Should().Be(1);
 
             await emailService.Received(1).UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>());
 
-            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.status == "delivered"));
+            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.status == status));
 
         }
 
-        [Theory, AutoDomainData]
+        [Theory]
+        [InlineAutoDomainData("delivered")]
+        [InlineAutoDomainData("Delivered")]
+        [InlineAutoDomainData("DELIVERED")]
         public async Task Then_Do_Not_Add_To_Failed_Queue_If_Status_Is_Delivered(
+            string status,
             MatchingConfiguration configuration,
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
@@ -58,20 +68,29 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService);
 
+            payload.status = status;
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
+            
+            emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
 
             //Act
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
 
             //Assert
-            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.status == "delivered"));
+            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.status == status));
 
             await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
 
         }
 
-        [Theory, AutoDomainData]
+        [Theory]
+        [InlineAutoDomainData("not-delivered")]
+        [InlineAutoDomainData("permanent-failure")]
+        [InlineAutoDomainData("temporary-failure")]
+        [InlineAutoDomainData("not-a-valid-status")]
+        [InlineAutoDomainData("FAILED-EMAIL")]
         public async Task Then_Add_To_Failed_Queue_If_Status_Is_Not_Delivered(
+            string status,
             MatchingConfiguration configuration,
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
@@ -80,7 +99,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         )
         {
             //Arrange
-            payload.status = "permanent-failure";
+            payload.status = status;
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService);
 
@@ -90,7 +109,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
 
             //Assert
-            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.status == "permanent-failure"));
+            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.status == status));
 
             await messageQueueService.Received(1).PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
 

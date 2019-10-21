@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Humanizer;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
@@ -47,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updatedCount = await _emailService.UpdateEmailStatus(callbackData);
 
-            if (callbackData.status != "delivered" && updatedCount != -1)
+            if (callbackData.status.ToUpper() != "DELIVERED" && updatedCount != -1)
                 await PushEmailDeliveryStatusAsync(callbackData.id);
 
             return updatedCount;

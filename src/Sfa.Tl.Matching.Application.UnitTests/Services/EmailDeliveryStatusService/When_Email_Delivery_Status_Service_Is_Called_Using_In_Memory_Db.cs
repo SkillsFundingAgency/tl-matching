@@ -248,13 +248,23 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             EmailDeliveryStatusPayLoad payload,
             MatchingConfiguration configuration,
             ILogger<OpportunityRepository> opportunityRepoLogger,
-            IEmailService emailService
+            ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<EmailService> emailServiceLogger,
+            IAsyncNotificationClient notificationClient
         )
         {
             //Arrange
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailService).Assembly));
+            var mapper = new Mapper(config);
+
+            var emailTemplateRepository = new GenericRepository<EmailTemplate>(emailTemplateLogger, dbContext);
             var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
+            var emailHistoryRepository = new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
+            var emailService = new EmailService(configuration, notificationClient, emailTemplateRepository, emailHistoryRepository, mapper, emailServiceLogger);
+
 
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService);
@@ -262,11 +272,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
             //Act
-            await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
+            var result = await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
 
             //Assert
             var data = dbContext.EmailHistory.FirstOrDefault(em => em.NotificationId == payload.id);
             data.Should().BeNull();
+            result.Should().Be(-1);
 
             await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
         }
