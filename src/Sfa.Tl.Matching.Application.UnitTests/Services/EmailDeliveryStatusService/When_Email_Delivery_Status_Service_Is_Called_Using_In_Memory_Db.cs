@@ -51,17 +51,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             payload.id = emailHistory.NotificationId.GetValueOrDefault();
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailService).Assembly));
-            var mapper = new Mapper(config);
-
-            var emailTemplateRepository = new GenericRepository<EmailTemplate>(emailTemplateLogger, dbContext);
-            var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
-            var emailHistoryRepository = new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
-            var emailService = new EmailService(configuration, notificationClient, emailTemplateRepository, emailHistoryRepository, mapper, emailServiceLogger);
-
-
-            var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+            var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger,
+                emailServiceLogger, notificationClient, configuration, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
@@ -110,16 +101,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             payload.status = status;
             payload.id = emailHistory.NotificationId.GetValueOrDefault();
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailService).Assembly));
-            var mapper = new Mapper(config);
-
-            var emailTemplateRepository = new GenericRepository<EmailTemplate>(emailTemplateLogger, dbContext);
-            var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
-            var emailHistoryRepository = new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
-            var emailService = new EmailService(configuration, notificationClient, emailTemplateRepository, emailHistoryRepository, mapper, emailServiceLogger);
-
-            var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+            var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger,
+                emailServiceLogger, notificationClient, configuration, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
@@ -167,16 +150,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             payload.status = status;
             payload.id = emailHistory.NotificationId.GetValueOrDefault();
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailService).Assembly));
-            var mapper = new Mapper(config);
-
-            var emailTemplateRepository = new GenericRepository<EmailTemplate>(emailTemplateLogger, dbContext);
-            var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
-            var emailHistoryRepository = new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
-            var emailService = new EmailService(configuration, notificationClient, emailTemplateRepository, emailHistoryRepository, mapper, emailServiceLogger);
-
-            var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+            var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger,
+                emailServiceLogger, notificationClient, configuration, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
@@ -225,17 +200,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             payload.status = status;
             payload.id = Guid.Empty;
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailService).Assembly));
-            var mapper = new Mapper(config);
-
-            var emailTemplateRepository = new GenericRepository<EmailTemplate>(emailTemplateLogger, dbContext);
-            var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
-            var emailHistoryRepository = new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
-            var emailService = new EmailService(configuration, notificationClient,  emailTemplateRepository, emailHistoryRepository, mapper, emailServiceLogger);
-
-
-            var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+            var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger,
+                emailServiceLogger, notificationClient, configuration, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
@@ -267,7 +233,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             [Frozen] BackgroundProcessHistory backgroundProcessHistory,
             IMessageQueueService messageQueueService, MatchingConfiguration configuration,
             ILogger<OpportunityRepository> opportunityRepoLogger,
-            IEmailService emailService)
+            ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<EmailService> emailServiceLogger,
+            IAsyncNotificationClient notificationClient
+            )
         {
             //Arrange
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
@@ -275,10 +245,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             dbContext.Add(emailHistory);
             dbContext.SaveChanges();
 
-            var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
-
-            var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+            var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger,
+                emailServiceLogger, notificationClient, configuration, messageQueueService);
 
             //Act
             var result = await sut.HandleEmailDeliveryStatusAsync(payload);
@@ -314,17 +282,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             //Arrange
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailService).Assembly));
-            var mapper = new Mapper(config);
-
-            var emailTemplateRepository = new GenericRepository<EmailTemplate>(emailTemplateLogger, dbContext);
-            var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
-            var emailHistoryRepository = new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
-            var emailService = new EmailService(configuration, notificationClient, emailTemplateRepository, emailHistoryRepository, mapper, emailServiceLogger);
-
-
-            var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+            var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger,
+                emailServiceLogger, notificationClient, configuration, messageQueueService);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
@@ -337,6 +296,28 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             result.Should().Be(-1);
 
             await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+        }
+
+        private static Application.Services.EmailDeliveryStatusService SutSetUp(
+            MatchingDbContext dbContext, 
+            ILogger<OpportunityRepository> opportunityRepoLogger,
+            ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<EmailService> emailServiceLogger,
+            IAsyncNotificationClient notificationClient, 
+            MatchingConfiguration configuration, 
+            IMessageQueueService messageQueueService)
+        {
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailService).Assembly));
+            var mapper = new Mapper(config);
+
+            var emailTemplateRepository = new GenericRepository<EmailTemplate>(emailTemplateLogger, dbContext);
+            var opportunityRepository = new OpportunityRepository(opportunityRepoLogger, dbContext);
+            var emailHistoryRepository = new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
+            var emailService = new EmailService(configuration, notificationClient, emailTemplateRepository, emailHistoryRepository, mapper, emailServiceLogger);
+
+            return new Application.Services.EmailDeliveryStatusService(configuration,
+                emailService, opportunityRepository, messageQueueService);
         }
 
     }
