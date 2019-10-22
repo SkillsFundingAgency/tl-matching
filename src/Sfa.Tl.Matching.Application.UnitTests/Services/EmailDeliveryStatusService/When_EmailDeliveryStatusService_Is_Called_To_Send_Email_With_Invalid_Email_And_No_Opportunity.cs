@@ -26,6 +26,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 MatchingServiceSupportEmailAddress = SupportEmailAddress
             };
 
+            var logger = Substitute.For<ILogger<Application.Services.EmailDeliveryStatusService>>();
+
             _emailService = Substitute.For<IEmailService>();
             _emailService.GetFailedEmailAsync(_notificationId).Returns(
                 new FailedEmailDto
@@ -41,6 +43,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                     NotificationId = _notificationId,
                     OpportunityId = null,
                     SentTo = "sent-to@email.com",
+                    Status = "permanent-failure",
                     EmailTemplateId = 11,
                     EmailTemplateName = "EmployerAupaBlank",
                     CreatedBy = "CreatedBy"
@@ -49,13 +52,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var messageQueueService = Substitute.For<IMessageQueueService>();
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            _opportunityRepository.GetFailedOpportunityEmailAsync(1, "sent-to@email.com").Returns(
-                new EmailBodyDtoBuilder().Build());
+            _opportunityRepository.GetFailedEmployerEmailAsync(1, "sent-to@email.com").Returns(
+                new EmailBodyDtoBuilder()
+                    .AddEmployerEmail().Build());
 
             var emailDeliveryStatusService = new Application.Services.EmailDeliveryStatusService(configuration,
                 _emailService,
                 _opportunityRepository,
-                messageQueueService);
+                messageQueueService,
+                logger);
 
             emailDeliveryStatusService.SendEmailDeliveryStatusAsync(_notificationId).GetAwaiter().GetResult();
         }
@@ -73,9 +78,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         }
 
         [Fact]
-        public void Then_OpportunityRepository_GetFailedOpportunityEmailAsync_Is_Called_Exactly_Once()
+        public void Then_OpportunityRepository_GetFailedEmployerEmailAsync_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.DidNotReceive().GetFailedOpportunityEmailAsync(Arg.Any<int>(),
+            _opportunityRepository.DidNotReceive().GetFailedEmployerEmailAsync(Arg.Any<int>(),
                 Arg.Any<string>());
         }
 
@@ -83,10 +88,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         public void Then_EmailService_SendEmailAsync_Is_Called_Exactly_Once()
         {
             _emailService.Received(1).SendEmailAsync(null,
-                EmailTemplateName.FailedEmail.ToString(),
+                EmailTemplateName.FailedEmailV2.ToString(),
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("email_type") && tokens["email_type"] == "Employer aupa blank"
+                    tokens.ContainsKey("summary") && tokens["summary"] == "There was an error sending an email from the industry placement matching service."
+                    && tokens.ContainsKey("email_type") && tokens["email_type"] == "employer aupa blank"
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Email address does not exist"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
                     && tokens.ContainsKey("failed_email_body") && tokens["failed_email_body"] == "Body")

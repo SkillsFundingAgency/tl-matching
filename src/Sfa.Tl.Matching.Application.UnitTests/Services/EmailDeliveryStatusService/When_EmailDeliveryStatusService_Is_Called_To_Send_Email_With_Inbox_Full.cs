@@ -27,6 +27,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 MatchingServiceSupportEmailAddress = "support@service.com"
             };
 
+            var logger = Substitute.For<ILogger<Application.Services.EmailDeliveryStatusService>>();
+
             _emailService = Substitute.For<IEmailService>();
             _emailService.GetFailedEmailAsync(_notificationId).Returns(
                 new FailedEmailDto
@@ -42,6 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                     NotificationId = _notificationId,
                     OpportunityId = OpportunityId,
                     SentTo = "sent-to@email.com",
+                    Status = "unknown-failure",
                     EmailTemplateId = 7,
                     EmailTemplateName = "ProviderReferralV3",
                     CreatedBy = "CreatedBy"
@@ -50,14 +53,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var messageQueueService = Substitute.For<IMessageQueueService>();
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            _opportunityRepository.GetFailedOpportunityEmailAsync(OpportunityId, "sent-to@email.com").Returns(
-                new EmailBodyDtoBuilder()
-                    .AddEmployerEmail().Build());
+            _opportunityRepository.GetFailedProviderEmailAsync(OpportunityId, "sent-to@email.com").Returns(
+                new EmailBodyDtoBuilder().AddPoviderEmail().Build());
 
             var emailDeliveryStatusService = new Application.Services.EmailDeliveryStatusService(configuration,
                 _emailService,
                 _opportunityRepository,
-                messageQueueService);
+                messageQueueService,
+                logger);
 
             emailDeliveryStatusService.SendEmailDeliveryStatusAsync(_notificationId).GetAwaiter().GetResult();
         }
@@ -75,20 +78,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         }
 
         [Fact]
-        public void Then_OpportunityRepository_GetFailedOpportunityEmailAsync_Is_Called_Exactly_Once()
+        public void Then_OpportunityRepository_GetFailedProviderEmailAsync_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.Received(1).GetFailedOpportunityEmailAsync(OpportunityId, "sent-to@email.com");
+            _opportunityRepository.Received(1).GetFailedProviderEmailAsync(OpportunityId, "sent-to@email.com");
         }
 
         [Fact]
         public void Then_EmailService_SendEmailAsync_Is_Called_Exactly_Once()
         {
             _emailService.Received(1).SendEmailAsync(OpportunityId,
-                EmailTemplateName.FailedEmail.ToString(),
+                EmailTemplateName.FailedEmailV2.ToString(),
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
-                    tokens.ContainsKey("email_type") && tokens["email_type"] == "Provider referral v 3"
-                    && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\nEmployer contact: employer@email.com\r\n"
+                    tokens.ContainsKey("summary") && tokens["summary"] == "We cannot determine whether or not the following email was sent."
+                    && tokens.ContainsKey("email_type") && tokens["email_type"] == "provider referral"
+                    && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Inbox not accepting messages right now"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
                     && tokens.ContainsKey("failed_email_body") && tokens["failed_email_body"] == "Body")

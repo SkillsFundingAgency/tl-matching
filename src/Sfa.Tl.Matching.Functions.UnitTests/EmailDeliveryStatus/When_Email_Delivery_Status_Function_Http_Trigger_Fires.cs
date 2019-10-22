@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             //Arrange
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
-                opportunityRepository, messageQueueService);
+                opportunityRepository, messageQueueService, logger);
 
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
 
@@ -83,7 +83,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             //Arrange
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
-                opportunityRepository, messageQueueService);
+                opportunityRepository, messageQueueService, logger);
             
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(-1);
 
@@ -127,7 +127,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             matchingConfiguration.EmailDeliveryStatusToken = Guid.NewGuid();
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
-                opportunityRepository, messageQueueService);
+                opportunityRepository, messageQueueService, logger);
 
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(-1);
 
@@ -182,7 +182,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             payLoad.status = status;
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
-                opportunityRepository, messageQueueService);
+                opportunityRepository, messageQueueService, logger);
 
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
 

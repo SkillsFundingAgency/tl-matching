@@ -8,14 +8,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
         public EmailBodyDtoBuilder()
         {
-            _emailBodyDto = new EmailBodyDto
-            {
-                PrimaryContactEmail = "primary-contact@email.com",
-                SecondaryContactEmail = "secondary-contact@email.com",
-                ProviderDisplayName = "Provider Display Name",
-                ProviderVenueName = "Provider Venue Name",
-                ProviderVenuePostcode = "AB1 1AA"
-            };
+            _emailBodyDto = new EmailBodyDto();
+        }
+
+        public EmailBodyDtoBuilder AddPoviderEmail()
+        {
+            _emailBodyDto.PrimaryContactEmail = "primary-contact@email.com";
+            _emailBodyDto.SecondaryContactEmail = "secondary-contact@email.com";
+            _emailBodyDto.ProviderDisplayName = "Provider Display Name";
+            _emailBodyDto.ProviderVenueName = "Provider Venue Name";
+            _emailBodyDto.ProviderVenuePostcode = "AB1 1AA";
+
+            return this;
         }
 
         public EmailBodyDtoBuilder AddEmployerEmail()

@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<Notification, FailedEmailDto>()
                 .ForMember(m => m.Body, config => config.MapFrom(s => s.body))
                 .ForMember(m => m.Subject, config => config.MapFrom(s => s.subject))
+                .ForMember(m => m.Status, config => config.MapFrom(s => s.status))
                 .ForMember(m => m.FailedEmailType, config => config.MapFrom(s => GetFailedEmailType(s.status)))
                 .ForAllOtherMembers(c => c.Ignore())
                 ;

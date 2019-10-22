@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -27,12 +28,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
             IMessageQueueService messageQueueService,
+            ILogger<Application.Services.EmailDeliveryStatusService> logger,
             EmailDeliveryStatusPayLoad payload
         )
         {
             //Arrange
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+                emailService, opportunityRepository, messageQueueService, logger);
 
             payload.status = status;
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
@@ -61,12 +63,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
             IMessageQueueService messageQueueService,
+            ILogger<Application.Services.EmailDeliveryStatusService> logger,
             EmailDeliveryStatusPayLoad payload
         )
         {
             //Arrange
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+                emailService, opportunityRepository, messageQueueService, logger);
 
             payload.status = status;
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
@@ -95,13 +98,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
             IMessageQueueService messageQueueService,
+            ILogger<Application.Services.EmailDeliveryStatusService> logger,
             EmailDeliveryStatusPayLoad payload
         )
         {
             //Arrange
             payload.status = status;
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+                emailService, opportunityRepository, messageQueueService, logger);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
@@ -124,6 +128,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
             IMessageQueueService messageQueueService,
+            ILogger<Application.Services.EmailDeliveryStatusService> logger,
             EmailDeliveryStatusPayLoad payload
         )
         {
@@ -132,7 +137,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             payload.status = status;
 
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+                emailService, opportunityRepository, messageQueueService, logger);
 
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
@@ -161,6 +166,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
             IMessageQueueService messageQueueService,
+            ILogger<Application.Services.EmailDeliveryStatusService> logger,
             Domain.Models.EmailHistory emailHistory
             )
         {
@@ -170,7 +176,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 .Returns(emailHistory);
 
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
-                emailService, opportunityRepository, messageQueueService);
+                emailService, opportunityRepository, messageQueueService, logger);
 
             //Act
             var result = await sut.HandleEmailDeliveryStatusAsync(payload);

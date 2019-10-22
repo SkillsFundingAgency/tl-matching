@@ -305,7 +305,21 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return dto;
         }
 
-        public async Task<EmailBodyDto> GetFailedOpportunityEmailAsync(int opportunityId, string sentTo)
+        public async Task<EmailBodyDto> GetFailedEmployerEmailAsync(int opportunityId, string sentTo)
+        {
+            var dto = await (from o in _dbContext.Opportunity
+                             where o.Id == opportunityId
+                                   && o.EmployerContactEmail == sentTo
+                             select new EmailBodyDto
+                             {
+                                 EmployerEmail = o.EmployerContactEmail,
+                             })
+                .FirstOrDefaultAsync();
+
+            return dto;
+        }
+
+        public async Task<EmailBodyDto> GetFailedProviderEmailAsync(int opportunityId, string sentTo)
         {
             var dto = await (from o in _dbContext.Opportunity
                              join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
@@ -314,13 +328,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              join p in _dbContext.Provider on pv.ProviderId equals p.Id
                              where o.Id == opportunityId &&
                                    (p.PrimaryContactEmail == sentTo ||
-                                    p.SecondaryContactEmail == sentTo ||
-                                    o.EmployerContactEmail == sentTo)
+                                    p.SecondaryContactEmail == sentTo)
                              select new EmailBodyDto
                              {
                                  PrimaryContactEmail = p.PrimaryContactEmail,
                                  SecondaryContactEmail = p.SecondaryContactEmail,
-                                 EmployerEmail = o.EmployerContactEmail,
                                  ProviderDisplayName = p.DisplayName,
                                  ProviderVenuePostcode = pv.Postcode,
                                  ProviderVenueName = pv.Name,

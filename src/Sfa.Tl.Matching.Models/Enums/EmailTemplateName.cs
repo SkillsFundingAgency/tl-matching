@@ -1,4 +1,6 @@
-﻿namespace Sfa.Tl.Matching.Models.Enums
+﻿using System.ComponentModel;
+
+namespace Sfa.Tl.Matching.Models.Enums
 {
     public enum EmailTemplateName
     {
@@ -12,6 +14,7 @@
         ProviderReferralV3,
         ProviderFeedback,
         EmployerAupaBlank,
-        FailedEmail
+        FailedEmail,
+        FailedEmailV2
     }
 }
