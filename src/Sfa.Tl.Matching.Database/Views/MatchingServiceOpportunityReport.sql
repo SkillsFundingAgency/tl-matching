@@ -4,7 +4,7 @@
 	WITH CTE AS (
 		SELECT
 			oi.Id AS OpportunityItemId,
-			count(p.Id) AS ProviderCount
+			COUNT(DISTINCT p.Id) AS ProviderCount
 		from [Provider] AS P
 			INNER JOIN ProviderVenue AS pv ON pv.ProviderId = p.Id
 			INNER JOIN Referral AS rf ON rf.ProviderVenueId = pv.Id
@@ -20,7 +20,7 @@
 		e.Id AS EmployerId,
 		e.CompanyName,
 		e.Aupa,
-		e.Owner,
+		e.[Owner],
 		oi.Postcode AS EmployerPostCodeEnteredInSearch,
 		oi.PlacementsKnown,
 		oi.Placements,
