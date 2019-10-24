@@ -14,7 +14,7 @@ using Sfa.Tl.Matching.Web.Filters;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
-    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
+    //[ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class QualificationController : Controller
     {
         private readonly IMapper _mapper;

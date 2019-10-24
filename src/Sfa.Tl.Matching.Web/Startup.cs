@@ -73,18 +73,20 @@ namespace Sfa.Tl.Matching.Web
             });
 
             services.AddMvc(config =>
-            {
-                if (!isConfigLocalOrDev)
                 {
-                    var policy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .Build();
-                    config.Filters.Add(new AuthorizeFilter(policy));
-                }
+                    if (!isConfigLocalOrDev)
+                    {
+                        var policy = new AuthorizationPolicyBuilder()
+                            .RequireAuthenticatedUser()
+                            .Build();
+                        config.Filters.Add(new AuthorizeFilter(policy));
+                    }
 
-                config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
-                config.Filters.Add<CustomExceptionFilterAttribute>();
-            })
+                    config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                    config.Filters.Add<CustomExceptionFilterAttribute>();
+                    config.Filters.Add<ServiceUnavailableFilterAttribute>();
+                    config.Filters.Add<BackLinkFilter>();
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             if (!isConfigLocalOrDev)
@@ -258,8 +260,8 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
             services.AddTransient<IServiceStatusHistoryService, ServiceStatusHistoryService>();
             services.AddTransient<INavigationService, NavigationService>();
-            services.AddTransient<BackLinkFilter>();
-            services.AddTransient<ServiceUnavailableFilterAttribute>();
+            //services.AddTransient<BackLinkFilter>();
+            //services.AddTransient<ServiceUnavailableFilterAttribute>();
             
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
