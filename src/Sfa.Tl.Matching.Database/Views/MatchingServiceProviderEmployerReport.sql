@@ -2,7 +2,6 @@
 	AS 
 	
 	SELECT 
-		--oi.OpportunityId,
 		oi.Id AS OpportunityItemId,
 		p.Name AS ProviderName,
 		pv.Name AS ProviderVenueName,
@@ -11,9 +10,6 @@
 		rt.[Name] as RouteName, 
 		oi.JobRole, 
 		oi.Placements,
-		--oi.IsSaved,
-		--oi.IsCompleted,
-		--e.[Owner],
 		oi.CreatedBy, 
 		oi.CreatedOn,
 		oi.ModifiedOn
