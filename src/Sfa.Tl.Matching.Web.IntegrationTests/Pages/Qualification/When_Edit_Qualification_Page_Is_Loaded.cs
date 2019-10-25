@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be("/Start");
+            backLink.PathName.Should().Be("/get-admin-back-link");
 
             var searchButton = documentHtml.GetElementById("tl-search") as IHtmlButtonElement;
             searchButton.TextContent.Should().Be("Search");

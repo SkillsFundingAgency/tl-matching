@@ -101,5 +101,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return Redirect(prevUrl);
         }
+
+        [HttpGet]
+        [Route("get-admin-back-link", Name = "GetAdminBackLink")]
+        public async Task<IActionResult> GetAdminBackLinkAsync()
+        {
+            var prevUrl = await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
+
+            return Redirect(prevUrl);
+        }
+
     }
 }

@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Home
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be("/Start");
+            backLink.PathName.Should().Be("/get-admin-back-link");
 
             var body = documentHtml.QuerySelector(".govuk-body");
             body.TextContent.Should().Be("The service is currently online.");

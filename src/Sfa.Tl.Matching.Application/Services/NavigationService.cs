@@ -142,8 +142,8 @@ namespace Sfa.Tl.Matching.Application.Services
             "saved-opportunities",
             "download-opportunity",
             "remove-opportunityItem",
-            "service-under-maintenance",
-            "provisiongap-opportunities"
+            "provisiongap-opportunities",
+            "get-admin-back-link"
         };
     }
 }

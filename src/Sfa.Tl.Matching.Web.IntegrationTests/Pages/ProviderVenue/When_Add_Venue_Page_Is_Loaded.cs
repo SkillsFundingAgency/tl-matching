@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderVenue
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be($"/provider-overview/{ProviderId}");
+            backLink.PathName.Should().Be("/get-admin-back-link");
 
             var postcode = documentHtml.GetElementById("Postcode") as IHtmlInputElement;
             postcode.Value.Should().BeEmpty();

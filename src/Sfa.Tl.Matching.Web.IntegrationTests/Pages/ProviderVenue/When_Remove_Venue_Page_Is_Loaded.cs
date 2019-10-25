@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderVenue
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be($"/venue-overview/{VenueId}");
+            backLink.PathName.Should().Be("/get-admin-back-link");
 
             var removeButton = documentHtml.GetElementById("tl-remove") as IHtmlButtonElement;
             removeButton.TextContent.Should().Be("Remove venue");

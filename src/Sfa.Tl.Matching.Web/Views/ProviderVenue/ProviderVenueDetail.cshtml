@@ -5,14 +5,17 @@
 }
 
 @section backButton{
-    @if (Model.IsFromAddVenue)
-    {
-        <a asp-route="AddProviderVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
-    }
-    else
-    {
-        <a asp-controller="Provider" asp-action="AddProviderDetail" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
-    }
+    @*@if (Model.IsFromAddVenue)
+        {
+            <a asp-route="AddProviderVenue" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
+        }
+        else
+        {
+            <a asp-controller="Provider" asp-action="AddProviderDetail" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
+        }*@
+
+    <a asp-route="GetAdminBackLink" class="govuk-back-link" id="tl-back">Back</a>
+
 }
 
 @if (!ViewData.ModelState.IsValid)
@@ -95,27 +98,27 @@
             {
                 <table class="govuk-table">
                     <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="col">Learning aim reference</th>
-                        <th class="govuk-table__header" scope="col">Qualification title</th>
-                        <th class="govuk-table__header" scope="col"></th>
-                    </tr>
+                        <tr class="govuk-table__row">
+                            <th class="govuk-table__header" scope="col">Learning aim reference</th>
+                            <th class="govuk-table__header" scope="col">Qualification title</th>
+                            <th class="govuk-table__header" scope="col"></th>
+                        </tr>
                     </thead>
                     <tbody class="govuk-table__body">
-                    @for (var i = 0; i < Model.Qualifications?.Count; i++)
-                    {
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">@Model.Qualifications[i].LarsId</td>
-                            <td class="govuk-table__cell">@Model.Qualifications[i].Title</td>
-                            <td class="govuk-table__cell">
-                                <a asp-controller="Qualification" asp-action="RemoveQualification" 
-                                   asp-route-providerVenueId="@Model.Id" asp-route-qualificationId="@Model.Qualifications[i].Id" 
-                                   class="govuk-link">Remove qualification</a>
-                                <input type="hidden" asp-for="@Model.Qualifications[i].LarsId" name="Qualifications[@i].LarsId" />
-                                <input type="hidden" asp-for="@Model.Qualifications[i].Title" name="Qualifications[@i].Title" />
-                            </td>
-                        </tr>
-                    }
+                        @for (var i = 0; i < Model.Qualifications?.Count; i++)
+                        {
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">@Model.Qualifications[i].LarsId</td>
+                                <td class="govuk-table__cell">@Model.Qualifications[i].Title</td>
+                                <td class="govuk-table__cell">
+                                    <a asp-route="RemoveQualification" asp-route-providerVenueId="@Model.Id"
+                                       asp-route-qualificationId="@Model.Qualifications[i].Id"
+                                       class="govuk-link">Remove qualification</a>
+                                    <input type="hidden" asp-for="@Model.Qualifications[i].LarsId" name="Qualifications[@i].LarsId" />
+                                    <input type="hidden" asp-for="@Model.Qualifications[i].Title" name="Qualifications[@i].Title" />
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             }

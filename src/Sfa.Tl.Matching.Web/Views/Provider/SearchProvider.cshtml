@@ -4,7 +4,8 @@
 }
 
 @section backButton{
-    <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link" id="tl-back">Back</a>
+    @*<a asp-controller="Proximity" asp-action="Start" class="govuk-back-link" id="tl-back">Back</a>*@
+    <a asp-route="GetAdminBackLink" class="govuk-back-link" id="tl-back">Back</a>
 }
 
 <div class="govuk-grid-row">
@@ -14,17 +15,17 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        
+
         @if (Model.SearchResults?.Results?.Count > 0)
         {
             @if (Model.SearchResults.IsUkRlp)
-             {
-                 <partial name="_addprovider" model="Model.SearchResults" />
-             }
-             else
-             {
-                 <partial name="_searchresults" model="Model" />
-             }
+            {
+                <partial name="_addprovider" model="Model.SearchResults" />
+            }
+            else
+            {
+                <partial name="_searchresults" model="Model" />
+            }
         }
         else if (Model.SearchParameters.UkPrn.HasValue)
         {
