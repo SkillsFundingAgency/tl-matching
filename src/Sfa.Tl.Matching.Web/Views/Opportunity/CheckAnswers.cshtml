@@ -19,82 +19,100 @@
         <span class="govuk-caption-l">@Model.CompanyNameWithAka</span>
 
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+        <h2 class="govuk-heading-m">Placement information</h2>
 
-        <table class="govuk-table" id="tl-placement-table">
-            <caption class="govuk-table__caption govuk-heading-m">Placement information</caption>
-            <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Skill area</th>
-                    <td class="govuk-table__cell">@Model.RouteName</td>
-                    <td class="govuk-table__cell">
-                        <a asp-route="GetProviderResults"
-                           asp-route-opportunityId="@Model.OpportunityId"
-                           asp-route-postcode="@Model.Postcode"
-                           asp-route-selectedRouteId="@Model.RouteId"
-                           class="govuk-link tl-float-right" id="tl-change-link">Change<span class="govuk-visually-hidden"> the type of placement</span></a>
-                    </td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Postcode of workplace</th>
-                    <td class="govuk-table__cell">@Model.Postcode</td>
-                    <td class="govuk-table__cell">
-                        <a asp-route="GetProviderResults"
-                           asp-route-opportunityId="@Model.OpportunityId"
-                           asp-route-postcode="@Model.Postcode"
-                           asp-route-selectedRouteId="@Model.RouteId"
-                           class="govuk-link tl-float-right" id="tl-change-link">Change<span class="govuk-visually-hidden"> the postcode of the workplace</span></a>
-                    </td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Job role</th>
-                    <td class="govuk-table__cell">@Model.JobRole</td>
-                    <td class="govuk-table__cell">
-                        <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right" id="tl-change-link">Change<span class="govuk-visually-hidden"> the job role</span></a>
-                    </td>
-                </tr>
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Students wanted</th>
-                    <td class="govuk-table__cell">@Model.PlacementsDetail</td>
-                    <td class="govuk-table__cell">
-                        <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link tl-float-right" id="tl-change-link">Change<span class="govuk-visually-hidden"> the number of placements</span></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9" id="tl-placement-table">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Skill area
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @Model.RouteName
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a asp-route="GetProviderResults"
+                       asp-route-opportunityId="@Model.OpportunityId"
+                       asp-route-postcode="@Model.Postcode"
+                       asp-route-selectedRouteId="@Model.RouteId"
+                       class="govuk-link" id="tl-change-link">Change<span class="govuk-visually-hidden"> the type of placement</span></a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Postcode of workplace
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @Model.Postcode
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a asp-route="GetProviderResults"
+                       asp-route-opportunityId="@Model.OpportunityId"
+                       asp-route-postcode="@Model.Postcode"
+                       asp-route-selectedRouteId="@Model.RouteId"
+                       class="govuk-link" id="tl-change-link">Change<span class="govuk-visually-hidden"> the postcode of the workplace</span></a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Job role
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @Model.JobRole
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link" id="tl-change-link">Change<span class="govuk-visually-hidden"> the job role</span></a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Students wanted
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @Model.PlacementsDetail
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a asp-route="GetPlacementInformation" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link " id="tl-change-link">Change<span class="govuk-visually-hidden"> the number of placements</span></a>
+
+                </dd>
+            </div>
+        </dl>
+
 
         <hr class="govuk-section-break govuk-section-break--l ">
 
         <h2 class="govuk-heading-m">Selected providers</h2>
-        <table class="govuk-table" id="tl-providers-table">
-            <tbody class="govuk-table__body">
-                @for (int i = 0; i < Model.Providers.Count(); i++)
+
+
+        <dl class="govuk-summary-list tl-summary-list" id="tl-providers-table">
+            @for (int i = 0; i < Model.Providers.Count(); i++)
+            {
+                var distance = @Model.Providers[i].DistanceFromEmployer;
+                var milesText = "miles";
+                if (distance == 1)
                 {
-                    var distance = @Model.Providers[i].DistanceFromEmployer;
-                    var milesText = "miles";
-                    if (distance == 1)
-                    {
-                        milesText = "mile";
-                    }
-
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">@Model.Providers[i].DisplayText</th>
-                        <td class="govuk-table__cell tl-min-150">
-                            @($"{distance:#0.0}") @milesText from @Model.Postcode
-                        </td>
-
-                        @if (Model.Providers.Count() > 1)
-                        {
-                            <td class="govuk-table__cell">
-                                <a asp-route="DeleteReferral" asp-route-referralId="@Model.Providers[i].ReferralId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link">Remove</a>
-                            </td>
-                        }
-                    </tr>
+                    milesText = "mile";
                 }
 
-            </tbody>
-        </table>
 
-        <p class="govuk-body">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    @Model.Providers[i].DisplayText
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @($"{distance:#0.0}") @milesText from @Model.Postcode
+                </dd>
+                @if (Model.Providers.Count() > 1)
+                {
+                    <dd class="govuk-summary-list__actions">
+                        <a asp-route="DeleteReferral" asp-route-referralId="@Model.Providers[i].ReferralId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link">Remove</a>
+                    </dd>
+                }
+            </div>
+
+            }
+        </dl>
+
+        <p class="govuk-body  govuk-!-margin-bottom-9">
             <a class="govuk-link" id="tl-change-providers"
                asp-route="GetProviderResults"
                asp-route-opportunityId="@Model.OpportunityId"
