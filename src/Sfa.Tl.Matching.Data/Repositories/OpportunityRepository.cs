@@ -238,8 +238,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return await _dbContext.MatchingServiceOpportunityReport
                 .OrderBy(o => o.OpportunityItemId)
                 .ThenByDescending(o => o.OpportunityType)
-                .ThenByDescending(o => o.IsCompleted)
-                .ThenByDescending(o => o.IsSaved)
+                .ThenByDescending(o => o.PipelineOpportunity)
                 .ToListAsync();
         }
 

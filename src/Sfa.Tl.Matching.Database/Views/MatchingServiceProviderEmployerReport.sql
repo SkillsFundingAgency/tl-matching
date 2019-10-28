@@ -3,8 +3,8 @@
 	
 	SELECT 
 		oi.Id AS OpportunityItemId,
-		p.Name AS ProviderName,
-		pv.Name AS ProviderVenueName,
+		p.[Name] AS ProviderName,
+		pv.[Name] AS ProviderVenueName,
 		e.CompanyName AS EmployerName, 
 		oi.Postcode  as EmployerPostCode, 
 		rt.[Name] as RouteName, 
