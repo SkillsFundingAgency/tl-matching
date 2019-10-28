@@ -217,6 +217,7 @@ namespace Sfa.Tl.Matching.Web
         {
             services.AddTransient<IOpportunityRepository, OpportunityRepository>();
             services.AddTransient<IProviderVenueRepository, ProviderVenueRepository>();
+            services.AddTransient<IProviderRepository, ProviderRepository>();
 
             services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>));
         }

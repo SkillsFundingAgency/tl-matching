@@ -145,6 +145,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddTransient<IOpportunityRepository, OpportunityRepository>();
             services.AddTransient<IProviderVenueRepository, ProviderVenueRepository>();
+            services.AddTransient<IProviderRepository, ProviderRepository>();
 
             services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>));
             services.AddTransient(typeof(IBulkInsertRepository<>), typeof(SqlBulkInsertRepository<>));
