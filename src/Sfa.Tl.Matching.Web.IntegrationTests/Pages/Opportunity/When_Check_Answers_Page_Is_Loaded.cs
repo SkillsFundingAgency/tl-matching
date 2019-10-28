@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using AngleSharp.Dom;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
@@ -58,38 +58,30 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var providerResultsUrl =
                 $"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-SW1A%202AA-for-route-1";
 
-            //var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
-            //placementInformationTable.Rows.Length.Should().Be(4);
+            var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlElement;
 
-            //AssertTableRow(placementInformationTable.Rows[0],
-            //    "Agriculture, environmental and animal care",
-            //    "Change the type of placement",
-            //    providerResultsUrl);
+            var placementKey = placementInformationTable.GetElementsByClassName("govuk-summary-list__key");
+            
+            placementKey[0].InnerHtml.Trim().Should().Be("Skill area");
+            placementKey[1].InnerHtml.Trim().Should().Be("Postcode of workplace");
+            placementKey[2].InnerHtml.Trim().Should().Be("Job role");
+            placementKey[3].InnerHtml.Trim().Should().Be("Students wanted");
 
-            //AssertTableRow(placementInformationTable.Rows[1],
-            //    "SW1A 2AA",
-            //    "Change the postcode of the workplace",
-            //    providerResultsUrl);
+            var placementValue = placementInformationTable.GetElementsByClassName("govuk-summary-list__value");
 
-            //AssertTableRow(placementInformationTable.Rows[2],
-            //    "Job Role",
-            //    "Change the job role",
-            //    $"/placement-information/{OpportunityItemId}");
+            placementValue[0].InnerHtml.Trim().Should().Be("Agriculture, environmental and animal care");
+            placementValue[1].InnerHtml.Trim().Should().Be("SW1A 2AA");
+            placementValue[2].InnerHtml.Trim().Should().Be("Job Role");
+            placementValue[3].InnerHtml.Trim().Should().Be("1");
 
-            //AssertTableRow(placementInformationTable.Rows[3],
-            //    "1",
-            //    "Change the number of placements",
-            //    $"/placement-information/{OpportunityItemId}");
+            var placementActions = placementInformationTable.GetElementsByClassName("govuk-link") ;
 
-            //var providerTable = documentHtml.GetElementById("tl-providers-table") as IHtmlTableElement;
-            //var provider1Row = providerTable.Rows[0];
-            //var providerNameCell = provider1Row.Cells[0] as IHtmlTableHeaderCellElement;
-            //providerNameCell.TextContent.Should().Be("Venue 1 Name (CV1 2WT)");
+            placementActions[0].TextContent.Should().Be("Change the type of placement");
+            placementActions[1].TextContent.Should().Be("Change the postcode of the workplace");
+            placementActions[2].TextContent.Should().Be("Change the job role");
+            placementActions[3].TextContent.Should().Be("Change the number of placements");
 
-            //var distanceCell = provider1Row.Cells[1] as IHtmlTableDataCellElement;
-            //distanceCell.TextContent.Should()
-            //    .Be("\n                            1.2 miles from SW1A 2AA\n                        ");
-
+            
             var changeProvidersLink = documentHtml.GetElementById("tl-change-providers") as IHtmlAnchorElement;
             changeProvidersLink.TextContent.Should().Be("Change providers");
             changeProvidersLink.PathName.Should().Be(providerResultsUrl);
@@ -122,54 +114,47 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var providerResultsUrl =
                 $"/provider-results-for-opportunity-{OpportunityProviderMultipleId}-item-{OpportunityItemProviderMultipleId}-within-30-miles-of-SW1A%202AA-for-route-1";
 
-            //var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
-            //AssertTableRow(placementInformationTable.Rows[0],
-            //   "Agriculture, environmental and animal care",
-            //   "Change the type of placement",
-            //   providerResultsUrl);
+            var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlElement;
 
-            //AssertTableRow(placementInformationTable.Rows[1],
-            //    "SW1A 2AA",
-            //    "Change the postcode of the workplace",
-            //    providerResultsUrl);
+            var placementKey = placementInformationTable.GetElementsByClassName("govuk-summary-list__key");
+            var placementValue = placementInformationTable.GetElementsByClassName("govuk-summary-list__value");
+            var placementActions = placementInformationTable.GetElementsByClassName("govuk-link");
 
-            //AssertTableRow(placementInformationTable.Rows[2],
-            //    "Job Role",
-            //    "Change the job role",
-            //    $"/placement-information/{OpportunityItemProviderMultipleId}");
+            placementKey[0].InnerHtml.Trim().Should().Be("Skill area");
+            placementKey[1].InnerHtml.Trim().Should().Be("Postcode of workplace");
+            placementKey[2].InnerHtml.Trim().Should().Be("Job role");
+            placementKey[3].InnerHtml.Trim().Should().Be("Students wanted");
+            
+            placementValue[0].InnerHtml.Trim().Should().Be("Agriculture, environmental and animal care");
+            placementValue[1].InnerHtml.Trim().Should().Be("SW1A 2AA");
+            placementValue[2].InnerHtml.Trim().Should().Be("Job Role");
+            placementValue[3].InnerHtml.Trim().Should().Be("1");
 
-            //AssertTableRow(placementInformationTable.Rows[3],
-            //    "1",
-            //    "Change the number of placements",
-            //    $"/placement-information/{OpportunityItemProviderMultipleId}");
-
+            placementActions[0].TextContent.Should().Be("Change the type of placement");
+            placementActions[1].TextContent.Should().Be("Change the postcode of the workplace");
+            placementActions[2].TextContent.Should().Be("Change the job role");
+            placementActions[3].TextContent.Should().Be("Change the number of placements");
 
             // Assert Provider Information with Remove Link
 
-            //var providerTable = documentHtml.GetElementById("tl-providers-table") as IHtmlTableElement;
+            var providerTable = documentHtml.GetElementById("tl-providers-table");
 
-            //AssertTableRow(providerTable.Rows[0],
-            //    "\n                            1.2 miles from SW1A 2AA\n                        ",
-            //    "Remove",
-            //    $"/remove-referral/{ProviderReferral1Id}-{OpportunityItemProviderMultipleId}");
+            var providerKey = providerTable.GetElementsByClassName("govuk-summary-list__key");
+            var providerValue = providerTable.GetElementsByClassName("govuk-summary-list__value");
+            var providerActions = providerTable.GetElementsByClassName("govuk-link");
 
-            //AssertTableRow(providerTable.Rows[1],
-            //    "\n                            2.9 miles from SW1A 2AA\n                        ",
-            //    "Remove",
-            //    $"/remove-referral/{ProviderReferral2Id}-{OpportunityItemProviderMultipleId}");
 
+            providerKey[0].InnerHtml.Trim().Should().Be("Venue 1 Name (CV1 2WT)");
+            providerKey[1].InnerHtml.Trim().Should().Be("Venue 2 Name (CV1 1EE)");
+
+            providerValue[0].InnerHtml.Trim().Should().Be("1.2 miles from SW1A 2AA");
+            providerValue[1].InnerHtml.Trim().Should().Be("2.9 miles from SW1A 2AA");
+
+            providerActions.Select(x => x.TextContent).Should().BeEquivalentTo(new[] {"Remove", "Remove"});
+            
             var changeProvidersLink = documentHtml.QuerySelector("#tl-change-providers") as IHtmlAnchorElement;
             changeProvidersLink.TextContent.Should().Be("Change providers");
             changeProvidersLink.PathName.Should().Be(providerResultsUrl);
-        }
-
-        private static void AssertTableRow(IHtmlTableRowElement row, string cell1Text, string cell2Text,
-            string cell2Path)
-        {
-            row.Cells[1].TextContent.Should().Be(cell1Text);
-            var changeCell = row.Cells[2].Children[0] as IHtmlAnchorElement;
-            changeCell.Text().Should().Be(cell2Text);
-            changeCell.PathName.Should().Be(cell2Path);
         }
     }
 }
