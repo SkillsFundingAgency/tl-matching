@@ -142,28 +142,12 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterRepositories(IServiceCollection services)
         {
-            services.AddTransient<IRepository<BankHoliday>, GenericRepository<BankHoliday>>();
-            services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
-            services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
-            services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
-            services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
-            services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
-            services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
-            services.AddTransient<IRepository<Qualification>, GenericRepository<Qualification>>();
-            services.AddTransient<IRepository<QualificationRouteMapping>, QualificationRouteMappingRepository>();
-            services.AddTransient<IRepository<Provider>, ProviderRepository>();
-            services.AddTransient<IRepository<BackgroundProcessHistory>, GenericRepository<BackgroundProcessHistory>>();
-            services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
-            services.AddTransient<IRepository<ProviderVenue>, GenericRepository<ProviderVenue>>();
-            services.AddTransient<IRepository<FunctionLog>, GenericRepository<FunctionLog>>();
-            services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
-            services.AddTransient<IRepository<OpportunityItem>, GenericRepository<OpportunityItem>>();
-            services.AddTransient<IOpportunityRepository, OpportunityRepository>();
 
-            services.AddTransient<IBulkInsertRepository<BankHoliday>, SqlBulkInsertRepository<BankHoliday>>();
-            services.AddTransient<IBulkInsertRepository<LearningAimReferenceStaging>, SqlBulkInsertRepository<LearningAimReferenceStaging>>();
-            services.AddTransient<IBulkInsertRepository<ProviderReferenceStaging>, SqlBulkInsertRepository<ProviderReferenceStaging>>();
-            services.AddTransient<IBulkInsertRepository<EmployerStaging>, SqlBulkInsertRepository<EmployerStaging>>();
+            services.AddTransient<IOpportunityRepository, OpportunityRepository>();
+            services.AddTransient<IProviderVenueRepository, ProviderVenueRepository>();
+
+            services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>));
+            services.AddTransient(typeof(IBulkInsertRepository<>), typeof(SqlBulkInsertRepository<>));
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
