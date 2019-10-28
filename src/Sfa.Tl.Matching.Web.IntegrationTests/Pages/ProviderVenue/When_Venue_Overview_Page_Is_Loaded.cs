@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderVenue
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be("/get-admin-back-link");
+            backLink.PathName.Should().Be("/get-admin-back-link/1");
 
             var searchVisibleYes = documentHtml.GetElementById("search-visible-yes") as IHtmlInputElement;
             searchVisibleYes.Value.Should().Be("true");

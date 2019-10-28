@@ -6,7 +6,7 @@
 
 @section backButton{
     @*<a asp-route="GetProviderVenueDetail" asp-route-providerId="@Model.ProviderVenueId" class="govuk-back-link" id="tl-back">Back</a>*@
-    <a asp-route="GetAdminBackLink"  class="govuk-back-link" id="tl-back">Back</a>
+    <a asp-route="GetAdminBackLink" asp-route-providerId="@Model.ProviderVenueId" class="govuk-back-link" id="tl-back">Back</a>
 }
 
 @if (!ViewData.ModelState.IsValid)

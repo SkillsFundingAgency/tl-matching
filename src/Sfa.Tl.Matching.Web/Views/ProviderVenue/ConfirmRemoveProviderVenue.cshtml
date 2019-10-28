@@ -6,7 +6,7 @@
 
 @section backButton{
     @*<a asp-controller="ProviderVenue" asp-action="GetProviderVenueDetailAsync" asp-route-providerVenueId="@Model.ProviderVenueId" class="govuk-back-link" id="tl-back">Back</a>*@
-    <a asp-route="GetAdminBackLink" class="govuk-back-link" id="tl-back">Back</a>
+    <a asp-route="GetAdminBackLink" asp-route-providerId=0 class="govuk-back-link" id="tl-back">Back</a>
 }
 
 <div class="govuk-grid-row">

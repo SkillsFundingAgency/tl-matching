@@ -23,12 +23,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("remove-opportunityItem/{opportunityId}-{opportunityItemId}", Name = "RemoveAndGetOpportunityBasket")]
         public async Task<IActionResult> RemoveAndGetOpportunityBasketAsync(int opportunityId, int opportunityItemId)
         {
-            await _opportunityService.DeleteOpportunityItemAsync(opportunityId, opportunityItemId);
             var opportunityItemCount = await _opportunityService.GetSavedOpportunityItemCountAsync(opportunityId);
 
-            return opportunityItemCount == 0
-                ? RedirectToRoute("Start")
-                : RedirectToRoute("GetOpportunityBasket", new { opportunityId, opportunityItemId });
+            if (opportunityItemCount == 0)
+            {
+                await _opportunityService.DeleteOpportunityItemAsync(opportunityId, opportunityItemId);
+                return RedirectToRoute("Start");
+            }
+
+            return RedirectToRoute("GetOpportunityBasket", new { opportunityId, opportunityItemId });
         }
 
         [HttpGet]
@@ -103,10 +106,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("get-admin-back-link", Name = "GetAdminBackLink")]
-        public async Task<IActionResult> GetAdminBackLinkAsync()
+        [Route("get-admin-back-link/{ProviderId}", Name = "GetAdminBackLink")]
+        public async Task<IActionResult> GetAdminBackLinkAsync(BackLinkViewModel viewModel)
         {
             var prevUrl = await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
+
+            if (prevUrl.Contains("create-provider") && viewModel.ProviderId != 0)
+            {
+                await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
+                return RedirectToRoute("GetProviderDetail", viewModel.ProviderId);
+            }
 
             return Redirect(prevUrl);
         }
