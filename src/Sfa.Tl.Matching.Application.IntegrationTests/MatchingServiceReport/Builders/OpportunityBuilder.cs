@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
@@ -99,13 +100,17 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
 
         public void ClearData()
         {
-            _context.Referral.Remove(_context.Referral.First(r => r.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests"));
+            var referral = _context.Referral.Where(r => r.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
+            if (!referral.IsNullOrEmpty()) _context.Referral.RemoveRange(referral);
 
-            _context.ProvisionGap.Remove(_context.ProvisionGap.First(r => r.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests"));
+            var provisionGap = _context.ProvisionGap.Where(r => r.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
+            if (!provisionGap.IsNullOrEmpty()) _context.ProvisionGap.RemoveRange(provisionGap);
 
-            _context.OpportunityItem.RemoveRange(_context.OpportunityItem.Where(o => o.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests"));
+            var oppItems = _context.OpportunityItem.Where(o => o.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
+            if (!oppItems.IsNullOrEmpty()) _context.OpportunityItem.RemoveRange(oppItems);
 
-            _context.Opportunity.Remove(_context.Opportunity.First(o => o.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests"));
+            var opp = _context.Opportunity.Where(o => o.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
+            if (!opp.IsNullOrEmpty()) _context.Opportunity.RemoveRange(opp);
 
             _context.SaveChanges();
         }
@@ -144,11 +149,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                     {
                         IsRemoved = true,
                         IsEnabledForReferral = true,
-                        County = "test",
+                        County = "test" + venue,
                         Name = "test" + venue,
-                        Postcode = "test",
-                        Source = "test",
-                        Town = "test",
+                        Postcode = "test" + venue,
+                        Source = "test" + venue,
+                        Town = "test" + venue,
                         CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
                         ProviderQualification = new List<ProviderQualification>
                         {
@@ -187,15 +192,20 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
 
         public void ClearData()
         {
-            _context.QualificationRouteMapping.Remove(_context.QualificationRouteMapping.First(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests"));
+            var qrm = _context.QualificationRouteMapping.Where(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
+            if (!qrm.IsNullOrEmpty()) _context.QualificationRouteMapping.RemoveRange(qrm);
 
-            _context.Qualification.Remove(_context.Qualification.First(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests"));
+            var qual = _context.Qualification.Where(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
+            if (!qual.IsNullOrEmpty()) _context.Qualification.RemoveRange(qual);
 
-            _context.ProviderQualification.Remove(_context.ProviderQualification.First(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests"));
+            var pq = _context.ProviderQualification.Where(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
+            if (!pq.IsNullOrEmpty()) _context.ProviderQualification.RemoveRange(pq);
 
-            _context.ProviderVenue.Remove(_context.ProviderVenue.First(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests"));
+            var pv = _context.ProviderVenue.Where(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
+            if (!pv.IsNullOrEmpty()) _context.ProviderVenue.RemoveRange(pv);
 
-            _context.Provider.Remove(_context.Provider.First(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests"));
+            var p = _context.Provider.Where(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
+            if (!p.IsNullOrEmpty()) _context.Provider.RemoveRange(p);
         }
     }
 
@@ -233,7 +243,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
 
         public void ClearData()
         {
-            _context.Employer.Remove(_context.Employer.First(e => e.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests"));
+            var employer = _context.Employer.Where(e => e.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
+           if(!employer.IsNullOrEmpty()) _context.Employer.RemoveRange(employer);
         }
     }
 }

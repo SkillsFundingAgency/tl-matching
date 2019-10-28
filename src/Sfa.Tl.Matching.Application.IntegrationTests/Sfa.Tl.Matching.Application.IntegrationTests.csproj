@@ -86,4 +86,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="MatchingServiceReport\MatchingServiceProviderEmployerReport\" />
+  </ItemGroup>
+
 </Project>
