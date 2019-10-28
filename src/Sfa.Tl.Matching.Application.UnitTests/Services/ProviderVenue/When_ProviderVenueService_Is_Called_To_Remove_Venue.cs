@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
     public class When_ProviderVenueService_Is_Called_To_Hide_Venue
     {
-        private readonly IRepository<Domain.Models.ProviderVenue> _providerVenueRepository;
+        private readonly IProviderVenueRepository _providerVenueRepository;
 
         public When_ProviderVenueService_Is_Called_To_Hide_Venue()
         {

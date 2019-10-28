@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
     public class When_ProviderVenueService_Is_Called_To_HaveUniqueVenue_Exists
     {
-        private readonly IRepository<Domain.Models.ProviderVenue> _providerVenueRepository;
+        private readonly IProviderVenueRepository _providerVenueRepository;
         private readonly ProviderVenueDetailViewModel _result;
         private const int ProviderId = 1;
         private const string Name = "Name";

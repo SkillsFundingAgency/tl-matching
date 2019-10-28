@@ -187,6 +187,8 @@ namespace Sfa.Tl.Matching.Web
 
         private void RegisterDependencies(IServiceCollection services)
         {
+            var apiKey = MatchingConfiguration.GovNotifyApiKey;
+
             //Inject AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -205,42 +207,18 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
+            services.AddTransient<IAsyncNotificationClient, NotificationClient>(provider => new NotificationClient(apiKey));
 
-            RegisterNotificationsApi(services, MatchingConfiguration.GovNotifyApiKey);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }
 
         private static void RegisterRepositories(IServiceCollection services)
         {
-            services.AddTransient<OpportunityRepository>();
-            services.AddTransient<IOpportunityRepository>(x => x.GetRequiredService<OpportunityRepository>());
-            services.AddTransient<IRepository<Opportunity>>(x => x.GetRequiredService<OpportunityRepository>());
-            
-            services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
-            services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
-            services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
-            services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
-            services.AddTransient<IRepository<OpportunityItem>, GenericRepository<OpportunityItem>>();
-            services.AddTransient<IRepository<Qualification>, GenericRepository<Qualification>>();
-            services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
-            services.AddTransient<IRepository<QualificationRouteMapping>, QualificationRouteMappingRepository>();
-            services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
-            services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
-            services.AddTransient<IRepository<Provider>, ProviderRepository>();
-            services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
-            services.AddTransient<IRepository<ProviderReference>, GenericRepository<ProviderReference>>();
-            services.AddTransient<IRepository<BackgroundProcessHistory>, GenericRepository<BackgroundProcessHistory>>();
-            services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
-            services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
-            services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
-            services.AddTransient<IRepository<ServiceStatusHistory>, GenericRepository<ServiceStatusHistory>>();
-            services.AddTransient<IRepository<UserCache>, GenericRepository<UserCache>>();
-        }
+            services.AddTransient<IOpportunityRepository, OpportunityRepository>();
+            services.AddTransient<IProviderVenueRepository, ProviderVenueRepository>();
 
-        private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)
-        {
-            services.AddTransient<IAsyncNotificationClient, NotificationClient>(provider => new NotificationClient(apiKey));
+            services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>));
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
