@@ -80,7 +80,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetProviderResults")]
+        [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetProviderResults")]
         public async Task<IActionResult> Results(SearchParametersViewModel searchParametersViewModel)
         {
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}")]
+        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}")]
         public async Task<IActionResult> RefineSearchResults(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
@@ -107,7 +107,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}")]
+        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}")]
         public async Task<IActionResult> ValidateProviderSearchResult(SaveReferralViewModel viewModel)
         {
             if (viewModel.SelectedProvider.Any(p => p.IsSelected))
@@ -139,6 +139,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 Postcode = viewModel.Postcode,
                 SelectedRouteId = viewModel.SelectedRouteId,
+                SearchRadius = SearchParametersViewModel.DefaultSearchRadius
             });
 
             var additionalResults = searchResults.Any() 

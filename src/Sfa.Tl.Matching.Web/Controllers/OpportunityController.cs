@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _mapper = mapper;
         }
 
-        [Route("{SearchResultProviderCount}-provisiongap-opportunities-within-one-hour-of-{Postcode}-for-route-{SelectedRouteId}", Name = "SaveProvisionGap")]
+        [Route("{SearchResultProviderCount}-provisiongap-opportunities-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "SaveProvisionGap")]
         public async Task<IActionResult> SaveProvisionGapAsync(SaveProvisionGapViewModel viewModel)
         {
             var opportunityDto = _mapper.Map<OpportunityDto>(viewModel);

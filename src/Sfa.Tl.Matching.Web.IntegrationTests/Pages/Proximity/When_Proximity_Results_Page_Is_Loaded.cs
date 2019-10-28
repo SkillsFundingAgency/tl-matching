@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 
             var client = _factory.CreateClient();
 
-            var response = await client.GetAsync($"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-CV1%202WT-for-route-1");
+            var response = await client.GetAsync($"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-CV1%202WT-for-route-1");
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html; charset=utf-8",
@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
 
             var noProvidersLink = documentHtml.GetElementById("tl-search-nosuitable") as IHtmlAnchorElement;
             noProvidersLink.Text.Should().Be("No suitable providers? Let us know");
-            noProvidersLink.PathName.Should().Be($"/2-provisiongap-opportunities-within-one-hour-of-CV1%202WT-for-route-1");
+            noProvidersLink.PathName.Should().Be($"/2-provisiongap-opportunities-within-30-miles-of-CV1%202WT-for-route-1");
 
             var searchResults = documentHtml.QuerySelector(".tl-search-results") as IHtmlOrderedListElement;
             AssertSearchResult(searchResults, 0);

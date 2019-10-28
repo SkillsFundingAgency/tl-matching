@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");
 
             var providerResultsUrl =
-                $"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-SW1A%202AA-for-route-1";
+                $"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-SW1A%202AA-for-route-1";
 
             var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
             placementInformationTable.Rows.Length.Should().Be(4);
@@ -120,7 +120,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             employerName.TextContent.Should().Be("Company Name");
 
             var providerResultsUrl =
-                $"/provider-results-for-opportunity-{OpportunityProviderMultipleId}-item-{OpportunityItemProviderMultipleId}-within-one-hour-of-SW1A%202AA-for-route-1";
+                $"/provider-results-for-opportunity-{OpportunityProviderMultipleId}-item-{OpportunityItemProviderMultipleId}-within-30-miles-of-SW1A%202AA-for-route-1";
 
             var placementInformationTable = documentHtml.GetElementById("tl-placement-table") as IHtmlTableElement;
             AssertTableRow(placementInformationTable.Rows[0],

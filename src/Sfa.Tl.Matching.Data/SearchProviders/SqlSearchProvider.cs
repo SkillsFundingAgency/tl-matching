@@ -35,10 +35,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
             var employerLocation = geometryFactory.CreatePoint(new Coordinate(double.Parse(dto.Longitude), double.Parse(dto.Latitude)));
 
-            //TODO: If javascript on then will need to search by radius first, otherwise this is ignored
-            //var searchRadius = dto.SearchRadius != 0 ? dto.SearchRadius : 25;
-            var searchRadius = 70;
-            var searchRadiusInMeters = searchRadius * MilesToMeters;
+            var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
 
             var result = await (from provider in _matchingDbContext.Provider
                                 join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId

@@ -3,7 +3,7 @@
 
 <h2 class="govuk-body">
     @{ var result = Model.SearchResults.SearchResultProviderCount == 1 ? "result" : "results"; }
-    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount</span> @result in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text</span> within 1 hour of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span>
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount</span> @result in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text</span> within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel.DefaultSearchRadius miles</span> of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span>
 </h2>
 
 <p class="govuk-body">
@@ -66,14 +66,6 @@
                                     <ul>
                                         <li id="tl-travel-times">
                                             <p class="govuk-body govuk-!-font-weight-bold">@($"{searchResult.Distance:#0.0}") miles</p>
-                                            @if (@searchResult?.TravelTimeByPublicTransport > 0)
-                                            {
-                                                <p class="govuk-body">Public transport: @searchResult.TravelTimeByPublicTransport.ToReadableString()</p>
-                                            }
-                                            @if (@searchResult?.TravelTimeByDriving > 0)
-                                            {
-                                                <p class="govuk-body">Car: @searchResult.TravelTimeByDriving.ToReadableString()</p>
-                                            }
                                         </li>
                                     </ul>
                                 </div>

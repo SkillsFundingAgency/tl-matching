@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             // ReSharper disable all PossibleNullReferenceException
 
             var client = _factory.CreateClient();
-            var pageResponse = await client.GetAsync($"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-one-hour-of-CV1%202WT-for-route-1");
+            var pageResponse = await client.GetAsync($"/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-CV1%202WT-for-route-1");
                 
             var pageContent = await HtmlHelpers.GetDocumentAsync(pageResponse);
 

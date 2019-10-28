@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
@@ -35,67 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var searchResults = await _searchProvider.SearchProvidersByPostcodeProximityAsync(dto);
 
-            if (searchResults != null && searchResults.Any())
-            {
-                Debug.Write($"Search results for {dto.Postcode} route {dto.SelectedRouteId} - {searchResults.Count} results, ");
-                searchResults = await FilterByTravelTimeAsync(dto.Postcode, decimal.Parse(dto.Latitude), decimal.Parse(dto.Longitude), searchResults);
-                Debug.WriteLine($" {searchResults.Count} filtered results");
-            }
-
             return searchResults ?? new List<SearchResultsViewModelItem>();
-        }
-
-        private async Task<IList<SearchResultsViewModelItem>> FilterByTravelTimeAsync(string originPostcode, decimal originLatitude, decimal originLongitude, IList<SearchResultsViewModelItem> searchResults)
-        {
-            var destinations = searchResults
-                //.Where(v => v.Latitude != 0 && v.Longitude != 0)
-                .Select(v => new LocationDto
-                {
-                    Id = v.ProviderVenueId,
-                    Postcode = v.ProviderVenuePostcode,
-                    Latitude = v.Latitude,
-                    Longitude = v.Longitude
-                }).ToList();
-
-            var arrivalTimeSeconds = GetArrivalTime();
-
-            var journeyResults =
-                await Task.WhenAll(
-                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(originPostcode, originLatitude, originLongitude, destinations, TravelMode.Driving, arrivalTimeSeconds),
-                    _googleDistanceMatrixApiClient.GetJourneyTimesAsync(originPostcode, originLatitude, originLongitude, destinations, TravelMode.Transit, arrivalTimeSeconds));
-
-            var journeyTimesByCar = journeyResults[0];
-            var journeyTimesByPublicTransport = journeyResults[1];
-
-            const int oneHour = 60 * 60;
-            var results = searchResults
-                .Where(s =>
-                        journeyTimesByCar.Any(d => d.Key == s.ProviderVenueId &&
-                                                   d.Value.TravelTime < oneHour) 
-                        ||
-                        journeyTimesByPublicTransport.Any(d => d.Key == s.ProviderVenueId &&
-                                                               d.Value.TravelTime < oneHour)
-                    )
-                .Select(r => new SearchResultsViewModelItem
-                {
-                    ProviderVenueTown = r.ProviderVenueTown,
-                    ProviderVenuePostcode = r.ProviderVenuePostcode,
-                    ProviderVenueId = r.ProviderVenueId,
-                    ProviderName = r.ProviderName,
-                    ProviderDisplayName = r.ProviderDisplayName,
-                    ProviderVenueName = r.ProviderVenueName,
-                    Distance = r.Distance,
-                    IsTLevelProvider = r.IsTLevelProvider,
-                    QualificationShortTitles = r.QualificationShortTitles,
-                    TravelTimeByPublicTransport = journeyTimesByPublicTransport.TryGetValue(r.ProviderVenueId, out var tVal)
-                            ? tVal.TravelTime: (long?)null,
-                    TravelTimeByDriving = journeyTimesByCar.TryGetValue(r.ProviderVenueId, out var dVal)
-                        ? dVal.TravelTime : (long?)null,
-                    Latitude = r.Latitude,
-                    Longitude = r.Longitude
-                }).OrderBy(r => r.Distance).ToList();
-
-            return results;
         }
 
         public async Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto)
@@ -114,22 +52,6 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)
         {
             return await _locationApiClient.IsValidPostcodeAsync(postcode, true);
-        }
-
-        private long GetArrivalTime()
-        {
-            var dateNextWednesday =
-                DateTime.Now.AddDays(((int)DayOfWeek.Wednesday - (int)DateTime.Now.DayOfWeek + 7) % 7).Date;
-            var ukTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-
-            var hour = ukTimeZone.IsDaylightSavingTime(dateNextWednesday) ? 8 : 9;
-            var nineAmWednesday = new DateTime(dateNextWednesday.Year, dateNextWednesday.Month, dateNextWednesday.Day,
-                hour, 0, 0, DateTimeKind.Utc);
-
-            //var convertBack = TimeZoneInfo.ConvertTime(nineAmWednesday, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
-
-            var arrivalTimeOffset = new DateTimeOffset(nineAmWednesday, TimeSpan.Zero);
-            return arrivalTimeOffset.ToUnixTimeSeconds();
         }
     }
 }
