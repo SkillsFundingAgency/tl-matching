@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
-        private readonly IRepository<Provider> _providerRepository;
+        private readonly IProviderRepository _providerRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
         private readonly IMessageQueueService _messageQueueService;
         private readonly ILogger<ProviderQuarterlyUpdateEmailService> _logger;
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.Services
             MatchingConfiguration configuration,
             ILogger<ProviderQuarterlyUpdateEmailService> logger,
             IEmailService emailService,
-            IRepository<Provider> providerRepository,
+            IProviderRepository providerRepository,
             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository,
             IMessageQueueService messageQueueService,
             IDateTimeProvider dateTimeProvider)
@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             try
             {
-                var providers = await ((IProviderRepository)_providerRepository).GetProvidersWithFundingAsync();
+                var providers = await _providerRepository.GetProvidersWithFundingAsync();
 
                 await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistory,
                     providers.Count,

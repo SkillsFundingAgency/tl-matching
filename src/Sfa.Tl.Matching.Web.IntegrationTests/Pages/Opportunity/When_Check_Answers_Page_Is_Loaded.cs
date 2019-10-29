@@ -80,7 +80,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             placementActions[1].TextContent.Should().Be("Change the postcode of the workplace");
             placementActions[2].TextContent.Should().Be("Change the job role");
             placementActions[3].TextContent.Should().Be("Change the number of placements");
-
             
             var changeProvidersLink = documentHtml.GetElementById("tl-change-providers") as IHtmlAnchorElement;
             changeProvidersLink.TextContent.Should().Be("Change providers");
@@ -142,7 +141,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
             var providerKey = providerTable.GetElementsByClassName("govuk-summary-list__key");
             var providerValue = providerTable.GetElementsByClassName("govuk-summary-list__value");
             var providerActions = providerTable.GetElementsByClassName("govuk-link");
-
 
             providerKey[0].InnerHtml.Trim().Should().Be("Venue 1 Name (CV1 2WT)");
             providerKey[1].InnerHtml.Trim().Should().Be("Venue 2 Name (CV1 1EE)");
