@@ -10,11 +10,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
 {
     public class ProviderVenueRepository : GenericRepository<ProviderVenue>, IProviderVenueRepository
     {
-        private readonly MatchingDbContext _dbContext;
-
         public ProviderVenueRepository(ILogger<ProviderVenueRepository> logger, MatchingDbContext dbContext) : base(logger, dbContext)
         {
-            _dbContext = dbContext;
+        
         }
 
         public async Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int id)

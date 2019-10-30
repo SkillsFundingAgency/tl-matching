@@ -14,11 +14,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
 {
     public class OpportunityRepository : GenericRepository<Opportunity>, IOpportunityRepository
     {
-        private readonly MatchingDbContext _dbContext;
-
         public OpportunityRepository(ILogger<OpportunityRepository> logger, MatchingDbContext dbContext) : base(logger, dbContext)
         {
-            _dbContext = dbContext;
+            
         }
 
         public async Task<IList<OpportunityReferralDto>> GetProviderOpportunitiesAsync(int opportunityId, IEnumerable<int> itemIds)

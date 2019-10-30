@@ -24,7 +24,6 @@ using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
@@ -194,8 +193,10 @@ namespace Sfa.Tl.Matching.Web
 
             //Inject DbContext
             services.AddDbContext<MatchingDbContext>(options =>
-                options.UseSqlServer(MatchingConfiguration.SqlConnectionString,
-                    builder => builder.UseNetTopologySuite()
+                options
+                    .UseSqlServer(MatchingConfiguration.SqlConnectionString,
+                    builder => builder
+                        .UseNetTopologySuite()
                                       .EnableRetryOnFailure()), ServiceLifetime.Transient);
 
             //Inject services
