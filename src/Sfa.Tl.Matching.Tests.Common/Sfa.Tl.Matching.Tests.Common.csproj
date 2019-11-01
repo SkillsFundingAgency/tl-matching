@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Builders\**" />
+    <EmbeddedResource Remove="Builders\**" />
+    <None Remove="Builders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.10.0" />
     <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.10.0" />
     <PackageReference Include="AutoFixture.SeedExtensions" Version="4.10.0" />
@@ -18,10 +24,6 @@
     <ProjectReference Include="..\Sfa.Tl.Matching.Application\Sfa.Tl.Matching.Application.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Domain\Sfa.Tl.Matching.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Builders\" />
   </ItemGroup>
 
 </Project>

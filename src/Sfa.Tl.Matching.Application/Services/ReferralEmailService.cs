@@ -114,8 +114,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var referrals = await GetOpportunityReferralsAsync(opportunityId, itemIds);
 
-            const string emailSubject = "Industry Placement Matching Referral";
-
             try
             {
                 foreach (var referral in referrals)

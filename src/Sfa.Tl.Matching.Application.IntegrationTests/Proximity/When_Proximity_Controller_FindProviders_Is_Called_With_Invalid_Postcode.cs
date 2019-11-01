@@ -50,7 +50,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             _proximityController = new ProximityController(mapper, routePathService, proximityService, opportunityService, employerService);
 
             var selectedRouteId = routes.First().Id;
-            const int searchRadius = 5;
             const string postcode = "cV12 34";
 
             var viewModel = new SearchParametersViewModel

@@ -7,9 +7,9 @@
 			count(p.Id) AS ProviderCount
 		from [Provider] AS P
 			INNER JOIN ProviderVenue AS pv ON pv.ProviderId = p.Id
-			INNER JOIN Referral AS rf ON rf.ProviderVenueId = pv.id
-			INNER JOIN OpportunityItem AS oi ON rf.OpportunityItemId = oi.id
-		GROUP BY oi.id
+			INNER JOIN Referral AS rf ON rf.ProviderVenueId = pv.Id
+			INNER JOIN OpportunityItem AS oi ON rf.OpportunityItemId = oi.Id
+		GROUP BY oi.Id
 	)
 	SELECT
 		oi.Id AS OpportunityItemId,
