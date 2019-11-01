@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +70,7 @@ namespace Sfa.Tl.Matching.Web
                 options.Cookie.Name = "tlevels-x-csrf";
                 options.FormFieldName = "_csrfToken";
                 options.HeaderName = "X-XSRF-TOKEN";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
             services.AddMvc(config =>
@@ -82,6 +84,12 @@ namespace Sfa.Tl.Matching.Web
                     }
 
                     config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                    config.Filters.Add(new ResponseCacheAttribute
+                    {
+                        NoStore = true,
+                        Location = ResponseCacheLocation.None
+                    });
+
                     config.Filters.Add<CustomExceptionFilterAttribute>();
                     config.Filters.Add<ServiceUnavailableFilterAttribute>();
                     config.Filters.Add<BackLinkFilter>();
@@ -115,8 +123,7 @@ namespace Sfa.Tl.Matching.Web
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseHsts(options => options.MaxAge(365));
             }
 
             app.UseXContentTypeOptions();
@@ -242,7 +249,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<INavigationService, NavigationService>();
             //services.AddTransient<BackLinkFilter>();
             //services.AddTransient<ServiceUnavailableFilterAttribute>();
-            
+
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
             services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
