@@ -5,12 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Builders\**" />
-    <EmbeddedResource Remove="Builders\**" />
-    <None Remove="Builders\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.10.0" />
     <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.10.0" />
     <PackageReference Include="AutoFixture.SeedExtensions" Version="4.10.0" />
