@@ -21,7 +21,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database
             context.AddRange(OpportunityData.CreateReferralMultipleAndProvisionGap());
             context.AddRange(OpportunityData.CreateReferralSingleAndProvisionGap());
             context.AddRange(OpportunityData.CreateProvidersMultiple());
-            
+            context.AddRange(OpportunityData.CreateNReferrals(1400));
+
             context.SaveChanges();
         }
     }

@@ -544,9 +544,73 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                                 CreatedBy = "Dev Surname",
                             }
                         }
-                    }                    
+                    }
                 }
             };
         }
+
+        internal static Opportunity CreateNReferrals(int nItems)
+        {
+            const int opportunityId = 3000;
+            var opportunityItemId = 4000;
+            var referralId = 5000;
+
+            var items = new List<OpportunityItem>();
+
+            for (var nItem = 1; nItem <= nItems; nItem++)
+            {
+                var item = new OpportunityItem
+                {
+                    Id = opportunityItemId,
+                    OpportunityId = opportunityId,
+                    OpportunityType = OpportunityType.Referral.ToString(),
+                    Town = "London",
+                    Postcode = "SW1A 2AA",
+                    SearchResultProviderCount = 1,
+                    JobRole = "Job Role",
+                    PlacementsKnown = true,
+                    Placements = 1,
+                    IsSaved = true,
+                    IsSelectedForReferral = false,
+                    IsCompleted = false,
+                    RouteId = 1,
+                    CreatedOn = new DateTime(2019, 1, 2),
+                    CreatedBy = "Dev Surname",
+                    Referral = new List<Referral>
+                    {
+                        new Referral
+                        {
+                            Id = referralId,
+                            ProviderVenueId = 1,
+                            DistanceFromEmployer = 1.23m,
+                            JourneyTimeByCar = 1200,
+                            JourneyTimeByPublicTransport = 1800,
+                            CreatedOn = new DateTime(2019, 1, 2),
+                            CreatedBy = "Dev Surname",
+                        }
+                    }
+                };
+
+                referralId += 1;
+                opportunityItemId += 1;
+
+                items.Add(item);
+            }
+
+            var opportunity = new Opportunity
+            {
+                Id = opportunityId,
+                EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
+                EmployerContact = "Employer Contact",
+                EmployerContactEmail = "employer-contact@email.com",
+                EmployerContactPhone = "01474 787878",
+                CreatedOn = new DateTime(2019, 1, 2),
+                CreatedBy = "Dev Surname",
+                OpportunityItem = items
+            };
+
+            return opportunity;
+        }
+
     }
 }
