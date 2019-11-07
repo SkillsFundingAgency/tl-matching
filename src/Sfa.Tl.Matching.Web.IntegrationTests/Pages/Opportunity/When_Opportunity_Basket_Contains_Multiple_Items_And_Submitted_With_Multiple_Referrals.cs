@@ -34,7 +34,9 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
                      ["OpportunityItemId"] = "0",
                      ["SelectedOpportunity[100].IsSelected"] = "true",
                      ["SelectedOpportunity[200].IsSelected"] = "true",
-                     ["SelectedOpportunity[300].IsSelected"] = "true"
+                     ["SelectedOpportunity[300].IsSelected"] = "true",
+                     ["SelectedOpportunity[400].IsSelected"] = "true",
+                     ["SelectedOpportunity[500].IsSelected"] = "true"
                  });
 
             var responseContent = await HtmlHelpers.GetDocumentAsync(response);
@@ -44,6 +46,5 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         }
 
     }
-
 
 }
