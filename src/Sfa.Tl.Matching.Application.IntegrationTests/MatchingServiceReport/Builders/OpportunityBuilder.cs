@@ -58,8 +58,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                 Referral = providerVenueId.Select(pv => new Referral
                 {
                     DistanceFromEmployer = 1.1m,
-                    JourneyTimeByCar = 1,
-                    JourneyTimeByPublicTransport = 1,
                     ProviderVenueId = pv,
                     CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests"
                 }).ToList()
@@ -206,6 +204,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
 
             var p = _context.Provider.Where(q => q.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
             if (!p.IsNullOrEmpty()) _context.Provider.RemoveRange(p);
+
+            _context.SaveChanges();
         }
     }
 
@@ -245,6 +245,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
         {
             var employer = _context.Employer.Where(e => e.CreatedBy == "Sfa.Tl.Matching.Application.IntegrationTests").ToList();
            if(!employer.IsNullOrEmpty()) _context.Employer.RemoveRange(employer);
+
+           _context.SaveChanges();
         }
     }
 }
