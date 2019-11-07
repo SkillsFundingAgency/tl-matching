@@ -65,6 +65,8 @@ namespace Sfa.Tl.Matching.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<FormOptions>(options => { options.ValueCountLimit = 15360; });
+
             services.AddAntiforgery(options =>
             {
                 options.Cookie.Name = "tlevels-x-csrf";
