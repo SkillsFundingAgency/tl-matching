@@ -23,8 +23,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             
             _locationApiClient = Substitute.For<ILocationApiClient>();
-            _locationApiClient.IsValidPostcodeAsync(Postcode)
-                .Returns((false, null));
             _locationApiClient.IsValidPostcodeAsync(Postcode, false)
                 .Returns((false, null));
             _locationApiClient.IsValidPostcodeAsync(Postcode, true)
@@ -34,15 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 
             _result = providerVenueService.IsValidPostcodeAsync(Postcode).GetAwaiter().GetResult();
         }
-        
-        [Fact]
-        public void Then_LocationApiClient_IsValidPostcodeAsync_Without_Terminated_Postcode_Parameter_Is_Not_Called()
-        {
-            _locationApiClient
-                .DidNotReceive()
-                .IsValidPostcodeAsync(Arg.Any<string>());
-        }
-
+ 
         [Fact]
         public void Then_LocationApiClient_IsValidPostcodeAsync_Is_Called_Exactly_Once()
         {
