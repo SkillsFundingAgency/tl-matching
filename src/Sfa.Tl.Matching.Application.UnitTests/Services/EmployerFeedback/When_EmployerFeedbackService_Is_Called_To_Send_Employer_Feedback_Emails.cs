@@ -28,7 +28,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
     {
         private readonly EmployerFeedbackFixture _testFixture;
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly int _result;
 
@@ -49,8 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .Returns(false);
 
             _emailService = Substitute.For<IEmailService>();
-            _emailHistoryService = Substitute.For<IEmailHistoryService>();
-
+            
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(OpportunityMapper).Assembly);
@@ -105,8 +103,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 
             var employerFeedbackService = new EmployerFeedbackService(
                 mapper, _testFixture.Configuration, _testFixture.Logger,
-                dateTimeProvider, 
-                _emailService, _emailHistoryService, bankHolidayRepository, 
+                dateTimeProvider,
+                _emailService, bankHolidayRepository,
                 _opportunityRepository, backgroundProcessHistoryRepository);
 
             _result = employerFeedbackService
@@ -156,8 +154,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>());
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Fact]
@@ -165,10 +163,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "EmployerFeedback"),
                     Arg.Is<string>(toAddress => toAddress == "primary.contact@employer.co.uk"),
-                    Arg.Any<IDictionary<string, string>>());
+                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Fact]
@@ -181,34 +179,34 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)));
+                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)), Arg.Any<string>());
         }
 
-        [Fact]
-        public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
-        {
-            _emailHistoryService
-                .Received(1)
-                .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(),
-                    Arg.Any<string>(), Arg.Any<string>());
-        }
-        
-        [Fact]
-        public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_With_Expected_Parameters()
-        {
-            _emailHistoryService
-                .Received(1)
-                .SaveEmailHistoryAsync(
-                    Arg.Is<string>(templateName => templateName == "EmployerFeedback"),
+        //[Fact]
+        //public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
+        //{
+        //    _emailHistoryService
+        //        .Received(1)
+        //        .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(),
+        //            Arg.Any<string>(), Arg.Any<string>());
+        //}
 
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Any<int?>(),
-                    Arg.Any<string>(),
-                    Arg.Is<string>(s => s == "TestUser"));
-        }
+        //[Fact]
+        //public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_With_Expected_Parameters()
+        //{
+        //    _emailHistoryService
+        //        .Received(1)
+        //        .SaveEmailHistoryAsync(
+        //            Arg.Is<string>(templateName => templateName == "EmployerFeedback"),
+
+        //            Arg.Any<IDictionary<string, string>>(),
+        //            Arg.Any<int?>(),
+        //            Arg.Any<string>(),
+        //            Arg.Is<string>(s => s == "TestUser"));
+        //}
 
         [Fact]
         public void Then_Result_Has_Expected_Value()

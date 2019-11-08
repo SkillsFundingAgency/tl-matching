@@ -21,7 +21,6 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
@@ -31,7 +30,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     MatchingConfiguration configuration,
                     IDateTimeProvider dateTimeProvider,
                     IEmailService emailService,
-                    IEmailHistoryService emailHistoryService,
                     IOpportunityRepository opportunityRepository,
                     IRepository<OpportunityItem> opportunityItemRepository,
                     IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
@@ -40,7 +38,6 @@ namespace Sfa.Tl.Matching.Application.Services
             _configuration = configuration;
             _dateTimeProvider = dateTimeProvider;
             _emailService = emailService;
-            _emailHistoryService = emailHistoryService;
             _opportunityRepository = opportunityRepository;
             _opportunityItemRepository = opportunityItemRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
@@ -92,8 +89,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("placements_list", sb.ToString());
 
-                await SendEmailAsync(EmailTemplateName.EmployerReferralV3, opportunityId, employerReferral.EmployerContactEmail,
-                    "Your industry placement referral – ESFA", tokens, employerReferral.CreatedBy);
+                await SendEmailAsync(EmailTemplateName.EmployerReferralV4, opportunityId, employerReferral.EmployerContactEmail, tokens, employerReferral.CreatedBy);
 
                 await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
                     BackgroundProcessHistoryStatus.Complete, username);
@@ -118,8 +114,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var referrals = await GetOpportunityReferralsAsync(opportunityId, itemIds);
 
-            const string emailSubject = "Industry Placement Matching Referral";
-
             try
             {
                 foreach (var referral in referrals)
@@ -134,8 +128,8 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "venue_text", referral.VenueText },
                         { "search_radius", referral.DistanceFromEmployer },
                         { "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
-                            ? $"* who is looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
-                            : $"* who is looking for this job role: {referral.JobRole}" },
+                            ? $"* looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
+                            : $"* looking for this job role: {referral.JobRole}" },
                         { "employer_business_name", referral.CompanyName.ToTitleCase() },
                         { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
                         { "employer_contact_number", referral.EmployerContactPhone },
@@ -144,15 +138,14 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "number_of_placements", placements }
                     };
 
-                    await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId, referral.ProviderPrimaryContactEmail,
-                        emailSubject, tokens, referral.CreatedBy);
+                    const EmailTemplateName template = EmailTemplateName.ProviderReferralV4;
+                    await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy);
 
                     if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmailAsync(EmailTemplateName.ProviderReferralV3, opportunityId,
-                            referral.ProviderSecondaryContactEmail,
-                            emailSubject, tokens, referral.CreatedBy);
+                        await SendEmailAsync(template, opportunityId,
+                            referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
                     }
 
                     await CompleteSelectedReferralsAsync(opportunityId, referral.OpportunityItemId, username);
@@ -273,23 +266,16 @@ namespace Sfa.Tl.Matching.Application.Services
         }
 
         private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId,
-            string toAddress, string subject,
-            IDictionary<string, string> tokens, string createdBy)
+            string toAddress, IDictionary<string, string> tokens, string createdBy)
         {
             if (!_configuration.SendEmailEnabled)
             {
                 return;
             }
 
-            await _emailService.SendEmailAsync(template.ToString(),
+            await _emailService.SendEmailAsync(opportunityId, template.ToString(),
                 toAddress,
-                tokens);
-
-            await _emailHistoryService.SaveEmailHistoryAsync(template.ToString(),
-                tokens,
-                opportunityId,
-                toAddress,
-                createdBy);
+                tokens, createdBy);
         }
 
         private async Task UpdateBackgroundProcessHistoryAsync(

@@ -56,7 +56,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
                 employerService);
 
             var selectedRouteId = routes.First().Id;
-            const int searchRadius = 5;
             const string postcode = requestPostcode;
 
             var viewModel = new SearchParametersViewModel

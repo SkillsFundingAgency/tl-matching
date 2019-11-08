@@ -18,7 +18,6 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
-        private readonly IEmailHistoryService _emailHistoryService;
         private readonly IRepository<Provider> _providerRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
         private readonly IMessageQueueService _messageQueueService;
@@ -28,7 +27,6 @@ namespace Sfa.Tl.Matching.Application.Services
             MatchingConfiguration configuration,
             ILogger<ProviderQuarterlyUpdateEmailService> logger,
             IEmailService emailService,
-            IEmailHistoryService emailHistoryService,
             IRepository<Provider> providerRepository,
             IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository,
             IMessageQueueService messageQueueService,
@@ -37,7 +35,6 @@ namespace Sfa.Tl.Matching.Application.Services
             _configuration = configuration;
             _logger = logger;
             _emailService = emailService;
-            _emailHistoryService = emailHistoryService;
             _providerRepository = providerRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
             _messageQueueService = messageQueueService;
@@ -168,15 +165,9 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            await _emailService.SendEmailAsync(template.ToString(),
+            await _emailService.SendEmailAsync(opportunityId, template.ToString(),
                     toAddress,
-                    tokens);
-
-            await _emailHistoryService.SaveEmailHistoryAsync(template.ToString(),
-                tokens,
-                opportunityId,
-                toAddress,
-                createdBy);
+                    tokens, createdBy);
         }
 
         private async Task UpdateBackgroundProcessHistoryAsync(

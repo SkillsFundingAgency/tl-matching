@@ -305,6 +305,43 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return dto;
         }
 
+        public async Task<EmailBodyDto> GetFailedEmployerEmailAsync(int opportunityId, string sentTo)
+        {
+            var dto = await (from o in _dbContext.Opportunity
+                             where o.Id == opportunityId
+                                   && o.EmployerContactEmail == sentTo
+                             select new EmailBodyDto
+                             {
+                                 EmployerEmail = o.EmployerContactEmail,
+                             })
+                .FirstOrDefaultAsync();
+
+            return dto;
+        }
+
+        public async Task<EmailBodyDto> GetFailedProviderEmailAsync(int opportunityId, string sentTo)
+        {
+            var dto = await (from o in _dbContext.Opportunity
+                             join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
+                             join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
+                             join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                             join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                             where o.Id == opportunityId &&
+                                   (p.PrimaryContactEmail == sentTo ||
+                                    p.SecondaryContactEmail == sentTo)
+                             select new EmailBodyDto
+                             {
+                                 PrimaryContactEmail = p.PrimaryContactEmail,
+                                 SecondaryContactEmail = p.SecondaryContactEmail,
+                                 ProviderDisplayName = p.DisplayName,
+                                 ProviderVenuePostcode = pv.Postcode,
+                                 ProviderVenueName = pv.Name,
+                             })
+                          .FirstOrDefaultAsync();
+
+            return dto;
+        }
+
         private static string GetReasons(IEnumerable<ProvisionGap> provisionGaps)
         {
             var reasons = new List<string>();

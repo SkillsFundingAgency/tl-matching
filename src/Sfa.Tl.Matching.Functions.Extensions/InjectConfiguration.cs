@@ -173,8 +173,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<IEmailHistoryService, EmailHistoryService>();
-            
             services.AddTransient(typeof(IFeedbackFactory<>), typeof(FeedbackFactory<>));
 
             services.AddTransient<ProviderFeedbackService>();
@@ -185,6 +183,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IReferralEmailService, ReferralEmailService>();
+            services.AddTransient<IEmailDeliveryStatusService, EmailDeliveryStatusService>();
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

@@ -20,8 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         public When_ProviderQuarterlyUpdateEmailService_Is_Called_To_Request_Provider_Quarterly_Update(ProviderQuarterlyUpdateEmailFixture testFixture)
         {
             _emailService = Substitute.For<IEmailService>();
-            var emailHistoryService = Substitute.For<IEmailHistoryService>();
-
+            
             _messageQueueService = Substitute.For<IMessageQueueService>();
 
             var providerRepository = Substitute.For<IProviderRepository>();
@@ -37,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
 
             var providerFeedbackService = new Application.Services.ProviderQuarterlyUpdateEmailService(
                 testFixture.Configuration, testFixture.Logger, 
-                _emailService, emailHistoryService,
+                _emailService,
                 providerRepository, _backgroundProcessHistoryRepository,
                 _messageQueueService, testFixture.DateTimeProvider);
 
@@ -71,7 +70,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .DidNotReceive()
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>());
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
     }
 }
