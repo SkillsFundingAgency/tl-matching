@@ -50,8 +50,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _result.Count.Should().Be(1);
             _result.First().OpportunityId.Should().Be(_opportunityId);
             _result.First().OpportunityItemId.Should().Be(_opportunityItemId);
-            _result.First().EmployerContact.Should().BeEquivalentTo("Employer Contact");
-            _result.First().EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
+            _result.First().PrimaryContact.Should().BeEquivalentTo("Employer Contact");
+            _result.First().Email.Should().BeEquivalentTo("employer.contact@employer.co.uk");
         }
 
         public void Dispose()
