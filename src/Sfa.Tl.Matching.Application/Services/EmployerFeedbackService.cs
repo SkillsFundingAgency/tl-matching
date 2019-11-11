@@ -59,10 +59,10 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     var tokens = new Dictionary<string, string>
                     {
-                        { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
+                        { "employer_contact_name", referral.PrimaryContact.ToTitleCase() },
                     };
 
-                    await SendEmailAsync(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.EmployerContactEmail, tokens, userName);
+                    await SendEmailAsync(EmailTemplateName.EmployerFeedback, referral.OpportunityId, referral.Email, tokens, userName);
                 }
 
                 await SetEmployerFeedbackAsSentAsync(referrals.Select(r => r.OpportunityId), userName);

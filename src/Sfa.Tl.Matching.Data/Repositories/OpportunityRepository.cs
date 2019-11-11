@@ -78,9 +78,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                               {
                                   OpportunityId = op.Id,
                                   CompanyName = emp.CompanyName,
-                                  EmployerContact = op.EmployerContact,
-                                  EmployerContactEmail = op.EmployerContactEmail,
-                                  EmployerContactPhone = op.EmployerContactPhone,
+                                  PrimaryContact = op.EmployerContact,
+                                  Email = op.EmployerContactEmail,
+                                  Phone = op.EmployerContactPhone,
                                   Postcode = emp.Postcode,
                                   CreatedBy = op.CreatedBy,
                                   WorkplaceDetails = (
@@ -266,8 +266,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                              {
                                  OpportunityId = o.Id,
                                  OpportunityItemId = oi.Id,
-                                 EmployerContact = o.EmployerContact,
-                                 EmployerContactEmail = o.EmployerContactEmail
+                                 PrimaryContact = o.EmployerContact,
+                                 Email = o.EmployerContactEmail
                              }).ToListAsync();
 
             return dto;

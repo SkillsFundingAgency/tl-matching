@@ -14,9 +14,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
             {
                 OpportunityId = 1,
                 CompanyName = "Employer",
-                EmployerContact = "Employer Contact",
-                EmployerContactPhone = "020 123 4567",
-                EmployerContactEmail = "employer.contact@employer.co.uk",
+                PrimaryContact = "Employer Contact",
+                Phone = "020 123 4567",
+                Email = "employer.contact@employer.co.uk",
                 JobRole = "Testing Job Title",
                 PlacementsKnown = false,
                 Placements = 1,

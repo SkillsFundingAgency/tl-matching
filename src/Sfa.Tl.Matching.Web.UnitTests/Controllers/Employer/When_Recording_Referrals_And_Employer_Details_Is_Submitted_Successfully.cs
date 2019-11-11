@@ -26,9 +26,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             OpportunityItemId = OpportunityItemId,
             OpportunityId = OpportunityId,
-            EmployerContact = Contact,
-            EmployerContactEmail = ContactEmail,
-            EmployerContactPhone = ContactPhone
+            PrimaryContact = Contact,
+            Email = ContactEmail,
+            Phone = ContactPhone
         };
 
         private const int OpportunityItemId = 1;
@@ -79,9 +79,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_SaveEmployerDetail_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).UpdateOpportunityAsync(Arg.Is<EmployerDetailDto>(a => 
-                a.EmployerContact == Contact && 
-                a.EmployerContactEmail == ContactEmail &&
-                a.EmployerContactPhone == ContactPhone &&
+                a.PrimaryContact == Contact && 
+                a.Email == ContactEmail &&
+                a.Phone == ContactPhone &&
                 a.ModifiedBy == ModifiedBy));
         }
 

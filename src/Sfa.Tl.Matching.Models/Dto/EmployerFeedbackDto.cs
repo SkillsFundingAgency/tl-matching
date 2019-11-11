@@ -5,7 +5,7 @@ namespace Sfa.Tl.Matching.Models.Dto
     {
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
-        public string EmployerContact { get; set; }
-        public string EmployerContactEmail { get; set; }
+        public string PrimaryContact { get; set; }
+        public string Email { get; set; }
     }
 }

@@ -56,10 +56,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 var tokens = new Dictionary<string, string>
                 {
-                    { "employer_contact_name", employerReferral.EmployerContact.ToTitleCase() },
+                    { "employer_contact_name", employerReferral.PrimaryContact.ToTitleCase() },
                     { "employer_business_name", employerReferral.CompanyName.ToTitleCase() },
-                    { "employer_contact_number", employerReferral.EmployerContactPhone },
-                    { "employer_contact_email", employerReferral.EmployerContactEmail }
+                    { "employer_contact_number", employerReferral.Phone },
+                    { "employer_contact_email", employerReferral.Email }
                 };
 
                 foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("placements_list", sb.ToString());
 
-                await SendEmailAsync(EmailTemplateName.EmployerReferralV4, opportunityId, employerReferral.EmployerContactEmail, tokens, employerReferral.CreatedBy);
+                await SendEmailAsync(EmailTemplateName.EmployerReferralV4, opportunityId, employerReferral.Email, tokens, employerReferral.CreatedBy);
 
                 await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
                     BackgroundProcessHistoryStatus.Complete, username);

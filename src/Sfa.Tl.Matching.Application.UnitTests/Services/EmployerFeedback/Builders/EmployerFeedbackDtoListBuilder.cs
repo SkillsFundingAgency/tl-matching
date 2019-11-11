@@ -11,8 +11,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
             {
                 OpportunityId = 1,
                 OpportunityItemId = 2,
-                EmployerContact = "Employer Contact",
-                EmployerContactEmail = "primary.contact@employer.co.uk"
+                PrimaryContact = "Employer Contact",
+                Email = "primary.contact@employer.co.uk"
             }
         };
     }

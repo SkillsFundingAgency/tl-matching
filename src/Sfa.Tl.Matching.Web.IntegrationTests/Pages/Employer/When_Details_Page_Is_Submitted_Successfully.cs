@@ -32,9 +32,9 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
                 (IHtmlButtonElement)pageContent.GetElementById("tl-confirm"),
                 new Dictionary<string, string>
                 {
-                    ["EmployerContact"] = "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUV",
-                    ["EmployerContactEmail"] = "email@address.com",
-                    ["EmployerContactPhone"] = "0123456789"
+                    ["PrimaryContact"] = "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUV",
+                    ["Email"] = "email@address.com",
+                    ["Phone"] = "0123456789"
                 });
 
             var responseContent = await HtmlHelpers.GetDocumentAsync(response);

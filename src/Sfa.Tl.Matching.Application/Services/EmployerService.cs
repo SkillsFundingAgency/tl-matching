@@ -103,9 +103,9 @@ namespace Sfa.Tl.Matching.Application.Services
                         OpportunityId = o.Id,
                         CompanyName = o.Employer.CompanyName,
                         CompanyNameAka = o.Employer.AlsoKnownAs,
-                        EmployerContact = o.EmployerContact,
-                        EmployerContactEmail = o.EmployerContactEmail,
-                        EmployerContactPhone = o.EmployerContactPhone
+                        PrimaryContact = o.EmployerContact,
+                        Email = o.EmployerContactEmail,
+                        Phone = o.EmployerContactPhone
                     },
                     o => o.CreatedOn,
                     false);
@@ -125,9 +125,9 @@ namespace Sfa.Tl.Matching.Application.Services
                         OpportunityId = opportunityId,
                         CompanyName = o.Employer.CompanyName,
                         CompanyNameAka = o.Employer.AlsoKnownAs,
-                        EmployerContact = o.EmployerContact,
-                        EmployerContactEmail = o.EmployerContactEmail,
-                        EmployerContactPhone = o.EmployerContactPhone
+                        PrimaryContact = o.EmployerContact,
+                        Email = o.EmployerContactEmail,
+                        Phone = o.EmployerContactPhone
                     });
 
             if (employerDetails != null) return employerDetails;
@@ -141,9 +141,9 @@ namespace Sfa.Tl.Matching.Application.Services
                         OpportunityId = opportunityId,
                         CompanyName = e.CompanyName,
                         CompanyNameAka = e.AlsoKnownAs,
-                        EmployerContact = e.PrimaryContact,
-                        EmployerContactEmail = e.Email,
-                        EmployerContactPhone = e.Phone
+                        PrimaryContact = e.PrimaryContact,
+                        Email = e.Email,
+                        Phone = e.Phone
                     });
         }
 

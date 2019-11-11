@@ -31,9 +31,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 OpportunityItemId = 2,
                 CompanyName = "CompanyName",
                 CompanyNameAka = "CompanyNameAka",
-                EmployerContact = "EmployerContact",
-                EmployerContactPhone = "EmployerContactPhone",
-                EmployerContactEmail = "EmployerContactEmail"
+                PrimaryContact = "EmployerContact",
+                Phone = "EmployerContactPhone",
+                Email = "EmployerContactEmail"
             });
 
             _opportunityService = Substitute.For<IOpportunityService>();
@@ -72,9 +72,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             viewModel.Details.CompanyName.Should().Be("CompanyName");
             viewModel.Details.CompanyNameAka.Should().Be("CompanyNameAka");
             viewModel.Details.CompanyNameWithAka.Should().Be("CompanyName (CompanyNameAka)");
-            viewModel.Details.EmployerContact.Should().Be("EmployerContact");
-            viewModel.Details.EmployerContactEmail.Should().Be("EmployerContactEmail");
-            viewModel.Details.EmployerContactPhone.Should().Be("EmployerContactPhone");
+            viewModel.Details.PrimaryContact.Should().Be("EmployerContact");
+            viewModel.Details.Email.Should().Be("EmployerContactEmail");
+            viewModel.Details.Phone.Should().Be("EmployerContactPhone");
         }
 
         [Fact]

@@ -34,9 +34,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 OpportunityId = OpportunityId,
                 OpportunityItemId = OpportunityItemId,
                 CompanyName = CompanyName,
-                EmployerContact = EmployerContact,
-                EmployerContactPhone = EmployerContactPhone,
-                EmployerContactEmail = EmployerContactEmail
+                PrimaryContact = EmployerContact,
+                Phone = EmployerContactPhone,
+                Email = EmployerContactEmail
             });
 
             var employerController = new EmployerController(employerService, Substitute.For<IOpportunityService>(),
@@ -68,9 +68,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
             viewModel.OpportunityId.Should().Be(OpportunityId);
             viewModel.CompanyName.Should().Be(CompanyName);
-            viewModel.EmployerContact.Should().Be(EmployerContact);
-            viewModel.EmployerContactPhone.Should().Be(EmployerContactPhone);
-            viewModel.EmployerContactEmail.Should().Be(EmployerContactEmail);
+            viewModel.PrimaryContact.Should().Be(EmployerContact);
+            viewModel.Phone.Should().Be(EmployerContactPhone);
+            viewModel.Email.Should().Be(EmployerContactEmail);
         }
     }
 }

@@ -23,16 +23,16 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
         }
 
         [Theory]
-        [InlineData("EmployerContact", "", "You must enter a contact name for placements", 0)]
-        [InlineData("EmployerContact", "A", "You must enter a contact name using 2 or more characters", 0)]
-        [InlineData("EmployerContact", "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVW", "You must enter a contact name that is 100 characters or fewer", 0)]
-        [InlineData("EmployerContact", "/%^*&$", "You must enter a contact name using only letters, hyphens and apostrophes", 0)]
-        [InlineData("EmployerContact", "15151", "You must enter a contact name using only letters, hyphens and apostrophes", 0)]
-        [InlineData("EmployerContactEmail", "", "You must enter a contact email for placements", 1)]
-        [InlineData("EmployerContactEmail", "Abcd", "You must enter a valid email", 1)]
-        [InlineData("EmployerContactPhone", "", "You must enter a contact telephone number for placements", 2)]
-        [InlineData("EmployerContactPhone", "A", "You must enter a number", 2)]
-        [InlineData("EmployerContactPhone", "123", "You must enter a telephone number that has 7 or more numbers", 2)]
+        [InlineData("PrimaryContact", "", "You must enter a contact name for placements", 0)]
+        [InlineData("PrimaryContact", "A", "You must enter a contact name using 2 or more characters", 0)]
+        [InlineData("PrimaryContact", "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVW", "You must enter a contact name that is 100 characters or fewer", 0)]
+        [InlineData("PrimaryContact", "/%^*&$", "You must enter a contact name using only letters, hyphens and apostrophes", 0)]
+        [InlineData("PrimaryContact", "15151", "You must enter a contact name using only letters, hyphens and apostrophes", 0)]
+        [InlineData("Email", "", "You must enter a contact email for placements", 1)]
+        [InlineData("Email", "Abcd", "You must enter a valid email", 1)]
+        [InlineData("Phone", "", "You must enter a contact telephone number for placements", 2)]
+        [InlineData("Phone", "A", "You must enter a number", 2)]
+        [InlineData("Phone", "123", "You must enter a telephone number that has 7 or more numbers", 2)]
         public async Task Then_Correct_Error_Message_Is_Displayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();

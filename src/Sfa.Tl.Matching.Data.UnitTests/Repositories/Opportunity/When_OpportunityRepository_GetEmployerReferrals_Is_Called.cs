@@ -40,9 +40,9 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
         {
             _result.OpportunityId.Should().Be(1);
             _result.CompanyName.Should().BeEquivalentTo("Company");
-            _result.EmployerContact.Should().BeEquivalentTo("Employer Contact");
-            _result.EmployerContactPhone.Should().BeEquivalentTo("020 123 4567");
-            _result.EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
+            _result.PrimaryContact.Should().BeEquivalentTo("Employer Contact");
+            _result.Phone.Should().BeEquivalentTo("020 123 4567");
+            _result.Email.Should().BeEquivalentTo("employer.contact@employer.co.uk");
             _result.Postcode.Should().BeEquivalentTo("CV1 2WT");
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
         }

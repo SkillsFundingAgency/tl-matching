@@ -16,9 +16,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
         {
             CreateMap<OpportunityDto, Opportunity>()
                 .ForMember(m => m.EmployerCrmId, o => o.MapFrom(s => s.EmployerCrmId))
-                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact.ToTitleCase()))
-                .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
-                .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
+                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.PrimaryContact.ToTitleCase()))
+                .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.Email))
+                .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.Phone))
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<OpportunityDto, Opportunity>>())
                 .ForAllOtherMembers(config => config.Ignore())
                 ;
@@ -65,9 +65,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<EmployerDetailDto, Opportunity>()
-                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact.ToTitleCase()))
-                .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
-                .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
+                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.PrimaryContact.ToTitleCase()))
+                .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.Email))
+                .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.Phone))
                 .ForMember(m => m.ModifiedBy, o => o.MapFrom(s => s.ModifiedBy))
                 .ForMember(m => m.ModifiedOn, o => o.MapFrom(s => s.ModifiedOn))
                 .ForAllOtherMembers(config => config.Ignore());
@@ -85,9 +85,9 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<Opportunity, OpportunityDto>()
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.EmployerCrmId, o => o.MapFrom(s => s.EmployerCrmId))
-                .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.EmployerContact))
-                .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.EmployerContactEmail))
-                .ForMember(m => m.EmployerContactPhone, o => o.MapFrom(s => s.EmployerContactPhone))
+                .ForMember(m => m.PrimaryContact, o => o.MapFrom(s => s.EmployerContact))
+                .ForMember(m => m.Email, o => o.MapFrom(s => s.EmployerContactEmail))
+                .ForMember(m => m.Phone, o => o.MapFrom(s => s.EmployerContactPhone))
                 .ForPath(m => m.EmployerCrmId, o => o.MapFrom(s => s.Employer.CrmId))
                 .ForPath(m => m.CompanyName, o => o.MapFrom(s => s.Employer.CompanyName))
                 .ForAllOtherMembers(config => config.Ignore())

@@ -234,13 +234,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private void Validate(EmployerDetailsViewModel viewModel)
         {
-            if (string.IsNullOrEmpty(viewModel.EmployerContactPhone))
+            if (string.IsNullOrEmpty(viewModel.Phone))
                 return;
 
-            if (!viewModel.EmployerContactPhone.Any(char.IsDigit))
-                ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a number");
-            else if (!Regex.IsMatch(viewModel.EmployerContactPhone, @"^(?:.*\d.*){7,}$"))
-                ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a telephone number that has 7 or more numbers");
+            if (!viewModel.Phone.Any(char.IsDigit))
+                ModelState.AddModelError(nameof(viewModel.Phone), "You must enter a number");
+            else if (!Regex.IsMatch(viewModel.Phone, @"^(?:.*\d.*){7,}$"))
+                ModelState.AddModelError(nameof(viewModel.Phone), "You must enter a telephone number that has 7 or more numbers");
         }
     }
 }

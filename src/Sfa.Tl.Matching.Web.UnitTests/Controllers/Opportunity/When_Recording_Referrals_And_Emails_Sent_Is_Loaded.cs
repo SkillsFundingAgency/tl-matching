@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_ViewModel_Properties_Are_Set()
         {
             var viewModel = _result.GetViewModel<SentViewModel>();
-            viewModel.EmployerContact.Should().Be("EmployerContact");
+            viewModel.PrimaryContact.Should().Be("EmployerContact");
             viewModel.CompanyName.Should().Be("CompanyName");
             viewModel.EmployerCrmRecord.Should().Be($"https://esfa-cs-prod.crm4.dynamics.com/main.aspx?pagetype=entityrecord&etc=1&id=%7b{_employerCrmId}%7d&extraqs=&newWindow=true");
         }
