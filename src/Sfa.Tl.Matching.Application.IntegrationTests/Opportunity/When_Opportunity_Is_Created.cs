@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
             var opportunityDto = new OpportunityDto
             {
                 EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
-                PrimaryContact = EmployerContact
+                EmployerContact = EmployerContact
             };
 
             _opportunityId = _testFixture.OpportunityService.CreateOpportunityAsync(opportunityDto).GetAwaiter().GetResult();

@@ -66,9 +66,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dto = new OpportunityDto
             {
                 EmployerCrmId = new Guid("11111111-1111-1111-1111-111111111111"),
-                PrimaryContact = "Employer contact",
-                Email = "employer.contact@employer.co.uk",
-                Phone = "020 123 4567"
+                EmployerContact = "Employer contact",
+                EmployerContactEmail = "employer.contact@employer.co.uk",
+                EmployerContactPhone = "020 123 4567"
             };
 
             _result = opportunityService.CreateOpportunityAsync(dto).GetAwaiter().GetResult();

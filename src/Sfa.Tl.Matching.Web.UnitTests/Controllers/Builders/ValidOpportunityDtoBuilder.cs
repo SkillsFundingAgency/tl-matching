@@ -9,9 +9,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
         {
             Id = 1,
             CompanyName = "CompanyName",
-            PrimaryContact = "EmployerContact",
-            Email = "EmployerContactEmail",
-            Phone = "EmployerContactPhone",
+            EmployerContact = "EmployerContact",
+            EmployerContactEmail = "EmployerContactEmail",
+            EmployerContactPhone = "EmployerContactPhone",
             EmployerCrmId = new Guid("60E00C18-3192-4283-BBBA-6EB4885D8618"),
             ModifiedBy = "ModifiedBy"
         };
