@@ -29,39 +29,17 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification
         }
 
         [Fact]
-        public void Then_ProviderQualification_Id_Is_Returned() =>
+        public void Then_Fields_Are_As_Expected()
+        {
             _result.Id.Should().Be(1);
-        
-        [Fact]
-        public void Then_ProviderQualification_ProviderVenueId_Is_Returned() =>
             _result.ProviderVenueId.Should().Be(1);
-
-        [Fact]
-        public void Then_ProviderQualification_QualificationId_Is_Returned() =>
             _result.QualificationId.Should().Be(1);
-
-        [Fact]
-        public void Then_ProviderQualification_NumberOfPlacements_Is_Returned()
-            => _result.NumberOfPlacements.Should().Be(1);
-
-        [Fact]
-        public void Then_ProviderQualification_Source_Is_Returned() =>
+            _result.NumberOfPlacements.Should().Be(1);
             _result.Source.Should().BeEquivalentTo("Test");
-        
-        [Fact]
-        public void Then_ProviderQualification_CreatedBy_Is_Returned() =>
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
-
-        [Fact]
-        public void Then_ProviderQualification_CreatedOn_Is_Returned() =>
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
-
-        [Fact]
-        public void Then_ProviderQualification_ModifiedBy_Is_Returned() =>
             _result.ModifiedBy.Should().Be(EntityCreationConstants.ModifiedByUser);
-        
-        [Fact]
-        public void Then_ProviderQualification_ModifiedOn_Is_Returned() =>
             _result.ModifiedOn.Should().Be(EntityCreationConstants.ModifiedOn);
+        }
     }
 }

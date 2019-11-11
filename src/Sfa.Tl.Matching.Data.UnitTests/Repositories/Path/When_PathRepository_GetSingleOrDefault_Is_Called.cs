@@ -4,7 +4,6 @@ using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Path.Builders;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Path.Constants;
 using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
@@ -32,10 +31,10 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
         [Fact]
         public void Then_Fields_Are_As_Expected()
         {
-            _result.Id.Should().Be(PathConstants.Id);
-            _result.Name.Should().BeEquivalentTo(PathConstants.Name);
-            _result.Keywords.Should().BeEquivalentTo(PathConstants.Keywords);
-            _result.Summary.Should().BeEquivalentTo(PathConstants.Summary);
+            _result.Id.Should().Be(1);
+            _result.Name.Should().BeEquivalentTo("Path 1");
+            _result.Keywords.Should().BeEquivalentTo("Keyword");
+            _result.Summary.Should().BeEquivalentTo("Path summary");
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
             _result.ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);

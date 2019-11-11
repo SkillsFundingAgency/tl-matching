@@ -4,7 +4,6 @@ using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.Builders;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.Constants;
 using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
@@ -30,14 +29,14 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
         }
 
         [Fact]
-        public void Then_RoutePathMapping_Id_Is_Returned()
+        public void Then_Fields_Are_As_Expected()
         {
-            _result.Id.Should().Be(QualificationRouteMappingConstants.Id);
-            _result.Qualification.LarsId.Should().BeEquivalentTo(QualificationRouteMappingConstants.LarsId);
-            _result.Qualification.Title.Should().BeEquivalentTo(QualificationRouteMappingConstants.Title);
-            _result.Qualification.ShortTitle.Should().BeEquivalentTo(QualificationRouteMappingConstants.ShortTitle);
-            _result.RouteId.Should().Be(QualificationRouteMappingConstants.RouteId);
-            _result.Source.Should().BeEquivalentTo(QualificationRouteMappingConstants.Source);
+            _result.Id.Should().Be(1);
+            _result.Qualification.LarsId.Should().BeEquivalentTo("1234567X");
+            _result.Qualification.Title.Should().BeEquivalentTo("Full Qualification Title");
+            _result.Qualification.ShortTitle.Should().BeEquivalentTo("Short Title");
+            _result.RouteId.Should().Be(2);
+            _result.Source.Should().BeEquivalentTo("Test");
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
             _result.ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);

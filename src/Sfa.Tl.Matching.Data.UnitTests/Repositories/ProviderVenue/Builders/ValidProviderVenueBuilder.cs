@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue.Builders
                 Town = "Town",
                 County = "County",
                 Latitude = 52.648869M,
-                Longitude = 2.095574M,
+                Longitude = -2.095574M,
                 IsEnabledForReferral = true,
                 IsRemoved = false,
                 Source = "Test",

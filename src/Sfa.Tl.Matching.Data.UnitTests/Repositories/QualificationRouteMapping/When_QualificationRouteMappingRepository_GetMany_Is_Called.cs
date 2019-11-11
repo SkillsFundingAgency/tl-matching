@@ -6,7 +6,6 @@ using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.Builders;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.Constants;
 using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
@@ -31,15 +30,15 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
         }
 
         [Fact]
-        public void Then_The_QualificationRouteMappings_Is_Returned_AS_Expected()
+        public void Then_Fields_Are_As_Expected()
         {
             _result.Count().Should().Be(2);
-            _result.First().Id.Should().Be(QualificationRouteMappingConstants.Id);
-            _result.First().Qualification.LarsId.Should().Be(QualificationRouteMappingConstants.LarsId);
-            _result.First().Qualification.Title.Should().BeEquivalentTo(QualificationRouteMappingConstants.Title);
-            _result.First().Qualification.ShortTitle.Should().BeEquivalentTo(QualificationRouteMappingConstants.ShortTitle);
-            _result.First().RouteId.Should().Be(QualificationRouteMappingConstants.RouteId);
-            _result.First().Source.Should().BeEquivalentTo(QualificationRouteMappingConstants.Source);
+            _result.First().Id.Should().Be(1);
+            _result.First().Qualification.LarsId.Should().Be("1234567X");
+            _result.First().Qualification.Title.Should().BeEquivalentTo("Full Qualification Title");
+            _result.First().Qualification.ShortTitle.Should().BeEquivalentTo("Short Title");
+            _result.First().RouteId.Should().Be(2);
+            _result.First().Source.Should().BeEquivalentTo("Test");
             _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
             _result.First().CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
             _result.First().ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);
