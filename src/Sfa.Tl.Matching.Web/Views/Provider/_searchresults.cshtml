@@ -16,12 +16,12 @@
 
             <tr class="govuk-table__row">
                 <td class="govuk-table__cell">@provider.UkPrn</td>
-                <td class="govuk-table__cell">@provider.ProviderName</td>
+                <td class="govuk-table__cell">@provider.Name</td>
                 <td class="govuk-table__cell">@provider.IsCdfProvider</td>
                 <td class="govuk-table__cell">
-                    <a asp-route="GetProviderDetail" asp-route-providerId="@provider.ProviderId" 
-                       class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden"> @provider.ProviderName's details</span></a>
-                    <input type="hidden" asp-for="@provider.ProviderId" name="Providers[@i].ProviderId" />
+                    <a asp-route="GetProviderDetail" asp-route-providerId="@provider.Id" 
+                       class="govuk-link tl-float-right">Edit<span class="govuk-visually-hidden"> @provider.Name's details</span></a>
+                    <input type="hidden" asp-for="@provider.Id" name="Providers[@i].ProviderId" />
                 </td>
             </tr>
         }

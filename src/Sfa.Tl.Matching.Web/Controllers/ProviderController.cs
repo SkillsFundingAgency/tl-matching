@@ -218,8 +218,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             };
             viewModel.SearchResults.Results.Add(new ProviderSearchResultItemViewModel
             {
-                ProviderId = dto.Id,
-                ProviderName = dto.Name,
+                Id = dto.Id,
+                Name = dto.Name,
                 UkPrn = dto.UkPrn
             });
 
