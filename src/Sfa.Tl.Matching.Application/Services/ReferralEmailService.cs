@@ -75,11 +75,11 @@ namespace Sfa.Tl.Matching.Application.Services
                     {
                         sb.AppendLine($"* {count.ToOrdinalWords().ToTitleCase()} provider selected: {providerAndVenue.CustomisedProviderDisplayName}");
                         sb.Append("Primary contact: ");
-                        sb.AppendLine(FormatContactDetails(providerAndVenue.ProviderPrimaryContact, providerAndVenue.ProviderPrimaryContactPhone, providerAndVenue.ProviderPrimaryContactEmail));
+                        sb.AppendLine(FormatContactDetails(providerAndVenue.PrimaryContact, providerAndVenue.PrimaryContactPhone, providerAndVenue.PrimaryContactEmail));
 
-                        if (!string.IsNullOrWhiteSpace(providerAndVenue.ProviderSecondaryContact))
+                        if (!string.IsNullOrWhiteSpace(providerAndVenue.SecondaryContact))
                         {
-                            sb.AppendLine($"Secondary contact: {FormatContactDetails(providerAndVenue.ProviderSecondaryContact, providerAndVenue.ProviderSecondaryContactPhone, providerAndVenue.ProviderSecondaryContactEmail)}");
+                            sb.AppendLine($"Secondary contact: {FormatContactDetails(providerAndVenue.SecondaryContact, providerAndVenue.SecondaryContactPhone, providerAndVenue.SecondaryContactEmail)}");
                         }
 
                         count++;

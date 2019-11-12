@@ -61,20 +61,20 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     var tokens = new Dictionary<string, string>
                     {
-                        { "contact_name", referral.ProviderPrimaryContactName },
+                        { "contact_name", referral.PrimaryContact },
                         { "company_name", referral.Companyname}
                     };
 
                     await SendEmailAsync(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
-                        referral.ProviderPrimaryContactEmail, tokens,
+                        referral.PrimaryContactEmail, tokens,
                         userName);
 
-                    if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactName))
+                    if (!string.IsNullOrWhiteSpace(referral.SecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.SecondaryContact))
                     {
-                        tokens["contact_name"] = referral.ProviderSecondaryContactName;
+                        tokens["contact_name"] = referral.SecondaryContact;
 
                         await SendEmailAsync(EmailTemplateName.ProviderFeedback, referral.OpportunityId,
-                            referral.ProviderSecondaryContactEmail, tokens,
+                            referral.SecondaryContactEmail, tokens,
                             userName);
                     }
                 }

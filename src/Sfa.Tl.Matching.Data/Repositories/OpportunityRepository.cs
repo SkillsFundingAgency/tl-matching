@@ -108,16 +108,16 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                             select new ProviderReferralDto
                                             {
                                                 ProviderName = p.Name,
-                                                ProviderDisplayName = p.DisplayName,
+                                                DisplayName = p.DisplayName,
                                                 ProviderVenueName = pv.Name,
-                                                ProviderPrimaryContact = p.PrimaryContact,
-                                                ProviderPrimaryContactEmail = p.PrimaryContactEmail,
-                                                ProviderPrimaryContactPhone = p.PrimaryContactPhone,
-                                                ProviderSecondaryContact = p.SecondaryContact,
-                                                ProviderSecondaryContactEmail = p.SecondaryContactEmail,
-                                                ProviderSecondaryContactPhone = p.SecondaryContactPhone,
-                                                ProviderVenueTown = pv.Town,
-                                                ProviderVenuePostcode = pv.Postcode
+                                                PrimaryContact = p.PrimaryContact,
+                                                PrimaryContactEmail = p.PrimaryContactEmail,
+                                                PrimaryContactPhone = p.PrimaryContactPhone,
+                                                SecondaryContact = p.SecondaryContact,
+                                                SecondaryContactEmail = p.SecondaryContactEmail,
+                                                SecondaryContactPhone = p.SecondaryContactPhone,
+                                                Town = pv.Town,
+                                                Postcode = pv.Postcode
                                             })
                                       })
                               }
@@ -293,10 +293,10 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                  OpportunityItemId = oi.Id,
                                  ProviderId = p.Id,
                                  Companyname = e.CompanyName,
-                                 ProviderPrimaryContactName = p.PrimaryContact,
-                                 ProviderPrimaryContactEmail = p.PrimaryContactEmail,
-                                 ProviderSecondaryContactName = p.SecondaryContact,
-                                 ProviderSecondaryContactEmail = p.SecondaryContactEmail,
+                                 PrimaryContact = p.PrimaryContact,
+                                 PrimaryContactEmail = p.PrimaryContactEmail,
+                                 SecondaryContact = p.SecondaryContact,
+                                 SecondaryContactEmail = p.SecondaryContactEmail,
                                  ProviderFeedbackEmailSentOn = p.ProviderFeedbackSentOn
                              })
                             .GroupBy(feedbackDto => feedbackDto.ProviderId)

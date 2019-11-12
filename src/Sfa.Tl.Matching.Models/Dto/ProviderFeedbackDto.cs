@@ -8,10 +8,10 @@ namespace Sfa.Tl.Matching.Models.Dto
         public int OpportunityItemId { get; set; }
         public int ProviderId { get; set; }
         public string Companyname { get; set; }
-        public string ProviderPrimaryContactName { get; set; }
-        public string ProviderPrimaryContactEmail { get; set; }
-        public string ProviderSecondaryContactName { get; set; }
-        public string ProviderSecondaryContactEmail { get; set; }
+        public string PrimaryContact { get; set; }
+        public string PrimaryContactEmail { get; set; }
+        public string SecondaryContact { get; set; }
+        public string SecondaryContactEmail { get; set; }
         public DateTime? ProviderFeedbackEmailSentOn { get; set; }
         
     }

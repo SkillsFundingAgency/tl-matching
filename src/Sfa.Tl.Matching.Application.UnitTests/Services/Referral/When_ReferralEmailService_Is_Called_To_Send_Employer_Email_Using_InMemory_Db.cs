@@ -327,8 +327,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 foreach (var providerAndVenue in data.ProviderAndVenueDetails)
                 {
                     sb.AppendLine($"* {count.ToOrdinalWords().ToTitleCase()} provider selected: {providerAndVenue.CustomisedProviderDisplayName}");
-                    sb.AppendLine($"Primary contact: {providerAndVenue.ProviderPrimaryContact} (Telephone: {providerAndVenue.ProviderPrimaryContactPhone}; Email: {providerAndVenue.ProviderPrimaryContactEmail})");
-                    sb.AppendLine($"Secondary contact: {providerAndVenue.ProviderSecondaryContact} (Telephone: {providerAndVenue.ProviderSecondaryContactPhone}; Email: {providerAndVenue.ProviderSecondaryContactEmail})");
+                    sb.AppendLine($"Primary contact: {providerAndVenue.PrimaryContact} (Telephone: {providerAndVenue.PrimaryContactPhone}; Email: {providerAndVenue.PrimaryContactEmail})");
+                    sb.AppendLine($"Secondary contact: {providerAndVenue.SecondaryContact} (Telephone: {providerAndVenue.SecondaryContactPhone}; Email: {providerAndVenue.SecondaryContactEmail})");
                     count++;
                 }
 
