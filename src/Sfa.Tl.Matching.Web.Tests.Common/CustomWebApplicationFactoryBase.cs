@@ -15,7 +15,6 @@ namespace Sfa.Tl.Matching.Web.Tests.Common
         
         protected override IWebHostBuilder CreateWebHostBuilder() =>
             WebHost.CreateDefaultBuilder()
-                .UseApplicationInsights()
                 .UseStartup<TStartup>();
     }
 }

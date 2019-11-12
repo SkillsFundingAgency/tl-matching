@@ -19,6 +19,8 @@ namespace Sfa.Tl.Matching.Web.Tests.Common
                     .AddEntityFrameworkInMemoryDatabase()
                     .BuildServiceProvider();
 
+                services.AddApplicationInsightsTelemetry();
+
                 services.AddDbContext<MatchingDbContext>(options =>
                 {
                     options.UseInMemoryDatabase("MatchingTestDb");
