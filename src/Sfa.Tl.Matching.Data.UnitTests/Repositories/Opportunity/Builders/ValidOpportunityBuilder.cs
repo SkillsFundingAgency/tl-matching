@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
 
         public ValidOpportunityBuilder AddEmployer()
         {
-            _opportunity.Employer = new Employer
+            _opportunity.Employer = new Domain.Models.Employer
             {
                 Id = 5,
                 CrmId = new Guid("55555555-5555-5555-5555-555555555555"),
@@ -63,6 +63,13 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                     CreatedOn = EntityCreationConstants.CreatedOn,
                     ModifiedBy = EntityCreationConstants.ModifiedByUser,
                     ModifiedOn = EntityCreationConstants.ModifiedOn,
+                    Route = new Domain.Models.Route
+                    {
+                        Id = 1,
+                        Name = "Test Route",
+                        CreatedBy = EntityCreationConstants.CreatedByUser,
+                        CreatedOn = EntityCreationConstants.CreatedOn,
+                    },
                     Referral = new List<Referral>
                     {
                         new Referral
