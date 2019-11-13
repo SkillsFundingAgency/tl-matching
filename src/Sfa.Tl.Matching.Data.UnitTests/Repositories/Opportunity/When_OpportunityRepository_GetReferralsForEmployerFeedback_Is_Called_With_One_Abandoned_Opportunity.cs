@@ -17,26 +17,32 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
     {
         private readonly MatchingDbContext _dbContext;
         private readonly IList<EmployerFeedbackDto> _result;
+        private readonly int _opportunityId;
+        private readonly int _opportunityItemId;
 
         public When_OpportunityRepository_GetReferralsForEmployerFeedback_Is_Called_With_One_Abandoned_Opportunity()
         {
             var logger = Substitute.For<ILogger<OpportunityRepository>>();
 
             _dbContext = InMemoryDbContext.Create();
-            {
-                _dbContext.Add(
-                    new ValidOpportunityBuilder()
-                        .AddEmployer()
-                        .AddReferrals(true)
-                        .AddAbandonedOpportunityItem()
-                        .Build());
-                _dbContext.SaveChanges();
 
-                var repository = new OpportunityRepository(logger, _dbContext);
-                var referralDate = EntityCreationConstants.ModifiedOn.AddDays(1);
-                _result = repository.GetReferralsForEmployerFeedbackAsync(referralDate)
-                    .GetAwaiter().GetResult();
-            }
+            var opportunity = new ValidOpportunityBuilder()
+                .AddEmployer()
+                .AddReferrals(true)
+                .AddAbandonedOpportunityItem()
+                .Build();
+
+            _dbContext.Add(opportunity);
+            _dbContext.SaveChanges();
+
+            //Save the ids to avoid interaction with other tests breaking the assertions
+            _opportunityId = opportunity.Id;
+            _opportunityItemId = opportunity.OpportunityItem.First().Id;
+
+            var repository = new OpportunityRepository(logger, _dbContext);
+            var referralDate = EntityCreationConstants.ModifiedOn.AddDays(1);
+            _result = repository.GetReferralsForEmployerFeedbackAsync(referralDate)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -44,9 +50,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
         {
             _result.Should().NotBeNullOrEmpty();
             _result.Count.Should().Be(1);
-            // TODO: Fix the ids
-            //_result.First().OpportunityId.Should().Be(1);
-            //_result.First().OpportunityItemId.Should().Be(1);
+            _result.First().OpportunityId.Should().Be(_opportunityId);
+            _result.First().OpportunityItemId.Should().Be(_opportunityItemId);
             _result.First().EmployerContact.Should().BeEquivalentTo("Employer Contact");
             _result.First().EmployerContactEmail.Should().BeEquivalentTo("employer.contact@employer.co.uk");
         }

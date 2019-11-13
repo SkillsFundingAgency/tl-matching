@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
             new Domain.Models.Opportunity
             {
                 Id = 2,
-                EmployerCrmId = new Guid("55555555-5555-5555-5555-555555555555"),
+                EmployerCrmId = new Guid("66666666-6666-6666-6666-666666666666"),
                 EmployerContact = "Employer Contact",
                 EmployerContactPhone = "020 123 4567",
                 EmployerContactEmail = "employer.contact@employer.co.uk",

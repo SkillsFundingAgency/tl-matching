@@ -10,11 +10,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 {
-    public class When_OpportunityRepository_GetSingleOrDefault_Is_Called
+    public class When_EmployerRepository_GetSingleOrDefault_Is_Called
     {
         private readonly Domain.Models.Opportunity _result;
 
-        public When_OpportunityRepository_GetSingleOrDefault_Is_Called()
+        public When_EmployerRepository_GetSingleOrDefault_Is_Called()
         {
             var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Opportunity>>>();
 
