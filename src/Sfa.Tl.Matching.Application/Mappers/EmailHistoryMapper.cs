@@ -8,18 +8,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
     {
         public EmailHistoryMapper()
         {
-            CreateMap<EmailHistoryDto, EmailHistory>()
-                .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.NotificationId, config => config.Ignore())
-                .ForMember(m => m.Status, config => config.Ignore())
-                .ForMember(m => m.EmailTemplate, config => config.Ignore())
-                .ForMember(m => m.Opportunity, config => config.Ignore())
-                .ForMember(m => m.EmailPlaceholder, config => config.Ignore())
-                .ForMember(m => m.CreatedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore())
-                ;
-
             CreateMap<EmailHistory, EmailHistoryDto>()
                 .ForMember(m => m.NotificationId, o => o.MapFrom(s => s.NotificationId))
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
