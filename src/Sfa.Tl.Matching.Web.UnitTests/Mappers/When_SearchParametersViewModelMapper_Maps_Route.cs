@@ -29,26 +29,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
+        public void Then_Result_Should_Be_Mapped_Correctly()
+        {
             _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Result_Should_Have_Two_Items()
-        {
             _result.Count.Should().Be(2);
-        }
-
-        [Fact]
-        public void Then_Result_Should_Value_Should_Be_Mapped_From_Id()
-        {
             _result.First().Value.Should().Be(_routes.First().Id.ToString());
-        }
-
-        [Fact]
-        public void Then_Result_Should_Text_Should_Be_Mapped_From_Name()
-        {
             _result.First().Text.Should().Be(_routes.First().Name);
         }
-
     }
 }
