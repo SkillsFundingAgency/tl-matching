@@ -81,7 +81,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                   PrimaryContact = op.EmployerContact,
                                   Email = op.EmployerContactEmail,
                                   Phone = op.EmployerContactPhone,
-                                  Postcode = emp.Postcode,
                                   CreatedBy = op.CreatedBy,
                                   WorkplaceDetails = (
                                       from oi in _dbContext.OpportunityItem

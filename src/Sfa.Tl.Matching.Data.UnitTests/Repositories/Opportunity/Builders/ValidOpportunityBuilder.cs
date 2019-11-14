@@ -32,8 +32,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                 Id = 5,
                 CrmId = new Guid("55555555-5555-5555-5555-555555555555"),
                 CompanyName = "Company",
-                AlsoKnownAs = "Also Known As",
-                Postcode = "CV1 2WT"
+                AlsoKnownAs = "Also Known As"
             };
 
             return this;

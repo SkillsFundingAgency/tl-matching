@@ -21,7 +21,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral.Builders
                 PlacementsKnown = false,
                 Placements = 1,
                 RouteName = "Agriculture, environmental and animal care",
-                Postcode = "AA1 1AA",
                 WorkplaceDetails = new List<WorkplaceDto>
                 {
                     new WorkplaceDto
