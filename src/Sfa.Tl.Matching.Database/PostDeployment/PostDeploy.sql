@@ -7,8 +7,5 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Seed Routes.sql"
 :r ".\Seed Paths.sql"
 :r ".\Seed Email Templates.sql"
-:r ".\Backfill Provider Venue Names.sql"
 :r ".\Remove Obsolete Tables.sql"
-:r ".\Update Qualification Title length.sql"
-:r ".\Update Opportunity Table EmployerCrmIds.sql"
 :r ".\Seed UserProfile.sql"

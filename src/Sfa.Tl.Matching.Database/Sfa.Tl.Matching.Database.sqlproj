@@ -97,14 +97,11 @@
     <Build Include="Tables\DBProjDeployLog.sql" />
     <Build Include="Tables\OpportunityItem.sql" />
     <Build Include="Tables\Opportunity.sql" />
-    <None Include="PostDeployment\Backfill Provider Venue Names.sql" />
     <None Include="PostDeployment\Remove Obsolete Tables.sql" />
     <Build Include="Tables\OLDOpportunity.sql" />
     <Build Include="Tables\BankHoliday.sql" />
     <Build Include="Tables\ServiceStatusHistory.sql" />
-    <None Include="PostDeployment\Update Qualification Title length.sql" />
     <Build Include="Tables\UserCache.sql" />
-    <None Include="PostDeployment\Update Opportunity Table EmployerCrmIds.sql" />
     <Build Include="Views\MatchingServiceOpportunityReport.sql" />
     <Build Include="Views\MatchingServiceProviderOpportunityReport.sql" />
     <Build Include="Tables\UserProfile.sql" />

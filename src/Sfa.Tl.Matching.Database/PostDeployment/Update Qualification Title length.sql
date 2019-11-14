@@ -1,1 +1,0 @@
-﻿ALTER TABLE [dbo].[Qualification] ALTER COLUMN [Title] NVARCHAR(400) NOT NULL;
