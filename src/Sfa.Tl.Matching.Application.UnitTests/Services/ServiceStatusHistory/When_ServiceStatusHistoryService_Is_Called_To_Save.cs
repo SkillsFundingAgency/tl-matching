@@ -49,30 +49,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
                 IsOnline = true
             }).GetAwaiter().GetResult();
         }
-
+        
         [Fact]
-        public void Then_ServiceStatusHistoryRepository_Create_Is_Called_Exactly_Once()
-        {
-            _serviceStatusHistoryRepository
-                .Received(1)
-                .CreateAsync(Arg.Any<Domain.Models.ServiceStatusHistory>());
-        }
-
-        [Fact]
-        public void Then_ServiceStatusHistoryRepository_Create_Is_Called_With_IsOnline_Is_False()
+        public void Then_ServiceStatusHistoryRepository_Create_Is_Called_Exactly_Once_With_Expected_Values()
         {
             _serviceStatusHistoryRepository
                 .Received(1)
                 .CreateAsync(Arg.Is<Domain.Models.ServiceStatusHistory>(mh =>
-                    !mh.IsOnline));
-        }
-
-        [Fact]
-        public void Then_ServiceStatusHistoryRepository_Create_Is_Called_With_CreatedBy()
-        {
-            _serviceStatusHistoryRepository
-                .Received(1)
-                .CreateAsync(Arg.Is<Domain.Models.ServiceStatusHistory>(mh =>
+                    !mh.IsOnline &&
                     mh.CreatedBy == "CreatedBy"));
         }
     }

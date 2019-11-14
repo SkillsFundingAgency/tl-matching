@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         }
         
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Not_Called_Exactly_Once()
+        public void Then_EmailService_SendEmail_Is_Not_Called()
         {
             _emailService
                 .DidNotReceive()

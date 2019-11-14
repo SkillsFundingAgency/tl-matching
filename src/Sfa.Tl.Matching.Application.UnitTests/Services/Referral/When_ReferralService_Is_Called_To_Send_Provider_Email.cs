@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using AutoMapper;
+using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
@@ -19,6 +20,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
 
+        private readonly IDictionary<string, string> _contactNames = new Dictionary<string, string>();
+
         public When_ReferralService_Is_Called_To_Send_Provider_Email()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
@@ -33,14 +36,30 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             _emailService = Substitute.For<IEmailService>();
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            
+
             backgroundProcessHistoryRepo.GetSingleOrDefaultAsync(
                 Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
-            {
-                Id = 1,
-                ProcessType = BackgroundProcessType.ProviderReferralEmail.ToString(),
-                Status = BackgroundProcessHistoryStatus.Pending.ToString()
-            });
+                {
+                    Id = 1,
+                    ProcessType = BackgroundProcessType.ProviderReferralEmail.ToString(),
+                    Status = BackgroundProcessHistoryStatus.Pending.ToString()
+                });
+
+            _emailService
+                .When(x => x.SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>()))
+                .Do(x =>
+                {
+                    var address = x.ArgAt<string>(2);
+                    var tokens = x.Arg<Dictionary<string, string>>();
+                    if (tokens.TryGetValue("contact_name", out var contact))
+                    {
+                        _contactNames[address] = contact;
+                    }
+                });
 
             _opportunityRepository
                 .GetProviderOpportunitiesAsync(
@@ -67,216 +86,98 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_Exactly_Once()
+        public void Then_EmailService_SendEmail_Is_Called_Exactly_Twice_With_Expected_Parameters()
         {
             _emailService
                 .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_TemplateName()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Is<string>(
                         templateName => templateName == "ProviderReferralV4"),
                     Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>());
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Primary_ToAddress()
+        public void Then_EmailService_SendEmail_Is_Called_Exactly_Twice_With_CreatedBy()
+        {
+            _emailService
+                .Received(2)
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Is<string>(
+                        createdBy => createdBy == "CreatedBy"));
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_Once_With_Primary_ToAddress()
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Any<string>(),
                     Arg.Is<string>(
                         toAddress => toAddress == "primary.contact@provider.co.uk"),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>());
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Secondary_ToAddress()
+        public void Then_EmailService_SendEmail_Is_Called_Once_With_Secondary_ToAddress()
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Any<string>(),
                     Arg.Is<string>(
                         toAddress => toAddress == "secondary.contact@provider.co.uk"),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>());
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Subject()
+        public void Then_EmailService_SendEmail_Is_Called_With_Expected_Contact_Name_Tokens()
+        {
+            _contactNames.Should().ContainKey("primary.contact@provider.co.uk");
+            _contactNames["primary.contact@provider.co.uk"].Should().Be("Provider Contact");
+         
+            _contactNames.Should().ContainKey("secondary.contact@provider.co.uk");
+            _contactNames["secondary.contact@provider.co.uk"].Should().Be("Provider Secondary Contact");
+        }
+
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Expected_Tokens()
         {
             _emailService
                 .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<int?>(),
                     Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_ReplyToAddress()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_ContactName_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("contact_name")), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_ProviderName_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("provider_name")
-                                  && tokens["provider_name"] == "Provider display name"), Arg.Any<string>());
+                                  && tokens["provider_name"] == "Provider display name"
+                                  && tokens.ContainsKey("route")
+                                  && tokens["route"] == "agriculture, environmental and animal care"
+                                  && tokens.ContainsKey("venue_text")
+                                  && tokens["venue_text"] == "at Venue name in Venuetown AA2 2AA"
+                                  && tokens.ContainsKey("search_radius")
+                                  && tokens["search_radius"] == "3.5"
+                                  && tokens.ContainsKey("job_role_list")
+                                  && tokens["job_role_list"] == "* looking for this job role: Testing Job Title"
+                                  && tokens.ContainsKey("employer_business_name")
+                                  && tokens["employer_business_name"] == "Company"
+                                  && tokens.ContainsKey("employer_contact_name")
+                                  && tokens["employer_contact_name"] == "Employer Contact"
+                                  && tokens.ContainsKey("employer_contact_number")
+                                  && tokens["employer_contact_number"] == "020 123 4567"
+                                  && tokens.ContainsKey("employer_contact_email")
+                                  && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"
+                                  && tokens.ContainsKey("employer_town_postcode")
+                                  && tokens["employer_town_postcode"] == "Town AA1 1AA"
+                                  && tokens.ContainsKey("number_of_placements")
+                                  && tokens["number_of_placements"] == "at least 1"),
+                    Arg.Any<string>());
         }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Route_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("route")
-                                  && tokens["route"] == "agriculture, environmental and animal care"), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Venue_Text_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("venue_text")
-                                  && tokens["venue_text"] == "at Venue name in Venuetown AA2 2AA"), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Search_Radius_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("search_radius")
-                                  && tokens["search_radius"] == "3.5"), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Job_Role_List_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("job_role_list")
-                                  && tokens["job_role_list"] == "* looking for this job role: Testing Job Title"), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Business_Name_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_business_name")
-                                  && tokens["employer_business_name"] == "Company"), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Name_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_contact_name")
-                                  && tokens["employer_contact_name"] == "Employer Contact"), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Number_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_contact_number")
-                                  && tokens["employer_contact_number"] == "020 123 4567"), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Email_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_contact_email")
-                                  && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Town_Postcode_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_town_postcode")
-                                  && tokens["employer_town_postcode"] == "Town AA1 1AA"), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Number_Of_Placements_Token()
-        {
-            _emailService
-                .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("number_of_placements")
-                                  && tokens["number_of_placements"] == "at least 1"), Arg.Any<string>());
-        }
-
-        //[Fact]
-        //public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
-        //{
-        //    _emailHistoryService
-        //        .Received(2)
-        //        .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
-        //}
     }
 }

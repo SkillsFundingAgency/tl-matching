@@ -53,17 +53,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         }
         
         [Fact]
-        public void Then_ProviderVenueRepository_UpdateWithSpecifedColumnsOnly_Is_Called_Exactly_Once()
+        public void Then_ProviderVenueRepository_UpdateWithSpecifedColumnsOnly_Is_Called_Exactly_Once_With_Expected_Values()
         {
-            _providerVenueRepository.Received(1)
-                .UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<Domain.Models.ProviderVenue>(),
-                    Arg.Any<Expression<Func<Domain.Models.ProviderVenue, object>>[]>());
-        }
-
-        [Fact]
-        public void Then_ProviderVenueRepository_UpdateWithSpecifedColumnsOnly_Is_Called_With_Expected_Values()
-        {
-            _providerVenueRepository.Received(1)
+            _providerVenueRepository
+                .Received(1)
                 .UpdateWithSpecifedColumnsOnlyAsync(Arg.Is<Domain.Models.ProviderVenue>(
                     pv =>
                         pv.Id == 1 &&

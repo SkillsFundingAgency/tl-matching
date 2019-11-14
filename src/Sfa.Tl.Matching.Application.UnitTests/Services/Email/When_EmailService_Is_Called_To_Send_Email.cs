@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             };
 
             _emailTemplateRepository = Substitute.For<IRepository<EmailTemplate>>();
-            var emailHistoryRepository = Substitute.For<IRepository<Domain.Models.EmailHistory>>();
+            var emailHistoryRepository = Substitute.For<IRepository<EmailHistory>>();
 
             _emailTemplateRepository.GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>()).Returns(emailTemplate);
 
@@ -68,30 +68,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         }
 
         [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_Exactly_Once()
+        public void Then_NotificationsApi_SendEmail_Is_Called_Exactly_Once_With_Expected_Values()
         {
-            _notificationsApi.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Dictionary<string, dynamic>>());
-        }
-
-        [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_With_Send_To_Address()
-        {
-            _notificationsApi.Received(1).SendEmailAsync(Arg.Is<string>(e => e == _toAddress), Arg.Any<string>(), Arg.Any<Dictionary<string, dynamic>>());
-        }
-
-        [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_With_Template_Id()
-        {
-            _notificationsApi.Received(1).SendEmailAsync(Arg.Any<string>(),
-                Arg.Is<string>(templateId => templateId == "1599768C-7D3D-43AB-8548-82A4E5349468"),
-                Arg.Any<Dictionary<string, dynamic>>());
-        }
-
-        [Fact]
-        public void Then_NotificationsApi_SendEmail_Is_Called_With_First_Token_Key()
-        {
-            _notificationsApi.Received(1).SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
-                Arg.Is<Dictionary<string, dynamic>>(dict => dict.First().Key == "contactname"));
+            _notificationsApi
+                .Received(1)
+                .SendEmailAsync(Arg.Is<string>(emailAddress =>
+                        emailAddress == _toAddress), 
+                    Arg.Is<string>(templateId => 
+                        templateId == "1599768C-7D3D-43AB-8548-82A4E5349468"),
+                    Arg.Is<Dictionary<string, dynamic>>(dict => 
+                        dict.First().Key == "contactname"));
         }
     }
 }

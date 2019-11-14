@@ -61,14 +61,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         }
         
         [Fact]
-        public void Then_ProviderRepository_Update_Is_Called_Exactly_Once()
-        {
-            _repository.Received(1)
-                .CreateAsync(Arg.Any<Domain.Models.Provider>());
-        }
-
-        [Fact]
-        public void Then_ProviderRepository_Update_Is_Called_With_Expected_Values()
+        public void Then_ProviderRepository_Create_Is_Called_Exactly_Once_With_Expected_Values()
         {
             _repository.Received(1)
                 .CreateAsync(Arg.Is<Domain.Models.Provider>(

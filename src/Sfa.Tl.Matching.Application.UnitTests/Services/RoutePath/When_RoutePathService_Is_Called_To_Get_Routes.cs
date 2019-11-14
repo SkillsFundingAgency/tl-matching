@@ -78,26 +78,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         }
 
         [Fact]
-        public void Then_Route_Id_Is_Returned()
+        public void Then_Route_Data_Is_As_Expected()
         {
             Assert.Equal(Expected.First().Id, _result.First().Id);
-        }
-
-        [Fact]
-        public void Then_Route_Name_Is_Returned()
-        {
             Assert.Equal(Expected.First().Name, _result.First().Name);
-        }
-
-        [Fact]
-        public void Then_Route_Keywords_Is_Returned()
-        {
             Assert.Equal(Expected.First().Keywords, _result.First().Keywords);
-        }
-
-        [Fact]
-        public void Then_Route_Summary_Is_Returned()
-        {
             Assert.Equal(Expected.First().Summary, _result.First().Summary);
         }
     }

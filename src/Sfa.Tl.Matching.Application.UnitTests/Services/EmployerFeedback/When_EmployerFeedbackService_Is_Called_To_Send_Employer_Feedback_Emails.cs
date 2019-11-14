@@ -148,16 +148,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>(),
                     Arg.Any<Expression<Func<Domain.Models.Opportunity, object>>>());
         }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_Exactly_Once()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
-        }
-
+        
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Expected_Parameters()
         {
@@ -184,30 +175,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                     Arg.Is<IDictionary<string, string>>(
                         tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)), Arg.Any<string>());
         }
-
-        //[Fact]
-        //public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
-        //{
-        //    _emailHistoryService
-        //        .Received(1)
-        //        .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(),
-        //            Arg.Any<string>(), Arg.Any<string>());
-        //}
-
-        //[Fact]
-        //public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_With_Expected_Parameters()
-        //{
-        //    _emailHistoryService
-        //        .Received(1)
-        //        .SaveEmailHistoryAsync(
-        //            Arg.Is<string>(templateName => templateName == "EmployerFeedback"),
-
-        //            Arg.Any<IDictionary<string, string>>(),
-        //            Arg.Any<int?>(),
-        //            Arg.Any<string>(),
-        //            Arg.Is<string>(s => s == "TestUser"));
-        //}
-
+        
         [Fact]
         public void Then_Result_Has_Expected_Value()
         {

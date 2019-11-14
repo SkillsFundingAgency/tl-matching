@@ -92,17 +92,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         {
             _providerVenueRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.ProviderVenue, bool>>>());
         }
-
-        [Fact]
-        public void Then_ProviderVenueRepository_Update_Is_Called_Exactly_Once()
-        {
-            _providerVenueRepository.Received(1).UpdateAsync(Arg.Any<Domain.Models.ProviderVenue>());
-        }
         
         [Fact]
-        public void Then_ProviderVenueRepository_Update_Is_Called_With_Expected_Values()
+        public void Then_ProviderVenueRepository_Update_Is_Called_Exactly_Once_With_Expected_Values()
         {
-            _providerVenueRepository.Received(1)
+            _providerVenueRepository
+                .Received(1)
                 .UpdateAsync(Arg.Is<Domain.Models.ProviderVenue>(
                     pv => pv.Id == 1 &&
                     pv.Postcode == "CV1 2WT" &&

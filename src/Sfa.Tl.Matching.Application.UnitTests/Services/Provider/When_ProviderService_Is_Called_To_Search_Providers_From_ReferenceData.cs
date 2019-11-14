@@ -41,22 +41,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
             _providerReferenceRepository.Received(1)
                 .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<ProviderReference, bool>>>());
         }
-        
+
         [Fact]
-        public void Then_The_Provider_Id_Is_As_Expected()
+        public void Then_The_Fields_Are_As_Expected()
         {
             _result.Id.Should().Be(1);
-        }
-
-        [Fact]
-        public void Then_The_Provider_UkPrn_Is_As_Expected()
-        {
             _result.UkPrn.Should().Be(UkPrn);
-        }
-
-        [Fact]
-        public void Then_The_Provider_Name_Is_As_Expected()
-        {
             _result.Name.Should().Be("Test Provider");
         }
     }

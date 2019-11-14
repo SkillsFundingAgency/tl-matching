@@ -70,57 +70,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_Exactly_Once()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_TemplateName()
+        public void Then_EmailService_SendEmail_Is_Called_Exactly_Once_With_Expected_Parameters()
         {
             _emailService
                 .Received(1)
                 .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "EmployerReferralV4"),
-                    Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_ToAddress()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
                     Arg.Is<string>(
                         toAddress => toAddress == "employer.contact@employer.co.uk"),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>());
         }
-
+        
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Subject()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_ReplyToAddress()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Name_Token()
+        public void Then_EmailService_SendEmail_Is_Called_With_Expected_Tokens()
         {
             _emailService
                 .Received(1)
@@ -128,44 +91,16 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("employer_contact_name")
-                                  && tokens["employer_contact_name"] == "Employer Contact"), Arg.Any<string>());
+                                  && tokens["employer_contact_name"] == "Employer Contact"
+                                  && tokens.ContainsKey("employer_business_name")
+                                  && tokens["employer_business_name"] == "Employer"
+                                  && tokens.ContainsKey("employer_contact_number")
+                                  && tokens["employer_contact_number"] == "020 123 4567"
+                                  && tokens.ContainsKey("employer_contact_email")
+                                  && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"), 
+                    Arg.Any<string>());
         }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Business_Name_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_business_name")
-                                  && tokens["employer_business_name"] == "Employer"), Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Number_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_contact_number")
-                                  && tokens["employer_contact_number"] == "020 123 4567"), Arg.Any<string>());
-        }
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Employer_Contact_Email_Token()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_contact_email")
-                                  && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"), Arg.Any<string>());
-        }
-
+        
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Placements_List()
         {
@@ -185,13 +120,5 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                         tokens => tokens.ContainsKey("placements_list")
                                   && tokens["placements_list"] == expectedPlacementsList), Arg.Any<string>());
         }
-
-        //[Fact]
-        //public void Then_EmailHistoryService_SaveEmailHistory_Is_Called_Exactly_Once()
-        //{
-        //    _emailHistoryService
-        //        .Received(1)
-        //        .SaveEmailHistoryAsync(Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>());
-        //}
     }
 }

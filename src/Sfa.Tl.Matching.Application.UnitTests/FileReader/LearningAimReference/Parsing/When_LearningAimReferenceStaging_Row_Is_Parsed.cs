@@ -23,27 +23,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.LearningAimReference.
             _parseResult.Count().Should().Be(1);
 
         [Fact]
-        public void Then_First_ParseResult_CrmId_Matches_Input() =>
-            _firstLearningAimReferenceStagingDto.Title.Should().Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.Title);
-
-        [Fact]
-        public void Then_First_ParseResult_CompanyName_Matches_Input() =>
-            _firstLearningAimReferenceStagingDto.LarId.Should().Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.LarId);
-
-        [Fact]
-        public void Then_First_ParseResult_AlsoKnownAs_Matches_Input() =>
-            _firstLearningAimReferenceStagingDto.AwardOrgLarId.Should().Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.AwardOrgLarId);
-
-        [Fact]
-        public void Then_First_ParseResult_CompanyNameSearch_Should_Be_ComanyName_And_AlsoKnownAs_Combined_Containing_Letters_Or_Digits() =>
-            _firstLearningAimReferenceStagingDto.SourceCreatedOn.Should().Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.SourceCreatedOn);
-
-        [Fact]
-        public void Then_First_ParseResult_Aupa_Matches_Input() =>
-            _firstLearningAimReferenceStagingDto.SourceModifiedOn.Should().Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.SourceModifiedOn);
-
-        [Fact]
-        public void Then_First_ParseResult_CompanyType_Matches_Input() =>
-            _firstLearningAimReferenceStagingDto.CreatedBy.Should().Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.CreatedBy);
+        public void Then_First_ParseResult_Fields_Match_Input()
+        {
+            _firstLearningAimReferenceStagingDto.Title.Should()
+                .Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.Title);
+            _firstLearningAimReferenceStagingDto.LarId.Should()
+                .Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.LarId);
+            _firstLearningAimReferenceStagingDto.AwardOrgLarId.Should()
+                .Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.AwardOrgLarId);
+            _firstLearningAimReferenceStagingDto.SourceCreatedOn.Should()
+                .Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.SourceCreatedOn);
+            _firstLearningAimReferenceStagingDto.SourceModifiedOn.Should()
+                .Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.SourceModifiedOn);
+            _firstLearningAimReferenceStagingDto.CreatedBy.Should()
+                .Be(ValidLearningAimReferenceStagingFileImportDtoBuilder.CreatedBy);
+        }
     }
 }
