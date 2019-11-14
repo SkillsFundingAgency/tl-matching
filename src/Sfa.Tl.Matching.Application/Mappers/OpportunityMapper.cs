@@ -14,6 +14,12 @@ namespace Sfa.Tl.Matching.Application.Mappers
     {
         public OpportunityMapper()
         {
+            CreateMap<Opportunity, EmployerOpportunityViewModel>()
+                .ForMember(m => m.Name, o => o.MapFrom(s => s.Employer.CompanyName))
+                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))
+                .ForMember(m => m.LastUpdated, o => o.MapFrom(s => s.ModifiedOn != null ? s.ModifiedOn.Value.GetTimeWithDate("on") : s.CreatedOn.GetTimeWithDate("on")))
+                ;
+
             CreateMap<OpportunityDto, Opportunity>()
                 .ForMember(m => m.EmployerCrmId, o => o.MapFrom(s => s.EmployerCrmId))
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.PrimaryContact.ToTitleCase()))

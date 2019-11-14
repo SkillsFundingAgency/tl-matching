@@ -10,6 +10,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
     {
         public EmployerMapper()
         {
+            CreateMap<Employer, EmployerSearchResultDto>();
+
             CreateMap<EmployerStagingDto, EmployerStaging>()
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.ChecksumCol, config => config.Ignore())

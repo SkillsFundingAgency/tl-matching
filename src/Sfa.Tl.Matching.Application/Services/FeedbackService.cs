@@ -67,10 +67,10 @@ namespace Sfa.Tl.Matching.Application.Services
             backgroundProcessHistory.ModifiedOn = _dateTimeProvider.UtcNow();
 
             await _backgroundProcessHistoryRepository.UpdateWithSpecifedColumnsOnlyAsync(backgroundProcessHistory,
-                history => history.RecordCount,
-                history => history.Status, 
-                history => history.ModifiedBy, 
-                history => history.ModifiedOn );
+                 history => history.RecordCount,
+                                history => history.Status, 
+                                history => history.ModifiedBy, 
+                                history => history.ModifiedOn );
         }
 
         public DateTime? ReferralDate => _dateTimeProvider.GetReferralDateAsync(GetBankHolidays, _configuration.EmployerFeedbackTimeSpan);
