@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                             Qualification = new Domain.Models.Qualification
                             {
                                 Id = 1,
-                                LarsId = "1001",
+                                LarId = "1001",
                                 Title = "Title 1",
                                 ShortTitle = "Short Title",
                                 CreatedBy = EntityCreationConstants.CreatedByUser,
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                             Qualification = new Domain.Models.Qualification
                             {
                                 Id = 2,
-                                LarsId = "1002",
+                                LarId = "1002",
                                 Title = "Title 2",
                                 ShortTitle = "Duplicate Short Title",
                                 CreatedBy = EntityCreationConstants.CreatedByUser,
@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                             Qualification = new Domain.Models.Qualification
                             {
                                 Id = 3,
-                                LarsId = "1003",
+                                LarId = "1003",
                                 Title = "Title 3",
                                 ShortTitle = "Duplicate Short Title",
                                 CreatedBy = EntityCreationConstants.CreatedByUser,
@@ -162,7 +162,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Provider.Builders
                             Qualification = new Domain.Models.Qualification
                             {
                                 Id = 1,
-                                LarsId = "1001",
+                                LarId = "1001",
                                 Title = "Title 1",
                                 ShortTitle = "Short Title",
                                 CreatedBy = EntityCreationConstants.CreatedByUser,

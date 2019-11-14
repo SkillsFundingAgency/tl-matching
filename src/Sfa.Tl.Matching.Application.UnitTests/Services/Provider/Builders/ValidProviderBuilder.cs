@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                         Qualification = new Domain.Models.Qualification
                         {
                             Id = 1,
-                            LarsId = "12345678",
+                            LarId = "12345678",
                             Title = "Qualification 1",
                             ShortTitle = "Qualification 1 Short Title"
                         }
@@ -73,7 +73,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                         Qualification = new Domain.Models.Qualification
                         {
                             Id = 2,
-                            LarsId = "00001234",
+                            LarId = "00001234",
                             Title = "Qualification 2",
                             ShortTitle = "Qualification 2 Short Title"
                         }
@@ -83,7 +83,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider.Builders
                         Qualification = new Domain.Models.Qualification
                         {
                             Id = 3,
-                            LarsId = "00005678",
+                            LarId = "00005678",
                             Title = "Qualification 3",
                             ShortTitle = "Qualification 3 Short Title"
                         }

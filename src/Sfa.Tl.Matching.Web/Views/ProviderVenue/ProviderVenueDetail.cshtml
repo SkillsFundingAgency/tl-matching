@@ -108,13 +108,13 @@
                         @for (var i = 0; i < Model.Qualifications?.Count; i++)
                         {
                             <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">@Model.Qualifications[i].LarsId</td>
+                                <td class="govuk-table__cell">@Model.Qualifications[i].LarId</td>
                                 <td class="govuk-table__cell">@Model.Qualifications[i].Title</td>
                                 <td class="govuk-table__cell">
                                     <a asp-route="RemoveQualification" asp-route-providerVenueId="@Model.Id"
                                        asp-route-qualificationId="@Model.Qualifications[i].Id"
                                        class="govuk-link">Remove qualification</a>
-                                    <input type="hidden" asp-for="@Model.Qualifications[i].LarsId" name="Qualifications[@i].LarsId" />
+                                    <input type="hidden" asp-for="@Model.Qualifications[i].LarId" name="Qualifications[@i].LarId" />
                                     <input type="hidden" asp-for="@Model.Qualifications[i].Title" name="Qualifications[@i].Title" />
                                 </td>
                             </tr>

@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                    select new QualificationDetailViewModel
                                                    {
                                                        Id = q.Id,
-                                                       LarsId = q.LarsId,
+                                                       LarId = q.LarId,
                                                        Title = q.Title,
                                                        ShortTitle = q.ShortTitle
                                                    }).Distinct().ToList()

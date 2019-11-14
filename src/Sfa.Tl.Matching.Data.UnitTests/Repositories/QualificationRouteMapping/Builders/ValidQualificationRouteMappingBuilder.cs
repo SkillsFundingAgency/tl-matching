@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.
             ModifiedOn = EntityCreationConstants.ModifiedOn,
             Qualification = new Domain.Models.Qualification
             {
-                LarsId = "1234567X",
+                LarId = "1234567X",
                 Title = "Full Qualification Title",
                 ShortTitle = "Short Title"
             }

@@ -11,14 +11,14 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
             if (ReferenceEquals(x, null)) return false;
             if (ReferenceEquals(y, null)) return false;
             if (x.GetType() != y.GetType()) return false;
-            return string.Equals(x.LarsId, y.LarsId) && string.Equals(x.Title, y.Title) && string.Equals(x.ShortTitle, y.ShortTitle) && Equals(x.ProviderQualification, y.ProviderQualification) && Equals(x.QualificationRouteMapping, y.QualificationRouteMapping);
+            return string.Equals(x.LarId, y.LarId) && string.Equals(x.Title, y.Title) && string.Equals(x.ShortTitle, y.ShortTitle) && Equals(x.ProviderQualification, y.ProviderQualification) && Equals(x.QualificationRouteMapping, y.QualificationRouteMapping);
         }
 
         public int GetHashCode(Qualification obj)
         {
             unchecked
             {
-                var hashCode = (obj.LarsId != null ? obj.LarsId.GetHashCode() : 0);
+                var hashCode = (obj.LarId != null ? obj.LarId.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (obj.Title != null ? obj.Title.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (obj.ShortTitle != null ? obj.ShortTitle.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (obj.ProviderQualification != null ? obj.ProviderQualification.GetHashCode() : 0);

@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.
                 ModifiedOn = EntityCreationConstants.ModifiedOn,
                 Qualification = new Domain.Models.Qualification
                 {
-                    LarsId = "1234567X",
+                    LarId = "1234567X",
                     Title = "Full Qualification Title",
                     ShortTitle = "Short Title"
                 }
@@ -34,10 +34,10 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.
                 ModifiedOn = EntityCreationConstants.ModifiedOn,
                 Qualification = new Domain.Models.Qualification
                 {
-                    LarsId = "7654321X",
+                    LarId = "7654321X",
                     Title = "Another Qualification Title",
-                    ShortTitle = "Another Short Title"
-                }
+                    ShortTitle = "Another Short Title" 
+				}
             }
         };
     }

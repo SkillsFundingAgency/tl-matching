@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
 
                 var repository = new GenericRepository<Domain.Models.QualificationRouteMapping>(logger, dbContext);
 
-                entity.Qualification.LarsId = "1234567X";
+                entity.Qualification.LarId = "1234567X";
                 entity.Qualification.Title = "Updated Full Qualification Title";
                 entity.Qualification.ShortTitle = "Updated Short Title";
                 entity.RouteId = 5;
@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
         public void Then_Fields_Are_As_Expected()
         {
             _result.Id.Should().Be(1);
-            _result.Qualification.LarsId.Should().BeEquivalentTo("1234567X");
+            _result.Qualification.LarId.Should().BeEquivalentTo("1234567X");
             _result.Qualification.Title.Should().BeEquivalentTo("Updated Full Qualification Title");
             _result.Qualification.ShortTitle.Should().BeEquivalentTo("Updated Short Title");
             _result.RouteId.Should().Be(5);

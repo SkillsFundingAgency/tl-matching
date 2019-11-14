@@ -9,7 +9,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders
             new Domain.Models.Qualification
             {
                 Id = 1,
-                LarsId = "10042982",
+                LarId = "10042982",
                 Title = "Level 2 Diploma in Sport and Enterprise in the Community",
                 ShortTitle = "sport and enterprise in the community",
                 QualificationSearch = "SportEnterpriseCommunitysportenterprisecommunity",
@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders
             new Domain.Models.Qualification
             {
                 Id = 2,
-                LarsId = "10017884",
+                LarId = "10017884",
                 Title = "Level 3 Diploma in Sport and Enterprise in the Community",
                 ShortTitle = "sport and enterprise in the community",
                 QualificationSearch = "SportEnterpriseCommunitysportenterprisecommunity",
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification.Builders
             new Domain.Models.Qualification
             {
                 Id = 3,
-                LarsId = "60163239",
+                LarId = "60163239",
                 Title = "Level 2 in Applied Scientific Reasoning",
                 ShortTitle = "applied science and technology",
                 QualificationSearch = "appliedscientificreasoningappliedsciencetechnology",

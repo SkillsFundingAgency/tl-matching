@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
     {
         private const string Title = "We need extra information for this qualification";
         private const int VenueId = 1;
-        private const string LarsId = "12345678";
+        private const string LarId = "12345678";
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
 
             var client = _factory.CreateClient();
 
-            var response = await client.GetAsync($"/missing-qualification/{VenueId}/{LarsId}");
+            var response = await client.GetAsync($"/missing-qualification/{VenueId}/{LarId}");
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html; charset=utf-8",

@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
         private const bool IsEnabledForReferral = false;
         private const bool IsRemoved = false;
         private const int QualificationId = 99;
-        private const string LarsId = "1234";
+        private const string LarId = "1234";
         private const string Title = "Title";
         private const string ShortTitle = "ShortTitle";
 
@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
                             Qualification = new Domain.Models.Qualification
                             {
                                 Id = QualificationId,
-                                LarsId = LarsId,
+                                LarId = LarId,
                                 Title = Title,
                                 ShortTitle = ShortTitle
                             }
@@ -83,7 +83,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderVenue
         {
             var qualification = _result.Qualifications.First();
             qualification.Id.Should().Be(QualificationId);
-            qualification.LarsId.Should().Be(LarsId);
+            qualification.LarId.Should().Be(LarId);
             qualification.Title.Should().Be(Title);
             qualification.ShortTitle.Should().Be(ShortTitle);
         }

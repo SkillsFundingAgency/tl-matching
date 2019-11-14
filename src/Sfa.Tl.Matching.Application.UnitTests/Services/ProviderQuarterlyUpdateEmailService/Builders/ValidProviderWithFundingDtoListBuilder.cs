@@ -26,12 +26,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                         {
                             new QualificationInfoDto
                             {
-                                LarsId = "10042982",
+                                LarId = "10042982",
                                 Title = "Qualification 1"
                             },
                             new QualificationInfoDto
                             {
-                                LarsId = "60165522",
+                                LarId = "60165522",
                                 Title = "Qualification 2"
                             }
                         }

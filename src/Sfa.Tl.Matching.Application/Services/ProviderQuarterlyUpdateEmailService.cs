@@ -106,9 +106,9 @@ namespace Sfa.Tl.Matching.Application.Services
                         }
 
                         foreach (var qualification in providerVenue.Qualifications
-                                                                   .OrderBy(q => q.LarsId))
+                                                                   .OrderBy(q => q.LarId))
                         {
-                            venuesListBuilder.AppendLine($"* {qualification.LarsId}: {qualification.Title}");
+                            venuesListBuilder.AppendLine($"* {qualification.LarId}: {qualification.Title}");
                         }
 
                         venuesListBuilder.AppendLine("");

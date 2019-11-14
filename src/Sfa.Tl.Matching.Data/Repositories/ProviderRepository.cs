@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         Qualifications = venue.ProviderQualification
                             .Select(qualification => new QualificationInfoDto
                             {
-                                LarsId = qualification.Qualification.LarsId,
+                                LarId = qualification.Qualification.LarId,
                                 Title = qualification.Qualification.Title
                             }).Distinct().ToList()
                     }).OrderBy(v => v.Postcode).ToList()

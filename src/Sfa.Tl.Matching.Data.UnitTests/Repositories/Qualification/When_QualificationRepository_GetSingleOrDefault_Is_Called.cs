@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Qualification
         public void Then_Fields_Are_As_Expected()
         {
             _result.Id.Should().Be(1);
-            _result.LarsId.Should().BeEquivalentTo("1000");
+            _result.LarId.Should().BeEquivalentTo("1000");
             _result.Title.Should().BeEquivalentTo("Title");
             _result.ShortTitle.Should().BeEquivalentTo("ShortTitle");
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);

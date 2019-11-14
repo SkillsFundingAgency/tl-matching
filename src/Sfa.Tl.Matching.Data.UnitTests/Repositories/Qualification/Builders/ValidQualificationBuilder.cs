@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Qualification.Builders
             new Domain.Models.Qualification
             {
                 Id = 1,
-                LarsId = "1000",
+                LarId = "1000",
                 Title = "Title",
                 ShortTitle = "ShortTitle",
                 CreatedBy = EntityCreationConstants.CreatedByUser,

@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
         public void Then_Fields_Are_As_Expected()
         {
             _result.Id.Should().Be(1);
-            _result.Qualification.LarsId.Should().BeEquivalentTo("1234567X");
+            _result.Qualification.LarId.Should().BeEquivalentTo("1234567X");
             _result.Qualification.Title.Should().BeEquivalentTo("Full Qualification Title");
             _result.Qualification.ShortTitle.Should().BeEquivalentTo("Short Title");
             _result.RouteId.Should().Be(2);

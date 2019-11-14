@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
         {
             _result.Count().Should().Be(2);
             _result.First().Id.Should().Be(1);
-            _result.First().Qualification.LarsId.Should().Be("1234567X");
+            _result.First().Qualification.LarId.Should().Be("1234567X");
             _result.First().Qualification.Title.Should().BeEquivalentTo("Full Qualification Title");
             _result.First().Qualification.ShortTitle.Should().BeEquivalentTo("Short Title");
             _result.First().RouteId.Should().Be(2);

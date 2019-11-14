@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 {
                     new QualificationDetailViewModel
                     {
-                        LarsId = "123"
+                        LarId = "123"
                     }
                 }
             };
