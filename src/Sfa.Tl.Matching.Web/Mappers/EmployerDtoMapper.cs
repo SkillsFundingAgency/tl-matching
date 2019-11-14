@@ -24,13 +24,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
 
             CreateMap<EmployerStagingDto, EmployerDetailsViewModel>()
                 .ForMember(m => m.OpportunityId, o => o.Ignore())
-                .ForMember(m => m.OpportunityItemId, o => o.Ignore())
-                .ForMember(m => m.CompanyName, o => o.MapFrom(s => s.CompanyName))
-                .ForMember(m => m.CompanyNameAka, o => o.MapFrom(s => s.AlsoKnownAs))
-                .ForMember(m => m.PrimaryContact, o => o.MapFrom(s => s.PrimaryContact))
-                .ForMember(m => m.Email, o => o.MapFrom(s => s.Email))
-                .ForMember(m => m.Phone, o => o.MapFrom(s => s.Phone))
-                ;
+                .ForMember(m => m.OpportunityItemId, o => o.Ignore());
 
             CreateMap<OpportunityDto, EmployerDetailsViewModel>()
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))
@@ -39,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
                 .ForMember(m => m.Phone, config => config.MapFrom(s => s.EmployerContactPhone))
                 .ForMember(m => m.OpportunityItemId, o => o.Ignore())
                 .ForMember(m => m.CompanyName, o => o.Ignore())
-                .ForMember(m => m.CompanyNameAka, o => o.Ignore())
+                .ForMember(m => m.AlsoKnownAs, o => o.Ignore())
                 ;
         }
     }

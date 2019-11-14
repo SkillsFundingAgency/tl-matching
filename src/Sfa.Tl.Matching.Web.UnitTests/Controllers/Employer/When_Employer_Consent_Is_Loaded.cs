@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 OpportunityId = 1,
                 OpportunityItemId = 2,
                 CompanyName = "CompanyName",
-                CompanyNameAka = "CompanyNameAka",
+                AlsoKnownAs = "CompanyNameAka",
                 PrimaryContact = "EmployerContact",
                 Phone = "EmployerContactPhone",
                 Email = "EmployerContactEmail"
@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             viewModel.ConfirmationSelected.Should().BeFalse();
 
             viewModel.Details.CompanyName.Should().Be("CompanyName");
-            viewModel.Details.CompanyNameAka.Should().Be("CompanyNameAka");
+            viewModel.Details.AlsoKnownAs.Should().Be("CompanyNameAka");
             viewModel.Details.CompanyNameWithAka.Should().Be("CompanyName (CompanyNameAka)");
             viewModel.Details.PrimaryContact.Should().Be("EmployerContact");
             viewModel.Details.Email.Should().Be("EmployerContactEmail");
