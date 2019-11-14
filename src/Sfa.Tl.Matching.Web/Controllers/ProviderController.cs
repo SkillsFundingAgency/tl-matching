@@ -13,8 +13,6 @@ using Sfa.Tl.Matching.Web.Filters;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
-    //[ServiceFilter(typeof(BackLinkFilter))]
-    //[ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class ProviderController : Controller
     {
         private readonly MatchingConfiguration _configuration;
