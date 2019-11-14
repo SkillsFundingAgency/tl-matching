@@ -28,9 +28,6 @@ namespace Sfa.Tl.Matching.Web.Mappers
 
             CreateMap<OpportunityDto, EmployerDetailsViewModel>()
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.Id))
-                .ForMember(m => m.PrimaryContact, config => config.MapFrom(s => s.PrimaryContact))
-                .ForMember(m => m.Email, config => config.MapFrom(s => s.Email))
-                .ForMember(m => m.Phone, config => config.MapFrom(s => s.Phone))
                 .ForMember(m => m.OpportunityItemId, o => o.Ignore())
                 .ForMember(m => m.CompanyName, o => o.Ignore())
                 .ForMember(m => m.AlsoKnownAs, o => o.Ignore())
