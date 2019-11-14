@@ -12,3 +12,4 @@ DECLARE @TicketNo VARCHAR(32)
 
 :r ".\Remove EmployerId from Opportunity.sql"
 :r ".\Remove Postcode and CompanyType from Employer.sql"
+:r ".\Remove NumberOfPlacements From ProviderQualification.sql"

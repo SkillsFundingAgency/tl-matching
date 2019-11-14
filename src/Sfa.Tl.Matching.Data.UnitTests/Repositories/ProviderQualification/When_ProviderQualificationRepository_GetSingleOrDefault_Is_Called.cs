@@ -34,7 +34,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification
             _result.Id.Should().Be(1);
             _result.ProviderVenueId.Should().Be(1);
             _result.QualificationId.Should().Be(1);
-            _result.NumberOfPlacements.Should().Be(1);
             _result.Source.Should().BeEquivalentTo("Test");
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);

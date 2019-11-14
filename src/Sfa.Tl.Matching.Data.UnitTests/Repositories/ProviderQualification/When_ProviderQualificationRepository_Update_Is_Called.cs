@@ -28,7 +28,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification
 
                 entity.ProviderVenueId = 2;
                 entity.QualificationId = 3;
-                entity.NumberOfPlacements = 4;
                 entity.Source = "Updated";
 
                 entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
@@ -47,7 +46,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification
             _result.Id.Should().Be(1);
             _result.ProviderVenueId.Should().Be(2);
             _result.QualificationId.Should().Be(3);
-            _result.NumberOfPlacements.Should().Be(4);
             _result.Source.Should().BeEquivalentTo("Updated");
 
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
