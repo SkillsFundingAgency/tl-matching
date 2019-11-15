@@ -11,6 +11,6 @@
 	INNER JOIN [Provider] AS P ON pv.ProviderId = p.Id
 	INNER JOIN [Route] AS R ON R.Id = oi.RouteId
 	WHERE 
-		oi.IsSaved = 1
+		oi.IsSaved = 1 AND oi.IsCompleted = 1
 	GROUP BY 
 		R.[Name], pv.Postcode, p.[Name], p.Id

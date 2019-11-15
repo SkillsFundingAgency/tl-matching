@@ -233,19 +233,23 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return _dbContext.OpportunityItem.Count(item => item.OpportunityId == opportunityId && item.IsSaved && !item.IsCompleted);
         }
 
-        public async Task<List<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync()
+        public async Task<IList<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync()
         {
             return await _dbContext.MatchingServiceOpportunityReport
                 .OrderBy(o => o.OpportunityItemId)
                 .ThenByDescending(o => o.OpportunityType)
-                .ThenByDescending(o => o.IsCompleted)
-                .ThenByDescending(o => o.IsSaved)
+                .ThenByDescending(o => o.PipelineOpportunity)
                 .ToListAsync();
         }
 
-        public async Task<List<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync()
+        public async Task<IList<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync()
         {
             return await _dbContext.MatchingServiceProviderOpportunityReport.ToListAsync();
+        }
+
+        public async Task<IList<MatchingServiceProviderEmployerReport>> GetMatchingServiceProviderEmployerReportAsync()
+        {
+            return await _dbContext.MatchingServiceProviderEmployerReport.ToListAsync();
         }
 
         public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
