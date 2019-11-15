@@ -28,11 +28,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Mat
 
             ClearData();
 
-            var employer = _employerBuilder.CreaeEmployer(Guid.NewGuid());
-            _provider = _providerBuilder.CreaeProvider();
+            var employer = _employerBuilder.CreateEmployer(Guid.NewGuid());
+            _provider = _providerBuilder.CreateProvider();
 
-            var savedReferralOpportunityItem1 = _opportunityBuilder.CreaeReferralOpportunityItem(true, true, _provider.ProviderVenue.Select(pv => pv.Id).ToArray());
-            var savedReferralOpportunityItem2 = _opportunityBuilder.CreaeReferralOpportunityItem(true, true, _provider.ProviderVenue.Select(pv => pv.Id).ToArray());
+            var savedReferralOpportunityItem1 = _opportunityBuilder.CreateReferralOpportunityItem(true, true, _provider.ProviderVenue.Select(pv => pv.Id).ToArray());
+            var savedReferralOpportunityItem2 = _opportunityBuilder.CreateReferralOpportunityItem(true, true, _provider.ProviderVenue.Select(pv => pv.Id).ToArray());
 
             _opportunityBuilder.CreateOpportunity(employer.CrmId, new List<OpportunityItem> { savedReferralOpportunityItem1, savedReferralOpportunityItem2 });
 

@@ -32,14 +32,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Mat
 
             ClearData();
 
-            var employer = _employerBuilder.CreaeEmployer(Guid.NewGuid());
-            var provider1 = _providerBuilder.CreaeProvider();
-            var provider2 = _providerBuilder.CreaeProvider();
+            var employer = _employerBuilder.CreateEmployer(Guid.NewGuid());
+            var provider1 = _providerBuilder.CreateProvider();
+            var provider2 = _providerBuilder.CreateProvider();
 
-            _savedReferralOpportunityItem = _opportunityBuilder.CreaeReferralOpportunityItem(true, true, provider1.ProviderVenue.First().Id);
+            _savedReferralOpportunityItem = _opportunityBuilder.CreateReferralOpportunityItem(true, true, provider1.ProviderVenue.First().Id);
             _savedProvisionGapOpportunityItem = _opportunityBuilder.CreateProvisionGapOpportunityItem(true, true);
 
-            _unsavedReferralOpportunityItem = _opportunityBuilder.CreaeReferralOpportunityItem(false, false, provider2.ProviderVenue.First().Id);
+            _unsavedReferralOpportunityItem = _opportunityBuilder.CreateReferralOpportunityItem(false, false, provider2.ProviderVenue.First().Id);
             _unsavedProvisionGapOpportunityItem = _opportunityBuilder.CreateProvisionGapOpportunityItem(false, false);
 
             _opportunityBuilder.CreateOpportunity(employer.CrmId, new List<OpportunityItem> { _savedReferralOpportunityItem, _savedProvisionGapOpportunityItem, _unsavedReferralOpportunityItem, _unsavedProvisionGapOpportunityItem });
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Mat
         }
 
         [Fact]
-        public void Then_Save_referal_Is_included()
+        public void Then_Saved_Referral_Is_Included()
         {
             _result.Should().NotBeNull();
             _result.SingleOrDefault(o => o.OpportunityItemId == _savedReferralOpportunityItem.Id).Should().NotBeNull();
@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Mat
         }
 
         [Fact]
-        public void Then_Unsave_referal_Is_NOT_included()
+        public void Then_Unsaved_Referral_Is_NOT_Included()
         {
             _result.Should().NotBeNull();
             _result.SingleOrDefault(o => o.OpportunityItemId == _unsavedReferralOpportunityItem.Id).Should().BeNull();

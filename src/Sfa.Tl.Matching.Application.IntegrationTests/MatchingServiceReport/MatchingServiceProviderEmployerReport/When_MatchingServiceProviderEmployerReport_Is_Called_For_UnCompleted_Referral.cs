@@ -28,10 +28,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Mat
 
             ClearData();
 
-            var employer = _employerBuilder.CreaeEmployer(Guid.NewGuid());
-            var provider = _providerBuilder.CreaeProvider();
+            var employer = _employerBuilder.CreateEmployer(Guid.NewGuid());
+            var provider = _providerBuilder.CreateProvider();
             
-            _savedReferralOpportunityItem = _opportunityBuilder.CreaeReferralOpportunityItem(true, false, provider.ProviderVenue.First().Id);
+            _savedReferralOpportunityItem = _opportunityBuilder.CreateReferralOpportunityItem(true, false, provider.ProviderVenue.First().Id);
 
             _opportunityBuilder.CreateOpportunity(employer.CrmId, new List<OpportunityItem> { _savedReferralOpportunityItem });
 

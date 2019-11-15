@@ -29,10 +29,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Mat
 
             ClearData();
 
-            var employer = _employerBuilder.CreaeEmployer(Guid.NewGuid());
-            var provider = _providerBuilder.CreaeProvider();
+            var employer = _employerBuilder.CreateEmployer(Guid.NewGuid());
+            var provider = _providerBuilder.CreateProvider();
             
-            _savedReferralOpportunityItem = _opportunityBuilder.CreaeReferralOpportunityItem(true, false, provider.ProviderVenue.First().Id);
+            _savedReferralOpportunityItem = _opportunityBuilder.CreateReferralOpportunityItem(true, false, provider.ProviderVenue.First().Id);
             _savedProvisionGapOpportunityItem = _opportunityBuilder.CreateProvisionGapOpportunityItem(true, false);
 
             _opportunityBuilder.CreateOpportunity(employer.CrmId, new List<OpportunityItem> { _savedReferralOpportunityItem, _savedProvisionGapOpportunityItem });
@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Mat
         }
 
         [Fact]
-        public void Then_Pipeline_referal_Is_included()
+        public void Then_Pipeline_Referral_Is_Included()
         {
             _result.Should().NotBeNull();
             var item = _result.SingleOrDefault(o => o.OpportunityItemId == _savedReferralOpportunityItem.Id);

@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
             return opportunity;
         }
 
-        public OpportunityItem CreaeReferralOpportunityItem(bool isSaved, bool isCompleted, params int[] providerVenueId)
+        public OpportunityItem CreateReferralOpportunityItem(bool isSaved, bool isCompleted, params int[] providerVenueId)
         {
             return new OpportunityItem
             {
@@ -123,7 +123,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
             _context = context;
         }
 
-        public Provider CreaeProvider(int venueCount = 1)
+        public Provider CreateProvider(int venueCount = 1)
         {
             var provider = new Provider
             {
@@ -218,7 +218,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
             _context = context;
         }
 
-        public Domain.Models.Employer CreaeEmployer(Guid crmId)
+        public Domain.Models.Employer CreateEmployer(Guid crmId)
         {
             var employer = new Domain.Models.Employer
             {
