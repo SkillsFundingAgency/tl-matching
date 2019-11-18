@@ -48,12 +48,6 @@ jobs:
         projects: '**/*.UnitTests.csproj'
         arguments: '--configuration $(buildConfiguration)'
     - task: DotNetCoreCLI@2
-      displayName: Integration Tests
-      inputs:
-        command: test
-        projects: '**/*.Web.IntegrationTests.csproj'
-        arguments: '--configuration $(buildConfiguration)'
-    - task: DotNetCoreCLI@2
       displayName: 'Publish Website'
       inputs:
         command: publish
@@ -66,6 +60,13 @@ jobs:
         command: publish
         publishWebProjects: false
         projects: 'src/Sfa.Tl.Matching.Functions/Sfa.Tl.Matching.Functions.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish Application Integration Tests'
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: 'src/Sfa.Tl.Matching.Application.IntegrationTests/Sfa.Tl.Matching.Application.IntegrationTests.csproj'
         arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
     - task: DotNetCoreCLI@2
       displayName: 'Publish Web Integration Tests'

@@ -16,11 +16,20 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
 
         protected override void ConfigureConfiguration(IServiceCollection services)
         {
-            MatchingConfiguration = new MatchingConfiguration
-            {
-                PostcodeRetrieverBaseUrl = "https://postcodes.io",
-                GoogleMapsApiBaseUrl = "https://google.com"
-            };
+            var configuration = new ConfigurationBuilder()
+               .AddJsonFile("appsettings.test.json", true)
+               .Build();
+
+            if (configuration["EnvironmentName"] == "__EnvironmentName__")
+                configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.local.json")
+                    .Build();
+
+            MatchingConfiguration = ConfigurationLoader.Load(
+                configuration["EnvironmentName"],
+                configuration["ConfigurationStorageConnectionString"],
+                configuration["Version"],
+                configuration["ServiceName"]);
         }
 
         protected override bool ConfigurationIsLocalOrDev()
