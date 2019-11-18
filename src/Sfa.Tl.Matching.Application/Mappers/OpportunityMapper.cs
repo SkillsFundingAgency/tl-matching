@@ -85,24 +85,17 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 ;
 
             CreateMap<OpportunityItem, OpportunityItemDto>()
+                .ForMember(m => m.OpportunityType,
+                    config => config.MapFrom(s =>
+                        ((OpportunityType) Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
                 .ForMember(m => m.OpportunityItemId, o => o.MapFrom(s => s.Id))
-                .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
-                .ForMember(m => m.OpportunityType, config => config.MapFrom(s => ((OpportunityType)Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
-                .ForMember(m => m.RouteId, o => o.MapFrom(s => s.RouteId))
-                .ForMember(m => m.RouteName, opt => opt.MapFrom(source => source.Route.Name))
                 .ForMember(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()))
-                .ForMember(m => m.Town, o => o.MapFrom(s => s.Town))
-                .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
-                .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
-                .ForMember(m => m.JobRole, o => o.MapFrom(s => s.JobRole))
-                .ForMember(m => m.Placements, o => o.MapFrom(s => s.Placements))
-                .ForMember(m => m.PlacementsKnown, o => o.MapFrom(s => s.PlacementsKnown))
-                .ForMember(m => m.SearchResultProviderCount, o => o.MapFrom(s => s.SearchResultProviderCount))
-                .ForMember(m => m.IsSaved, o => o.MapFrom(s => s.IsSaved))
-                .ForMember(m => m.IsSelectedForReferral, o => o.MapFrom(s => s.IsSelectedForReferral))
-                .ForMember(m => m.IsCompleted, o => o.MapFrom(s => s.IsCompleted))
-                .ForAllOtherMembers(config => config.Ignore())
-                ;
+                .ForMember(m => m.EmployerFeedbackSent, config => config.Ignore())
+                .ForMember(m => m.CreatedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.ModifiedOn, config => config.Ignore())
+                .ForMember(m => m.ProvisionGap, config => config.Ignore())
+                .ForMember(m => m.Referral, config => config.Ignore());
 
             CreateMap<OpportunityItem, CheckAnswersViewModel>()
                 .ForMember(m => m.OpportunityId, o => o.MapFrom(s => s.OpportunityId))
