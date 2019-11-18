@@ -83,6 +83,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                         .ToList();
                 })
                 ;
+
+            CreateMap<Qualification, QualificationDetailViewModel>();
         }
 
         private static string GetSearchTerm(params string[] searchTerms)
