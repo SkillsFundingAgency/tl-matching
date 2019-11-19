@@ -68,25 +68,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToRouteResult>();
-
-        [Fact]
         public void Then_Result_Is_Redirect_To_Results()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<RedirectToRouteResult>();
             var redirect = _result as RedirectToRouteResult;
+            redirect.Should().NotBeNull();
             redirect?.RouteName.Should().BeEquivalentTo("GetProviderResults");
-        }
 
-        [Fact]
-        public void Then_Result_Postcode_Is_Correctly_Formatted()
-        {
-            var redirect = _result as RedirectToRouteResult;
             redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");
+            redirect?.RouteValues["SelectedRouteId"].Should().Be(1);
         }
     }
 }
