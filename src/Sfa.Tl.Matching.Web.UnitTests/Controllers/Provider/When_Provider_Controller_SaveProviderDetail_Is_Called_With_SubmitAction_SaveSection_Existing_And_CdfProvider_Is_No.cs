@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -30,17 +31,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             _result = controllerWithClaims.SaveProviderDetailAsync(_viewModel).GetAwaiter().GetResult();
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
-        }
-
+        
         [Fact]
         public void Then_Result_Is_Redirect_To_SearchProvider()
         {
+            _result.Should().NotBeNull();
             var redirect = _result as RedirectToRouteResult;
+            redirect.Should().NotBeNull();
             redirect?.RouteName.Should().Be("SearchProvider");
         }
 

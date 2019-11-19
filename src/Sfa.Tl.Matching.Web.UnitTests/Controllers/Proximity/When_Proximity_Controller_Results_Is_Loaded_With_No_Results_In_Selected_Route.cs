@@ -23,7 +23,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
         private const int RouteId = 1;
         private const string Postcode = "SW1A 2AA";
-        private const int SearchRadius = 10;
         private readonly int _selectedRouteId;
 
         public When_Proximity_Controller_Results_Is_Loaded_With_No_Results_In_Selected_Route()
@@ -54,16 +53,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             _proximityService
                 .SearchProvidersByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
-                        a => a.Postcode == Postcode && 
-                             a.SearchRadius == SearchRadius && 
+                        a => a.Postcode == Postcode &&
                              a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
             _proximityService
                 .SearchProvidersForOtherRoutesByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
-                        a => a.Postcode == Postcode && 
-                             a.SearchRadius == SearchParametersViewModel.ZeroResultsSearchRadius && 
+                        a => a.Postcode == Postcode &&
+                             a.SearchRadius == SearchParametersViewModel.ZeroResultsSearchRadius &&
                              a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultForOtherRoutesDto);
 
@@ -90,7 +88,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 .Received(1)
                 .SearchProvidersByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
-                        a => a.Postcode == Postcode && 
+                        a => a.Postcode == Postcode &&
                              a.SelectedRouteId == RouteId));
         }
 
@@ -107,62 +105,32 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_SearchViewModel_Contains_SearchParametersViewModel()
+        public void Then_ViewModel_Should_Have_Expected_Values()
         {
             var viewModel = _result.GetViewModel<SearchViewModel>();
+
             viewModel.SearchParameters.Should().NotBeNull();
-        }
 
-        [Fact]
-        public void Then_SearchViewModel_Contains_SearchResultsViewModel()
-        {
-            var viewModel = _result.GetViewModel<SearchViewModel>();
-            viewModel.SearchResults.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Then_SearchViewModel_SearchParameters_Values_Should_Match_Input_Values()
-        {
             var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
             searchParametersViewModel.Postcode.Should().Be(Postcode);
             searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
-        }
 
-        [Fact]
-        public void Then_SearchViewModel_SearchResults_Should_Have_Expected_Number_Of_Items()
-        {
+            viewModel.SearchResults.Should().NotBeNull();
             var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
             searchResultsViewModel.Results.Count.Should().Be(0);
-        }
-
-        [Fact]
-        public void Then_SearchViewModel_AdditionalSearchResults_Should_Have_Expected_Number_Of_Items()
-        {
-            var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
             searchResultsViewModel.AdditionalResults.Should().NotBeNull();
             searchResultsViewModel.AdditionalResults.Count.Should().Be(1);
-        }
 
-        [Fact]
-        public void Then_SearchViewModel_AdditionalSearchResults_Should_Have_Expected_Values()
-        {
-            var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
             var result = searchResultsViewModel.AdditionalResults.First();
             result.NumberOfResults.Should().Be(1);
             result.RouteName.Should().Be("another route");
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
         public void Then_Model_Is_Not_Null()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
         }

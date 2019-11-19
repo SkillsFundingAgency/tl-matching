@@ -31,15 +31,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
-        }
-
-        [Fact]
         public void Then_Result_Is_Redirect_To_SearchProvider()
         {
+            _result.Should().NotBeNull();
             var redirect = _result as RedirectToRouteResult;
+            redirect.Should().NotBeNull();
             redirect?.RouteName.Should().Be("SearchProvider");
         }
 

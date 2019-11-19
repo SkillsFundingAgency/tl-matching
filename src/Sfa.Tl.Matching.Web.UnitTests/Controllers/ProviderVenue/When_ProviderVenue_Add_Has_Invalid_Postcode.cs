@@ -28,18 +28,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
+        public void Then_Model_Contains_Error()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
             var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
             viewResult?.Model.Should().NotBeNull();
+            
+            viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();
+            viewResult?.ViewData.ModelState["Postcode"]
+                .Errors
+                .Should()
+                .ContainSingle(error => error.ErrorMessage == "You must enter a real postcode");
         }
 
         [Fact]

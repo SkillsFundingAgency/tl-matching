@@ -39,36 +39,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Then_Model_Is_Of_Type_ProviderSearchViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().BeOfType<ProviderSearchViewModel>();
-        }
-
-        [Fact]
         public void Then_Model_Contains_UkPrn_Error()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
             var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            
+            viewResult?.Model.Should().NotBeNull();
+            viewResult?.Model.Should().BeOfType<ProviderSearchViewModel>();
             viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();
             viewResult?.ViewData.ModelState["UkPrn"]
                 .Errors
                 .Should()
                 .ContainSingle(error => error.ErrorMessage == "You must enter a UKPRN");
         }
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
     }
 }

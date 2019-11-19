@@ -51,14 +51,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 .SearchReferenceDataAsync(Arg.Any<long>());
         }
 
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
 
+        
         [Fact]
         public void Then_Model_Is_Not_Null()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
             var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
             viewResult?.Model.Should().NotBeNull();
         }
         

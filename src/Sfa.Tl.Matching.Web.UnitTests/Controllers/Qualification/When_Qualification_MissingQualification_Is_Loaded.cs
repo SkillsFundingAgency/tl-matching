@@ -62,37 +62,26 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         {
             _qualificationService.Received(1).GetLarTitleAsync("12345678");
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-
+        
         [Fact]
         public void Then_ViewModel_Fields_Are_Set()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
+
+            var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
+
             var viewModel = _result.GetViewModel<MissingQualificationViewModel>();
+            viewModel.Should().NotBeNull();
             viewModel.ProviderVenueId.Should().Be(1);
             viewModel.LarId.Should().Be("12345678");
             viewModel.Title.Should().BeEquivalentTo("LAR title from lookup");
             viewModel.Routes.Should().NotBeNullOrEmpty();
-        }
         
-        [Fact]
-        public void Then_ViewModel_Routes_Are_Set()
-        {
             var routes = _result.GetViewModel<MissingQualificationViewModel>().Routes;
-
+            
             routes.Count.Should().Be(2);
             
             routes.Should().Contain(r => r.Id == 1 && r.Name == "Route 1");

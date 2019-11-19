@@ -21,25 +21,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             _result = providerVenueController.AddProviderVenue(1);
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-
+        
         [Fact]
         public void Then_ProviderId_Is_Set()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
+
+            var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
             var viewModel = _result.GetViewModel<AddProviderVenueViewModel>();
             viewModel.ProviderId.Should().Be(1);
         }

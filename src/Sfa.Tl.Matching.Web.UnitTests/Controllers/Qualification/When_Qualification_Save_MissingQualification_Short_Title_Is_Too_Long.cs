@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
             var routePathService = Substitute.For<IRoutePathService>();
 
-            var qualificationController = new QualificationController(mapper, 
+            var qualificationController = new QualificationController(mapper,
                 providerVenueService, qualificationService,
                 providerQualificationService, routePathService);
             var controllerWithClaims = new ClaimsBuilder<QualificationController>(qualificationController)
@@ -56,30 +56,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Model_Is_Of_Type_MissingQualificationViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().BeOfType<MissingQualificationViewModel>();
-        }
-
-        [Fact]
         public void Then_Model_Contains_Short_Title_Error()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
+
             var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().BeOfType<MissingQualificationViewModel>();
+
             viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();
             viewResult?.ViewData.ModelState["ShortTitle"]
-                .Errors
-                .Should()
-                .ContainSingle(error => 
-                    error.ErrorMessage == "You must enter a short title that is 100 characters or fewer");
+                    .Errors
+                    .Should()
+                    .ContainSingle(error =>
+                        error.ErrorMessage == "You must enter a short title that is 100 characters or fewer");
         }
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
     }
 }

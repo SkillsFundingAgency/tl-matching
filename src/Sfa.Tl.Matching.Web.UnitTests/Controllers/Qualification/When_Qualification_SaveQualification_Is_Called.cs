@@ -73,10 +73,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
         public void Then_UpdateQualification_Is_Called_Exactly_Once()
         {
             _qualificationService.Received(1).UpdateQualificationAsync(Arg.Any<SaveQualificationViewModel>());
@@ -85,6 +81,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         [Fact]
         public void Then_Json_Result_Is_Returned()
         {
+            _result.Should().NotBeNull();
             var result = _result as JsonResult;
             result.Should().NotBeNull();
 

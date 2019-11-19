@@ -24,20 +24,25 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
         public void Then_ProviderService_Is_Not_Called() =>
             _providerService.DidNotReceiveWithAnyArgs();
 
         [Fact]
+        public void Then_Model_Is_Not_Null()
+        {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<ViewResult>();
+            var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
+        }
+
+        [Fact]
         public void Then_ModelState_Is_Not_Valid()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
+
             _providerController.ViewData.ModelState.IsValid.Should().BeFalse();
             _providerController.ViewData.ModelState.Count.Should().Be(1);
             _providerController.ViewData.ModelState["ProviderVenue"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must add a venue for this provider");

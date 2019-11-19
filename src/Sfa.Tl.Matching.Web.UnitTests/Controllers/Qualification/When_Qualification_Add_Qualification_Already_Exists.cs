@@ -47,34 +47,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             _result = controllerWithClaims.CreateQualificationAsync(viewModel).GetAwaiter().GetResult();
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<RedirectToRouteResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-
+        
         [Fact]
         public void Then_Result_Is_RedirectToRoute()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<RedirectToRouteResult>();
+
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
             result?.RouteName.Should().Be("GetProviderVenueDetail");
-        }
-
-        [Fact]
-        public void Then_RouteValues_Has_ProviderVenueId()
-        {
-            var result = _result as RedirectToRouteResult;
             result?.RouteValues["providerVenueId"].Should().Be(1);
         }
 
@@ -83,7 +65,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         {
             _qualificationService.Received(1).IsValidLarIdAsync("12345678");
         }
-        
+
         [Fact]
         public void Then_CreateProviderQualification_Is_Called_Exactly_Once()
         {

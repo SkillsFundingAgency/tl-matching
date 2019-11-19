@@ -28,16 +28,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
             _result = controllerWithClaims.CreateProviderDetailAsync(_viewModel).GetAwaiter().GetResult();
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
-        }
-
+        
         [Fact]
         public void Then_Result_Is_Redirect_To_SearchProvider()
         {
+            _result.Should().NotBeNull();
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 

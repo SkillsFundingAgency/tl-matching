@@ -47,12 +47,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(EmployerDtoMapper).Assembly);
-                c.ConstructServicesUsing(type => 
-                    type.Name.Contains("LoggedInUserEmailResolver") ? 
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpcontextAccesor) :
-                        type.Name.Contains("LoggedInUserNameResolver") ? 
-                            (object) new LoggedInUserNameResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpcontextAccesor) :
-                            type.Name.Contains("UtcNowResolver") ? 
+                        type.Name.Contains("LoggedInUserNameResolver") ?
+                            (object)new LoggedInUserNameResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpcontextAccesor) :
+                            type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<EmployerDetailsViewModel, EmployerDetailDto>(new DateTimeProvider()) :
                                 null);
             });
@@ -86,13 +86,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToActionResult>();
-
-        [Fact]
         public void Then_Result_Is_Redirect_To_SaveCheckAnswers()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<RedirectToActionResult>(); 
             var redirect = _result as RedirectToActionResult;
+            redirect.Should().NotBeNull();
             redirect?.ControllerName.Should().BeEquivalentTo("Opportunity");
             redirect?.ActionName.Should().BeEquivalentTo("SaveCheckAnswers");
             redirect?.RouteValues["opportunityId"].Should().Be(1);

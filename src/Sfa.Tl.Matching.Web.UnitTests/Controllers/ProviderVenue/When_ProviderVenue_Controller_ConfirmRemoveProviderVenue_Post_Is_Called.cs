@@ -46,19 +46,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                     Arg.Is<RemoveProviderVenueViewModel>(
                         vm => vm.ProviderVenueId == 1));
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToRouteResult>();
-
+        
         [Fact]
         public void Then_Result_Is_Redirect_To_Provider_Detail_With_Provider_Id()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<RedirectToRouteResult>();
+
             var redirect = _result as RedirectToRouteResult;
+            redirect.Should().NotBeNull();
             redirect?.RouteName.Should().BeEquivalentTo("GetProviderDetail");
             redirect?.RouteValues
                 .Should()

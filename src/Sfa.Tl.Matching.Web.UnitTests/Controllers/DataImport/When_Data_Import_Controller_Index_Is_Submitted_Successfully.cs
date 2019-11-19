@@ -44,12 +44,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
         }
 
         [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
         public void Then_Model_State_Has_No_Errors()
         {
+            _result.Should().BeAssignableTo<ViewResult>();
+            
             var viewResult = (ViewResult)_result;
             viewResult.ViewData.ModelState.Should().BeEmpty();
         }

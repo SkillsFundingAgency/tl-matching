@@ -27,7 +27,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             }
             .AsQueryable();
 
-
             var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
@@ -56,18 +55,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToRouteResult>();
-
-        [Fact]
         public void Then_Result_Is_Redirect_To_Results()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<RedirectToRouteResult>();
             var redirect = _result as RedirectToRouteResult;
+            redirect.Should().NotBeNull();
             redirect?.RouteName.Should().BeEquivalentTo("GetProviderResults");
+
+            redirect?.RouteValues["SelectedRouteId"].Should().Be(1);
+            redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");
+            redirect?.RouteValues["OpportunityId"].Should().Be(0);
+            redirect?.RouteValues["OpportunityItemId"].Should().Be(0);
+            redirect?.RouteValues["CompanyNameWithAka"].Should().BeNull();
         }
     }
 }

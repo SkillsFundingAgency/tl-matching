@@ -30,31 +30,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToRouteResult>();
-
-        [Fact]
         public void Then_Result_Is_Redirect_To_Results()
         {
-            var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("AddProviderDetail");
-        }
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<RedirectToRouteResult>();
 
-        [Fact]
-        public void Then_Result_Contains_Correct_Results()
-        {
             var redirect = _result as RedirectToRouteResult;
+            redirect.Should().NotBeNull();
+            redirect?.RouteName.Should().BeEquivalentTo("AddProviderDetail");
             redirect?.RouteValues["ukPrn"].Should().Be(123);
             redirect?.RouteValues["name"].Should().Be("ProviderName");
         }

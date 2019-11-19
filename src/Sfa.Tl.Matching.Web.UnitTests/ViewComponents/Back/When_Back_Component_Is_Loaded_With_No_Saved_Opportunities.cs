@@ -39,11 +39,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.ViewComponents.Back
             _result.Should().BeAssignableTo<ViewViewComponentResult>();
 
             var viewViewComponentResult = _result as ViewViewComponentResult;
-            viewViewComponentResult.ViewName.Should().Be("BackToStart");
+            viewViewComponentResult.Should().NotBeNull();
+            
+            viewViewComponentResult?.ViewName.Should().Be("BackToStart");
             viewViewComponentResult?.ViewData.Model.Should().NotBeNull();
             var viewModel = viewViewComponentResult?.ViewData.Model.As<BackViewModel>();
-            viewModel.OpportunityId.Should().Be(1);
-            viewModel.OpportunityItemId.Should().Be(2);
+            viewModel.Should().NotBeNull(); 
+            viewModel?.OpportunityId.Should().Be(1);
+            viewModel?.OpportunityItemId.Should().Be(2);
         }
     }
 }

@@ -29,6 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
             result.Should().BeOfType<RedirectToActionResult>();
 
             var redirectResult = result as RedirectToActionResult;
+            redirectResult.Should().NotBeNull();
             redirectResult?.ControllerName.Should().Be("Home");
             redirectResult?.ActionName.Should().Be("FailedLogin");
         }
@@ -45,6 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
             result.Should().BeOfType<RedirectToActionResult>();
 
             var redirectResult = result as RedirectToActionResult;
+            redirectResult.Should().NotBeNull(); 
             redirectResult?.ControllerName.Should().Be("Proximity");
             redirectResult?.ActionName.Should().Be("Start");
         }

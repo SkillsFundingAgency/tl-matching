@@ -40,16 +40,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_PlacementsKnown_Is_Set()
+        public void Then_ViewModel_Fields_Are_Set()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
+            var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
+
             var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
             viewModel.PlacementsKnown.Should().Be(PlacementsKnown);
-        }
-
-        [Fact]
-        public void Then_Placements_Is_Set_To_Default_Int()
-        {
-            var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
+        
             viewModel.Placements.Should().BeNull();
         }
     }

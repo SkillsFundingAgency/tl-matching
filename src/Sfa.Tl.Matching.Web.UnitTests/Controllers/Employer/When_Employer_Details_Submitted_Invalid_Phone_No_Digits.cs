@@ -35,21 +35,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_View_Result_Is_Returned() =>
+        public void Then_View_Result_Is_Returned()
+        {
+            _result.Should().NotBeNull();
             _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_State_Has_1_Error() =>
-            _employerController.ViewData.ModelState.Should().ContainSingle();
-
-        [Fact]
-        public void Then_Model_State_Has_ContactPhone_Key() =>
-            _employerController.ViewData.ModelState.ContainsKey(nameof(EmployerDetailsViewModel.Phone))
-                .Should().BeTrue();
+        }
 
         [Fact]
         public void Then_Model_State_Has_ContactPhone_Error()
         {
+            _employerController.ViewData.ModelState.Should().ContainSingle();
+
+            _employerController.ViewData.ModelState.ContainsKey(nameof(EmployerDetailsViewModel.Phone))
+                .Should().BeTrue();
+
             var modelStateEntry =
                 _employerController.ViewData.ModelState[nameof(EmployerDetailsViewModel.Phone)];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must enter a number");

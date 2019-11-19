@@ -39,10 +39,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.ViewComponents.Cancel
             _result.Should().BeAssignableTo<ViewViewComponentResult>();
 
             var viewViewComponentResult = _result as ViewViewComponentResult;
-            viewViewComponentResult.ViewName.Should().Be("Cancel");
+            viewViewComponentResult.Should().NotBeNull();
+
+            viewViewComponentResult?.ViewName.Should().Be("Cancel");
             viewViewComponentResult?.ViewData.Model.Should().NotBeNull();
             var viewModel = viewViewComponentResult?.ViewData.Model.As<CancelViewModel>();
-            viewModel.CancelText.Should().Be("Cancel opportunity and start again");
+            viewModel.Should().NotBeNull(); 
+            viewModel?.CancelText.Should().Be("Cancel opportunity and start again");
         }
     }
 }

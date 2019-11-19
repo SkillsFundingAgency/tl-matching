@@ -22,25 +22,24 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
 
+            _providerService.CreateProviderAsync(Arg.Any<CreateProviderDetailViewModel>())
+                .Returns(1);
+
             _result = controllerWithClaims.CreateProviderDetailAsync(new CreateProviderDetailViewModel
             {
                 SubmitAction = "SaveAndAddVenue"
             }).GetAwaiter().GetResult();
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
-        }
-
+        
         [Fact]
         public void Then_Result_Is_Redirect_To_AddVenue()
         {
+            _result.Should().NotBeNull();
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("AddProviderVenue");
+            result?.RouteValues["providerId"].Should().Be(1);
         }
 
         [Fact]
