@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Models.Enums
 {
-    public enum FailedEmailType
+    public enum EmailDeliveryStatusType
     {
         [Description("Email address does not exist")]
         PermanentFailure = 1,

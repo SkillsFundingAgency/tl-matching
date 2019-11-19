@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using AutoFixture.Kernel;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -16,8 +15,6 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.Register<IDateTimeProvider>(fixture.Create<DateTimeProvider>);
 
             fixture.Behaviors.Add(new NullRecursionBehavior());
-            fixture.Customizations.Add(new TypeRelay(typeof(FeedbackService), typeof(EmployerFeedbackService)));
-            fixture.Customizations.Add(new TypeRelay(typeof(FeedbackService), typeof(ProviderFeedbackService)));
         }
     }
 }

@@ -18,8 +18,7 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<IList<ProviderFeedbackDto>> GetAllReferralsForProviderFeedbackAsync(DateTime referralDate);
         Task<IList<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync();
         Task<IList<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync();
-        Task<EmailBodyDto> GetFailedEmployerEmailAsync(int opportunityId, string sentTo);
-        Task<EmailBodyDto> GetFailedProviderEmailAsync(int opportunityId, string sentTo);
+        Task<EmailBodyDto> GetDeliveryStatusOpportunityEmailAsync(int opportunityId, string sentTo);
         Task<IList<MatchingServiceProviderEmployerReport>> GetMatchingServiceProviderEmployerReportAsync();
     }
 }

@@ -49,10 +49,10 @@ namespace Sfa.Tl.Matching.Application.Services
                 QueueName.EmployerAupaBlankEmailQueue);
         }
 
-        public async Task PushFailedEmailMessageAsync(SendFailedEmail failedEmail)
+        public async Task PushEmailDeliveryStatusMessageAsync(SendEmailDeliveryStatus emailDeliveryStatus)
         {
-            await PushMessageAsync(JsonConvert.SerializeObject(failedEmail),
-                QueueName.FailedEmailQueue);
+            await PushMessageAsync(JsonConvert.SerializeObject(emailDeliveryStatus),
+                QueueName.EmailDeliveryStatusQueue);
         }
 
         private async Task PushMessageAsync(string message, string queueName)

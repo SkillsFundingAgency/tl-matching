@@ -2,7 +2,7 @@
 
 namespace Sfa.Tl.Matching.Models.Command
 {
-    public class SendFailedEmail
+    public class SendEmailDeliveryStatus
     {
         public Guid NotificationId { get; set; }
     }

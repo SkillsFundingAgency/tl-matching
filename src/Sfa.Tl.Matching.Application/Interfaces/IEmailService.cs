@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task SendEmailAsync(int? opportunityId, string templateName, string toAddress,
             IDictionary<string, string> personalisationTokens, string createdBy);
-        Task<FailedEmailDto> GetFailedEmailAsync(Guid notificationId);
+        Task<EmailDeliveryStatusDto> GetEmailBodyFromNotifyClientAsync(Guid notificationId);
         Task<EmailHistoryDto> GetEmailHistoryAsync(Guid notificationId);
         Task<int> UpdateEmailStatus(EmailDeliveryStatusPayLoad payLoad);
     }

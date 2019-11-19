@@ -235,7 +235,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return await _dbContext.MatchingServiceOpportunityReport
                 .OrderBy(o => o.OpportunityItemId)
                 .ThenByDescending(o => o.OpportunityType)
-                .ThenByDescending(o => o.PipelineOpportunity)
+                .ThenByDescending(o => o.IsCompleted)
+                .ThenByDescending(o => o.IsSaved)
                 .ToListAsync();
         }
 
@@ -306,21 +307,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return dto;
         }
 
-        public async Task<EmailBodyDto> GetFailedEmployerEmailAsync(int opportunityId, string sentTo)
-        {
-            var dto = await (from o in _dbContext.Opportunity
-                             where o.Id == opportunityId
-                                   && o.EmployerContactEmail == sentTo
-                             select new EmailBodyDto
-                             {
-                                 EmployerEmail = o.EmployerContactEmail,
-                             })
-                .FirstOrDefaultAsync();
-
-            return dto;
-        }
-
-        public async Task<EmailBodyDto> GetFailedProviderEmailAsync(int opportunityId, string sentTo)
+        public async Task<EmailBodyDto> GetDeliveryStatusOpportunityEmailAsync(int opportunityId, string sentTo)
         {
             var dto = await (from o in _dbContext.Opportunity
                              join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId

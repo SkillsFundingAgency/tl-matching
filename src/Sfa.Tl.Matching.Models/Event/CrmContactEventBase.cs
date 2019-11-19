@@ -1,28 +1,58 @@
+using Newtonsoft.Json;
+
 namespace Sfa.Tl.Matching.Models.Event
 {
     public class CrmContactEventBase
     {
-        public string contactid { get; set; }
-        public Parentcustomerid parentcustomerid { get; set; }
-        public Customertypecode customertypecode { get; set; }
-
-        public string fullname { get; set; }
-        public object mobilephone { get; set; }
-        public string telephone1 { get; set; }
-        public string emailaddress1 { get; set; }
+        [JsonProperty("contactid")]
+        public string ContactId { get; set; }
         
-        public string address1_city { get; set; }
-        public string address1_county { get; set; }
-        public string address1_line1 { get; set; }
-        public string address1_line2 { get; set; }
-        public object address1_line3 { get; set; }
-        public string address1_postalcode { get; set; }
+        [JsonProperty("parentcustomerid")]
+        public ParentCustomerId ParentCustomerId { get; set; }
+
+        [JsonProperty("customertypecode")]
+        public Customertypecode CustomerTypeCode { get; set; }
+
+        [JsonProperty("fullname")]
+        public string Fullname { get; set; }
+
+        [JsonProperty("mobilephone")]
+        public object MobilePhone { get; set; }
+        
+        [JsonProperty("telephone1")]
+        public string Telephone { get; set; }
+
+        [JsonProperty("emailaddress1")]
+        public string EmailAddress { get; set; }
+
+        [JsonProperty("address1_city")]
+        public string City { get; set; }
+
+        [JsonProperty("address1_county")]
+        public string County { get; set; }
+
+        [JsonProperty("address1_line1")]
+        public string AddressLine1 { get; set; }
+
+        [JsonProperty("address1_line2")]
+        public string AddressLine2 { get; set; }
+
+        [JsonProperty("address1_line3")]
+        public object AddressLine3 { get; set; }
+
+        [JsonProperty("address1_postalcode")]
+        public string PostCode { get; set; }
     }
 
-    public class Parentcustomerid
+    public class ParentCustomerId
     {
-        public string id { get; set; }
-        public string logicalname { get; set; }
-        public string name { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("logicalname")]
+        public string LogicalName { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
     }
 }

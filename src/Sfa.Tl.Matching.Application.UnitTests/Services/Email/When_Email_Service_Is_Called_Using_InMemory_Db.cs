@@ -140,7 +140,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             var sut = new EmailService(configuration, notificationClient, templateLogger, historyLogger, mapper,
                 emailServiceLogger);
 
-            emailHistory.NotificationId = payLoad.id;
+            emailHistory.NotificationId = payLoad.Id;
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
             await DataBuilder.SetEmailHistory(dbContext, emailHistory);
 
@@ -148,11 +148,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             await sut.UpdateEmailStatus(payLoad);
 
             //Assert
-            var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == payLoad.id);
+            var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == payLoad.Id);
 
             data.Should().NotBeNull();
-            data.Status.Should().Be(payLoad.status);
-            data.NotificationId.Should().Be(payLoad.id);
+            data.Status.Should().Be(payLoad.Status);
+            data.NotificationId.Should().Be(payLoad.Id);
             data.ModifiedBy.Should().Be("System");
 
         }
@@ -182,8 +182,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         {
             //Arrange
             Guid.TryParse(emailNotificationResponse.id, out var notificationId);
-            payLoad.status = status;
-            payLoad.id = notificationId;
+            payLoad.Status = status;
+            payLoad.Id = notificationId;
 
             var (templateLogger, historyLogger, mapper) = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger);
 
@@ -223,7 +223,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             data.Should().NotBeNull();
             data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
             data.Status.Should().NotBeNullOrEmpty();
-            data.Status.Should().Be(payLoad.status);
+            data.Status.Should().Be(payLoad.Status);
             data.NotificationId.Should().Be(emailNotificationResponse.id);
             data.CreatedBy.Should().Be("System");
             data.ModifiedBy.Should().Be("System");

@@ -222,7 +222,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (isAupaMissing)
             {
-                var existingReferrals = await _opportunityRepository.GetFirstOrDefaultAsync(o => o.EmployerCrmId == employerData.accountid.ToGuid() && o.OpportunityItem.Count(oi => oi.Referral.Any()) > 0);
+                var existingReferrals = await _opportunityRepository.GetFirstOrDefaultAsync(o => o.EmployerCrmId == employerData.AccountId.ToGuid() && o.OpportunityItem.Count(oi => oi.Referral.Any()) > 0);
 
                 if (existingReferrals == null) return -1;
                 await AddMessageToQueueAsync(employerData);
@@ -230,7 +230,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 return -1;
             }
 
-            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.accountid.ToGuid());
+            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.AccountId.ToGuid());
 
             if (existingEmployer == null)
             {
@@ -253,24 +253,24 @@ namespace Sfa.Tl.Matching.Application.Services
             await _messageQueueService.PushEmployerAupaBlankEmailMessageAsync(new SendEmployerAupaBlankEmail
             {
                 Name = employerData.Name,
-                Owner = employerData.owneridname,
+                Owner = employerData.OwnerIdName,
                 ContactEmail = employerData.ContactEmail,
                 ContactPhone = employerData.ContactTelephone1,
-                CrmId = new Guid(employerData.accountid)
+                CrmId = new Guid(employerData.AccountId)
             });
         }
 
         private async Task<int> CreateOrUpdateContactAsync(CrmContactEventBase employerData)
         {
-            if (employerData.parentcustomerid == null) return -1;
+            if (employerData.ParentCustomerId == null) return -1;
 
-            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.parentcustomerid.id.ToGuid());
+            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.ParentCustomerId.Id.ToGuid());
 
             if (existingEmployer == null) return -1;
 
-            existingEmployer.PrimaryContact = employerData.fullname;
-            existingEmployer.Phone = employerData.telephone1;
-            existingEmployer.Email = employerData.emailaddress1;
+            existingEmployer.PrimaryContact = employerData.Fullname;
+            existingEmployer.Phone = employerData.Telephone;
+            existingEmployer.Email = employerData.EmailAddress;
             existingEmployer.ModifiedBy = "System";
             existingEmployer.ModifiedOn = DateTime.UtcNow;
 

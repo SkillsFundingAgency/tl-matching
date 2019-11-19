@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace Sfa.Tl.Matching.Models.Event
 {
     public class CrmEmployerEventBase
@@ -6,25 +8,54 @@ namespace Sfa.Tl.Matching.Models.Event
         public string ContactTelephone1 { get; set; }
         public string Name { get; set; }
         public PrimaryContactId PrimaryContactId { get; set; }
-        public string accountid { get; set; }
-        public string address1_line1 { get; set; }
-        public string address1_postalcode { get; set; }
-        public Customertypecode customertypecode { get; set; }
-        public object emailaddress1 { get; set; }
-        public string owneremail { get; set; }
-        public string owneridname { get; set; }
-        public string sfa_alias { get; set; }
+
+        [JsonProperty("accountid")]
+        public string AccountId { get; set; }
+
+        [JsonProperty("address1_line1")]
+        public string AddressLine { get; set; }
+
+        [JsonProperty("address1_postalcode")]
+        public string PostCode { get; set; }
+
+        [JsonProperty("customertypecode")]
+        public Customertypecode CustomerTypeCode { get; set; }
+
+        [JsonProperty("emailaddress1")]
+        public object EmailAddress { get; set; }
+
+        [JsonProperty("owneremail")]
+        public string OwnerEmail { get; set; }
+
+        [JsonProperty("owneridname")]
+        public string OwnerIdName { get; set; }
+
+        [JsonProperty("sfa_alias")]
+        public string Alias { get; set; }
+
+        [JsonProperty("sfa_aupa")]
         public SfaAupa sfa_aupa { get; set; }
-        public int sfa_ceasedtrading { get; set; }
-        public object sfa_employermanagement { get; set; }
-        public string telephone1 { get; set; }
+
+        [JsonProperty("sfa_ceasedtrading")]
+        public int CeasedTrading { get; set; }
+
+        [JsonProperty("sfa_employermanagement")]
+        public object EmployerManagement { get; set; }
+
+        [JsonProperty("telephone1")]
+        public string Phone { get; set; }
     }
 
     public class PrimaryContactId
     {
-        public string id { get; set; }
-        public string logicalname { get; set; }
-        public string name { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
+        
+        [JsonProperty("logicalname")]
+        public string LogicalName { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
     }
 
     public class Customertypecode

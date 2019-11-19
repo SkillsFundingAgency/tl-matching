@@ -5,31 +5,31 @@ using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Mappers
 {
-    public class FailedEmailMapper : Profile
+    public class EmailDeliveryStatusMapper : Profile
     {
-        public FailedEmailMapper()
+        public EmailDeliveryStatusMapper()
         {
-            CreateMap<Notification, FailedEmailDto>()
+            CreateMap<Notification, EmailDeliveryStatusDto>()
                 .ForMember(m => m.Body, config => config.MapFrom(s => s.body))
                 .ForMember(m => m.Subject, config => config.MapFrom(s => s.subject))
                 .ForMember(m => m.Status, config => config.MapFrom(s => s.status))
-                .ForMember(m => m.FailedEmailType, config => config.MapFrom(s => GetFailedEmailType(s.status)))
+                .ForMember(m => m.EmailDeliveryStatusType, config => config.MapFrom(s => GetEmailDeliveryStatusType(s.status)))
                 .ForAllOtherMembers(c => c.Ignore())
                 ;
         }
 
-        private static FailedEmailType GetFailedEmailType(string status)
+        private static EmailDeliveryStatusType GetEmailDeliveryStatusType(string status)
         {
             switch (status)
             {
                 case "permanent-failure":
-                    return FailedEmailType.PermanentFailure;
+                    return EmailDeliveryStatusType.PermanentFailure;
                 case "temporary-failure":
-                    return FailedEmailType.TemporaryFailure;
+                    return EmailDeliveryStatusType.TemporaryFailure;
                 case "technical-failure":
-                    return FailedEmailType.TechnicalFailure;
+                    return EmailDeliveryStatusType.TechnicalFailure;
                 default:
-                    return FailedEmailType.TechnicalFailure;
+                    return EmailDeliveryStatusType.TechnicalFailure;
             }
         }
     }

@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.Customize<OpportunityItem>(composer => composer.With(oi => oi.ModifiedOn, new DateTime(2019, 9, 1)));
 
             fixture.Customize<EmailDeliveryStatusPayLoad>(composer => composer
-                .With(payload => payload.status, "delivered"));
+                .With(payload => payload.Status, "delivered"));
 
         }
     }

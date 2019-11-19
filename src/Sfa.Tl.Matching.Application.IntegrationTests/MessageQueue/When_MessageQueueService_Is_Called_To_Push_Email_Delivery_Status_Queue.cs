@@ -11,16 +11,16 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
 {
-    public class When_MessageQueueService_Is_Called_To_Push_Failed_Email_Queue
+    public class When_MessageQueueService_Is_Called_To_Push_Email_Delivery_Status_Queue
     {
         private readonly MessageQueueService _messageQueueService;
         private readonly CloudQueue _queue;
 
-        public When_MessageQueueService_Is_Called_To_Push_Failed_Email_Queue()
+        public When_MessageQueueService_Is_Called_To_Push_Email_Delivery_Status_Queue()
         {
             var storageAccount = CloudStorageAccount.Parse(TestConfiguration.MatchingConfiguration.BlobStorageConnectionString);
             var queueClient = storageAccount.CreateCloudQueueClient();
-            _queue = queueClient.GetQueueReference(QueueName.FailedEmailQueue);
+            _queue = queueClient.GetQueueReference(QueueName.EmailDeliveryStatusQueue);
             _messageQueueService = new MessageQueueService(new NullLogger<MessageQueueService>(), TestConfiguration.MatchingConfiguration);
 
         }
@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
             try
             {
                 var notificationId = new Guid();
-                await _messageQueueService.PushFailedEmailMessageAsync(new SendFailedEmail
+                await _messageQueueService.PushEmailDeliveryStatusMessageAsync(new SendEmailDeliveryStatus
                 {
                     NotificationId = notificationId
                 });

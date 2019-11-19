@@ -13,12 +13,12 @@ using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Functions
 {
-    public class FailedEmailNotification
+    public class EmailDeliveryStatusNotification
     {
-        [FunctionName("SendFailedEmailNotification")]
-        public async Task SendFailedEmailNotification(
-            [QueueTrigger(QueueName.FailedEmailQueue, Connection = "BlobStorageConnectionString")]
-            SendFailedEmail failedEmailData,
+        [FunctionName("SendEmailDeliveryStatusNotification")]
+        public async Task SendEmailDeliveryStatusNotification(
+            [QueueTrigger(QueueName.EmailDeliveryStatusQueue, Connection = "BlobStorageConnectionString")]
+            SendEmailDeliveryStatus emailDeliveryStatusData,
             ExecutionContext context,
             ILogger logger,
             [Inject] MatchingConfiguration matchingConfiguration,
@@ -31,12 +31,12 @@ namespace Sfa.Tl.Matching.Functions
 
             try
             {
-                await emailDeliveryStatusService.SendEmailDeliveryStatusAsync(failedEmailData.NotificationId);
+                await emailDeliveryStatusService.SendEmailDeliveryStatusAsync(emailDeliveryStatusData.NotificationId);
             }
             catch (Exception e)
             {
                 var errormessage =
-                    $"Error sending failed email notification for Notification Id: {failedEmailData.NotificationId}. Internal Error Message {e}";
+                    $"Error sending failed email notification for Notification Id: {emailDeliveryStatusData.NotificationId}. Internal Error Message {e}";
 
                 logger.LogError(errormessage);
 

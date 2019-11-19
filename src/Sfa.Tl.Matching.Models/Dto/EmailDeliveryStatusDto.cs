@@ -2,11 +2,11 @@
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class FailedEmailDto
+    public class EmailDeliveryStatusDto
     {
         public string Subject { get; set; }
         public string Body { get; set; }
         public string Status { get; set; }
-        public FailedEmailType FailedEmailType { get; set; }
+        public EmailDeliveryStatusType EmailDeliveryStatusType { get; set; }
     }
 }

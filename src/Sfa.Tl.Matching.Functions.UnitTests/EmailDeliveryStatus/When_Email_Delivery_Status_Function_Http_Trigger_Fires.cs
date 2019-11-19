@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
     public class When_Email_Delivery_Status_Function_Http_Trigger_Fires
     {
         [Theory, AutoDomainData]
-        public async void Then_Update_Email_History_With_Status_And_Do_Not_Push_To_Failed_Email_Queue(
+        public async void Then_Update_Email_History_With_Status_And_Do_Not_Push_To_Email_Delivery_Status_Queue(
             MatchingConfiguration matchingConfiguration,
             EmailDeliveryStatusPayLoad payLoad,
             ExecutionContext context,
@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             result.StatusCode.Should().Be(200);
             result.Value.Should().Be("1 records updated.");
 
-            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+            await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
 
         }
 
@@ -106,7 +106,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
                 Arg.Any<Expression<Func<EmailHistory, object>>[]>());
 
-            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+            await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
         }
 
         [Theory, AutoDomainData]
@@ -155,7 +155,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
                     eh.Status == "delivered" && eh.ModifiedBy == "System"),
                 Arg.Any<Expression<Func<EmailHistory, object>>[]>());
 
-            await messageQueueService.DidNotReceive().PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+            await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
 
         }
 
@@ -164,7 +164,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
         [InlineAutoDomainData("temporary-failure")]
         [InlineAutoDomainData("")]
         [InlineAutoDomainData(null)]
-        public async void Then_Update_Email_History_With_Failed_Status_And_Push_To_Failed_Email_Queue(
+        public async void Then_Update_Email_History_With_Failed_Status_And_Push_To_Email_Delivery_Status_Queue(
             string status,
             MatchingConfiguration matchingConfiguration,
             EmailDeliveryStatusPayLoad payLoad,
@@ -179,7 +179,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
         )
         {
             //Arrange
-            payLoad.status = status;
+            payLoad.Status = status;
             var serializedPayLoad = JsonConvert.SerializeObject(payLoad);
             var notificationService = new EmailDeliveryStatusService(matchingConfiguration, emailService,
                 opportunityRepository, messageQueueService, logger);
@@ -202,7 +202,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             result.StatusCode.Should().Be(200);
             result.Value.Should().Be("1 records updated.");
 
-            await messageQueueService.Received(1).PushFailedEmailMessageAsync(Arg.Is<SendFailedEmail>(email => email.NotificationId == payLoad.id));
+            await messageQueueService.Received(1).PushEmailDeliveryStatusMessageAsync(Arg.Is<SendEmailDeliveryStatus>(email => email.NotificationId == payLoad.Id));
 
         }
 

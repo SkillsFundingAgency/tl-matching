@@ -57,10 +57,10 @@ namespace Sfa.Tl.Matching.Application.Services
             await SendEmailAndSaveHistoryAsync(opportunityId, toAddress, emailTemplate, personalisationTokens, createdBy);
         }
 
-        public async Task<FailedEmailDto> GetFailedEmailAsync(Guid notificationId)
+        public async Task<EmailDeliveryStatusDto> GetEmailBodyFromNotifyClientAsync(Guid notificationId)
         {
             var notification = await _notificationClient.GetNotificationByIdAsync(notificationId.ToString());
-            var dto = _mapper.Map<FailedEmailDto>(notification);
+            var dto = _mapper.Map<EmailDeliveryStatusDto>(notification);
 
             return dto;
         }
@@ -78,11 +78,11 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<int> UpdateEmailStatus(EmailDeliveryStatusPayLoad payLoad)
         {
             var data = await _emailHistoryRepository.GetFirstOrDefaultAsync(history =>
-                history.NotificationId == payLoad.id);
+                history.NotificationId == payLoad.Id);
 
             if (data == null) return -1;
 
-            data.Status = payLoad.EmailDeliveryStatus;
+            data.Status = payLoad.Status;
             data.ModifiedOn = DateTime.UtcNow;
             data.ModifiedBy = "System";
 
