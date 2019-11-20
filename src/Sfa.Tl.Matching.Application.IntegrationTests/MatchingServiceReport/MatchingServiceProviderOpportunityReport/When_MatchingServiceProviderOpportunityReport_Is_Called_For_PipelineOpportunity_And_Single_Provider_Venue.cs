@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.MatchingServiceProviderOpportunityReport
 {
-    public class When_MatchingServiceProviderOpportunityReport_Is_Called_For_PipelineOpportunity_Opportunity_And_Single_Provider_Venue : IDisposable
+    public class When_MatchingServiceProviderOpportunityReport_Is_Called_For_PipelineOpportunity_And_Single_Provider_Venue : IDisposable
     {
         private readonly MatchingDbContext _dbContext;
         private readonly List<Domain.Models.MatchingServiceProviderOpportunityReport> _result;
@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Mat
         private readonly ProviderBuilder _providerBuilder;
         private readonly EmployerBuilder _employerBuilder;
 
-        public When_MatchingServiceProviderOpportunityReport_Is_Called_For_PipelineOpportunity_Opportunity_And_Single_Provider_Venue()
+        public When_MatchingServiceProviderOpportunityReport_Is_Called_For_PipelineOpportunity_And_Single_Provider_Venue()
         {
             _dbContext = new TestConfiguration().GetDbContext();
 
