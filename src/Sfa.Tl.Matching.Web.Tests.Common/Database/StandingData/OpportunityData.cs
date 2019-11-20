@@ -583,8 +583,6 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                             Id = referralId,
                             ProviderVenueId = 1,
                             DistanceFromEmployer = 1.23m,
-                            JourneyTimeByCar = 1200,
-                            JourneyTimeByPublicTransport = 1800,
                             CreatedOn = new DateTime(2019, 1, 2),
                             CreatedBy = "Dev Surname",
                         }

@@ -50,12 +50,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                             new ProviderQualification
                             {
                                 CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
-                                NumberOfPlacements = 1,
                                 Source = "test",
                                 Qualification = new Qualification
                                 {
                                     CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
-                                    LarsId = "12345678",
+                                    LarId = "12345678",
                                     ShortTitle = "test",
                                     Title = "test",
                                     QualificationRouteMapping = new List<QualificationRouteMapping>

@@ -18,11 +18,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
         {
             var employer = new Domain.Models.Employer
             {
-                Postcode = "test",
                 AlsoKnownAs = "test",
                 Aupa = "test",
                 CompanyName = "test",
-                CompanyType = "test",
                 CrmId = Guid.NewGuid(),
                 Email = "test@test.com",
                 Owner = "test",
