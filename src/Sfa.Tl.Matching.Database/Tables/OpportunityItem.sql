@@ -6,7 +6,7 @@
 	[OpportunityType]			NVARCHAR(50) NULL,
 	[Town]						VARCHAR(100) NULL, 
 	[Postcode]					VARCHAR(10) NOT NULL,
-	[SearchRadius]				SMALLINT NOT NULL DEFAULT(0),
+	[SearchRadius]				SMALLINT NULL ,
 	[SearchResultProviderCount] INT NULL,
 	[JobRole]					NVARCHAR(250) NULL,
 	[PlacementsKnown]			BIT NULL,
