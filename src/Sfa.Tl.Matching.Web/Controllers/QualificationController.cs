@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("add-qualification/{providerVenueId}", Name = "AddQualification")]
-        public async Task<IActionResult> AddQualification(int providerVenueId)
+        public async Task<IActionResult> AddQualificationAsync(int providerVenueId)
         {
             var postcode = await _providerVenueService.GetVenuePostcodeAsync(providerVenueId);
 
@@ -130,7 +130,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("save-qualification", Name = "SaveQualification")]
-        public async Task<IActionResult> SaveQualification(SaveQualificationViewModel viewModel)
+        public async Task<IActionResult> SaveQualificationAsync(SaveQualificationViewModel viewModel)
         {
             Validate(viewModel);
 
@@ -152,7 +152,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "MissingQualification")]
-        public async Task<IActionResult> MissingQualification(int providerVenueId, string larId)
+        public async Task<IActionResult> MissingQualificationAsync(int providerVenueId, string larId)
         {
             //Get title from service, based on LAR
             var title = await _qualificationService.GetLarTitleAsync(larId);
@@ -194,7 +194,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("remove-qualification/{providerVenueId}/{qualificationId}", Name = "RemoveQualification")]
-        public async Task<IActionResult> RemoveQualification(int providerVenueId, int qualificationId)
+        public async Task<IActionResult> RemoveQualificationAsync(int providerVenueId, int qualificationId)
         {
             await _providerQualificationService.RemoveProviderQualificationAsync(providerVenueId, qualificationId);
 
