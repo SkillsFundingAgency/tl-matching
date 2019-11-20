@@ -167,7 +167,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     Name = viewModel.Name
                 });
 
-            return RedirectToAction(nameof(AddProviderDetail), viewModel.Id);
+            return RedirectToRoute("GetProviderDetail", new
+            {
+                providerId = viewModel.Id
+            });
         }
 
         private async Task<IActionResult> PerformSaveAndFinish(ProviderDetailViewModel viewModel)
