@@ -148,7 +148,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 EmployerCount = dto.EmployerCount
             };
 
-            return View(viewModel);
+            return View("ConfirmDelete", viewModel);
         }
 
         [HttpGet]

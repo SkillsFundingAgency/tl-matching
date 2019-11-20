@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var postcode = await _providerVenueService.GetVenuePostcodeAsync(providerVenueId);
 
-            return View(new AddQualificationViewModel
+            return View("AddQualification", new AddQualificationViewModel
             {
                 ProviderVenueId = providerVenueId,
                 Postcode = postcode

@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             model.SearchParameters.ShowAllProvider = false;
 
-            return View(model);
+            return View("SearchProvider", model);
         }
 
         [HttpPost]
