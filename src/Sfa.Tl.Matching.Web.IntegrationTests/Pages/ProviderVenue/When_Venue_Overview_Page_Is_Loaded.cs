@@ -95,10 +95,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderVenue
             saveAndFinishButton.Value.Should().Be("SaveAndFinish");
         }
 
-        private static void AssertTableRow(IHtmlTableRowElement row, string lars, string qualificationTitle,
+        private static void AssertTableRow(IHtmlTableRowElement row, string larId, string qualificationTitle,
             int qualificationId, int venueId)
         {
-            row.Cells[0].TextContent.Should().Be(lars);
+            row.Cells[0].TextContent.Should().Be(larId);
             row.Cells[1].TextContent.Should().Be(qualificationTitle);
 
             var deleteCell = row.Cells[2].Children[0] as IHtmlAnchorElement;
