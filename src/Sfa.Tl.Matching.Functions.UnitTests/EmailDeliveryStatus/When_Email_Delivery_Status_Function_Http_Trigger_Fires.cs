@@ -51,7 +51,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             var httpRequest = HttpRequestSetup(query, serializedPayLoad);
 
             //Act
-            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(httpRequest, context, logger,
+            var functions = new Functions.EmailDeliveryStatus();
+            var result = await functions.EmailDeliveryStatusHandlerAsync(httpRequest, context, logger,
                 matchingConfiguration,
                 notificationService, functionlogRepository) as OkObjectResult;
 
@@ -94,7 +95,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
                 .Returns(Task.FromResult<EmailHistory>(null));
 
             //Act
-            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+            var functions = new Functions.EmailDeliveryStatus();
+            var result = await functions.EmailDeliveryStatusHandlerAsync(
                 HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
                 notificationService, functionlogRepository) as OkObjectResult;
 
@@ -138,7 +140,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
                 .Returns(emailHistory);
 
             //Act
-            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+            var functions = new Functions.EmailDeliveryStatus();
+            var result = await functions.EmailDeliveryStatusHandlerAsync(
                 HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
                 notificationService, functionlogRepository) as BadRequestObjectResult;
 
@@ -193,7 +196,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
                 .Returns(emailHistory);
 
             //Act
-            var result = await Functions.EmailDeliveryStatus.EmailDeliveryStatusHandlerAsync(
+            var functions = new Functions.EmailDeliveryStatus();
+            var result = await functions.EmailDeliveryStatusHandlerAsync(
                 HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
                 notificationService, functionlogRepository) as OkObjectResult;
 
