@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AngleSharp.Html.Dom;
@@ -22,6 +23,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         public async Task Then_Submit_Form_Successfully()
         {
             var client = _factory.CreateClient();
+            client.Timeout = TimeSpan.FromSeconds(200);
+           
             var pageResponse = await client.GetAsync($"employer-opportunities/{OpportunityId}-0");
             var pageContent = await HtmlHelpers.GetDocumentAsync(pageResponse);
 
