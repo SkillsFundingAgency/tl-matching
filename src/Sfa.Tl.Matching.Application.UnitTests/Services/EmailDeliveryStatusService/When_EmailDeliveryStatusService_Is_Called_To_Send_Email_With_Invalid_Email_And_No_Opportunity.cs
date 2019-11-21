@@ -29,12 +29,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var logger = Substitute.For<ILogger<Application.Services.EmailDeliveryStatusService>>();
 
             _emailService = Substitute.For<IEmailService>();
-            _emailService.GetFailedEmailAsync(_notificationId).Returns(
-                new FailedEmailDto
+            _emailService.GetEmailBodyFromNotifyClientAsync(_notificationId).Returns(
+                new EmailDeliveryStatusDto
                 {
                     Body = "Body",
                     Subject = "Subject",
-                    FailedEmailType = FailedEmailType.PermanentFailure
+                    EmailDeliveryStatusType = EmailDeliveryStatusType.PermanentFailure
                 });
 
             _emailService.GetEmailHistoryAsync(_notificationId).Returns(
@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var messageQueueService = Substitute.For<IMessageQueueService>();
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            _opportunityRepository.GetFailedEmployerEmailAsync(1, "sent-to@email.com").Returns(
+            _opportunityRepository.GetDeliveryStatusOpportunityEmailAsync(1, "sent-to@email.com").Returns(
                 new EmailBodyDtoBuilder()
                     .AddEmployerEmail().Build());
 
@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         [Fact]
         public void Then_EmailService_GetFailedEmailAsync_Is_Called_Exactly_Once()
         {
-            _emailService.Received(1).GetFailedEmailAsync(Arg.Any<Guid>());
+            _emailService.Received(1).GetEmailBodyFromNotifyClientAsync(Arg.Any<Guid>());
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         [Fact]
         public void Then_OpportunityRepository_GetFailedEmployerEmailAsync_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.DidNotReceive().GetFailedEmployerEmailAsync(Arg.Any<int>(),
+            _opportunityRepository.DidNotReceive().GetDeliveryStatusOpportunityEmailAsync(Arg.Any<int>(),
                 Arg.Any<string>());
         }
 

@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityRepository.GetDeliveryStatusOpportunityEmailAsync(1, "sent-to@email.com").Returns(
-                new EmailBodyDtoBuilder().Build());
+                new EmailBodyDtoBuilder().AddEmployerEmail().Build());
 
             var emailDeliveryStatusService = new Application.Services.EmailDeliveryStatusService(configuration,
                 _emailService,

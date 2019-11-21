@@ -231,8 +231,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         }
 
         [Theory]
-        [InlineAutoDomainData("")]
-        [InlineAutoDomainData(null)]
+        [InlineAutoDomainData("delivered")]
+        [InlineAutoDomainData("failure-status")]
+        [InlineAutoDomainData("temporary-failure-status")]
+        [InlineAutoDomainData("temporary-failure-status")]
         public async Task Then_Send_Email_And_Save_Email_History_And_Update_Email_History_If_Status_Is_Null(
             string status,
             MatchingConfiguration configuration,
@@ -253,8 +255,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         {
             //Arrange
             Guid.TryParse(emailNotificationResponse.id, out var notificationId);
-            payLoad.status = status;
-            payLoad.id = notificationId;
+            payLoad.Status = status;
+            payLoad.Id = notificationId;
 
             var (templateLogger, historyLogger, mapper) = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger);
 
@@ -294,7 +296,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             data.Should().NotBeNull();
             data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
             data.Status.Should().NotBeNullOrEmpty();
-            data.Status.Should().Be("unknown-failure");
+            data.Status.Should().Be(payLoad.Status);
             data.NotificationId.Should().Be(emailNotificationResponse.id);
             data.CreatedBy.Should().Be("System");
             data.ModifiedBy.Should().Be("System");

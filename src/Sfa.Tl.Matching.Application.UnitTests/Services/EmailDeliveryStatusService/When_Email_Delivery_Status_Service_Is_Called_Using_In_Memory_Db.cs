@@ -112,14 +112,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
 
             //Assert
-            var data = dbContext.EmailHistory.FirstOrDefault(em => em.NotificationId == payload.id);
+            var data = dbContext.EmailHistory.FirstOrDefault(em => em.NotificationId == payload.Id);
 
             data.Should().NotBeNull();
-            data?.NotificationId.Should().Be(payload.id);
-            data?.Status.Should().Be(payload.status);
+            data?.NotificationId.Should().Be(payload.Id);
+            data?.Status.Should().Be(payload.Status);
             data?.ModifiedBy.Should().Be("System");
 
-            await messageQueueService.Received(1).PushFailedEmailMessageAsync(Arg.Any<SendFailedEmail>());
+            await messageQueueService.Received(1).PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
         }
 
         [Theory]
@@ -150,8 +150,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             dbContext.Add(emailHistory);
             dbContext.SaveChanges();
 
-            payload.status = status;
-            payload.id = emailHistory.NotificationId.GetValueOrDefault();
+            payload.Status = status;
+            payload.Id = emailHistory.NotificationId.GetValueOrDefault();
 
             var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger,
                 emailDeliveryServiceStatusLogger, emailServiceLogger, notificationClient, configuration, messageQueueService);

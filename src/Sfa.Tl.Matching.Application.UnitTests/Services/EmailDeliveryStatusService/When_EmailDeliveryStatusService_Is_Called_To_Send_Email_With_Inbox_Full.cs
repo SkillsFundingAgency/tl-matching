@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var messageQueueService = Substitute.For<IMessageQueueService>();
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            _opportunityRepository.GetFailedOpportunityEmailAsync(OpportunityId, "sent-to@email.com").Returns(
+            _opportunityRepository.GetDeliveryStatusOpportunityEmailAsync(OpportunityId, "sent-to@email.com").Returns(
                 new EmailBodyDtoBuilder().AddPoviderEmail().Build());
 
             var emailDeliveryStatusService = new Application.Services.EmailDeliveryStatusService(configuration,

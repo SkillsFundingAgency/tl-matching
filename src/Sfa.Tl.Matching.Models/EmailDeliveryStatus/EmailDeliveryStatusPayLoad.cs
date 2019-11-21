@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Models.EmailDeliveryStatus
 
         [JsonProperty("notification_type")]
         public string NotificationType { get; set; }
-        public string EmailDeliveryStatus => string.IsNullOrEmpty(status) ? "unknown-failure" : status;
+        public string EmailDeliveryStatus => string.IsNullOrEmpty(Status) ? "unknown-failure" : Status;
 
     }
 }

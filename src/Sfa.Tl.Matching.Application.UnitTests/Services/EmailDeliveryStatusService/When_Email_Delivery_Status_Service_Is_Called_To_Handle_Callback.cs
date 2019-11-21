@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService, logger);
 
-            payload.status = status;
+            payload.Status = status;
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
 
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             await emailService.Received(1).UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>());
 
-            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.status == "delivered"));
+            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.Status == status));
 
         }
 
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService, logger);
 
-            payload.status = status;
+            payload.Status = status;
             var serializedPayLoad = JsonConvert.SerializeObject(payload);
             
             emailService.UpdateEmailStatus(Arg.Any<EmailDeliveryStatusPayLoad>()).Returns(1);
@@ -80,7 +80,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
 
             //Assert
-            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.status == "delivered"));
+            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.Status == status));
 
             await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
 
@@ -113,7 +113,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
 
             //Assert
-            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.status == "permanent-failure"));
+            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.Status == "permanent-failure"));
 
             await messageQueueService.Received(1).PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
 
