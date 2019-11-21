@@ -108,7 +108,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Postcode, o => o.MapFrom(s => s.Postcode))
                 .ForMember(m => m.SearchRadius, o => o.MapFrom(s => s.SearchRadius))
                 .ForMember(m => m.RouteName, o => o.MapFrom(s => s.Route.Name))
-                .ForMember(m => m.RouteName, o => o.MapFrom(s => s.Route.Name))
                 .ForAllOtherMembers(config => config.Ignore());
 
             CreateMap<CheckAnswersDto, OpportunityItem>()
