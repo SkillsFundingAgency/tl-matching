@@ -249,82 +249,39 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return await _dbContext.MatchingServiceProviderEmployerReport.ToListAsync();
         }
 
-        public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate)
+        public async Task<EmailBodyDto> GetEmailDeliveryStatusForEmployerAsync(int opportunityId, string sentTo)
         {
             var dto = await (from o in _dbContext.Opportunity
-                             join oi in _dbContext.OpportunityItem
-                                 on o.Id equals oi.OpportunityId
-                             where oi.IsCompleted
-                                   && o.EmployerFeedbackSentOn == null
-                                   && oi.ModifiedOn.HasValue
-                                   && oi.ModifiedOn.Value <= referralDate
-                                   && o.OpportunityItem.Count(x => x.IsCompleted) == 1
-                                   && o.OpportunityItem.Count(x => x.IsSaved) == 1
-                                   && oi.OpportunityType == OpportunityType.Referral.ToString()
-                             select new EmployerFeedbackDto
-                             {
-                                 OpportunityId = o.Id,
-                                 OpportunityItemId = oi.Id,
-                                 PrimaryContact = o.EmployerContact,
-                                 Email = o.EmployerContactEmail
-                             }).ToListAsync();
+                    where o.Id == opportunityId
+                          && o.EmployerContactEmail == sentTo
+                    select new EmailBodyDto
+                    {
+                        EmployerEmail = o.EmployerContactEmail,
+                    })
+                .FirstOrDefaultAsync();
 
             return dto;
         }
 
-        public async Task<IList<ProviderFeedbackDto>> GetAllReferralsForProviderFeedbackAsync(DateTime referralDate)
+        public async Task<EmailBodyDto> GetEmailDeliveryStatusForProviderAsync(int opportunityId, string sentTo)
         {
             var dto = await (from o in _dbContext.Opportunity
-                             join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
-                             join e in _dbContext.Employer on o.EmployerCrmId equals e.CrmId
-                             join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
-                             join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
-                             join p in _dbContext.Provider on pv.ProviderId equals p.Id
-                             where oi.IsCompleted
-                                   && oi.IsSaved
-                                   && oi.ModifiedOn.HasValue
-                                   && oi.ModifiedOn.Value <= referralDate
-                                   && oi.OpportunityType == OpportunityType.Referral.ToString()
-                                   && p.ProviderFeedbackSentOn == null
-                             select new ProviderFeedbackDto
-                             {
-                                 OpportunityId = o.Id,
-                                 OpportunityItemId = oi.Id,
-                                 ProviderId = p.Id,
-                                 Companyname = e.CompanyName,
-                                 PrimaryContact = p.PrimaryContact,
-                                 PrimaryContactEmail = p.PrimaryContactEmail,
-                                 SecondaryContact = p.SecondaryContact,
-                                 SecondaryContactEmail = p.SecondaryContactEmail,
-                                 ProviderFeedbackEmailSentOn = p.ProviderFeedbackSentOn
-                             })
-                            .GroupBy(feedbackDto => feedbackDto.ProviderId)
-                            .Select(data => data.FirstOrDefault())
-                            .Select(feedbackDto => feedbackDto)
-                            .ToListAsync();
-
-            return dto;
-        }
-
-        public async Task<EmailBodyDto> GetDeliveryStatusOpportunityEmailAsync(int opportunityId, string sentTo)
-        {
-            var dto = await (from o in _dbContext.Opportunity
-                             join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
-                             join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
-                             join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
-                             join p in _dbContext.Provider on pv.ProviderId equals p.Id
-                             where o.Id == opportunityId &&
-                                   (p.PrimaryContactEmail == sentTo ||
-                                    p.SecondaryContactEmail == sentTo)
-                             select new EmailBodyDto
-                             {
-                                 PrimaryContactEmail = p.PrimaryContactEmail,
-                                 SecondaryContactEmail = p.SecondaryContactEmail,
-                                 ProviderDisplayName = p.DisplayName,
-                                 ProviderVenuePostcode = pv.Postcode,
-                                 ProviderVenueName = pv.Name,
-                             })
-                          .FirstOrDefaultAsync();
+                    join oi in _dbContext.OpportunityItem on o.Id equals oi.OpportunityId
+                    join re in _dbContext.Referral on oi.Id equals re.OpportunityItemId
+                    join pv in _dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
+                    join p in _dbContext.Provider on pv.ProviderId equals p.Id
+                    where o.Id == opportunityId &&
+                          (p.PrimaryContactEmail == sentTo ||
+                           p.SecondaryContactEmail == sentTo)
+                    select new EmailBodyDto
+                    {
+                        PrimaryContactEmail = p.PrimaryContactEmail,
+                        SecondaryContactEmail = p.SecondaryContactEmail,
+                        ProviderDisplayName = p.DisplayName,
+                        ProviderVenuePostcode = pv.Postcode,
+                        ProviderVenueName = pv.Name,
+                    })
+                .FirstOrDefaultAsync();
 
             return dto;
         }

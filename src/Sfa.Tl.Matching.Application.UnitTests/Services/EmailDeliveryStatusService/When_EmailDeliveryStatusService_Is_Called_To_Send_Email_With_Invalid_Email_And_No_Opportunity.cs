@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var messageQueueService = Substitute.For<IMessageQueueService>();
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            _opportunityRepository.GetDeliveryStatusOpportunityEmailAsync(1, "sent-to@email.com").Returns(
+            _opportunityRepository.GetEmailDeliveryStatusForEmployerAsync(1, "sent-to@email.com").Returns(
                 new EmailBodyDtoBuilder()
                     .AddEmployerEmail().Build());
 
@@ -80,7 +80,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         [Fact]
         public void Then_OpportunityRepository_GetFailedEmployerEmailAsync_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.DidNotReceive().GetDeliveryStatusOpportunityEmailAsync(Arg.Any<int>(),
+            _opportunityRepository.DidNotReceive().GetEmailDeliveryStatusForEmployerAsync(Arg.Any<int>(),
                 Arg.Any<string>());
         }
 
