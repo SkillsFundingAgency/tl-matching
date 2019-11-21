@@ -98,7 +98,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("edit-qualifications", Name = "SearchQualifications")]
-        public async Task<IActionResult> SearchQualifications(QualificationSearchViewModel viewModel)
+        public async Task<IActionResult> SearchQualificationsAsync(QualificationSearchViewModel viewModel)
         {
             if (IsValidSearchTerm(viewModel))
                 ModelState.AddModelError("SearchTerms", "You must enter 2 or more letters for your search");
@@ -121,7 +121,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("search-short-title", Name = "SearchShortTitle")]
-        public async Task<IActionResult> SearchShortTitle(string query)
+        public async Task<IActionResult> SearchShortTitleAsync(string query)
         {
             var shortTitles = await _qualificationService.SearchShortTitleAsync(query);
 
