@@ -67,8 +67,8 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            var failedEmailDto = await _emailService.GetEmailBodyFromNotifyClientAsync(notificationId);
-            if (failedEmailDto == null)
+            var emailBodyDto = await _emailService.GetEmailBodyFromNotifyClientAsync(notificationId);
+            if (emailBodyDto == null)
             {
                 _logger.LogInformation($"Notification Id={notificationId} cannot be found in Notify");
                 return;
@@ -78,12 +78,12 @@ namespace Sfa.Tl.Matching.Application.Services
             if (emailHistoryDto.Status == "unknown-failure")
             {
                 summary = ErrorUnknownSummary;
-                if (emailHistoryDto.Status != failedEmailDto.Status)
+                if (emailHistoryDto.Status != emailBodyDto.Status)
                 {
                     await _emailService.UpdateEmailStatus(new EmailDeliveryStatusPayLoad
                     {
                         Id = notificationId,
-                        Status = failedEmailDto.Status
+                        Status = emailBodyDto.Status
                     });
                 }
             }
@@ -97,12 +97,12 @@ namespace Sfa.Tl.Matching.Application.Services
                 { "summary", summary },
                 { "email_type", emailTemplateName.Humanize().ToLower() },
                 { "body", emailBody },
-                { "reason", failedEmailDto.EmailDeliveryStatusType.Humanize() },
+                { "reason", emailBodyDto.EmailDeliveryStatusType.Humanize() },
                 { "sender_username", emailHistoryDto.CreatedBy },
-                { "failed_email_body", failedEmailDto.Body }
+                { "email_body", emailBodyDto.Body }
             };
 
-            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId, EmailTemplateName.FailedEmailV2.ToString(),
+            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId, EmailTemplateName.EmailDeliveryStatus.ToString(),
                 _configuration.MatchingServiceSupportEmailAddress, tokens, "System");
         }
 

@@ -125,7 +125,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         [Theory]
         [InlineAutoDomainData("")]
         [InlineAutoDomainData(null)]
-        public async Task Then_Update_Email_History_With_Status_And_Push_To_Failed_Email_Queue_If_Status_Is_Null(
+        public async Task Then_Update_Email_History_With_Status_And_Push_To_Email_Delivery_Status_Queue_If_Status_Is_Null(
             string status,
             MatchingDbContext dbContext,
             MatchingConfiguration configuration,

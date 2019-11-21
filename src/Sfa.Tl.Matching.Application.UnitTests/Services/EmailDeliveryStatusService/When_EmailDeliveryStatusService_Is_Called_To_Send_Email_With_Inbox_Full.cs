@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         public void Then_EmailService_SendEmailAsync_Is_Called_Exactly_Once()
         {
             _emailService.Received(1).SendEmailAsync(OpportunityId,
-                EmailTemplateName.FailedEmailV2.ToString(),
+                EmailTemplateName.EmailDeliveryStatus.ToString(),
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("summary") && tokens["summary"] == "We cannot determine whether or not the following email was sent."
@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                     && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Inbox not accepting messages right now"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
-                    && tokens.ContainsKey("failed_email_body") && tokens["failed_email_body"] == "Body")
+                    && tokens.ContainsKey("email_body") && tokens["email_body"] == "Body")
                 , Arg.Any<string>());
         }
     }

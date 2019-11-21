@@ -1,0 +1,14 @@
+((summary))
+
+Details:
+
+Type of email: ((email_type))
+
+((body))
+
+Reason: ((reason))
+Username of sender: ((sender_username))
+
+A copy of the ((email_type)) email is included below.
+
+((email_body))
