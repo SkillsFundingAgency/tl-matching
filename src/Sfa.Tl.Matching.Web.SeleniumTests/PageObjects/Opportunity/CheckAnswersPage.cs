@@ -1,5 +1,5 @@
 ﻿using OpenQA.Selenium;
-using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Proximity;
+using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity;
 
 // ReSharper disable UnusedMember.Local
 // ReSharper disable UnusedMember.Global

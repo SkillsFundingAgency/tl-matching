@@ -13,9 +13,9 @@ using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 {
-    public class When_Proximity_Controller_Results_Is_Loaded_With_Existing_Opportunity
+    public class When_OpportunityProximity_Controller_Results_Is_Loaded_With_Existing_Opportunity
     {
         private readonly IActionResult _result;
         private readonly IProximityService _proximityService;
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         private const string Postcode = "SW1A 2AA";
         private readonly int _selectedRouteId;
 
-        public When_Proximity_Controller_Results_Is_Loaded_With_Existing_Opportunity()
+        public When_OpportunityProximity_Controller_Results_Is_Loaded_With_Existing_Opportunity()
         {
             var routes = new List<Route>
                 {

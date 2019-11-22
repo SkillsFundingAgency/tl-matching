@@ -12,13 +12,13 @@ using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 {
-    public class When_Proximity_Controller_FindProviders_Is_Called_For_Invalid_Postcode
+    public class When_OpportunityProximity_Controller_FindProviders_Is_Called
     {
         private readonly IActionResult _result;
 
-        public When_Proximity_Controller_FindProviders_Is_Called_For_Invalid_Postcode()
+        public When_OpportunityProximity_Controller_FindProviders_Is_Called()
         {
             var routes = new List<Route>
             {
@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             IMapper mapper = new Mapper(config);
 
             var proximityService = Substitute.For<IProximityService>();
-            proximityService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((false, null));
+            proximityService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, "CV1 2WT"));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
@@ -39,11 +39,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, 
-                proximityService, opportunityService, employerService);
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService, opportunityService,
+                employerService);
 
             var selectedRouteId = routes.First().Id;
-            const string postcode = "XYZ A12";
+            const string postcode = "SW1A 2AA";
 
             var viewModel = new SearchParametersViewModel
             {
@@ -55,24 +55,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_Model_Is_Of_Type_SearchParametersViewModel()
+        public void Then_Result_Is_Redirect_To_Results()
         {
             _result.Should().NotBeNull();
-            var viewResult = _result as ViewResult;
-            viewResult.Should().NotBeNull();
-            viewResult?.Model.Should().NotBeNull();
-            viewResult?.Model.Should().BeOfType<SearchParametersViewModel>();
-        }
+            _result.Should().BeOfType<RedirectToRouteResult>();
+            var redirect = _result as RedirectToRouteResult;
+            redirect.Should().NotBeNull();
+            redirect?.RouteName.Should().BeEquivalentTo("GetProviderResults");
 
-        [Fact]
-        public void Then_Model_Contains_Postcode_Error()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();
-            viewResult?.ViewData.ModelState["Postcode"]
-                .Errors
-                .Should()
-                .ContainSingle(error => error.ErrorMessage == "You must enter a real postcode");
+            redirect?.RouteValues["SelectedRouteId"].Should().Be(1);
+            redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");
+            redirect?.RouteValues["OpportunityId"].Should().Be(0);
+            redirect?.RouteValues["OpportunityItemId"].Should().Be(0);
+            redirect?.RouteValues["CompanyNameWithAka"].Should().BeNull();
         }
     }
 }

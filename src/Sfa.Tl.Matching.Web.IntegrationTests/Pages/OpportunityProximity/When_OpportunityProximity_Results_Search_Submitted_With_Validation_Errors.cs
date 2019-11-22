@@ -8,15 +8,16 @@ using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Sfa.Tl.Matching.Web.Tests.Common;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
 {
-    public class When_Proximity_Index_Is_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_OpportunityProximity_Results_Search_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const int OpportunityId = 1000;
+        private const int OpportunityItemId = 2000;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public When_Proximity_Index_Is_Submitted_With_Validation_Errors(CustomWebApplicationFactory<TestStartup> factory)
+        public When_OpportunityProximity_Results_Search_Submitted_With_Validation_Errors(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
@@ -27,11 +28,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
         public async Task Then_Correct_Error_Message_Is_Displayed(string field, string value, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();
-            var pageResponse = await client.GetAsync($"find-providers/{OpportunityId}");
+            var pageResponse = await client.GetAsync($"provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-SW1A%202AA-for-route-1");
             var pageContent = await HtmlHelpers.GetDocumentAsync(pageResponse);
 
             var response = await client.SendAsync(
-                (IHtmlFormElement)pageContent.QuerySelector("form"),
+                (IHtmlFormElement)pageContent.GetElementById("tl-search-form"),
                 (IHtmlButtonElement)pageContent.GetElementById("tl-search"),
                 new Dictionary<string, string>
                 {
@@ -56,8 +57,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
             var input = responseContent.QuerySelector($"#{field}");
             var div = input.ParentElement;
             div.ClassName.Should().Be("govuk-form-group govuk-form-group--error");
-            div.QuerySelector(".govuk-error-message").TextContent.Should()
-                .Be(errorMessage);
         }
     }
 }

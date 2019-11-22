@@ -11,13 +11,13 @@ using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 {
-    public class When_Proximity_Controller_Start_Is_Loaded_With_No_Saved_Opportunities
+    public class When_OpportunityProximity_Controller_Start_Is_Loaded_With_Saved_Opportunities
     {
         private readonly IActionResult _result;
 
-        public When_Proximity_Controller_Start_Is_Loaded_With_No_Saved_Opportunities()
+        public When_OpportunityProximity_Controller_Start_Is_Loaded_With_Saved_Opportunities()
         {
             var mapper = Substitute.For<IMapper>();
 
@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(0);
+            employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(1);
             var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService,
                 opportunityService, employerService);
 
@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             viewResult?.Model.Should().NotBeNull();
 
             var viewModel = _result.GetViewModel<DashboardViewModel>();
-            viewModel.HasSavedOppportunities.Should().BeFalse();
+            viewModel.HasSavedOppportunities.Should().BeTrue();
         }
     }
 }

@@ -5,7 +5,7 @@ using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Sfa.Tl.Matching.Web.Tests.Common;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Proximity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
 {
     public class When_Start_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {

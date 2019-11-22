@@ -3,32 +3,27 @@ using System.Linq;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 {
-    public class When_Proximity_Controller_FindProviders_Is_Called
+    public class When_OpportunityProximity_Controller_RefineSearchResults_Is_Called
     {
         private readonly IActionResult _result;
 
-        public When_Proximity_Controller_FindProviders_Is_Called()
+        public When_OpportunityProximity_Controller_RefineSearchResults_Is_Called()
         {
             var routes = new List<Route>
             {
-                new Route { Id = 1, Name = "Route 1" },
-                new Route { Id = 2, Name = "Route 2" }
-            }
-            .AsQueryable();
+                new Route {Id = 1, Name = "Route 1"}
+            }.AsQueryable();
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
-            IMapper mapper = new Mapper(config);
+            var mapper = Substitute.For<IMapper>();
 
             var proximityService = Substitute.For<IProximityService>();
             proximityService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, "CV1 2WT"));
@@ -42,20 +37,18 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService, opportunityService,
                 employerService);
 
-            var selectedRouteId = routes.First().Id;
-            const string postcode = "SW1A 2AA";
-
             var viewModel = new SearchParametersViewModel
             {
-                RoutesSelectList = mapper.Map<SelectListItem[]>(routes),
-                SelectedRouteId = selectedRouteId,
-                Postcode = postcode
+                Postcode = "CV12WT",
+                SelectedRouteId = 1,
+                CompanyNameWithAka = "CompanyName (AlsoKnownAs)"
             };
-            _result = opportunityProximityController.FindProviders(viewModel).GetAwaiter().GetResult();
+
+            _result = opportunityProximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_Result_Is_Redirect_To_Results()
+        public void Then_RedirectToRoute_Result_Is_Returned()
         {
             _result.Should().NotBeNull();
             _result.Should().BeOfType<RedirectToRouteResult>();
@@ -67,7 +60,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");
             redirect?.RouteValues["OpportunityId"].Should().Be(0);
             redirect?.RouteValues["OpportunityItemId"].Should().Be(0);
-            redirect?.RouteValues["CompanyNameWithAka"].Should().BeNull();
+            redirect?.RouteValues["CompanyNameWithAka"].Should().Be("CompanyName (AlsoKnownAs)");
+
         }
     }
 }

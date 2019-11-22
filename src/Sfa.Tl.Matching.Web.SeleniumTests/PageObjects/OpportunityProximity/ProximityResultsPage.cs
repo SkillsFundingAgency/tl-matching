@@ -4,7 +4,7 @@ using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity;
 
 // ReSharper disable UnusedMember.Global
 
-namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Proximity
+namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
 {
     public class ProximityResultsPage : PageBase
     {

@@ -11,14 +11,14 @@ using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 {
-    public class When_Proximity_Controller_Index_Is_Loaded
+    public class When_OpportunityProximity_Controller_Index_Is_Loaded
     {
         private readonly IActionResult _result;
         private readonly IOpportunityService _opportunityService;
 
-        public When_Proximity_Controller_Index_Is_Loaded()
+        public When_OpportunityProximity_Controller_Index_Is_Loaded()
         {
             var routes = new List<Route>
             {
