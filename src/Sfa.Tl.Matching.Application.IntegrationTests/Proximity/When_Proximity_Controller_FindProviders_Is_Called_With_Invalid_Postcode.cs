@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +26,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
         public When_Proximity_Controller_FindProviders_Is_Called_With_Invalid_Postcode()
         {
+            const string requestPostcode = "cV12 34";
+            var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
+
             var routes = new List<Route>
             {
                 new Route { Id = 1, Name = "Route 1" },
@@ -37,8 +39,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
-            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), 
-                new LocationApiClient(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }),
+            var locationService = new LocationService(
+                new LocationApiClient(httpClient, new MatchingConfiguration
+                {
+                    PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
+                }));
+
+            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(),
+                locationService,
                 Substitute.For<IGoogleDistanceMatrixApiClient>());
 
             var routePathService = Substitute.For<IRoutePathService>();
@@ -47,10 +55,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            _opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService, employerService);
+            _opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService, employerService, locationService);
 
             var selectedRouteId = routes.First().Id;
-            const string postcode = "cV12 34";
+            const string postcode = requestPostcode;
 
             var viewModel = new SearchParametersViewModel
             {

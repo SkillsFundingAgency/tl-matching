@@ -47,6 +47,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
+            var locationService = Substitute.For<ILocationService>();
+
             _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             _opportunityProximityService
                 .SearchProvidersByPostcodeProximityAsync(Arg.Is<ProviderSearchParametersDto>(a => a.Postcode == Postcode && a.SelectedRouteId == RouteId))
@@ -59,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             var employerService = Substitute.For<IEmployerService>();
 
             var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, _opportunityProximityService, _opportunityService,
-                employerService);
+                employerService, locationService);
 
             _result = opportunityProximityController.GetProviderResultsAsync(new SearchParametersViewModel
             {

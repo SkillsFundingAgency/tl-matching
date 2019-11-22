@@ -25,6 +25,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
         public When_Proximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode()
         {
+            const string requestPostcode = "CV1234";
+            var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
+
             var routes = new List<Route>
             {
                 new Route {Id = 1, Name = "Route 1"}
@@ -32,11 +35,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
             var mapper = Substitute.For<IMapper>();
 
-            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(),
-                new LocationApiClient(new HttpClient(), new MatchingConfiguration
+            var locationService = new LocationService(
+                new LocationApiClient(httpClient, new MatchingConfiguration
                 {
-                    PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
-                }),
+                    PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
+
+                }));
+            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(),
+                locationService,
                 Substitute.For<IGoogleDistanceMatrixApiClient>());
 
             var routePathService = Substitute.For<IRoutePathService>();
@@ -46,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var employerService = Substitute.For<IEmployerService>();
 
             _opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService,
-                employerService);
+                employerService, locationService);
 
             var viewModel = new SearchParametersViewModel
             {

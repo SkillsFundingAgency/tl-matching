@@ -38,12 +38,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
-            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), 
+            var locationService = new LocationService(
                 new LocationApiClient(httpClient, new MatchingConfiguration
                 {
                     PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
-
-                }),
+                }));
+            
+            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), 
+                locationService,
                 Substitute.For<IGoogleDistanceMatrixApiClient>());
 
             var routePathService = Substitute.For<IRoutePathService>();
@@ -53,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var employerService = Substitute.For<IEmployerService>();
 
             var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService, 
-                employerService);
+                employerService, locationService);
 
             var selectedRouteId = routes.First().Id;
             const string postcode = requestPostcode;

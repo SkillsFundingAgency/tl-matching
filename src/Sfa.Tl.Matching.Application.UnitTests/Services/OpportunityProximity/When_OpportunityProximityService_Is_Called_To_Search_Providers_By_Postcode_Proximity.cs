@@ -3,6 +3,7 @@ using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
+using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -18,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
         private const int SearchRadius = 5;
         private const int RouteId = 2;
         private readonly IList<SearchResultsViewModelItem> _result;
-        private readonly ILocationApiClient _locationApiClient;
+        private readonly ILocationService _locationService;
         private readonly ISearchProvider _searchProvider;
 
         public When_OpportunityProximityService_Is_Called_To_Search_Providers_By_Postcode_Proximity()
@@ -35,8 +36,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
                 .SearchProvidersByPostcodeProximityAsync(dto)
                 .Returns(new SearchResultsBuilder().Build());
 
-            _locationApiClient = Substitute.For<ILocationApiClient>();
-            _locationApiClient.GetGeoLocationDataAsync(Postcode, true)
+            _locationService = Substitute.For<ILocationService>();
+            _locationService.GetGeoLocationDataAsync(Postcode, true)
                 .Returns(new PostcodeLookupResultDto
                 {
                     Postcode = Postcode,
@@ -56,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
                     Arg.Any<long>())
                 .Returns(new JourneyTimesBuilder().BuildPublicTransportResults());
 
-            var service = new OpportunityProximityService(_searchProvider, _locationApiClient, googleDistanceMatrixApiClient);
+            var service = new OpportunityProximityService(_searchProvider, _locationService, googleDistanceMatrixApiClient);
 
             _result = service.SearchProvidersByPostcodeProximityAsync(dto).GetAwaiter().GetResult();
         }
@@ -77,7 +78,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
         [Fact]
         public void Then_The_LocationService_Is_Called_Exactly_Once()
         {
-            _locationApiClient.Received(1).GetGeoLocationDataAsync(Postcode, true);
+            _locationService.Received(1).GetGeoLocationDataAsync(Postcode, true);
         }
 
         [Fact]

@@ -21,6 +21,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         {
             var mapper = Substitute.For<IMapper>();
 
+            var locationService = Substitute.For<ILocationService>();
             var opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             var routePathService = Substitute.For<IRoutePathService>();
             var opportunityService = Substitute.For<IOpportunityService>();
@@ -28,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(0);
             var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService,
-                opportunityService, employerService);
+                opportunityService, employerService, locationService);
 
             var controllerWithClaims = new ClaimsBuilder<OpportunityProximityController>(opportunityProximityController)
                 .Add(ClaimTypes.Role, RolesExtensions.StandardUser)

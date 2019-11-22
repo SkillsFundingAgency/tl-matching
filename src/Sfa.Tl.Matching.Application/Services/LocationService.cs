@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
@@ -16,6 +17,16 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)
         {
             return await _locationApiClient.IsValidPostcodeAsync(postcode, true);
+        }
+
+        public async Task<PostcodeLookupResultDto> GetGeoLocationDataAsync(string postcode)
+        {
+            return await _locationApiClient.GetGeoLocationDataAsync(postcode);
+        }
+
+        public async Task<PostcodeLookupResultDto> GetGeoLocationDataAsync(string postcode, bool includeTerminated)
+        {
+            return await _locationApiClient.GetGeoLocationDataAsync(postcode, includeTerminated);
         }
     }
 }

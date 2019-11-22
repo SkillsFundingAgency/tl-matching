@@ -27,15 +27,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             var mapper = Substitute.For<IMapper>();
 
-            var proximiopportunityProximityServicetyService = Substitute.For<IOpportunityProximityService>();
+            var proximityopportunityService = Substitute.For<IOpportunityProximityService>();
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
+
+            var locationService = Substitute.For<ILocationService>();
 
             _opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximiopportunityProximityServicetyService,
-                _opportunityService, employerService);
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityopportunityService,
+                _opportunityService, employerService, locationService);
 
             _result = opportunityProximityController.Index().GetAwaiter().GetResult();
         }

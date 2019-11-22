@@ -25,8 +25,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             var mapper = Substitute.For<IMapper>();
 
+            var locationService = Substitute.For<ILocationService>();
+            locationService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, "CV1 2WT"));
+
             var opportunityProximityService = Substitute.For<IOpportunityProximityService>();
-            opportunityProximityService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, "CV1 2WT"));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
@@ -35,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             var employerService = Substitute.For<IEmployerService>();
 
             var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService,
-                employerService);
+                employerService, locationService);
 
             var viewModel = new SearchParametersViewModel
             {

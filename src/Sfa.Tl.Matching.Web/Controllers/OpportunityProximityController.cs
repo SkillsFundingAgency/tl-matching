@@ -10,7 +10,6 @@ using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
@@ -19,18 +18,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IOpportunityProximityService _opportunityProximityService;
+        private readonly ILocationService _locationService;
         private readonly IRoutePathService _routePathService;
         private readonly IOpportunityService _opportunityService;
         private readonly IEmployerService _employerService;
 
         public OpportunityProximityController(IMapper mapper, IRoutePathService routePathService, IOpportunityProximityService opportunityProximityService,
-            IOpportunityService opportunityService, IEmployerService employerService)
+            IOpportunityService opportunityService, IEmployerService employerService, ILocationService locationService)
         {
             _mapper = mapper;
             _opportunityProximityService = opportunityProximityService;
             _routePathService = routePathService;
             _opportunityService = opportunityService;
             _employerService = employerService;
+            _locationService = locationService;
         }
 
         [Route("Start", Name = "Start")]
@@ -214,7 +215,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 result = false;
             }
 
-            var (isValid, formattedPostcode) = await _opportunityProximityService.IsValidPostcodeAsync(viewModel.Postcode);
+            var (isValid, formattedPostcode) = await _locationService.IsValidPostcodeAsync(viewModel.Postcode);
             if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
             {
                 ModelState.AddModelError("Postcode", "You must enter a real postcode");

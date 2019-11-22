@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -13,21 +12,21 @@ namespace Sfa.Tl.Matching.Application.Services
     public class OpportunityProximityService : IOpportunityProximityService
     {
         private readonly ISearchProvider _searchProvider;
-        private readonly ILocationApiClient _locationApiClient;
+        private readonly ILocationService _locationService;
         private readonly IGoogleDistanceMatrixApiClient _googleDistanceMatrixApiClient;
 
-        public OpportunityProximityService(ISearchProvider searchProvider, 
-            ILocationApiClient locationApiClient,
+        public OpportunityProximityService(ISearchProvider searchProvider,
+            ILocationService locationService,
             IGoogleDistanceMatrixApiClient googleDistanceMatrixApiClient)
         {
             _searchProvider = searchProvider;
-            _locationApiClient = locationApiClient;
+            _locationService = locationService;
             _googleDistanceMatrixApiClient = googleDistanceMatrixApiClient;
         }
 
         public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderSearchParametersDto dto)
         {
-            var geoLocationData = await _locationApiClient.GetGeoLocationDataAsync(dto.Postcode, true);
+            var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 
@@ -38,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto)
         {
-            var geoLocationData = await _locationApiClient.GetGeoLocationDataAsync(dto.Postcode, true);
+            var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 
@@ -47,11 +46,6 @@ namespace Sfa.Tl.Matching.Application.Services
             var results = searchResults.Any() ? searchResults : new List<SearchResultsByRouteViewModelItem>();
 
             return results;
-        }
-
-        public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)
-        {
-            return await _locationApiClient.IsValidPostcodeAsync(postcode, true);
         }
     }
 }
