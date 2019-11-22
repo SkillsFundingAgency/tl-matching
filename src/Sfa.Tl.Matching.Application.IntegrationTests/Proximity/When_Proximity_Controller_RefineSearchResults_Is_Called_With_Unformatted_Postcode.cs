@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
             var mapper = Substitute.For<IMapper>();
 
-            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(),
+            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(),
                 new LocationApiClient(httpClient, new MatchingConfiguration
                 {
                     PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService, opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService,
                 employerService);
 
             var viewModel = new SearchParametersViewModel

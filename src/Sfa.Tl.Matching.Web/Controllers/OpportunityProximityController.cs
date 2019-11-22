@@ -18,16 +18,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class OpportunityProximityController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IProximityService _proximityService;
+        private readonly IOpportunityProximityService _opportunityProximityService;
         private readonly IRoutePathService _routePathService;
         private readonly IOpportunityService _opportunityService;
         private readonly IEmployerService _employerService;
 
-        public OpportunityProximityController(IMapper mapper, IRoutePathService routePathService, IProximityService proximityService,
+        public OpportunityProximityController(IMapper mapper, IRoutePathService routePathService, IOpportunityProximityService opportunityProximityService,
             IOpportunityService opportunityService, IEmployerService employerService)
         {
             _mapper = mapper;
-            _proximityService = proximityService;
+            _opportunityProximityService = opportunityProximityService;
             _routePathService = routePathService;
             _opportunityService = opportunityService;
             _employerService = employerService;
@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
         {
-            var searchResults = await _proximityService.SearchProvidersByPostcodeProximityAsync(new ProviderSearchParametersDto
+            var searchResults = await _opportunityProximityService.SearchProvidersByPostcodeProximityAsync(new ProviderSearchParametersDto
             {
                 Postcode = viewModel.Postcode,
                 SelectedRouteId = viewModel.SelectedRouteId,
@@ -142,7 +142,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var additionalResults = searchResults.Any() 
                 ? new List<SearchResultsByRouteViewModelItem>()
-                : await _proximityService.SearchProvidersForOtherRoutesByPostcodeProximityAsync(new ProviderSearchParametersDto
+                : await _opportunityProximityService.SearchProvidersForOtherRoutesByPostcodeProximityAsync(new ProviderSearchParametersDto
                 {
                     Postcode = viewModel.Postcode,
                     SelectedRouteId = viewModel.SelectedRouteId,
@@ -214,7 +214,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 result = false;
             }
 
-            var (isValid, formattedPostcode) = await _proximityService.IsValidPostcodeAsync(viewModel.Postcode);
+            var (isValid, formattedPostcode) = await _opportunityProximityService.IsValidPostcodeAsync(viewModel.Postcode);
             if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
             {
                 ModelState.AddModelError("Postcode", "You must enter a real postcode");

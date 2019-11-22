@@ -244,7 +244,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IOpportunityService, OpportunityService>();
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<IProviderQuarterlyUpdateEmailService, ProviderQuarterlyUpdateEmailService>();
-            services.AddTransient<IProximityService, ProximityService>();
+            services.AddTransient<IOpportunityProximityService, OpportunityProximityService>();
             services.AddTransient<IReferralService, ReferralService>();
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
             services.AddTransient<IQualificationService, QualificationService>();

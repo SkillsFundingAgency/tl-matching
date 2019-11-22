@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
-            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), 
+            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), 
                 new LocationApiClient(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" }),
                 Substitute.For<IGoogleDistanceMatrixApiClient>());
 
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            _opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService, opportunityService, employerService);
+            _opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService, employerService);
 
             var selectedRouteId = routes.First().Id;
             const string postcode = "cV12 34";

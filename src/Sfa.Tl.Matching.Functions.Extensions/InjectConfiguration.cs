@@ -157,7 +157,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IProviderQuarterlyUpdateEmailService, ProviderQuarterlyUpdateEmailService>();
-            services.AddTransient<IProximityService, ProximityService>();
+            services.AddTransient<IOpportunityProximityService, OpportunityProximityService>();
             services.AddTransient<IReferenceDataService, ProviderReferenceDataService>();
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IReferralEmailService, ReferralEmailService>();

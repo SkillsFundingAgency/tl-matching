@@ -21,13 +21,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         {
             var mapper = Substitute.For<IMapper>();
 
-            var proximityService = Substitute.For<IProximityService>();
+            var opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             var routePathService = Substitute.For<IRoutePathService>();
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
             employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(0);
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService,
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService,
                 opportunityService, employerService);
 
             var controllerWithClaims = new ClaimsBuilder<OpportunityProximityController>(opportunityProximityController)

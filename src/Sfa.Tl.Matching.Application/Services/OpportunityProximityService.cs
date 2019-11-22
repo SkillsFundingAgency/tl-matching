@@ -10,13 +10,13 @@ using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
-    public class ProximityService : IProximityService
+    public class OpportunityProximityService : IOpportunityProximityService
     {
         private readonly ISearchProvider _searchProvider;
         private readonly ILocationApiClient _locationApiClient;
         private readonly IGoogleDistanceMatrixApiClient _googleDistanceMatrixApiClient;
 
-        public ProximityService(ISearchProvider searchProvider, 
+        public OpportunityProximityService(ISearchProvider searchProvider, 
             ILocationApiClient locationApiClient,
             IGoogleDistanceMatrixApiClient googleDistanceMatrixApiClient)
         {

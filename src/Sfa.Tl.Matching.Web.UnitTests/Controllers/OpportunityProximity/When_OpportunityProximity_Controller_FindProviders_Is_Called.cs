@@ -30,8 +30,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
-            var proximityService = Substitute.For<IProximityService>();
-            proximityService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, "CV1 2WT"));
+            var opportunityProximityService = Substitute.For<IOpportunityProximityService>();
+            opportunityProximityService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, "CV1 2WT"));
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService, opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService,
                 employerService);
 
             var selectedRouteId = routes.First().Id;

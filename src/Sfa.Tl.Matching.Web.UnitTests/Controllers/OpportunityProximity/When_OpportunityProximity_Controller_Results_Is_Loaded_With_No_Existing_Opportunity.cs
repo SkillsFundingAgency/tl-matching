@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
     public class When_OpportunityProximity_Controller_Results_Is_Loaded_With_No_Existing_Opportunity
     {
         private readonly IActionResult _result;
-        private readonly IProximityService _proximityService;
+        private readonly IOpportunityProximityService _opportunityProximityService;
         private readonly IOpportunityService _opportunityService;
 
         private const int RouteId = 1;
@@ -47,8 +47,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
-            _proximityService = Substitute.For<IProximityService>();
-            _proximityService
+            _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
+            _opportunityProximityService
                 .SearchProvidersByPostcodeProximityAsync(Arg.Is<ProviderSearchParametersDto>(a => a.Postcode == Postcode && a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             _opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, _proximityService, _opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, _opportunityProximityService, _opportunityService,
                 employerService);
 
             _result = opportunityProximityController.GetProviderResultsAsync(new SearchParametersViewModel
@@ -71,7 +71,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_ProximityService_SearchProvidersByPostcodeProximity_Is_Called_Exactly_Once()
         {
-            _proximityService
+            _opportunityProximityService
                 .Received(1)
                 .SearchProvidersByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
@@ -82,7 +82,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_ProximityService_SearchProvidersForOtherRoutesByPostcodeProximity_Is_Called_Exactly_Once()
         {
-            _proximityService
+            _opportunityProximityService
                 .DidNotReceive()
                 .SearchProvidersForOtherRoutesByPostcodeProximityAsync(
                     Arg.Any<ProviderSearchParametersDto>());
