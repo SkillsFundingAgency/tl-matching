@@ -240,11 +240,13 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmployerService, EmployerService>();
+            services.AddTransient<ILocationService, LocationService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IOpportunityService, OpportunityService>();
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<IProviderQuarterlyUpdateEmailService, ProviderQuarterlyUpdateEmailService>();
             services.AddTransient<IOpportunityProximityService, OpportunityProximityService>();
+            services.AddTransient<IProviderProximityService, ProviderProximityService>();
             services.AddTransient<IReferralService, ReferralService>();
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
             services.AddTransient<IQualificationService, QualificationService>();
