@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            var proximityController = new ProximityController(mapper, routePathService, proximityService, opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService, opportunityService,
                 employerService);
 
             var selectedRouteId = routes.First().Id;
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 SelectedRouteId = selectedRouteId,
                 Postcode = postcode
             };
-            _result = proximityController.FindProviders(viewModel).GetAwaiter().GetResult();
+            _result = opportunityProximityController.FindProviders(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

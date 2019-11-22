@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Account
 
             var redirectResult = result as RedirectToActionResult;
             redirectResult.Should().NotBeNull(); 
-            redirectResult?.ControllerName.Should().Be("Proximity");
+            redirectResult?.ControllerName.Should().Be("OpportunityProximity");
             redirectResult?.ActionName.Should().Be("Start");
         }
     }

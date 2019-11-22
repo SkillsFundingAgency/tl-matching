@@ -15,7 +15,7 @@ using Sfa.Tl.Matching.Web.Filters;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
-    public class ProximityController : Controller
+    public class OpportunityProximityController : Controller
     {
         private readonly IMapper _mapper;
         private readonly IProximityService _proximityService;
@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IOpportunityService _opportunityService;
         private readonly IEmployerService _employerService;
 
-        public ProximityController(IMapper mapper, IRoutePathService routePathService, IProximityService proximityService,
+        public OpportunityProximityController(IMapper mapper, IRoutePathService routePathService, IProximityService proximityService,
             IOpportunityService opportunityService, IEmployerService employerService)
         {
             _mapper = mapper;

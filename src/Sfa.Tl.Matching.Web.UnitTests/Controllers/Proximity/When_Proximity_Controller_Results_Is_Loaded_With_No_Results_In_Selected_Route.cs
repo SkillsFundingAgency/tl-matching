@@ -71,10 +71,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             _opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            var proximityController = new ProximityController(mapper, routePathService, _proximityService, _opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, _proximityService, _opportunityService,
                 employerService);
 
-            _result = proximityController.GetProviderResultsAsync(new SearchParametersViewModel
+            _result = opportunityProximityController.GetProviderResultsAsync(new SearchParametersViewModel
             {
                 SelectedRouteId = RouteId,
                 Postcode = Postcode

@@ -5,7 +5,7 @@
     ViewData["Title"] = "Select providers for this opportunity";
 }
 @section backButton{
-    @*<a asp-controller="Proximity" asp-action="Index" class="govuk-back-link" id="tl-back">Back</a>*@
+    @*<a asp-controller="OpportunityProximity" asp-action="Index" class="govuk-back-link" id="tl-back">Back</a>*@
     <a asp-route="GetBackLink"  
        asp-route-opportunityId="@Model.OpportunityId"
        asp-route-opportunityItemId="@Model.OpportunityItemId"

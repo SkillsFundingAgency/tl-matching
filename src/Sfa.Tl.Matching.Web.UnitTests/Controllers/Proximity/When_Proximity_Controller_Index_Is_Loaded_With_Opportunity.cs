@@ -38,10 +38,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
             var employerService = Substitute.For<IEmployerService>();
 
-            var proximityController = new ProximityController(mapper, routePathService, proximityService,
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService,
                 _opportunityService, employerService);
 
-            _result = proximityController.Index(1).GetAwaiter().GetResult();
+            _result = opportunityProximityController.Index(1).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            var proximityController = new ProximityController(mapper, routePathService, proximityService, opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService, opportunityService,
                 employerService);
 
             var viewModel = new SearchParametersViewModel
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
                 SelectedRouteId = 1
             };
 
-            _result = proximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
+            _result = opportunityProximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

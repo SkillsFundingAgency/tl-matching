@@ -27,10 +27,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var employerService = Substitute.For<IEmployerService>();
 
             employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(1);
-            var proximityController = new ProximityController(mapper, routePathService, proximityService,
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService,
                 opportunityService, employerService);
 
-            var controllerWithClaims = new ClaimsBuilder<ProximityController>(proximityController)
+            var controllerWithClaims = new ClaimsBuilder<OpportunityProximityController>(opportunityProximityController)
                 .Add(ClaimTypes.Role, RolesExtensions.StandardUser)
                 .AddUserName("username")
                 .Build();

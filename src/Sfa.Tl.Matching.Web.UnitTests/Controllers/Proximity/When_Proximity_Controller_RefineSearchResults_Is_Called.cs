@@ -34,7 +34,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            var proximityController = new ProximityController(mapper, routePathService, proximityService, opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService, opportunityService,
                 employerService);
 
             var viewModel = new SearchParametersViewModel
@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 CompanyNameWithAka = "CompanyName (AlsoKnownAs)"
             };
 
-            _result = proximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
+            _result = opportunityProximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]

@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
     public class When_Proximity_Controller_FindProviders_Is_Called_With_Invalid_Postcode
     {
         private readonly IActionResult _result;
-        private readonly ProximityController _proximityController;
+        private readonly OpportunityProximityController _opportunityProximityController;
 
         public When_Proximity_Controller_FindProviders_Is_Called_With_Invalid_Postcode()
         {
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
-            _proximityController = new ProximityController(mapper, routePathService, proximityService, opportunityService, employerService);
+            _opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityService, opportunityService, employerService);
 
             var selectedRouteId = routes.First().Id;
             const string postcode = "cV12 34";
@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
                 SelectedRouteId = selectedRouteId,
                 Postcode = postcode
             };
-            _result = _proximityController.FindProviders(viewModel).GetAwaiter().GetResult();
+            _result = _opportunityProximityController.FindProviders(viewModel).GetAwaiter().GetResult();
         }
         
         [Fact]
@@ -74,8 +74,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
         [Fact]
         public void Then_Model_Contains_Postcode_Error()
         {
-            _proximityController.ViewData.ModelState.IsValid.Should().BeFalse();
-            _proximityController.ViewData.ModelState["Postcode"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must enter a real postcode");
+            _opportunityProximityController.ViewData.ModelState.IsValid.Should().BeFalse();
+            _opportunityProximityController.ViewData.ModelState["Postcode"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must enter a real postcode");
         }
     }
 }
