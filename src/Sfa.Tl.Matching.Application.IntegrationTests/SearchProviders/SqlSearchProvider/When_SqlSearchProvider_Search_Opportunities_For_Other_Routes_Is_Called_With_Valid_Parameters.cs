@@ -13,13 +13,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider
 {
-    public class When_SqlSearchProvider_Search_Other_Routes_Is_Called_With_Valid_Parameters : IDisposable
+    public class When_SqlSearchProvider_Search_Opportunities_For_Other_Routes_Is_Called_With_Valid_Parameters : IDisposable
     {
         private readonly IEnumerable<SearchResultsByRouteViewModelItem> _results;
         private readonly MatchingDbContext _dbContext;
         private readonly ProviderVenue _providerVenue;
 
-        public When_SqlSearchProvider_Search_Other_Routes_Is_Called_With_Valid_Parameters()
+        public When_SqlSearchProvider_Search_Opportunities_For_Other_Routes_Is_Called_With_Valid_Parameters()
         {
             var logger = Substitute.For<ILogger<Data.SearchProviders.SqlSearchProvider>>();
 

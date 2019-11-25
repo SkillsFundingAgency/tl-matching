@@ -13,19 +13,19 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider
 {
-    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters : IDisposable
+    public class When_SqlSearchProvider_Search_Opportunities_Is_Called_With_Valid_Parameters_With_Provider_Disabled : IDisposable
     {
         private readonly IEnumerable<SearchResultsViewModelItem> _results;
         private readonly MatchingDbContext _dbContext;
         private readonly ProviderVenue _providerVenue;
 
-        public When_SqlSearchProvider_Search_Is_Called_With_Valid_Parameters()
+        public When_SqlSearchProvider_Search_Opportunities_Is_Called_With_Valid_Parameters_With_Provider_Disabled()
         {
             var logger = Substitute.For<ILogger<Data.SearchProviders.SqlSearchProvider>>();
 
             _dbContext = new TestConfiguration().GetDbContext();
 
-            _providerVenue = new ValidProviderVenueSearchBuilder().BuildOneVenue();
+            _providerVenue = new ValidProviderVenueSearchBuilder().BuildOneVenueWithDisabledProvider();
             _dbContext.Add(_providerVenue);
             _dbContext.SaveChanges();
 
@@ -35,10 +35,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         }
 
         [Fact]
-        public void Then_Exactly_One_Provider_Is_Found_Within_Search_Radius()
+        public void Then_No_Provider_Is_Found_Within_Search_Radius()
         {
             _results.Should().NotBeNull();
-            _results.Count().Should().Be(1);
+            _results.Count().Should().Be(0);
         }
 
         public void Dispose()

@@ -50,16 +50,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity
         [Fact]
         public void Then_The_Expected_Number_Of_Search_Results_Is_Returned()
         {
-            //TODO: Implement search
-            //_result.Count.Should().Be(2);
+            _result.Count.Should().Be(2);
         }
         
         [Fact]
         public void Then_The_Search_Results_Should_Have_Expected_Values()
         {
-            //TODO: Implement search
-            //_result[0].ProviderVenueId.Should().Be(1);
-            //_result[1].ProviderVenueId.Should().Be(2);
+            _result[0].ProviderVenueId.Should().Be(1);
+            _result[1].ProviderVenueId.Should().Be(2);
         }
 
         [Fact]

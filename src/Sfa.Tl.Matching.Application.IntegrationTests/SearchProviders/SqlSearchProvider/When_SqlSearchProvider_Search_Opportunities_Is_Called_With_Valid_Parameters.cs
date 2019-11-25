@@ -13,32 +13,32 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider
 {
-    public class When_SqlSearchProvider_Search_Is_Called_With_Valid_Postcode_But_Provider_Is_Disabled_For_Selected_Route : IDisposable
+    public class When_SqlSearchProvider_Search_Opportunities_Is_Called_With_Valid_Parameters : IDisposable
     {
         private readonly IEnumerable<SearchResultsViewModelItem> _results;
         private readonly MatchingDbContext _dbContext;
         private readonly ProviderVenue _providerVenue;
 
-        public When_SqlSearchProvider_Search_Is_Called_With_Valid_Postcode_But_Provider_Is_Disabled_For_Selected_Route()
+        public When_SqlSearchProvider_Search_Opportunities_Is_Called_With_Valid_Parameters()
         {
             var logger = Substitute.For<ILogger<Data.SearchProviders.SqlSearchProvider>>();
 
             _dbContext = new TestConfiguration().GetDbContext();
 
-            _providerVenue = new ValidProviderVenueSearchBuilder().BuildWithOneDisabledVenue();
+            _providerVenue = new ValidProviderVenueSearchBuilder().BuildOneVenue();
             _dbContext.Add(_providerVenue);
             _dbContext.SaveChanges();
 
             var provider = new Data.SearchProviders.SqlSearchProvider(logger, _dbContext);
 
-            _results = provider.SearchOpportunitiesByPostcodeProximityAsync(new ProviderSearchParametersDto { Postcode = "MK1 1AD", SelectedRouteId = 7, Latitude = "52.010709", Longitude = "-0.736412" }).GetAwaiter().GetResult();
+            _results = provider.SearchOpportunitiesByPostcodeProximityAsync(new ProviderSearchParametersDto { Postcode = "CV1 2WT", SearchRadius = 5, SelectedRouteId = 7, Latitude = "52.400997", Longitude = "-1.508122" }).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_No_Provider_Is_Found()
+        public void Then_Exactly_One_Provider_Is_Found_Within_Search_Radius()
         {
             _results.Should().NotBeNull();
-            _results.Count().Should().Be(0);
+            _results.Count().Should().Be(1);
         }
 
         public void Dispose()
