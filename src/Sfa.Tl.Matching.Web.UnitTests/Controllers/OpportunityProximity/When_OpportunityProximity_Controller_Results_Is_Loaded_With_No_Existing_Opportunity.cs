@@ -35,9 +35,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             _selectedRouteId = routes.First().Id;
 
-            var providerSearchResultDto = new List<SearchResultsViewModelItem>
+            var providerSearchResultDto = new List<OpportunityProximitySearchResultViewModelItem>
             {
-                new SearchResultsViewModelItem
+                new OpportunityProximitySearchResultViewModelItem
                 {
                     ProviderVenuePostcode = Postcode,
                     Distance = 1.5d
@@ -93,21 +93,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_SearchViewModel_Contains_SearchParametersViewModel()
         {
-            var viewModel = _result.GetViewModel<SearchViewModel>();
+            var viewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>();
             viewModel.SearchParameters.Should().NotBeNull();
         }
 
         [Fact]
         public void Then_SearchViewModel_Contains_SearchResultsViewModel()
         {
-            var viewModel = _result.GetViewModel<SearchViewModel>();
+            var viewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>();
             viewModel.SearchResults.Should().NotBeNull();
         }
 
         [Fact]
         public void Then_SearchViewModel_SearchParameters_Values_Should_Match_Input_Values()
         {
-            var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
+            var searchParametersViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchParameters;
             searchParametersViewModel.Postcode.Should().Be(Postcode);
             searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
         }
@@ -115,14 +115,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_SearchViewModel_SearchResults_Should_Have_Expected_Number_Of_Items()
         {
-            var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
+            var searchResultsViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchResults;
             searchResultsViewModel.Results.Count.Should().Be(1);
         }
 
         [Fact]
         public void Then_SearchViewModel_AdditionalSearchResults_Should_Be_Null_Or_Empty()
         {
-            var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
+            var searchResultsViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchResults;
             searchResultsViewModel.AdditionalResults.Should().BeNullOrEmpty();
         }
 
@@ -145,7 +145,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_SearchViewModel_Results_Is_Not_Selected()
         {
-            var viewModel = _result.GetViewModel<SearchViewModel>();
+            var viewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>();
             viewModel.SearchResults.Results[0].IsSelected.Should().BeFalse();
         }
 

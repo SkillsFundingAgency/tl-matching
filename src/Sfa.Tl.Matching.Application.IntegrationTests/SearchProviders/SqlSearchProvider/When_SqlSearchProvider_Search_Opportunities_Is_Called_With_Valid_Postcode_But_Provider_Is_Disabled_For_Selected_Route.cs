@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
 {
     public class When_SqlSearchProvider_Search_Opportunities_Is_Called_With_Valid_Postcode_But_Provider_Is_Disabled_For_Selected_Route : IDisposable
     {
-        private readonly IEnumerable<SearchResultsViewModelItem> _results;
+        private readonly IEnumerable<OpportunityProximitySearchResultViewModelItem> _results;
         private readonly MatchingDbContext _dbContext;
         private readonly ProviderVenue _providerVenue;
 

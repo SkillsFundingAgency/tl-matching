@@ -5,15 +5,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity.Bu
 {
     public class SearchResultsByRouteBuilder
     {
-        public IList<SearchResultsByRouteViewModelItem> Build() =>
-            new List<SearchResultsByRouteViewModelItem>
+        public IList<OpportunityProximitySearchResultByRouteViewModelItem> Build() =>
+            new List<OpportunityProximitySearchResultByRouteViewModelItem>
             {
-                new SearchResultsByRouteViewModelItem
+                new OpportunityProximitySearchResultByRouteViewModelItem
                 {
                     NumberOfResults = 1,
                     RouteName = "digital"
                 },
-                new SearchResultsByRouteViewModelItem
+                new OpportunityProximitySearchResultByRouteViewModelItem
                 {
                     NumberOfResults = 2,
                     RouteName = "health and beauty"

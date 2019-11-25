@@ -35,11 +35,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             _selectedRouteId = routes.First().Id;
 
-            var providerSearchResultDto = new List<SearchResultsViewModelItem>();
+            var providerSearchResultDto = new List<OpportunityProximitySearchResultViewModelItem>();
 
-            var providerSearchResultForOtherRoutesDto = new List<SearchResultsByRouteViewModelItem>
+            var providerSearchResultForOtherRoutesDto = new List<OpportunityProximitySearchResultByRouteViewModelItem>
             {
-                new SearchResultsByRouteViewModelItem
+                new OpportunityProximitySearchResultByRouteViewModelItem
                 {
                     NumberOfResults = 1,
                     RouteName = "another route"
@@ -109,16 +109,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_ViewModel_Should_Have_Expected_Values()
         {
-            var viewModel = _result.GetViewModel<SearchViewModel>();
+            var viewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>();
 
             viewModel.SearchParameters.Should().NotBeNull();
 
-            var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
+            var searchParametersViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchParameters;
             searchParametersViewModel.Postcode.Should().Be(Postcode);
             searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
 
             viewModel.SearchResults.Should().NotBeNull();
-            var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
+            var searchResultsViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchResults;
             searchResultsViewModel.Results.Count.Should().Be(0);
             searchResultsViewModel.AdditionalResults.Should().NotBeNull();
             searchResultsViewModel.AdditionalResults.Count.Should().Be(1);

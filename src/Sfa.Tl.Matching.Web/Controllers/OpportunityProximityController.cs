@@ -94,10 +94,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
             {
 
-                return View("Results", new SearchViewModel
+                return View("Results", new OpportunityProximitySearchViewModel
                 {
                     SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
-                    SearchResults = new SearchResultsViewModel(),
+                    SearchResults = new OpportunityProximitySearchResultsViewModel(),
                     IsValidSearch = false
                 });
             }
@@ -132,7 +132,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View("Results", searchViewModel);
         }
 
-        private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
+        private async Task<OpportunityProximitySearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
         {
             var searchResults = await _opportunityProximityService.SearchOpportunitiesByPostcodeProximityAsync(new OpportunityProximitySearchParametersDto
             {
@@ -142,7 +142,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
 
             var additionalResults = searchResults.Any() 
-                ? new List<SearchResultsByRouteViewModelItem>()
+                ? new List<OpportunityProximitySearchResultByRouteViewModelItem>()
                 : await _opportunityProximityService.SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(new OpportunityProximitySearchParametersDto
                 {
                     Postcode = viewModel.Postcode,
@@ -150,9 +150,9 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     SearchRadius = SearchParametersViewModel.ZeroResultsSearchRadius
                 });
 
-            var resultsViewModel = new SearchViewModel
+            var resultsViewModel = new OpportunityProximitySearchViewModel
             {
-                SearchResults = new SearchResultsViewModel
+                SearchResults = new OpportunityProximitySearchResultsViewModel
                 {
                     Results =  searchResults,
                     AdditionalResults = additionalResults
@@ -172,7 +172,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return selectedResultsViewModel;
         }
 
-        private SearchViewModel SetProviderIsSelected(SearchViewModel resultsViewModel)
+        private OpportunityProximitySearchViewModel SetProviderIsSelected(OpportunityProximitySearchViewModel resultsViewModel)
         {
             var referrals = _opportunityService.GetReferrals(resultsViewModel.SearchParameters.OpportunityItemId);
             foreach (var result in resultsViewModel.SearchResults.Results)

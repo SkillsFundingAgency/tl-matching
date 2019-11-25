@@ -25,15 +25,11 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             _matchingDbContext = matchingDbContext;
         }
 
-        public async Task<IList<SearchResultsViewModelItem>> SearchOpportunitiesByPostcodeProximityAsync(OpportunityProximitySearchParametersDto dto)
+        public async Task<IList<OpportunityProximitySearchResultViewModelItem>> SearchOpportunitiesByPostcodeProximityAsync(OpportunityProximitySearchParametersDto dto)
         {
-            _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
+            _logger.LogInformation($"Searching for opportunities within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route {dto.SelectedRouteId}");
 
-            if (string.IsNullOrWhiteSpace(dto.Latitude) || string.IsNullOrWhiteSpace(dto.Longitude))
-                throw new InvalidOperationException("Latitude and Longitude can not be null");
-
-            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-            var employerLocation = geometryFactory.CreatePoint(new Coordinate(double.Parse(dto.Longitude), double.Parse(dto.Latitude)));
+            var employerLocation = GetSearchStartPoint(dto.Latitude, dto.Longitude);
 
             var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
 
@@ -74,7 +70,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                                QualificationShortTitle = qualification.ShortTitle
                                            }).Distinct().ToListAsync();
 
-            return result.Select(r => new SearchResultsViewModelItem
+            return result.Select(r => new OpportunityProximitySearchResultViewModelItem
             {
                 ProviderVenueTown = r.Town,
                 ProviderVenuePostcode = r.Postcode,
@@ -90,15 +86,11 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             }).OrderBy(r => r.Distance).ToList();
         }
 
-        public async Task<IList<SearchResultsByRouteViewModelItem>> SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(OpportunityProximitySearchParametersDto dto)
+        public async Task<IList<OpportunityProximitySearchResultByRouteViewModelItem>> SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(OpportunityProximitySearchParametersDto dto)
         {
-            _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route other than {dto.SelectedRouteId}");
+            _logger.LogInformation($"Searching for opportunities within radius {dto.SearchRadius} of postcode '{dto.Postcode}' with route other than {dto.SelectedRouteId}");
 
-            if (string.IsNullOrWhiteSpace(dto.Latitude) || string.IsNullOrWhiteSpace(dto.Longitude))
-                throw new InvalidOperationException("Latitude and Longitude can not be null");
-
-            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-            var employerLocation = geometryFactory.CreatePoint(new Coordinate(double.Parse(dto.Longitude), double.Parse(dto.Latitude)));
+            var employerLocation = GetSearchStartPoint(dto.Latitude, dto.Longitude);
 
             var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
 
@@ -122,16 +114,79 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
 
             return result
                 .GroupBy(r => r.RouteName)
-                .Select(rg => new SearchResultsByRouteViewModelItem
+                .Select(rg => new OpportunityProximitySearchResultByRouteViewModelItem
                 {
                     RouteName = rg.Key.ToLower(),
                     NumberOfResults = rg.Count()
                 }).OrderBy(r => r.RouteName).ToList();
         }
 
-        public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderProximitySearchParametersDto dto)
+        public async Task<IList<ProviderProximitySearchResultViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderProximitySearchParametersDto dto)
         {
-            return new List<SearchResultsViewModelItem>();
+            _logger.LogInformation($"Searching for providers within radius {dto.SearchRadius} of postcode '{dto.Postcode}'");
+
+            var employerLocation = GetSearchStartPoint(dto.Latitude, dto.Longitude);
+
+            var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
+
+            var result = await (from provider in _matchingDbContext.Provider
+                                join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId
+                                join providerQualification in _matchingDbContext.ProviderQualification on providerVenue.Id equals providerQualification.ProviderVenueId
+                                join qualificationRouteMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals qualificationRouteMapping.QualificationId
+                                orderby providerVenue.Location.Distance(employerLocation)
+                                where providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters
+                                      && provider.IsCdfProvider
+                                      && provider.IsEnabledForReferral
+                                      && providerVenue.IsEnabledForReferral
+                                      && !providerVenue.IsRemoved
+                                select new
+                                {
+                                    ProviderVenueId = providerVenue.Id,
+                                    ProviderName = provider.Name,
+                                    ProviderDisplayName = provider.DisplayName,
+                                    ProviderVenueName = providerVenue.Name,
+                                    Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
+                                    providerVenue.Postcode,
+                                    providerVenue.Town,
+                                    providerVenue.Latitude,
+                                    providerVenue.Longitude,
+                                    provider.IsTLevelProvider
+                                }).Distinct().ToListAsync();
+
+            var venueIds = result.Select(v => v.ProviderVenueId);
+
+            var qualificationShortTitles = await (from providerQualification in _matchingDbContext.ProviderQualification
+                                                  join routePathMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals routePathMapping.QualificationId
+                                                  join qualification in _matchingDbContext.Qualification on routePathMapping.QualificationId equals qualification.Id
+                                                  //where routePathMapping.RouteId == dto.SelectedRouteId && venueIds.Any(venueId => venueId == providerQualification.ProviderVenueId)
+                                                  select new
+                                                  {
+                                                      providerQualification.ProviderVenueId,
+                                                      QualificationShortTitle = qualification.ShortTitle
+                                                  }).Distinct().ToListAsync();
+
+            return result.Select(r => new ProviderProximitySearchResultViewModelItem
+            {
+                ProviderVenueTown = r.Town,
+                ProviderVenuePostcode = r.Postcode,
+                ProviderVenueId = r.ProviderVenueId,
+                ProviderName = r.ProviderName,
+                ProviderDisplayName = r.ProviderDisplayName,
+                ProviderVenueName = r.ProviderVenueName,
+                Distance = r.Distance,
+                IsTLevelProvider = r.IsTLevelProvider,
+                Latitude = r.Latitude ?? 0,
+                Longitude = r.Longitude ?? 0,
+                QualificationShortTitles = qualificationShortTitles.Where(q => q.ProviderVenueId == r.ProviderVenueId).Select(q => q.QualificationShortTitle)
+            }).OrderBy(r => r.Distance).ToList();
+        }
+        private static IPoint GetSearchStartPoint(string latitude, string longitude)
+        {
+            if (string.IsNullOrWhiteSpace(latitude) || string.IsNullOrWhiteSpace(longitude))
+                throw new InvalidOperationException("Latitude and Longitude can not be null or blank");
+
+            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(4326);
+            return geometryFactory.CreatePoint(new Coordinate(double.Parse(longitude), double.Parse(latitude)));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
 {
     public class When_SqlSearchProvider_Search_Opportunities_For_Other_Routes_Is_Called_With_Valid_Parameters : IDisposable
     {
-        private readonly IEnumerable<SearchResultsByRouteViewModelItem> _results;
+        private readonly IEnumerable<OpportunityProximitySearchResultByRouteViewModelItem> _results;
         private readonly MatchingDbContext _dbContext;
         private readonly ProviderVenue _providerVenue;
 

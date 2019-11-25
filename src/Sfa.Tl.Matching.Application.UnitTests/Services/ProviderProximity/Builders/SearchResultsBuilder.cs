@@ -5,27 +5,35 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity.Build
 {
     public class SearchResultsBuilder
     {
-        public IList<SearchResultsViewModelItem> Build() =>
-            new List<SearchResultsViewModelItem>
+        public IList<ProviderProximitySearchResultViewModelItem> Build() =>
+            new List<ProviderProximitySearchResultViewModelItem>
             {
-                new SearchResultsViewModelItem
+                new ProviderProximitySearchResultViewModelItem
                 {
                     ProviderVenueId = 1,
                     ProviderName = "The WKCIC Group",
                     ProviderVenuePostcode = "NW1 3HB",
                     Distance = 2.5d,
+                    RouteNames = new List<string>
+                    {
+                        "health and science"
+                    },
                     QualificationShortTitles = new List<string>
                     {
                         "applied science",
                         "health and physiotherapy"
                     }
                 },
-                new SearchResultsViewModelItem
+                new ProviderProximitySearchResultViewModelItem
                 {
                     ProviderVenueId = 2,
                     ProviderName = "Lambeth College",
                     ProviderVenuePostcode = "SW4 9BL",
                     Distance = 2.5d,
+                    RouteNames = new List<string>
+                    {
+                        "health and science"
+                    },
                     QualificationShortTitles = new List<string>
                     {
                         "applied science",

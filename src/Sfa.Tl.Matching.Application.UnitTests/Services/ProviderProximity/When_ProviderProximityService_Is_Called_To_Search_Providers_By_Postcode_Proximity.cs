@@ -15,8 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity
     {
         private const string Postcode = "SW1A 2AA";
         private const int SearchRadius = 5;
-        private const int RouteId = 2;
-        private readonly IList<SearchResultsViewModelItem> _result;
+        private readonly IList<ProviderProximitySearchResultViewModelItem> _result;
         private readonly ILocationService _locationService;
         private readonly ISearchProvider _searchProvider;
 

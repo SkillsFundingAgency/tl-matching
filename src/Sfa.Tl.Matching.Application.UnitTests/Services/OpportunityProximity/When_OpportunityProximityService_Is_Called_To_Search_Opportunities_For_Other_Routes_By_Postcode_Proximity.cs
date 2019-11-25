@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
         private const string Postcode = "SW1A 2AA";
         private const int SearchRadius = 25;
         private const int RouteId = 2;
-        private readonly IList<SearchResultsByRouteViewModelItem> _result;
+        private readonly IList<OpportunityProximitySearchResultByRouteViewModelItem> _result;
         private readonly ILocationService _locationService;
 
         private readonly ISearchProvider _searchProvider;

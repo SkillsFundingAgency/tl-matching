@@ -43,9 +43,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             _selectedRouteId = routes.First().Id;
 
-            var providerSearchResultDto = new List<SearchResultsViewModelItem>
+            var providerSearchResultDto = new List<OpportunityProximitySearchResultViewModelItem>
             {
-                new SearchResultsViewModelItem
+                new OpportunityProximitySearchResultViewModelItem
                 {
                     ProviderVenuePostcode = Postcode,
                     Distance = 1.5d,
@@ -144,16 +144,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_ViewModel_Should_Have_Expected_Values()
         {
-            var viewModel = _result.GetViewModel<SearchViewModel>();
+            var viewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>();
 
             viewModel.SearchParameters.Should().NotBeNull();
-            var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
+            var searchParametersViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchParameters;
             searchParametersViewModel.Postcode.Should().Be(Postcode);
             searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
             searchParametersViewModel.CompanyNameWithAka.Should().Be("CompanyName (AlsoKnownAs)");
 
             viewModel.SearchResults.Should().NotBeNull();
-            var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
+            var searchResultsViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchResults;
             searchResultsViewModel.Results.Count.Should().Be(1);
             searchResultsViewModel.AdditionalResults.Should().BeNullOrEmpty();
 

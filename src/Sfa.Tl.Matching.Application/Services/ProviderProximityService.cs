@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _locationService = locationService;
         }
 
-        public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderProximitySearchParametersDto dto)
+        public async Task<IList<ProviderProximitySearchResultViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderProximitySearchParametersDto dto)
         {
             var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var searchResults = await _searchProvider.SearchProvidersByPostcodeProximityAsync(dto);
 
-            return searchResults ?? new List<SearchResultsViewModelItem>();
+            return searchResults ?? new List<ProviderProximitySearchResultViewModelItem>();
         }
     }
 }
