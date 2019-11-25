@@ -13,9 +13,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderProximity
 
         public When_ProviderProximity_Controller_Finish_Is_Called()
         {
+            var locationService = Substitute.For<ILocationService>();
             var routePathService = Substitute.For<IRoutePathService>();
+            var providerProximityService = Substitute.For<IProviderProximityService>();
 
-            var providerProximityController = new ProviderProximityController(routePathService);
+            var providerProximityController = new ProviderProximityController(routePathService, 
+                providerProximityService, locationService);
 
             _result = providerProximityController.Finish();
         }
