@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.Dto
 {
-    public class ProviderSearchParametersDto
+    public class OpportunityProximitySearchParametersDto
     {
         public string Postcode { get; set; }
 

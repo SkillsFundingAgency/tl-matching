@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         [Fact]
         public void Then_Search_Should_Throw_Exception()
         {
-            Action action = () => _provider.SearchOpportunitiesByPostcodeProximityAsync(new ProviderSearchParametersDto { Postcode = "CV1 2WT", SearchRadius = 5, SelectedRouteId = 7, Latitude = "", Longitude = "" }).GetAwaiter().GetResult();
+            Action action = () => _provider.SearchOpportunitiesByPostcodeProximityAsync(new OpportunityProximitySearchParametersDto { Postcode = "CV1 2WT", SearchRadius = 5, SelectedRouteId = 7, Latitude = "", Longitude = "" }).GetAwaiter().GetResult();
             action.Should().ThrowExactly<InvalidOperationException>();
         }
     }

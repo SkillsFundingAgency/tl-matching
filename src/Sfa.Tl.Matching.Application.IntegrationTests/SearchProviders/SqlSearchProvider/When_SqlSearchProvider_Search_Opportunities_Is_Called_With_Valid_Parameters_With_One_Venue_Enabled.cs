@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
 
             var provider = new Data.SearchProviders.SqlSearchProvider(logger, _dbContext);
 
-            _results = provider.SearchOpportunitiesByPostcodeProximityAsync(new ProviderSearchParametersDto { Postcode = "CV1 2WT", SearchRadius = 5, SelectedRouteId = 7, Latitude = "52.400997", Longitude = "-1.508122" }).GetAwaiter().GetResult();
+            _results = provider.SearchOpportunitiesByPostcodeProximityAsync(new OpportunityProximitySearchParametersDto { Postcode = "CV1 2WT", SearchRadius = 5, SelectedRouteId = 7, Latitude = "52.400997", Longitude = "-1.508122" }).GetAwaiter().GetResult();
         }
 
         [Fact]

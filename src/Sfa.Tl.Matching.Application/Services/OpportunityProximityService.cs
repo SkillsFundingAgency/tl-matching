@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _googleDistanceMatrixApiClient = googleDistanceMatrixApiClient;
         }
 
-        public async Task<IList<SearchResultsViewModelItem>> SearchOpportunitiesByPostcodeProximityAsync(ProviderSearchParametersDto dto)
+        public async Task<IList<SearchResultsViewModelItem>> SearchOpportunitiesByPostcodeProximityAsync(OpportunityProximitySearchParametersDto dto)
         {
             var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;
@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return searchResults ?? new List<SearchResultsViewModelItem>();
         }
 
-        public async Task<IList<SearchResultsByRouteViewModelItem>> SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto)
+        public async Task<IList<SearchResultsByRouteViewModelItem>> SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(OpportunityProximitySearchParametersDto dto)
         {
             var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;

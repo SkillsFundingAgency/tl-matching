@@ -54,14 +54,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             _opportunityProximityService
                 .SearchOpportunitiesByPostcodeProximityAsync(
-                    Arg.Is<ProviderSearchParametersDto>(
+                    Arg.Is<OpportunityProximitySearchParametersDto>(
                         a => a.Postcode == Postcode &&
                              a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
             _opportunityProximityService
                 .SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(
-                    Arg.Is<ProviderSearchParametersDto>(
+                    Arg.Is<OpportunityProximitySearchParametersDto>(
                         a => a.Postcode == Postcode &&
                              a.SearchRadius == SearchParametersViewModel.ZeroResultsSearchRadius &&
                              a.SelectedRouteId == RouteId))
@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             _opportunityProximityService
                 .Received(1)
                 .SearchOpportunitiesByPostcodeProximityAsync(
-                    Arg.Is<ProviderSearchParametersDto>(
+                    Arg.Is<OpportunityProximitySearchParametersDto>(
                         a => a.Postcode == Postcode &&
                              a.SelectedRouteId == RouteId));
         }
@@ -100,7 +100,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             _opportunityProximityService
                 .Received(1)
                 .SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(
-                    Arg.Is<ProviderSearchParametersDto>(
+                    Arg.Is<OpportunityProximitySearchParametersDto>(
                         a => a.Postcode == Postcode &&
                              a.SearchRadius == SearchParametersViewModel.ZeroResultsSearchRadius &&
                              a.SelectedRouteId == RouteId));

@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
 
         public When_OpportunityProximityService_Is_Called_To_Search_Opportunities_For_Other_Routes_By_Postcode_Proximity()
         {
-            var dto = new ProviderSearchParametersDto
+            var dto = new OpportunityProximitySearchParametersDto
             {
                 Postcode = Postcode,
                 SearchRadius = SearchRadius,
@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
         [Fact]
         public void Then_The_ISearchProvider_Is_Called_Exactly_Once()
         {
-            _searchProvider.Received(1).SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(Arg.Any<ProviderSearchParametersDto>());
+            _searchProvider.Received(1).SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(Arg.Any<OpportunityProximitySearchParametersDto>());
         }
     }
 }
