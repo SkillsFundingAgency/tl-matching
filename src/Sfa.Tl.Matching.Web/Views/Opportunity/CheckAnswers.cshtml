@@ -30,7 +30,7 @@
                     @Model.RouteName
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a asp-route="GetProviderResults"
+                    <a asp-route="GetOpportunityProviderResults"
                        asp-route-opportunityId="@Model.OpportunityId"
                        asp-route-postcode="@Model.Postcode"
                        asp-route-selectedRouteId="@Model.RouteId"
@@ -45,7 +45,7 @@
                     @Model.Postcode
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a asp-route="GetProviderResults"
+                    <a asp-route="GetOpportunityProviderResults"
                        asp-route-opportunityId="@Model.OpportunityId"
                        asp-route-postcode="@Model.Postcode"
                        asp-route-selectedRouteId="@Model.RouteId"
@@ -114,7 +114,7 @@
 
         <p class="govuk-body  govuk-!-margin-bottom-9">
             <a class="govuk-link" id="tl-change-providers"
-               asp-route="GetProviderResults"
+               asp-route="GetOpportunityProviderResults"
                asp-route-opportunityId="@Model.OpportunityId"
                asp-route-opportunityItemId="@Model.OpportunityItemId"
                asp-route-Postcode="@Model.Postcode"

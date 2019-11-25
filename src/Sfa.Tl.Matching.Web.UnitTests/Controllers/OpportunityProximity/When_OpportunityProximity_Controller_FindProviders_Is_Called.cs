@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             _result.Should().BeOfType<RedirectToRouteResult>();
             var redirect = _result as RedirectToRouteResult;
             redirect.Should().NotBeNull();
-            redirect?.RouteName.Should().BeEquivalentTo("GetProviderResults");
+            redirect?.RouteName.Should().BeEquivalentTo("GetOpportunityProviderResults");
 
             redirect?.RouteValues["SelectedRouteId"].Should().Be(1);
             redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");

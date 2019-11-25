@@ -76,7 +76,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, _opportunityProximityService, _opportunityService,
                 employerService, locationService);
 
-            _result = opportunityProximityController.GetProviderResultsAsync(new SearchParametersViewModel
+            _result = opportunityProximityController.GetOpportunityProviderResultsAsync(new SearchParametersViewModel
             {
                 SelectedRouteId = RouteId,
                 Postcode = Postcode

@@ -69,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 return View(nameof(Index), await GetSearchParametersViewModelAsync(viewModel));
             }
 
-            return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
+            return RedirectToRoute("GetOpportunityProviderResults", new SearchParametersViewModel
             {
                 SelectedRouteId = viewModel.SelectedRouteId,
                 Postcode = viewModel.Postcode,
@@ -79,8 +79,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
             });
         }
 
-        [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetProviderResults")]
-        public async Task<IActionResult> GetProviderResultsAsync(SearchParametersViewModel searchParametersViewModel)
+        [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetOpportunityProviderResults")]
+        public async Task<IActionResult> GetOpportunityProviderResultsAsync(SearchParametersViewModel searchParametersViewModel)
         {
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
 
@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 });
             }
 
-            return RedirectToRoute("GetProviderResults", viewModel);
+            return RedirectToRoute("GetOpportunityProviderResults", viewModel);
         }
 
         [HttpPost]
