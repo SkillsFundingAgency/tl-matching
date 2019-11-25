@@ -44,8 +44,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [HttpPost]
         public IActionResult FilterResultsAsync(ProviderProximitySearchParametersViewModel viewModel)
         {
-            var filters = string.Join("-", viewModel.Filters.Where(f => f.IsSelected).Select(f => f.Name));
+            if (viewModel.Filters.Count(f => f.IsSelected) == 0)
+                return RedirectToRoute("GetProviderProximityResults", new
+                {
+                    searchCriteria = $"{viewModel.Postcode}"
+                });
 
+            var filters = string.Join("-", viewModel.Filters.Where(f => f.IsSelected).Select(f => f.Name));
+            
             return RedirectToRoute("GetProviderProximityResults", new
             {
                 searchCriteria = $"{viewModel.Postcode}-{filters}"
