@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -19,19 +18,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
         public When_OpportunityProximity_Controller_Start_Is_Loaded_With_No_Saved_Opportunities()
         {
-            var mapper = Substitute.For<IMapper>();
-
-            var locationService = Substitute.For<ILocationService>();
-            var opportunityProximityService = Substitute.For<IOpportunityProximityService>();
-            var routePathService = Substitute.For<IRoutePathService>();
-            var opportunityService = Substitute.For<IOpportunityService>();
             var employerService = Substitute.For<IEmployerService>();
 
             employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(0);
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService,
-                opportunityService, employerService, locationService);
+            
+            var dashboardController = new DashboardController(employerService);
 
-            var controllerWithClaims = new ClaimsBuilder<OpportunityProximityController>(opportunityProximityController)
+            var controllerWithClaims = new ClaimsBuilder<DashboardController>(dashboardController)
                 .Add(ClaimTypes.Role, RolesExtensions.StandardUser)
                 .AddUserName("username")
                 .Build();
