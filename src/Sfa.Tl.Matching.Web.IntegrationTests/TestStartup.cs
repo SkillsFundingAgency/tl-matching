@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Configuration;
-using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
 {

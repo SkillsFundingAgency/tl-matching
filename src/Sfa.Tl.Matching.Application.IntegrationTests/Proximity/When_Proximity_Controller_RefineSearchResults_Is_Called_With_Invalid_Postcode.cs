@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
