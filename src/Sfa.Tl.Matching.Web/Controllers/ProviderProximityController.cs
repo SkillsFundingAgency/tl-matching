@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [HttpPost]
         public IActionResult FilterResultsAsync(ProviderProximitySearchParametersViewModel viewModel)
         {
-            if (viewModel.Filters.Count(f => f.IsSelected) == 0)
+            if (viewModel.Filters == null || viewModel.Filters.Count(f => f.IsSelected) == 0)
                 return RedirectToRoute("GetProviderProximityResults", new
                 {
                     searchCriteria = $"{viewModel.Postcode}"
