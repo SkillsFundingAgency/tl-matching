@@ -19,9 +19,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         public When_OpportunityProximity_Controller_Start_Is_Loaded_With_Saved_Opportunities()
         {
             var employerService = Substitute.For<IEmployerService>();
+            var serviceStatusService = Substitute.For<IServiceStatusHistoryService>();
 
             employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(1);
-            var dashboardController = new DashboardController(employerService);
+            var dashboardController = new DashboardController(employerService, serviceStatusService);
 
             var controllerWithClaims = new ClaimsBuilder<DashboardController>(dashboardController)
                 .Add(ClaimTypes.Role, RolesExtensions.StandardUser)

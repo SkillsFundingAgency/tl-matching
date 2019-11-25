@@ -67,9 +67,9 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-third">
                     <h4 class="govuk-heading-s govuk-!-margin-bottom-1">
-                        <a class="govuk-link" asp-action="Maintenance" asp-controller="Home" id="tl-dash-takeoffline">Take service offline</a>
+                        <a class="govuk-link" asp-action="Maintenance" asp-controller="Home" id="tl-dash-takeoffline">@Model.HeaderText</a>
                     </h4>
-                    <p class="govuk-body">Show that the service is ‘under maintenance’.</p>
+                    <p class="govuk-body">@Model.Description</p>
                 </div>
             </div>
         }

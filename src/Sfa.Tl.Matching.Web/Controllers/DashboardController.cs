@@ -9,10 +9,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
     public class DashboardController : Controller
     {
         private readonly IEmployerService _employerService;
+        private readonly IServiceStatusHistoryService _serviceStatusHistoryService;
 
-        public DashboardController(IEmployerService employerService)
+        public DashboardController(IEmployerService employerService, IServiceStatusHistoryService serviceStatusHistoryService)
         {
             _employerService = employerService;
+            _serviceStatusHistoryService = serviceStatusHistoryService;
         }
 
         [Route("Start", Name = "Start")]
@@ -20,10 +22,12 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var username = HttpContext.User.GetUserName();
             var savedOpportunitiesCount = await _employerService.GetInProgressEmployerOpportunityCountAsync(username);
+            var serviceStatusHistory = await _serviceStatusHistoryService.GetLatestServiceStatusHistoryAsync();
 
             return View(new DashboardViewModel
             {
-                HasSavedOppportunities = savedOpportunitiesCount > 0
+                HasSavedOppportunities = savedOpportunitiesCount > 0,
+                IsServiceOnline = serviceStatusHistory.IsOnline
             });
         }
     }
