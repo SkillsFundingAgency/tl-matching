@@ -8,11 +8,17 @@ namespace Sfa.Tl.Matching.Web.Controllers
 {
     public class ProviderProximityController : Controller
     {
+        private readonly ILocationService _locationService;
+        private readonly IProviderProximityService _providerProximityService;
         private readonly IRoutePathService _routePathService;
 
-        public ProviderProximityController(IRoutePathService routePathService)
+        public ProviderProximityController(IRoutePathService routePathService, 
+            IProviderProximityService providerProximityService,
+            ILocationService locationService)
         {
             _routePathService = routePathService;
+            _providerProximityService = providerProximityService;
+            _locationService = locationService;
         }
 
         /* Added to display postcode page, needs removing */
