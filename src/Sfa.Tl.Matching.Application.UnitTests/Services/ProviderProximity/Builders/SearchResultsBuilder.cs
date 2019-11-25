@@ -14,14 +14,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity.Build
                     ProviderName = "The WKCIC Group",
                     ProviderVenuePostcode = "NW1 3HB",
                     Distance = 2.5d,
-                    RouteNames = new List<string>
+                    Routes = new List<RouteAndQualificationsViewModel>
                     {
-                        "health and science"
-                    },
-                    QualificationShortTitles = new List<string>
-                    {
-                        "applied science",
-                        "health and physiotherapy"
+                        new RouteAndQualificationsViewModel
+                        {
+                            RouteName = "health and science",
+                            QualificationShortTitles = new List<string>
+                            {
+                                "applied science",
+                                "health and physiotherapy"
+                            }
+                        }
                     }
                 },
                 new ProviderProximitySearchResultViewModelItem
@@ -30,14 +33,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity.Build
                     ProviderName = "Lambeth College",
                     ProviderVenuePostcode = "SW4 9BL",
                     Distance = 2.5d,
-                    RouteNames = new List<string>
+                    Routes = new List<RouteAndQualificationsViewModel>
                     {
-                        "health and science"
-                    },
-                    QualificationShortTitles = new List<string>
-                    {
-                        "applied science",
-                        "cooking"
+                        new RouteAndQualificationsViewModel
+                        {
+                            RouteName = "health and science",
+                            QualificationShortTitles = new List<string>
+                            {
+                                "applied science",
+                                "cooking"
+                            }
+                        }
                     }
                 }
             };
