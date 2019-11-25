@@ -2,9 +2,7 @@
 
 @{ var result = Model.SearchResults.SearchResultProviderCount == 1 ? "result" : "results"; }
 <p class="govuk-body">
-    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">
-        @Model.SearchResults.SearchResultProviderCount
-    </span> @result
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount</span> @result
     @if (Model.SearchParameters.SelectedFilters.Count > 0)
     {
         <text>for </text>
@@ -70,6 +68,6 @@
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-<a asp-route="Start" class="govuk-button">
+<a id="tl-finish" asp-route="Start" class="govuk-button">
     Finish
 </a>

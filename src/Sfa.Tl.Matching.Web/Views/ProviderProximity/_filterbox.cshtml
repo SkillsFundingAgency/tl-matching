@@ -26,12 +26,10 @@
         @if (Model.SelectedFilters.Count > 0)
         {
             <p class="govuk-body govuk-!-margin-bottom-2  tl-pane-expandable__content">
-                <a asp-controller="ProviderProximity"
+                <a id="tl-filter-remove" asp-controller="ProviderProximity"
                    asp-action="GetProviderProximityResults"
                    asp-route-searchCriteria="@Model.Postcode"
-                   class="govuk-link">
-                    Remove filters
-                </a>
+                   class="govuk-link">Remove filters</a>
             </p>
         }
     </div>
