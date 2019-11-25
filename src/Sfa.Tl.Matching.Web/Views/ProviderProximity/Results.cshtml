@@ -10,10 +10,13 @@
 <h1 class="govuk-heading-l">Providers within @Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel.DefaultSearchRadius miles of @Model.SearchParameters.Postcode.ToUpper()</h1>
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
-        <partial name="_filterbox" model="Model.SearchParameters" />
-    </div>
+    @if (Model.SearchResults.SearchResultProviderCount > 0)
+    {
+        <div class="govuk-grid-column-one-third">
+            <partial name="_filterbox" model="Model.SearchParameters"/>
+        </div>
+    }
     <div class="govuk-grid-column-two-thirds">
-        <partial name="_filterresults" model="Model" />
+        <partial name="_filterresults" model="Model"/>
     </div>
 </div>

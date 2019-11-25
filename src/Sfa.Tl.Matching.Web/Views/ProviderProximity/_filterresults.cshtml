@@ -1,30 +1,23 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderProximitySearchViewModel
 
-@{
-    var searchResultCount = 1; // TODO AU FIX when new viewmodel
-}
-
-@{ var result = searchResultCount == 1 ? "result" : "results"; }
-
-    <p class="govuk-body">
-        <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">
-            @searchResultCount
-        </span> @result
-        @if (Model.SearchParameters.SelectedFilters.Count > 0)
+@{ var result = Model.SearchResults.SearchResultProviderCount == 1 ? "result" : "results"; }
+<p class="govuk-body">
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">
+        @Model.SearchResults.SearchResultProviderCount
+    </span> @result
+    @if (Model.SearchParameters.SelectedFilters.Count > 0)
+    {
+        <text>for </text>
+        for (var i = 0; i < Model.SearchParameters.SelectedFilters.Count; i++)
         {
-            <text>for </text>
-            for (var i = 0; i < Model.SearchParameters.SelectedFilters.Count; i++)
+            <span class="govuk-body govuk-!-font-weight-bold">@Model.SearchParameters.SelectedFilters[i]</span>
+            if (i != Model.SearchParameters.SelectedFilters.Count - 1)
             {
-                <span class="govuk-body govuk-!-font-weight-bold">@Model.SearchParameters.SelectedFilters[i]</span>
-                if (i != Model.SearchParameters.SelectedFilters.Count - 1)
-                {
-                    <text> and </text>
-                }
+                <text> and </text>
             }
         }
-    </p>
-
-<p class="govuk-body"><a href="/public/files/ShowMeEverythingSpreadsheet.xlsx" download="" class="govuk-link">Download as a spreadsheet</a></p>
+    }
+</p>
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 

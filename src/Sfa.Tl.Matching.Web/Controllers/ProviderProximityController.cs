@@ -37,7 +37,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var searchParametersViewModel = new ProviderProximitySearchParametersViewModel(searchCriteria, routeNames);
             var viewModel = new ProviderProximitySearchViewModel(searchParametersViewModel);
-
+            viewModel.SearchResults = new ProviderProximitySearchResultsViewModel();
+            
             return View("Results", viewModel);
         }
 
