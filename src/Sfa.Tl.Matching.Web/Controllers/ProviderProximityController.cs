@@ -15,6 +15,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _routePathService = routePathService;
         }
 
+        /* Added to display postcode page, needs removing */
+        [Route("postcode", Name = "Postcode")]
+        public IActionResult SearchPostcode()
+        {
+            return View();
+        }
+
         [HttpGet]
         [Route("provider-results-{searchCriteria}", Name = "GetProviderProximityResults", Order = 1)]
         public async Task<IActionResult> GetProviderProximityResults(string searchCriteria)
