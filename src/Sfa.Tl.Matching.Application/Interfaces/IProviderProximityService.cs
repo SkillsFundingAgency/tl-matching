@@ -7,5 +7,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IProviderProximityService
     {
+        Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderProximitySearchParametersDto dto);
     }
 }

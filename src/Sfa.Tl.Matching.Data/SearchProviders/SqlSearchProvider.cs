@@ -128,5 +128,10 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                     NumberOfResults = rg.Count()
                 }).OrderBy(r => r.RouteName).ToList();
         }
+
+        public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderProximitySearchParametersDto dto)
+        {
+            return new List<SearchResultsViewModelItem>();
+        }
     }
 }
