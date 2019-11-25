@@ -22,8 +22,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             var serviceStatusService = Substitute.For<IServiceStatusHistoryService>();
 
             employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(1);
-            var dashboardController = new DashboardController(employerService, serviceStatusService);
+            serviceStatusService.GetLatestServiceStatusHistoryAsync().Returns(new ServiceStatusHistoryViewModel
+            {
+                IsOnline = false
+            });
 
+            var dashboardController = new DashboardController(employerService, serviceStatusService);
+            
             var controllerWithClaims = new ClaimsBuilder<DashboardController>(dashboardController)
                 .Add(ClaimTypes.Role, RolesExtensions.StandardUser)
                 .AddUserName("username")
