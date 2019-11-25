@@ -7,9 +7,9 @@ namespace Sfa.Tl.Matching.Data.Interfaces
 {
     public interface ISearchProvider
     {
-        Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderSearchParametersDto dto);
+        Task<IList<SearchResultsViewModelItem>> SearchOpportunitiesByPostcodeProximityAsync(ProviderSearchParametersDto dto);
 
-        Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto);
+        Task<IList<SearchResultsByRouteViewModelItem>> SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto);
         
         Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderProximitySearchParametersDto dto);
     }

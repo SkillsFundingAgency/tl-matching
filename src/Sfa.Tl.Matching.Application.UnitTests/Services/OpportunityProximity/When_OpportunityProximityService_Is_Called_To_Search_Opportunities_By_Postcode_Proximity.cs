@@ -12,17 +12,16 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
 {
-    public class When_OpportunityProximityService_Is_Called_To_Search_Providers_For_Other_Routes_By_Postcode_Proximity
+    public class When_OpportunityProximityService_Is_Called_To_Search_Opportunities_By_Postcode_Proximity
     {
         private const string Postcode = "SW1A 2AA";
-        private const int SearchRadius = 25;
+        private const int SearchRadius = 5;
         private const int RouteId = 2;
-        private readonly IList<SearchResultsByRouteViewModelItem> _result;
+        private readonly IList<SearchResultsViewModelItem> _result;
         private readonly ILocationService _locationService;
-
         private readonly ISearchProvider _searchProvider;
 
-        public When_OpportunityProximityService_Is_Called_To_Search_Providers_For_Other_Routes_By_Postcode_Proximity()
+        public When_OpportunityProximityService_Is_Called_To_Search_Opportunities_By_Postcode_Proximity()
         {
             var dto = new ProviderSearchParametersDto
             {
@@ -33,22 +32,33 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
 
             _searchProvider = Substitute.For<ISearchProvider>();
             _searchProvider
-                .SearchProvidersForOtherRoutesByPostcodeProximityAsync(dto)
-                .Returns(new SearchResultsByRouteBuilder().Build());
+                .SearchOpportunitiesByPostcodeProximityAsync(dto)
+                .Returns(new SearchResultsBuilder().Build());
 
             _locationService = Substitute.For<ILocationService>();
-            _locationService.GetGeoLocationDataAsync(Postcode, true).Returns(new PostcodeLookupResultDto
-            {
-                Postcode = Postcode,
-                Longitude = "1.2",
-                Latitude = "1.2"
-            });
+            _locationService.GetGeoLocationDataAsync(Postcode, true)
+                .Returns(new PostcodeLookupResultDto
+                {
+                    Postcode = Postcode,
+                    Longitude = "1.2",
+                    Latitude = "1.2"
+                });
 
             var googleDistanceMatrixApiClient = Substitute.For<IGoogleDistanceMatrixApiClient>();
-            
+            googleDistanceMatrixApiClient.GetJourneyTimesAsync(Arg.Any<string>(), 
+                    Arg.Any<decimal>(), Arg.Any<decimal>(),
+                    Arg.Any<IList<LocationDto>>(), TravelMode.Driving, 
+                    Arg.Any<long>())
+                .Returns(new JourneyTimesBuilder().BuildDrivingResults());
+            googleDistanceMatrixApiClient.GetJourneyTimesAsync(Arg.Any<string>(), 
+                    Arg.Any<decimal>(), Arg.Any<decimal>(),
+                    Arg.Any<IList<LocationDto>>(), TravelMode.Transit, 
+                    Arg.Any<long>())
+                .Returns(new JourneyTimesBuilder().BuildPublicTransportResults());
+
             var service = new OpportunityProximityService(_searchProvider, _locationService, googleDistanceMatrixApiClient);
 
-            _result = service.SearchProvidersForOtherRoutesByPostcodeProximityAsync(dto).GetAwaiter().GetResult();
+            _result = service.SearchOpportunitiesByPostcodeProximityAsync(dto).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -56,14 +66,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
         {
             _result.Count.Should().Be(2);
         }
-
+        
         [Fact]
         public void Then_The_Search_Results_Should_Have_Expected_Values()
         {
-            _result[0].NumberOfResults.Should().Be(1);
-            _result[0].RouteName.Should().Be("digital");
-            _result[1].NumberOfResults.Should().Be(2);
-            _result[1].RouteName.Should().Be("health and beauty");
+            _result[0].ProviderVenueId.Should().Be(1);
+            _result[1].ProviderVenueId.Should().Be(2);
         }
 
         [Fact]
@@ -75,7 +83,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
         [Fact]
         public void Then_The_ISearchProvider_Is_Called_Exactly_Once()
         {
-            _searchProvider.Received(1).SearchProvidersForOtherRoutesByPostcodeProximityAsync(Arg.Any<ProviderSearchParametersDto>());
+            _searchProvider.Received(1).SearchOpportunitiesByPostcodeProximityAsync(Arg.Any<ProviderSearchParametersDto>());
         }
     }
 }

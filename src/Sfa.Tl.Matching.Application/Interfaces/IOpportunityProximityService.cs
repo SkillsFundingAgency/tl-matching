@@ -7,7 +7,7 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IOpportunityProximityService
     {
-        Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderSearchParametersDto dto);
-        Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto);
+        Task<IList<SearchResultsViewModelItem>> SearchOpportunitiesByPostcodeProximityAsync(ProviderSearchParametersDto dto);
+        Task<IList<SearchResultsByRouteViewModelItem>> SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto);
     }
 }

@@ -134,7 +134,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)
         {
-            var searchResults = await _opportunityProximityService.SearchProvidersByPostcodeProximityAsync(new ProviderSearchParametersDto
+            var searchResults = await _opportunityProximityService.SearchOpportunitiesByPostcodeProximityAsync(new ProviderSearchParametersDto
             {
                 Postcode = viewModel.Postcode,
                 SelectedRouteId = viewModel.SelectedRouteId,
@@ -143,7 +143,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var additionalResults = searchResults.Any() 
                 ? new List<SearchResultsByRouteViewModelItem>()
-                : await _opportunityProximityService.SearchProvidersForOtherRoutesByPostcodeProximityAsync(new ProviderSearchParametersDto
+                : await _opportunityProximityService.SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(new ProviderSearchParametersDto
                 {
                     Postcode = viewModel.Postcode,
                     SelectedRouteId = viewModel.SelectedRouteId,

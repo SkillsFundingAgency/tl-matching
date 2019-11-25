@@ -53,14 +53,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             _opportunityProximityService
-                .SearchProvidersByPostcodeProximityAsync(
+                .SearchOpportunitiesByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
                         a => a.Postcode == Postcode &&
                              a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
             _opportunityProximityService
-                .SearchProvidersForOtherRoutesByPostcodeProximityAsync(
+                .SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
                         a => a.Postcode == Postcode &&
                              a.SearchRadius == SearchParametersViewModel.ZeroResultsSearchRadius &&
@@ -84,22 +84,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         }
 
         [Fact]
-        public void Then_ProximityService_SearchProvidersByPostcodeProximity_Is_Called_Exactly_Once()
+        public void Then_ProximityService_SearchOpportunitiesByPostcodeProximity_Is_Called_Exactly_Once()
         {
             _opportunityProximityService
                 .Received(1)
-                .SearchProvidersByPostcodeProximityAsync(
+                .SearchOpportunitiesByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
                         a => a.Postcode == Postcode &&
                              a.SelectedRouteId == RouteId));
         }
 
         [Fact]
-        public void Then_ProximityService_SearchProvidersForOtherRoutesByPostcodeProximity_Is_Called_Exactly_Once()
+        public void Then_ProximityService_SearchOpportunitysForOtherRoutesByPostcodeProximity_Is_Called_Exactly_Once()
         {
             _opportunityProximityService
                 .Received(1)
-                .SearchProvidersForOtherRoutesByPostcodeProximityAsync(
+                .SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
                         a => a.Postcode == Postcode &&
                              a.SearchRadius == SearchParametersViewModel.ZeroResultsSearchRadius &&

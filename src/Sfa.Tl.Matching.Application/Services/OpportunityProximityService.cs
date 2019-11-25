@@ -24,24 +24,24 @@ namespace Sfa.Tl.Matching.Application.Services
             _googleDistanceMatrixApiClient = googleDistanceMatrixApiClient;
         }
 
-        public async Task<IList<SearchResultsViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderSearchParametersDto dto)
+        public async Task<IList<SearchResultsViewModelItem>> SearchOpportunitiesByPostcodeProximityAsync(ProviderSearchParametersDto dto)
         {
             var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 
-            var searchResults = await _searchProvider.SearchProvidersByPostcodeProximityAsync(dto);
+            var searchResults = await _searchProvider.SearchOpportunitiesByPostcodeProximityAsync(dto);
 
             return searchResults ?? new List<SearchResultsViewModelItem>();
         }
 
-        public async Task<IList<SearchResultsByRouteViewModelItem>> SearchProvidersForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto)
+        public async Task<IList<SearchResultsByRouteViewModelItem>> SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(ProviderSearchParametersDto dto)
         {
             var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 
-            var searchResults = await _searchProvider.SearchProvidersForOtherRoutesByPostcodeProximityAsync(dto);
+            var searchResults = await _searchProvider.SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(dto);
 
             var results = searchResults.Any() ? searchResults : new List<SearchResultsByRouteViewModelItem>();
 

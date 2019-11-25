@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             _opportunityProximityService
-                .SearchProvidersByPostcodeProximityAsync(Arg.Is<ProviderSearchParametersDto>(a =>
+                .SearchOpportunitiesByPostcodeProximityAsync(Arg.Is<ProviderSearchParametersDto>(a =>
                     a.Postcode == Postcode && a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
@@ -97,11 +97,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         }
 
         [Fact]
-        public void Then_ProximityService_SearchProvidersByPostcodeProximity_Is_Called_Exactly_Once()
+        public void Then_ProximityService_SearchOpportunitiesByPostcodeProximity_Is_Called_Exactly_Once()
         {
             _opportunityProximityService
                 .Received(1)
-                .SearchProvidersByPostcodeProximityAsync(
+                .SearchOpportunitiesByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
                         a => a.Postcode == Postcode &&
                              a.SelectedRouteId == RouteId));
@@ -109,11 +109,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
 
         [Fact]
-        public void Then_ProximityService_SearchProvidersForOtherRoutesByPostcodeProximity_Is_Called_Exactly_Once()
+        public void Then_ProximityService_SearchOpportunitiesForOtherRoutesByPostcodeProximity_Is_Called_Exactly_Once()
         {
             _opportunityProximityService
                 .DidNotReceive()
-                .SearchProvidersForOtherRoutesByPostcodeProximityAsync(
+                .SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(
                     Arg.Any<ProviderSearchParametersDto>());
         }
 
