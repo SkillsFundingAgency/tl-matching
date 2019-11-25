@@ -46,7 +46,31 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         public void Then_Exactly_One_Provider_Is_Found_Within_Search_Radius()
         {
             _results.Should().NotBeNull();
+            
             _results.Count().Should().Be(1);
+
+            var item = _results.First();
+            item.ProviderName.Should().Be("SQL Search Provider");
+            item.ProviderDisplayName.Should().Be("SQL Search Provider");
+
+            item.ProviderVenueId.Should().BeGreaterOrEqualTo(1);
+            item.ProviderVenuePostcode.Should().Be("CV1 2WT");
+            item.ProviderVenueName.Should().Be("CV1 2WT");
+            item.ProviderVenueTown.Should().Be("Coventry");
+            item.IsTLevelProvider.Should().BeTrue();
+            item.Distance.Should().Be(0);
+            item.Latitude.Should().Be(52.400997M);
+            item.Longitude.Should().Be(-1.508122M);
+
+            item.Routes.Count().Should().Be(1);
+            
+            var route = item.Routes.First();
+            route.RouteName.Should().Be("Education and childcare");
+
+            route.QualificationShortTitles.Count().Should().Be(1);
+            var qualification = route.QualificationShortTitles.First();
+
+            qualification.Should().Be("Short Title");
         }
 
         public void Dispose()

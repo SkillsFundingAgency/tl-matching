@@ -19,7 +19,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
-        public IEnumerable<string> RouteNames { get; set; }
-        public IEnumerable<string> QualificationShortTitles { get; set; }
+        public IEnumerable<RouteAndQualificationsViewModel> Routes { get; set; }
     }
 }
