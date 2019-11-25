@@ -1,52 +1,64 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderProximitySearchParametersViewModel
 
-<form id="tl-provider-filter-results-form" class="form" asp-action="Finish" novalidate>
+<p class="govuk-body">
+    <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold">9 </span>results
+</p>
 
-    <p class="govuk-body">
-        <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold">9 </span>results
-    </p>
+<p class="govuk-body"><a href="/public/files/ShowMeEverythingSpreadsheet.xlsx" download="" class="govuk-link">Download as a spreadsheet</a></p>
 
-    <p class="govuk-body"><a href="/public/files/ShowMeEverythingSpreadsheet.xlsx" download="" class="govuk-link">Download as a spreadsheet</a></p>
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    <div class="govuk-form-group">
 
-        <!-- 1 -->
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Westminster Kingsway College</h2>
-        <p class="govuk-body govuk-!-margin-bottom-2">Part of Capital City College Group &nbsp;&nbsp;|&nbsp;&nbsp; London NW1 3HB</p>
-        <div class="timeline">
-            <ul>
-                <li>
-                    <h2 style="margin-bottom: -5px">1.5 miles</h2>
-                </li>
-                <li>
-                </li>
-            </ul>
-        </div>
-        <p class="govuk-body govuk-!-margin-bottom-2">Has students learning:</p>
-        <ul class="govuk-list" style="margin-bottom: 0">
-            <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details" role="group">
-                <summary class="govuk-details__summary" role="button" aria-controls="details-content-decf0b1d-404f-421d-b343-056e6b7dab29" aria-expanded="false">
-                    <span class="govuk-details__summary-text">
-                        business and administration
-                    </span>
-                </summary>
-                <div class="govuk-details__text govuk-!-margin-bottom-3 govuk-!-padding-bottom-1 govuk-!-padding-top-1" id="details-content-decf0b1d-404f-421d-b343-056e6b7dab29" aria-hidden="true">
-                    <ul class="govuk-list govuk-list--bullet">
-                        <li>business</li>
-                    </ul>
-                </div>
-            </details>
-        </ul>
+<!-- 1 -->
+<h2 class="govuk-heading-m govuk-!-margin-bottom-1">Westminster Kingsway College</h2>
 
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+<ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
+    <li>Part of Capital City College Group   |   London NW1 3HB</li>
+</ul>
 
-    </div>
+<div class="timeline">
+    <ul>
+        <li id="tl-travel-times">
+            <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">1.4 miles</p>
+        </li>
+    </ul>
+</div>
 
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+<p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
+<ul id="tl-qualification-list" class="govuk-list">
+    <li>
+        <details class="govuk-details govuk-!-margin-0" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                    business and administration
+                </span>
+            </summary>
+            <div class="govuk-details__text">
+                <ul class="govuk-list govuk-list--bullet govuk-!-margin-0">
+                    <li>business</li>
+                </ul>
+            </div>
+        </details>
+    </li>
+    <li>
+        <details class="govuk-details govuk-!-margin-0" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                    construction
+                </span>
+            </summary>
+            <div class="govuk-details__text">
+                <ul class="govuk-list govuk-list--bullet govuk-!-margin-0">
+                    <li>plumbing</li>
+                </ul>
+            </div>
+        </details>
+    </li>
+</ul>
 
-    <button class="govuk-button" asp-action="Index" asp-controller="Home" >
-        Finish
-    </button>
-    
-</form>
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+<a href="#" class="govuk-button">
+    Finish
+</a>
+

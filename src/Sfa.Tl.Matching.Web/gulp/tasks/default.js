@@ -23,6 +23,8 @@ gulp.task('copy-js', function () {
     return src([
         'node_modules/jquery/dist/jquery.min.js',
         'Frontend/src/javascripts/cookie-banner.js',
+        'Frontend/src/javascripts/filter.js',
+
         ])
         .pipe(concat('all.js'))
         .pipe(minify({
