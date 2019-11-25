@@ -57,11 +57,5 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 searchCriteria = $"{viewModel.Postcode}-{filters}"
             });
         }
-
-        [HttpPost]
-        public IActionResult Finish()
-        {
-            return RedirectToRoute("Start");
-        }
     }
 }

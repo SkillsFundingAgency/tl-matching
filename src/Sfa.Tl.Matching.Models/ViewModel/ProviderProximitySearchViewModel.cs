@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
     public class ProviderProximitySearchViewModel
     {
         public ProviderProximitySearchParametersViewModel SearchParameters { get; }
+        public ProviderProximitySearchResultsViewModel SearchResults { get; set; }
 
         public ProviderProximitySearchViewModel(ProviderProximitySearchParametersViewModel searchParameters)
         {
@@ -12,11 +14,16 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         }
     }
 
+    public class ProviderProximitySearchResultsViewModel
+    {
+
+    }
+
     public class ProviderProximitySearchParametersViewModel
     {
         public string Postcode { get; set; }
         public ProviderProximityFiltersViewModel[] Filters { get; set; }
-        public bool HasFilters { get; set; }
+        public List<string> SelectedFilters { get; } = new List<string>();
 
         public ProviderProximitySearchParametersViewModel()
         {
@@ -36,7 +43,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
                 {
                     if (!criteria[i].ToLower().Contains(route.ToLower())) continue;
                     isSelected = true;
-                    HasFilters = true;
                     break;
                 }
 
@@ -48,6 +54,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
             }
 
             Filters = filters.ToArray();
+            SelectedFilters = filters.Where(f => f.IsSelected).Select(f => f.Name).ToList();
         }
     }
 

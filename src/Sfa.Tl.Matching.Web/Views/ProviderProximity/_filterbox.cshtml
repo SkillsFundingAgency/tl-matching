@@ -23,7 +23,7 @@
         </div>
 
         <button type="submit" class="govuk-button tl-button--blue  tl-pane-expandable__content" id="tl-filter">Filter results</button>
-        @if (Model.HasFilters)
+        @if (Model.SelectedFilters.Count > 0)
         {
             <p class="govuk-body govuk-!-margin-bottom-2  tl-pane-expandable__content">
                 <a asp-controller="ProviderProximity"

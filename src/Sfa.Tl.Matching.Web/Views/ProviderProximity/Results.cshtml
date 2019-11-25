@@ -4,8 +4,7 @@
     ViewData["Title"] = "All providers in an area";
 }
 @section backButton{
-    <a asp-route="GetBackLink"
-       class="govuk-back-link" id="tl-back">Back</a>
+    <a asp-route="Start" class="govuk-back-link" id="tl-back">Back</a>
 }
 
 <h1 class="govuk-heading-l">Providers within @Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel.DefaultSearchRadius miles of @Model.SearchParameters.Postcode.ToUpper()</h1>
@@ -15,6 +14,6 @@
         <partial name="_filterbox" model="Model.SearchParameters" />
     </div>
     <div class="govuk-grid-column-two-thirds">
-        <partial name="_filterresults" model="Model.SearchParameters" />
+        <partial name="_filterresults" model="Model" />
     </div>
 </div>
