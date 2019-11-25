@@ -15,8 +15,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     public class ProviderProximitySearchParametersViewModel
     {
         public string Postcode { get; set; }
-        public List<ProviderProximityFiltersViewModel> Filters { get; set; } = new List<ProviderProximityFiltersViewModel>();
-        public ProviderProximityFiltersViewModel[] FiltersArray { get; set; }
+        public ProviderProximityFiltersViewModel[] Filters { get; set; }
         public bool HasFilters { get; set; }
 
         public ProviderProximitySearchParametersViewModel()
@@ -29,6 +28,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
             var criteria = searchCriteria.Split("-");
             Postcode = criteria[0];
 
+            var filters = new List<ProviderProximityFiltersViewModel>();
             foreach (var route in routes)
             {
                 var isSelected = false;
@@ -40,14 +40,14 @@ namespace Sfa.Tl.Matching.Models.ViewModel
                     break;
                 }
 
-                Filters.Add(new ProviderProximityFiltersViewModel
+                filters.Add(new ProviderProximityFiltersViewModel
                 {
                     Name = route,
                     IsSelected = isSelected
                 });
             }
 
-            FiltersArray = Filters.ToArray();
+            Filters = filters.ToArray();
         }
     }
 

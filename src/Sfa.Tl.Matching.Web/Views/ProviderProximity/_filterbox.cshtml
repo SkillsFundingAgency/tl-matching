@@ -1,18 +1,21 @@
 ﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderProximitySearchParametersViewModel
 
 <form id="tl-provider-filter-form" class="form" asp-action="FilterResultsAsync" novalidate>
+    <input type="hidden" asp-for=" @Model.Postcode" />
+
     <div class="tl-pane tl-pane-expandable govuk-!-margin-bottom-3">
         <h2 class="govuk-heading-s govuk-!-margin-bottom-3">
             Filter results by skill area
         </h2>
         <div class="govuk-form-group govuk-!-margin-bottom-4 tl-pane-expandable__content" style="background-color: white; padding: 10px">
             <div class="govuk-checkboxes govuk-checkboxes--small">
-                @for (var i = 0; i < Model.FiltersArray.Length; i++)
+                @for (var i = 0; i < Model.Filters.Length; i++)
                 {
+                    <input type="hidden" asp-for=" @Model.Filters[i].Name" name="Filters[@i].Name"/>
                     <div class="govuk-checkboxes__item">
-                        <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.FiltersArray[i].IsSelected" name="@Model.FiltersArray[i].IsSelected">
+                        <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.Filters[i].IsSelected" name="Filters[@i].IsSelected">
                         <label class="govuk-body-s govuk-checkboxes__label" asp-for="@Model.FiltersArray[i].IsSelected"> 
-                            @Model.FiltersArray[i].Name
+                            @Model.Filters[i].Name
                         </label>
                     </div>
                 }

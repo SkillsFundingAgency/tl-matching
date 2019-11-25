@@ -29,10 +29,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        //[Route("[action]/provider-results-{searchCriteria}", Name = "FilterResultsAsync")]
-        public async Task<IActionResult> FilterResultsAsync(ProviderProximitySearchParametersViewModel viewModel)
+        public IActionResult FilterResultsAsync(ProviderProximitySearchParametersViewModel viewModel)
         {
-            return RedirectToRoute("GetProviderProximityResults", viewModel);
+            var filters = string.Join("-", viewModel.Filters.Where(f => f.IsSelected).Select(f => f.Name));
+
+            return RedirectToRoute("GetProviderProximityResults", new
+            {
+                searchCriteria = $"{viewModel.Postcode}-{filters}"
+            });
         }
 
         [HttpPost]
