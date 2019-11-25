@@ -82,10 +82,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                 .GetCompanyNameWithAkaAsync(OpportunityId)
                 .Returns("CompanyName (AlsoKnownAs)");
 
-            var employerService = Substitute.For<IEmployerService>();
-
             var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, _opportunityProximityService, _opportunityService,
-                employerService, locationService);
+                locationService);
 
             _result = opportunityProximityController.GetOpportunityProviderResultsAsync(new SearchParametersViewModel
             {

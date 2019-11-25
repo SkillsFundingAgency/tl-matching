@@ -71,10 +71,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             routePathService.GetRoutes().Returns(routes);
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            var employerService = Substitute.For<IEmployerService>();
 
             var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, _opportunityProximityService, _opportunityService,
-                employerService, locationService);
+                locationService);
 
             _result = opportunityProximityController.GetOpportunityProviderResultsAsync(new SearchParametersViewModel
             {

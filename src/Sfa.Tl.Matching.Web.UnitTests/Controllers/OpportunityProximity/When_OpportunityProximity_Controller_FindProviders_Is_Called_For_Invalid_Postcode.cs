@@ -39,10 +39,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             routePathService.GetRoutes().Returns(routes);
 
             var opportunityService = Substitute.For<IOpportunityService>();
-            var employerService = Substitute.For<IEmployerService>();
 
             var opportunityProximityController = new OpportunityProximityController(mapper, routePathService,
-                opportunityProximityService, opportunityService, employerService, locationService);
+                opportunityProximityService, opportunityService, locationService);
 
             var selectedRouteId = routes.First().Id;
             const string postcode = "XYZ A12";

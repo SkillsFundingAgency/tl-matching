@@ -21,16 +21,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly ILocationService _locationService;
         private readonly IRoutePathService _routePathService;
         private readonly IOpportunityService _opportunityService;
-        private readonly IEmployerService _employerService;
 
         public OpportunityProximityController(IMapper mapper, IRoutePathService routePathService, IOpportunityProximityService opportunityProximityService,
-            IOpportunityService opportunityService, IEmployerService employerService, ILocationService locationService)
+            IOpportunityService opportunityService, ILocationService locationService)
         {
             _mapper = mapper;
             _opportunityProximityService = opportunityProximityService;
             _routePathService = routePathService;
             _opportunityService = opportunityService;
-            _employerService = employerService;
             _locationService = locationService;
         }
 
