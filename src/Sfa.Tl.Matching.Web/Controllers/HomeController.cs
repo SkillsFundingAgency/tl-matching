@@ -34,12 +34,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View();
         }
 
-        [Route("dashboard", Name = "Dashboard")]
-        public IActionResult Dashboard()
-        {
-            return View();
-        }
-
         [Route("no-permission", Name = "FailedLogin")]
         public IActionResult FailedLogin()
         {

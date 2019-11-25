@@ -1,47 +1,63 @@
-﻿@using Sfa.Tl.Matching.Application.Extensions
-@model Sfa.Tl.Matching.Models.ViewModel.DashboardViewModel
-
-@{
+﻿@{
     ViewData["Title"] = "Match employers with providers for industry placements";
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
-        <p class="govuk-body">Use this service to help employers:</p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>create opportunities for students to do industry placements</li>
-            <li>find local providers with suitable students</li>
-            <li>talk to providers about these opportunities</li>
-            <li>tell us if there are not enough providers to fill their opportunities</li>
-        </ul>
-        @if (Model.HasSavedOppportunities)
-        {
-            <p class="govuk-body">
-                <a asp-route="GetSavedEmployerOpportunity" class="govuk-link" id="tl-view-opportunities-link">View saved opportunities</a>
-            </p>
-        }
-        <div>
-            <a asp-action="Index" asp-controller="OpportunityProximity" id="tl-start-now" class="govuk-button govuk-button--start">Start a new opportunity</a>
+    </div>
+    <div class="govuk-grid-column-full">
+
+        <div class="govuk-grid-row tl-dashwrapper">
+            <div class="govuk-grid-column-one-third tl-dashgrid">
+                <a href="#" class="tl-dashbox">
+                    <h4 class="govuk-heading-m govuk-!-margin-bottom-1 govuk-link">Create and refer new opportunities</h4>
+                    <p class="govuk-body govuk-!-margin-top-3">Find relevant, local providers to introduce to your employer.</p>
+                </a>
+            </div>
+
+            <div class="govuk-grid-column-one-third tl-dashgrid">
+                <a href="#" class="tl-dashbox">
+                    <h4 class="govuk-heading-m govuk-!-margin-bottom-1">Show all providers in an area</h4>
+                    <p class="govuk-body govuk-!-margin-top-3">Search a geographical area for everything that’s available.</p>
+                </a>
+            </div>
+
+            <div class="govuk-grid-column-one-third tl-dashgrid">
+                <a href="#" class="tl-dashbox">
+                    <h4 class="govuk-heading-m govuk-!-margin-bottom-1">View saved opportunities</h4>
+                    <p class="govuk-body govuk-!-margin-top-3">Any unreferred opportunities that you’re working on.</p>
+                </a>
+            </div>
         </div>
 
-        @if (Context.User.HasAdminRole())
-        {
-            <h2 class="govuk-heading-m">Service administration</h2>
-            <ul class="govuk-list">
-                <li>
-                    <a asp-action="Index" class="govuk-link" asp-controller="DataImport" id="tl-upload-link">Upload employer and provider data</a>
-                </li>
-                <li>
-                    <a asp-action="SearchProviderByUkPrnAsync" class="govuk-link" asp-controller="Provider" id="tl-Add-edit-provider-link">Add or edit provider data</a>
-                </li>
-                <li>
-                    <a asp-action="EditQualifications" class="govuk-link" asp-controller="Qualification" id="tl-edit-qualifications-link">Edit qualifications</a>
-                </li>
-                <li>
-                    <a asp-action="Maintenance" class="govuk-link" asp-controller="Home" id="tl-maintenance-link">Service under maintenance</a>
-                </li>
-            </ul>
-        }
+
+
+
+
+        <h2 class="govuk-heading-m govuk-!-margin-top-4">Service administration</h2>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-third">
+                <h4 class="govuk-heading-s govuk-!-margin-bottom-1"><a class="govuk-link" href="#">Manage provider data</a></h4>
+                <p class="govuk-body">Add or edit provider contact, venue and course data.</p>
+            </div>
+
+            <div class="govuk-grid-column-one-third">
+                <h4 class="govuk-heading-s govuk-!-margin-bottom-1"><a class="govuk-link" href="#">Edit qualifications</a></h4>
+                <p class="govuk-body">Change course-route mapping or edit course short titles.</p>
+            </div>
+
+            <div class="govuk-grid-column-one-third">
+                <h4 class="govuk-heading-s govuk-!-margin-bottom-1"><a class="govuk-link" href="#">Manually upload data</a></h4>
+                <p class="govuk-body">Upload csv files of employer data or Ofqual course data.</p>
+            </div>
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-third">
+                <h4 class="govuk-heading-s govuk-!-margin-bottom-1"><a class="govuk-link" href="#">Take service offline</a></h4>
+                <p class="govuk-body">Show that the service is ‘under maintenance’.</p>
+            </div>
+        </div>
+
     </div>
 </div>
