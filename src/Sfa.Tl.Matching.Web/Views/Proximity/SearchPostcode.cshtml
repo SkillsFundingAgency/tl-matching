@@ -1,0 +1,30 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel
+@{
+    ViewData["Title"] = "Where is the employer?";
+}
+
+@section backButton{
+    <a asp-controller="Proximity" asp-action="Start" class="govuk-back-link" id="tl-back">Back</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">@ViewData["Title"]</h1>
+
+        <form class="form" asp-action="FindProviders" novalidate>
+            <input type="hidden" asp-for="OpportunityId" />
+            <input type="hidden" asp-for="CompanyNameWithAka" />
+
+
+            <div class="govuk-form-group" sfa-validation-for="Postcode" sfa-validationerror-class="govuk-form-group--error">
+                <label class="govuk-label" asp-for="Postcode">
+                    Postcode of workplace
+                </label>
+                <span class="govuk-error-message" asp-validation-for="Postcode"></span>
+                <input class="govuk-input govuk-input--width-5" asp-for="Postcode" type="text"
+                       sfa-validation-for="Postcode" sfa-validationerror-class="govuk-input--error">
+            </div>
+            <button type="submit" class="govuk-button" id="tl-search">Search</button>
+        </form>
+    </div>
+</div>

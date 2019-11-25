@@ -87,6 +87,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View("Results", resultsViewModel);
         }
 
+        /* Added to display postcode page, needs removing */
+        [Route("postcode", Name = "Postcode")]
+        public IActionResult SearchPostcode()
+        {
+            return View();
+        }
+
         [HttpPost]
         [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "RefineSearchResults")]
         public async Task<IActionResult> RefineSearchResultsAsync(SearchParametersViewModel viewModel)
