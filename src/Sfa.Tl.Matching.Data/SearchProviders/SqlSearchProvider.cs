@@ -157,6 +157,9 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                     Routes = provider.ProviderVenue.Select(pv =>
                                         new RouteAndQualificationsViewModel
                                         {
+                                            RouteId = pv.ProviderQualification.Select(
+                                                pq => pq.Qualification.QualificationRouteMapping.
+                                                        First().RouteId).First(),
                                             RouteName = pv.ProviderQualification.Select(
                                                 pq => pq.Qualification.QualificationRouteMapping
                                                     .First()

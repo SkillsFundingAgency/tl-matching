@@ -65,6 +65,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             item.Routes.Count().Should().Be(1);
             
             var route = item.Routes.First();
+            route.RouteId.Should().Be(7);
             route.RouteName.Should().Be("Education and childcare");
 
             route.QualificationShortTitles.Count().Should().Be(1);
