@@ -56,15 +56,12 @@
                 <li>
                     <details class="govuk-details govuk-!-margin-0" data-module="govuk-details">
                         <summary class="govuk-details__summary">
-                            <span class="govuk-details__summary-text">
-                                @qualification.RouteName
-                            </span>
+                            <span class="govuk-details__summary-text">@qualification.RouteName</span>
                         </summary>
                         <div class="govuk-details__text">
                             <ul class="govuk-list govuk-list--bullet govuk-!-margin-0">
                                 @foreach (var shortTitle in qualification.QualificationShortTitles)
                                 {
-
                                     <li>@shortTitle</li>
                                 }
                             </ul>

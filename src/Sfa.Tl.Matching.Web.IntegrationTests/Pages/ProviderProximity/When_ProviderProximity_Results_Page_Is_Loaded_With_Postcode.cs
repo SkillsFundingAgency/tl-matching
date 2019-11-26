@@ -87,10 +87,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
             var distanceItem = travelTimes.Children[0] as IHtmlParagraphElement;
             distanceItem.TextContent.Should().Be("0.0 miles");
 
-            // TODO AU ASSERT THIS AND SHORT TITLES
-            //var qualificationList = searchResults.QuerySelector("#tl-qualification-list");
-            //var shortTitleListItem = qualificationList.Children[0] as IHtmlListItemElement;
-            //shortTitleListItem.TextContent.Should().Be("Short Title");
+            var qualificationList = searchResults.QuerySelector("#tl-qualification-list") as IHtmlUnorderedListElement;
+            var routeName1 = qualificationList.Children[0] as IHtmlListItemElement;
+            routeName1.QuerySelector("details > summary > span").TextContent.Should().Be("Agriculture, environmental and animal care");
+
+            var shortTitleList = routeName1.QuerySelector("details > div > ul") as IHtmlUnorderedListElement;
+            var shortTitle1 = shortTitleList.Children[0] as IHtmlListItemElement;
+            shortTitle1.TextContent.Should().Be("Short Title");
         }
     }
 }
