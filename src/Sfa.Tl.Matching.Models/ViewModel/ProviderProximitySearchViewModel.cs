@@ -16,8 +16,8 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 
     public class ProviderProximitySearchResultsViewModel
     {
-        public int SearchResultProviderCount => Results?.Count ?? 8;
-        public IList<string> Results { get; set; } // TODO AU Fill in Results
+        public int SearchResultProviderCount => Results?.Count ?? 0;
+        public IList<ProviderProximitySearchResultViewModelItem> Results { get; set; }
     }
 
     public class ProviderProximitySearchParametersViewModel

@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Web.Controllers
@@ -37,8 +39,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var searchParametersViewModel = new ProviderProximitySearchParametersViewModel(searchCriteria, routeNames);
             var viewModel = new ProviderProximitySearchViewModel(searchParametersViewModel);
-            viewModel.SearchResults = new ProviderProximitySearchResultsViewModel();
-            
+            viewModel.SearchResults = new ProviderProximitySearchResultsViewModel
+            {
+                Results = await _providerProximityService.SearchProvidersByPostcodeProximityAsync(
+                    new ProviderProximitySearchParametersDto
+                    {
+                        Postcode = viewModel.SearchParameters.Postcode
+                    })
+            };
+
             return View("Results", viewModel);
         }
 
