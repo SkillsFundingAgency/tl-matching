@@ -27,30 +27,30 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
         [Fact(DisplayName = "Create Single Referral")]
         public void CreateReferral()
         {
-            //_startPage.AssertContent();
+            _startPage.AssertContent();
 
-            //var proximityIndexPage = _startPage.ClickStart();
-            //proximityIndexPage.AssertContent();
-            //proximityIndexPage.EnterPostcode("CV1 2WT");
+            var proximityIndexPage = _startPage.ClickStart();
+            proximityIndexPage.AssertContent();
+            proximityIndexPage.EnterPostcode("CV1 2WT");
 
-            //var proximityResultsPage = proximityIndexPage.ClickSearch();
-            //proximityResultsPage.AssertContent();
+            var proximityResultsPage = proximityIndexPage.ClickSearch();
+            proximityResultsPage.AssertContent();
 
-            //var placementInformationPage = proximityResultsPage.ClickNoSuitableProvidersLink();
-            //placementInformationPage.AssertContent();
-            //placementInformationPage.SelectReasonNoProvider();
-            //placementInformationPage.SelectPlacementsKnown();
+            var placementInformationPage = proximityResultsPage.ClickNoSuitableProvidersLink();
+            placementInformationPage.AssertContent();
+            placementInformationPage.SelectReasonNoProvider();
+            placementInformationPage.SelectPlacementsKnown();
 
-            //var findEmployerPage = placementInformationPage.ClickContinue();
-            //findEmployerPage.AssertContent();
-            //findEmployerPage = findEmployerPage.EnterCompanyName("Company Name For Selection");
+            var findEmployerPage = placementInformationPage.ClickContinue();
+            findEmployerPage.AssertContent();
+            findEmployerPage = findEmployerPage.EnterCompanyName("Company Name For Selection");
 
-            //var detailsPage = findEmployerPage.ClickContinue();
-            //detailsPage.AssertContent();
+            var detailsPage = findEmployerPage.ClickContinue();
+            detailsPage.AssertContent();
 
-            //var opportunityBasketPage = detailsPage.ClickConfirmToOpprunityBasket();
-            //opportunityBasketPage.AssertContent();
-            //opportunityBasketPage.ClickFinish();
+            var opportunityBasketPage = detailsPage.ClickConfirmToOpprunityBasket();
+            opportunityBasketPage.AssertContent();
+            opportunityBasketPage.ClickFinish();
         }
 
         public void Dispose()
