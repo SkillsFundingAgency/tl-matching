@@ -16,49 +16,65 @@
         }
     }
 </p>
-
-@foreach (var searchResult in Model.SearchResults.Results)
-{
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Westminster Kingsway College</h2>
-
-    <ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
-        <li>Part of Capital City College Group   |   London NW1 3HB</li>
-    </ul>
-
-    <div class="timeline">
-        <ul>
-            <li id="tl-travel-times">
-                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">@($"{searchResult.Distance:#0.0}") miles</p>
-            </li>
-        </ul>
-    </div>
-
-    <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
-    @*<ul id="tl-qualification-list" class="govuk-list">
-        @foreach (var qualification in searchResult.Routes)
+<div class="tl-search-results">
+    @foreach (var searchResult in Model.SearchResults.Results)
+    {
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        @if (searchResult.IsTLevelProvider)
         {
-            <li>@qualification</li>
-            <li>
-                <details class="govuk-details govuk-!-margin-0" data-module="govuk-details">
-                    <summary class="govuk-details__summary">
-                        <span class="govuk-details__summary-text">
-                            @qualification.RouteName
-                        </span>
-                    </summary>
-                    @foreach (var shortTitle in qualification.QualificationShortTitles)
-                    {
-                        <div class="govuk-details__text">
-                            <ul class="govuk-list govuk-list--bullet govuk-!-margin-0">
-                                <li>@shortTitle</li>
-                            </ul>
-                        </div>
-                    }
-                </details>
-            </li>
+            <span id="tl-provider" class="tl-search-results-flag">T level provider</span>
         }
-    </ul>*@
-}
+
+        @if (searchResult.ProviderVenueName == searchResult.ProviderVenuePostcode)
+        {
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">@searchResult.ProviderDisplayName</h2>
+            <ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
+                <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
+            </ul>
+        }
+        else
+        {
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">@searchResult.ProviderVenueName</h2>
+            <ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
+                <li>Part of @searchResult.ProviderDisplayName</li>
+                <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
+            </ul>
+        }
+
+        <div class="timeline">
+            <ul>
+                <li id="tl-travel-times">
+                    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">@($"{searchResult.Distance:#0.0}") miles</p>
+                </li>
+            </ul>
+        </div>
+
+        <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
+        @*<ul id="tl-qualification-list" class="govuk-list">
+                @foreach (var qualification in searchResult.Routes)
+                {
+                    <li>@qualification</li>
+                    <li>
+                        <details class="govuk-details govuk-!-margin-0" data-module="govuk-details">
+                            <summary class="govuk-details__summary">
+                                <span class="govuk-details__summary-text">
+                                    @qualification.RouteName
+                                </span>
+                            </summary>
+                            @foreach (var shortTitle in qualification.QualificationShortTitles)
+                            {
+                                <div class="govuk-details__text">
+                                    <ul class="govuk-list govuk-list--bullet govuk-!-margin-0">
+                                        <li>@shortTitle</li>
+                                    </ul>
+                                </div>
+                            }
+                        </details>
+                    </li>
+                }
+            </ul>*@
+    }
+</div>
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 

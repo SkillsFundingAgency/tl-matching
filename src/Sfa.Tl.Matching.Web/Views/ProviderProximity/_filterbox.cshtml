@@ -3,7 +3,7 @@
 <form id="tl-provider-filter-form" class="form" asp-action="FilterResultsAsync" novalidate>
     <input type="hidden" asp-for=" @Model.Postcode" />
 
-    <div class="tl-pane tl-pane-expandable govuk-!-margin-bottom-3">
+    <div class="tl-pane">
         <h2 class="govuk-heading-s govuk-!-margin-bottom-3">
             Filter results by skill area
         </h2>
@@ -14,7 +14,7 @@
                     <input type="hidden" asp-for=" @Model.Filters[i].Name" name="Filters[@i].Name"/>
                     <div class="govuk-checkboxes__item">
                         <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.Filters[i].IsSelected" name="Filters[@i].IsSelected">
-                        <label class="govuk-body-s govuk-checkboxes__label" asp-for="@Model.FiltersArray[i].IsSelected"> 
+                        <label class="govuk-body-s govuk-checkboxes__label" asp-for="@Model.Filters[i].IsSelected" >
                             @Model.Filters[i].Name
                         </label>
                     </div>
