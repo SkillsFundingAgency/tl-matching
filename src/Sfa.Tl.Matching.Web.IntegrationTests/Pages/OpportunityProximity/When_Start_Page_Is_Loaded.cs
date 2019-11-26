@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
 
             var searchPostcodeLink = documentHtml.GetElementById("tl-dash-showall") as IHtmlAnchorElement;
             searchPostcodeLink.TextContent.Trim().Should().Be("Show all providers in an area\n                    Search a geographical area for everything that’s available.");
-            searchPostcodeLink.PathName.Should().Be($"/postcode");
+            searchPostcodeLink.PathName.Should().Be($"/find-all-providers");
 
             var viewSavedOpportunitiesLink = documentHtml.GetElementById("tl-dash-viewsaved") as IHtmlAnchorElement;
             viewSavedOpportunitiesLink.TextContent.Trim().Should().Be("View saved opportunities\n                        Any unreferred opportunities that you’re working on.");
