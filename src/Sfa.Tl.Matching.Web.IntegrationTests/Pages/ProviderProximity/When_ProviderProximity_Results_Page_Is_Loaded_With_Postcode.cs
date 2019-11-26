@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be("/Start");
+            backLink.PathName.Should().Be("/find-all-providers");
 
             var searchCount = documentHtml.GetElementById("tl-search-count");
             searchCount.TextContent.Should().Be("2");
