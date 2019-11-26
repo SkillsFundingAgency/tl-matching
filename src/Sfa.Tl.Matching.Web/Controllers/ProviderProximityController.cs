@@ -44,7 +44,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 Results = await _providerProximityService.SearchProvidersByPostcodeProximityAsync(
                     new ProviderProximitySearchParametersDto
                     {
-                        Postcode = viewModel.SearchParameters.Postcode
+                        Postcode = viewModel.SearchParameters.Postcode,
+                        SearchRadius = SearchParametersViewModel.DefaultSearchRadius
                     })
             };
 
