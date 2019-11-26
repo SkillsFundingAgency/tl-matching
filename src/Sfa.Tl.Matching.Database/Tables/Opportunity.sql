@@ -1,8 +1,6 @@
 ﻿CREATE TABLE [dbo].[Opportunity]
 (
 	[Id]					INT IDENTITY(1,1) NOT NULL, 
-	--TODO: Delete [EmployerId] after sprint 20 release
-	[EmployerId]			INT NULL,
 	[EmployerCrmId]			uniqueidentifier NULL,
 	[EmployerContact]		NVARCHAR(100) NULL,
 	[EmployerContactEmail]	VARCHAR(320) NULL,

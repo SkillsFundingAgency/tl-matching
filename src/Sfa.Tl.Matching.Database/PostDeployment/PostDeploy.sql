@@ -9,7 +9,3 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Seed Email Templates.sql"
 :r ".\Remove Obsolete Tables.sql"
 :r ".\Seed UserProfile.sql"
-
-:r ".\Remove EmployerId from Opportunity.sql"
-:r ".\Remove Postcode and CompanyType from Employer.sql"
-:r ".\Remove NumberOfPlacements From ProviderQualification.sql"
