@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -14,7 +13,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IProviderProximityService _providerProximityService;
         private readonly IRoutePathService _routePathService;
 
-        public ProviderProximityController(IRoutePathService routePathService,
+        public ProviderProximityController(
+            IRoutePathService routePathService,
             IProviderProximityService providerProximityService,
             ILocationService locationService)
         {
@@ -31,7 +31,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("find-all-providers/{opportunityId?}", Name = "ProviderProximitySearch")]
-        public async Task<IActionResult> FindProviders(ProviderProximitySearchParamViewModel viewModel)
+        public async Task<IActionResult> FindAllProviders(ProviderProximitySearchParamViewModel viewModel)
         {
             if (!ModelState.IsValid || !await IsPostCodeValidAsync(viewModel))
             {
