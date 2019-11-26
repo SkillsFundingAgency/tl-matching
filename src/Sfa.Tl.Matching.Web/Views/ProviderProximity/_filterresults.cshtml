@@ -51,27 +51,28 @@
 
         <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
         <ul id="tl-qualification-list" class="govuk-list">
-                @foreach (var qualification in searchResult.Routes)
-                {
-                    <li>
-                        <details class="govuk-details govuk-!-margin-0" data-module="govuk-details">
-                            <summary class="govuk-details__summary">
-                                <span class="govuk-details__summary-text">
-                                    @qualification.RouteName
-                                </span>
-                            </summary>
-                            @foreach (var shortTitle in qualification.QualificationShortTitles)
-                            {
-                                <div class="govuk-details__text">
-                                    <ul class="govuk-list govuk-list--bullet govuk-!-margin-0">
-                                        <li>@shortTitle</li>
-                                    </ul>
-                                </div>
-                            }
-                        </details>
-                    </li>
-                }
-            </ul>
+            @foreach (var qualification in searchResult.Routes)
+            {
+                <li>
+                    <details class="govuk-details govuk-!-margin-0" data-module="govuk-details">
+                        <summary class="govuk-details__summary">
+                            <span class="govuk-details__summary-text">
+                                @qualification.RouteName
+                            </span>
+                        </summary>
+                        <div class="govuk-details__text">
+                            <ul class="govuk-list govuk-list--bullet govuk-!-margin-0">
+                                @foreach (var shortTitle in qualification.QualificationShortTitles)
+                                {
+
+                                    <li>@shortTitle</li>
+                                }
+                            </ul>
+                        </div>
+                    </details>
+                </li>
+            }
+        </ul>
     }
 </div>
 
