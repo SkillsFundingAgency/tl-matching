@@ -113,6 +113,7 @@
     <Build Include="Indexes\IX_QualificationRouteMapping_RouteId.sql" />
     <Build Include="Views\MatchingServiceProviderEmployerReport.sql" />
     <Build Include="Indexes\IX_Employer_CrmId.sql" />
+    <Build Include="Indexes\IX_ProviderQualification_QualificationId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

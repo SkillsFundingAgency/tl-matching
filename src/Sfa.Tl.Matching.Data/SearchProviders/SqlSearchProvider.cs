@@ -157,6 +157,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                         RouteId = route.Id,
                                         QualificationShortTitle = qualification.ShortTitle
                                     }).Distinct().ToListAsync();
+
             var result = resulttemp.GroupBy(g => new
             {
                 g.Distance,
@@ -187,10 +188,9 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                         {
                             RouteName = rt.Key.RouteName,
                             RouteId = rt.Key.RouteId,
-                            QualificationShortTitles = rt.Select(q => 
+                            QualificationShortTitles = rt.Select(q =>
                                 q.QualificationShortTitle)
                                 .OrderBy(q => q)
-                                //.ToList()
                         }).OrderBy(rt => rt.RouteName)
             }).ToList();
 
