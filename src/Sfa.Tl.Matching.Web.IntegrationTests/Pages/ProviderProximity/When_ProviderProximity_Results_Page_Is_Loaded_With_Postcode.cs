@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
             backLink.PathName.Should().Be("/Start");
 
             var searchCount = documentHtml.GetElementById("tl-search-count");
-            searchCount.TextContent.Should().Be("8");
+            searchCount.TextContent.Should().Be("2");
 
             var allFilterCheckboxes =
                 documentHtml.QuerySelectorAll(".govuk-checkboxes__input") as IHtmlCollection<IElement>;
@@ -65,8 +65,33 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
             var filterRemove = documentHtml.GetElementById("tl-filter-remove") as IHtmlAnchorElement;
             filterRemove.Should().BeNull();
 
+            var searchResults = documentHtml.QuerySelector(".tl-search-results") as IHtmlDivElement;
+            AssertSearchResult(searchResults);
+        }
 
-            // TODO AU Add search results
+        private void AssertSearchResult(IHtmlDivElement searchResults)
+        {
+            var tLevelProvider = searchResults.QuerySelector("#tl-provider");
+            tLevelProvider.TextContent.Should().Be("T level provider");
+            tLevelProvider.ClassName.Should().Be("tl-search-results-flag");
+
+            var venueDetailList = searchResults.QuerySelector("#tl-venue-detail-list");
+            var providerNameListItem = venueDetailList.Children[0] as IHtmlListItemElement;
+            providerNameListItem.TextContent.Should().Be("Part of SQL Search Provider Display Name");
+
+            var townAndPostcodeListItem = venueDetailList.Children[1] as IHtmlListItemElement;
+            townAndPostcodeListItem.TextContent.Should().Be("Coventry CV1 2WT");
+
+            var travelTimes = searchResults.QuerySelector("#tl-travel-times");
+            travelTimes.Children.Length.Should().Be(1);
+
+            var distanceItem = travelTimes.Children[0] as IHtmlParagraphElement;
+            distanceItem.TextContent.Should().Be("0.0 miles");
+
+            // TODO AU ASSERT THIS AND SHORT TITLES
+            //var qualificationList = searchResults.QuerySelector("#tl-qualification-list");
+            //var shortTitleListItem = qualificationList.Children[0] as IHtmlListItemElement;
+            //shortTitleListItem.TextContent.Should().Be("Short Title");
         }
     }
 }
