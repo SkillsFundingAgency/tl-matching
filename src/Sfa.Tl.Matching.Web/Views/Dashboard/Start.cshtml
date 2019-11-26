@@ -14,14 +14,14 @@
 
         <div class="govuk-grid-row tl-dashwrapper">
             <div class="govuk-grid-column-one-third tl-dashgrid">
-                <a asp-action="Index" asp-controller="OpportunityProximity" class="tl-dashbox" id="tl-dash-createnew">
+                <a asp-route="OpportunityProximitySearch" class="tl-dashbox" id="tl-dash-createnew">
                     <h4 class="govuk-heading-m govuk-!-margin-bottom-1 govuk-link">Create and refer new opportunities</h4>
                     <p class="govuk-body govuk-!-margin-top-3">Find relevant, local providers to introduce to your employer.</p>
                 </a>
             </div>
 
             <div class="govuk-grid-column-one-third tl-dashgrid">
-                <a asp-action="SearchPostcode" asp-controller="ProviderProximity" class="tl-dashbox" id="tl-dash-showall">
+                <a asp-route="ProviderProximitySearch" class="tl-dashbox" id="tl-dash-showall">
                     <h4 class="govuk-heading-m govuk-!-margin-bottom-1">Show all providers in an area</h4>
                     <p class="govuk-body govuk-!-margin-top-3">Search a geographical area for everything that’s available.</p>
                 </a>

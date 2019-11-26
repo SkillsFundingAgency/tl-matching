@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("find-providers/{opportunityId?}", Name = "FindProviders")]
+        [Route("find-providers/{opportunityId?}", Name = "OpportunityProximitySearch")]
         public async Task<IActionResult> Index(int? opportunityId = null)
         {
             var viewModel = new SearchParametersViewModel
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("find-providers/{opportunityId?}")]
+        [Route("find-providers/{opportunityId?}", Name = "OpportunityProximitySearch")]
         public async Task<IActionResult> FindProviders(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))

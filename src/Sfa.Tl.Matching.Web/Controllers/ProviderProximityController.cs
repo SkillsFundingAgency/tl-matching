@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         private readonly IProviderProximityService _providerProximityService;
         private readonly IRoutePathService _routePathService;
 
-        public ProviderProximityController(IRoutePathService routePathService, 
+        public ProviderProximityController(IRoutePathService routePathService,
             IProviderProximityService providerProximityService,
             ILocationService locationService)
         {
@@ -23,11 +23,22 @@ namespace Sfa.Tl.Matching.Web.Controllers
             _locationService = locationService;
         }
 
-        /* Added to display postcode page, needs removing */
-        [Route("postcode", Name = "Postcode")]
+        [Route("find-all-providers/{opportunityId?}", Name = "ProviderProximitySearch")]
         public IActionResult SearchPostcode()
         {
             return View();
+        }
+
+        [HttpPost]
+        [Route("find-all-providers/{opportunityId?}", Name = "ProviderProximitySearch")]
+        public async Task<IActionResult> FindProviders(ProviderProximitySearchParamViewModel viewModel)
+        {
+            if (!ModelState.IsValid || !await IsPostCodeValidAsync(viewModel))
+            {
+                return View(nameof(SearchPostcode), viewModel);
+            }
+
+            return RedirectToRoute("GetProviderProximityResults", new { searchCriteria = viewModel.Postcode });
         }
 
         [HttpGet]
@@ -62,11 +73,29 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 });
 
             var filters = string.Join("-", viewModel.Filters.Where(f => f.IsSelected).Select(f => f.Name));
-            
+
             return RedirectToRoute("GetProviderProximityResults", new
             {
                 searchCriteria = $"{viewModel.Postcode}-{filters}"
             });
+        }
+
+        private async Task<bool> IsPostCodeValidAsync(ProviderProximitySearchParamViewModel viewModel)
+        {
+            var result = true;
+
+            var (isValid, formattedPostcode) = await _locationService.IsValidPostcodeAsync(viewModel.Postcode);
+            if (string.IsNullOrWhiteSpace(viewModel.Postcode) || !isValid)
+            {
+                ModelState.AddModelError("Postcode", "You must enter a real postcode");
+                result = false;
+            }
+            else
+            {
+                viewModel.Postcode = formattedPostcode;
+            }
+
+            return result;
         }
     }
 }
