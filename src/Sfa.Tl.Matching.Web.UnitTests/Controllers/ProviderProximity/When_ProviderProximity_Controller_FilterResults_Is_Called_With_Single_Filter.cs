@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -8,23 +9,27 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderProximity
 {
-    public class When_ProviderProximity_Controller_FilterResults_Is_Called_With_No_Filters
+    public class When_ProviderProximity_Controller_FilterResults_Is_Called_With_Single_Filter
     {
         private readonly IActionResult _result;
+        private const string SearchCriteria = "CV12WT-Business and administration";
 
-        public When_ProviderProximity_Controller_FilterResults_Is_Called_With_No_Filters()
+        public When_ProviderProximity_Controller_FilterResults_Is_Called_With_Single_Filter()
         {
             var routePathService = Substitute.For<IRoutePathService>();
             var providerProximityService = Substitute.For<IProviderProximityService>();
             var locationService = Substitute.For<ILocationService>();
 
-            var providerProximityController = new ProviderProximityController(routePathService, providerProximityService, 
+            var providerProximityController = new ProviderProximityController(routePathService, providerProximityService,
                 locationService);
 
-            var viewModel = new ProviderProximitySearchParametersViewModel
+            var routes = new List<string>
             {
-                Postcode = "CV12WT"
+                "Agriculture, environmental and animal care", 
+                "Business and administration"
             };
+
+            var viewModel = new ProviderProximitySearchParametersViewModel(SearchCriteria, routes);
 
             _result = providerProximityController.FilterResultsAsync(viewModel);
         }
@@ -37,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderProximity
             var redirect = _result as RedirectToRouteResult;
             redirect.Should().NotBeNull();
             redirect?.RouteName.Should().BeEquivalentTo("GetProviderProximityResults");
-            redirect?.RouteValues["searchCriteria"].Should().Be("CV12WT");
+            redirect?.RouteValues["searchCriteria"].Should().Be(SearchCriteria);
         }
     }
 }
