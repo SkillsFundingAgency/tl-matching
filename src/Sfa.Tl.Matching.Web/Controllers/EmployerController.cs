@@ -13,8 +13,6 @@ using Sfa.Tl.Matching.Web.Filters;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
-    [ServiceFilter(typeof(BackLinkFilter))]
-    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class EmployerController : Controller
     {
         private readonly IEmployerService _employerService;
@@ -35,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-search", Name = "SearchEmployer")]
-        public IActionResult Search(string query)
+        public IActionResult SearchEmployer(string query)
         {
             var employers = _employerService.Search(query);
 
@@ -43,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "LoadWhoIsEmployer")]
+        [Route("who-is-employer/{opportunityId}-{opportunityItemId}", Name = "GetOpportunityCompanyName")]
         public async Task<IActionResult> GetOpportunityCompanyNameAsync(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerAsync(opportunityId, opportunityItemId);
@@ -71,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-details/{opportunityId}-{opportunityItemId}", Name = "GetEmployerDetails")]
-        public async Task<IActionResult> GetOpportunityEmployerDetailsAsync(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetEmployerDetailsAsync(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
 
@@ -102,7 +100,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("check-employer-details/{opportunityId}-{opportunityItemId}", Name = "CheckEmployerDetails")]
-        public async Task<IActionResult> GetCheckOpportunityEmployerDetailsAsync(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> CheckEmployerDetailsAsync(int opportunityId, int opportunityItemId)
         {
             var viewModel = await _employerService.GetOpportunityEmployerDetailAsync(opportunityId, opportunityItemId);
 
@@ -110,7 +108,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("check-employer-details/{opportunityId}-{opportunityItemId}")]
+        [Route("check-employer-details/{opportunityId}-{opportunityItemId}", Name = "SaveCheckOpportunityEmployerDetails")]
         public async Task<IActionResult> SaveCheckOpportunityEmployerDetailsAsync(EmployerDetailsViewModel viewModel)
         {
             Validate(viewModel);
@@ -127,7 +125,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("saved-opportunities", Name = "GetSavedEmployerOpportunity")]
-        public async Task<IActionResult> SavedEmployerOpportunityAsync()
+        public async Task<IActionResult> GetSavedEmployerOpportunityAsync()
         {
             var username = HttpContext.User.GetUserName();
             var viewModel = await _employerService.GetSavedEmployerOpportunitiesAsync(username);
@@ -157,6 +155,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("remove-employer/{opportunityId}", Name = "DeleteEmployer")]
         public async Task<IActionResult> DeleteEmployerAsync(int opportunityId)
         {
+
             await _opportunityService.DeleteEmployerOpportunityItemAsync(opportunityId);
 
             var employerOpportunities =
@@ -171,7 +170,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("permission/{opportunityId}-{opportunityItemId}", Name = "GetEmployerConsent")]
-        public async Task<IActionResult> EmployerConsentAsync(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetEmployerConsentAsync(int opportunityId, int opportunityItemId)
         {
             var viewModel = await GetEmployerConsentViewModel(opportunityId, opportunityItemId);
 
@@ -180,14 +179,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("permission/{opportunityId}-{opportunityItemId}", Name = "SaveEmployerConsent")]
-        public async Task<IActionResult> EmployerConsentAsync(EmployerConsentViewModel viewModel)
+        public async Task<IActionResult> SaveEmployerConsentAsync(EmployerConsentViewModel viewModel)
         {
             if (!ModelState.IsValid)
                 return View("EmployerConsent", await GetEmployerConsentViewModel(viewModel.OpportunityId, viewModel.OpportunityItemId));
 
             await _referralService.ConfirmOpportunitiesAsync(viewModel.OpportunityId, HttpContext.User.GetUserName());
 
-            return RedirectToRoute("EmailSentReferrals_Get", new { id = viewModel.OpportunityId });
+            return RedirectToRoute("GetReferralEmailSent", new { id = viewModel.OpportunityId });
         }
 
         private async Task<EmployerConsentViewModel> GetEmployerConsentViewModel(int opportunityId, int opportunityItemId)
@@ -233,13 +232,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private void Validate(EmployerDetailsViewModel viewModel)
         {
-            if (string.IsNullOrEmpty(viewModel.EmployerContactPhone))
+            if (string.IsNullOrEmpty(viewModel.Phone))
                 return;
 
-            if (!viewModel.EmployerContactPhone.Any(char.IsDigit))
-                ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a number");
-            else if (!Regex.IsMatch(viewModel.EmployerContactPhone, @"^(?:.*\d.*){7,}$"))
-                ModelState.AddModelError(nameof(viewModel.EmployerContactPhone), "You must enter a telephone number that has 7 or more numbers");
+            if (!viewModel.Phone.Any(char.IsDigit))
+                ModelState.AddModelError(nameof(viewModel.Phone), "You must enter a number");
+            else if (!Regex.IsMatch(viewModel.Phone, @"^(?:.*\d.*){7,}$"))
+                ModelState.AddModelError(nameof(viewModel.Phone), "You must enter a telephone number that has 7 or more numbers");
         }
     }
 }

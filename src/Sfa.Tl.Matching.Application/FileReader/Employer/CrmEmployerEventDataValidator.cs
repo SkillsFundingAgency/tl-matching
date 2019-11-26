@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
         {
             CascadeMode = CascadeMode.StopOnFirstFailure;
 
-            RuleFor(dto => dto.accountid)
+            RuleFor(dto => dto.AccountId)
                 .NotEmpty()
                 .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                 .WithMessage($"'{nameof(EmployerStagingFileImportDto.CrmId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
@@ -34,12 +34,12 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
                 .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                 .WithMessage($"'{nameof(EmployerStagingFileImportDto.Aupa)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
-            RuleFor(dto => dto.customertypecode)
+            RuleFor(dto => dto.CustomerTypeCode)
                 .Must(dto => dto.IsCompanyType())
                 .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
                 .WithMessage($"'{nameof(EmployerStagingFileImportDto.CompanyType)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
-            RuleFor(dto => dto.owneridname)
+            RuleFor(dto => dto.OwnerIdName)
                 .NotEmpty()
                 .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
                 .WithMessage($"'{nameof(EmployerStagingFileImportDto.Owner)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");

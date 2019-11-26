@@ -22,16 +22,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Referrals()
         {
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunityBasketAsync(1);
+            _opportunityService.GetOpportunityBasketAsync(1)
+                .Returns(new OpportunityBasketViewModel());
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
             var mapper = new Mapper(config);
 
             _opportunityController = new OpportunityController(_opportunityService, mapper);
+
             var controllerWithClaims = new ClaimsBuilder<OpportunityController>(_opportunityController).Build();
 
             _result = controllerWithClaims.SaveSelectedOpportunitiesAsync(new ContinueOpportunityViewModel
             {
+                OpportunityId = 1,
                 SubmitAction = "SaveSelectedOpportunities",
                 SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
                 {
@@ -45,14 +48,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
         public void Then_OpportunityService_GetOpportunityBasket_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetOpportunityBasketAsync(1);
@@ -62,6 +57,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         public void Then_OpportunityService_ContinueWithOpportunities_Is_Not_Called()
         {
             _opportunityService.DidNotReceive().ContinueWithOpportunitiesAsync(Arg.Any<ContinueOpportunityViewModel>());
+        }
+
+        [Fact]
+        public void Then_Model_Is_Not_Null()
+        {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<ViewResult>();
+            var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
         }
 
         [Fact]

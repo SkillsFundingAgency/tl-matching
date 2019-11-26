@@ -54,25 +54,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 }
             };
 
-            _result = controllerWithClaims.MissingQualificationAsync(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveMissingQualificationAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-        
-        [Fact]
         public void Then_Result_Is_RedirectToRoute()
         {
+            _result.Should().NotBeNull();
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
+
             result?.RouteName.Should().Be("GetProviderVenueDetail");
-        }
-        
-        [Fact]
-        public void Then_RouteValues_Has_Expected_Parameters()
-        {
-            var result = _result as RedirectToRouteResult;
             result?.RouteValues["providerVenueId"].Should().Be(1);
         }
 

@@ -3,9 +3,9 @@ namespace Sfa.Tl.Matching.Models.ViewModel
 {
     public class ProviderSearchResultItemViewModel
     {
-        public int ProviderId { get; set; }
+        public int Id { get; set; }
         public long? UkPrn { get; set; }
-        public string ProviderName { get; set; }
+        public string Name { get; set; }
         public string IsCdfProvider { get; set; }
     }
 }

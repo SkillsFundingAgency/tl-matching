@@ -13,15 +13,15 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
-    public class When_ProviderVenueService_Is_Called_To_HaveUniqueVenue_Exists
+    public class When_ProviderVenueService_Is_Called_To_GetVenue
     {
-        private readonly IRepository<Domain.Models.ProviderVenue> _providerVenueRepository;
+        private readonly IProviderVenueRepository _providerVenueRepository;
         private readonly ProviderVenueDetailViewModel _result;
         private const int ProviderId = 1;
         private const string Name = "Name";
         private const string Postcode = "CV1 2WT";
 
-        public When_ProviderVenueService_Is_Called_To_HaveUniqueVenue_Exists()
+        public When_ProviderVenueService_Is_Called_To_GetVenue()
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(ProviderVenueMapper).Assembly));
             var mapper = new Mapper(config);
@@ -50,14 +50,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         }
 
         [Fact]
-        public void Then_The_ProviderId_Is_Correct()
+        public void Then_The_Fields_Are_As_Expected()
         {
             _result.ProviderId.Should().Be(ProviderId);
-        }
-
-        [Fact]
-        public void Then_The_Name_Is_Correct()
-        {
             _result.Name.Should().Be(Name);
         }
     }

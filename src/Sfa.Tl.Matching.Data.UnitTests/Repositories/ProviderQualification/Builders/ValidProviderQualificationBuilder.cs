@@ -7,7 +7,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification.Buil
         public Domain.Models.ProviderQualification Build() => new Domain.Models.ProviderQualification
         {
             Id = 1,
-            NumberOfPlacements = 1,
             ProviderVenueId = 1,
             QualificationId = 1,
             Source = "Test",

@@ -9,11 +9,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
 {
     public class QualificationRouteMappingRepository : GenericRepository<QualificationRouteMapping>
     {
-        private readonly MatchingDbContext _dbContext;
-
         public QualificationRouteMappingRepository(ILogger<QualificationRouteMappingRepository> logger, MatchingDbContext dbContext) : base(logger, dbContext)
         {
-            _dbContext = dbContext;
+            
         }
 
         public override async Task<int> CreateManyAsync(IList<QualificationRouteMapping> entities)

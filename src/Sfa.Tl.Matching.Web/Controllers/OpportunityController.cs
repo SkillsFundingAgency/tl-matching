@@ -15,8 +15,6 @@ using Sfa.Tl.Matching.Web.Filters;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser + "," + RolesExtensions.StandardUser)]
-    [ServiceFilter(typeof(BackLinkFilter))]
-    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class OpportunityController : Controller
     {
         private readonly IOpportunityService _opportunityService;
@@ -135,7 +133,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             //if First Opp (saved opportunity items == 0) then LoadWhoIsEmployer else if referral then check answer of if provisiongap then OpportunityBasket
             return opportunityItemCount == 0 ?
-                RedirectToRoute("LoadWhoIsEmployer", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
+                RedirectToRoute("GetOpportunityCompanyName", new { viewModel.OpportunityId, viewModel.OpportunityItemId })
                 : viewModel.OpportunityType == OpportunityType.Referral ?
                     RedirectToRoute("GetCheckAnswers", new { viewModel.OpportunityItemId })
                     : await SaveCheckAnswers(viewModel.OpportunityId, viewModel.OpportunityItemId);
@@ -165,7 +163,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("employer-opportunities/{opportunityId}-{opportunityItemId}", Name = "GetOpportunityBasket")]
-        public async Task<IActionResult> OpportunityBasketAsync(int opportunityId, int opportunityItemId)
+        public async Task<IActionResult> GetOpportunityBasketAsync(int opportunityId, int opportunityItemId)
         {
             await _opportunityService.ClearOpportunityItemsSelectedForReferralAsync(opportunityId);
 
@@ -181,8 +179,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("emails-sent/{opportunityId}", Name = "EmailSentReferrals_Get")]
-        public async Task<IActionResult> ReferralEmailSentAsync(int opportunityId)
+        [Route("emails-sent/{opportunityId}", Name = "GetReferralEmailSent")]
+        public async Task<IActionResult> GetReferralEmailSentAsync(int opportunityId)
         {
             var dto = await _opportunityService.GetOpportunityAsync(opportunityId);
             var viewModel = _mapper.Map<SentViewModel>(dto);
@@ -215,7 +213,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpGet]
         [Route("remove-opportunity/{opportunityItemId}", Name = "GetConfirmDeleteOpportunityItem")]
-        public async Task<IActionResult> ConfirmDeleteOpportunityItemAsync(int opportunityItemId)
+        public async Task<IActionResult> GetConfirmDeleteOpportunityItemAsync(int opportunityItemId)
         {
             var viewModel = await _opportunityService.GetConfirmDeleteOpportunityItemAsync(opportunityItemId);
 

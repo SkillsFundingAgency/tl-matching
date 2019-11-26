@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
     {
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
         private const int VenueId = 1;
-        private const string LarsId = "12345678";
+        private const string LarId = "12345678";
 
         public When_Missing_Qualification_Is_Submitted_With_Validation_Errors(CustomWebApplicationFactory<TestStartup> factory)
         {
@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
             // ReSharper disable all PossibleNullReferenceException
 
             var client = _factory.CreateClient();
-            var pageResponse = await client.GetAsync($"/missing-qualification/{VenueId}/{LarsId}");
+            var pageResponse = await client.GetAsync($"/missing-qualification/{VenueId}/{LarId}");
             var pageContent = await HtmlHelpers.GetDocumentAsync(pageResponse);
 
             var response = await client.SendAsync(

@@ -5,7 +5,8 @@
 }
 
 @section backButton{
-    <a asp-route="GetProviderDetail" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
+    @*<a asp-route="GetProviderDetail" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>*@
+    <a asp-route="GetAdminBackLink" asp-route-providerId="@Model.ProviderId" class="govuk-back-link" id="tl-back">Back</a>
 }
 
 @if (!ViewData.ModelState.IsValid)
@@ -21,7 +22,7 @@
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-route="AddVenue" novalidate>
+        <form asp-route="AddProviderVenue" novalidate>
             <input asp-for="ProviderId" type="hidden" />
             <input asp-for="Source" value="Admin" type="hidden" />
             <div class="govuk-form-group" sfa-validation-for="Postcode" sfa-validationerror-class="govuk-form-group--error">

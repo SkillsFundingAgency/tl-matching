@@ -69,6 +69,9 @@
     <None Include="Sfa.Tl.Matching.Database.Local.Int.Test.publish.xml" />
     <None Include="Sfa.Tl.Matching.Database.Local.publish.xml" />
     <None Include="PostDeployment\Seed UserProfile.sql" />
+    <None Include="PostDeployment\Remove EmployerId from Opportunity.sql" />
+    <None Include="PostDeployment\Remove Postcode and CompanyType from Employer.sql" />
+    <None Include="PostDeployment\Remove NumberOfPlacements From ProviderQualification.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
@@ -97,17 +100,11 @@
     <Build Include="Tables\DBProjDeployLog.sql" />
     <Build Include="Tables\OpportunityItem.sql" />
     <Build Include="Tables\Opportunity.sql" />
-    <None Include="PostDeployment\Backfill Provider Venue Names.sql" />
     <None Include="PostDeployment\Remove Obsolete Tables.sql" />
     <Build Include="Tables\OLDOpportunity.sql" />
     <Build Include="Tables\BankHoliday.sql" />
     <Build Include="Tables\ServiceStatusHistory.sql" />
-    <None Include="PostDeployment\Update Qualification Title length.sql" />
-    <None Include="PostDeployment\Backfill Employer Feedback Sent.sql" />
     <Build Include="Tables\UserCache.sql" />
-    <None Include="PostDeployment\Update Opportunity Table EmployerCrmIds.sql" />
-    <None Include="PostDeployment\Update Opportunity Table EmployerFeedbackSentOn.sql" />
-    <None Include="PostDeployment\Remove EmployerFeedbackSent From Opportunity.sql" />
     <Build Include="Views\MatchingServiceOpportunityReport.sql" />
     <Build Include="Views\MatchingServiceProviderOpportunityReport.sql" />
     <Build Include="Tables\UserProfile.sql" />
@@ -115,6 +112,7 @@
     <Build Include="Indexes\IX_ProviderQualification_ProviderVenueId.sql" />
     <Build Include="Indexes\IX_QualificationRouteMapping_RouteId.sql" />
     <Build Include="Views\MatchingServiceProviderEmployerReport.sql" />
+    <Build Include="Indexes\IX_Employer_CrmId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

@@ -12,6 +12,7 @@ using Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Event;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
@@ -33,7 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
             employerRepository.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Employer, bool>>>())
                 .Returns(new SearchResultsBuilder().Build().AsQueryable());
 
-            var employerService = new EmployerService(employerRepository, opportunityRepository, Substitute.For<IMapper>(), Substitute.For<IValidator<CrmEmployerEventBase>>(),
+            var employerService = new EmployerService(employerRepository, opportunityRepository, AutoMapperExtension.GetRealMapper(), Substitute.For<IValidator<CrmEmployerEventBase>>(),
                 Substitute.For<IMessageQueueService>());
 
             const string companyName = "Co";
@@ -52,38 +53,23 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         }
 
         [Fact]
-        public void Then_The_First_Employer_Is_In_Correct_Order_With_CompanyName()
+        public void Then_The_First_Employer_Is_In_Correct_Order_With_Expected_Values()
         {
             _firstEmployer.CompanyName.Should().Be("Another Company");
-        }
-        
-        [Fact]
-        public void Then_The_First_Employer_Is_In_Correct_Order_With_AlsoKnownAs()
-        {
             _firstEmployer.AlsoKnownAs.Should().Be("Another Also Known As");
         }
 
         [Fact]
-        public void Then_The_Second_Employer_Is_In_Correct_Order_With_CompanyName()
+        public void Then_The_Second_Employer_Is_In_Correct_Order_With_Expected_Values()
         {
             _secondEmployer.CompanyName.Should().Be("Company");
-        }
-
-        [Fact]
-        public void Then_The_Second_Employer_Is_In_Correct_Order_With_AlsoKnownAs()
-        {
             _secondEmployer.AlsoKnownAs.Should().Be("Also Known As");
         }
 
         [Fact]
-        public void Then_The_Third_Employer_Is_In_Correct_Order_With_CompanyName()
+        public void Then_The_Third_Employer_Is_In_Correct_Order_With_Expected_Values()
         {
             _thirdEmployer.CompanyName.Should().Be("Z Company");
-        }
-
-        [Fact]
-        public void Then_The_Third_Employer_Is_In_Correct_Order_With_AlsoKnownAs()
-        {
             _thirdEmployer.AlsoKnownAs.Should().Be("Z Also Known As");
         }
     }

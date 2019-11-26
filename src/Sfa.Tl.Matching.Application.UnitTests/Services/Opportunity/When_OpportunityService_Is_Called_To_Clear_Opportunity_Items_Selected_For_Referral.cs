@@ -65,7 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var googleMapApiClient = Substitute.For<IGoogleMapApiClient>();
             var opportunityPipelineReportWriter = Substitute.For<IFileWriter<OpportunityReportDto>>();
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository, 
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, _opportunityItemRepository,
                 provisionGapRepository, referralRepository, googleMapApiClient,
                 opportunityPipelineReportWriter, dateTimeProvider);
 
@@ -81,18 +81,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         [Fact]
-        public void Then_UpdateMany_Is_Called_Exactly_Once()
-        {
-            _opportunityItemRepository.Received(1)
-                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Any<IList<OpportunityItem>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>()
-                );
-        }
-
-        [Fact]
-        public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Two_Items_With_Expected_Values()
+        public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_Exactly_Once_With_Two_Items_With_Expected_Values()
         {
             _opportunityItemRepository.Received(1)
                 .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(

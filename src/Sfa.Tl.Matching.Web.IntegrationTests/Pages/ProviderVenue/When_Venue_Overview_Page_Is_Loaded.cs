@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderVenue
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be("/add-venue/1");
+            backLink.PathName.Should().Be("/get-admin-back-link/1");
 
             var searchVisibleYes = documentHtml.GetElementById("search-visible-yes") as IHtmlInputElement;
             searchVisibleYes.Value.Should().Be("true");
@@ -95,10 +95,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderVenue
             saveAndFinishButton.Value.Should().Be("SaveAndFinish");
         }
 
-        private static void AssertTableRow(IHtmlTableRowElement row, string lars, string qualificationTitle,
+        private static void AssertTableRow(IHtmlTableRowElement row, string larId, string qualificationTitle,
             int qualificationId, int venueId)
         {
-            row.Cells[0].TextContent.Should().Be(lars);
+            row.Cells[0].TextContent.Should().Be(larId);
             row.Cells[1].TextContent.Should().Be(qualificationTitle);
 
             var deleteCell = row.Cells[2].Children[0] as IHtmlAnchorElement;

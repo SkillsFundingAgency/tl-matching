@@ -6,7 +6,7 @@ using Sfa.Tl.Matching.Web.Filters;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
-    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
+    //[ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class FeedbackController : Controller
     {
         public IActionResult Index()

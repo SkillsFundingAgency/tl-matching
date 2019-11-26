@@ -5,7 +5,7 @@
         public Domain.Models.Qualification Build() => new Domain.Models.Qualification
         {
             Id = 1,
-            LarsId = "10042982",
+            LarId = "10042982",
             Title = "Title",
             ShortTitle = "Short Title",
             QualificationSearch = "TitleShortTitle",

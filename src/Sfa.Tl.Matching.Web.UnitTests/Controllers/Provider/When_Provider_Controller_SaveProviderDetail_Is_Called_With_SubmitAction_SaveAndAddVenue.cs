@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -28,18 +29,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
-        }
-
-        [Fact]
         public void Then_Result_Is_Redirect_To_AddVenue()
         {
+            _result.Should().NotBeNull();
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
 
-            result?.RouteName.Should().Be("AddVenue");
+            result?.RouteName.Should().Be("AddProviderVenue");
+            result?.RouteValues
+                .Should()
+                .Contain(new KeyValuePair<string, object>("providerId", 1));
         }
 
         [Fact]

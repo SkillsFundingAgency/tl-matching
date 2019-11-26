@@ -35,12 +35,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         }
 
         [Fact]
-        public void Then_Results_Should_Not_Be_Null() =>
+        public void Then_No_Provider_Is_Found()
+        {
             _results.Should().NotBeNull();
-
-        [Fact]
-        public void Then_No_Provider_Is_Found() =>
             _results.Count().Should().Be(0);
+        }
 
         public void Dispose()
         {

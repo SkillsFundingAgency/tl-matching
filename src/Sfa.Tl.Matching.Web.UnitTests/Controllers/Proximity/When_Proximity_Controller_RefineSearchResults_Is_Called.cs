@@ -44,15 +44,24 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 CompanyNameWithAka = "CompanyName (AlsoKnownAs)"
             };
 
-            _result = proximityController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
+            _result = proximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
+        public void Then_RedirectToRoute_Result_Is_Returned()
+        {
             _result.Should().NotBeNull();
+            _result.Should().BeOfType<RedirectToRouteResult>();
+            var redirect = _result as RedirectToRouteResult;
+            redirect.Should().NotBeNull();
+            redirect?.RouteName.Should().BeEquivalentTo("GetProviderResults");
 
-        [Fact]
-        public void Then_RedirectToRoute_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<RedirectToRouteResult>();
+            redirect?.RouteValues["SelectedRouteId"].Should().Be(1);
+            redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");
+            redirect?.RouteValues["OpportunityId"].Should().Be(0);
+            redirect?.RouteValues["OpportunityItemId"].Should().Be(0);
+            redirect?.RouteValues["CompanyNameWithAka"].Should().Be("CompanyName (AlsoKnownAs)");
+
+        }
     }
 }

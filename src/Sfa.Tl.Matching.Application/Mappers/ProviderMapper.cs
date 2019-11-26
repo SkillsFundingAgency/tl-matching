@@ -41,12 +41,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<Provider, ProviderSearchResultDto>();
             CreateMap<ProviderReference, ProviderSearchResultDto>();
-
             CreateMap<Provider, ProviderSearchResultItemViewModel>()
-                .ForMember(m => m.ProviderId, config => config.MapFrom(s => s.Id))
-                .ForMember(m => m.ProviderName, config => config.MapFrom(s => s.Name))
-                .ForMember(m => m.IsCdfProvider, config => config.MapFrom(s => s.IsCdfProvider ? "Yes" : "No"))
-                ;
+                .ForMember(m => m.IsCdfProvider, config => config.MapFrom(s => s.IsCdfProvider ? "Yes" : "No"));
 
             CreateMap<UsernameForFeedbackSentDto, Provider>()
                 .ForMember(m => m.Id, o => o.MapFrom(s => s.Id))

@@ -9,6 +9,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         Task PushProviderReferralEmailMessageAsync(SendProviderReferralEmail providerReferralEmail);
         Task PushEmployerReferralEmailMessageAsync(SendEmployerReferralEmail employerReferralEmail);
         Task PushEmployerAupaBlankEmailMessageAsync(SendEmployerAupaBlankEmail employerAupaBlankEmail);
-        Task PushFailedEmailMessageAsync(SendFailedEmail failedEmail);
+        Task PushEmailDeliveryStatusMessageAsync(SendEmailDeliveryStatus emailDeliveryStatus);
     }
 }

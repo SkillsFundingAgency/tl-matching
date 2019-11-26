@@ -53,13 +53,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             findAnotherLink.Text.Should().Be("Find a different employer");
             findAnotherLink.PathName.Should().Be($"/who-is-employer/{OpportunityId}-{OpportunityItemId}");
 
-            var employerContact = documentHtml.GetElementById("EmployerContact") as IHtmlInputElement;
+            var employerContact = documentHtml.GetElementById("PrimaryContact") as IHtmlInputElement;
             employerContact.Value.Should().Be("Employer Contact");
 
-            var employerContactEmail = documentHtml.GetElementById("EmployerContactEmail") as IHtmlInputElement;
+            var employerContactEmail = documentHtml.GetElementById("Email") as IHtmlInputElement;
             employerContactEmail.Value.Should().Be("employer-contact@email.com");
 
-            var employerContactPhone = documentHtml.GetElementById("EmployerContactPhone") as IHtmlInputElement;
+            var employerContactPhone = documentHtml.GetElementById("Phone") as IHtmlInputElement;
             employerContactPhone.Value.Should().Be("01474 787878");
 
             var confirmButton = documentHtml.GetElementById("tl-confirm") as IHtmlButtonElement;

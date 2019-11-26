@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Constants;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Builders
 {
@@ -10,10 +9,10 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Builders
         {
             new Domain.Models.Route
             {
-                Id = RouteConstants.Id,
-                Name = RouteConstants.Name,
-                Keywords = RouteConstants.Keywords,
-                Summary = RouteConstants.Summary,
+                Id = 1,
+                Name = "Route 1",
+                Keywords = "Keyword",
+                Summary = "Route summary",
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,
@@ -21,10 +20,10 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Builders
             },
             new Domain.Models.Route
             {
-                Id = RouteConstants.Id + 1,
-                Name = RouteConstants.SecondName,
-                Keywords = RouteConstants.Keywords,
-                Summary = RouteConstants.Summary,
+                Id = 2,
+                Name = "Route 2",
+                Keywords = "Keyword",
+                Summary = "Route summary",
                 CreatedBy = EntityCreationConstants.CreatedByUser,
                 CreatedOn = EntityCreationConstants.CreatedOn,
                 ModifiedBy = EntityCreationConstants.ModifiedByUser,

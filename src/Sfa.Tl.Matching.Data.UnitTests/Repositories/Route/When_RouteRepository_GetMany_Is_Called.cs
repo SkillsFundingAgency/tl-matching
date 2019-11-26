@@ -6,7 +6,6 @@ using NSubstitute;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Builders;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Constants;
 using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
@@ -37,10 +36,10 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
         [Fact]
         public void Then_First_Path_Fields_Have_Expected_Values()
         {
-            _result.First().Id.Should().Be(RouteConstants.Id);
-            _result.First().Name.Should().BeEquivalentTo(RouteConstants.Name);
-            _result.First().Keywords.Should().BeEquivalentTo(RouteConstants.Keywords);
-            _result.First().Summary.Should().BeEquivalentTo(RouteConstants.Summary);
+            _result.First().Id.Should().Be(1);
+            _result.First().Name.Should().BeEquivalentTo("Route 1");
+            _result.First().Keywords.Should().BeEquivalentTo("Keyword");
+            _result.First().Summary.Should().BeEquivalentTo("Route summary");
             _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
             _result.First().CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
             _result.First().ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);

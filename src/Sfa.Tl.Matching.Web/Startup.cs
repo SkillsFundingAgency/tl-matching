@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,6 @@ using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
@@ -58,6 +58,8 @@ namespace Sfa.Tl.Matching.Web
 
             var isConfigLocalOrDev = ConfigurationIsLocalOrDev();
 
+            services.AddApplicationInsightsTelemetry();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -65,26 +67,37 @@ namespace Sfa.Tl.Matching.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<FormOptions>(options => { options.ValueCountLimit = 15360; });
+
             services.AddAntiforgery(options =>
             {
                 options.Cookie.Name = "tlevels-x-csrf";
                 options.FormFieldName = "_csrfToken";
                 options.HeaderName = "X-XSRF-TOKEN";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
             services.AddMvc(config =>
-            {
-                if (!isConfigLocalOrDev)
                 {
-                    var policy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .Build();
-                    config.Filters.Add(new AuthorizeFilter(policy));
-                }
+                    if (!isConfigLocalOrDev)
+                    {
+                        var policy = new AuthorizationPolicyBuilder()
+                            .RequireAuthenticatedUser()
+                            .Build();
+                        config.Filters.Add(new AuthorizeFilter(policy));
+                    }
 
-                config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
-                config.Filters.Add<CustomExceptionFilterAttribute>();
-            })
+                    config.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                    config.Filters.Add(new ResponseCacheAttribute
+                    {
+                        NoStore = true,
+                        Location = ResponseCacheLocation.None
+                    });
+
+                    config.Filters.Add<CustomExceptionFilterAttribute>();
+                    config.Filters.Add<ServiceUnavailableFilterAttribute>();
+                    config.Filters.Add<BackLinkFilter>();
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             if (!isConfigLocalOrDev)
@@ -114,8 +127,7 @@ namespace Sfa.Tl.Matching.Web
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseHsts(options => options.MaxAge(365));
             }
 
             app.UseXContentTypeOptions();
@@ -185,13 +197,17 @@ namespace Sfa.Tl.Matching.Web
 
         private void RegisterDependencies(IServiceCollection services)
         {
+            var apiKey = MatchingConfiguration.GovNotifyApiKey;
+
             //Inject AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             //Inject DbContext
             services.AddDbContext<MatchingDbContext>(options =>
-                options.UseSqlServer(MatchingConfiguration.SqlConnectionString,
-                    builder => builder.UseNetTopologySuite()
+                options
+                    .UseSqlServer(MatchingConfiguration.SqlConnectionString,
+                    builder => builder
+                        .UseNetTopologySuite()
                                       .EnableRetryOnFailure()), ServiceLifetime.Transient);
 
             //Inject services
@@ -203,42 +219,19 @@ namespace Sfa.Tl.Matching.Web
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
+            services.AddTransient<IAsyncNotificationClient, NotificationClient>(provider => new NotificationClient(apiKey));
 
-            RegisterNotificationsApi(services, MatchingConfiguration.GovNotifyApiKey);
             RegisterRepositories(services);
             RegisterApplicationServices(services);
         }
 
         private static void RegisterRepositories(IServiceCollection services)
         {
-            services.AddTransient<OpportunityRepository>();
-            services.AddTransient<IOpportunityRepository>(x => x.GetRequiredService<OpportunityRepository>());
-            services.AddTransient<IRepository<Opportunity>>(x => x.GetRequiredService<OpportunityRepository>());
-            
-            services.AddTransient<IRepository<Employer>, GenericRepository<Employer>>();
-            services.AddTransient<IRepository<EmailHistory>, GenericRepository<EmailHistory>>();
-            services.AddTransient<IRepository<EmailPlaceholder>, GenericRepository<EmailPlaceholder>>();
-            services.AddTransient<IRepository<EmailTemplate>, GenericRepository<EmailTemplate>>();
-            services.AddTransient<IRepository<OpportunityItem>, GenericRepository<OpportunityItem>>();
-            services.AddTransient<IRepository<Qualification>, GenericRepository<Qualification>>();
-            services.AddTransient<IRepository<LearningAimReference>, GenericRepository<LearningAimReference>>();
-            services.AddTransient<IRepository<QualificationRouteMapping>, QualificationRouteMappingRepository>();
-            services.AddTransient<IRepository<Route>, GenericRepository<Route>>();
-            services.AddTransient<IRepository<Path>, GenericRepository<Path>>();
-            services.AddTransient<IRepository<Provider>, ProviderRepository>();
-            services.AddTransient<IRepository<ProviderQualification>, GenericRepository<ProviderQualification>>();
-            services.AddTransient<IRepository<ProviderReference>, GenericRepository<ProviderReference>>();
-            services.AddTransient<IRepository<BackgroundProcessHistory>, GenericRepository<BackgroundProcessHistory>>();
-            services.AddTransient<IRepository<ProviderVenue>, ProviderVenueRepository>();
-            services.AddTransient<IRepository<ProvisionGap>, GenericRepository<ProvisionGap>>();
-            services.AddTransient<IRepository<Referral>, GenericRepository<Referral>>();
-            services.AddTransient<IRepository<ServiceStatusHistory>, GenericRepository<ServiceStatusHistory>>();
-            services.AddTransient<IRepository<UserCache>, GenericRepository<UserCache>>();
-        }
+            services.AddTransient<IOpportunityRepository, OpportunityRepository>();
+            services.AddTransient<IProviderVenueRepository, ProviderVenueRepository>();
+            services.AddTransient<IProviderRepository, ProviderRepository>();
 
-        private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)
-        {
-            services.AddTransient<IAsyncNotificationClient, NotificationClient>(provider => new NotificationClient(apiKey));
+            services.AddTransient(typeof(IRepository<>), typeof(GenericRepository<>));
         }
 
         private static void RegisterApplicationServices(IServiceCollection services)
@@ -258,8 +251,6 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
             services.AddTransient<IServiceStatusHistoryService, ServiceStatusHistoryService>();
             services.AddTransient<INavigationService, NavigationService>();
-            services.AddTransient<BackLinkFilter>();
-            services.AddTransient<ServiceUnavailableFilterAttribute>();
             
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();

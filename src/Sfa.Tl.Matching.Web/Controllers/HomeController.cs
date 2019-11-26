@@ -9,7 +9,7 @@ using Sfa.Tl.Matching.Web.Filters;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [AllowAnonymous]
-    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
+    //[ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class HomeController : Controller
     {
         private readonly IServiceStatusHistoryService _serviceStatusHistoryService;

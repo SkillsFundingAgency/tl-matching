@@ -53,50 +53,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             };
 
             emailService.SendEmailAsync(2, "Test Template", toAddress, tokens, createdBy).GetAwaiter().GetResult();
-
         }
 
         [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_Called_Exactly_Once()
-        {
-            _emailHistoryRepository
-                .Received(1)
-                .CreateAsync(Arg.Any<EmailHistory>());
-        }
-
-        [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_Called_With_OpportunityId()
+        public void Then_EmailHistoryRepository_Create_Is_Called_Exactly_Once_With_Expected_Values()
         {
             _emailHistoryRepository
                 .Received(1)
                 .CreateAsync(Arg.Is<EmailHistory>(email =>
-                    email.OpportunityId == 2));
-        }
-
-        [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_Called_With_EmailTemplateId()
-        {
-            _emailHistoryRepository
-                .Received(1)
-                .CreateAsync(Arg.Is<EmailHistory>(email =>
-                    email.EmailTemplateId == 1));
-        }
-
-        [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_Called_With_SentTo()
-        {
-            _emailHistoryRepository
-                .Received(1)
-                .CreateAsync(Arg.Is<EmailHistory>(email =>
-                    email.SentTo == "test@test.com"));
-        }
-
-        [Fact]
-        public void Then_EmailHistoryRepository_Create_Is_Called_With_CreatedBy()
-        {
-            _emailHistoryRepository
-                .Received(1)
-                .CreateAsync(Arg.Is<EmailHistory>(email =>
+                    email.OpportunityId == 2 &&
+                    email.EmailTemplateId == 1 &&
+                    email.SentTo == "test@test.com" &&
                     email.CreatedBy == "CreatedBy"));
         }
     }

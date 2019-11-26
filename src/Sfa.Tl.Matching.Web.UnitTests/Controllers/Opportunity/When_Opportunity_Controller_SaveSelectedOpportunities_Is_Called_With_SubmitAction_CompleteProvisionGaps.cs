@@ -32,17 +32,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 SubmitAction = "CompleteProvisionGaps"
             }).GetAwaiter().GetResult();
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
-        }
-
+        
         [Fact]
         public void Then_Result_Is_Redirect_To_Start()
         {
+            _result.Should().NotBeNull();
             var redirect = _result as RedirectToRouteResult;
+            redirect.Should().NotBeNull(); 
             redirect?.RouteName.Should().Be("Start");
         }
 

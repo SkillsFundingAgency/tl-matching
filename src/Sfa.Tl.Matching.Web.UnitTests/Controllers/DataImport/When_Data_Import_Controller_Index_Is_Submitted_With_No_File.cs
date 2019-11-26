@@ -32,22 +32,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
             };
             _result = _dataImportController.Index(viewModel).Result;
         }
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_State_Has_1_Error() =>
-            _dataImportController.ViewData.ModelState.Should().ContainSingle();
-
-        [Fact]
-        public void Then_Model_State_Has_File_Key() =>
-            _dataImportController.ViewData.ModelState.ContainsKey("file").Should().BeTrue();
-
+        
         [Fact]
         public void Then_Model_State_Has_File_Error()
         {
+            _result.Should().BeAssignableTo<ViewResult>();
+        
+            _dataImportController.ViewData.ModelState.Should().ContainSingle();
+
+            _dataImportController.ViewData.ModelState.ContainsKey("file").Should().BeTrue();
             var modelStateEntry = _dataImportController.ViewData.ModelState["file"];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must select a file");
         }

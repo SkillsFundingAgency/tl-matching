@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
             if (ReferenceEquals(x, null)) return false;
             if (ReferenceEquals(y, null)) return false;
             if (x.GetType() != y.GetType()) return false;
-            return x.ProviderVenueId == y.ProviderVenueId && x.QualificationId == y.QualificationId && x.NumberOfPlacements == y.NumberOfPlacements && string.Equals(x.Source, y.Source) && Equals(x.ProviderVenue, y.ProviderVenue) && Equals(x.Qualification, y.Qualification);
+            return x.ProviderVenueId == y.ProviderVenueId && x.QualificationId == y.QualificationId && string.Equals(x.Source, y.Source) && Equals(x.ProviderVenue, y.ProviderVenue) && Equals(x.Qualification, y.Qualification);
         }
 
         public int GetHashCode(ProviderQualification obj)
@@ -21,7 +21,6 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
             {
                 var hashCode = obj.ProviderVenueId;
                 hashCode = (hashCode * 397) ^ obj.QualificationId;
-                hashCode = (hashCode * 397) ^ obj.NumberOfPlacements.GetHashCode();
                 hashCode = (hashCode * 397) ^ (obj.Source != null ? obj.Source.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (obj.ProviderVenue != null ? obj.ProviderVenue.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (obj.Qualification != null ? obj.Qualification.GetHashCode() : 0);

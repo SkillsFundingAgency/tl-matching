@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var viewModel = new EmployerDetailsViewModel
             {
-                EmployerContactPhone = "ABC"
+                Phone = "ABC"
             };
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
@@ -39,19 +39,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             _result.Should().BeAssignableTo<ViewResult>();
 
         [Fact]
-        public void Then_Model_State_Has_1_Error() =>
-            _employerController.ViewData.ModelState.Should().ContainSingle();
-
-        [Fact]
-        public void Then_Model_State_Has_ContactPhone_Key() =>
-            _employerController.ViewData.ModelState.ContainsKey(nameof(EmployerDetailsViewModel.EmployerContactPhone))
-                .Should().BeTrue();
-
-        [Fact]
         public void Then_Model_State_Has_ContactPhone_Error()
         {
+            _employerController.ViewData.ModelState.Should().ContainSingle();
+
+            _employerController.ViewData.ModelState.ContainsKey(nameof(EmployerDetailsViewModel.Phone))
+                .Should().BeTrue();
+
             var modelStateEntry =
-                _employerController.ViewData.ModelState[nameof(EmployerDetailsViewModel.EmployerContactPhone)];
+                _employerController.ViewData.ModelState[nameof(EmployerDetailsViewModel.Phone)];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must enter a number");
         }
     }

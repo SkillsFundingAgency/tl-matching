@@ -71,15 +71,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var viewModel = result?.Model as RemoveEmployerViewModel;
 
             viewModel.Should().NotBeNull();
-            viewModel.OpportunityId.Should().Be(opportunity.Id);
-            viewModel.ConfirmDeleteText.Should()
+            viewModel?.OpportunityId.Should().Be(opportunity.Id);
+            viewModel?.ConfirmDeleteText.Should()
                 .Be($"Confirm you want to delete {dto.OpportunityCount} opportunities created for {dto.EmployerName}");
 
-            viewModel.ConfirmDeleteText.Should()
+            viewModel?.ConfirmDeleteText.Should()
                 .NotBe($"Confirm you want to delete {dto.OpportunityCount} opportunity created for {dto.EmployerName}");
 
-            viewModel.WarningDeleteText.Should().Be("This cannot be undone.");
-            viewModel.EmployerCount.Should().Be(dto.EmployerCount);
+            viewModel?.WarningDeleteText.Should().Be("This cannot be undone.");
+            viewModel?.EmployerCount.Should().Be(dto.EmployerCount);
         }
 
         [Theory, AutoDomainData]

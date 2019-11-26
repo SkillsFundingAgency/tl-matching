@@ -30,10 +30,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 OpportunityId = 1,
                 OpportunityItemId = 2,
                 CompanyName = "CompanyName",
-                CompanyNameAka = "CompanyNameAka",
-                EmployerContact = "EmployerContact",
-                EmployerContactPhone = "EmployerContactPhone",
-                EmployerContactEmail = "EmployerContactEmail"
+                AlsoKnownAs = "CompanyNameAka",
+                PrimaryContact = "EmployerContact",
+                Phone = "EmployerContactPhone",
+                Email = "EmployerContactEmail"
             });
 
             _opportunityService = Substitute.For<IOpportunityService>();
@@ -41,27 +41,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var employerController = new EmployerController(_employerService, _opportunityService, referralService, mapper);
 
-            _result = employerController.EmployerConsentAsync(1, 2).GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
+            _result = employerController.GetEmployerConsentAsync(1, 2).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_EmployerDetailsViewModel_Is_Populated_Correctly()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
+
+            var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
+
             var viewModel = _result.GetViewModel<EmployerConsentViewModel>();
 
             viewModel.OpportunityId.Should().Be(1);
@@ -70,11 +62,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             viewModel.ConfirmationSelected.Should().BeFalse();
 
             viewModel.Details.CompanyName.Should().Be("CompanyName");
-            viewModel.Details.CompanyNameAka.Should().Be("CompanyNameAka");
+            viewModel.Details.AlsoKnownAs.Should().Be("CompanyNameAka");
             viewModel.Details.CompanyNameWithAka.Should().Be("CompanyName (CompanyNameAka)");
-            viewModel.Details.EmployerContact.Should().Be("EmployerContact");
-            viewModel.Details.EmployerContactEmail.Should().Be("EmployerContactEmail");
-            viewModel.Details.EmployerContactPhone.Should().Be("EmployerContactPhone");
+            viewModel.Details.PrimaryContact.Should().Be("EmployerContact");
+            viewModel.Details.Email.Should().Be("EmployerContactEmail");
+            viewModel.Details.Phone.Should().Be("EmployerContactPhone");
         }
 
         [Fact]

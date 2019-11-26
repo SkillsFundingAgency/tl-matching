@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
     {
         private const string Title = "We need extra information for this qualification";
         private const int VenueId = 1;
-        private const string LarsId = "12345678";
+        private const string LarId = "12345678";
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
 
             var client = _factory.CreateClient();
 
-            var response = await client.GetAsync($"/missing-qualification/{VenueId}/{LarsId}");
+            var response = await client.GetAsync($"/missing-qualification/{VenueId}/{LarId}");
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html; charset=utf-8",
@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be("/venue-overview/1");
+            backLink.PathName.Should().Be("/get-admin-back-link/1");
 
             var larId = documentHtml.GetElementById("tl-qualification-larid") as IHtmlParagraphElement;
             larId.TextContent.Should().Be("12345678");

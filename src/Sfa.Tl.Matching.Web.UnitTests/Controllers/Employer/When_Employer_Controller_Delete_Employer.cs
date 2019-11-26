@@ -15,12 +15,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
     {
 
         [Theory, AutoDomainData]
-        public async Task Then_Result_Should_Return_To_GetSavedEmployerOpportunity(
-                                                    SavedEmployerOpportunityViewModel viewModel,
-                                                    IEmployerService employerService,
-                                                    EmployerController sut,
-                                                    int opportunityId
-                                                    )
+        public async Task Then_Result_Should_Return_To_GetSavedEmployerOpportunity(SavedEmployerOpportunityViewModel viewModel, IEmployerService employerService, EmployerController sut, int opportunityId)
         {
             //Arrange
             employerService.GetSavedEmployerOpportunitiesAsync(Arg.Any<string>()).Returns(viewModel);
@@ -32,15 +27,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             result.Should().NotBeNull();
             result?.RouteName.Should().Be("GetSavedEmployerOpportunity");
             result?.RouteName.Should().NotBe("Start");
-
         }
 
         [Theory, AutoDomainData]
-        public async Task Then_Result_Should_Return_To_Start(
-                                                    [Frozen] IEmployerService employerService,
-                                                    EmployerController sut,
-                                                    int opportunityId
-                                                    )
+        public async Task Then_Result_Should_Return_To_Start([Frozen] IEmployerService employerService, EmployerController sut, int opportunityId)
         {
             //Arrange
             employerService.GetSavedEmployerOpportunitiesAsync(Arg.Any<string>()).Returns(new SavedEmployerOpportunityViewModel());
@@ -53,6 +43,5 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             result?.RouteName.Should().Be("Start");
             result?.RouteName.Should().NotBe("GetSavedEmployerOpportunity");
         }
-
     }
 }

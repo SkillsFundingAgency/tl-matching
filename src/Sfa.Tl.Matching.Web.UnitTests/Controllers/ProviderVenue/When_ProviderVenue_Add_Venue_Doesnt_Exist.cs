@@ -34,36 +34,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
                 Postcode = "CV1 2WT"
             };
 
-            _result = controllerWithClaims.AddProviderVenueAsync(viewModel).GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Redirect_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<RedirectToRouteResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
+            _result = controllerWithClaims.CreateVenueAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_Result_Is_RedirectToRoute()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<RedirectToRouteResult>();
+            var viewResult = _result as ViewResult;
+            viewResult?.Model.Should().NotBeNull();
+
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
             result?.RouteName.Should().Be("GetProviderVenueDetail");
-        }
-
-        [Fact]
-        public void Then_RouteValues_Has_VenueId()
-        {
-            var result = _result as RedirectToRouteResult;
             result?.RouteValues["providerVenueId"].Should().Be(1);
         }
 

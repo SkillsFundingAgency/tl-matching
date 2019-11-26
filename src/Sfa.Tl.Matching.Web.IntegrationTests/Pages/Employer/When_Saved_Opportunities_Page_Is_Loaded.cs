@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             backLink.PathName.Should().Be($"/Start");
 
             var table = documentHtml.QuerySelector(".govuk-table") as IHtmlTableElement;
-            table.Rows.Length.Should().Be(6);
+            table.Rows.Length.Should().Be(7);
 
             AssertTableRow(table.Rows[1], "Company Name",
                 "12:00am on 01 January 2019", 1010);

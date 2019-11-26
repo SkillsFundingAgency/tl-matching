@@ -20,14 +20,14 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IProviderVenueRepository _providerVenueRepository;
 
         public ProviderVenueService(IMapper mapper,
-            IRepository<ProviderVenue> providerVenueRepository,
+            IProviderVenueRepository providerVenueRepository,
             ILocationApiClient locationApiClient,
             IGoogleMapApiClient googleMapApiClient)
         {
             _mapper = mapper;
             _locationApiClient = locationApiClient;
             _googleMapApiClient = googleMapApiClient;
-            _providerVenueRepository = (IProviderVenueRepository)providerVenueRepository;
+            _providerVenueRepository = providerVenueRepository;
         }
 
         public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)

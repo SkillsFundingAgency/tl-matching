@@ -4,7 +4,7 @@ namespace Sfa.Tl.Matching.Domain.Models
 {
     public class Qualification : BaseEntity
     {
-        public string LarsId { get; set; }
+        public string LarId { get; set; }
         public string Title { get; set; }
         public string ShortTitle { get; set; }
         public string QualificationSearch { get; set; }

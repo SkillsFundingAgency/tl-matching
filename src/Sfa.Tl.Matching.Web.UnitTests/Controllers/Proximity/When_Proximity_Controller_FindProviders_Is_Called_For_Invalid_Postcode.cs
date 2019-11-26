@@ -55,20 +55,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-
-        [Fact]
         public void Then_Model_Is_Of_Type_SearchParametersViewModel()
         {
+            _result.Should().NotBeNull();
             var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
             viewResult?.Model.Should().BeOfType<SearchParametersViewModel>();
         }
 

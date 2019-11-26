@@ -2,8 +2,8 @@
 {
     public class EmployerDetailDto : BaseOpportunityDto
     {
-        public string EmployerContact { get; set; }
-        public string EmployerContactEmail { get; set; }
-        public string EmployerContactPhone { get; set; }
+        public string PrimaryContact { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
     }
 }

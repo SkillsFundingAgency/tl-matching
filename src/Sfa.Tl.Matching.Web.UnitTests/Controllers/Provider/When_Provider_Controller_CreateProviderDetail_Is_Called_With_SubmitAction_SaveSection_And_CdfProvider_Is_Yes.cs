@@ -33,16 +33,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
-        }
-
-        [Fact]
         public void Then_Result_Is_Redirect_To_SearchProvider_With_Correct_Values()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<RedirectToActionResult>();
             var redirect = _result as RedirectToActionResult;
-            redirect?.ActionName.Should().BeEquivalentTo("ProviderDetail");
+            redirect.Should().NotBeNull();
+            redirect?.ActionName.Should().BeEquivalentTo("AddProviderDetail");
             redirect?.RouteValues
                 .Should()
                 .Contain(new KeyValuePair<string, object>("UkPrn", 123));

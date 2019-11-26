@@ -15,8 +15,6 @@ using Sfa.Tl.Matching.Web.Filters;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
-    [ServiceFilter(typeof(BackLinkFilter))]
-    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class ProximityController : Controller
     {
         private readonly IMapper _mapper;
@@ -81,21 +79,21 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetProviderResults")]
-        public async Task<IActionResult> Results(SearchParametersViewModel searchParametersViewModel)
+        public async Task<IActionResult> GetProviderResultsAsync(SearchParametersViewModel searchParametersViewModel)
         {
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
 
-            return View(resultsViewModel);
+            return View("Results", resultsViewModel);
         }
 
         [HttpPost]
-        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}")]
-        public async Task<IActionResult> RefineSearchResults(SearchParametersViewModel viewModel)
+        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "RefineSearchResults")]
+        public async Task<IActionResult> RefineSearchResultsAsync(SearchParametersViewModel viewModel)
         {
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
             {
 
-                return View(nameof(Results), new SearchViewModel
+                return View("Results", new SearchViewModel
                 {
                     SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
                     SearchResults = new SearchResultsViewModel(),
@@ -107,8 +105,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpPost]
-        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}")]
-        public async Task<IActionResult> ValidateProviderSearchResult(SaveReferralViewModel viewModel)
+        [Route("[action]/provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "ValidateProviderSearchResult")]
+        public async Task<IActionResult> ValidateProviderSearchResultAsync(SaveReferralViewModel viewModel)
         {
             if (viewModel.SelectedProvider.Any(p => p.IsSelected))
             {
@@ -130,7 +128,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 CompanyNameWithAka = viewModel.CompanyNameWithAka
             });
 
-            return View(nameof(Results), searchViewModel);
+            return View("Results", searchViewModel);
         }
 
         private async Task<SearchViewModel> GetSearchResultsAsync(SearchParametersViewModel viewModel)

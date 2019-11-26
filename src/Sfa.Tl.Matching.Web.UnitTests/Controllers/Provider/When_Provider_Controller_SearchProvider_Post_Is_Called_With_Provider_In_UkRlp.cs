@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
 
             var viewModel = new ProviderSearchParametersViewModel { UkPrn = 10000546 };
-            _result = controllerWithClaims.SearchProviderAsync(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SearchProviderByUkPrnAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -67,33 +67,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Then_Result_Is_ViewResult() =>
-            _result.Should().BeOfType<ViewResult>();
-
-        [Fact]
-        public void Then_Result_Is_Redirect_To_Provider_Detail_With_Provider_Id()
-        {
-            var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("GetProviderDetail");
-            redirect?.RouteValues
-                .Should()
-                .Contain(new KeyValuePair<string, object>("providerId", 1));
-        }
-
-        [Fact]
         public void Then_IsUkRlp_Is_True()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<ViewResult>();
+            var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
+
             var viewModel = _result.GetViewModel<ProviderSearchViewModel>();
             viewModel.SearchResults.IsUkRlp.Should().BeTrue();
         }

@@ -14,12 +14,10 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<OpportunityBasketViewModel> GetOpportunityBasketAsync(int opportunityId);
         Task<OpportunityReportDto> GetPipelineOpportunitiesAsync(int opportunityId);
         int GetEmployerOpportunityCount(int opportunityId);
-        Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime referralDate);
-        Task<IList<ProviderFeedbackDto>> GetAllReferralsForProviderFeedbackAsync(DateTime referralDate);
         Task<IList<MatchingServiceOpportunityReport>> GetMatchingServiceOpportunityReportAsync();
         Task<IList<MatchingServiceProviderOpportunityReport>> GetMatchingServiceProviderOpportunityReportAsync();
-        Task<EmailBodyDto> GetFailedEmployerEmailAsync(int opportunityId, string sentTo);
-        Task<EmailBodyDto> GetFailedProviderEmailAsync(int opportunityId, string sentTo);
         Task<IList<MatchingServiceProviderEmployerReport>> GetMatchingServiceProviderEmployerReportAsync();
+        Task<EmailBodyDto> GetEmailDeliveryStatusForEmployerAsync(int opportunityId, string sentTo);
+        Task<EmailBodyDto> GetEmailDeliveryStatusForProviderAsync(int opportunityId, string sentTo);
     }
 }

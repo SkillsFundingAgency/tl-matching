@@ -26,9 +26,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         {
             OpportunityItemId = OpportunityItemId,
             OpportunityId = OpportunityId,
-            EmployerContact = Contact,
-            EmployerContactEmail = ContactEmail,
-            EmployerContactPhone = ContactPhone
+            PrimaryContact = Contact,
+            Email = ContactEmail,
+            Phone = ContactPhone
         };
 
         private const int OpportunityId = 1;
@@ -47,12 +47,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var config = new MapperConfiguration(c =>
             {
                 c.AddMaps(typeof(EmployerDtoMapper).Assembly);
-                c.ConstructServicesUsing(type => 
-                    type.Name.Contains("LoggedInUserEmailResolver") ? 
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserEmailResolver") ?
                         new LoggedInUserEmailResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpcontextAccesor) :
-                        type.Name.Contains("LoggedInUserNameResolver") ? 
-                            (object) new LoggedInUserNameResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpcontextAccesor) :
-                            type.Name.Contains("UtcNowResolver") ? 
+                        type.Name.Contains("LoggedInUserNameResolver") ?
+                            (object)new LoggedInUserNameResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpcontextAccesor) :
+                            type.Name.Contains("UtcNowResolver") ?
                                 new UtcNowResolver<EmployerDetailsViewModel, EmployerDetailDto>(new DateTimeProvider()) :
                                 null);
             });
@@ -79,20 +79,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         public void Then_SaveEmployerDetail_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).UpdateOpportunityAsync(Arg.Is<EmployerDetailDto>(a =>
-                a.EmployerContact == Contact &&
-                a.EmployerContactEmail == ContactEmail &&
-                a.EmployerContactPhone == ContactPhone &&
+                a.PrimaryContact == Contact &&
+                a.Email == ContactEmail &&
+                a.Phone == ContactPhone &&
                 a.ModifiedBy == ModifiedBy));
         }
 
         [Fact]
-        public void Then_Result_Is_RedirectResult() =>
-            _result.Should().BeOfType<RedirectToActionResult>();
-
-        [Fact]
         public void Then_Result_Is_Redirect_To_SaveCheckAnswers()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<RedirectToActionResult>(); 
             var redirect = _result as RedirectToActionResult;
+            redirect.Should().NotBeNull();
             redirect?.ControllerName.Should().BeEquivalentTo("Opportunity");
             redirect?.ActionName.Should().BeEquivalentTo("SaveCheckAnswers");
             redirect?.RouteValues["opportunityId"].Should().Be(1);

@@ -17,11 +17,9 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     AlsoKnownAs = "",
                     CompanyNameSearch = "CompanyName",
                     Aupa = "Active",
-                    CompanyType = "Employer",
                     PrimaryContact = "Primary Contact",
                     Phone = "07878 787558",
                     Email = "email@address.com",
-                    Postcode = "CV1 2WT",
                     Owner = "Owner",
                     CreatedOn = new DateTime(2019, 1, 1),
                     CreatedBy = "Dev Surname"
@@ -34,11 +32,9 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     AlsoKnownAs = "",
                     CompanyNameSearch = "CompanyNameForSelection",
                     Aupa = "Active",
-                    CompanyType = "Employer",
                     PrimaryContact = "Primary Contact",
                     Phone = "07878 787558",
                     Email = "email@address.com",
-                    Postcode = "CV1 2WT",
                     Owner = "Owner",
                     CreatedOn = new DateTime(2019, 1, 1),
                     CreatedBy = "Dev Surname"

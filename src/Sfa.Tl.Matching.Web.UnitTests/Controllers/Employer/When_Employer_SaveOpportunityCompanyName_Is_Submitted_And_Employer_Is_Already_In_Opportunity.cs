@@ -48,21 +48,20 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_View_Result_Is_Returned() =>
+        public void Then_View_Result_Is_Returned()
+        {
+            _result.Should().NotBeNull();
             _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_State_Has_1_Error() =>
-            _employerController.ViewData.ModelState.Should().ContainSingle();
-
-        [Fact]
-        public void Then_Model_State_Has_CompanyName_Key() =>
-            _employerController.ViewData.ModelState.ContainsKey(nameof(FindEmployerViewModel.CompanyName))
-                .Should().BeTrue();
+        }
 
         [Fact]
         public void Then_Model_State_Has_CompanyName_Error()
         {
+            _employerController.ViewData.ModelState.Should().ContainSingle();
+
+            _employerController.ViewData.ModelState.ContainsKey(nameof(FindEmployerViewModel.CompanyName))
+                    .Should().BeTrue();
+
             var modelStateEntry = _employerController.ViewData.ModelState[nameof(FindEmployerViewModel.CompanyName)];
             modelStateEntry
                 .Errors[0]

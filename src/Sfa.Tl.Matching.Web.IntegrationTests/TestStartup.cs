@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
 {
@@ -16,15 +17,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
         protected override void ConfigureConfiguration(IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.test.json", true)
-                .Build();
+               .AddJsonFile("appsettings.test.json", true)
+               .Build();
 
             if (configuration["EnvironmentName"] == "__EnvironmentName__")
-            {
                 configuration = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.local.json")
                     .Build();
-            }
 
             MatchingConfiguration = ConfigurationLoader.Load(
                 configuration["EnvironmentName"],

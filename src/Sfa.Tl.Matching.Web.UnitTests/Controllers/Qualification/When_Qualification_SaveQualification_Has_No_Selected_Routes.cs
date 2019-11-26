@@ -56,30 +56,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Model_Is_Of_Type_QualificationSearchViewModell()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().BeOfType<QualificationSearchViewModel>();
-        }
-
-        [Fact]
-        public void Then_Model_Contains_Routes_Error()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();
-            viewResult?.ViewData.ModelState["Routes"]
-                .Errors
-                .Should()
-                .ContainSingle(error =>
-                    error.ErrorMessage == "You must choose a skill area for this qualification");
-        }
-
-        [Fact]
-        public void Then_Json_Result_Is_Returned()
+        public void Then_Json_Result_Is_Returned_With_Short_Title_Error()
         {
             var result = _result as JsonResult;
             result.Should().NotBeNull();
@@ -88,6 +65,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                     .Replace("=", ":")
                     .Replace(" False", "\"False\"")
                     .Replace(" True", "\"True\"");
+
+            validJson.Should().NotBeNull();
 
             dynamic responseObject = JsonConvert.DeserializeObject(validJson);
 

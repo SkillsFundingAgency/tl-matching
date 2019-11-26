@@ -35,16 +35,12 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
         }
 
         [Fact]
-        public void Then_Results_Should_Not_Be_Null() =>
+        public void Then_Exactly_One_Provider_And_Two_Venues_Found_Within_Search_Radius()
+        {
             _results.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Exactly_One_Provider_Is_Found_Within_Search_Radius() =>
             _results.Select(p => p.ProviderName).Distinct().Count().Should().Be(1);
-
-        [Fact]
-        public void Then_Exactly_Two_Provider_Venue_Are_Found_Within_Search_Radius() =>
             _results.Count().Should().Be(2);
+        }
 
         public void Dispose()
         {

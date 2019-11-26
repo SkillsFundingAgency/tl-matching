@@ -65,15 +65,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
         }
 
         [Fact]
-        public void Then_ProviderVenueRepository_Create_Is_Called_Exactly_Once()
-        {
-            _providerQualificationRepository
-                .Received(1)
-                .CreateAsync(Arg.Any<Domain.Models.ProviderQualification>());
-        }
-
-        [Fact]
-        public void Then_ProviderQualificationRepository_Create_Is_Called_With_Expected_Values()
+        public void Then_ProviderQualificationRepository_Create_Is_Called_Exactly_Once_With_Expected_Values()
         {
             _providerQualificationRepository
                 .Received()

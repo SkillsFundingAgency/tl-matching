@@ -51,9 +51,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         public void Then_The_First_Provider_Fields_Are_As_Expected()
         {
             var provider = _result.First();
-            provider.ProviderId.Should().Be(1);
+            provider.Id.Should().Be(1);
             provider.UkPrn.Should().Be(10000546);
-            provider.ProviderName.Should().Be("ProviderName");
+            provider.Name.Should().Be("ProviderName");
             provider.IsCdfProvider.Should().Be("Yes");
         }
 
@@ -61,9 +61,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Provider
         public void Then_The_Second_Provider_Fields_Are_As_Expected()
         {
             var provider = _result.Skip(1).First();
-            provider.ProviderId.Should().Be(2);
+            provider.Id.Should().Be(2);
             provider.UkPrn.Should().Be(10000123);
-            provider.ProviderName.Should().Be("ProviderName2");
+            provider.Name.Should().Be("ProviderName2");
             provider.IsCdfProvider.Should().Be("No");
         }
     }

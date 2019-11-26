@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var updatedCount = await _emailService.UpdateEmailStatus(emailDeliveryStatusPayLoad);
 
             if (emailDeliveryStatusPayLoad.EmailDeliveryStatus.ToUpper() != "DELIVERED" && updatedCount != -1)
-                await PushEmailDeliveryStatusAsync(emailDeliveryStatusPayLoad.id);
+                await PushEmailDeliveryStatusAsync(emailDeliveryStatusPayLoad.Id);
 
             return updatedCount;
         }
@@ -67,8 +67,8 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            var failedEmailDto = await _emailService.GetFailedEmailAsync(notificationId);
-            if (failedEmailDto == null)
+            var emailBodyDto = await _emailService.GetEmailBodyFromNotifyClientAsync(notificationId);
+            if (emailBodyDto == null)
             {
                 _logger.LogInformation($"Notification Id={notificationId} cannot be found in Notify");
                 return;
@@ -78,12 +78,12 @@ namespace Sfa.Tl.Matching.Application.Services
             if (emailHistoryDto.Status == "unknown-failure")
             {
                 summary = ErrorUnknownSummary;
-                if (emailHistoryDto.Status != failedEmailDto.Status)
+                if (emailHistoryDto.Status != emailBodyDto.Status)
                 {
                     await _emailService.UpdateEmailStatus(new EmailDeliveryStatusPayLoad
                     {
-                        id = notificationId,
-                        status = failedEmailDto.Status
+                        Id = notificationId,
+                        Status = emailBodyDto.Status
                     });
                 }
             }
@@ -97,12 +97,12 @@ namespace Sfa.Tl.Matching.Application.Services
                 { "summary", summary },
                 { "email_type", emailTemplateName.Humanize().ToLower() },
                 { "body", emailBody },
-                { "reason", failedEmailDto.FailedEmailType.Humanize() },
+                { "reason", emailBodyDto.EmailDeliveryStatusType.Humanize() },
                 { "sender_username", emailHistoryDto.CreatedBy },
-                { "failed_email_body", failedEmailDto.Body }
+                { "email_body", emailBodyDto.Body }
             };
 
-            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId, EmailTemplateName.FailedEmailV2.ToString(),
+            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId, EmailTemplateName.EmailDeliveryStatus.ToString(),
                 _configuration.MatchingServiceSupportEmailAddress, tokens, "System");
         }
 
@@ -119,7 +119,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<EmailBodyDto> GetEmailBodyDto(EmailTemplateName emailTemplateName, EmailHistoryDto emailHistoryDto)
         {
-            if (!emailHistoryDto.OpportunityId.HasValue) 
+            if (!emailHistoryDto.OpportunityId.HasValue)
                 return null;
 
             EmailBodyDto emailBodyDto = null;
@@ -131,7 +131,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 case EmailTemplateName.EmployerReferralComplex:
                 case EmailTemplateName.EmployerReferralV3:
                 case EmailTemplateName.EmployerReferralV4:
-                    emailBodyDto = await _opportunityRepository.GetFailedEmployerEmailAsync(
+                    emailBodyDto = await _opportunityRepository.GetEmailDeliveryStatusForEmployerAsync(
                         emailHistoryDto.OpportunityId.Value,
                         emailHistoryDto.SentTo);
                     break;
@@ -141,7 +141,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 case EmailTemplateName.ProviderReferralV3:
                 case EmailTemplateName.ProviderReferralV4:
                 case EmailTemplateName.ProviderFeedback:
-                    emailBodyDto = await _opportunityRepository.GetFailedProviderEmailAsync(
+                    emailBodyDto = await _opportunityRepository.GetEmailDeliveryStatusForProviderAsync(
                         emailHistoryDto.OpportunityId.Value,
                         emailHistoryDto.SentTo);
                     break;
@@ -152,7 +152,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task PushEmailDeliveryStatusAsync(Guid notificationId)
         {
-            await _messageQueueService.PushFailedEmailMessageAsync(new SendFailedEmail
+            await _messageQueueService.PushEmailDeliveryStatusMessageAsync(new SendEmailDeliveryStatus
             {
                 NotificationId = notificationId
             });

@@ -23,14 +23,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
         }
 
         [Fact]
-        public void Then_GeoLocationData_Is_Returned()
-        {
-            _postcodeLookupResultDto.Should().NotBeNull();
-        }
-
-        [Fact]
         public void Then_GeoLocationData_Has_Valid_Data()
         {
+            _postcodeLookupResultDto.Should().NotBeNull();
             _postcodeLookupResultDto.Latitude.Should().Be("52.400997");
             _postcodeLookupResultDto.Longitude.Should().Be("-1.508122");
         }

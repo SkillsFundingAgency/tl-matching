@@ -30,22 +30,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
 
             var providerVenueController = new ProviderVenueController(_providerVenueService);
 
-            _result = providerVenueController.ProviderVenueDetailAsync(1).GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
+            _result = providerVenueController.GetProviderVenueDetailAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -55,8 +40,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         }
 
         [Fact]
-        public void Then_viewModel_Values_Are_Set()
+        public void Then_ViewModel_Values_Are_Set()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
+
+            var viewResult = _result as ViewResult;
+            viewResult?.Model.Should().NotBeNull();
+
             var viewModel = _result.GetViewModel<ProviderVenueDetailViewModel>();
             viewModel.Id.Should().Be(1);
             viewModel.Postcode.Should().Be("CV1 2WT");

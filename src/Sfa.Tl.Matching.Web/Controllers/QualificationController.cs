@@ -14,7 +14,7 @@ using Sfa.Tl.Matching.Web.Filters;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
-    [ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
+    //[ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class QualificationController : Controller
     {
         private readonly IMapper _mapper;
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("add-qualification/{providerId}", Name = "CreateQualification")]
-        public async Task<IActionResult> AddQualificationAsync(AddQualificationViewModel viewModel)
+        public async Task<IActionResult> CreateQualificationAsync(AddQualificationViewModel viewModel)
         {
             if (!ModelState.IsValid)
                 return View("AddQualification", viewModel);
@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [Route("edit-qualifications", Name = "EditQualifications")]
-        public IActionResult SearchQualifications()
+        public IActionResult EditQualifications()
         {
             return View("SearchQualifications", new QualificationSearchViewModel());
         }
@@ -104,13 +104,19 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError("SearchTerms", "You must enter 2 or more letters for your search");
 
             if (!ModelState.IsValid)
-                return View("SearchQualifications", viewModel);
+                return View("SearchQualifications",viewModel);
 
             var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
 
             PopulateRoutesForQualificationSearchItem(searchResult);
 
             return View("SearchQualifications", searchResult);
+        }
+
+        private static bool IsValidSearchTerm(QualificationSearchViewModel viewModel)
+        {
+            return viewModel.SearchTerms.IsAllSpecialCharactersOrNumbers() ||
+                   viewModel.SearchTerms.ToLetter().Length < 2;
         }
 
         [HttpGet]
@@ -163,7 +169,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         [HttpPost]
         [Route("missing-qualification/{providerVenueId}/{larId}", Name = "SaveMissingQualification")]
-        public async Task<IActionResult> MissingQualificationAsync(MissingQualificationViewModel viewModel)
+        public async Task<IActionResult> SaveMissingQualificationAsync(MissingQualificationViewModel viewModel)
         {
             Validate(viewModel);
 
@@ -193,12 +199,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
             await _providerQualificationService.RemoveProviderQualificationAsync(providerVenueId, qualificationId);
 
             return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId });
-        }
-
-        private static bool IsValidSearchTerm(QualificationSearchViewModel viewModel)
-        {
-            return viewModel.SearchTerms.IsAllSpecialCharactersOrNumbers() ||
-                   viewModel.SearchTerms.ToLetter().Length < 2;
         }
 
         private IList<RouteViewModel> GetRoutes(MissingQualificationViewModel viewModel = null)

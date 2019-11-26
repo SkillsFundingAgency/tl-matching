@@ -10,7 +10,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification.Buil
             new Domain.Models.ProviderQualification
             {
                 Id = 1,
-                NumberOfPlacements = 1,
                 ProviderVenueId = 1,
                 QualificationId = 1,
                 Source = "Test",
@@ -22,7 +21,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.ProviderQualification.Buil
             new Domain.Models.ProviderQualification
             {
                 Id = 2,
-                NumberOfPlacements = 2,
                 ProviderVenueId = 2,
                 QualificationId = 2,
                 Source = "Test",

@@ -6,6 +6,6 @@
         public const string ProviderReferralEmailQueue = "provider-referral-email-request-queue";
         public const string EmployerReferralEmailQueue = "employer-referral-email-request-queue";
         public const string EmployerAupaBlankEmailQueue = "employer-aupa-email-blank-request-queue";
-        public const string FailedEmailQueue = "failed-email-request-queue";
+        public const string EmailDeliveryStatusQueue = "email-delivery-status-request-queue";
     }
 }

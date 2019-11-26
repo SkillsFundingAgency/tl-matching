@@ -25,7 +25,6 @@ namespace Sfa.Tl.Matching.Models.Enums
         ProviderReferralV4,
         ProviderFeedback,
         EmployerAupaBlank,
-        FailedEmail,
-        FailedEmailV2
+        EmailDeliveryStatus
     }
 }

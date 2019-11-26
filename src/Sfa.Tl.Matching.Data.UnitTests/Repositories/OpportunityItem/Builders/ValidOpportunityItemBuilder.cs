@@ -24,5 +24,5 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.OpportunityItem.Builders
             ModifiedBy = EntityCreationConstants.ModifiedByUser,
             ModifiedOn = EntityCreationConstants.ModifiedOn
         };
-}
+    }
 }

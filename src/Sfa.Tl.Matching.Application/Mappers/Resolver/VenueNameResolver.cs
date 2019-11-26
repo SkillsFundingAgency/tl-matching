@@ -19,11 +19,9 @@ namespace Sfa.Tl.Matching.Application.Mappers.Resolver
         {
             var name = source.Name;
 
-            var lookupResult = _locationApiClient.IsValidPostcodeAsync(name, true).GetAwaiter().GetResult();
-            if (lookupResult.Item1)
-                return lookupResult.Item2;
-
-            return name.ToTitleCase();
+            var (includeTerminated, postcode) = _locationApiClient.IsValidPostcodeAsync(name, true).GetAwaiter().GetResult();
+            
+            return includeTerminated ? postcode : name.ToTitleCase();
         }
     }
 }

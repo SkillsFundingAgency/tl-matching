@@ -10,11 +10,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
 {
     public class ProviderVenueRepository : GenericRepository<ProviderVenue>, IProviderVenueRepository
     {
-        private readonly MatchingDbContext _dbContext;
-
         public ProviderVenueRepository(ILogger<ProviderVenueRepository> logger, MatchingDbContext dbContext) : base(logger, dbContext)
         {
-            _dbContext = dbContext;
+        
         }
 
         public async Task<ProviderVenueDetailViewModel> GetVenueWithQualificationsAsync(int id)
@@ -36,7 +34,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                                    select new QualificationDetailViewModel
                                                    {
                                                        Id = q.Id,
-                                                       LarsId = q.LarsId,
+                                                       LarId = q.LarId,
                                                        Title = q.Title,
                                                        ShortTitle = q.ShortTitle
                                                    }).Distinct().ToList()

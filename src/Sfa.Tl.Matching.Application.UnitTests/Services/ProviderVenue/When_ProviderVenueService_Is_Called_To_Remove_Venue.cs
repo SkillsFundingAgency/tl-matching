@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
 {
     public class When_ProviderVenueService_Is_Called_To_Hide_Venue
     {
-        private readonly IRepository<Domain.Models.ProviderVenue> _providerVenueRepository;
+        private readonly IProviderVenueRepository _providerVenueRepository;
 
         public When_ProviderVenueService_Is_Called_To_Hide_Venue()
         {
@@ -53,17 +53,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         }
         
         [Fact]
-        public void Then_ProviderVenueRepository_UpdateWithSpecifedColumnsOnly_Is_Called_Exactly_Once()
+        public void Then_ProviderVenueRepository_UpdateWithSpecifedColumnsOnly_Is_Called_Exactly_Once_With_Expected_Values()
         {
-            _providerVenueRepository.Received(1)
-                .UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<Domain.Models.ProviderVenue>(),
-                    Arg.Any<Expression<Func<Domain.Models.ProviderVenue, object>>[]>());
-        }
-
-        [Fact]
-        public void Then_ProviderVenueRepository_UpdateWithSpecifedColumnsOnly_Is_Called_With_Expected_Values()
-        {
-            _providerVenueRepository.Received(1)
+            _providerVenueRepository
+                .Received(1)
                 .UpdateWithSpecifedColumnsOnlyAsync(Arg.Is<Domain.Models.ProviderVenue>(
                     pv =>
                         pv.Id == 1 &&

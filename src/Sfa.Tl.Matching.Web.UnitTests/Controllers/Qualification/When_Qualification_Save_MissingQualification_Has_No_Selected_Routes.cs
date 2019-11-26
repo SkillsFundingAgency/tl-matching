@@ -52,24 +52,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 }
             };
 
-            _result = controllerWithClaims.MissingQualificationAsync(viewModel).GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Model_Is_Of_Type_MissingQualificationViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().BeOfType<MissingQualificationViewModel>();
+            _result = controllerWithClaims.SaveMissingQualificationAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_Model_Contains_Routes_Error()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
             var viewResult = _result as ViewResult;
+            _result.Should().NotBeNull();
+
+            viewResult?.Model.Should().BeOfType<MissingQualificationViewModel>();
+            
             viewResult?.ViewData.ModelState.IsValid.Should().BeFalse();
             viewResult?.ViewData.ModelState["Routes"]
                 .Errors
@@ -77,9 +72,5 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 .ContainSingle(error =>
                     error.ErrorMessage == "You must choose a skill area for this qualification");
         }
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
     }
 }

@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 .AddUserName("CreatedBy")
                 .Build();
 
-            _result = controllerWithClaims.ReferralEmailSentAsync(1).GetAwaiter().GetResult();
+            _result = controllerWithClaims.GetReferralEmailSentAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -46,25 +46,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-
-        [Fact]
         public void Then_ViewModel_Properties_Are_Set()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
+            var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
+
             var viewModel = _result.GetViewModel<SentViewModel>();
-            viewModel.EmployerContact.Should().Be("EmployerContact");
+            viewModel.PrimaryContact.Should().Be("EmployerContact");
             viewModel.CompanyName.Should().Be("CompanyName");
             viewModel.EmployerCrmRecord.Should().Be($"https://esfa-cs-prod.crm4.dynamics.com/main.aspx?pagetype=entityrecord&etc=1&id=%7b{_employerCrmId}%7d&extraqs=&newWindow=true");
         }

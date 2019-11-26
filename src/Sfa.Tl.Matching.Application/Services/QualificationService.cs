@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 q => new QualificationSearchResultViewModel
                 {
                     QualificationId = q.Id,
-                    LarId = q.LarsId,
+                    LarId = q.LarId,
                     ShortTitle = q.ShortTitle,
                     Title = q.Title,
                     RouteIds = q.QualificationRouteMapping.Select(m => m.Id).ToList()
@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<QualificationDetailViewModel> GetQualificationAsync(string larId)
         {
-            var qualification = await _qualificationRepository.GetSingleOrDefaultAsync(p => p.LarsId == larId);
+            var qualification = await _qualificationRepository.GetSingleOrDefaultAsync(p => p.LarId == larId);
             return _mapper.Map<Qualification, QualificationDetailViewModel>(qualification);
         }
 
@@ -98,7 +98,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     QualificationId = q.Id,
                     Title = q.Title,
                     ShortTitle = q.ShortTitle,
-                    LarId = q.LarsId,
+                    LarId = q.LarId,
                     RouteIds = q.QualificationRouteMapping.Select(r => r.RouteId).ToList()
                 })
                 .Take(51)

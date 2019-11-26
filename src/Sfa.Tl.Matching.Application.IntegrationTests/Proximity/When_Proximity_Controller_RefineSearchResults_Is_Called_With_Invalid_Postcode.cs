@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
             var mapper = Substitute.For<IMapper>();
 
-            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), 
+            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(),
                 new LocationApiClient(new HttpClient(), new MatchingConfiguration
                 {
                     PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
@@ -54,21 +54,16 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
                 SelectedRouteId = 1
             };
 
-            _result = _proximityController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
+            _result = _proximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Result_Is_ViewResult() =>
-            _result.Should().BeAssignableTo<ViewResult>();
 
         [Fact]
         public void Then_Model_Is_Not_Null()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<ViewResult>();
             var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
             viewResult?.Model.Should().NotBeNull();
         }
 

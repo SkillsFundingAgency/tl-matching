@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
 
             var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
             backLink.Text.Should().Be("Back");
-            backLink.PathName.Should().Be("/venue-overview/1");
+            backLink.PathName.Should().Be("/get-admin-back-link/1");
 
             var larId = documentHtml.GetElementById("LarId") as IHtmlInputElement;
             larId.Value.Should().BeEmpty();

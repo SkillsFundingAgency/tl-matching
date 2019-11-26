@@ -39,6 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             _result.Should().NotBeNull();
 
             var result = _result as RedirectToRouteResult;
+            result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("Start");
         }

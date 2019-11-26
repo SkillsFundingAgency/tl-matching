@@ -80,21 +80,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
         }
 
         [Fact]
-        public void Then_QualificationRouteMappingRepository_CreateMany_Is_Called_Exactly_Once()
-        {
-            _qualificationRouteMappingRepository
-                .Received(1)
-                .CreateManyAsync(Arg.Any<IList<QualificationRouteMapping>>());
-        }
-
-        [Fact]
-        public void Then_QualificationRouteMappingRepository_CreateMany_Is_Called_With_Expected_Values()
+        public void Then_QualificationRouteMappingRepository_CreateMany_Is_Called_Exactly_Once_With_Expected_Values()
         {
             _qualificationRouteMappingRepository
                 .Received(1)
                 .CreateManyAsync(Arg.Is<IList<QualificationRouteMapping>>(
                     qrpm => qrpm.Count == 1 &&
-                            qrpm.First().Qualification.LarsId == "10042982" &&
+                            qrpm.First().Qualification.LarId == "10042982" &&
                             qrpm.First().Qualification.ShortTitle == "short title" &&
                             qrpm.First().RouteId == 1
                 ));

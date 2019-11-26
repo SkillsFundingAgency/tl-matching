@@ -9,8 +9,8 @@ namespace Sfa.Tl.Matching.Web.Mappers
         public SentViewModelMapper()
         {
             CreateMap<OpportunityDto, SentViewModel>()
-                .ForMember(m => m.EmployerCrmRecord, opt => opt.Ignore())
-                ;
+                .ForMember(m=> m.PrimaryContact, config => config.MapFrom(s=> s.PrimaryContact))
+                .ForMember(m => m.EmployerCrmRecord, opt => opt.Ignore());
         }
     }
 }

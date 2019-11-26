@@ -19,10 +19,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
             _providerVenueService = Substitute.For<IProviderVenueService>();
             _providerVenueService.GetRemoveProviderVenueViewModelAsync(Arg.Any<int>())
                 .Returns(new ValidRemoveProviderVenueViewModelBuilder().Build());
-            
+
             var providerVenueController = new ProviderVenueController(_providerVenueService);
 
-            _result = providerVenueController.ConfirmRemoveProviderVenueAsync(1).GetAwaiter().GetResult();
+            _result = providerVenueController.GetConfirmRemoveProviderVenueAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -32,35 +32,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderVenue
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-        
-        [Fact]
-        public void Then_Model_Is_Of_Type_RemoveProviderVenueViewModel()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().BeOfType<RemoveProviderVenueViewModel>();
-        }
-        
-        [Fact]
         public void Then_View_Model_Fields_Have_Expected_Value()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
             var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
+            viewResult?.Model.Should().BeOfType<RemoveProviderVenueViewModel>();
+
             var model = viewResult?.Model as RemoveProviderVenueViewModel;
-            // ReSharper disable once PossibleNullReferenceException
-            model.ProviderVenueId.Should().Be(1);
-            model.Postcode.Should().Be("CV1 2WT");
+            model.Should().NotBeNull();
+            model?.ProviderVenueId.Should().Be(1);
+            model?.Postcode.Should().Be("CV1 2WT");
         }
     }
 }

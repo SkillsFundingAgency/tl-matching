@@ -30,12 +30,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var logger = Substitute.For<ILogger<Application.Services.EmailDeliveryStatusService>>();
 
             _emailService = Substitute.For<IEmailService>();
-            _emailService.GetFailedEmailAsync(_notificationId).Returns(
-                new FailedEmailDto
+            _emailService.GetEmailBodyFromNotifyClientAsync(_notificationId).Returns(
+                new EmailDeliveryStatusDto
                 {
                     Body = "Body",
                     Subject = "Subject",
-                    FailedEmailType = FailedEmailType.TemporaryFailure
+                    EmailDeliveryStatusType = EmailDeliveryStatusType.TemporaryFailure
                 });
 
             _emailService.GetEmailHistoryAsync(_notificationId).Returns(
@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             var messageQueueService = Substitute.For<IMessageQueueService>();
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            _opportunityRepository.GetFailedProviderEmailAsync(OpportunityId, "sent-to@email.com").Returns(
+            _opportunityRepository.GetEmailDeliveryStatusForProviderAsync(OpportunityId, "sent-to@email.com").Returns(
                 new EmailBodyDtoBuilder().AddPoviderEmail().Build());
 
             var emailDeliveryStatusService = new Application.Services.EmailDeliveryStatusService(configuration,
@@ -66,28 +66,28 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         }
 
         [Fact]
-        public void Then_EmailService_GetFailedEmailAsync_Is_Called_Exactly_Once()
+        public void Then_EmailService_GetEmailDeliveryStatusAsync_Is_Called_Exactly_Once()
         {
-            _emailService.Received(1).GetFailedEmailAsync(Arg.Any<Guid>());
+            _emailService.Received(1).GetEmailBodyFromNotifyClientAsync(Arg.Any<Guid>());
         }
 
         [Fact]
-        public void Then_EmailHistoryService_GetFailedEmailAsync_Is_Called_Exactly_Once()
+        public void Then_EmailHistoryService_GetEmailDeliveryStatusAsync_Is_Called_Exactly_Once()
         {
             _emailService.Received(1).GetEmailHistoryAsync(_notificationId);
         }
 
         [Fact]
-        public void Then_OpportunityRepository_GetFailedProviderEmailAsync_Is_Called_Exactly_Once()
+        public void Then_OpportunityRepository_GetDeliveryStatusOpportunityEmailAsync_Is_Called_Exactly_Once()
         {
-            _opportunityRepository.Received(1).GetFailedProviderEmailAsync(OpportunityId, "sent-to@email.com");
+            _opportunityRepository.Received(1).GetEmailDeliveryStatusForProviderAsync(OpportunityId, "sent-to@email.com");
         }
 
         [Fact]
         public void Then_EmailService_SendEmailAsync_Is_Called_Exactly_Once()
         {
             _emailService.Received(1).SendEmailAsync(OpportunityId,
-                EmailTemplateName.FailedEmailV2.ToString(),
+                EmailTemplateName.EmailDeliveryStatus.ToString(),
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("summary") && tokens["summary"] == "We cannot determine whether or not the following email was sent."
@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                     && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
                     && tokens.ContainsKey("reason") && tokens["reason"] == "Inbox not accepting messages right now"
                     && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
-                    && tokens.ContainsKey("failed_email_body") && tokens["failed_email_body"] == "Body")
+                    && tokens.ContainsKey("email_body") && tokens["email_body"] == "Body")
                 , Arg.Any<string>());
         }
     }

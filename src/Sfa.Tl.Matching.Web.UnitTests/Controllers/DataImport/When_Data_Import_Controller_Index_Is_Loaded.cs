@@ -26,38 +26,17 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
+        public void Then_ViewData_Contains_Expected_Data()
+        {
             _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
             _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
             var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
             viewResult?.Model.Should().NotBeNull();
-        }
 
-        [Fact]
-        public void Then_Data_Import_Type_Is_Not_Null()
-        {
             var viewModel = _result.GetViewModel<DataImportParametersViewModel>();
             viewModel.ImportType.Should().NotBeEmpty();
-        }
-
-        [Fact]
-        public void Then_Data_Import_Type_Contains_Data()
-        {
-            var viewModel = _result.GetViewModel<DataImportParametersViewModel>();
             viewModel.ImportType.Length.Should().BeGreaterThan(0);
-        }
-
-        [Fact]
-        public void Then_DataImportType_Text_Is_Populated_With_Description()
-        {
-            var viewModel = _result.GetViewModel<DataImportParametersViewModel>();
             viewModel.ImportType[1].Text.Should().Be(DataImportType.LearningAimReference.Humanize());
         }
     }

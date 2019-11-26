@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.10.0" />
-    <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.10.0" />
-    <PackageReference Include="AutoFixture.SeedExtensions" Version="4.10.0" />
-    <PackageReference Include="AutoFixture.Xunit2" Version="4.10.0" />
-    <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="AutoFixture" Version="4.11.0" />
+    <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.11.0" />
+    <PackageReference Include="AutoFixture.SeedExtensions" Version="4.11.0" />
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.11.0" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.6" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>

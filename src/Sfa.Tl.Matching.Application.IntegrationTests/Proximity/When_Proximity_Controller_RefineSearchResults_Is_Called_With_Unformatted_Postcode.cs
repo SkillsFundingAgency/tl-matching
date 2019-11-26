@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
             var mapper = Substitute.For<IMapper>();
 
-            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(), 
+            var proximityService = new ProximityService(Substitute.For<ISearchProvider>(),
                 new LocationApiClient(httpClient, new MatchingConfiguration
                 {
                     PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
@@ -55,19 +55,20 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
                 SelectedRouteId = 1
             };
 
-            _result = proximityController.RefineSearchResults(viewModel).GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
+            _result = proximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_RedirectToRoute_Result_Is_Returned()
         {
+            _result.Should().NotBeNull();
             _result.Should().BeAssignableTo<RedirectToRouteResult>();
+
+            var redirect = _result as RedirectToRouteResult;
+            redirect.Should().NotBeNull();
+            redirect?.RouteValues.Count.Should().BeGreaterOrEqualTo(3);
+            redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");
+            redirect?.RouteValues["SelectedRouteId"].Should().Be(1);
         }
 
         [Fact]
@@ -76,14 +77,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             var result = _result as RedirectToRouteResult;
             // ReSharper disable once PossibleNullReferenceException
             result.RouteValues.Count.Should().BeGreaterOrEqualTo(3);
-        }
-
-        [Fact]
-        public void Then_Result_Postcode_Is_Correctly_Formatted()
-        {
-            var result = _result as RedirectToRouteResult;
-            // ReSharper disable once PossibleNullReferenceException
-            result.RouteValues["Postcode"].Should().Be("CV1 2WT");
         }
     }
 }

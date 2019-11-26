@@ -46,9 +46,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dto = new EmployerDetailDto
             {
                 OpportunityId = OpportunityId,
-                EmployerContact = Contact,
-                EmployerContactEmail = ContactEmail,
-                EmployerContactPhone = ContactPhone,
+                PrimaryContact = Contact,
+                Email = ContactEmail,
+                Phone = ContactPhone,
                 ModifiedBy = ModifiedBy
             };
 

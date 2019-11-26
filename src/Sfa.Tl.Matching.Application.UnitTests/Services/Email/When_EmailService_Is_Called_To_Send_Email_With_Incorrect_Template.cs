@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
         public When_EmailService_Is_Called_To_Send_Email_With_Incorrect_Template()
         {
-            var emailHistoryRepository = Substitute.For<IRepository<Domain.Models.EmailHistory>>();
+            var emailHistoryRepository = Substitute.For<IRepository<EmailHistory>>();
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailHistoryMapper).Assembly));
             var mapper = new Mapper(config);
             var configuration = new MatchingConfiguration
@@ -56,27 +56,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         {
             _emailTemplateRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
         }
-
+        
         [Fact]
-        public void Then_EmailTemplateRepository_Logger_Is_Called_Exactly_Once()
+        public void Then_EmailTemplateRepository_Logger_Is_Called_Exactly_Once_With_Expected_Message()
         {
-            _logger.Received(1).Log(
-                LogLevel.Warning,
-                Arg.Any<EventId>(),
-                Arg.Any<object>(),
-                null,
-                Arg.Any<Func<object, Exception, string>>());
-        }
-
-        [Fact]
-        public void Then_EmailTemplateRepository_Logger_Is_Called_With_Expected_Message()
-        {
-            _logger.Received(1).Log(
-                LogLevel.Warning,
-                Arg.Any<EventId>(),
-                Arg.Is<object>(o => o.ToString().Contains("Email template MissingTestTemplate not found. No emails sent.")),
-                null,
-                Arg.Any<Func<object, Exception, string>>());
+            _logger
+                .Received(1)
+                .Log(
+                    LogLevel.Warning,
+                    Arg.Any<EventId>(),
+                    Arg.Is<object>(o => o.ToString().Contains("Email template MissingTestTemplate not found. No emails sent.")),
+                    null,
+                    Arg.Any<Func<object, Exception, string>>());
         }
 
         [Fact]

@@ -5,6 +5,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
@@ -17,33 +18,38 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         public When_Provider_Controller_GetProviderDetail_Is_Loaded()
         {
             _providerService = Substitute.For<IProviderService>();
-            _providerService.GetProviderDetailByIdAsync(1).Returns(new ProviderDetailViewModel());
+            _providerService.GetProviderDetailByIdAsync(1)
+                .Returns(new ProviderDetailViewModel
+                {
+                    Id = 1,
+                    UkPrn = 123,
+                    Name = "Provider Name",
+                    DisplayName = "Provider Display Name",
+                });
 
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
 
-            _result = providerController.ProviderDetail(1).GetAwaiter().GetResult();
+            _result = providerController.GetProviderDetailAsync(1).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
+        public void Then_ViewModel_Values_Are_Set()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
-        }
+            viewResult.Should().NotBeNull();
 
-        [Fact]
-        public void Then_Model_Is_Of_Type_ProviderDetailViewModel()
-        {
-            var viewResult = _result as ViewResult;
             viewResult?.Model.Should().BeOfType<ProviderDetailViewModel>();
+            var viewModel = _result.GetViewModel<ProviderDetailViewModel>();
+            viewModel.Id.Should().Be(1);
+            
+            viewModel.Name.Should().Be("Provider Name");
+            viewModel.DisplayName.Should().Be("Provider Display Name");
+            viewModel.UkPrn.Should().Be(123);
+            viewModel.IsCdfProvider.Should().BeTrue();
+            viewModel.IsEnabledForReferral.Should().BeTrue();
         }
 
         [Fact]

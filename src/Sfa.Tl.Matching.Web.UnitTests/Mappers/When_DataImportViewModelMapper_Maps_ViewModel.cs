@@ -56,23 +56,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
+        public void Then_Result_Should_Be_Mapped_Correctly()
+        {
             _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Result_FileName_Should_Be_Mapped() =>
             _result.FileName.Should().Be($"{FormattedDateTimeNowUtc}{FileName}");
-
-        [Fact]
-        public void Then_Result_ContentType_Should_Be_Mapped() =>
             _result.ContentType.Should().Be(FileContentType);
-
-        [Fact]
-        public void Then_Result_ImportType_Should_Be_Mapped() =>
             _result.ImportType.Should().Be(DataImportType.Employer);
-
-        [Fact]
-        public void Then_Result_Data_Should_Be_Mapped() =>
             _result.Data.Should().BeEquivalentTo(_data);
+        }
     }
 }

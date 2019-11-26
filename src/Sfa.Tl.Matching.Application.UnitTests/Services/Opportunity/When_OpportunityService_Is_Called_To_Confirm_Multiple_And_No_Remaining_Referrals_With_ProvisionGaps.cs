@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                         new LoggedInUserEmailResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
                             httpcontextAccesor)
                         : type.Name.Contains("LoggedInUserNameResolver")
-                            ? (object) new
+                            ? (object)new
                                 LoggedInUserNameResolver<OpportunityItemIsSelectedForCompleteDto, OpportunityItem>(
                                     httpcontextAccesor)
                             : type.Name.Contains("UtcNowResolver")
@@ -139,22 +139,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var referralService = new ReferralEmailService(mapper, configuration, dateTimeProvider, emailService,
                 opportunityRepo, _opportunityItemRepository, backgroundProcessHistoryRepo);
 
-            referralService.SendProviderReferralEmailAsync(1, itemIds, 1,  httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
+            referralService.SendProviderReferralEmailAsync(1, itemIds, 1, httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
         }
-
+        
         [Fact]
-        public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_Exactly_Once()
-        {
-            _opportunityItemRepository.Received(1)
-                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Any<IList<OpportunityItem>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>(),
-                    Arg.Any<Expression<Func<OpportunityItem, object>>>()
-                );
-        }
-
-        [Fact]
-        public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_With_Four_Items_With_Expected_Values()
+        public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_Exactly_Once_With_Four_Items_With_Expected_Values()
         {
             _opportunityItemRepository.Received(1)
                 .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(

@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
 
         private const string ProviderDisplayName = "Provider display name";
         private const string ProviderVenueDisplayName = "Provider venue display name";
-        
+
         private const string Postcode = "SW1A 2AA";
         private readonly int _selectedRouteId;
 
@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var proximityController = new ProximityController(mapper, routePathService, _proximityService, _opportunityService,
                 employerService);
 
-            _result = proximityController.Results(new SearchParametersViewModel
+            _result = proximityController.GetProviderResultsAsync(new SearchParametersViewModel
             {
                 SelectedRouteId = RouteId,
                 Postcode = Postcode,
@@ -101,7 +101,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
                 .Received(1)
                 .SearchProvidersByPostcodeProximityAsync(
                     Arg.Is<ProviderSearchParametersDto>(
-                        a => a.Postcode == Postcode && 
+                        a => a.Postcode == Postcode &&
                              a.SelectedRouteId == RouteId));
         }
 
@@ -116,71 +116,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_SearchViewModel_Contains_SearchParametersViewModel()
-        {
-            var viewModel = _result.GetViewModel<SearchViewModel>();
-            viewModel.SearchParameters.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Then_SearchViewModel_Contains_SearchResultsViewModel()
-        {
-            var viewModel = _result.GetViewModel<SearchViewModel>();
-            viewModel.SearchResults.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Then_SearchViewModel_SearchParameters_Values_Should_Match_Input_Values()
-        {
-            var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
-            searchParametersViewModel.Postcode.Should().Be(Postcode);
-            searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
-        }
-
-        [Fact]
-        public void Then_SearchViewModel_SearchResults_Should_Have_Expected_Number_Of_Items()
-        {
-            var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
-            searchResultsViewModel.Results.Count.Should().Be(1);
-        }
-
-        [Fact]
-        public void Then_SearchViewModel_AdditionalSearchResults_Should_Be_Null_Or_Empty()
-        {
-            var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
-            searchResultsViewModel.AdditionalResults.Should().BeNullOrEmpty();
-        }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Then_View_Result_Is_Returned()
-        {
-            _result.Should().BeAssignableTo<ViewResult>();
-        }
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
-        }
-
-        [Fact]
         public void Then_GetReferrals_Is_Called_Exactly_Once()
         {
             _opportunityService.Received(1).GetReferrals(OpportunityItemId);
-        }
-
-        [Fact]
-        public void Then_SearchViewModel_Results_Is_Selected()
-        {
-            var viewModel = _result.GetViewModel<SearchViewModel>();
-            viewModel.SearchResults.Results[0].IsSelected.Should().BeTrue();
         }
 
         [Fact]
@@ -192,23 +130,37 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
         }
 
         [Fact]
-        public void Then_ViewModel_CompanyNameWithAka_Should_Have_Expected_Value()
+        public void Then_Model_Is_Not_Null()
         {
-            var viewModel = _result.GetViewModel<SearchViewModel>();
-            viewModel.SearchParameters.CompanyNameWithAka.Should().Be("CompanyName (AlsoKnownAs)");
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
+            var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
         }
 
         [Fact]
-        public void Then_ViewModel_Should_Have_Provider_And_Venue_Display_Name()
+        public void Then_ViewModel_Should_Have_Expected_Values()
         {
             var viewModel = _result.GetViewModel<SearchViewModel>();
 
-            viewModel.SearchResults.Results.Select(x => x.ProviderDisplayName).Should()
-                .Contain("Provider display name");
+            viewModel.SearchParameters.Should().NotBeNull();
+            var searchParametersViewModel = _result.GetViewModel<SearchViewModel>().SearchParameters;
+            searchParametersViewModel.Postcode.Should().Be(Postcode);
+            searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
+            searchParametersViewModel.CompanyNameWithAka.Should().Be("CompanyName (AlsoKnownAs)");
 
-            viewModel.SearchResults.Results.Select(x => x.ProviderVenueName).Should()
+            viewModel.SearchResults.Should().NotBeNull();
+            var searchResultsViewModel = _result.GetViewModel<SearchViewModel>().SearchResults;
+            searchResultsViewModel.Results.Count.Should().Be(1);
+            searchResultsViewModel.AdditionalResults.Should().BeNullOrEmpty();
+
+            searchResultsViewModel.Results.Select(x => x.ProviderDisplayName).Should()
+                .Contain("Provider display name");
+            searchResultsViewModel.Results.Select(x => x.ProviderVenueName).Should()
                 .Contain("Provider venue display name");
 
+            searchResultsViewModel.Results[0].IsSelected.Should().BeTrue();
         }
     }
 }

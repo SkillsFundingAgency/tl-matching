@@ -56,10 +56,10 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 var tokens = new Dictionary<string, string>
                 {
-                    { "employer_contact_name", employerReferral.EmployerContact.ToTitleCase() },
+                    { "employer_contact_name", employerReferral.PrimaryContact.ToTitleCase() },
                     { "employer_business_name", employerReferral.CompanyName.ToTitleCase() },
-                    { "employer_contact_number", employerReferral.EmployerContactPhone },
-                    { "employer_contact_email", employerReferral.EmployerContactEmail }
+                    { "employer_contact_number", employerReferral.Phone },
+                    { "employer_contact_email", employerReferral.Email }
                 };
 
                 foreach (var data in employerReferral.WorkplaceDetails.OrderBy(dto => dto.WorkplaceTown))
@@ -75,11 +75,11 @@ namespace Sfa.Tl.Matching.Application.Services
                     {
                         sb.AppendLine($"* {count.ToOrdinalWords().ToTitleCase()} provider selected: {providerAndVenue.CustomisedProviderDisplayName}");
                         sb.Append("Primary contact: ");
-                        sb.AppendLine(FormatContactDetails(providerAndVenue.ProviderPrimaryContact, providerAndVenue.ProviderPrimaryContactPhone, providerAndVenue.ProviderPrimaryContactEmail));
+                        sb.AppendLine(FormatContactDetails(providerAndVenue.PrimaryContact, providerAndVenue.PrimaryContactPhone, providerAndVenue.PrimaryContactEmail));
 
-                        if (!string.IsNullOrWhiteSpace(providerAndVenue.ProviderSecondaryContact))
+                        if (!string.IsNullOrWhiteSpace(providerAndVenue.SecondaryContact))
                         {
-                            sb.AppendLine($"Secondary contact: {FormatContactDetails(providerAndVenue.ProviderSecondaryContact, providerAndVenue.ProviderSecondaryContactPhone, providerAndVenue.ProviderSecondaryContactEmail)}");
+                            sb.AppendLine($"Secondary contact: {FormatContactDetails(providerAndVenue.SecondaryContact, providerAndVenue.SecondaryContactPhone, providerAndVenue.SecondaryContactEmail)}");
                         }
 
                         count++;
@@ -89,7 +89,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("placements_list", sb.ToString());
 
-                await SendEmailAsync(EmailTemplateName.EmployerReferralV4, opportunityId, employerReferral.EmployerContactEmail, tokens, employerReferral.CreatedBy);
+                await SendEmailAsync(EmailTemplateName.EmployerReferralV4, opportunityId, employerReferral.Email, tokens, employerReferral.CreatedBy);
 
                 await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
                     BackgroundProcessHistoryStatus.Complete, username);

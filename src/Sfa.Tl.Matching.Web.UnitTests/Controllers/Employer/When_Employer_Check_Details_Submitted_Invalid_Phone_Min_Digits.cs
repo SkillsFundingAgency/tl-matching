@@ -23,7 +23,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var viewModel = new EmployerDetailsViewModel
             {
-                EmployerContactPhone = "1"
+                Phone = "1"
             };
 
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
@@ -35,23 +35,24 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         }
 
         [Fact]
-        public void Then_View_Result_Is_Returned() =>
+        public void Then_View_Result_Is_Returned()
+        {
+            _result.Should().NotBeNull();
             _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
-        public void Then_Model_State_Has_1_Error() =>
-            _employerController.ViewData.ModelState.Should().ContainSingle();
-
-        [Fact]
-        public void Then_Model_State_Has_ContactPhone_Key() =>
-            _employerController.ViewData.ModelState.ContainsKey(nameof(EmployerDetailsViewModel.EmployerContactPhone))
-                .Should().BeTrue();
+        }
 
         [Fact]
         public void Then_Model_State_Has_ContactPhone_Error()
-        {
+        { 
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
+
+            _employerController.ViewData.ModelState.Should().ContainSingle();
+            _employerController.ViewData.ModelState.ContainsKey(nameof(EmployerDetailsViewModel.Phone))
+                .Should().BeTrue();
+
             var modelStateEntry =
-                _employerController.ViewData.ModelState[nameof(EmployerDetailsViewModel.EmployerContactPhone)];
+                _employerController.ViewData.ModelState[nameof(EmployerDetailsViewModel.Phone)];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must enter a telephone number that has 7 or more numbers");
         }
     }

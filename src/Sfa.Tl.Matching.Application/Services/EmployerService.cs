@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
@@ -57,12 +58,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var searchResults = _employerRepository
                 .GetManyAsync(e => EF.Functions.Like(e.CompanyNameSearch, $"%{companyName.ToLetterOrDigit()}%"))
                 .OrderBy(e => e.CompanyName)
-                .Select(e => new EmployerSearchResultDto
-                {
-                    CrmId = e.CrmId,
-                    CompanyName = e.CompanyName,
-                    AlsoKnownAs = e.AlsoKnownAs
-                });
+                .ProjectTo<EmployerSearchResultDto>(_mapper.ConfigurationProvider);
 
             return searchResults;
         }
@@ -102,10 +98,10 @@ namespace Sfa.Tl.Matching.Application.Services
                         OpportunityItemId = opportunityItemId,
                         OpportunityId = o.Id,
                         CompanyName = o.Employer.CompanyName,
-                        CompanyNameAka = o.Employer.AlsoKnownAs,
-                        EmployerContact = o.EmployerContact,
-                        EmployerContactEmail = o.EmployerContactEmail,
-                        EmployerContactPhone = o.EmployerContactPhone
+                        AlsoKnownAs = o.Employer.AlsoKnownAs,
+                        PrimaryContact = o.EmployerContact,
+                        Email = o.EmployerContactEmail,
+                        Phone = o.EmployerContactPhone
                     },
                     o => o.CreatedOn,
                     false);
@@ -124,10 +120,10 @@ namespace Sfa.Tl.Matching.Application.Services
                         OpportunityItemId = opportunityItemId,
                         OpportunityId = opportunityId,
                         CompanyName = o.Employer.CompanyName,
-                        CompanyNameAka = o.Employer.AlsoKnownAs,
-                        EmployerContact = o.EmployerContact,
-                        EmployerContactEmail = o.EmployerContactEmail,
-                        EmployerContactPhone = o.EmployerContactPhone
+                        AlsoKnownAs = o.Employer.AlsoKnownAs,
+                        PrimaryContact = o.EmployerContact,
+                        Email = o.EmployerContactEmail,
+                        Phone = o.EmployerContactPhone
                     });
 
             if (employerDetails != null) return employerDetails;
@@ -140,33 +136,26 @@ namespace Sfa.Tl.Matching.Application.Services
                         OpportunityItemId = opportunityItemId,
                         OpportunityId = opportunityId,
                         CompanyName = e.CompanyName,
-                        CompanyNameAka = e.AlsoKnownAs,
-                        EmployerContact = e.PrimaryContact,
-                        EmployerContactEmail = e.Email,
-                        EmployerContactPhone = e.Phone
+                        AlsoKnownAs = e.AlsoKnownAs,
+                        PrimaryContact = e.PrimaryContact,
+                        Email = e.Email,
+                        Phone = e.Phone
                     });
         }
 
         public async Task<int> GetInProgressEmployerOpportunityCountAsync(string username)
         {
-            var savedCount = await _opportunityRepository.CountAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved &&
-                                                                                             !oi.IsCompleted)
-                                                                 && o.CreatedBy == username);
+            var savedCount = await _opportunityRepository.CountAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username);
 
             return savedCount;
         }
 
         public async Task<SavedEmployerOpportunityViewModel> GetSavedEmployerOpportunitiesAsync(string username)
         {
-            var employerOpportunities = await _opportunityRepository.GetManyAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved
-                                                                                                              && !oi.IsCompleted)
-                                                                                  && o.CreatedBy == username)
-                .Select(eo => new EmployerOpportunityViewModel
-                {
-                    Name = eo.Employer.CompanyName,
-                    OpportunityId = eo.Id,
-                    LastUpdated = eo.ModifiedOn != null ? eo.ModifiedOn.Value.GetTimeWithDate("on") : eo.CreatedOn.GetTimeWithDate("on")
-                }).ToListAsync();
+            var employerOpportunities = await _opportunityRepository
+                .GetManyAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username)
+                .ProjectTo<EmployerOpportunityViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
 
             var viewModel = new SavedEmployerOpportunityViewModel
             {
@@ -179,12 +168,10 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<RemoveEmployerDto> GetConfirmDeleteEmployerOpportunityAsync(int opportunityId, string username)
         {
             var opportunityCount = _opportunityRepository.GetEmployerOpportunityCount(opportunityId);
-            var employerCount = _opportunityRepository.GetManyAsync(o =>
-                o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted)
-                && o.CreatedBy == username).ToList();
+            var employerCount = _opportunityRepository.GetManyAsync(o => o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted) && o.CreatedBy == username).ToList();
 
-            var removeEmployerDto =
-                await _opportunityRepository.GetSingleOrDefaultAsync(op => op.Id == opportunityId,
+            var removeEmployerDto = await _opportunityRepository.GetSingleOrDefaultAsync(
+                    op => op.Id == opportunityId,
                     op => new RemoveEmployerDto
                     {
                         OpportunityCount = opportunityCount,
@@ -197,10 +184,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<string> GetEmployerOpportunityOwnerAsync(Guid employerCrmId)
         {
-            var opportunity = await _opportunityRepository.GetFirstOrDefaultAsync(
-                o => o.EmployerCrmId == employerCrmId
-                     && o.OpportunityItem.Any(oi => oi.IsSaved &&
-                                                    !oi.IsCompleted));
+            var opportunity = await _opportunityRepository.GetFirstOrDefaultAsync(o => o.EmployerCrmId == employerCrmId && o.OpportunityItem.Any(oi => oi.IsSaved && !oi.IsCompleted));
             return opportunity?.CreatedBy;
         }
 
@@ -238,9 +222,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (isAupaMissing)
             {
-                var existingReferrals = await _opportunityRepository.GetFirstOrDefaultAsync(
-                    o => o.EmployerCrmId == employerData.accountid.ToGuid()
-                         && o.OpportunityItem.Count(oi => oi.Referral.Any()) > 0);
+                var existingReferrals = await _opportunityRepository.GetFirstOrDefaultAsync(o => o.EmployerCrmId == employerData.AccountId.ToGuid() && o.OpportunityItem.Count(oi => oi.Referral.Any()) > 0);
 
                 if (existingReferrals == null) return -1;
                 await AddMessageToQueueAsync(employerData);
@@ -248,7 +230,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 return -1;
             }
 
-            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.accountid.ToGuid());
+            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.AccountId.ToGuid());
 
             if (existingEmployer == null)
             {
@@ -271,24 +253,24 @@ namespace Sfa.Tl.Matching.Application.Services
             await _messageQueueService.PushEmployerAupaBlankEmailMessageAsync(new SendEmployerAupaBlankEmail
             {
                 Name = employerData.Name,
-                Owner = employerData.owneridname,
+                Owner = employerData.OwnerIdName,
                 ContactEmail = employerData.ContactEmail,
                 ContactPhone = employerData.ContactTelephone1,
-                CrmId = new Guid(employerData.accountid)
+                CrmId = new Guid(employerData.AccountId)
             });
         }
 
         private async Task<int> CreateOrUpdateContactAsync(CrmContactEventBase employerData)
         {
-            if (employerData.parentcustomerid == null) return -1;
+            if (employerData.ParentCustomerId == null) return -1;
 
-            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.parentcustomerid.id.ToGuid());
+            var existingEmployer = await _employerRepository.GetSingleOrDefaultAsync(emp => emp.CrmId == employerData.ParentCustomerId.Id.ToGuid());
 
             if (existingEmployer == null) return -1;
 
-            existingEmployer.PrimaryContact = employerData.fullname;
-            existingEmployer.Phone = employerData.telephone1;
-            existingEmployer.Email = employerData.emailaddress1;
+            existingEmployer.PrimaryContact = employerData.Fullname;
+            existingEmployer.Phone = employerData.Telephone;
+            existingEmployer.Email = employerData.EmailAddress;
             existingEmployer.ModifiedBy = "System";
             existingEmployer.ModifiedOn = DateTime.UtcNow;
 
@@ -299,9 +281,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static bool IsAupaMissing(IEnumerable<ValidationFailure> validationFailures)
         {
-            return validationFailures.Count(vf => vf.PropertyName == "sfa_aupa"
-                                                  && (vf.ErrorCode == "InvalidFormat" 
-                                                      || vf.ErrorCode == "MissingMandatoryData")) > 0;
+            return validationFailures.Any(vf => vf.PropertyName == "sfa_aupa"
+                                                  && (vf.ErrorCode == "InvalidFormat"
+                                                      || vf.ErrorCode == "MissingMandatoryData"));
         }
     }
 }

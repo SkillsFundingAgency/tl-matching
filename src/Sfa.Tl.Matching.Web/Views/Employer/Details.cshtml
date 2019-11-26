@@ -4,7 +4,7 @@
 }
 
 @section backButton{
-    @*<a asp-route="LoadWhoIsEmployer" asp-route-opportunityId="@Model.OpportunityId" class="govuk-back-link" id="tl-back">Back</a>*@
+    @*<a asp-route="GetOpportunityCompanyName" asp-route-opportunityId="@Model.OpportunityId" class="govuk-back-link" id="tl-back">Back</a>*@
     <a asp-route="GetBackLink"  
        asp-route-opportunityId="@Model.OpportunityId" 
        asp-route-opportunityItemId="@Model.OpportunityItemId"
@@ -22,9 +22,9 @@
                 <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
-                        <li><a sfa-validation-for="EmployerContact"></a></li>
-                        <li><a sfa-validation-for="EmployerContactEmail"></a></li>
-                        <li><a sfa-validation-for="EmployerContactPhone"></a></li>
+                        <li><a sfa-validation-for="PrimaryContact"></a></li>
+                        <li><a sfa-validation-for="Email"></a></li>
+                        <li><a sfa-validation-for="Phone"></a></li>
                     </ul>
                 </div>
             </div>
@@ -38,10 +38,10 @@
             <input asp-for="OpportunityId" type="hidden" />
             <input asp-for="OpportunityItemId" type="hidden" />
             <input asp-for="CompanyName" type="hidden" />
-            <input asp-for="CompanyNameAka" type="hidden" />
+            <input asp-for="AlsoKnownAs" type="hidden" />
 
             <p class="govuk-body">
-                <a asp-route="LoadWhoIsEmployer" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link" id="tl-find-different">Find a different employer</a>
+                <a asp-route="GetOpportunityCompanyName" asp-route-opportunityId="@Model.OpportunityId" asp-route-opportunityItemId="@Model.OpportunityItemId" class="govuk-link" id="tl-find-different">Find a different employer</a>
             </p>
 
             <partial name="_employerDetailForm" , model="Model" />

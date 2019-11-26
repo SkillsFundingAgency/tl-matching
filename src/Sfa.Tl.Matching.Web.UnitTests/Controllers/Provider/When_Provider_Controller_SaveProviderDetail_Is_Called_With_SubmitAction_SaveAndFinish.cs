@@ -36,18 +36,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 }
             }).GetAwaiter().GetResult();
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
-        }
-
+        
         [Fact]
         public void Then_View_Result_Is_Returned_For_SearchProvider()
         {
-            _result.Should().BeAssignableTo<RedirectToRouteResult>();
-            ((RedirectToRouteResult)_result).RouteName.Should().Be("SearchProvider");
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<RedirectToActionResult>();
+
+            var result = _result as RedirectToActionResult;
+            result.Should().NotBeNull();
+            result?.ActionName.Should().Be("SearchProviderByUkPrnAsync");
         }
 
         [Fact]

@@ -11,28 +11,28 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer.Builders
         {
             _crmEmployerEventBase = new CrmEmployerEventBase
             {
-                accountid = Guid.NewGuid().ToString(),
+                AccountId = Guid.NewGuid().ToString(),
                 Name = "Test",
 
-                address1_line1 = "Test",
-                address1_postalcode = "Test",
+                AddressLine = "Test",
+                PostCode = "Test",
 
-                customertypecode = new Customertypecode { Value = 200005 },
+                CustomerTypeCode = new Customertypecode { Value = 200005 },
 
-                PrimaryContactId = new PrimaryContactId { name = "Test" },
+                PrimaryContactId = new PrimaryContactId { Name = "Test" },
                 ContactEmail = "Test@test.com",
                 ContactTelephone1 = "0123456789",
 
-                telephone1 = "NOT_IN_USE",
-                emailaddress1 = "NOT_IN_USE",
+                Phone = "NOT_IN_USE",
+                EmailAddress = "NOT_IN_USE",
 
-                owneremail = "NOT_IN_USE",
-                owneridname = "Test",
+                OwnerEmail = "NOT_IN_USE",
+                OwnerIdName = "Test",
 
-                sfa_alias = "Test",
+                Alias = "Test",
 
-                sfa_ceasedtrading = 0,
-                sfa_employermanagement = null,
+                CeasedTrading = 0,
+                EmployerManagement = null,
             };
         }
 

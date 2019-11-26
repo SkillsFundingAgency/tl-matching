@@ -45,40 +45,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 Postcode = "CV1 2WT"
             };
 
-            _result = controllerWithClaims.AddQualificationAsync(viewModel).GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_Redirect_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<RedirectToRouteResult>();
-
-        [Fact]
-        public void Then_Model_Is_Not_Null()
-        {
-            var viewResult = _result as ViewResult;
-            viewResult?.Model.Should().NotBeNull();
+            _result = controllerWithClaims.CreateQualificationAsync(viewModel).GetAwaiter().GetResult();
         }
         
         [Fact]
         public void Then_Result_Is_RedirectToRoute()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<RedirectToRouteResult>();
+
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
             result?.RouteName.Should().Be("MissingQualification");
-        }
-
-        [Fact]
-        public void Then_RouteValues_Has_Expected_Parameters()
-        {
-            var result = _result as RedirectToRouteResult;
             result?.RouteValues["providerVenueId"].Should().Be(1);
             result?.RouteValues["larId"].Should().Be("12345678");
         }
-
+        
         [Fact]
         public void Then_IsValidLarId_Is_Called_Exactly_Once()
         {

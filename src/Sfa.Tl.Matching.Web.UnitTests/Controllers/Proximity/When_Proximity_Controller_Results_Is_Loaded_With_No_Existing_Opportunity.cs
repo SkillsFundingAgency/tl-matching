@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             var proximityController = new ProximityController(mapper, routePathService, _proximityService, _opportunityService,
                 employerService);
 
-            _result = proximityController.Results(new SearchParametersViewModel
+            _result = proximityController.GetProviderResultsAsync(new SearchParametersViewModel
             {
                 SelectedRouteId = RouteId,
                 Postcode = Postcode
@@ -124,18 +124,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Proximity
             searchResultsViewModel.AdditionalResults.Should().BeNullOrEmpty();
         }
 
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_View_Result_Is_Returned() =>
-            _result.Should().BeAssignableTo<ViewResult>();
-
-        [Fact]
+       [Fact]
         public void Then_Model_Is_Not_Null()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeAssignableTo<ViewResult>();
             var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
             viewResult?.Model.Should().NotBeNull();
         }
 

@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Employer
         {
             _employerRepository.DidNotReceive().CreateAsync(Arg.Any<Domain.Models.Employer>());
             _employerRepository.Received(1).UpdateAsync(Arg.Is<Domain.Models.Employer>(e =>
-                e.CrmId == _employerEventBase.accountid.ToGuid() &&
+                e.CrmId == _employerEventBase.AccountId.ToGuid() &&
                 e.Aupa == "Aware" &&
                 e.CompanyName == "Test" &&
                 e.AlsoKnownAs == "Test" &&

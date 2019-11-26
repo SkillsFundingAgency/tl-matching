@@ -1,5 +1,4 @@
 ﻿using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.Constants;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.Builders
 {
@@ -7,18 +6,18 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.
     {
         public Domain.Models.QualificationRouteMapping Build() => new Domain.Models.QualificationRouteMapping
         {
-            Id = QualificationRouteMappingConstants.Id,
-            RouteId = QualificationRouteMappingConstants.RouteId,
-            Source = QualificationRouteMappingConstants.Source,
+            Id = 1,
+            RouteId = 2,
+            Source = "Test",
             CreatedBy = EntityCreationConstants.CreatedByUser,
             CreatedOn = EntityCreationConstants.CreatedOn,
             ModifiedBy = EntityCreationConstants.ModifiedByUser,
             ModifiedOn = EntityCreationConstants.ModifiedOn,
             Qualification = new Domain.Models.Qualification
             {
-                LarsId = QualificationRouteMappingConstants.LarsId,
-                Title = QualificationRouteMappingConstants.Title,
-                ShortTitle = QualificationRouteMappingConstants.ShortTitle
+                LarId = "1234567X",
+                Title = "Full Qualification Title",
+                ShortTitle = "Short Title"
             }
         };
     }

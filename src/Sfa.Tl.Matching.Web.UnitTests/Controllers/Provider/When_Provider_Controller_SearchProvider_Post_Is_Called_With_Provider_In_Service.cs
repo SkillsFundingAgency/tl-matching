@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -8,6 +9,7 @@ using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
@@ -23,17 +25,28 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             _providerService
                 .SearchAsync(Arg.Any<long>())
                 .Returns(new ProviderSearchResultDto
+                {
+                    Id = 1,
+                    UkPrn = 10000546,
+                    Name = "Test Provider"
+                });
+            _providerService
+                .SearchProvidersWithFundingAsync(Arg.Any<ProviderSearchParametersViewModel>())
+                .Returns(new List<ProviderSearchResultItemViewModel>
+                {
+                    new ProviderSearchResultItemViewModel
                     {
                         Id = 1,
                         UkPrn = 10000546,
                         Name = "Test Provider"
-                    });
+                    }
+                });
 
             var providerController = new ProviderController(_providerService, new MatchingConfiguration());
             var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
 
             var viewModel = new ProviderSearchParametersViewModel { UkPrn = 10000546 };
-            _result = controllerWithClaims.SearchProviderAsync(viewModel).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SearchProviderByUkPrnAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -59,29 +72,22 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
                 .DidNotReceive()
                 .SearchReferenceDataAsync(Arg.Any<long>());
         }
-        [Fact]
-        public void Then_Result_Is_Not_Null() =>
-            _result.Should().NotBeNull();
 
         [Fact]
-        public void Then_Model_Is_Not_Null()
+        public void Then_ViewModel_Contains_Search_Results()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<ViewResult>();
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
-        }
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
 
-        [Fact]
-        public void Then_Result_Is_ViewResult() =>
-            _result.Should().BeOfType<ViewResult>();
-
-        [Fact]
-        public void Then_Result_Is_Redirect_To_Provider_Detail_With_Provider_Id()
-        {
-            var redirect = _result as RedirectToRouteResult;
-            redirect?.RouteName.Should().BeEquivalentTo("GetProviderDetail");
-            redirect?.RouteValues
-                .Should()
-                .Contain(new KeyValuePair<string, object>("providerId", 1));
+            var viewModel = _result.GetViewModel<ProviderSearchViewModel>();
+            viewModel.SearchResults.Results.Count().Should().Be(1);
+            viewModel.SearchResults.Results.First().Id.Should().Be(1);
+            viewModel.SearchResults.Results.First().UkPrn.Should().Be(10000546);
+            viewModel.SearchResults.Results.First().Name.Should().Be("Test Provider");
         }
     }
 }

@@ -13,7 +13,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
     public class GenericRepository<T> : IRepository<T> where T : BaseEntity, new()
     {
         private readonly ILogger _logger;
-        private readonly MatchingDbContext _dbContext;
+        
+        // ReSharper disable InconsistentNaming
+        protected readonly MatchingDbContext _dbContext;
 
         public GenericRepository(ILogger<GenericRepository<T>> logger, MatchingDbContext dbContext)
         {

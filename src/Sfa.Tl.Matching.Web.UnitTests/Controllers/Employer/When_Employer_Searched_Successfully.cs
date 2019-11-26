@@ -40,49 +40,26 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
             var employerController = new EmployerController(_employerService, null, referralService, mapper);
 
-            _result = employerController.Search(query);
+            _result = employerController.SearchEmployer(query);
         }
 
         [Fact]
-        public void Then_Result_Is_Not_Null() =>
+        public void Then_ViewModel_Is_Populated_Correctly()
+        { 
             _result.Should().NotBeNull();
-
-        [Fact]
-        public void Then_OkObjectResult_Is_Returned() =>
             _result.Should().BeAssignableTo<OkObjectResult>();
 
-        [Fact]
-        public void Then_Value_Is_Not_Null()
-        {
             var viewResult = _result as OkObjectResult;
             viewResult?.Value.Should().NotBeNull();
-        }
 
-        [Fact]
-        public void Then_First_Item_CompanyName_Is_Correct()
-        {
             var resultList = GetResultList();
+            resultList.Should().NotBeNull();
+            resultList.Count.Should().Be(2);
+
             resultList[0].CompanyName.Should().Be("CompanyName1");
-        }
-
-        [Fact]
-        public void Then_First_Item_AlsoKnownAs_Is_Correct()
-        {
-            var resultList = GetResultList();
             resultList[0].AlsoKnownAs.Should().Be("AlsoKnownAs1");
-        }
 
-        [Fact]
-        public void Then_Second_Item_CompanyName_Is_Correct()
-        {
-            var resultList = GetResultList();
             resultList[1].CompanyName.Should().Be("CompanyName2");
-        }
-
-        [Fact]
-        public void Then_Second_Item_AlsoKnownAs_Is_Correct()
-        {
-            var resultList = GetResultList();
             resultList[1].AlsoKnownAs.Should().Be("AlsoKnownAs2");
         }
 

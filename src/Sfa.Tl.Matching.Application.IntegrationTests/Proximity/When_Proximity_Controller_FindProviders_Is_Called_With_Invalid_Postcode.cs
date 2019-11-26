@@ -60,23 +60,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
             };
             _result = _proximityController.FindProviders(viewModel).GetAwaiter().GetResult();
         }
-
-        [Fact]
-        public void Then_Result_Is_Not_Null()
-        {
-            _result.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void Then_Result_Is_ViewResult()
-        {
-            _result.Should().BeOfType<ViewResult>();
-        }
-
+        
         [Fact]
         public void Then_Model_Is_Not_Null()
         {
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<ViewResult>();
             var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
             viewResult?.Model.Should().NotBeNull();
         }
 

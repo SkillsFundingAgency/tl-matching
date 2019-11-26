@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                     Qualification = new Qualification
                     {
                         Id = 1,
-                        LarsId = "12345678",
+                        LarId = "12345678",
                         Title = "Qualification Title",
                         ShortTitle = "Short Title",
                         QualificationRouteMapping = new List<QualificationRouteMapping>

@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<AddQualificationViewModel, Qualification>()
                 .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.LarsId, config => config.MapFrom(s => s.LarId))
+                .ForMember(m => m.LarId, config => config.MapFrom(s => s.LarId))
                 .ForMember(m => m.Title, config => config.Ignore())
                 .ForMember(m => m.ShortTitle, config => config.Ignore())
                 .ForMember(m => m.QualificationSearch, config => config.Ignore())
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
 
             CreateMap<MissingQualificationViewModel, Qualification>()
                 .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.LarsId, config => config.MapFrom(s => s.LarId))
+                .ForMember(m => m.LarId, config => config.MapFrom(s => s.LarId))
                 .ForMember(m => m.ShortTitle, config => config.MapFrom(s => s.ShortTitle.ToLower()))
                 .ForMember(m => m.QualificationSearch, config => config.MapFrom(s => GetSearchTerm(s.Title, s.ShortTitle.ToLower())))
                 .ForMember(m => m.ShortTitleSearch, config => config.MapFrom(s => GetSearchTerm(s.ShortTitle.ToLower())))
@@ -83,6 +83,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                         .ToList();
                 })
                 ;
+
+            CreateMap<Qualification, QualificationDetailViewModel>();
         }
 
         private static string GetSearchTerm(params string[] searchTerms)

@@ -33,3 +33,15 @@
     }
   }
 }
+
+.tl-summary-list {
+    @include govuk-media-query($from: tablet) {
+        .govuk-summary-list__value { 
+            width: 30%;
+        }
+
+        .govuk-summary-list__key {
+            width: unset;
+        }
+    }
+}
