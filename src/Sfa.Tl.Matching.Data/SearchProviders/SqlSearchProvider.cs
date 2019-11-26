@@ -129,78 +129,71 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
 
             var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
 
-            var result = await (from provider in _matchingDbContext.Provider
-                                join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId
-                                join providerQualification in _matchingDbContext.ProviderQualification on providerVenue.Id equals providerQualification.ProviderVenueId
-                                join routePathMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals routePathMapping.QualificationId
-                                //
-                                //join route in _matchingDbContext.Route on routePathMapping.RouteId equals route.Id
-                                //
-                                orderby providerVenue.Location.Distance(employerLocation)
-                                where providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters
-                                                  && provider.IsCdfProvider
-                                                  && provider.IsEnabledForReferral
-                                                  && providerVenue.IsEnabledForReferral
-                                                  && !providerVenue.IsRemoved
-                                select new ProviderProximitySearchResultViewModelItem
-                                {
-                                    ProviderVenueId = providerVenue.Id,
-                                    ProviderName = provider.Name,
-                                    ProviderDisplayName = provider.DisplayName,
-                                    ProviderVenueName = providerVenue.Name,
-                                    Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
-                                    ProviderVenuePostcode = providerVenue.Postcode,
-                                    ProviderVenueTown = providerVenue.Town,
-                                    Latitude = providerVenue.Latitude ?? 0,
-                                    Longitude = providerVenue.Longitude ?? 0,
-                                    IsTLevelProvider = provider.IsTLevelProvider,
-                                    Routes = provider.ProviderVenue.Select(pv =>
-                                        new RouteAndQualificationsViewModel
-                                        {
-                                            RouteId = pv.ProviderQualification.Select(
-                                                pq => pq.Qualification.QualificationRouteMapping.
-                                                        First().RouteId).First(),
-                                            RouteName = pv.ProviderQualification.Select(
-                                                pq => pq.Qualification.QualificationRouteMapping
-                                                    .First()
-                                                    .Route.Name).First(),
-                                            QualificationShortTitles = pv.ProviderQualification.Select(pq =>
-                                                pq.Qualification.ShortTitle)
-                                        })
-                                }).Distinct().ToListAsync();
+            var resulttemp = await (from provider in _matchingDbContext.Provider
+                                    join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId
+                                    join providerQualification in _matchingDbContext.ProviderQualification on providerVenue.Id equals providerQualification.ProviderVenueId
+                                    join routePathMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals routePathMapping.QualificationId
+                                    join qualification in _matchingDbContext.Qualification on routePathMapping.QualificationId equals qualification.Id
+                                    join route in _matchingDbContext.Route on routePathMapping.RouteId equals route.Id
+                                    orderby providerVenue.Location.Distance(employerLocation)
+                                    where providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters
+                                                      && provider.IsCdfProvider
+                                                      && provider.IsEnabledForReferral
+                                                      && providerVenue.IsEnabledForReferral
+                                                      && !providerVenue.IsRemoved
+                                    select new
+                                    {
+                                        ProviderVenueId = providerVenue.Id,
+                                        ProviderName = provider.Name,
+                                        ProviderDisplayName = provider.DisplayName,
+                                        ProviderVenueName = providerVenue.Name,
+                                        Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
+                                        ProviderVenuePostcode = providerVenue.Postcode,
+                                        ProviderVenueTown = providerVenue.Town,
+                                        Latitude = providerVenue.Latitude ?? 0,
+                                        Longitude = providerVenue.Longitude ?? 0,
+                                        provider.IsTLevelProvider,
+                                        RouteName = route.Name,
+                                        RouteId = route.Id,
+                                        QualificationShortTitle = qualification.ShortTitle
+                                    }).Distinct().ToListAsync();
+            var result = resulttemp.GroupBy(g => new
+            {
+                g.Distance,
+                g.IsTLevelProvider,
+                g.Latitude,
+                g.Longitude,
+                g.ProviderDisplayName,
+                g.ProviderName,
+                g.ProviderVenueId,
+                g.ProviderVenueName,
+                g.ProviderVenuePostcode,
+                g.ProviderVenueTown
+            })
+            .Select(grp => new ProviderProximitySearchResultViewModelItem
+            {
+                Latitude = grp.Key.Latitude,
+                Distance = grp.Key.Distance,
+                ProviderVenueTown = grp.Key.ProviderVenueTown,
+                ProviderName = grp.Key.ProviderName,
+                ProviderVenuePostcode = grp.Key.ProviderVenuePostcode,
+                ProviderVenueId = grp.Key.ProviderVenueId,
+                ProviderDisplayName = grp.Key.ProviderDisplayName,
+                ProviderVenueName = grp.Key.ProviderVenueName,
+                IsTLevelProvider = grp.Key.IsTLevelProvider,
+                Longitude = grp.Key.Longitude,
+                Routes = grp.GroupBy(rt => new { rt.RouteName, rt.RouteId })
+                        .Select(rt => new RouteAndQualificationsViewModel
+                        {
+                            RouteName = rt.Key.RouteName,
+                            RouteId = rt.Key.RouteId,
+                            QualificationShortTitles = rt.Select(q => 
+                                q.QualificationShortTitle)
+                                .OrderBy(q => q)
+                                //.ToList()
+                        }).OrderBy(rt => rt.RouteName)
+            }).ToList();
 
-            var resultGrouped = await (from provider in _matchingDbContext.Provider
-                                       join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId
-
-                                       join providerQualification in _matchingDbContext.ProviderQualification on providerVenue.Id equals providerQualification.ProviderVenueId
-                                       join routePathMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals routePathMapping.QualificationId
-                                       orderby providerVenue.Location.Distance(employerLocation)
-                                       where providerVenue.Location.Distance(employerLocation) <= searchRadiusInMeters
-                                                         && provider.IsCdfProvider
-                                                         && provider.IsEnabledForReferral
-                                                         && providerVenue.IsEnabledForReferral
-                                                         && !providerVenue.IsRemoved
-                                                         
-                                       select new ProviderProximitySearchResultViewModelItem
-                                       {
-                                           ProviderVenueId = providerVenue.Id,
-                                           ProviderName = provider.Name,
-                                           ProviderDisplayName = provider.DisplayName,
-                                           ProviderVenueName = providerVenue.Name,
-                                           Distance = providerVenue.Location.Distance(employerLocation) / MilesToMeters,
-                                           ProviderVenuePostcode = providerVenue.Postcode,
-                                           ProviderVenueTown = providerVenue.Town,
-                                           Latitude = providerVenue.Latitude ?? 0,
-                                           Longitude = providerVenue.Longitude ?? 0,
-                                           IsTLevelProvider = provider.IsTLevelProvider,
-                                           Routes = provider.ProviderVenue.Select(pv =>
-                                               new RouteAndQualificationsViewModel
-                                               {
-                                                QualificationShortTitles = pv.ProviderQualification.Select(pq =>
-                                                       pq.Qualification.ShortTitle)
-                                            })
-                                       }
-                                    ).Distinct().ToListAsync();
             return result;
         }
 
