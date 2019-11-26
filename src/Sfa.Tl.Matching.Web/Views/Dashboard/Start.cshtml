@@ -14,14 +14,14 @@
 
         <div class="govuk-grid-row tl-dashwrapper">
             <div class="govuk-grid-column-one-third tl-dashgrid">
-                <a asp-action="Index" asp-controller="OpportunityProximity" class="tl-dashbox">
+                <a asp-action="Index" asp-controller="OpportunityProximity" class="tl-dashbox" id="tl-dash-createnew">
                     <h4 class="govuk-heading-m govuk-!-margin-bottom-1 govuk-link">Create and refer new opportunities</h4>
                     <p class="govuk-body govuk-!-margin-top-3">Find relevant, local providers to introduce to your employer.</p>
                 </a>
             </div>
 
             <div class="govuk-grid-column-one-third tl-dashgrid">
-                <a asp-action="SearchPostcode" asp-controller="ProviderProximity" class="tl-dashbox">
+                <a asp-action="SearchPostcode" asp-controller="ProviderProximity" class="tl-dashbox" id="tl-dash-showall">
                     <h4 class="govuk-heading-m govuk-!-margin-bottom-1">Show all providers in an area</h4>
                     <p class="govuk-body govuk-!-margin-top-3">Search a geographical area for everything that’s available.</p>
                 </a>
@@ -30,7 +30,7 @@
             @if (Model.HasSavedOppportunities)
             {
                 <div class="govuk-grid-column-one-third tl-dashgrid">
-                    <a asp-route="GetSavedEmployerOpportunity" class="tl-dashbox">
+                    <a asp-route="GetSavedEmployerOpportunity" class="tl-dashbox" id="tl-dash-viewsaved">
                         <h4 class="govuk-heading-m govuk-!-margin-bottom-1">View saved opportunities</h4>
                         <p class="govuk-body govuk-!-margin-top-3">Any unreferred opportunities that you’re working on.</p>
                     </a>
@@ -45,21 +45,21 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-third">
                     <h4 class="govuk-heading-s govuk-!-margin-bottom-1">
-                        <a class="govuk-link" asp-action="SearchProviderByUkPrnAsync" asp-controller="Provider">Manage provider data</a>
+                        <a class="govuk-link" asp-action="SearchProviderByUkPrnAsync" asp-controller="Provider" id="tl-dash-manageprovider">Manage provider data</a>
                     </h4>
                     <p class="govuk-body">Add or edit provider contact, venue and course data.</p>
                 </div>
 
                 <div class="govuk-grid-column-one-third">
                     <h4 class="govuk-heading-s govuk-!-margin-bottom-1">
-                        <a class="govuk-link" asp-action="EditQualifications" asp-controller="Qualification">Edit qualifications</a>
+                        <a class="govuk-link" asp-action="EditQualifications" asp-controller="Qualification"  id="tl-dash-editquals">Edit qualifications</a>
                     </h4>
                     <p class="govuk-body">Change course-route mapping or edit course short titles.</p>
                 </div>
 
                 <div class="govuk-grid-column-one-third">
                     <h4 class="govuk-heading-s govuk-!-margin-bottom-1">
-                        <a class="govuk-link" asp-action="Index" asp-controller="DataImport">Manually upload data</a>
+                        <a class="govuk-link" asp-action="Index" asp-controller="DataImport" id="tl-dash-uploaddata">Manually upload data</a>
                     </h4>
                     <p class="govuk-body">Upload csv files of employer data or Ofqual course data.</p>
                 </div>
@@ -67,7 +67,7 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-third">
                     <h4 class="govuk-heading-s govuk-!-margin-bottom-1">
-                        <a class="govuk-link" asp-action="Maintenance" asp-controller="Home">Take service offline</a>
+                        <a class="govuk-link" asp-action="Maintenance" asp-controller="Home" id="tl-dash-takeoffline">Take service offline</a>
                     </h4>
                     <p class="govuk-body">Show that the service is ‘under maintenance’.</p>
                 </div>
