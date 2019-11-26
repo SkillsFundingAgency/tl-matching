@@ -93,6 +93,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         [InlineAutoDomainData("not-a-valid-status")]
         [InlineAutoDomainData("FAILED-EMAIL")]
         public async Task Then_Add_To_Failed_Queue_If_Status_Is_Not_Delivered(
+            string status,
             MatchingConfiguration configuration,
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
@@ -102,7 +103,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         )
         {
             //Arrange
-            payload.Status = "permanent-failure";
+            payload.Status = status;
             var sut = new Application.Services.EmailDeliveryStatusService(configuration,
                 emailService, opportunityRepository, messageQueueService, logger);
 
@@ -112,10 +113,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await sut.HandleEmailDeliveryStatusAsync(serializedPayLoad);
 
             //Assert
-            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.Status == "permanent-failure"));
+            await emailService.Received(1).UpdateEmailStatus(Arg.Is<EmailDeliveryStatusPayLoad>(data => data.Status == status));
 
             await messageQueueService.Received(1).PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
-
         }
 
         [Theory]
