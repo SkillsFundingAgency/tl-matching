@@ -129,7 +129,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
 
             var searchRadiusInMeters = dto.SearchRadius * MilesToMeters;
 
-            var resulttemp = await (from provider in _matchingDbContext.Provider
+            var resultTemp = await (from provider in _matchingDbContext.Provider
                                     join providerVenue in _matchingDbContext.ProviderVenue on provider.Id equals providerVenue.ProviderId
                                     join providerQualification in _matchingDbContext.ProviderQualification on providerVenue.Id equals providerQualification.ProviderVenueId
                                     join routePathMapping in _matchingDbContext.QualificationRouteMapping on providerQualification.QualificationId equals routePathMapping.QualificationId
@@ -158,7 +158,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                         QualificationShortTitle = qualification.ShortTitle
                                     }).Distinct().ToListAsync();
 
-            var result = resulttemp.GroupBy(g => new
+            var result = resultTemp.GroupBy(g => new
             {
                 g.Distance,
                 g.IsTLevelProvider,
@@ -192,7 +192,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                 q.QualificationShortTitle)
                                 .OrderBy(q => q)
                         }).OrderBy(rt => rt.RouteName)
-            }).ToList();
+            }).OrderBy(r => r.Distance).ToList();
 
             return result;
         }
