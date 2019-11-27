@@ -38,11 +38,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity.Build
                     {
                         new RouteAndQualificationsViewModel
                         {
-                            RouteName = "health and science",
+                            RouteId = 12,
+                            RouteName = "care services",
                             QualificationShortTitles = new List<string>
                             {
-                                "applied science",
-                                "cooking"
+                                "counselling skills"
                             }
                         }
                     }
