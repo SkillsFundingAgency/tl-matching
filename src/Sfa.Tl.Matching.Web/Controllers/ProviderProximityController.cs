@@ -46,17 +46,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
         public async Task<IActionResult> GetProviderProximityResults(string searchCriteria)
         {
             var routeNames = _routePathService.GetRoutes().OrderBy(r => r.Name)
-                .Select(r => r.Name).ToList();
+                .ToDictionary(r => r.Id, r => r.Name);
 
-            var searchParametersViewModel = new ProviderProximitySearchParametersViewModel(searchCriteria, routeNames);
+            var searchParametersViewModel = new ProviderProximitySearchParametersViewModel(searchCriteria, routeNames.Values);
             var viewModel = new ProviderProximitySearchViewModel(searchParametersViewModel);
+
             viewModel.SearchResults = new ProviderProximitySearchResultsViewModel
             {
                 Results = await _providerProximityService.SearchProvidersByPostcodeProximityAsync(
                     new ProviderProximitySearchParametersDto
                     {
                         Postcode = viewModel.SearchParameters.Postcode,
-                        SearchRadius = SearchParametersViewModel.DefaultSearchRadius
+                        SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
+                        SelectedRoutes = routeNames.Where(r => viewModel.SearchParameters.SelectedFilters.Contains(r.Value))
+                            .Select(r => r.Key).ToList()
                     })
             };
 
