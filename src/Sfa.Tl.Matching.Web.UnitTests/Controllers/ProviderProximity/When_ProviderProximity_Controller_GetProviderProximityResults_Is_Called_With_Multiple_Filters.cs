@@ -13,13 +13,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderProximity
 {
-    public class When_ProviderProximity_Controller_GetProviderProximityResults_Is_Called_With_No_Filters
+    public class When_ProviderProximity_Controller_GetProviderProximityResults_Is_Called_With_Multiple_Filters
     {
         private readonly IActionResult _result;
         private readonly IProviderProximityService _providerProximityService;
         private const string Postcode = "CV1 2WT";
 
-        public When_ProviderProximity_Controller_GetProviderProximityResults_Is_Called_With_No_Filters()
+        public When_ProviderProximity_Controller_GetProviderProximityResults_Is_Called_With_Multiple_Filters()
         {
             var routes = new List<Route>
                 {
@@ -51,7 +51,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderProximity
             var providerProximityController = new ProviderProximityController(routePathService, _providerProximityService,
                 locationService);
 
-            _result = providerProximityController.GetProviderProximityResults(Postcode)
+            _result = providerProximityController.GetProviderProximityResults($"{Postcode}-Route 1-Route 2")
                 .GetAwaiter().GetResult();
         }
 
@@ -66,12 +66,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderProximity
 
             var viewModel = _result.GetViewModel<ProviderProximitySearchViewModel>();
             viewModel.SearchParameters.Postcode.Should().Be(Postcode);
-            viewModel.SearchParameters.SelectedFilters.Count.Should().Be(0);
+            viewModel.SearchParameters.SelectedFilters.Count.Should().Be(2);
+            viewModel.SearchParameters.SelectedFilters[0].Should().Be("Route 1");
+            viewModel.SearchParameters.SelectedFilters[1].Should().Be("Route 2");
 
             viewModel.SearchParameters.Filters[0].Name.Should().Be("Route 1");
-            viewModel.SearchParameters.Filters[0].IsSelected.Should().Be(false);
+            viewModel.SearchParameters.Filters[0].IsSelected.Should().Be(true);
             viewModel.SearchParameters.Filters[1].Name.Should().Be("Route 2");
-            viewModel.SearchParameters.Filters[1].IsSelected.Should().Be(false);
+            viewModel.SearchParameters.Filters[1].IsSelected.Should().Be(true);
 
             viewModel.SearchResults.SearchResultProviderCount.Should().Be(1);
             viewModel.SearchResults.Results[0].Distance.Should().Be(1.4);
@@ -91,7 +93,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderProximity
                     Arg.Is<ProviderProximitySearchParametersDto>(
                         p => p.Postcode == Postcode &&
                              p.SearchRadius == SearchParametersViewModel.DefaultSearchRadius &&
-                             p.SelectedRoutes.Count == 0));
+                             p.SelectedRoutes.Count == 2));
         }
     }
 }
