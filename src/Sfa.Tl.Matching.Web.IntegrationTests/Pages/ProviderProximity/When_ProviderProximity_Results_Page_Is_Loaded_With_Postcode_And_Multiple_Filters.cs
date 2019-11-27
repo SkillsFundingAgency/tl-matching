@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
 
             var client = _factory.CreateClient();
 
-            var response = await client.GetAsync("/provider-results-cv12wt-Business and administration-Care services-Construction");
+            var response = await client.GetAsync("/provider-results-cv12wt-Agriculture, environmental and animal care-Business and administration");
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html; charset=utf-8",
@@ -47,7 +47,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
 
             var firstFilterCheckbox = documentHtml.QuerySelector($"input[name='Filters[0].IsSelected']")
                 as IHtmlInputElement;
-            firstFilterCheckbox.IsChecked.Should().BeFalse();
+            firstFilterCheckbox.IsChecked.Should().BeTrue();
 
             var secondFilterCheckbox = documentHtml.QuerySelector($"input[name='Filters[1].IsSelected']")
                 as IHtmlInputElement;
