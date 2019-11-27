@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using FluentAssertions;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
@@ -8,13 +7,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
 {
-    public class When_ProviderProximity_Results_Page_Is_Loaded_With_Postcode : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_ProviderProximity_Results_Page_Is_Loaded_With_Postcode_And_Single_Filter : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "All providers in an area";
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public When_ProviderProximity_Results_Page_Is_Loaded_With_Postcode(CustomWebApplicationFactory<TestStartup> factory)
+        public When_ProviderProximity_Results_Page_Is_Loaded_With_Postcode_And_Single_Filter(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
@@ -26,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
 
             var client = _factory.CreateClient();
 
-            var response = await client.GetAsync("/provider-results-cv12wt");
+            var response = await client.GetAsync("/provider-results-cv12wt-Agriculture, environmental and animal care");
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html; charset=utf-8",
@@ -46,13 +45,13 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
             var searchCount = documentHtml.GetElementById("tl-search-count");
             searchCount.TextContent.Should().Be("2");
 
-            var allFilterCheckboxes =
-                documentHtml.QuerySelectorAll(".govuk-checkboxes__input") as IHtmlCollection<IElement>;
-            foreach (var filterCheckbox in allFilterCheckboxes)
-            {
-                var htmlInput = filterCheckbox as IHtmlInputElement;
-                htmlInput.IsChecked.Should().BeFalse();
-            }
+            var firstFilterCheckbox = documentHtml.QuerySelector($"input[name='Filters[0].IsSelected']")
+                as IHtmlInputElement;
+            firstFilterCheckbox.IsChecked.Should().BeTrue();
+
+            var secondFilterCheckbox = documentHtml.QuerySelector($"input[name='Filters[1].IsSelected']")
+                as IHtmlInputElement;
+            secondFilterCheckbox.IsChecked.Should().BeFalse();
 
             var finishLink = documentHtml.GetElementById("tl-finish") as IHtmlAnchorElement;
             finishLink.PathName.Should().Be("/Start");
@@ -62,7 +61,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
             filterButton.Type.Should().Be("submit");
 
             var filterRemove = documentHtml.GetElementById("tl-filter-remove") as IHtmlAnchorElement;
-            filterRemove.Should().BeNull();
+            filterRemove.Text.Should().Be("Remove filters");
+            filterRemove.PathName.Should().Be("/provider-results-cv12wt");
 
             var searchResults = documentHtml.QuerySelector(".tl-search-results") as IHtmlDivElement;
             AssertSearchResult(searchResults);
