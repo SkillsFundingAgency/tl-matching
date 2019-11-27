@@ -6,7 +6,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     public class ProviderProximitySearchParametersViewModel
     {
         public string Postcode { get; set; }
-        public ProviderProximityFiltersViewModel[] Filters { get; }
+        public ProviderProximityFiltersViewModel[] Filters { get; set; }
         public List<string> SelectedFilters { get; } = new List<string>();
 
         public ProviderProximitySearchParametersViewModel() { }

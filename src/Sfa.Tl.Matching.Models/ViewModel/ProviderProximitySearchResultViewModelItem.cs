@@ -5,7 +5,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
     public class ProviderProximitySearchResultViewModelItem
     {
         public int ProviderVenueId { get; set; }
-        public bool IsSelected { get; set; }
         public string ProviderVenueTown { get; set; }
         public string ProviderVenuePostcode { get; set; }
         public double? Distance { get; set; }
