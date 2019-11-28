@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         }
 
         [HttpGet]
-        [Route("provider-results-{searchCriteria}", Name = "GetProviderProximityResults", Order = 1)]
+        [Route("all-provider-results-{searchCriteria}", Name = "GetProviderProximityResults")]
         public async Task<IActionResult> GetProviderProximityResults(string searchCriteria)
         {
             var routeNames = _routePathService.GetRoutes().OrderBy(r => r.Name)

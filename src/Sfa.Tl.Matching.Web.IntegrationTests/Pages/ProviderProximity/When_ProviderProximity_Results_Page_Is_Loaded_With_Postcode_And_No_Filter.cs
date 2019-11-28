@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
 
             var client = _factory.CreateClient();
 
-            var response = await client.GetAsync("/provider-results-cv12wt");
+            var response = await client.GetAsync("/all-provider-results-cv12wt");
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html; charset=utf-8",
