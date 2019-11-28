@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -12,21 +13,33 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly ISearchProvider _searchProvider;
         private readonly ILocationService _locationService;
+        private readonly ICacheService _cacheService;
 
         public ProviderProximityService(ISearchProvider searchProvider,
-            ILocationService locationService)
+            ILocationService locationService,
+            ICacheService cacheService)
         {
             _searchProvider = searchProvider;
             _locationService = locationService;
+            _cacheService = cacheService;
         }
 
         public async Task<IList<ProviderProximitySearchResultViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderProximitySearchParametersDto dto)
         {
-            var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
-            dto.Latitude = geoLocationData.Latitude;
-            dto.Longitude = geoLocationData.Longitude;
+            var cacheKey = $"Proximity_Search_{dto.Postcode.Replace(' ', '_')}";
 
-            var searchResults = await _searchProvider.SearchProvidersByPostcodeProximityAsync(dto);
+            var searchResults = _cacheService.Get<IList<ProviderProximitySearchResultViewModelItem>>(cacheKey);
+
+            if (searchResults == null)
+            {
+                var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
+                dto.Latitude = geoLocationData.Latitude;
+                dto.Longitude = geoLocationData.Longitude;
+
+                searchResults = await _searchProvider.SearchProvidersByPostcodeProximityAsync(dto);
+
+                _cacheService.Set(cacheKey, searchResults, TimeSpan.FromSeconds(1800));
+            }
 
             if (dto.SelectedRoutes != null
                 && dto.SelectedRoutes.Count > 0

@@ -110,6 +110,9 @@ namespace Sfa.Tl.Matching.Web
                     options.DefaultChallengeScheme = "Local Scheme";
                 }).AddTestAuth(o => { });
             }
+
+            services.AddMemoryCache();
+
             RegisterDependencies(services);
         }
 
@@ -238,6 +241,7 @@ namespace Sfa.Tl.Matching.Web
         {
             services.AddTransient<IValidator<CrmEmployerEventBase>, CrmEmployerEventDataValidator>();
 
+            services.AddTransient<ICacheService, CacheService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmployerService, EmployerService>();
             services.AddTransient<ILocationService, LocationService>();
