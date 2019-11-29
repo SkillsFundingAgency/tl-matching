@@ -9,6 +9,19 @@ using Sfa.Tl.Matching.Models.Configuration;
 
 namespace Sfa.Tl.Matching.Api.Clients.GoogleMaps
 {
+    public class DummyGoogleMapApiClient : IGoogleMapApiClient
+    {
+        public async Task<string> GetAddressDetailsAsync(string postcode)
+        {
+            return await Task.FromResult("AddressDetails");
+        }
+
+        public async Task GetJourneyDetails(string fromPostcode, string destinationPostcode)
+        {
+
+        }
+    }
+
     public class GoogleMapApiClient : IGoogleMapApiClient
     {
         private readonly HttpClient _httpClient;

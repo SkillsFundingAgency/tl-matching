@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Configuration;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
@@ -36,9 +39,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
             return true;
         }
 
-        public override void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        protected override void RegisterHttpClients(IServiceCollection services)
         {
-            base.Configure(app, env, loggerFactory);
+            services.AddTransient<ILocationApiClient, DummyLocationApiClient>();
+            services.AddTransient<IGoogleMapApiClient, DummyGoogleMapApiClient>();
+            services.AddTransient<IGoogleDistanceMatrixApiClient, DummyGoogleDistanceMatrixApiClient>();
         }
     }
 }
