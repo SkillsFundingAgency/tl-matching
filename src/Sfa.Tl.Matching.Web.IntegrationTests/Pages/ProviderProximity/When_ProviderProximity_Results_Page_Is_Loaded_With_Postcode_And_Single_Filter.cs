@@ -25,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
 
             var client = _factory.CreateClient();
 
-            var response = await client.GetAsync("/all-provider-results-cv12wt-Agriculture, environmental and animal care");
+            var response = await client.GetAsync("/all-provider-results-CV12WT-Agriculture, environmental and animal care");
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("text/html; charset=utf-8",
@@ -62,7 +62,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
 
             var filterRemove = documentHtml.GetElementById("tl-filter-remove") as IHtmlAnchorElement;
             filterRemove.Text.Should().Be("Remove filters");
-            filterRemove.PathName.Should().Be("/all-provider-results-cv12wt");
+            filterRemove.PathName.Should().Be("/all-provider-results-CV12WT");
 
             var searchResults = documentHtml.QuerySelector(".tl-search-results") as IHtmlDivElement;
             AssertSearchResult(searchResults);

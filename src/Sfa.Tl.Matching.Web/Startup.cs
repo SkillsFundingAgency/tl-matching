@@ -220,9 +220,7 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddSingleton(MatchingConfiguration);
 
-            services.AddHttpClient<ILocationApiClient, LocationApiClient>();
-            services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
-            services.AddHttpClient<IGoogleDistanceMatrixApiClient, GoogleDistanceMatrixApiClient>();
+            RegisterHttpClients(services);
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
@@ -230,6 +228,13 @@ namespace Sfa.Tl.Matching.Web
 
             RegisterRepositories(services);
             RegisterApplicationServices(services);
+        }
+
+        protected virtual void RegisterHttpClients(IServiceCollection services)
+        {
+            services.AddHttpClient<ILocationApiClient, LocationApiClient>();
+            services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
+            services.AddHttpClient<IGoogleDistanceMatrixApiClient, GoogleDistanceMatrixApiClient>();
         }
 
         private static void RegisterRepositories(IServiceCollection services)
