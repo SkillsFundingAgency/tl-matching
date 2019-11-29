@@ -43,8 +43,8 @@ namespace Sfa.Tl.Matching.Web
     {
         protected MatchingConfiguration MatchingConfiguration;
         private readonly ILoggerFactory _loggerFactory;
-        protected bool IsTestAdminUser { get; set; }
-
+        protected bool IsTestAdminUser { get; set; } = true;
+        
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
