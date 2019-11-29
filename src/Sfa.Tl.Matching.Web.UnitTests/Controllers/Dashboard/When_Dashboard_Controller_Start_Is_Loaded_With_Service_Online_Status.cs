@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Dashboard
             viewModel.IsServiceOnline.Should().BeTrue();
             viewModel.HasSavedOppportunities.Should().BeTrue();
             viewModel.HeaderText.Should().Be("Take service offline");
-            viewModel.Description.Should().Be("Show that the service is 'under maintenance'");
+            viewModel.Description.Should().Be("Show that the service is 'under maintenance'.");
         }
 
     }
