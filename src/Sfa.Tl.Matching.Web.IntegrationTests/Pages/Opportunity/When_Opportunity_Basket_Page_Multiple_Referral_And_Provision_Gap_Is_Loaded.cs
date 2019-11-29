@@ -14,7 +14,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
         private const int OpportunityId = 1050;
         private const int OpportunityItem1Id = 1051;
         private const int OpportunityItem2Id = 1052;
-        private const int OpportunityItem3Id = 1053;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 

@@ -16,8 +16,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 
         private const int OpportunityProviderMultipleId = 1060;
         private const int OpportunityItemProviderMultipleId = 1061;
-        private const int ProviderReferral1Id = 1062;
-        private const int ProviderReferral2Id = 1063;
 
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
