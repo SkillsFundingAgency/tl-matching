@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
                     Arg.Any<long>())
                 .Returns(new JourneyTimesBuilder().BuildPublicTransportResults());
 
-            var service = new OpportunityProximityService(_searchProvider, _locationService, googleDistanceMatrixApiClient);
+            var service = new OpportunityProximityService(_searchProvider, _locationService);
 
             _result = service.SearchOpportunitiesByPostcodeProximityAsync(dto).GetAwaiter().GetResult();
         }

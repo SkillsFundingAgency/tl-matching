@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SendEmployerReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
         {
-            if (await GetBackgroundProcessHistoryData(backgroundProcessHistoryId) == null) return;
+            if (await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId) == null) return;
 
             try
             {
@@ -91,26 +91,20 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await SendEmailAsync(EmailTemplateName.EmployerReferralV4, opportunityId, employerReferral.Email, tokens, employerReferral.CreatedBy);
 
-                await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, 1,
-                    BackgroundProcessHistoryStatus.Complete, username);
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 1, BackgroundProcessHistoryStatus.Complete, username);
             }
             catch (Exception ex)
             {
                 var errorMessage = $"Error sending employer referral emails. {ex.Message} " +
                                    $"Opportunity id {opportunityId}";
 
-                await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData,
-                    backgroundProcessHistoryId,
-                    1,
-                    BackgroundProcessHistoryStatus.Error,
-                    username,
-                    errorMessage);
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 1, BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
         }
 
         public async Task SendProviderReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
         {
-            if (await GetBackgroundProcessHistoryData(backgroundProcessHistoryId) == null) return;
+            if (await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId) == null) return;
 
             var referrals = await GetOpportunityReferralsAsync(opportunityId, itemIds);
 
@@ -144,8 +138,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmailAsync(template, opportunityId,
-                            referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
+                        await SendEmailAsync(template, opportunityId, referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
                     }
 
                     await CompleteSelectedReferralsAsync(opportunityId, referral.OpportunityItemId, username);
@@ -153,16 +146,14 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await CompleteRemainingItemsAsync(opportunityId, username);
 
-                await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
-                    BackgroundProcessHistoryStatus.Complete, username);
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, referrals.Count, BackgroundProcessHistoryStatus.Complete, username);
             }
             catch (Exception ex)
             {
                 var errorMessage = $"Error sending provider referral emails. {ex.Message} " +
                                    $"Opportunity id {opportunityId}";
 
-                await UpdateBackgroundProcessHistoryAsync(GetBackgroundProcessHistoryData, backgroundProcessHistoryId, referrals.Count,
-                    BackgroundProcessHistoryStatus.Error, username, errorMessage);
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, referrals.Count, BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
         }
 
@@ -217,11 +208,9 @@ namespace Sfa.Tl.Matching.Application.Services
                                                                                   && !oi.IsSelectedForReferral
                                                                                   && !oi.IsCompleted);
 
-            var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString())
-                .ToList();
+            var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString()).ToList();
 
-            var provisionItems = remainingOpportunities
-                .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
+            var provisionItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
 
             if (provisionItems.Count > 0 && referralItems.Count == 0)
             {
@@ -265,26 +254,24 @@ namespace Sfa.Tl.Matching.Application.Services
                 : "at least 1";
         }
 
-        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId,
-            string toAddress, IDictionary<string, string> tokens, string createdBy)
+        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, string toAddress, IDictionary<string, string> tokens, string createdBy)
         {
             if (!_configuration.SendEmailEnabled)
             {
                 return;
             }
 
-            await _emailService.SendEmailAsync(opportunityId, template.ToString(),
-                toAddress,
-                tokens, createdBy);
+            await _emailService.SendEmailAsync(opportunityId, template.ToString(), toAddress, tokens, createdBy);
         }
 
         private async Task UpdateBackgroundProcessHistoryAsync(
-            Func<int, Task<BackgroundProcessHistory>> data,
             int backgroundProcessHistoryId,
-            int providerCount, BackgroundProcessHistoryStatus historyStatus,
-            string userName, string errorMessage = null)
+            int providerCount, 
+            BackgroundProcessHistoryStatus historyStatus,
+            string userName, 
+            string errorMessage = null)
         {
-            var backgroundProcessHistory = await data(backgroundProcessHistoryId);
+            var backgroundProcessHistory = await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId);
 
             backgroundProcessHistory.RecordCount = providerCount;
             backgroundProcessHistory.Status = historyStatus.ToString();
@@ -300,16 +287,11 @@ namespace Sfa.Tl.Matching.Application.Services
                 history => history.ModifiedOn);
         }
 
-        private Func<int, Task<BackgroundProcessHistory>> GetBackgroundProcessHistoryData => BackgroundProcessHistoryDataAsync;
-
-        private async Task<BackgroundProcessHistory> BackgroundProcessHistoryDataAsync(int backgroundProcessHistoryId)
+        private async Task<BackgroundProcessHistory> GetBackgroundProcessHistoryDataAsync(int backgroundProcessHistoryId)
         {
-            var backgroundProcessHistory =
-                await _backgroundProcessHistoryRepository
-                    .GetSingleOrDefaultAsync(p => p.Id == backgroundProcessHistoryId);
+            var backgroundProcessHistory = await _backgroundProcessHistoryRepository.GetSingleOrDefaultAsync(p => p.Id == backgroundProcessHistoryId);
 
-            if (backgroundProcessHistory == null ||
-                backgroundProcessHistory.Status != BackgroundProcessHistoryStatus.Pending.ToString())
+            if (backgroundProcessHistory == null || backgroundProcessHistory.Status != BackgroundProcessHistoryStatus.Pending.ToString())
             {
                 return null;
             }

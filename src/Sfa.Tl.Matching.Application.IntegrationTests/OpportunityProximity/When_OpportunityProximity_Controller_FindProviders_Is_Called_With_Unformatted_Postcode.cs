@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
@@ -46,8 +45,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
                 }));
             
             var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), 
-                locationService,
-                Substitute.For<IGoogleDistanceMatrixApiClient>());
+                locationService);
 
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);

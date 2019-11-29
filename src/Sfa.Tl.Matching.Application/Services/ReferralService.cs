@@ -16,9 +16,9 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         public ReferralService(
-                            IMessageQueueService messageQueueService,
-                            IRepository<OpportunityItem> opportunityItemRepository,
-                            IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
+            IMessageQueueService messageQueueService,
+            IRepository<OpportunityItem> opportunityItemRepository,
+            IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
         {
             _messageQueueService = messageQueueService;
             _opportunityItemRepository = opportunityItemRepository;

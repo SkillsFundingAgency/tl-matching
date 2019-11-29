@@ -119,8 +119,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     var secondaryDetailsBuilder = new StringBuilder();
                     if (!string.IsNullOrEmpty(provider.SecondaryContact))
                     {
-                        secondaryDetailsBuilder.AppendLine(
-                            $"We also have the following secondary contact for {provider.Name}:");
+                        secondaryDetailsBuilder.AppendLine($"We also have the following secondary contact for {provider.Name}:");
                         secondaryDetailsBuilder.AppendLine($"* Name: {provider.SecondaryContact}");
                         secondaryDetailsBuilder.AppendLine($"* Email: {provider.SecondaryContactEmail}");
                         secondaryDetailsBuilder.AppendLine($"* Telephone: {provider.SecondaryContactPhone}");
@@ -128,8 +127,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     tokens.Add("secondary_contact_details", secondaryDetailsBuilder.ToString());
 
-                    await SendEmailAsync(EmailTemplateName.ProviderQuarterlyUpdate, null, toAddress,
-                        "Industry Placement Matching Provider Update", tokens, userName);
+                    await SendEmailAsync(EmailTemplateName.ProviderQuarterlyUpdate, null, toAddress, tokens, userName);
 
                     numberOfProviderEmailsSent++;
                 }
@@ -156,9 +154,12 @@ namespace Sfa.Tl.Matching.Application.Services
             return numberOfProviderEmailsSent;
         }
 
-        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId,
-            string toAddress, string subject,
-            IDictionary<string, string> tokens, string createdBy)
+        private async Task SendEmailAsync(
+            EmailTemplateName template, 
+            int? opportunityId,
+            string toAddress,
+            IDictionary<string, string> tokens, 
+            string createdBy)
         {
             if (!_configuration.SendEmailEnabled)
             {

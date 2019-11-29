@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
 
             var googleDistanceMatrixApiClient = Substitute.For<IGoogleDistanceMatrixApiClient>();
             
-            var service = new OpportunityProximityService(_searchProvider, _locationService, googleDistanceMatrixApiClient);
+            var service = new OpportunityProximityService(_searchProvider, _locationService);
 
             _result = service.SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(dto).GetAwaiter().GetResult();
         }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
@@ -13,15 +12,12 @@ namespace Sfa.Tl.Matching.Application.Services
     {
         private readonly ISearchProvider _searchProvider;
         private readonly ILocationService _locationService;
-        private readonly IGoogleDistanceMatrixApiClient _googleDistanceMatrixApiClient;
 
         public OpportunityProximityService(ISearchProvider searchProvider,
-            ILocationService locationService,
-            IGoogleDistanceMatrixApiClient googleDistanceMatrixApiClient)
+            ILocationService locationService)
         {
             _searchProvider = searchProvider;
             _locationService = locationService;
-            _googleDistanceMatrixApiClient = googleDistanceMatrixApiClient;
         }
 
         public async Task<IList<OpportunityProximitySearchResultViewModelItem>> SearchOpportunitiesByPostcodeProximityAsync(OpportunityProximitySearchParametersDto dto)
