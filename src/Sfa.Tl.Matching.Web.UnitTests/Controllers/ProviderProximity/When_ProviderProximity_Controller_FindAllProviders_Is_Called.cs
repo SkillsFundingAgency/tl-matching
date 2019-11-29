@@ -1,15 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderProximity
@@ -21,9 +15,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderProximity
         public When_ProviderProximity_Controller_FindAllProviders_Is_Called()
         {
             const string postcode = "cv1 2wt";
-
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
-            IMapper mapper = new Mapper(config);
 
             var locationService = Substitute.For<ILocationService>();
             locationService.IsValidPostcodeAsync(postcode).Returns((true, postcode.ToUpper()));

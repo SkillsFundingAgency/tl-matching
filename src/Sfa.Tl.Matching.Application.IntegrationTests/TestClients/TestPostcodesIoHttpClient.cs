@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
 
-namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
+namespace Sfa.Tl.Matching.Application.IntegrationTests.TestClients
 {
     public class TestPostcodesIoHttpClient
     {

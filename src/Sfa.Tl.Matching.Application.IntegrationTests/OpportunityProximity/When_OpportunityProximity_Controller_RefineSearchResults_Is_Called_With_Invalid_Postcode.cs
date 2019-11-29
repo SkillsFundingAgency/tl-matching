@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
+using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -15,15 +16,16 @@ using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
+namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
 {
-    public class When_Proximity_Controller_RefineSearchResults_Is_Called_With_Unformatted_Postcode
+    public class When_OpportunityProximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode
     {
         private readonly IActionResult _result;
+        private readonly OpportunityProximityController _opportunityProximityController;
 
-        public When_Proximity_Controller_RefineSearchResults_Is_Called_With_Unformatted_Postcode()
+        public When_OpportunityProximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode()
         {
-            const string requestPostcode = "Cv 12 Wt";
+            const string requestPostcode = "CV1234";
             var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
 
             var routes = new List<Route>
@@ -37,8 +39,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
                 new LocationApiClient(httpClient, new MatchingConfiguration
                 {
                     PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
-                }));
 
+                }));
             var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(),
                 locationService,
                 Substitute.For<IGoogleDistanceMatrixApiClient>());
@@ -48,37 +50,33 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService,
+            _opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService,
                 locationService);
 
             var viewModel = new SearchParametersViewModel
             {
-                Postcode = requestPostcode,
+                Postcode = "CV1234",
                 SelectedRouteId = 1
             };
 
-            _result = opportunityProximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_RedirectToRoute_Result_Is_Returned()
-        {
-            _result.Should().NotBeNull();
-            _result.Should().BeAssignableTo<RedirectToRouteResult>();
-
-            var redirect = _result as RedirectToRouteResult;
-            redirect.Should().NotBeNull();
-            redirect?.RouteValues.Count.Should().BeGreaterOrEqualTo(3);
-            redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");
-            redirect?.RouteValues["SelectedRouteId"].Should().Be(1);
+            _result = _opportunityProximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_Model_Is_Not_Null()
         {
-            var result = _result as RedirectToRouteResult;
-            // ReSharper disable once PossibleNullReferenceException
-            result.RouteValues.Count.Should().BeGreaterOrEqualTo(3);
+            _result.Should().NotBeNull();
+            _result.Should().BeOfType<ViewResult>();
+            var viewResult = _result as ViewResult;
+            viewResult.Should().NotBeNull();
+            viewResult?.Model.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Then_Model_Contains_Postcode_Error()
+        {
+            _opportunityProximityController.ViewData.ModelState.IsValid.Should().BeFalse();
+            _opportunityProximityController.ViewData.ModelState["Postcode"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must enter a real postcode");
         }
     }
 }

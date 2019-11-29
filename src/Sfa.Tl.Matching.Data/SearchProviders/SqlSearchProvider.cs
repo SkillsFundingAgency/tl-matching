@@ -184,7 +184,15 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                                 q.QualificationShortTitle)
                                 .OrderBy(q => q)
                         }).OrderBy(rt => rt.RouteName)
-            }).OrderBy(r => r.Distance).ToList();
+            }).OrderBy(r => r.Distance)
+            .ThenBy(r =>
+            {
+                if (r.ProviderVenueName == r.ProviderVenuePostcode)
+                    return r.ProviderDisplayName;
+                else
+                    return r.ProviderVenueName;
+            })
+            .ToList();
 
             return result;
         }

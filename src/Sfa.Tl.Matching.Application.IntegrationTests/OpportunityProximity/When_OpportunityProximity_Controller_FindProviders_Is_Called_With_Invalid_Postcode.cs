@@ -3,9 +3,11 @@ using System.Linq;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
+using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -13,33 +15,37 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
+namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
 {
-    public class When_Proximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode
+    public class When_OpportunityProximity_Controller_FindProviders_Is_Called_With_Invalid_Postcode
     {
         private readonly IActionResult _result;
         private readonly OpportunityProximityController _opportunityProximityController;
 
-        public When_Proximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode()
+        public When_OpportunityProximity_Controller_FindProviders_Is_Called_With_Invalid_Postcode()
         {
-            const string requestPostcode = "CV1234";
+            const string requestPostcode = "cV12 34";
             var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
 
             var routes = new List<Route>
             {
-                new Route {Id = 1, Name = "Route 1"}
-            }.AsQueryable();
-
-            var mapper = Substitute.For<IMapper>();
+                new Route { Id = 1, Name = "Route 1" },
+                new Route { Id = 2, Name = "Route 2" }
+            }
+            .AsQueryable();
+            
+            var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
+            IMapper mapper = new Mapper(config);
 
             var locationService = new LocationService(
                 new LocationApiClient(httpClient, new MatchingConfiguration
                 {
                     PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
-
                 }));
+
             var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(),
                 locationService,
                 Substitute.For<IGoogleDistanceMatrixApiClient>());
@@ -49,18 +55,20 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
 
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            _opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService,
-                locationService);
+            _opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService, locationService);
+
+            var selectedRouteId = routes.First().Id;
+            const string postcode = requestPostcode;
 
             var viewModel = new SearchParametersViewModel
             {
-                Postcode = "CV1234",
-                SelectedRouteId = 1
+                RoutesSelectList = mapper.Map<SelectListItem[]>(routes),
+                SelectedRouteId = selectedRouteId,
+                Postcode = postcode
             };
-
-            _result = _opportunityProximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
+            _result = _opportunityProximityController.FindProviders(viewModel).GetAwaiter().GetResult();
         }
-
+        
         [Fact]
         public void Then_Model_Is_Not_Null()
         {

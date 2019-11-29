@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Application.IntegrationTests.Proximity;
+using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
 using Sfa.Tl.Matching.Models.Configuration;
 using Xunit;
 

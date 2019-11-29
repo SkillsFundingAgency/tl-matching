@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
+using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -17,13 +18,13 @@ using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.IntegrationTests.Proximity
+namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
 {
-    public class When_Proximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode
+    public class When_OpportunityProximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode
     {
         private readonly IActionResult _result;
 
-        public When_Proximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode()
+        public When_OpportunityProximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode()
         {
             const string requestPostcode = "cV12 Wt";
             var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
