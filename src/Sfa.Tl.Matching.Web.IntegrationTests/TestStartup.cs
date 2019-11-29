@@ -33,6 +33,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
 
         protected override bool ConfigurationIsLocalOrDev()
         {
+            IsTestAdminUser = true;
             return true;
         }
 

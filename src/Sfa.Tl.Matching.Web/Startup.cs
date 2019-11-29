@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Security.Claims;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -42,6 +43,7 @@ namespace Sfa.Tl.Matching.Web
     {
         protected MatchingConfiguration MatchingConfiguration;
         private readonly ILoggerFactory _loggerFactory;
+        protected bool IsTestAdminUser { get; set; }
 
         public IConfiguration Configuration { get; }
 
@@ -105,10 +107,12 @@ namespace Sfa.Tl.Matching.Web
             else
             {
                 services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = "Local Scheme";
-                    options.DefaultChallengeScheme = "Local Scheme";
-                }).AddTestAuth(o => { });
+                    {
+                        options.DefaultAuthenticateScheme = "Local Scheme";
+                        options.DefaultChallengeScheme = "Local Scheme";
+                    })
+                    .IsAdminUser(IsTestAdminUser)
+                    .AddTestAuth(o => { });
             }
 
             services.AddMemoryCache();
@@ -257,7 +261,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
             services.AddTransient<IServiceStatusHistoryService, ServiceStatusHistoryService>();
             services.AddTransient<INavigationService, NavigationService>();
-            
+
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
             services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
