@@ -5,7 +5,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
 {
-    public class ProximityIndexPage : PageBase, IPage
+    public class OpportunityProximityIndexPage : PageBase, IPage
     {
         private readonly By _skillAreaSelect = By.Id("SelectedRouteId");
         private readonly By _postcode = By.Id("Postcode");
@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
 
         private const string Title = "Set up placement opportunity";
 
-        public ProximityIndexPage(IWebDriver driver) : base(driver)
+        public OpportunityProximityIndexPage(IWebDriver driver) : base(driver)
         {
         }
 
@@ -29,11 +29,11 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
             Driver.FindElement(_postcode).SendKeys(postcode);
         }
 
-        public ProximityResultsPage ClickSearch()
+        public OpportunityProximityResultsPage ClickSearch()
         {
             Driver.FindElement(_searchButton).Click();
 
-            return new ProximityResultsPage(Driver);
+            return new OpportunityProximityResultsPage(Driver);
         }
 
         public void AssertContent()

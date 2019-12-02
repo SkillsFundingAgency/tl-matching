@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using OpenQA.Selenium;
 using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity;
+using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.ProviderProximity;
 
 // ReSharper disable UnusedMember.Global
 
@@ -13,7 +14,8 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
         private readonly By _providerLink = By.Id("tl-dash-manageprovider");
         private readonly By _qualificationLink = By.Id("tl-dash-editquals");
         private readonly By _startButton = By.Id("tl-dash-createnew");
-
+        private readonly By _showAllLink = By.Id("tl-dash-showall");
+        
         public StartPage(IWebDriver driver) : base(driver)
         {
         }
@@ -41,11 +43,11 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
             qualificationPathAndQuery.Should().Be("/edit-qualifications");
         }
 
-        public ProximityIndexPage ClickStart()
+        public OpportunityProximityIndexPage ClickStart()
         {
             Driver.FindElement(_startButton).Click();
 
-            return new ProximityIndexPage(Driver);
+            return new OpportunityProximityIndexPage(Driver);
         }
 
         public void ClickOpportunitiesLink()
@@ -61,6 +63,13 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
         public void ClickProviderLink()
         {
             Driver.FindElement(_providerLink).Click();
+        }
+
+        public ProviderProximitySearchPostcodePage ClickShowAll()
+        {
+            Driver.FindElement(_showAllLink).Click();
+
+            return new ProviderProximitySearchPostcodePage(Driver);
         }
 
         public void ClickQualificationLink()

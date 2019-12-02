@@ -6,7 +6,7 @@ using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
 {
-    public class ProximityResultsPage : PageBase
+    public class OpportunityProximityResultsPage : PageBase
     {
         private readonly By _noSuitableProvidersLink = By.Id("tl-search-nosuitable");
         private readonly By _skillAreaSelect = By.Id("SelectedRouteId");
@@ -17,7 +17,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
 
         private const string Title = "Select providers for this opportunity";
 
-        public ProximityResultsPage(IWebDriver driver) : base(driver)
+        public OpportunityProximityResultsPage(IWebDriver driver) : base(driver)
         {
         }
 
@@ -33,11 +33,11 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity
             Driver.FindElement(_postcode).SendKeys(postcode);
         }
 
-        public ProximityResultsPage ClickSearchAgain()
+        public OpportunityProximityResultsPage ClickSearchAgain()
         {
             Driver.FindElement(_searchButton).Click();
 
-            return new ProximityResultsPage(Driver);
+            return new OpportunityProximityResultsPage(Driver);
         }
 
         public PlacementInformationPage ClickNoSuitableProvidersLink()

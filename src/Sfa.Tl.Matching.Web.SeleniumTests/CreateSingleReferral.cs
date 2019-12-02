@@ -29,15 +29,15 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
         {
             _startPage.AssertContent();
 
-            var proximityIndexPage = _startPage.ClickStart();
-            proximityIndexPage.AssertContent();
-            proximityIndexPage.EnterPostcode("CV1 2WT");
+            var opportunityProximityIndexPage = _startPage.ClickStart();
+            opportunityProximityIndexPage.AssertContent();
+            opportunityProximityIndexPage.EnterPostcode("CV1 2WT");
 
-            var proximityResultsPage = proximityIndexPage.ClickSearch();
-            proximityResultsPage.AssertContent();
-            proximityResultsPage.SelectProvider();
+            var opportunityProximityResultsPage = opportunityProximityIndexPage.ClickSearch();
+            opportunityProximityResultsPage.AssertContent();
+            opportunityProximityResultsPage.SelectProvider();
 
-            var placementInformationPage = proximityResultsPage.ClickContinue();
+            var placementInformationPage = opportunityProximityResultsPage.ClickContinue();
             placementInformationPage.AssertContent();
             placementInformationPage.SelectPlacementsKnown();
 
