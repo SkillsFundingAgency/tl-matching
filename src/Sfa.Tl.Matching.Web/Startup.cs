@@ -113,14 +113,8 @@ namespace Sfa.Tl.Matching.Web
                     })
                     .AddTestAuth(o =>
                     {
-                        o.Identity = new ClaimsIdentity(new[]
-                        {
-                            new Claim(ClaimTypes.GivenName, "Dev"),
-                            new Claim(ClaimTypes.Surname, "Surname"),
-                            new Claim(ClaimTypes.Upn, "tmatching3@sfa.bis.gov.uk"),
-                            new Claim(ClaimTypes.Role,
-                                IsTestAdminUser ? RolesExtensions.AdminUser : RolesExtensions.StandardUser)
-                        }, "test");
+                        o.IsAdminUser = IsTestAdminUser;
+                        o.Identity = o.ClaimsIdentity;
                     });
             }
 
