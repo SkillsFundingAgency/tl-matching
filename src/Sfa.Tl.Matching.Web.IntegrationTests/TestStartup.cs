@@ -8,6 +8,7 @@ using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
 {
