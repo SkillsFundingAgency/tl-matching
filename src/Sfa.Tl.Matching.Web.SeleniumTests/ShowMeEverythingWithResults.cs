@@ -8,12 +8,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.SeleniumTests
 {
-    public class ShowMeEverything : IClassFixture<SeleniumServerFactory<Startup>>, IDisposable
+    public class ShowMeEverythingWithResults : IClassFixture<SeleniumServerFactory<Startup>>, IDisposable
     {
         private readonly StartPage _startPage;
         public IWebDriver Driver { get; }
 
-        public ShowMeEverything(SeleniumServerFactory<Startup> server)
+        public ShowMeEverythingWithResults(SeleniumServerFactory<Startup> server)
         {
             server.CreateClient();
             var opts = new ChromeOptions();
