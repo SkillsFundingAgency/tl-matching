@@ -1,12 +1,9 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
-using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 

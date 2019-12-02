@@ -5,19 +5,19 @@ using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 using Sfa.Tl.Matching.Web.Tests.Common;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
+namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Dashboard
 {
-    public class When_Start_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Dashboard_Page_Is_Loaded_As_Admin_User : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private readonly CustomWebApplicationFactory<TestStartup> _factory;
 
-        public When_Start_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Dashboard_Page_Is_Loaded_As_Admin_User(CustomWebApplicationFactory<TestStartup> factory)
         {
             _factory = factory;
         }
 
         [Fact]
-        public async Task Then_Correct_Response_Is_Returned()
+        public async Task Then_The_Correct_Response_Is_Returned()
         {
             // ReSharper disable all PossibleNullReferenceException
 
@@ -65,6 +65,9 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
             var serviceMaintenanceLink = documentHtml.GetElementById("tl-dash-takeoffline") as IHtmlAnchorElement;
             serviceMaintenanceLink.TextContent.Should().Be("Take service offline");
             serviceMaintenanceLink.PathName.Should().Be($"/service-under-maintenance");
+
+
         }
+
     }
 }
