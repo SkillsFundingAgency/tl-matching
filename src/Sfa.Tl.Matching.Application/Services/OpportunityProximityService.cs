@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<OpportunityProximitySearchResultViewModelItem>> SearchOpportunitiesByPostcodeProximityAsync(OpportunityProximitySearchParametersDto dto)
         {
-            var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
+            var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode);
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<OpportunityProximitySearchResultByRouteViewModelItem>> SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(OpportunityProximitySearchParametersDto dto)
         {
-            var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
+            var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode);
             dto.Latitude = geoLocationData.Latitude;
             dto.Longitude = geoLocationData.Longitude;
 

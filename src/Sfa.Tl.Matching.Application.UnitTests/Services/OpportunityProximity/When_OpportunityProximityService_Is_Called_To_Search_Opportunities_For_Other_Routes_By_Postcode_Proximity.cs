@@ -37,15 +37,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
                 .Returns(new SearchResultsByRouteBuilder().Build());
 
             _locationService = Substitute.For<ILocationService>();
-            _locationService.GetGeoLocationDataAsync(Postcode, true).Returns(new PostcodeLookupResultDto
+            _locationService.GetGeoLocationDataAsync(Postcode).Returns(new PostcodeLookupResultDto
             {
                 Postcode = Postcode,
                 Longitude = "1.2",
                 Latitude = "1.2"
             });
 
-            var googleDistanceMatrixApiClient = Substitute.For<IGoogleDistanceMatrixApiClient>();
-            
             var service = new OpportunityProximityService(_searchProvider, _locationService);
 
             _result = service.SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(dto).GetAwaiter().GetResult();
@@ -69,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.OpportunityProximity
         [Fact]
         public void Then_The_LocationService_Is_Called_Exactly_Once()
         {
-            _locationService.Received(1).GetGeoLocationDataAsync(Postcode, true);
+            _locationService.Received(1).GetGeoLocationDataAsync(Postcode);
         }
 
         [Fact]

@@ -7,6 +7,5 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task<(bool, string)> IsValidPostcodeAsync(string postcode);
         Task<PostcodeLookupResultDto> GetGeoLocationDataAsync(string postcode);
-        Task<PostcodeLookupResultDto> GetGeoLocationDataAsync(string postcode, bool includeTerminated);
     }
 }

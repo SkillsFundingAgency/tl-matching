@@ -37,13 +37,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity
             _cacheService = Substitute.For<ICacheService>();
             _cacheService.Get<IList<ProviderProximitySearchResultViewModelItem>>(Arg.Any<string>()) 
                 .Returns((IList<ProviderProximitySearchResultViewModelItem>)null);
-            //_cacheService.Set(Arg.Any<string>(), 
-            //        Arg.Any<IList<ProviderProximitySearchResultViewModelItem>>(), 
-            //        Arg.Any<TimeSpan>())
-            //    .Returns(x => x[1]);
 
             _locationService = Substitute.For<ILocationService>();
-            _locationService.GetGeoLocationDataAsync(Postcode, true)
+            _locationService.GetGeoLocationDataAsync(Postcode)
                 .Returns(new PostcodeLookupResultDto
                 {
                     Postcode = Postcode,
@@ -84,7 +80,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity
         [Fact]
         public void Then_The_LocationService_Is_Called_Exactly_Once()
         {
-            _locationService.Received(1).GetGeoLocationDataAsync(Postcode, true);
+            _locationService.Received(1).GetGeoLocationDataAsync(Postcode);
         }
 
         [Fact]

@@ -16,17 +16,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<(bool, string)> IsValidPostcodeAsync(string postcode)
         {
-            return await _locationApiClient.IsValidPostcodeAsync(postcode, true);
+            return await _locationApiClient.IsValidPostcodeAsync(postcode);
         }
 
         public async Task<PostcodeLookupResultDto> GetGeoLocationDataAsync(string postcode)
         {
             return await _locationApiClient.GetGeoLocationDataAsync(postcode);
-        }
-
-        public async Task<PostcodeLookupResultDto> GetGeoLocationDataAsync(string postcode, bool includeTerminated)
-        {
-            return await _locationApiClient.GetGeoLocationDataAsync(postcode, includeTerminated);
         }
     }
 }

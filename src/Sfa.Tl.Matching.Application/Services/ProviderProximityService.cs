@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (searchResults == null)
             {
-                var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode, true);
+                var geoLocationData = await _locationService.GetGeoLocationDataAsync(dto.Postcode);
                 dto.Latitude = geoLocationData.Latitude;
                 dto.Longitude = geoLocationData.Longitude;
 
