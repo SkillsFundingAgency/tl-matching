@@ -149,13 +149,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
             //Get title from service, based on LAR
             var title = await _qualificationService.GetLarTitleAsync(larId);
 
+            var routes = await GetRoutesAsync();
+
             return View("MissingQualification", new MissingQualificationViewModel
             {
                 ProviderVenueId = providerVenueId,
                 LarId = larId,
                 QualificationId = 1,
                 Title = title,
-                Routes = await GetRoutesAsync()
+                Routes = routes
             });
         }
 

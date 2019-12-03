@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
@@ -57,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         [Fact]
         public void Then_GetRoutes_Is_Called_Exactly_Once()
         {
-            _routePathService.Received(1).GetRoutes();
+            _routePathService.Received(1).GetRouteSummaryAsync();
         }
 
         [Fact]
