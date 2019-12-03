@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -26,27 +25,25 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
             const string requestPostcode = "CV1234";
             var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
 
-            var routes = new List<Route>
+            var routes = new List<SelectListItem>
             {
-                new Route {Id = 1, Name = "Route 1"}
-            }.AsQueryable();
+                new SelectListItem {Text = "1", Value = "Route 1"}
+            };
 
-            var locationService = new LocationService(
-                new LocationApiClient(httpClient, new MatchingConfiguration
-                {
-                    PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
+            var locationService = new LocationService(new LocationApiClient(httpClient, new MatchingConfiguration
+            {
+                PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
 
-                }));
-            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(),
-                locationService);
+            }));
+
+            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), locationService);
 
             var routePathService = Substitute.For<IRoutePathService>();
-            routePathService.GetRoutes().Returns(routes);
+            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
 
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            _opportunityProximityController = new OpportunityProximityController(routePathService, opportunityProximityService, opportunityService,
-                locationService);
+            _opportunityProximityController = new OpportunityProximityController(routePathService, opportunityProximityService, opportunityService, locationService);
 
             var viewModel = new SearchParametersViewModel
             {
