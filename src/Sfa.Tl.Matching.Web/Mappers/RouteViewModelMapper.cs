@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Web.Mappers
     {
         public RouteViewModelMapper()
         {
-            CreateMap<Route, RouteViewModel>()
+            CreateMap<Route, RouteSummaryViewModel>()
                 .ForMember(dest => dest.IsSelected, opt => opt.Ignore());
         }
     }

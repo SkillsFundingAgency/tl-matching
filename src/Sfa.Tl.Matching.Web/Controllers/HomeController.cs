@@ -8,7 +8,6 @@ using Sfa.Tl.Matching.Models.ViewModel;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [AllowAnonymous]
-    //[ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class HomeController : Controller
     {
         private readonly IServiceStatusHistoryService _serviceStatusHistoryService;

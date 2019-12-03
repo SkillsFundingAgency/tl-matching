@@ -45,7 +45,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
                     Summary = "Route 1 summary"
                 },
                 new Route
-                { Id = 2,
+                { 
+                    Id = 2,
                     Name = "Route 2",
                     Keywords = "Keyword2",
                     Summary = "Route 2 summary"
@@ -58,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 
             _routeRepository.GetManyAsync().Returns(_routeData);
 
-            IRoutePathService service = new RoutePathService(_routeRepository);
+            IRoutePathService service = new RoutePathService(TODO, _routeRepository);
 
             _result = service.GetRoutes();
         }

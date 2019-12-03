@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -31,8 +30,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
                 new Route {Id = 1, Name = "Route 1"}
             }.AsQueryable();
 
-            var mapper = Substitute.For<IMapper>();
-
             var locationService = new LocationService(
                 new LocationApiClient(httpClient, new MatchingConfiguration
                 {
@@ -47,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
 
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(routePathService, opportunityProximityService, opportunityService,
                 locationService);
 
             var viewModel = new SearchParametersViewModel

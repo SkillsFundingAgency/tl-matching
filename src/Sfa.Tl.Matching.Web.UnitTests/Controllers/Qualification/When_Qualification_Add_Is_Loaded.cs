@@ -1,4 +1,3 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -17,8 +16,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
         public When_Qualification_Add_Is_Loaded()
         {
-            var mapper = Substitute.For<IMapper>();
-
             var qualificationService = Substitute.For<IQualificationService>();
 
             _providerVenueService = Substitute.For<IProviderVenueService>();
@@ -28,7 +25,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
             var routePathService = Substitute.For<IRoutePathService>();
 
-            var qualificationController = new QualificationController(mapper, _providerVenueService, qualificationService, providerQualificationService, routePathService);
+            var qualificationController = new QualificationController(_providerVenueService, qualificationService, providerQualificationService, routePathService);
 
             _result = qualificationController.AddQualificationAsync(1)
                 .GetAwaiter().GetResult();

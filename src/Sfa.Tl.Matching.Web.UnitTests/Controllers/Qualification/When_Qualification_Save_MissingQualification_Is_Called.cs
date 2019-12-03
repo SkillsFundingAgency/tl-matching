@@ -1,12 +1,10 @@
 using System.Collections.Generic;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
@@ -20,16 +18,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
         public When_Qualification_Save_MissingQualification_Is_Called()
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(RouteViewModelMapper).Assembly));
-            var mapper = new Mapper(config);
-
             _qualificationService = Substitute.For<IQualificationService>();
             var providerVenueService = Substitute.For<IProviderVenueService>();
             _providerQualificationService = Substitute.For<IProviderQualificationService>();
             var routePathService = Substitute.For<IRoutePathService>();
 
-            var qualificationController = new QualificationController(mapper,
-                providerVenueService, _qualificationService,
+            var qualificationController = new QualificationController(providerVenueService, _qualificationService,
                 _providerQualificationService, routePathService);
             var controllerWithClaims = new ClaimsBuilder<QualificationController>(qualificationController)
                 .AddUserName("username")
@@ -43,9 +37,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 QualificationId = 1,
                 Title = "Qualification title",
                 ShortTitle = new string('X', 100),
-                Routes = new List<RouteViewModel>
+                Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteViewModel
+                    new RouteSummaryViewModel
                     {
                         Id = 1,
                         Name = "Route 1",

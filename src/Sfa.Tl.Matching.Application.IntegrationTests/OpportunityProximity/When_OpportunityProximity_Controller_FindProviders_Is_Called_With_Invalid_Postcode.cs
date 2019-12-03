@@ -10,7 +10,6 @@ using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -29,13 +28,12 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
             const string requestPostcode = "cV12 34";
             var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
 
-            var routes = new List<Route>
+            var routes = new List<SelectListItem>
             {
-                new Route { Id = 1, Name = "Route 1" },
-                new Route { Id = 2, Name = "Route 2" }
-            }
-            .AsQueryable();
-            
+                new SelectListItem {Text = "1", Value = "Route 1"},
+                new SelectListItem {Text = "2", Value = "Route 2"}
+            };
+
             var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
             IMapper mapper = new Mapper(config);
 
@@ -45,28 +43,27 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
                     PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
                 }));
 
-            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(),
-                locationService);
+            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), locationService);
 
             var routePathService = Substitute.For<IRoutePathService>();
-            routePathService.GetRoutes().Returns(routes);
+            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
 
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            _opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService, locationService);
+            _opportunityProximityController = new OpportunityProximityController(routePathService, opportunityProximityService, opportunityService, locationService);
 
-            var selectedRouteId = routes.First().Id;
+            var selectedRouteId = routes.First().Text;
             const string postcode = requestPostcode;
 
             var viewModel = new SearchParametersViewModel
             {
                 RoutesSelectList = mapper.Map<SelectListItem[]>(routes),
-                SelectedRouteId = selectedRouteId,
+                SelectedRouteId = int.Parse(selectedRouteId),
                 Postcode = postcode
             };
             _result = _opportunityProximityController.FindProviders(viewModel).GetAwaiter().GetResult();
         }
-        
+
         [Fact]
         public void Then_Model_Is_Not_Null()
         {

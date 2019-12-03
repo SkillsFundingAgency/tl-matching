@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -9,7 +8,6 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -44,9 +42,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                 }
             };
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
-            IMapper mapper = new Mapper(config);
-
             var locationService = Substitute.For<ILocationService>();
 
             _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
@@ -59,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, _opportunityProximityService, _opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(routePathService, _opportunityProximityService, _opportunityService,
                 locationService);
 
             _result = opportunityProximityController.GetOpportunityProviderResultsAsync(new SearchParametersViewModel

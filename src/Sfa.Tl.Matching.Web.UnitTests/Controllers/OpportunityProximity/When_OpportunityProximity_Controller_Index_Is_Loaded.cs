@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -25,8 +24,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                 new Route {Id = 1, Name = "Route 1"}
             }.AsQueryable();
 
-            var mapper = Substitute.For<IMapper>();
-
             var proximityopportunityService = Substitute.For<IOpportunityProximityService>();
             var routePathService = Substitute.For<IRoutePathService>();
             routePathService.GetRoutes().Returns(routes);
@@ -35,7 +32,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, proximityopportunityService,
+            var opportunityProximityController = new OpportunityProximityController(routePathService, proximityopportunityService,
                 _opportunityService, locationService);
 
             _result = opportunityProximityController.Index().GetAwaiter().GetResult();

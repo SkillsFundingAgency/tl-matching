@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            var opportunityProximityController = new OpportunityProximityController(mapper, routePathService, opportunityProximityService, opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(routePathService, opportunityProximityService, opportunityService,
                 locationService);
 
             var selectedRouteId = routes.First().Id;

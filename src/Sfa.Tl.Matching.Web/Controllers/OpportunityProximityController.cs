@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -16,16 +14,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
     [Authorize(Roles = RolesExtensions.StandardUser + "," + RolesExtensions.AdminUser)]
     public class OpportunityProximityController : Controller
     {
-        private readonly IMapper _mapper;
         private readonly IOpportunityProximityService _opportunityProximityService;
         private readonly ILocationService _locationService;
         private readonly IRoutePathService _routePathService;
         private readonly IOpportunityService _opportunityService;
 
-        public OpportunityProximityController(IMapper mapper, IRoutePathService routePathService, IOpportunityProximityService opportunityProximityService,
-            IOpportunityService opportunityService, ILocationService locationService)
+        public OpportunityProximityController(IRoutePathService routePathService, IOpportunityProximityService opportunityProximityService, IOpportunityService opportunityService, ILocationService locationService)
         {
-            _mapper = mapper;
             _opportunityProximityService = opportunityProximityService;
             _routePathService = routePathService;
             _opportunityService = opportunityService;
@@ -172,16 +167,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
         private async Task<SearchParametersViewModel> GetSearchParametersViewModelAsync(SearchParametersViewModel viewModel)
         {
-            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
-
             if (viewModel.OpportunityId > 0 && string.IsNullOrEmpty(viewModel.CompanyNameWithAka))
             {
                 viewModel.CompanyNameWithAka = await _opportunityService.GetCompanyNameWithAkaAsync(viewModel.OpportunityId);
             }
 
+            var routes = await _routePathService.GetRouteSelectListItemsAsync();
+
             return new SearchParametersViewModel
             {
-                RoutesSelectList = _mapper.Map<SelectListItem[]>(routes),
+                RoutesSelectList = routes,
                 SelectedRouteId = viewModel.SelectedRouteId,
                 Postcode = viewModel.Postcode?.Trim(),
                 OpportunityId = viewModel.OpportunityId,
@@ -194,8 +189,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             var result = true;
 
-            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
-            if (viewModel.SelectedRouteId == null || routes.All(r => r.Id != viewModel.SelectedRouteId))
+            var routeIds = await _routePathService.GetRouteIdsAsync();
+            if (viewModel.SelectedRouteId == null || routeIds.All(id => id != viewModel.SelectedRouteId))
             {
                 ModelState.AddModelError("SelectedRouteId", "You must select a valid skill area");
                 result = false;

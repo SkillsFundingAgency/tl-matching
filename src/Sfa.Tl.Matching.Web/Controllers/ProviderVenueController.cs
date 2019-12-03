@@ -9,7 +9,6 @@ using Sfa.Tl.Matching.Models.ViewModel;
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
-    //[ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class ProviderVenueController : Controller
     {
         private readonly IProviderVenueService _providerVenueService;

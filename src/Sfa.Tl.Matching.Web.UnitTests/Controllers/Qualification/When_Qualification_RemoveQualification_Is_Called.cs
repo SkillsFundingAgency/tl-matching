@@ -1,10 +1,8 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
@@ -17,16 +15,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
         public When_Qualification_RemoveQualification_Is_Called()
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(RouteViewModelMapper).Assembly));
-            var mapper = new Mapper(config);
-
             var qualificationService = Substitute.For<IQualificationService>();
             var providerVenueService = Substitute.For<IProviderVenueService>();
             _providerQualificationService = Substitute.For<IProviderQualificationService>();
             var routePathService = Substitute.For<IRoutePathService>();
 
-            var qualificationController = new QualificationController(mapper,
-                providerVenueService, qualificationService,
+            var qualificationController = new QualificationController(providerVenueService, qualificationService,
                 _providerQualificationService, routePathService);
             var controllerWithClaims = new ClaimsBuilder<QualificationController>(qualificationController)
                 .AddUserName("username")

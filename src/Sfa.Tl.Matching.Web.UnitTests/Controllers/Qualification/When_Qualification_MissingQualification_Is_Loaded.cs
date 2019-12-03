@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -8,7 +7,6 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -28,9 +26,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 new Route {Id = 2, Name = "Route 2", Summary = "Route Summary 2"}
             }.AsQueryable();
             
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(RouteViewModelMapper).Assembly));
-            var mapper = new Mapper(config);
-
              _qualificationService = Substitute.For<IQualificationService>();
 
             _qualificationService.GetLarTitleAsync("12345678")
@@ -45,7 +40,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
 
-            var qualificationController = new QualificationController(mapper, providerVenueService, _qualificationService, providerQualificationService, _routePathService);
+            var qualificationController = new QualificationController(providerVenueService, _qualificationService, providerQualificationService, _routePathService);
 
             _result = qualificationController.MissingQualificationAsync(1, "12345678")
                 .GetAwaiter().GetResult();

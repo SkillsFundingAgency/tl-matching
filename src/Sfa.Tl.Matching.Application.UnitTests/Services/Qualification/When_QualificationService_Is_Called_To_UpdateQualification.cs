@@ -90,21 +90,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 Title = "Title",
                 ShortTitle = "Modified Short Title",
                 Source = "Test",
-                Routes = new List<RouteViewModel>
+                Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteViewModel
+                    new RouteSummaryViewModel
                     {
                         Id = 1,
                         Name = "Route 1",
                         IsSelected = false
                     },
-                    new RouteViewModel
+                    new RouteSummaryViewModel
                     {
                         Id = 2,
                         Name = "Route 2",
                         IsSelected = true
                     },
-                    new RouteViewModel
+                    new RouteSummaryViewModel
                     {
                         Id = 3,
                         Name = "Route 1",

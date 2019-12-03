@@ -1,7 +1,7 @@
 ﻿
 namespace Sfa.Tl.Matching.Models.ViewModel
 {
-    public class RouteViewModel
+    public class RouteSummaryViewModel
     {
         public int Id { get; set; }
         public bool IsSelected { get; set; }
