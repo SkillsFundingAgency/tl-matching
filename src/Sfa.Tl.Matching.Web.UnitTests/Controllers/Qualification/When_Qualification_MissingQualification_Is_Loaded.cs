@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -20,13 +21,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
         public When_Qualification_MissingQualification_Is_Loaded()
         {
-            var routes = new List<Route>
+            var routes = new List<SelectListItem>
             {
-                new Route {Id = 1, Name = "Route 1", Summary = "Route Summary 1"},
-                new Route {Id = 2, Name = "Route 2", Summary = "Route Summary 2"}
-            }.AsQueryable();
-            
-             _qualificationService = Substitute.For<IQualificationService>();
+                new SelectListItem {Text = "1", Value = "Route 1"},
+                new SelectListItem {Text = "2", Value = "Route 2"}
+            };
+
+            var routeDictionary = new Dictionary<int, string>
+            {
+                {1, "Route 1" },
+                {2, "Route 2" }
+            };
+
+            _qualificationService = Substitute.For<IQualificationService>();
 
             _qualificationService.GetLarTitleAsync("12345678")
                 .Returns("LAR title from lookup");
@@ -36,7 +43,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 .Returns("CV1 2WT");
 
             _routePathService = Substitute.For<IRoutePathService>();
-            _routePathService.GetRoutes().Returns(routes);
+            _routePathService.GetRouteSelectListItemsAsync().Returns(routes);
+            _routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
 
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
 

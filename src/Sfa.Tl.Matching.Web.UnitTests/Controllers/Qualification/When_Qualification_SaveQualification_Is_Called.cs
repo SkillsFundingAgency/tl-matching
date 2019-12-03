@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -23,11 +24,21 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
 
             var routePathService = Substitute.For<IRoutePathService>();
-            var routes = new List<Route>
+
+            var routes = new List<SelectListItem>
             {
-                new Route {Id = 1, Name = "Route 1", Summary = "Route Summary 1"}
-            }.AsQueryable();
-            routePathService.GetRoutes().Returns(routes);
+                new SelectListItem {Text = "1", Value = "Route 1"},
+                new SelectListItem {Text = "2", Value = "Route 2"}
+            };
+
+            var routeDictionary = new Dictionary<int, string>
+            {
+                {1, "Route 1" },
+                {2, "Route 2" }
+            };
+
+            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
+            routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
 
             _qualificationService = Substitute.For<IQualificationService>();
             _qualificationService.GetQualificationByIdAsync(1)

@@ -2,9 +2,9 @@
 using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -21,15 +21,23 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderProximity
 
         public When_ProviderProximity_Controller_GetProviderProximityResults_Is_Called_With_No_Filters()
         {
-            var routes = new List<Route>
-                {
-                    new Route { Id = 1, Name = "Route 1" },
-                    new Route { Id = 2, Name = "Route 2" }
-                }
-                .AsQueryable();
+            var routes = new List<SelectListItem>
+            {
+                new SelectListItem {Text = "1", Value = "Route 1"},
+                new SelectListItem {Text = "2", Value = "Route 2"}
+            };
+
+            var routeDictionary = new Dictionary<int, string>
+            {
+                {1, "Route 1" },
+                {2, "Route 2" }
+            };
 
             var routePathService = Substitute.For<IRoutePathService>();
-            routePathService.GetRoutes().Returns(routes);
+
+
+            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
+            routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
 
             _providerProximityService = Substitute.For<IProviderProximityService>();
             _providerProximityService.SearchProvidersByPostcodeProximityAsync(

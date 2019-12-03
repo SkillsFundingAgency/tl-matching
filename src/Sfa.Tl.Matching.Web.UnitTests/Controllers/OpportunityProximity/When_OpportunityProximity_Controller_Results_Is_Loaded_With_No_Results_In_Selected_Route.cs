@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
@@ -25,13 +26,19 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
         public When_OpportunityProximity_Controller_Results_Is_Loaded_With_No_Results_In_Selected_Route()
         {
-            var routes = new List<Route>
-                {
-                    new Route { Id = 1, Name = "Route 1" }
-                }
-                .AsQueryable();
+            var routes = new List<SelectListItem>
+            {
+                new SelectListItem {Text = "1", Value = "Route 1"},
+                new SelectListItem {Text = "2", Value = "Route 2"}
+            };
 
-            _selectedRouteId = routes.First().Id;
+            var routeDictionary = new Dictionary<int, string>
+            {
+                {1, "Route 1" },
+                {2, "Route 2" }
+            };
+
+            _selectedRouteId = int.Parse(routes.First().Text);
 
             var providerSearchResultDto = new List<OpportunityProximitySearchResultViewModelItem>();
 
@@ -63,7 +70,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                 .Returns(providerSearchResultForOtherRoutesDto);
 
             var routePathService = Substitute.For<IRoutePathService>();
-            routePathService.GetRoutes().Returns(routes);
+
+            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
+            routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
