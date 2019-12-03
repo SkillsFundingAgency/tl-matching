@@ -11,17 +11,16 @@ using Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath.Builders;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 {
-    public class When_RoutePathService_Is_Called_To_Get_Route_Summary
+    public class When_RoutePathService_Is_Called_To_Get_Route_Dictionary
     {
-        private readonly IList<RouteSummaryViewModel> _result;
+        private readonly IDictionary<int, string> _result;
 
-        public When_RoutePathService_Is_Called_To_Get_Route_Summary()
+        public When_RoutePathService_Is_Called_To_Get_Route_Dictionary()
         {
             var logger = Substitute.For<ILogger<GenericRepository<Route>>>();
 
@@ -37,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
 
                 IRoutePathService service = new RoutePathService(mapper, routeRepository);
 
-                _result = service.GetRouteSummaryAsync().GetAwaiter().GetResult();
+                _result = service.GetRouteDictionaryAsync().GetAwaiter().GetResult();
             }
         }
 
@@ -48,19 +47,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         }
 
         [Fact]
-        public void Then_Route_Summary_Data_Is_As_Expected()
+        public void Then_Route_Dictionary_Data_Is_As_Expected()
         {
             var firstResult = _result.First();
-            firstResult.Id.Should().Be(1);
-            firstResult.IsSelected.Should().BeFalse();
-            firstResult.Name.Should().Be("Route 1");
-            firstResult.Summary.Should().Be("Route 1 summary");
+            firstResult.Key.Should().Be(1);
+            firstResult.Value.Should().Be("Route 1");
 
             var secondResult = _result.Skip(1).First();
-            secondResult.Id.Should().Be(2);
-            secondResult.IsSelected.Should().BeFalse();
-            secondResult.Name.Should().Be("Route 2");
-            secondResult.Summary.Should().Be("Route 2 summary");
+            secondResult.Key.Should().Be(2);
+            secondResult.Value.Should().Be("Route 2");
         }
     }
 }
