@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
@@ -26,13 +27,18 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderProximity
             const string requestPostcode = "cV12 34";
             var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
 
-            var routes = new List<Route>
+            var routes = new List<SelectListItem>
             {
-                new Route { Id = 1, Name = "Route 1" },
-                new Route { Id = 2, Name = "Route 2" }
-            }
-            .AsQueryable();
-            
+                new SelectListItem {Text = "1", Value = "Route 1"},
+                new SelectListItem {Text = "2", Value = "Route 2"}
+            };
+
+            var routeDictionary = new Dictionary<int, string>
+            {
+                {1, "Route 1" },
+                {2, "Route 2" }
+            };
+
             var locationService = new LocationService(
                 new LocationApiClient(httpClient, new MatchingConfiguration
                 {
@@ -46,8 +52,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderProximity
                 locationService, cacheService);
 
             var routePathService = Substitute.For<IRoutePathService>();
-            routePathService.GetRoutes().Returns(routes);
-            
+
+            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
+            routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
+
             _providerProximityController = new ProviderProximityController(routePathService, providerProximityService, locationService);
 
             const string postcode = requestPostcode;
