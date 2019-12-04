@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -20,37 +19,27 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
         public When_Qualification_MissingQualification_Is_Loaded()
         {
-            var routes = new List<SelectListItem>
+            var routes = new List<RouteSummaryViewModel>
             {
-                new SelectListItem {Text = "1", Value = "Route 1"},
-                new SelectListItem {Text = "2", Value = "Route 2"}
-            };
-
-            var routeDictionary = new Dictionary<int, string>
-            {
-                {1, "Route 1" },
-                {2, "Route 2" }
+                new RouteSummaryViewModel { Id = 1, Name = "Route 1", Summary = "Route Summary 1" },
+                new RouteSummaryViewModel { Id = 2, Name = "Route 2", Summary = "Route Summary 2" }
             };
 
             _qualificationService = Substitute.For<IQualificationService>();
 
-            _qualificationService.GetLarTitleAsync("12345678")
-                .Returns("LAR title from lookup");
+            _qualificationService.GetLarTitleAsync("12345678").Returns("LAR title from lookup");
 
             var providerVenueService = Substitute.For<IProviderVenueService>();
-            providerVenueService.GetVenuePostcodeAsync(1)
-                .Returns("CV1 2WT");
+            providerVenueService.GetVenuePostcodeAsync(1).Returns("CV1 2WT");
 
             _routePathService = Substitute.For<IRoutePathService>();
-            _routePathService.GetRouteSelectListItemsAsync().Returns(routes);
-            _routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
+            _routePathService.GetRouteSummaryAsync().Returns(routes);
 
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
 
             var qualificationController = new QualificationController(providerVenueService, _qualificationService, providerQualificationService, _routePathService);
 
-            _result = qualificationController.MissingQualificationAsync(1, "12345678")
-                .GetAwaiter().GetResult();
+            _result = qualificationController.MissingQualificationAsync(1, "12345678").GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -64,7 +53,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         {
             _qualificationService.Received(1).GetLarTitleAsync("12345678");
         }
-        
+
         [Fact]
         public void Then_ViewModel_Fields_Are_Set()
         {
@@ -81,14 +70,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             viewModel.LarId.Should().Be("12345678");
             viewModel.Title.Should().BeEquivalentTo("LAR title from lookup");
             viewModel.Routes.Should().NotBeNullOrEmpty();
-        
+
             var routes = _result.GetViewModel<MissingQualificationViewModel>().Routes;
-            
+
             routes.Count.Should().Be(2);
-            
+
             routes.Should().Contain(r => r.Id == 1 && r.Name == "Route 1");
             routes.Should().Contain(r => r.Id == 2 && r.Name == "Route 2");
-            
+
             routes.Single(r => r.Id == 1).Summary.Should().Be("Route Summary 1");
             routes.Single(r => r.Id == 2).Summary.Should().Be("Route Summary 2");
         }
