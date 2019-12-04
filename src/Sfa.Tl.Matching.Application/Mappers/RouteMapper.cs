@@ -12,6 +12,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<Route, SelectListItem>()
                 .ForMember(m => m.Text, o => o.MapFrom(s => s.Id.ToString()))
                 .ForMember(m => m.Value, o => o.MapFrom(s => s.Name))
+                .ForAllOtherMembers(config => config.Ignore())
                 ;
 
             CreateMap<Route, RouteSummaryViewModel>()
