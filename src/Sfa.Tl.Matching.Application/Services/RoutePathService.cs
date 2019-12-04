@@ -40,7 +40,11 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<IList<RouteSummaryViewModel>> GetRouteSummaryAsync()
         {
-            return await _routeRepository.GetManyAsync().OrderBy(r => r.Name).ProjectTo<RouteSummaryViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+            return await _routeRepository
+                .GetManyAsync()
+                .OrderBy(r => r.Name)
+                .ProjectTo<RouteSummaryViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
     }
 }

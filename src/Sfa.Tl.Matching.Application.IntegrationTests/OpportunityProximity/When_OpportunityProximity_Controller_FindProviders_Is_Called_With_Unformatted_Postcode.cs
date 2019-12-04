@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,7 +11,6 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
@@ -21,46 +18,38 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
     public class When_OpportunityProximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode
     {
         private readonly IActionResult _result;
+        private readonly IRoutePathService _routeService;
 
         public When_OpportunityProximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode()
         {
             const string requestPostcode = "cV12 Wt";
             var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
 
-            var routes = new List<SelectListItem>
+            var locationService = new LocationService(new LocationApiClient(httpClient, new MatchingConfiguration
             {
-                new SelectListItem {Text = "1", Value = "Route 1"},
-                new SelectListItem {Text = "2", Value = "Route 2"}
-            };
+                PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
+            }));
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
-            IMapper mapper = new Mapper(config);
+            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), locationService);
 
-            var locationService = new LocationService(
-                new LocationApiClient(httpClient, new MatchingConfiguration
-                {
-                    PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
-                }));
-            
-            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), 
-                locationService);
-
-            var routePathService = Substitute.For<IRoutePathService>();
-            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
+            _routeService = Substitute.For<IRoutePathService>();
+            _routeService.GetRouteIdsAsync().Returns(new List<int> { 1, 2 });
 
             var opportunityService = Substitute.For<IOpportunityService>();
 
-            var opportunityProximityController = new OpportunityProximityController(routePathService, opportunityProximityService, opportunityService, locationService);
-
-            var selectedRouteId = routes.First().Text;
-            const string postcode = requestPostcode;
+            var opportunityProximityController = new OpportunityProximityController(_routeService, opportunityProximityService, opportunityService, locationService);
 
             var viewModel = new SearchParametersViewModel
             {
-                RoutesSelectList = mapper.Map<SelectListItem[]>(routes),
-                SelectedRouteId = int.Parse(selectedRouteId),
-                Postcode = postcode
+                RoutesSelectList = new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "1", Value = "Route 1" },
+                    new SelectListItem { Text = "2", Value = "Route 2" }
+                },
+                SelectedRouteId = 1,
+                Postcode = requestPostcode
             };
+
             _result = opportunityProximityController.FindProviders(viewModel).GetAwaiter().GetResult();
         }
 
@@ -75,6 +64,12 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
 
             redirect?.RouteValues["Postcode"].Should().Be("CV1 2WT");
             redirect?.RouteValues["SelectedRouteId"].Should().Be(1);
+        }
+
+        [Fact]
+        public void Then_RouteService_GetRouteIdsAsync_Is_Called_exactly_Once()
+        {
+            _routeService.Received(1).GetRouteIdsAsync();
         }
     }
 }
