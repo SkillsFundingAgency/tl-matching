@@ -1,11 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
@@ -20,29 +16,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
         public When_OpportunityProximity_Controller_Index_Is_Loaded()
         {
-            var routes = new List<SelectListItem>
-            {
-                new SelectListItem {Text = "1", Value = "Route 1"},
-                new SelectListItem {Text = "2", Value = "Route 2"}
-            };
-
-            var routeDictionary = new Dictionary<int, string>
-            {
-                {1, "Route 1" },
-                {2, "Route 2" }
-            };
-
             var proximityopportunityService = Substitute.For<IOpportunityProximityService>();
-            var routePathService = Substitute.For<IRoutePathService>();
-            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
-            routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
-
             var locationService = Substitute.For<ILocationService>();
+            var routeService = Substitute.For<IRoutePathService>();
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
-            var opportunityProximityController = new OpportunityProximityController(routePathService, proximityopportunityService,
-                _opportunityService, locationService);
+            var opportunityProximityController = new OpportunityProximityController(routeService, proximityopportunityService, _opportunityService, locationService);
 
             _result = opportunityProximityController.Index().GetAwaiter().GetResult();
         }

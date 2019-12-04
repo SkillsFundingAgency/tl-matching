@@ -2,10 +2,8 @@
 using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -22,24 +20,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
         private const int RouteId = 1;
         private const string Postcode = "SW1A 2AA";
-        private readonly int _selectedRouteId;
+        private const int SelectedRouteId = 1;
 
         public When_OpportunityProximity_Controller_Results_Is_Loaded_With_No_Results_In_Selected_Route()
         {
-            var routes = new List<SelectListItem>
-            {
-                new SelectListItem {Text = "1", Value = "Route 1"},
-                new SelectListItem {Text = "2", Value = "Route 2"}
-            };
-
-            var routeDictionary = new Dictionary<int, string>
-            {
-                {1, "Route 1" },
-                {2, "Route 2" }
-            };
-
-            _selectedRouteId = int.Parse(routes.First().Text);
-
             var providerSearchResultDto = new List<OpportunityProximitySearchResultViewModelItem>();
 
             var providerSearchResultForOtherRoutesDto = new List<OpportunityProximitySearchResultByRouteViewModelItem>
@@ -69,14 +53,11 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                              a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultForOtherRoutesDto);
 
-            var routePathService = Substitute.For<IRoutePathService>();
-
-            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
-            routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
+            var routeService = Substitute.For<IRoutePathService>();
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
-            var opportunityProximityController = new OpportunityProximityController(routePathService, _opportunityProximityService, _opportunityService,
+            var opportunityProximityController = new OpportunityProximityController(routeService, _opportunityProximityService, _opportunityService,
                 locationService);
 
             _result = opportunityProximityController.GetOpportunityProviderResultsAsync(new SearchParametersViewModel
@@ -118,7 +99,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             var searchParametersViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchParameters;
             searchParametersViewModel.Postcode.Should().Be(Postcode);
-            searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
+            searchParametersViewModel.SelectedRouteId.Should().Be(SelectedRouteId);
 
             viewModel.SearchResults.Should().NotBeNull();
             var searchResultsViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchResults;
@@ -153,6 +134,5 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                 .DidNotReceiveWithAnyArgs()
                 .GetCompanyNameWithAkaAsync(Arg.Any<int>());
         }
-
     }
 }

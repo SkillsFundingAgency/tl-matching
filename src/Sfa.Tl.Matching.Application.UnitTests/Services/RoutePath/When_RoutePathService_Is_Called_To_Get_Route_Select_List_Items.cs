@@ -51,12 +51,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.RoutePath
         public void Then_Route_Summary_Data_Is_As_Expected()
         {
             var firstResult = _result.First();
-            firstResult.Value.Should().Be("Route 1");
-            firstResult.Text.Should().Be("1");
+            firstResult.Value.Should().Be("1");
+            firstResult.Text.Should().Be("Route 1");
 
             var secondResult = _result.Skip(1).First();
-            secondResult.Value.Should().Be("Route 2");
-            secondResult.Text.Should().Be("2");
+            secondResult.Value.Should().Be("2");
+            secondResult.Text.Should().Be("Route 2");
         }
     }
 }

@@ -2,10 +2,8 @@
 using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -30,25 +28,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         private const string ProviderVenueDisplayName = "Provider venue display name";
 
         private const string Postcode = "SW1A 2AA";
-        private readonly int _selectedRouteId;
+        private const int SelectedRouteId = 1;
 
         public When_OpportunityProximity_Controller_Results_Is_Loaded_With_Existing_Opportunity()
         {
-            var routes = new List<SelectListItem>
-            {
-                new SelectListItem {Text = "1", Value = "Route 1"},
-                new SelectListItem {Text = "2", Value = "Route 2"}
-            };
-
-            var routeDictionary = new Dictionary<int, string>
-            {
-                {1, "Route 1" },
-                {2, "Route 2" }
-            };
-
-
-            _selectedRouteId = int.Parse(routes.First().Text);
-
             var providerSearchResultDto = new List<OpportunityProximitySearchResultViewModelItem>
             {
                 new OpportunityProximitySearchResultViewModelItem
@@ -62,17 +45,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             };
 
             var locationService = Substitute.For<ILocationService>();
+            var routeService = Substitute.For<IRoutePathService>();
 
             _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             _opportunityProximityService
                 .SearchOpportunitiesByPostcodeProximityAsync(Arg.Is<OpportunityProximitySearchParametersDto>(a =>
                     a.Postcode == Postcode && a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
-
-            var routePathService = Substitute.For<IRoutePathService>();
-
-            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
-            routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
 
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService.GetReferrals(OpportunityItemId).Returns(new List<ReferralDto>
@@ -83,12 +62,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                     Name = "Referral"
                 }
             });
+
             _opportunityService
                 .GetCompanyNameWithAkaAsync(OpportunityId)
                 .Returns("CompanyName (AlsoKnownAs)");
 
-            var opportunityProximityController = new OpportunityProximityController(routePathService, _opportunityProximityService, _opportunityService,
-                locationService);
+            var opportunityProximityController = new OpportunityProximityController(routeService, _opportunityProximityService, _opportunityService, locationService);
 
             _result = opportunityProximityController.GetOpportunityProviderResultsAsync(new SearchParametersViewModel
             {
@@ -152,7 +131,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             viewModel.SearchParameters.Should().NotBeNull();
             var searchParametersViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchParameters;
             searchParametersViewModel.Postcode.Should().Be(Postcode);
-            searchParametersViewModel.SelectedRouteId.Should().Be(_selectedRouteId);
+            searchParametersViewModel.SelectedRouteId.Should().Be(SelectedRouteId);
             searchParametersViewModel.CompanyNameWithAka.Should().Be("CompanyName (AlsoKnownAs)");
 
             viewModel.SearchResults.Should().NotBeNull();
@@ -160,10 +139,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             searchResultsViewModel.Results.Count.Should().Be(1);
             searchResultsViewModel.AdditionalResults.Should().BeNullOrEmpty();
 
-            searchResultsViewModel.Results.Select(x => x.ProviderDisplayName).Should()
-                .Contain("Provider display name");
-            searchResultsViewModel.Results.Select(x => x.ProviderVenueName).Should()
-                .Contain("Provider venue display name");
+            searchResultsViewModel.Results.Select(x => x.ProviderDisplayName).Should().Contain("Provider display name");
+            searchResultsViewModel.Results.Select(x => x.ProviderVenueName).Should().Contain("Provider venue display name");
 
             searchResultsViewModel.Results[0].IsSelected.Should().BeTrue();
         }

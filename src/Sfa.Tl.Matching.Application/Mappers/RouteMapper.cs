@@ -10,8 +10,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
         public RouteMapper()
         {
             CreateMap<Route, SelectListItem>()
-                .ForMember(m => m.Text, o => o.MapFrom(s => s.Id.ToString()))
-                .ForMember(m => m.Value, o => o.MapFrom(s => s.Name))
+                .ForMember(m => m.Text, o => o.MapFrom(s => s.Name))
+                .ForMember(m => m.Value, o => o.MapFrom(s => s.Id.ToString()))
                 .ForAllOtherMembers(s => s.Ignore())
                 ;
 

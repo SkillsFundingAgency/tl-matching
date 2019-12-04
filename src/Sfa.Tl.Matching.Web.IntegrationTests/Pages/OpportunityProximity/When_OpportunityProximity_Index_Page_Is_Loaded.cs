@@ -31,8 +31,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
             var response = await client.GetAsync("/find-providers");
 
             response.EnsureSuccessStatusCode();
-            Assert.Equal("text/html; charset=utf-8",
-                response.Content.Headers.ContentType.ToString());
+            Assert.Equal("text/html; charset=utf-8", response.Content.Headers.ContentType.ToString());
 
             var documentHtml = await HtmlHelpers.GetDocumentAsync(response);
 
@@ -40,10 +39,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
 
             var header1 = documentHtml.QuerySelector(".govuk-heading-l");
             header1.TextContent.Should().Be(Title);
-
-            //var backLink = documentHtml.GetElementById("tl-back") as IHtmlAnchorElement;
-            //backLink.Text.Should().Be("Back");
-            //backLink.PathName.Should().Be("/Start");
 
             var cancelLink = documentHtml.GetElementById("tl-finish") as IHtmlAnchorElement;
             cancelLink.PathName.Should().Be($"/remove-opportunityItem/{OpportunityId}-{OpportunityItemId}");

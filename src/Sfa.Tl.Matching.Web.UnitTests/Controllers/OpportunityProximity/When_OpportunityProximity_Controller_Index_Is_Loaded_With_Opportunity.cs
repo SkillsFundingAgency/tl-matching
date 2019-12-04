@@ -1,11 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
@@ -20,33 +16,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
         public When_OpportunityProximity_Controller_Index_Is_Loaded_With_Opportunity()
         {
-            var routes = new List<SelectListItem>
-            {
-                new SelectListItem {Text = "1", Value = "Route 1"},
-                new SelectListItem {Text = "2", Value = "Route 2"}
-            };
-
-            var routeDictionary = new Dictionary<int, string>
-            {
-                {1, "Route 1" },
-                {2, "Route 2" }
-            };
-
             var locationService = Substitute.For<ILocationService>();
-            
             var opportunityProximityService = Substitute.For<IOpportunityProximityService>();
-            var routePathService = Substitute.For<IRoutePathService>();
-            
-            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
-            routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
+            var routeService = Substitute.For<IRoutePathService>();
 
             _opportunityService = Substitute.For<IOpportunityService>();
             _opportunityService
                 .GetCompanyNameWithAkaAsync(1)
                 .Returns("CompanyName (AlsoKnownAs)");
 
-            var opportunityProximityController = new OpportunityProximityController(routePathService, opportunityProximityService,
-                _opportunityService, locationService);
+            var opportunityProximityController = new OpportunityProximityController(routeService, opportunityProximityService, _opportunityService, locationService);
 
             _result = opportunityProximityController.Index(1).GetAwaiter().GetResult();
         }
