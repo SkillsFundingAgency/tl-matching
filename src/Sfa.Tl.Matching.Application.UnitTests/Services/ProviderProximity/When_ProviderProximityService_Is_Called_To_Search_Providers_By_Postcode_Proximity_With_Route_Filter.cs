@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FluentAssertions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -17,7 +16,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity
         private const string Postcode = "SW1A 2AA";
         private const int SearchRadius = 5;
         private readonly IList<ProviderProximitySearchResultViewModelItem> _result;
-        private readonly ICacheService _cacheService;
         private readonly ILocationService _locationService;
         private readonly ISearchProvider _searchProvider;
 
@@ -35,10 +33,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity
                 .SearchProvidersByPostcodeProximityAsync(dto)
                 .Returns(new SearchResultsBuilder().Build());
 
-            _cacheService = Substitute.For<ICacheService>();
-            _cacheService.Get<IList<ProviderProximitySearchResultViewModelItem>>(Arg.Any<string>())
-                .Returns((IList<ProviderProximitySearchResultViewModelItem>)null);
-
             _locationService = Substitute.For<ILocationService>();
             _locationService.GetGeoLocationDataAsync(Postcode)
                 .Returns(new PostcodeLookupResultDto
@@ -48,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity
                     Latitude = "1.2"
                 });
 
-            var service = new ProviderProximityService(_searchProvider, _locationService, _cacheService);
+            var service = new ProviderProximityService(_searchProvider, _locationService);
 
             _result = service.SearchProvidersByPostcodeProximityAsync(dto).GetAwaiter().GetResult();
         }
@@ -63,18 +57,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity
         public void Then_The_Search_Results_Should_Have_Expected_Values()
         {
             _result[0].ProviderVenueId.Should().Be(2);
-        }
-
-        [Fact]
-        public void Then_The_CacheServiceGet_Is_Called_Exactly_Once()
-        {
-            _cacheService.Received(1).Get<IList<ProviderProximitySearchResultViewModelItem>>(Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_The_CacheService_Set_Is_Called_Exactly_Once()
-        {
-            _cacheService.Received(1).Set(Arg.Any<string>(), Arg.Any<IList<ProviderProximitySearchResultViewModelItem>>(), Arg.Any<TimeSpan>());
         }
 
         [Fact]

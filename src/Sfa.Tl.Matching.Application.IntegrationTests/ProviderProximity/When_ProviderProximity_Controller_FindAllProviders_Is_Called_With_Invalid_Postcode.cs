@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,7 +8,6 @@ using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
@@ -46,10 +44,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderProximity
                 }));
 
             var searchProvider = Substitute.For<ISearchProvider>();
-            var cacheService = Substitute.For<ICacheService>();
 
-            var providerProximityService = new ProviderProximityService(searchProvider,
-                locationService, cacheService);
+            var providerProximityService = new ProviderProximityService(searchProvider, locationService);
 
             var routePathService = Substitute.For<IRoutePathService>();
 
