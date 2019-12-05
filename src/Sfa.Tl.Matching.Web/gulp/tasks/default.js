@@ -1,4 +1,5 @@
-﻿
+﻿const { src } = require('gulp');
+
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var minify = require('gulp-minify');
@@ -10,7 +11,7 @@ const paths = require('../paths.json');
 const sassOptions = require('../sassOptions.js');
 
 gulp.task('govuk-js', () => {
-    gulp.src([
+    return src([
         'node_modules/govuk-frontend/*.js',
         'node_modules/govuk-frontend/vendor/**.js',
         'node_modules/govuk-frontend/components/**/*.js',
@@ -19,9 +20,11 @@ gulp.task('govuk-js', () => {
 });
 
 gulp.task('copy-js', function () {
-    return gulp.src([
+    return src([
         'node_modules/jquery/dist/jquery.min.js',
         'Frontend/src/javascripts/cookie-banner.js',
+        'Frontend/src/javascripts/filter.js',
+
         ])
         .pipe(concat('all.js'))
         .pipe(minify({
@@ -34,7 +37,7 @@ gulp.task('copy-js', function () {
 });
 
 gulp.task('copy-opportunity-basket-js', function () {
-    return gulp.src([
+    return src([
         'Frontend/src/javascripts/opportunity-basket.js'
     ])
         .pipe(concat('opportunity-basket.js'))
@@ -48,7 +51,7 @@ gulp.task('copy-opportunity-basket-js', function () {
 });
 
 gulp.task('copy-editquals-js', function () {
-    return gulp.src([
+    return src([
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
         'Frontend/src/javascripts/edit-qualifications.js'
     ])
@@ -63,7 +66,7 @@ gulp.task('copy-editquals-js', function () {
 });
 
 gulp.task('copy-employer-js', function () {
-    return gulp.src([
+    return src([
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
         'Frontend/src/javascripts/employer-search.js'
     ])
@@ -78,7 +81,7 @@ gulp.task('copy-employer-js', function () {
 });
 
 gulp.task('copy-missing-quals-js', function () {
-    return gulp.src([
+    return src([
             'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
             'Frontend/src/javascripts/missing-qualification-search.js'
         ])
@@ -93,21 +96,25 @@ gulp.task('copy-missing-quals-js', function () {
 });
 
 gulp.task('copy-assets', () => {
-    gulp.src(paths.src.defaultAssets)
+   return src(paths.src.defaultAssets)
         .pipe(gulp.dest(paths.dist.defaultAssets));
 });
 
-gulp.task('sass', () => gulp
-    .src(paths.src.default)
-    .pipe(sass(sassOptions))
-    .pipe(gulp.dest(paths.mid.default)));
+gulp.task('sass', () => {
+    return src(paths.src.default)
+        .pipe(sass(sassOptions))
+        .pipe(gulp.dest(paths.mid.default));
+}
+);
 
-gulp.task('merge-css', ['sass'], function () {
-    return gulp.src([
+
+gulp.task('merge-css', gulp.series('sass', function () {
+    return src([
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.css',
         "Frontend/src/stylesheets/css/*.css"
     ])
         .pipe(concatCss("main.css"))
         .pipe(cleanCSS({ compatibility: 'ie8' }))
         .pipe(gulp.dest(paths.dist.default));
-});
+    }
+));

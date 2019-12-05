@@ -69,9 +69,6 @@
     <None Include="Sfa.Tl.Matching.Database.Local.Int.Test.publish.xml" />
     <None Include="Sfa.Tl.Matching.Database.Local.publish.xml" />
     <None Include="PostDeployment\Seed UserProfile.sql" />
-    <None Include="PostDeployment\Remove EmployerId from Opportunity.sql" />
-    <None Include="PostDeployment\Remove Postcode and CompanyType from Employer.sql" />
-    <None Include="PostDeployment\Remove NumberOfPlacements From ProviderQualification.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
@@ -113,6 +110,7 @@
     <Build Include="Indexes\IX_QualificationRouteMapping_RouteId.sql" />
     <Build Include="Views\MatchingServiceProviderEmployerReport.sql" />
     <Build Include="Indexes\IX_Employer_CrmId.sql" />
+    <Build Include="Indexes\IX_ProviderQualification_QualificationId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

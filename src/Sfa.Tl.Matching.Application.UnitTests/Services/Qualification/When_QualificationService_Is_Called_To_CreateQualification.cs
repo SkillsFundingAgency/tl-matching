@@ -64,9 +64,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
                 Title = "Title",
                 ShortTitle = "Short Title",
                 Source = "Test",
-                Routes = new List<RouteViewModel>
+                Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteViewModel
+                    new RouteSummaryViewModel
                     {
                         Id = 1,
                         Name = "Route 1",

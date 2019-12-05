@@ -10,6 +10,6 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         [Required(ErrorMessage = "You must enter a short title")]
         public string ShortTitle { get; set; }
         public string Title { get; set; }
-        public IList<RouteViewModel> Routes { get; set; }
+        public IList<RouteSummaryViewModel> Routes { get; set; }
     }
 }

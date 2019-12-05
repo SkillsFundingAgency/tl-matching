@@ -9,12 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="SearchProviders\**" />
-    <EmbeddedResource Remove="SearchProviders\**" />
-    <None Remove="SearchProviders\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.9.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.6" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />

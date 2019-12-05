@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
@@ -21,18 +20,25 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
         public When_Qualification_SaveQualification_Is_Called()
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(RouteViewModelMapper).Assembly));
-            var mapper = new Mapper(config);
-
             var providerVenueService = Substitute.For<IProviderVenueService>();
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
 
             var routePathService = Substitute.For<IRoutePathService>();
-            var routes = new List<Route>
+
+            var routes = new List<SelectListItem>
             {
-                new Route {Id = 1, Name = "Route 1", Summary = "Route Summary 1"}
-            }.AsQueryable();
-            routePathService.GetRoutes().Returns(routes);
+                new SelectListItem {Text = "1", Value = "Route 1"},
+                new SelectListItem {Text = "2", Value = "Route 2"}
+            };
+
+            var routeDictionary = new Dictionary<int, string>
+            {
+                {1, "Route 1" },
+                {2, "Route 2" }
+            };
+
+            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
+            routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);
 
             _qualificationService = Substitute.For<IQualificationService>();
             _qualificationService.GetQualificationByIdAsync(1)
@@ -44,8 +50,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                     RouteIds = new List<int> { 1 }
                 });
 
-            var qualificationController = new QualificationController(mapper,
-                providerVenueService, _qualificationService,
+            var qualificationController = new QualificationController(providerVenueService, _qualificationService,
                 providerQualificationService, routePathService);
             var controllerWithClaims = new ClaimsBuilder<QualificationController>(qualificationController)
                 .AddUserName("username")
@@ -58,9 +63,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
                 Title = "Qualification title",
                 ShortTitle = new string('X', 100),
                 Source = "Test",
-                Routes = new List<RouteViewModel>
+                Routes = new List<RouteSummaryViewModel>
                 {
-                    new RouteViewModel
+                    new RouteSummaryViewModel
                     {
                         Id = 1,
                         Name = "Route 1",

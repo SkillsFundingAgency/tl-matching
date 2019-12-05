@@ -1,0 +1,36 @@
+﻿@using Sfa.Tl.Matching.Models.ViewModel
+@model Sfa.Tl.Matching.Models.ViewModel.OpportunityProximitySearchViewModel
+
+@{
+    ViewData["Title"] = "Select Providers";
+}
+
+@if (Model.SearchResults?.AdditionalResults != null && Model.SearchResults.AdditionalResults.Any())
+{
+    <h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">0</span> results in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">@Model.SearchParameters.RoutesSelectList.SingleOrDefault(x => x.Value == @Model.SearchParameters.SelectedRouteId.ToString())?.Text </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel.DefaultSearchRadius miles</span> of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span></h2>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <h2 class="govuk-heading-s">If you change the skill area</h2>
+    <p class="govuk-body">Within @SearchParametersViewModel.ZeroResultsSearchRadius miles of @Model.SearchParameters.Postcode, there are:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        @foreach (var item in Model.SearchResults.AdditionalResults)
+        {
+            var result = item.NumberOfResults == 1 ? "result" : "results";
+            <li>@item.NumberOfResults @result for @item.RouteName</li>
+        }
+    </ul>
+}
+else
+{
+<h2 class="govuk-body"><span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">0</span> results in <span class="govuk-!-font-weight-bold tl-lowercase" id="tl-search-skillarea">any skill area </span>within <span class="govuk-!-font-weight-bold" id="tl-search-distance">@Sfa.Tl.Matching.Models.ViewModel.SearchParametersViewModel.DefaultSearchRadius miles</span> of <span class="govuk-!-font-weight-bold" id="tl-search-postcode">@Model.SearchParameters.Postcode</span></h2>
+}
+
+<p class="govuk-body">
+    <a asp-route="SaveProvisionGap"
+       asp-route-SearchResultProviderCount="@Model.SearchResults.SearchResultProviderCount"
+       asp-route-Postcode="@Model.SearchParameters.Postcode"
+       asp-route-SelectedRouteId="@Model.SearchParameters.SelectedRouteId"
+       asp-route-OpportunityId="@Model.SearchParameters.OpportunityId"
+       asp-route-OpportunityItemId="@Model.SearchParameters.OpportunityItemId"
+       class="govuk-link" id="tl-search-noresults">Let us know that there are no suitable providers</a>.
+</p>

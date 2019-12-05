@@ -92,7 +92,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 await _backLinkService.GetBackLinkAsync(HttpContext.User.GetUserName());
 
-                return RedirectToRoute("GetProviderResults", new SearchParametersViewModel
+                return RedirectToRoute("GetOpportunityProviderResults", new SearchParametersViewModel
                 {
                     SelectedRouteId = viewModel.SelectedRouteId,
                     Postcode = viewModel.Postcode,

@@ -1,5 +1,5 @@
 ﻿using OpenQA.Selenium;
-using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Proximity;
+using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity;
 
 // ReSharper disable UnusedMember.Local
 // ReSharper disable UnusedMember.Global
@@ -28,18 +28,18 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
         {
         }
 
-        public ProximityResultsPage ClickSkillAreaChangeLink()
+        public OpportunityProximityResultsPage ClickSkillAreaChangeLink()
         {
             Driver.FindElement(_skillAreaChangeLink).Click();
 
-            return new ProximityResultsPage(Driver);
+            return new OpportunityProximityResultsPage(Driver);
         }
 
-        public ProximityResultsPage ClickPostcodeChangeLink()
+        public OpportunityProximityResultsPage ClickPostcodeChangeLink()
         {
             Driver.FindElement(_postcodeChangeLink).Click();
 
-            return new ProximityResultsPage(Driver);
+            return new OpportunityProximityResultsPage(Driver);
         }
 
         public PlacementInformationPage ClickJobRoleChangeLink()
@@ -56,11 +56,11 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Opportunity
             return new PlacementInformationPage(Driver);
         }
 
-        public ProximityResultsPage ClickProvidersChangeLink()
+        public OpportunityProximityResultsPage ClickProvidersChangeLink()
         {
             Driver.FindElement(_providersChangeLink).Click();
 
-            return new ProximityResultsPage(Driver);
+            return new OpportunityProximityResultsPage(Driver);
         }
 
         public OpportunityBasketPage ClickConfirm()

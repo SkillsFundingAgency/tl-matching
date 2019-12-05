@@ -3,8 +3,6 @@
 	[Id] INT IDENTITY(1,1) NOT NULL, 
 	[ProviderVenueId] INT NOT NULL,
 	[QualificationId] INT NOT NULL, 
-	--TODO: Delete [NumberOfPlacements] after sprint 20 release
-	[NumberOfPlacements] INT NULL, 
 	[Source] VARCHAR(50) NOT NULL,
 	[CreatedOn] DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy] NVARCHAR(50) NULL, 

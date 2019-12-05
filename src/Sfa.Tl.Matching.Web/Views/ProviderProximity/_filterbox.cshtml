@@ -1,0 +1,36 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderProximitySearchParametersViewModel
+
+<form id="tl-provider-filter-form" class="form" asp-action="FilterResultsAsync" novalidate>
+    <input type="hidden" asp-for=" @Model.Postcode" />
+
+    <div class="tl-pane">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-3">
+            Filter results by skill area
+        </h2>
+        <div class="govuk-form-group govuk-!-margin-bottom-4 tl-pane-expandable__content" style="background-color: white; padding: 10px">
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+                @for (var i = 0; i < Model.Filters.Length; i++)
+                {
+                    <input type="hidden" asp-for=" @Model.Filters[i].Name" name="Filters[@i].Name"/>
+                    <div class="govuk-checkboxes__item">
+                        <input type="checkbox" class="govuk-checkboxes__input" asp-for="@Model.Filters[i].IsSelected" name="Filters[@i].IsSelected">
+                        <label class="govuk-body-s govuk-checkboxes__label" asp-for="@Model.Filters[i].IsSelected" >
+                            @Model.Filters[i].Name
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <button type="submit" class="govuk-button tl-button--blue  tl-pane-expandable__content" id="tl-filter">Filter results</button>
+        @if (Model.SelectedFilters.Count > 0)
+        {
+            <p class="govuk-body govuk-!-margin-bottom-2  tl-pane-expandable__content">
+                <a id="tl-filter-remove" asp-controller="ProviderProximity"
+                   asp-action="GetProviderProximityResults"
+                   asp-route-searchCriteria="@Model.Postcode"
+                   class="govuk-link">Remove filters</a>
+            </p>
+        }
+    </div>
+</form>

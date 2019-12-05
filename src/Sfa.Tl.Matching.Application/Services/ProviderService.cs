@@ -58,36 +58,35 @@ namespace Sfa.Tl.Matching.Application.Services
         public async Task<ProviderDetailViewModel> GetProviderDetailByIdAsync(int providerId)
         {
             var provider = await _repository
-                .GetManyAsync(p => p.Id == providerId)
-                .Select(p => new ProviderDetailViewModel
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    UkPrn = p.UkPrn,
-                    DisplayName = p.DisplayName,
-                    PrimaryContact = p.PrimaryContact,
-                    PrimaryContactPhone = p.PrimaryContactPhone,
-                    PrimaryContactEmail = p.PrimaryContactEmail,
-                    SecondaryContact = p.SecondaryContact,
-                    SecondaryContactPhone = p.SecondaryContactPhone,
-                    SecondaryContactEmail = p.SecondaryContactEmail,
-                    IsCdfProvider = p.IsCdfProvider,
-                    IsEnabledForReferral = p.IsEnabledForReferral,
-                    IsTLevelProvider = p.IsTLevelProvider,
-                    Source = p.Source,
-                    ProviderVenues = p.ProviderVenue
-                    .Where(venue => !venue.IsRemoved)
-                    .Select(venue => new ProviderVenueViewModel
+                .GetSingleOrDefaultAsync(
+                    p => p.Id == providerId,
+                    p => new ProviderDetailViewModel
                     {
-                        ProviderVenueId = venue.Id,
-                        Postcode = venue.Postcode,
-                        IsRemoved = venue.IsRemoved,
-                        IsEnabledForReferral = venue.IsEnabledForReferral,
-                        QualificationCount = venue.ProviderQualification.Count
-                    })
-                    .OrderBy(v => v.Postcode).ToList()
-                })
-                .SingleOrDefaultAsync();
+                        Id = p.Id,
+                        Name = p.Name,
+                        UkPrn = p.UkPrn,
+                        DisplayName = p.DisplayName,
+                        PrimaryContact = p.PrimaryContact,
+                        PrimaryContactPhone = p.PrimaryContactPhone,
+                        PrimaryContactEmail = p.PrimaryContactEmail,
+                        SecondaryContact = p.SecondaryContact,
+                        SecondaryContactPhone = p.SecondaryContactPhone,
+                        SecondaryContactEmail = p.SecondaryContactEmail,
+                        IsCdfProvider = p.IsCdfProvider,
+                        IsEnabledForReferral = p.IsEnabledForReferral,
+                        IsTLevelProvider = p.IsTLevelProvider,
+                        Source = p.Source,
+                        ProviderVenues = p.ProviderVenue.Where(venue => !venue.IsRemoved)
+                                        .Select(venue => new ProviderVenueViewModel
+                                        {
+                                            ProviderVenueId = venue.Id,
+                                            Postcode = venue.Postcode,
+                                            IsRemoved = venue.IsRemoved,
+                                            IsEnabledForReferral = venue.IsEnabledForReferral,
+                                            QualificationCount = venue.ProviderQualification.Count
+                                        })
+                                        .OrderBy(v => v.Postcode).ToList()
+                    });
 
             return provider;
         }

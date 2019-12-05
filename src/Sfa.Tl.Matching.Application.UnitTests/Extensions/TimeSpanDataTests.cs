@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentAssertions;
-using Humanizer.Localisation;
 using Sfa.Tl.Matching.Application.Extensions;
 using Xunit;
 

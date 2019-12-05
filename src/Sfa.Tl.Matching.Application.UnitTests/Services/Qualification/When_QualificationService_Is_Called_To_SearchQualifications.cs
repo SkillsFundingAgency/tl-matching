@@ -24,25 +24,39 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Qualification
             var config = new MapperConfiguration(c => c.AddMaps(typeof(QualificationMapper).Assembly));
             var mapper = new Mapper(config);
 
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Qualification>>>();
+            var qlogger = Substitute.For<ILogger<GenericRepository<Domain.Models.Qualification>>>();
+            var qrmlogger = Substitute.For<ILogger<GenericRepository<QualificationRouteMapping>>>();
 
             using (var dbContext = InMemoryDbContext.Create())
             {
-                dbContext.AddRange(new ValidQualificationListBuilder()
-                    .Build());
+                dbContext.AddRange(new ValidQualificationListBuilder().Build());
+                dbContext.AddRange(
+   new QualificationRouteMapping
+                {
+                    RouteId = 1,
+                    QualificationId = 1
+                }, 
+                new QualificationRouteMapping
+                {
+                    RouteId = 1,
+                    QualificationId = 2
+                },
+                new QualificationRouteMapping
+                {
+                    RouteId = 1,
+                    QualificationId = 3
+                });
+
                 dbContext.SaveChanges();
 
-                var repository = new GenericRepository<Domain.Models.Qualification>(logger, dbContext);
+                var qualificationRepo = new GenericRepository<Domain.Models.Qualification>(qlogger, dbContext);
+                var routeMappingRepo = new GenericRepository<QualificationRouteMapping>(qrmlogger, dbContext);
 
                 var learningAimReferenceRepository = Substitute.For<IRepository<LearningAimReference>>();
-                var qualificationRouteMappingRepository = Substitute.For<IRepository<QualificationRouteMapping>>();
 
-                var service = new QualificationService(mapper, repository, qualificationRouteMappingRepository,
-                    learningAimReferenceRepository);
+                var service = new QualificationService(mapper, qualificationRepo, routeMappingRepo, learningAimReferenceRepository);
 
-                _searchResults = service
-                    .SearchQualificationAsync("Scientific Reasoning")
-                    .GetAwaiter().GetResult();
+                _searchResults = service.SearchQualificationAsync("Scientific Reasoning").GetAwaiter().GetResult();
             }
         }
 

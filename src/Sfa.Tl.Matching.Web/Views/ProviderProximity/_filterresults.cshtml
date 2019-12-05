@@ -1,0 +1,80 @@
+﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderProximitySearchViewModel
+
+@{ var result = Model.SearchResults.SearchResultProviderCount == 1 ? "result" : "results"; }
+<p class="govuk-body">
+    <span class="govuk-!-font-size-36 govuk-!-font-weight-bold" id="tl-search-count">@Model.SearchResults.SearchResultProviderCount</span> @result
+    @if (Model.SearchParameters.SelectedFilters.Count > 0)
+    {
+        <text>for </text>
+        for (var i = 0; i < Model.SearchParameters.SelectedFilters.Count; i++)
+        {
+            <span class="govuk-body govuk-!-font-weight-bold">@Model.SearchParameters.SelectedFilters[i]</span>
+            if (i != Model.SearchParameters.SelectedFilters.Count - 1)
+            {
+                <text> and </text>
+            }
+        }
+    }
+</p>
+<div class="tl-search-results">
+    @foreach (var searchResult in Model.SearchResults.Results)
+    {
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        @if (searchResult.IsTLevelProvider)
+        {
+            <span id="tl-provider" class="tl-search-results-flag">T level provider</span>
+        }
+
+        @if (searchResult.ProviderVenueName == searchResult.ProviderVenuePostcode)
+        {
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">@searchResult.ProviderDisplayName</h2>
+            <ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
+                <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
+            </ul>
+        }
+        else
+        {
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">@searchResult.ProviderVenueName</h2>
+            <ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
+                <li>Part of @searchResult.ProviderDisplayName</li>
+                <li>@searchResult.ProviderVenueTown @searchResult.ProviderVenuePostcode</li>
+            </ul>
+        }
+
+        <div class="timeline">
+            <ul>
+                <li id="tl-travel-times">
+                    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">@($"{searchResult.Distance:#0.0}") miles</p>
+                </li>
+            </ul>
+        </div>
+
+        <p class="govuk-body govuk-!-margin-top-3">Has students learning:</p>
+        <ul id="tl-qualification-list" class="govuk-list">
+            @foreach (var qualification in searchResult.Routes)
+            {
+                <li>
+                    <details class="govuk-details govuk-!-margin-0" data-module="govuk-details">
+                        <summary class="govuk-details__summary">
+                            <span class="govuk-details__summary-text">@qualification.RouteName</span>
+                        </summary>
+                        <div class="govuk-details__text">
+                            <ul class="govuk-list govuk-list--bullet govuk-!-margin-0">
+                                @foreach (var shortTitle in qualification.QualificationShortTitles)
+                                {
+                                    <li>@shortTitle</li>
+                                }
+                            </ul>
+                        </div>
+                    </details>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+<a id="tl-finish" asp-route="Start" class="govuk-button">
+    Finish
+</a>

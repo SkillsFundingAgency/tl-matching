@@ -48,6 +48,12 @@ jobs:
         projects: '**/*.UnitTests.csproj'
         arguments: '--configuration $(buildConfiguration)'
     - task: DotNetCoreCLI@2
+      displayName: Integration Tests
+      inputs:
+        command: test
+        projects: '**/*.Web.IntegrationTests.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
       displayName: 'Publish Website'
       inputs:
         command: publish

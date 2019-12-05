@@ -1,14 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
 using Xunit;
 
@@ -22,39 +19,33 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
 
         public When_Qualification_MissingQualification_Is_Loaded()
         {
-            var routes = new List<Route>
+            var routes = new List<RouteSummaryViewModel>
             {
-                new Route {Id = 1, Name = "Route 1", Summary = "Route Summary 1"},
-                new Route {Id = 2, Name = "Route 2", Summary = "Route Summary 2"}
-            }.AsQueryable();
-            
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(RouteViewModelMapper).Assembly));
-            var mapper = new Mapper(config);
+                new RouteSummaryViewModel { Id = 1, Name = "Route 1", Summary = "Route Summary 1" },
+                new RouteSummaryViewModel { Id = 2, Name = "Route 2", Summary = "Route Summary 2" }
+            };
 
-             _qualificationService = Substitute.For<IQualificationService>();
+            _qualificationService = Substitute.For<IQualificationService>();
 
-            _qualificationService.GetLarTitleAsync("12345678")
-                .Returns("LAR title from lookup");
+            _qualificationService.GetLarTitleAsync("12345678").Returns("LAR title from lookup");
 
             var providerVenueService = Substitute.For<IProviderVenueService>();
-            providerVenueService.GetVenuePostcodeAsync(1)
-                .Returns("CV1 2WT");
+            providerVenueService.GetVenuePostcodeAsync(1).Returns("CV1 2WT");
 
             _routePathService = Substitute.For<IRoutePathService>();
-            _routePathService.GetRoutes().Returns(routes);
+            _routePathService.GetRouteSummaryAsync().Returns(routes);
 
             var providerQualificationService = Substitute.For<IProviderQualificationService>();
 
-            var qualificationController = new QualificationController(mapper, providerVenueService, _qualificationService, providerQualificationService, _routePathService);
+            var qualificationController = new QualificationController(providerVenueService, _qualificationService, providerQualificationService, _routePathService);
 
-            _result = qualificationController.MissingQualificationAsync(1, "12345678")
-                .GetAwaiter().GetResult();
+            _result = qualificationController.MissingQualificationAsync(1, "12345678").GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetRoutes_Is_Called_Exactly_Once()
         {
-            _routePathService.Received(1).GetRoutes();
+            _routePathService.Received(1).GetRouteSummaryAsync();
         }
 
         [Fact]
@@ -62,7 +53,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         {
             _qualificationService.Received(1).GetLarTitleAsync("12345678");
         }
-        
+
         [Fact]
         public void Then_ViewModel_Fields_Are_Set()
         {
@@ -79,14 +70,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             viewModel.LarId.Should().Be("12345678");
             viewModel.Title.Should().BeEquivalentTo("LAR title from lookup");
             viewModel.Routes.Should().NotBeNullOrEmpty();
-        
+
             var routes = _result.GetViewModel<MissingQualificationViewModel>().Routes;
-            
+
             routes.Count.Should().Be(2);
-            
+
             routes.Should().Contain(r => r.Id == 1 && r.Name == "Route 1");
             routes.Should().Contain(r => r.Id == 2 && r.Name == "Route 2");
-            
+
             routes.Single(r => r.Id == 1).Summary.Should().Be("Route Summary 1");
             routes.Single(r => r.Id == 2).Summary.Should().Be("Route Summary 2");
         }

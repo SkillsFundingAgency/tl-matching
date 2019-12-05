@@ -1,5 +1,7 @@
 ﻿/*Reserved for dev build only gulp tasks */
 
+const { src } = require('gulp');
+
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var minify = require('gulp-minify');
@@ -12,7 +14,7 @@ const sassOptions = require('../sassOptions.js');
 
 
 gulp.task('dev-copy-opportunity-basket-js', function () {
-    return gulp.src([
+    return src([
         'Frontend/src/javascripts/opportunity-basket.js'
     ])
         .pipe(concat('opportunity-basket.min.js'))
@@ -20,16 +22,17 @@ gulp.task('dev-copy-opportunity-basket-js', function () {
 });
 
 gulp.task('dev-copy-employer-js', function () {
-    return gulp.src([
+    return src([
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
         'Frontend/src/javascripts/employer-search.js'
     ])
-        .pipe(concat('employer-search.min.js'))
+        .pipe(concat('employer-search.js'))
         .pipe(gulp.dest(paths.dist.defaultJs));
 });
 
+
 gulp.task('dev-copy-editquals-js', function () {
-    return gulp.src([
+    return src([
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
         'Frontend/src/javascripts/edit-qualifications.js'
     ])
@@ -38,7 +41,7 @@ gulp.task('dev-copy-editquals-js', function () {
 });
 
 gulp.task('dev-copy-missing-quals-js', function () {
-    return gulp.src([
+    return src([
             'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
             'Frontend/src/javascripts/missing-qualification-search.js'
         ])

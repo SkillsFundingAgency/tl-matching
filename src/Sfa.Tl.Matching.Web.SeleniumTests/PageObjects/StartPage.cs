@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using OpenQA.Selenium;
-using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Proximity;
+using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.OpportunityProximity;
+using Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.ProviderProximity;
 
 // ReSharper disable UnusedMember.Global
 
@@ -8,12 +9,13 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
 {
     public class StartPage : PageBase
     {
-        private readonly By _viewOpportunitiesLink = By.Id("tl-view-opportunities-link");
-        private readonly By _uploadLink = By.Id("tl-upload-link");
-        private readonly By _providerLink = By.Id("tl-Add-edit-provider-link");
-        private readonly By _qualificationLink = By.Id("tl-edit-qualifications-link");
-        private readonly By _startButton = By.Id("tl-start-now");
-
+        private readonly By _viewOpportunitiesLink = By.Id("tl-dash-viewsaved");
+        private readonly By _uploadLink = By.Id("tl-dash-uploaddata");
+        private readonly By _providerLink = By.Id("tl-dash-manageprovider");
+        private readonly By _qualificationLink = By.Id("tl-dash-editquals");
+        private readonly By _startButton = By.Id("tl-dash-createnew");
+        private readonly By _showAllLink = By.Id("tl-dash-showall");
+        
         public StartPage(IWebDriver driver) : base(driver)
         {
         }
@@ -26,12 +28,12 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
             //var uploadLink = _wait.Until(d => d.FindElement(_uploadLink));
 
             var uploadLink = Driver.FindElement(_uploadLink);
-            uploadLink.Text.Should().Be("Upload employer and provider data");
+            uploadLink.Text.Should().Be("Manually upload data");
             var uploadPathAndQuery = new System.Uri(uploadLink.GetAttribute("href")).PathAndQuery;
             uploadPathAndQuery.Should().Be("/DataImport");
 
             var providerLink = Driver.FindElement(_providerLink);
-            providerLink.Text.Should().Be("Add or edit provider data");
+            providerLink.Text.Should().Be("Manage provider data");
             var providerPathAndQuery = new System.Uri(providerLink.GetAttribute("href")).PathAndQuery;
             providerPathAndQuery.Should().Be("/search-ukprn");
 
@@ -41,11 +43,11 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
             qualificationPathAndQuery.Should().Be("/edit-qualifications");
         }
 
-        public ProximityIndexPage ClickStart()
+        public OpportunityProximityIndexPage ClickStart()
         {
             Driver.FindElement(_startButton).Click();
 
-            return new ProximityIndexPage(Driver);
+            return new OpportunityProximityIndexPage(Driver);
         }
 
         public void ClickOpportunitiesLink()
@@ -61,6 +63,13 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects
         public void ClickProviderLink()
         {
             Driver.FindElement(_providerLink).Click();
+        }
+
+        public ProviderProximitySearchPostcodePage ClickShowAll()
+        {
+            Driver.FindElement(_showAllLink).Click();
+
+            return new ProviderProximitySearchPostcodePage(Driver);
         }
 
         public void ClickQualificationLink()

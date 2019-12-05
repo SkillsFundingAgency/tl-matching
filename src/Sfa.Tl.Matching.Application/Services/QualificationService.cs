@@ -90,21 +90,33 @@ namespace Sfa.Tl.Matching.Application.Services
                     HasTooManyResults = true
                 };
 
-            var searchResult = await _qualificationRepository
-                .GetManyAsync(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
-                .OrderBy(q => q.Id)
-                .Select(q => new QualificationSearchResultViewModel
+            var results = await _qualificationRepository.GetManyAsync(q => EF.Functions.Like(q.QualificationSearch, $"%{qualificationSearch}%"))
+                .Join(_qualificationRouteMappingRepository.GetManyAsync(), qualification => qualification.Id, qualificationRouteMapping => qualificationRouteMapping.QualificationId, (qualification, qualificationRouteMapping) => new { qualification, qualificationRouteMapping })
+                .Select(q => new
                 {
-                    QualificationId = q.Id,
-                    Title = q.Title,
-                    ShortTitle = q.ShortTitle,
-                    LarId = q.LarId,
-                    RouteIds = q.QualificationRouteMapping.Select(r => r.RouteId).ToList()
+                    q.qualification.Id,
+                    q.qualification.Title,
+                    q.qualification.ShortTitle,
+                    q.qualification.LarId,
+                    q.qualificationRouteMapping.RouteId
                 })
+                .OrderBy(q => q.Id)
                 .Take(51)
+                .ToListAsync();
+
+            var searchResult = results
+                .GroupBy(grp => new { grp.Id, grp.LarId, grp.ShortTitle, grp.Title })
+                .Select(grp => new QualificationSearchResultViewModel
+                {
+                    QualificationId = grp.Key.Id,
+                    Title = grp.Key.Title,
+                    ShortTitle = grp.Key.ShortTitle,
+                    LarId = grp.Key.LarId,
+                    RouteIds = grp.Select(g => g.RouteId).ToList()
+
+                })
                 .OrderBy(q => q.Title.IndexOf(qualificationSearch, StringComparison.Ordinal))
-                .ToListAsync()
-                ;
+                .ToList();
 
             return new QualificationSearchViewModel
             {

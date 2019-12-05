@@ -42,7 +42,8 @@ namespace Sfa.Tl.Matching.Web
     {
         protected MatchingConfiguration MatchingConfiguration;
         private readonly ILoggerFactory _loggerFactory;
-
+        protected bool IsTestAdminUser { get; set; } = true;
+        
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
@@ -105,11 +106,19 @@ namespace Sfa.Tl.Matching.Web
             else
             {
                 services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = "Local Scheme";
-                    options.DefaultChallengeScheme = "Local Scheme";
-                }).AddTestAuth(o => { });
+                    {
+                        options.DefaultAuthenticateScheme = "Local Scheme";
+                        options.DefaultChallengeScheme = "Local Scheme";
+                    })
+                    .AddTestAuth(o =>
+                    {
+                        o.IsAdminUser = IsTestAdminUser;
+                        o.Identity = o.ClaimsIdentity;
+                    });
             }
+
+            services.AddMemoryCache();
+
             RegisterDependencies(services);
         }
 
@@ -213,9 +222,7 @@ namespace Sfa.Tl.Matching.Web
             //Inject services
             services.AddSingleton(MatchingConfiguration);
 
-            services.AddHttpClient<ILocationApiClient, LocationApiClient>();
-            services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
-            services.AddHttpClient<IGoogleDistanceMatrixApiClient, GoogleDistanceMatrixApiClient>();
+            RegisterHttpClients(services);
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddTransient<IMessageQueueService, MessageQueueService>();
@@ -223,6 +230,13 @@ namespace Sfa.Tl.Matching.Web
 
             RegisterRepositories(services);
             RegisterApplicationServices(services);
+        }
+
+        protected virtual void RegisterHttpClients(IServiceCollection services)
+        {
+            services.AddHttpClient<ILocationApiClient, LocationApiClient>();
+            services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
+            services.AddHttpClient<IGoogleDistanceMatrixApiClient, GoogleDistanceMatrixApiClient>();
         }
 
         private static void RegisterRepositories(IServiceCollection services)
@@ -238,20 +252,23 @@ namespace Sfa.Tl.Matching.Web
         {
             services.AddTransient<IValidator<CrmEmployerEventBase>, CrmEmployerEventDataValidator>();
 
+            services.AddTransient<ICacheService, CacheService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmployerService, EmployerService>();
+            services.AddTransient<ILocationService, LocationService>();
             services.AddTransient<IRoutePathService, RoutePathService>();
             services.AddTransient<IOpportunityService, OpportunityService>();
             services.AddTransient<IProviderService, ProviderService>();
             services.AddTransient<IProviderQuarterlyUpdateEmailService, ProviderQuarterlyUpdateEmailService>();
-            services.AddTransient<IProximityService, ProximityService>();
+            services.AddTransient<IOpportunityProximityService, OpportunityProximityService>();
+            services.AddTransient<IProviderProximityService, ProviderProximityService>();
             services.AddTransient<IReferralService, ReferralService>();
             services.AddTransient<IProviderVenueService, ProviderVenueService>();
             services.AddTransient<IQualificationService, QualificationService>();
             services.AddTransient<IProviderQualificationService, ProviderQualificationService>();
             services.AddTransient<IServiceStatusHistoryService, ServiceStatusHistoryService>();
             services.AddTransient<INavigationService, NavigationService>();
-            
+
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
             services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();

@@ -94,7 +94,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var placementInformation = await _opportunityItemRepository.GetSingleOrDefaultAsync(
                 o => o.Id == opportunityItemId,
                 oi => oi.ProvisionGap,
-                (Expression<Func<OpportunityItem, object>>)(oi => oi.Opportunity), oi => oi.Opportunity.Employer);
+                oi => oi.Opportunity, oi => oi.Opportunity.Employer);
 
             var dto = _mapper.Map<OpportunityItem, PlacementInformationSaveDto>(placementInformation);
 

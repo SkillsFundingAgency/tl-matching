@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Sfa.Tl.Matching.Application.Configuration;
+using Sfa.Tl.Matching.Api.Clients.GeoLocations;
+using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
+using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
 {
@@ -16,30 +17,25 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
 
         protected override void ConfigureConfiguration(IServiceCollection services)
         {
-            var configuration = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.test.json", true)
-               .Build();
+            MatchingConfiguration = new MatchingConfiguration
+            {
 
-            if (configuration["EnvironmentName"] == "__EnvironmentName__")
-                configuration = new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.local.json")
-                    .Build();
-
-            MatchingConfiguration = ConfigurationLoader.Load(
-                configuration["EnvironmentName"],
-                configuration["ConfigurationStorageConnectionString"],
-                configuration["Version"],
-                configuration["ServiceName"]);
+                PostcodeRetrieverBaseUrl = "https://postcodes.io",
+                GoogleMapsApiBaseUrl = "https://google.com"
+            };
         }
 
         protected override bool ConfigurationIsLocalOrDev()
         {
+            IsTestAdminUser = true;
             return true;
         }
 
-        public override void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        protected override void RegisterHttpClients(IServiceCollection services)
         {
-            base.Configure(app, env, loggerFactory);
+            services.AddTransient<ILocationApiClient, DummyLocationApiClient>();
+            services.AddTransient<IGoogleMapApiClient, DummyGoogleMapApiClient>();
+            services.AddTransient<IGoogleDistanceMatrixApiClient, DummyGoogleDistanceMatrixApiClient>();
         }
     }
 }

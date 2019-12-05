@@ -1,4 +1,3 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -17,8 +16,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
         
         public When_Qualification_Add_Has_Invalid_LarId()
         {
-            var mapper = Substitute.For<IMapper>();
-
             var providerVenueService = Substitute.For<IProviderVenueService>();
 
             _qualificationService = Substitute.For<IQualificationService>();
@@ -27,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Qualification
             _providerQualificationService = Substitute.For<IProviderQualificationService>();
             var routePathService = Substitute.For<IRoutePathService>();
 
-            var qualificationController = new QualificationController(mapper, providerVenueService, _qualificationService, _providerQualificationService, routePathService);
+            var qualificationController = new QualificationController(providerVenueService, _qualificationService, _providerQualificationService, routePathService);
 
             var viewModel = new AddQualificationViewModel
             {

@@ -7,12 +7,10 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Extensions;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
-    //[ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class DataImportController : Controller
     {
         private readonly IMapper _mapper;

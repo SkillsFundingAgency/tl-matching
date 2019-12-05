@@ -1,36 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Filters;
 
 namespace Sfa.Tl.Matching.Web.Controllers
 {
     [Authorize(Roles = RolesExtensions.AdminUser)]
-    //[ServiceFilter(typeof(ServiceUnavailableFilterAttribute))]
     public class QualificationController : Controller
     {
-        private readonly IMapper _mapper;
         private readonly IProviderVenueService _providerVenueService;
         private readonly IQualificationService _qualificationService;
         private readonly IProviderQualificationService _providerQualificationService;
         private readonly IRoutePathService _routePathService;
 
-        public QualificationController(
-            IMapper mapper,
-            IProviderVenueService providerVenueService,
+        public QualificationController(IProviderVenueService providerVenueService,
             IQualificationService qualificationService,
             IProviderQualificationService providerQualificationService,
             IRoutePathService routePathService)
         {
-            _mapper = mapper;
             _providerVenueService = providerVenueService;
             _qualificationService = qualificationService;
             _providerQualificationService = providerQualificationService;
@@ -108,7 +100,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
 
-            PopulateRoutesForQualificationSearchItem(searchResult);
+            await PopulateRoutesForQualificationSearchItem(searchResult);
 
             return View("SearchQualifications", searchResult);
         }
@@ -157,13 +149,15 @@ namespace Sfa.Tl.Matching.Web.Controllers
             //Get title from service, based on LAR
             var title = await _qualificationService.GetLarTitleAsync(larId);
 
+            var routes = await GetRoutesAsync();
+
             return View("MissingQualification", new MissingQualificationViewModel
             {
                 ProviderVenueId = providerVenueId,
                 LarId = larId,
                 QualificationId = 1,
                 Title = title,
-                Routes = GetRoutes()
+                Routes = routes
             });
         }
 
@@ -175,7 +169,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                viewModel.Routes = GetRoutes(viewModel);
+                viewModel.Routes = await GetRoutesAsync(viewModel);
                 return View("MissingQualification", viewModel);
             }
 
@@ -201,13 +195,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return RedirectToRoute("GetProviderVenueDetail", new { providerVenueId });
         }
 
-        private IList<RouteViewModel> GetRoutes(MissingQualificationViewModel viewModel = null)
+        private async Task<IList<RouteSummaryViewModel>> GetRoutesAsync(MissingQualificationViewModel viewModel = null)
         {
-            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
+            var routes = await _routePathService.GetRouteSummaryAsync();
 
-            var routesList = _mapper.Map<RouteViewModel[]>(routes);
-
-            foreach (var route in routesList)
+            foreach (var route in routes)
             {
                 if (viewModel?.Routes.Any(r => r.Id == route.Id && r.IsSelected) == true)
                 {
@@ -215,28 +207,21 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 }
             }
 
-            return routesList;
-        }
-
-        private IList<RouteViewModel> GetRoutesForQualificationSearchItem(QualificationSearchResultViewModel viewModel, IList<Route> routes)
-        {
-            var routesList = _mapper.Map<RouteViewModel[]>(routes);
-
-            foreach (var route in routesList.Where(r => viewModel.RouteIds.Contains(r.Id)))
-            {
-                route.IsSelected = true;
-            }
-
-            return routesList;
+            return routes;
         }
         
-        private void PopulateRoutesForQualificationSearchItem(QualificationSearchViewModel searchResult)
+        private async Task PopulateRoutesForQualificationSearchItem(QualificationSearchViewModel searchResult)
         {
-            var routes = _routePathService.GetRoutes().OrderBy(r => r.Name).ToList();
+            var routes = await _routePathService.GetRouteSummaryAsync();
 
             foreach (var searchResultItem in searchResult.Results)
             {
-                searchResultItem.Routes = GetRoutesForQualificationSearchItem(searchResultItem, routes);
+                searchResultItem.Routes = routes.Select(route =>
+                {
+                    route.IsSelected = searchResultItem.RouteIds.Contains(route.Id);
+                    
+                    return route;
+                }).ToList();
             }
         }
 

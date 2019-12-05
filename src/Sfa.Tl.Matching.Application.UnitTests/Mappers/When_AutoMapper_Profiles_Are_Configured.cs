@@ -14,7 +14,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Mappers
         }
 
         [Fact]
-        public void Then_All_Properties_Are_Implemented() =>
-            _config.AssertConfigurationIsValid();
+        public void Then_All_Properties_Are_Implemented() => _config.AssertConfigurationIsValid();
     }
 }
