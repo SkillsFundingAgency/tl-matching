@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
             CloudQueueMessage retrievedMessage = null;
             try
             {
-                await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderFeedbackEmail
+                await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderQuarterlyUpdateEmail
                     {BackgroundProcessHistoryId = 1001});
                 retrievedMessage = await _queue.GetMessageAsync();
                 retrievedMessage.Should().NotBeNull();

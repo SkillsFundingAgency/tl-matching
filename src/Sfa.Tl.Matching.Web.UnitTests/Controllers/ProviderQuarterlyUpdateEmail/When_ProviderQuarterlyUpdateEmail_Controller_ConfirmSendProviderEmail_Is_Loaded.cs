@@ -10,7 +10,7 @@ using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderQuarterlyUpdateEmail
 {
     public class When_ProviderQuarterlyUpdateEmail_Controller_ConfirmSendProviderEmail_Is_Loaded
     {
@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
         public When_ProviderQuarterlyUpdateEmail_Controller_ConfirmSendProviderEmail_Is_Loaded()
         {
             _providerService = Substitute.For<IProviderService>();
-            var providerFeedbackService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
+            var providerQuarterlyUpdateEmailService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
 
             _providerService
                 .GetProvidersWithFundingCountAsync()
@@ -32,9 +32,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
                 AuthorisedAdminUserEmail = adminEmail
             };
 
-            var providerFeedbackController =
-                new ProviderQuarterlyUpdateEmailController(providerFeedbackService, _providerService, configuration);
-            var controllerWithClaims = new ClaimsBuilder<ProviderQuarterlyUpdateEmailController>(providerFeedbackController)
+            var providerQuarterlyUpdateEmailController =
+                new ProviderQuarterlyUpdateEmailController(providerQuarterlyUpdateEmailService, _providerService, configuration);
+            var controllerWithClaims = new ClaimsBuilder<ProviderQuarterlyUpdateEmailController>(providerQuarterlyUpdateEmailController)
                 .Add(ClaimTypes.Role, RolesExtensions.AdminUser)
                 .AddEmail(adminEmail)
                 .Build();
@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
             viewResult?.Model.Should().NotBeNull();
             viewResult?.Model.Should().BeOfType<ConfirmSendProviderEmailViewModel>();
             
-            var model = viewResult.Model as ConfirmSendProviderEmailViewModel;
+            var model = viewResult?.Model as ConfirmSendProviderEmailViewModel;
             model.Should().NotBeNull();
             model?.ProviderCount.Should().Be(42);
             model?.SendEmail.Should().Be(null);

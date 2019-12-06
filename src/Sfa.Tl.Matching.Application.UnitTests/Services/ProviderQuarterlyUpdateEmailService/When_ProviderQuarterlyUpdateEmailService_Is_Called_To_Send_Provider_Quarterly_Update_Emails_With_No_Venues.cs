@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         private readonly IEmailService _emailService;
         private readonly IProviderRepository _providerRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
-        private readonly IList<BackgroundProcessHistory> _receivedProviderFeedbackRequestHistories;
+        private readonly IList<BackgroundProcessHistory> _receivedProviderQuarterlyUpdateEmailRequestHistories;
         private readonly int _result;
 
         public When_ProviderQuarterlyUpdateEmailService_Is_Called_To_Send_Provider_Quarterly_Update_Emails_With_No_Venues(ProviderQuarterlyUpdateEmailFixture testFixture)
@@ -41,10 +41,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>())
                 .Returns(new BackgroundProcessHistoryBuilder().Build());
 
-            _receivedProviderFeedbackRequestHistories = new List<BackgroundProcessHistory>();
+            _receivedProviderQuarterlyUpdateEmailRequestHistories = new List<BackgroundProcessHistory>();
             _backgroundProcessHistoryRepository
                 .UpdateAsync(Arg.Do<BackgroundProcessHistory>
-                (x => _receivedProviderFeedbackRequestHistories.Add(
+                (x => _receivedProviderQuarterlyUpdateEmailRequestHistories.Add(
                     new BackgroundProcessHistory
                     {
                         Id = x.Id,
@@ -55,13 +55,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                     }
                 )));
 
-            var providerFeedbackService = new Application.Services.ProviderQuarterlyUpdateEmailService(
+            var providerQuarterlyUpdateEmailService = new Application.Services.ProviderQuarterlyUpdateEmailService(
                 _testFixture.Configuration, _testFixture.Logger,
                     _emailService,
                     _providerRepository, _backgroundProcessHistoryRepository,
                     messageQueueService, _testFixture.DateTimeProvider);
 
-            _result = providerFeedbackService
+            _result = providerQuarterlyUpdateEmailService
                 .SendProviderQuarterlyUpdateEmailsAsync(1, "TestUser")
                 .GetAwaiter().GetResult();
         }
@@ -106,7 +106,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         [Fact]
         public void Then_BackgroundProcessHistoryRepository_Update_Sets_Expected_Values_In_First_Call()
         {
-            var history = _receivedProviderFeedbackRequestHistories.First();
+            var history = _receivedProviderQuarterlyUpdateEmailRequestHistories.First();
             history.Id.Should().Be(1);
             history.Status.Should().Be(BackgroundProcessHistoryStatus.Processing.ToString());
             history.RecordCount.Should().Be(1);
@@ -116,7 +116,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         [Fact]
         public void Then_BackgroundProcessHistoryRepository_Update_Sets_Expected_Values_In_Second_Call()
         {
-            var history = _receivedProviderFeedbackRequestHistories.Skip(1).First();
+            var history = _receivedProviderQuarterlyUpdateEmailRequestHistories.Skip(1).First();
             history.Id.Should().Be(1);
             history.Status.Should().Be(BackgroundProcessHistoryStatus.Complete.ToString());
             history.RecordCount.Should().Be(1);

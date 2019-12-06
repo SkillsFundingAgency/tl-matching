@@ -7,29 +7,29 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Command;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderFeedback
+namespace Sfa.Tl.Matching.Functions.UnitTests.ProviderQuarterlyUpdateEmail
 {
     public class When_SendProviderQuarterlyUpdateEmails_Function_Queue_Trigger_Fires
     {
-        private readonly IProviderQuarterlyUpdateEmailService _providerFeedbackService;
+        private readonly IProviderQuarterlyUpdateEmailService _providerQuarterlyUpdateService;
 
         public When_SendProviderQuarterlyUpdateEmails_Function_Queue_Trigger_Fires()
         {
-            _providerFeedbackService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
+            _providerQuarterlyUpdateService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
 
-            var providerFeedbackFunctions = new ProviderQuarterlyUpdateEmail();
-            providerFeedbackFunctions.SendProviderQuarterlyUpdateEmailsAsync(
-                new SendProviderFeedbackEmail { BackgroundProcessHistoryId = 1 }, 
+            var providerQuarterlyUpdateEmailFunctions = new Functions.ProviderQuarterlyUpdateEmail();
+            providerQuarterlyUpdateEmailFunctions.SendProviderQuarterlyUpdateEmailsAsync(
+                new SendProviderQuarterlyUpdateEmail { BackgroundProcessHistoryId = 1 }, 
                 new ExecutionContext(), 
                 new NullLogger<Functions.Proximity>(), 
-                _providerFeedbackService, 
+                _providerQuarterlyUpdateService, 
                 Substitute.For<IRepository<FunctionLog>>()).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void SendProviderQuarterlyUpdateEmailsAsync_Is_Called_Exactly_Once()
         {
-            _providerFeedbackService
+            _providerQuarterlyUpdateService
                 .Received(1)
                 .SendProviderQuarterlyUpdateEmailsAsync(
                     Arg.Is<int>(id => id == 1), 

@@ -46,12 +46,12 @@ namespace Sfa.Tl.Matching.Application.Services
             var backgroundProcessHistoryId = await _backgroundProcessHistoryRepository.CreateAsync(
                 new BackgroundProcessHistory
                 {
-                    ProcessType = BackgroundProcessType.ProviderFeedbackRequest.ToString(),
+                    ProcessType = BackgroundProcessType.ProviderQuarterlyUpdateEmail.ToString(),
                     Status = BackgroundProcessHistoryStatus.Pending.ToString(),
                     CreatedBy = userName
                 });
 
-            await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderFeedbackEmail
+            await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderQuarterlyUpdateEmail
             {
                 BackgroundProcessHistoryId = backgroundProcessHistoryId
             });

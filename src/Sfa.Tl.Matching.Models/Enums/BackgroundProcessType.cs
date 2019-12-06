@@ -2,7 +2,7 @@
 {
     public enum BackgroundProcessType
     {
-        ProviderFeedbackRequest = 1,
+        ProviderQuarterlyUpdateEmail = 1,
         ProviderReferralEmail = 2,
         EmployerReferralEmail = 3,
         ProviderFeedbackEmail = 4,
