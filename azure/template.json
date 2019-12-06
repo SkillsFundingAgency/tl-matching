@@ -48,6 +48,9 @@
         "employerFeedbackTrigger": {
             "type": "string"
         },
+        "providerFeedbackTrigger": {
+            "type": "string"
+        },
         "providerReferenceTrigger": {
             "type": "string"
         }
@@ -255,12 +258,16 @@
                                 "value": "1.0"
                             },
                             {
-                                 "name": "ServiceName",
-                                 "value": "Sfa.Tl.Matching"
+                                "name": "ServiceName",
+                                "value": "Sfa.Tl.Matching"
                             },
                             {
                                 "name": "EmployerFeedbackTrigger",
                                 "value": "[parameters('employerFeedbackTrigger')]"
+                            },
+                            {
+                                "name": "ProviderFeedbackTrigger",
+                                "value": "[parameters('providerFeedbackTrigger')]"
                             },
                             {
                                 "name": "ProviderReferenceTrigger",

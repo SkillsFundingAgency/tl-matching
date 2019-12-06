@@ -5,6 +5,7 @@
         "CronSchedule": "0 */15 * * * *",
         "ProviderReferenceTrigger": "0 0 10 * * *",
         "EmployerFeedbackTrigger": "0 0 10 * * MON-FRI",
+        "ProviderFeedbackTrigger": "0 0 9 * * MON-FRI",
         "AzureWebJobsStorage": "UseDevelopmentStorage=true",
         "ServiceBusConnectionString": "UseDevelopmentStorage=true;",
         "BlobStorageConnectionString": "UseDevelopmentStorage=true;",
