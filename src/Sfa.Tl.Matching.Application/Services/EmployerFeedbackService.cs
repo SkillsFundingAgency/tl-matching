@@ -43,19 +43,18 @@ namespace Sfa.Tl.Matching.Application.Services
                 
                 foreach (var (_, value) in referralsGroupedByEmployer)
                 {
-                    var employerContactEmail = value.First().EmployerContactEmail;
-                    var employerContact = value.First().EmployerContact;
-
+                    var lastestEmployer = value.First();
+                    
                     var tokens = new Dictionary<string, string>
                     {
-                        { "employer_contact_name", employerContact },
+                        { "employer_contact_name", lastestEmployer.EmployerContact },
                         { "previous_month", previousMonth },
                         { "opportunity_list", BuildOpportunityList(value) }
                     };
 
                     await _emailService.SendEmailAsync(null, null,
                         EmailTemplateName.EmployerFeedbackV2.ToString(),
-                        employerContactEmail,
+                        lastestEmployer.EmployerContactEmail,
                         tokens,
                         userName);
                 }
