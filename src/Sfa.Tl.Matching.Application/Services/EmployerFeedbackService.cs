@@ -77,7 +77,8 @@ namespace Sfa.Tl.Matching.Application.Services
             foreach (var employeeFeedback in employerFeedbackDtos)
             {
                 opportunityListBuilder.AppendLine($"* {employeeFeedback.PlacementsDetail} x " +
-                                                  $"{employeeFeedback.JobRoleDetail} students at {employeeFeedback.Town} {employeeFeedback.Postcode}");
+                                                  $"{employeeFeedback.JobRoleDetail} {employeeFeedback.StudentsDetail} at {employeeFeedback.Town} " +
+                                                  $"{employeeFeedback.Postcode}");
             }
 
             return opportunityListBuilder.ToString();

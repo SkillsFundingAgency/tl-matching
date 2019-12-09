@@ -20,6 +20,11 @@ namespace Sfa.Tl.Matching.Models.Dto
             Placements.HasValue
                 ? Placements.ToString()
                 : "At least 1";
+        public string StudentsDetail =>
+            (Placements.HasValue && Placements.Value == 1)
+                || PlacementsDetail == "At least 1"
+                ? "student"
+                : "students";
         public string Town { get; set; }
         public string Postcode { get; set; }
         public DateTime? ModifiedOn { get; set; }
