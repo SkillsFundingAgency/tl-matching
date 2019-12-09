@@ -56,5 +56,27 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return referralDate;
         }
+
+        public DateTime GetNthWorkingDayDate(DateTime currentDate, int n, IList<DateTime> bankHolidays)
+        {
+            var year = currentDate.Year;
+            var month = currentDate.Month;
+            var day = 0;
+
+            for (var workingDay = 1; workingDay <= n; workingDay++)
+            {
+                day++;
+                var candidate = new DateTime(year, month, day);
+                while (candidate.DayOfWeek == DayOfWeek.Saturday ||
+                       candidate.DayOfWeek == DayOfWeek.Sunday ||
+                       IsHoliday(candidate, bankHolidays))
+                {
+                    day++;
+                    candidate = new DateTime(year, month, day);
+                }
+            }
+
+            return new DateTime(year, month, day);
+        }
     }
 }
