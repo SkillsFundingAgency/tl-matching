@@ -40,17 +40,17 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 var referralsGroupedByEmployer = referrals.GroupBy(r => r.EmployerCrmId)
                     .ToDictionary(r => r.Key, r => r.OrderByDescending(e => e.ModifiedOn).ToList());
-
-                foreach (var employerGroup in referralsGroupedByEmployer)
+                
+                foreach (var (_, value) in referralsGroupedByEmployer)
                 {
-                    var employerContactEmail = employerGroup.Value.First().EmployerContactEmail;
-                    var employerContact = employerGroup.Value.First().EmployerContact;
+                    var employerContactEmail = value.First().EmployerContactEmail;
+                    var employerContact = value.First().EmployerContact;
 
                     var tokens = new Dictionary<string, string>
                     {
                         { "employer_contact_name", employerContact },
                         { "previous_month", previousMonth },
-                        { "opportunity_list", BuildOpportunityList(employerGroup.Value) }
+                        { "opportunity_list", BuildOpportunityList(value) }
                     };
 
                     await _emailService.SendEmailAsync(null,
