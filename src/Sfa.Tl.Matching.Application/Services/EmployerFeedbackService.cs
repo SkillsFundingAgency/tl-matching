@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -37,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 var previousMonth = previousMonthDate.ToString("MMMM");
 
                 var referralsGroupedByEmployer = referrals.GroupBy(r => r.EmployerCrmId)
-                    .ToDictionary(r => r.Key, r => r.ToList());
+                    .ToDictionary(r => r.Key, r => r.OrderByDescending(e => e.ModifiedOn).ToList());
 
                 foreach (var employerGroup in referralsGroupedByEmployer)
                 {
@@ -48,7 +50,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     {
                         { "employer_contact_name", employerContact },
                         { "previous_month", previousMonth },
-                        { "opportunity_list", "" }
+                        { "opportunity_list", BuildOpportunityList(employerGroup.Value) }
                     };
 
                     await _emailService.SendEmailAsync(null,
@@ -67,6 +69,18 @@ namespace Sfa.Tl.Matching.Application.Services
                 _logger.LogError(ex, errorMessage);
                 throw;
             }
+        }
+
+        private static string BuildOpportunityList(IEnumerable<EmployerFeedbackDto> employerFeedbackDtos)
+        {
+            var opportunityListBuilder = new StringBuilder();
+            foreach (var employeeFeedback in employerFeedbackDtos)
+            {
+                opportunityListBuilder.AppendLine($"* {employeeFeedback.PlacementsDetail} x " +
+                                                  $"{employeeFeedback.JobRoleDetail} students at {employeeFeedback.Town} {employeeFeedback.Postcode}");
+            }
+
+            return opportunityListBuilder.ToString();
         }
     }
 }

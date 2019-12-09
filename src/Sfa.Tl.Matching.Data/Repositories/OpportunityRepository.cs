@@ -294,6 +294,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
             var dto = await (from o in _dbContext.Opportunity
                 join oi in _dbContext.OpportunityItem
                     on o.Id equals oi.OpportunityId
+                join ro in _dbContext.Route
+                    on oi.RouteId equals ro.Id
                 join r in _dbContext.Referral
                     on oi.Id equals r.OpportunityItemId
                 join pv in _dbContext.ProviderVenue
@@ -313,6 +315,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     EmployerContact = o.EmployerContact,
                     EmployerContactEmail = o.EmployerContactEmail,
                     JobRole = oi.JobRole,
+                    Route = ro.Name,
                     Placements = oi.Placements,
                     ModifiedOn = oi.ModifiedOn,
                     Town = pv.Town,
