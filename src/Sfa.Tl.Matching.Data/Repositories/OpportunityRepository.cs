@@ -322,6 +322,72 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return dto;
         }
 
+        public async Task<IList<ProviderFeedbackDto>> GetReferralsForProviderFeedbackAsync(DateTime dateToSearch)
+        {
+            var firstDayOfMonth = new DateTime(dateToSearch.Year, dateToSearch.Month, 1, 0, 0, 0);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+            
+            var allResults = await (from o in _dbContext.Opportunity
+                join oi in _dbContext.OpportunityItem
+                    on o.Id equals oi.OpportunityId
+                join r in _dbContext.Referral
+                    on oi.Id equals r.OpportunityItemId
+                join e in _dbContext.Employer
+                    on o.EmployerCrmId equals e.CrmId
+                join pv in _dbContext.ProviderVenue
+                    on r.ProviderVenueId equals pv.Id
+                join p in _dbContext.Provider
+                    on pv.ProviderId equals p.Id
+                join pq in _dbContext.ProviderQualification 
+                    on pv.Id equals pq.ProviderVenueId
+                join qrm in _dbContext.QualificationRouteMapping
+                    on pq.Id equals qrm.QualificationId
+                join rt in _dbContext.Route
+                    on qrm.RouteId equals rt.Id
+                where o.EmployerCrmId.HasValue
+                      && oi.IsCompleted
+                      && oi.ModifiedOn.HasValue
+                      && (oi.ModifiedOn.Value >= firstDayOfMonth && oi.ModifiedOn.Value <= lastDayOfMonth)
+                      && oi.OpportunityType == OpportunityType.Referral.ToString()
+                select new
+                {
+                    ProviderName = p.Name,
+                    p.PrimaryContact,
+                    p.PrimaryContactEmail,
+                    p.SecondaryContact,
+                    p.SecondaryContactEmail,
+                    EmployerCompanyName = e.CompanyName,
+                    pv.Town,
+                    pv.Postcode,
+                    RouteName = rt.Name
+                }).Distinct().ToListAsync();
+
+            var dto = allResults.GroupBy(grp => new {
+                    grp.ProviderName,
+                    grp.PrimaryContact,
+                    grp.PrimaryContactEmail,
+                    grp.SecondaryContact,
+                    grp.SecondaryContactEmail,
+                    grp.EmployerCompanyName,
+                    grp.Town,
+                    grp.Postcode
+                })
+                .Select(g => new ProviderFeedbackDto
+                {
+                    ProviderName = g.Key.ProviderName,
+                    Town = g.Key.Town,
+                    Postcode = g.Key.Postcode,
+                    PrimaryContact = g.Key.PrimaryContact,
+                    PrimaryContactEmail = g.Key.PrimaryContactEmail,
+                    SecondaryContact = g.Key.SecondaryContact,
+                    SecondaryContactEmail = g.Key.SecondaryContactEmail,
+                    EmployerCompanyName = g.Key.EmployerCompanyName,
+                    Routes = g.Select(r => r.RouteName)
+                }).OrderBy(p => p.EmployerCompanyName).ToList(); 
+            
+            return dto;
+        }
+
         private static string GetReasons(IEnumerable<ProvisionGap> provisionGaps)
         {
             var reasons = new List<string>();

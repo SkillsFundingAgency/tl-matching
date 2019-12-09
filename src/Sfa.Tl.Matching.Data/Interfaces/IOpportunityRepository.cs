@@ -20,6 +20,7 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<IList<MatchingServiceProviderEmployerReport>> GetMatchingServiceProviderEmployerReportAsync();
         Task<EmailBodyDto> GetEmailDeliveryStatusForEmployerAsync(int opportunityId, string sentTo);
         Task<EmailBodyDto> GetEmailDeliveryStatusForProviderAsync(int opportunityId, string sentTo);
-        Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime todaysDate);
+        Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime dateToSearch);
+        Task<IList<ProviderFeedbackDto>> GetReferralsForProviderFeedbackAsync(DateTime dateToSearch);
     }
 }
