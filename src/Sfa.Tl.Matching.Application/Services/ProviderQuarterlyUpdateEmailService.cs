@@ -166,7 +166,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            await _emailService.SendEmailAsync(opportunityId, template.ToString(),
+            await _emailService.SendEmailAsync(opportunityId, null, template.ToString(),
                     toAddress,
                     tokens, createdBy);
         }

@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly Guid _notificationId = new Guid("a8de2d8c-23ae-4c2f-980a-0a8a3231938f");
         public const int OpportunityId = 1;
+        private const int OpportunityItemId = 1;
         private const string SupportEmailAddress = "support@service.com";
 
         public When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_Invalid_Email()
@@ -43,6 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 {
                     NotificationId = _notificationId,
                     OpportunityId = OpportunityId,
+                    OpportunityItemId = OpportunityItemId,
                     SentTo = "sent-to@email.com",
                     Status = "permanent-failure",
                     EmailTemplateId = 14,
@@ -87,6 +89,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         public void Then_EmailService_SendEmailAsync_Is_Called_Exactly_Once()
         {
             _emailService.Received(1).SendEmailAsync(OpportunityId,
+                OpportunityItemId,
                 EmailTemplateName.EmailDeliveryStatus.ToString(),
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>

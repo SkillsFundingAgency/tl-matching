@@ -47,13 +47,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             _emailService
                 .When(x => x.SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Any<int?>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Any<string>()))
                 .Do(x =>
                 {
-                    var address = x.ArgAt<string>(2);
+                    var address = x.ArgAt<string>(3);
                     var tokens = x.Arg<Dictionary<string, string>>();
                     if (tokens.TryGetValue("contact_name", out var contact))
                     {
@@ -91,6 +92,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailService
                 .Received(2)
                 .SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Any<int?>(),
                     Arg.Is<string>(
                         templateName => templateName == "ProviderReferralV4"),
                     Arg.Any<string>(),
@@ -103,7 +105,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         {
             _emailService
                 .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Any<int?>(),
+                    Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Is<string>(
@@ -116,6 +120,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailService
                 .Received(1)
                 .SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Any<int?>(),
                     Arg.Any<string>(),
                     Arg.Is<string>(
                         toAddress => toAddress == "primary.contact@provider.co.uk"),
@@ -129,6 +134,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailService
                 .Received(1)
                 .SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Any<int?>(),
                     Arg.Any<string>(),
                     Arg.Is<string>(
                         toAddress => toAddress == "secondary.contact@provider.co.uk"),
@@ -152,6 +158,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailService
                 .Received(2)
                 .SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Any<int?>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(

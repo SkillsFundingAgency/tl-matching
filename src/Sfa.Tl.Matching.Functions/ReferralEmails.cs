@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -25,7 +26,7 @@ namespace Sfa.Tl.Matching.Functions
 
             var opportunityId = employerReferralEmailData.OpportunityId;
             var backgroundProcessHistoryId = employerReferralEmailData.BackgroundProcessHistoryId;
-            var itemIds = employerReferralEmailData.ItemIds;
+            var itemIds = employerReferralEmailData.ItemIds.ToList();
 
             try
             {
@@ -63,7 +64,7 @@ namespace Sfa.Tl.Matching.Functions
 
             var opportunityId = providerReferralEmailData.OpportunityId;
             var backgroundProcessHistoryId = providerReferralEmailData.BackgroundProcessHistoryId;
-            var itemIds = providerReferralEmailData.ItemIds;
+            var itemIds = providerReferralEmailData.ItemIds.ToList();
 
             try
             {
