@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         userName);
                 }
 
-                return referrals.Count;
+                return referralsGroupedByEmployer.Count;
             }
             catch (Exception ex)
             {
