@@ -3,6 +3,7 @@
 	[Id] INT IDENTITY(1,1) NOT NULL, 
 	[NotificationId] UNIQUEIDENTIFIER NULL, 
 	[OpportunityId] INT NULL, 
+	[OpportunityItemId] INT NULL,
 	[EmailTemplateId] INT NOT NULL, 
 	[SentTo] NVARCHAR(500) NOT NULL, 
 	[CopiedTo] NVARCHAR(500) NULL, 
