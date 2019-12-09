@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         { "opportunity_list", BuildOpportunityList(value) }
                     };
 
-                    await _emailService.SendEmailAsync(null,
+                    await _emailService.SendEmailAsync(null, null,
                         EmailTemplateName.EmployerFeedbackV2.ToString(),
                         employerContactEmail,
                         tokens,
