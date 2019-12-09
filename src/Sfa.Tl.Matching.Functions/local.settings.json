@@ -6,6 +6,8 @@
         "ProviderReferenceTrigger": "0 0 10 * * *",
         "EmployerFeedbackTrigger": "0 0 9 * * MON-FRI",
         "ProviderFeedbackTrigger": "0 0 9 * * MON-FRI",
+        "EmployerFeedbackWorkingDayInMonth":  10,
+        "ProviderFeedbackWorkingDayInMonth":  10,
         "AzureWebJobsStorage": "UseDevelopmentStorage=true",
         "ServiceBusConnectionString": "UseDevelopmentStorage=true;",
         "BlobStorageConnectionString": "UseDevelopmentStorage=true;",

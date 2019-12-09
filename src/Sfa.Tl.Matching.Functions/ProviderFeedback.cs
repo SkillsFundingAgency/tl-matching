@@ -80,10 +80,11 @@ namespace Sfa.Tl.Matching.Functions
 
             return new OkObjectResult($"{emailsSent} emails sent.");
         }
+
         public bool IsNthWorkingDay(IDateTimeProvider dateTimeProvider,
             IRepository<BankHoliday> bankHolidayRepository)
         {
-            var workingDay = 10;
+            var workingDay = Convert.ToInt32(Environment.GetEnvironmentVariable("ProviderFeedbackWorkingDayInMonth"));
             var today = dateTimeProvider.UtcNow().Date;
             var holidays = bankHolidayRepository
                 .GetManyAsync(h => h.Date.Month == today.Month)
