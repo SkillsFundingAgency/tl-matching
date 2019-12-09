@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -281,6 +282,42 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         ProviderVenueName = pv.Name,
                     })
                 .FirstOrDefaultAsync();
+
+            return dto;
+        }
+
+        public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime dateToSearch)
+        {
+            var firstDayOfMonth = new DateTime(dateToSearch.Year, dateToSearch.Month, 1, 0, 0, 0);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+
+            var dto = await (from o in _dbContext.Opportunity
+                join oi in _dbContext.OpportunityItem
+                    on o.Id equals oi.OpportunityId
+                join r in _dbContext.Referral
+                    on oi.Id equals r.OpportunityItemId
+                join pv in _dbContext.ProviderVenue
+                    on r.ProviderVenueId equals pv.Id
+                where o.EmployerCrmId.HasValue 
+                      && oi.IsCompleted
+                      && oi.ModifiedOn.HasValue
+                      && (oi.ModifiedOn.Value >= firstDayOfMonth && oi.ModifiedOn.Value <= lastDayOfMonth)
+                      && o.OpportunityItem.Count(x => x.IsCompleted) == 1
+                      && o.OpportunityItem.Count(x => x.IsSaved) == 1
+                      && oi.OpportunityType == OpportunityType.Referral.ToString()
+                select new EmployerFeedbackDto
+                {
+                    OpportunityId = o.Id,
+                    OpportunityItemId = oi.Id,
+                    EmployerCrmId = o.EmployerCrmId.Value,
+                    EmployerContact = o.EmployerContact,
+                    EmployerContactEmail = o.EmployerContactEmail,
+                    JobRole = oi.JobRole,
+                    Placements = oi.Placements,
+                    ModifiedOn = oi.ModifiedOn,
+                    Town = pv.Town,
+                    Postcode = pv.Postcode
+                }).ToListAsync();
 
             return dto;
         }
