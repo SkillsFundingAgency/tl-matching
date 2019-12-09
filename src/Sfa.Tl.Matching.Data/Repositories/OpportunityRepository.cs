@@ -304,8 +304,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                       && oi.IsCompleted
                       && oi.ModifiedOn.HasValue
                       && (oi.ModifiedOn.Value >= firstDayOfMonth && oi.ModifiedOn.Value <= lastDayOfMonth)
-                      && o.OpportunityItem.Count(x => x.IsCompleted) == 1
-                      && o.OpportunityItem.Count(x => x.IsSaved) == 1
                       && oi.OpportunityType == OpportunityType.Referral.ToString()
                 select new EmployerFeedbackDto
                 {
