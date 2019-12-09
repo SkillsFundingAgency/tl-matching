@@ -30,7 +30,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.ReferralEmails
                 functionLogRepo);
 
             //Assert
-            await referralEmailService.Received(1).SendProviderReferralEmailAsync(Arg.Any<int>(), Arg.Any<IEnumerable<int>>(), Arg.Any<int>(), Arg.Any<string>());
+            await referralEmailService.Received(1).SendProviderReferralEmailAsync(Arg.Any<int>(), Arg.Any<IList<int>>(), Arg.Any<int>(), Arg.Any<string>());
 
         }
     }

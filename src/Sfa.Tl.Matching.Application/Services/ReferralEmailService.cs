@@ -43,7 +43,8 @@ namespace Sfa.Tl.Matching.Application.Services
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
         }
 
-        public async Task SendEmployerReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
+        public async Task SendEmployerReferralEmailAsync(int opportunityId, IList<int> itemIds,
+            int backgroundProcessHistoryId, string username)
         {
             if (await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId) == null) return;
 
@@ -89,9 +90,14 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 tokens.Add("placements_list", sb.ToString());
 
-                await SendEmailAsync(EmailTemplateName.EmployerReferralV4, opportunityId, employerReferral.Email, tokens, employerReferral.CreatedBy);
+                foreach (var itemId in itemIds)
+                {
+                    await SendEmailAsync(EmailTemplateName.EmployerReferralV4, opportunityId, itemId, employerReferral.Email, tokens, employerReferral.CreatedBy);
+                }
 
                 await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, 1, BackgroundProcessHistoryStatus.Complete, username);
+
+
             }
             catch (Exception ex)
             {
@@ -102,7 +108,8 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        public async Task SendProviderReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
+        public async Task SendProviderReferralEmailAsync(int opportunityId, IList<int> itemIds,
+            int backgroundProcessHistoryId, string username)
         {
             if (await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId) == null) return;
 
@@ -133,12 +140,12 @@ namespace Sfa.Tl.Matching.Application.Services
                     };
 
                     const EmailTemplateName template = EmailTemplateName.ProviderReferralV4;
-                    await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy);
+                    await SendEmailAsync(template, opportunityId, referral.OpportunityItemId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy);
 
                     if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmailAsync(template, opportunityId, referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
+                        await SendEmailAsync(template, opportunityId, referral.OpportunityItemId, referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
                     }
 
                     await CompleteSelectedReferralsAsync(opportunityId, referral.OpportunityItemId, username);
@@ -254,14 +261,14 @@ namespace Sfa.Tl.Matching.Application.Services
                 : "at least 1";
         }
 
-        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, string toAddress, IDictionary<string, string> tokens, string createdBy)
+        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, int opportunityItemId, string toAddress, IDictionary<string, string> tokens, string createdBy)
         {
             if (!_configuration.SendEmailEnabled)
             {
                 return;
             }
 
-            await _emailService.SendEmailAsync(opportunityId, template.ToString(), toAddress, tokens, createdBy);
+            await _emailService.SendEmailAsync(opportunityId, opportunityItemId, template.ToString(), toAddress, tokens, createdBy);
         }
 
         private async Task UpdateBackgroundProcessHistoryAsync(

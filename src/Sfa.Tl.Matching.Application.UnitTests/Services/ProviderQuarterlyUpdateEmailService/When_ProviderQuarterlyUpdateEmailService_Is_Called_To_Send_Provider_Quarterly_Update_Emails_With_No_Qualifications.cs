@@ -128,7 +128,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<int?>(), 
+                    Arg.Is<string>(
                         templateName => templateName == "ProviderQuarterlyUpdate"),
                     Arg.Is<string>(toAddress => toAddress == "primary.contact@provider.co.uk"),
                     Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
@@ -160,7 +161,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<int?>(), 
+                    Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)), Arg.Any<string>());

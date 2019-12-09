@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 { "email_body", emailBodyDto.Body }
             };
 
-            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId, EmailTemplateName.EmailDeliveryStatus.ToString(),
+            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId, emailHistoryDto.OpportunityItemId, EmailTemplateName.EmailDeliveryStatus.ToString(),
                 _configuration.MatchingServiceSupportEmailAddress, tokens, "System");
         }
 
