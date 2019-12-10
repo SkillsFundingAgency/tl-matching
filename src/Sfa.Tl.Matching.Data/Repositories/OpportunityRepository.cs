@@ -307,6 +307,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                       && oi.OpportunityType == OpportunityType.Referral.ToString()
                 select new EmployerFeedbackDto
                 {
+                    OpportunityItemId = oi.Id,
                     EmployerCrmId = o.EmployerCrmId.Value,
                     EmployerContact = o.EmployerContact,
                     EmployerContactEmail = o.EmployerContactEmail,

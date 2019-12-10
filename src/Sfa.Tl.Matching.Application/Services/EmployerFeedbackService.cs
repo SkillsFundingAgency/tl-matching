@@ -43,18 +43,11 @@ namespace Sfa.Tl.Matching.Application.Services
                 
                 foreach (var (_, value) in referralsGroupedByEmployer)
                 {
-                    var lastestEmployer = value.First();
-                    
-                    var tokens = new Dictionary<string, string>
-                    {
-                        { "employer_contact_name", lastestEmployer.EmployerContact },
-                        { "previous_month", previousMonth },
-                        { "opportunity_list", BuildOpportunityList(value) }
-                    };
+                    var tokens = CreateTokens(value, previousMonth);
 
                     await _emailService.SendEmailAsync(null, null,
                         EmailTemplateName.EmployerFeedbackV2.ToString(),
-                        lastestEmployer.EmployerContactEmail,
+                        value.First().EmployerContactEmail,
                         tokens,
                         userName);
                 }
@@ -70,6 +63,25 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
+        private static IDictionary<string, string> CreateTokens(IReadOnlyCollection<EmployerFeedbackDto> employerFeedbackDtos,
+            string previousMonth)
+        {
+            var lastestEmployer = employerFeedbackDtos.First();
+
+            var tokens = new Dictionary<string, string>
+            {
+                { "employer_contact_name", lastestEmployer.EmployerContact },
+                { "previous_month", previousMonth },
+                { "opportunity_list", BuildOpportunityList(employerFeedbackDtos) }
+            };
+
+            var opportunityItemIds = employerFeedbackDtos.Select(ef => ef.OpportunityItemId.ToString()).Distinct().ToList();
+            for (var i = 0; i < opportunityItemIds.Count; i++)
+                tokens.Add($"opportunity_item_id_{i+1}", opportunityItemIds[i]);
+
+            return tokens;
+        }
+
         private static string BuildOpportunityList(IEnumerable<EmployerFeedbackDto> employerFeedbackDtos)
         {
             var opportunityListBuilder = new StringBuilder();
@@ -82,5 +94,32 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return opportunityListBuilder.ToString();
         }
+
+        //private static Dictionary<int, string> BuildOpportunityListDictionary(IEnumerable<EmployerFeedbackDto> employerFeedbackDtos)
+        //{
+        //    //var opportunityListBuilder = new StringBuilder();
+        //    //foreach (var employeeFeedback in employerFeedbackDtos)
+        //    //{
+        //    //    opportunityListBuilder.AppendLine($"* {employeeFeedback.PlacementsDetail} x " +
+        //    //                                      $"{employeeFeedback.JobRoleDetail} {employeeFeedback.StudentsDetail} at {employeeFeedback.Town} " +
+        //    //                                      $"{employeeFeedback.Postcode}");
+        //    //}
+
+        //    //return opportunityListBuilder.ToString();
+
+        //    var dic = new Dictionary<int, string>();
+        //    foreach (var employeeFeedback in employerFeedbackDtos)
+        //    {
+        //        if (!dic.ContainsKey(employeeFeedback.OpportunityItemId))
+        //        {
+
+        //        }
+        //    }
+
+        //    return employerFeedbackDtos.ToDictionary(ef => ef.OpportunityItemId, employeeFeedback => 
+        //        $"* {employeeFeedback.PlacementsDetail} x " + 
+        //        $"{employeeFeedback.JobRoleDetail} {employeeFeedback.StudentsDetail} at " +
+        //        $"{employeeFeedback.Town} " + $"{employeeFeedback.Postcode}");
+        //}
     }
 }
