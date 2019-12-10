@@ -48,14 +48,8 @@
         "employerFeedbackTrigger": {
             "type": "string"
         },
-        "employerFeedbackWorkingDayInMonth": {
-            "type": "int"
-        },
         "providerFeedbackTrigger": {
             "type": "string"
-        },
-        "providerFeedbackWorkingDayInMonth": {
-            "type": "int"
         },
         "providerReferenceTrigger": {
             "type": "string"
@@ -272,16 +266,8 @@
                                 "value": "[parameters('employerFeedbackTrigger')]"
                             },
                             {
-                                "name": "EmployerFeedbackWorkingDayInMonth",
-                                "value": "[parameters('employerFeedbackWorkingDayInMonth')]"
-                            },
-                            {
                                 "name": "ProviderFeedbackTrigger",
                                 "value": "[parameters('providerFeedbackTrigger')]"
-                            },
-                            {
-                                "name": "ProviderFeedbackWorkingDayInMonth",
-                                "value": "[parameters('ProviderFeedbackWorkingDayInMonth')]"
                             },
                             {
                                 "name": "ProviderReferenceTrigger",

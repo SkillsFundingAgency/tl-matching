@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,18 +22,10 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IEmployerFeedbackService employerFeedbackService,
-            [Inject] IDateTimeProvider dateTimeProvider,
-            [Inject] IRepository<BankHoliday> bankHolidayRepository,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             try
             {
-                if (!IsNthWorkingDay(dateTimeProvider, bankHolidayRepository))
-                {
-                    logger.LogInformation($"Function {context.FunctionName} exited because today is not a valid day for processing.");
-                    return;
-                }
-
                 var stopwatch = Stopwatch.StartNew();
 
                 var emailsSent = await employerFeedbackService.SendEmployerFeedbackEmailsAsync("System");
@@ -79,19 +70,6 @@ namespace Sfa.Tl.Matching.Functions
                                   $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
 
             return new OkObjectResult($"{emailsSent} emails sent.");
-        }
-
-        public bool IsNthWorkingDay(IDateTimeProvider dateTimeProvider,
-            IRepository<BankHoliday> bankHolidayRepository)
-        {
-            var workingDay = Convert.ToInt32(Environment.GetEnvironmentVariable("ProviderFeedbackWorkingDayInMonth"));
-            var today = dateTimeProvider.UtcNow().Date;
-            var holidays = bankHolidayRepository
-                .GetManyAsync(h => h.Date.Month == today.Month)
-                .Select(h => h.Date)
-                .ToList();
-
-            return today == dateTimeProvider.GetNthWorkingDayDate(today, workingDay, holidays);
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -13,19 +15,25 @@ namespace Sfa.Tl.Matching.Application.Services
 {
     public class EmployerFeedbackService : IEmployerFeedbackService
     {
+        private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
+        private readonly IRepository<BankHoliday> _bankHolidayRepository;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly ILogger<EmployerFeedbackService> _logger;
 
         public EmployerFeedbackService(
+            MatchingConfiguration configuration,
             ILogger<EmployerFeedbackService> logger,
             IEmailService emailService,
+            IRepository<BankHoliday> bankHolidayRepository,
             IOpportunityRepository opportunityRepository,
             IDateTimeProvider dateTimeProvider)
         {
+            _configuration = configuration;
             _logger = logger;
             _emailService = emailService;
+            _bankHolidayRepository = bankHolidayRepository;
             _opportunityRepository = opportunityRepository;
             _dateTimeProvider = dateTimeProvider;
         }
@@ -34,6 +42,12 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             try
             {
+                if (!IsNthWorkingDay(_configuration.EmployerFeedbackWorkingDayInMonth))
+                {
+                    _logger.LogInformation("Employer feedback service exited because today is not a valid day for processing.");
+                    return 0;
+                }
+
                 var previousMonthDate = _dateTimeProvider.UtcNow().AddMonths(-1);
                 var referrals = await _opportunityRepository.GetReferralsForEmployerFeedbackAsync(previousMonthDate);
                 var previousMonth = previousMonthDate.ToString("MMMM");
@@ -94,5 +108,15 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return opportunityListBuilder.ToString();
         }
-    }
+
+        public bool IsNthWorkingDay(int workingDay)
+        {
+            var today = _dateTimeProvider.UtcNow().Date;
+            var holidays = _bankHolidayRepository
+                .GetManyAsync(h => h.Date.Month == today.Month)
+                .Select(h => h.Date)
+                .ToList();
+             return today == _dateTimeProvider.GetNthWorkingDayDate(today, workingDay, holidays);
+        }
+     }
 }

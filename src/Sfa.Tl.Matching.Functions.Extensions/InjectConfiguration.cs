@@ -163,6 +163,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             services.AddTransient<IReferralEmailService, ReferralEmailService>();
             services.AddTransient<IEmailDeliveryStatusService, EmailDeliveryStatusService>();
             services.AddTransient<IEmployerFeedbackService, EmployerFeedbackService>();
+            services.AddTransient<IProviderFeedbackService, ProviderFeedbackService>();
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();

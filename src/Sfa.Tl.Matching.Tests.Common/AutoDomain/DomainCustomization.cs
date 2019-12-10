@@ -16,7 +16,8 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             fixture.Customize<MatchingConfiguration>(composer =>
                 composer
                     .With(config => config.SendEmailEnabled, true)
-                    .With(config => config.EmployerFeedbackTimeSpan, "-10.00:00:00")
+                    .With(config => config.EmployerFeedbackWorkingDayInMonth, 10)
+                    .With(config => config.ProviderFeedbackWorkingDayInMonth, 10)
                     .With(config => config.EmailDeliveryStatusToken, Guid.Parse("72b561ed-a7f3-4c0c-82a9-aae800a51de7"))
             );
 
