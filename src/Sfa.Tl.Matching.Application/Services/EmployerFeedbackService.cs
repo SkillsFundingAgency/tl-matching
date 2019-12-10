@@ -49,9 +49,9 @@ namespace Sfa.Tl.Matching.Application.Services
                 }
 
                 var previousMonthDate = _dateTimeProvider.UtcNow().AddMonths(-1);
-                var referrals = await _opportunityRepository.GetReferralsForEmployerFeedbackAsync(previousMonthDate);
                 var previousMonth = previousMonthDate.ToString("MMMM");
-
+                
+                var referrals = await _opportunityRepository.GetReferralsForEmployerFeedbackAsync(previousMonthDate);
                 var referralsGroupedByEmployer = referrals.GroupBy(r => r.EmployerCrmId)
                     .ToDictionary(r => r.Key, r => r.OrderByDescending(e => e.ModifiedOn).ToList());
                 
@@ -77,14 +77,24 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
+        public bool IsNthWorkingDay(int workingDay)
+        {
+            var today = _dateTimeProvider.UtcNow().Date;
+            var holidays = _bankHolidayRepository
+                .GetManyAsync(h => h.Date.Month == today.Month)
+                .Select(h => h.Date)
+                .ToList();
+            return today == _dateTimeProvider.GetNthWorkingDayDate(today, workingDay, holidays);
+        }
+
         private static IDictionary<string, string> CreateTokens(IReadOnlyCollection<EmployerFeedbackDto> employerFeedbackDtos,
             string previousMonth)
         {
-            var lastestEmployer = employerFeedbackDtos.First();
+            var latestEmployer = employerFeedbackDtos.First();
 
             var tokens = new Dictionary<string, string>
             {
-                { "employer_contact_name", lastestEmployer.EmployerContact },
+                { "employer_contact_name", latestEmployer.EmployerContact },
                 { "previous_month", previousMonth },
                 { "opportunity_list", BuildOpportunityList(employerFeedbackDtos) }
             };
@@ -108,15 +118,5 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return opportunityListBuilder.ToString();
         }
-
-        public bool IsNthWorkingDay(int workingDay)
-        {
-            var today = _dateTimeProvider.UtcNow().Date;
-            var holidays = _bankHolidayRepository
-                .GetManyAsync(h => h.Date.Month == today.Month)
-                .Select(h => h.Date)
-                .ToList();
-             return today == _dateTimeProvider.GetNthWorkingDayDate(today, workingDay, holidays);
-        }
-     }
+    }
 }
