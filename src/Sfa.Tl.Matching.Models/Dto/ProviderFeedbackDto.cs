@@ -4,7 +4,9 @@ namespace Sfa.Tl.Matching.Models.Dto
 {
     public class ProviderFeedbackDto
     {
+        public int ProviderId { get; set; }
         public string ProviderName { get; set; }
+        public string ProviderDisplayName { get; set; }
         public string PrimaryContact { get; set; }
         public string PrimaryContactEmail { get; set; }
         public string SecondaryContact { get; set; }

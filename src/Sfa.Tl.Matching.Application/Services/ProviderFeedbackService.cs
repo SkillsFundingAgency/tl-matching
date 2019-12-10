@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -50,25 +51,69 @@ namespace Sfa.Tl.Matching.Application.Services
                 var referrals = await _opportunityRepository.GetReferralsForProviderFeedbackAsync(previousMonthDate);
                 var previousMonth = previousMonthDate.ToString("MMMM");
 
-                var referralsGroupedByProvider = referrals.GroupBy(r => r.ProviderName)
+                var referralsGroupedByProvider = referrals.GroupBy(r => r.ProviderId)
                     .ToDictionary(r => r.Key, r => r.ToList());
 
                 foreach (var providerGroup in referralsGroupedByProvider)
                 {
+                    var providerId = providerGroup.Key;
                     var provider = providerGroup.Value.First();
                     var providerName = provider.ProviderName;
+                    var providerDisplayName = provider.ProviderDisplayName;
                     var primaryContactEmail = provider.PrimaryContactEmail;
                     var primaryContact = provider.PrimaryContact;
                     var secondaryContactEmail = provider.SecondaryContactEmail;
                     var secondaryContact = provider.SecondaryContact;
 
+                    var employersList = new StringBuilder();
+
+                    var employers = providerGroup.Value.GroupBy(r => r.EmployerCompanyName)
+                        .ToDictionary(r => r.Key, r => r.OrderByDescending(e => e.EmployerCompanyName)
+                            .ToList());
+
+                    foreach (var employer in employers)
+                    {
+                        var companyName = employer.Key;
+                        employersList.AppendLine($"* {companyName} ");
+
+                        foreach (var venue in employer.Value)
+                        {
+                            var hasFirstRouteBeenShown = false;
+                            foreach (var route in venue.Routes)
+                            {
+                                if (hasFirstRouteBeenShown)
+                                {
+                                    employersList.Append($" and ");
+                                }
+                                
+                                hasFirstRouteBeenShown = true;
+                                employersList.AppendLine($"for students studying {route.ToLower()} courses at {venue.Town} {venue.Postcode}");
+                            }
+                            employersList.AppendLine("");
+                        }
+
+                        employersList.AppendLine("");
+                    }
+
+                    var otherEmailDetails = new StringBuilder();
+
+                    //TODO: Deal with secondary email properly
+                    if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
+                        && provider.SecondaryContactEmail != provider.PrimaryContactEmail)
+                    {
+                        otherEmailDetails.Append("We also sent this email to ");
+                        otherEmailDetails.Append($"{provider.SecondaryContactEmail} ");
+                        otherEmailDetails.Append($"who we have as {providerDisplayName}’s secondary contact for industry placements. ");
+                        otherEmailDetails.Append("Please coordinate your response with them.");
+                    }
+
                     var tokens = new Dictionary<string, string>
                     {
                         { "contact_name", primaryContact },
                         { "previous_month", previousMonth },
-                        { "provider_name", providerName },
-                        { "employers_list", "" },
-                        { "other_email_details", "" },
+                        { "provider_name", providerDisplayName },
+                        { "employers_list", employersList.ToString() },
+                        { "other_email_details", otherEmailDetails.ToString() },
                     };
 
                     await _emailService.SendEmailAsync(null, null,
@@ -88,7 +133,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 throw;
             }
         }
-        
+
         public bool IsNthWorkingDay(int workingDay)
         {
             var today = _dateTimeProvider.UtcNow().Date;

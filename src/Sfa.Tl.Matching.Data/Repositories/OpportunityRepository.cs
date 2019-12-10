@@ -351,7 +351,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                       && oi.OpportunityType == OpportunityType.Referral.ToString()
                 select new
                 {
+                    ProviderId = p.Id,
                     ProviderName = p.Name,
+                    ProviderDisplayName = p.DisplayName,
                     p.PrimaryContact,
                     p.PrimaryContactEmail,
                     p.SecondaryContact,
@@ -363,7 +365,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 }).Distinct().ToListAsync();
 
             var dto = allResults.GroupBy(grp => new {
+                    grp.ProviderId,
                     grp.ProviderName,
+                    grp.ProviderDisplayName,
                     grp.PrimaryContact,
                     grp.PrimaryContactEmail,
                     grp.SecondaryContact,
@@ -374,7 +378,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 })
                 .Select(g => new ProviderFeedbackDto
                 {
+                    ProviderId = g.Key.ProviderId,
                     ProviderName = g.Key.ProviderName,
+                    ProviderDisplayName = g.Key.ProviderDisplayName,
                     Town = g.Key.Town,
                     Postcode = g.Key.Postcode,
                     PrimaryContact = g.Key.PrimaryContact,
