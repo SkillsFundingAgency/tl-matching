@@ -113,7 +113,7 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 opportunityListBuilder.AppendLine($"* {employeeFeedback.PlacementsDetail} x " +
                                                   $"{employeeFeedback.JobRoleDetail} {employeeFeedback.StudentsDetail} at {employeeFeedback.Town} " +
-                                                  $"{employeeFeedback.Postcode}");
+                                                  $"{employeeFeedback.Postcode} on {employeeFeedback.ModifiedOn:dd MMMM yyyy}");
             }
 
             return opportunityListBuilder.ToString();
