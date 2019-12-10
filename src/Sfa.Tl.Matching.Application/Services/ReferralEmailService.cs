@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             try
             {
-                var employerReferral = await GetEmployerReferralsAsync(opportunityId, itemIds);
+                var employerReferral = await _opportunityRepository.GetEmployerReferralsAsync(opportunityId, itemIds); 
                 var sb = new StringBuilder();
 
                 if (employerReferral == null) return;
@@ -109,7 +109,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             if (await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId) == null) return;
 
-            var referrals = await GetOpportunityReferralsAsync(opportunityId, itemIds);
+            var referrals = await _opportunityRepository.GetProviderOpportunitiesAsync(opportunityId, itemIds);
 
             try
             {
@@ -160,7 +160,7 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        private string FormatContactDetails(string name, string phone, string email)
+        private static string FormatContactDetails(string name, string phone, string email)
         {
             var sb = new StringBuilder($"{name}");
 
@@ -191,12 +191,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task CompleteSelectedReferralsAsync(int opportunityId, int itemId, string username)
         {
-            var selectedOpportunityItemIds = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
-                                                                                      && oi.Id == itemId
-                                                                                      && oi.IsSaved
-                                                                                      && oi.IsSelectedForReferral
-                                                                                      && !oi.IsCompleted)
-                .Select(oi => oi.Id).ToList();
+            var selectedOpportunityItemIds = _opportunityItemRepository
+                .GetManyAsync(oi => oi.Opportunity.Id == opportunityId
+                                    && oi.Id == itemId
+                                    && oi.IsSaved
+                                    && oi.IsSelectedForReferral
+                                    && !oi.IsCompleted).Select(oi => oi.Id).ToList();
 
             if (selectedOpportunityItemIds.Count > 0)
             {
@@ -238,16 +238,6 @@ namespace Sfa.Tl.Matching.Application.Services
                 x => x.IsCompleted,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
-        }
-
-        private async Task<EmployerReferralDto> GetEmployerReferralsAsync(int opportunityId, IEnumerable<int> itemIds)
-        {
-            return await _opportunityRepository.GetEmployerReferralsAsync(opportunityId, itemIds);
-        }
-
-        private async Task<IList<OpportunityReferralDto>> GetOpportunityReferralsAsync(int opportunityId, IEnumerable<int> itemIds)
-        {
-            return await _opportunityRepository.GetProviderOpportunitiesAsync(opportunityId, itemIds);
         }
 
         private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
