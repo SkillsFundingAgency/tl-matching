@@ -56,7 +56,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 )));
 
             var providerQuarterlyUpdateEmailService = new Application.Services.ProviderQuarterlyUpdateEmailService(
-                _testFixture.Configuration, _testFixture.Logger,
+                _testFixture.Logger,
                     _emailService, _providerRepository, _backgroundProcessHistoryRepository,
                     messageQueueService, _testFixture.DateTimeProvider);
 

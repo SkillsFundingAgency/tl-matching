@@ -34,8 +34,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 .GetProvidersWithFundingAsync()
                 .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
 
-            var providerQuarterlyUpdateEmailService = new Application.Services.ProviderQuarterlyUpdateEmailService(
-                testFixture.Configuration, testFixture.Logger, 
+            var providerQuarterlyUpdateEmailService = new Application.Services.ProviderQuarterlyUpdateEmailService(testFixture.Logger, 
                 _emailService,
                 providerRepository, _backgroundProcessHistoryRepository,
                 _messageQueueService, testFixture.DateTimeProvider);

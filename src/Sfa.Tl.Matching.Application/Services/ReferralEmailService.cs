@@ -9,7 +9,6 @@ using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -18,7 +17,6 @@ namespace Sfa.Tl.Matching.Application.Services
     public class ReferralEmailService : IReferralEmailService
     {
         private readonly IMapper _mapper;
-        private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
@@ -27,7 +25,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public ReferralEmailService(
                     IMapper mapper,
-                    MatchingConfiguration configuration,
                     IDateTimeProvider dateTimeProvider,
                     IEmailService emailService,
                     IOpportunityRepository opportunityRepository,
@@ -35,7 +32,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
         {
             _mapper = mapper;
-            _configuration = configuration;
             _dateTimeProvider = dateTimeProvider;
             _emailService = emailService;
             _opportunityRepository = opportunityRepository;
@@ -263,11 +259,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, int opportunityItemId, string toAddress, IDictionary<string, string> tokens, string createdBy)
         {
-            if (!_configuration.SendEmailEnabled)
-            {
-                return;
-            }
-
             await _emailService.SendEmailAsync(opportunityId, opportunityItemId, template.ToString(), toAddress, tokens, createdBy);
         }
 

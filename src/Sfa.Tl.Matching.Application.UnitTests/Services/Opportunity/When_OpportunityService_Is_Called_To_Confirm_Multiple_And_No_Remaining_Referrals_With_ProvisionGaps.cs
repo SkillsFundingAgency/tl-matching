@@ -62,11 +62,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             });
             var mapper = new Mapper(config);
 
-            var configuration = new MatchingConfiguration
-            {
-                SendEmailEnabled = true
-            };
-
             _opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             _opportunityItemRepository.GetManyAsync(Arg.Any<Expression<Func<OpportunityItem, bool>>>())
                 .Returns(new List<OpportunityItem>
@@ -136,7 +131,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 1
             };
 
-            var referralService = new ReferralEmailService(mapper, configuration, dateTimeProvider, emailService,
+            var referralService = new ReferralEmailService(mapper, dateTimeProvider, emailService,
                 opportunityRepo, _opportunityItemRepository, backgroundProcessHistoryRepo);
 
             referralService.SendProviderReferralEmailAsync(1, itemIds, 1, httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();

@@ -8,14 +8,12 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Command;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
 {
     public class ProviderQuarterlyUpdateEmailService : IProviderQuarterlyUpdateEmailService
     {
-        private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IProviderRepository _providerRepository;
@@ -24,7 +22,6 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly ILogger<ProviderQuarterlyUpdateEmailService> _logger;
 
         public ProviderQuarterlyUpdateEmailService(
-            MatchingConfiguration configuration,
             ILogger<ProviderQuarterlyUpdateEmailService> logger,
             IEmailService emailService,
             IProviderRepository providerRepository,
@@ -32,7 +29,6 @@ namespace Sfa.Tl.Matching.Application.Services
             IMessageQueueService messageQueueService,
             IDateTimeProvider dateTimeProvider)
         {
-            _configuration = configuration;
             _logger = logger;
             _emailService = emailService;
             _providerRepository = providerRepository;
@@ -161,11 +157,6 @@ namespace Sfa.Tl.Matching.Application.Services
             IDictionary<string, string> tokens, 
             string createdBy)
         {
-            if (!_configuration.SendEmailEnabled)
-            {
-                return;
-            }
-
             await _emailService.SendEmailAsync(opportunityId, null, template.ToString(),
                     toAddress,
                     tokens, createdBy);
