@@ -94,32 +94,5 @@ namespace Sfa.Tl.Matching.Application.Services
 
             return opportunityListBuilder.ToString();
         }
-
-        //private static Dictionary<int, string> BuildOpportunityListDictionary(IEnumerable<EmployerFeedbackDto> employerFeedbackDtos)
-        //{
-        //    //var opportunityListBuilder = new StringBuilder();
-        //    //foreach (var employeeFeedback in employerFeedbackDtos)
-        //    //{
-        //    //    opportunityListBuilder.AppendLine($"* {employeeFeedback.PlacementsDetail} x " +
-        //    //                                      $"{employeeFeedback.JobRoleDetail} {employeeFeedback.StudentsDetail} at {employeeFeedback.Town} " +
-        //    //                                      $"{employeeFeedback.Postcode}");
-        //    //}
-
-        //    //return opportunityListBuilder.ToString();
-
-        //    var dic = new Dictionary<int, string>();
-        //    foreach (var employeeFeedback in employerFeedbackDtos)
-        //    {
-        //        if (!dic.ContainsKey(employeeFeedback.OpportunityItemId))
-        //        {
-
-        //        }
-        //    }
-
-        //    return employerFeedbackDtos.ToDictionary(ef => ef.OpportunityItemId, employeeFeedback => 
-        //        $"* {employeeFeedback.PlacementsDetail} x " + 
-        //        $"{employeeFeedback.JobRoleDetail} {employeeFeedback.StudentsDetail} at " +
-        //        $"{employeeFeedback.Town} " + $"{employeeFeedback.Postcode}");
-        //}
     }
 }
