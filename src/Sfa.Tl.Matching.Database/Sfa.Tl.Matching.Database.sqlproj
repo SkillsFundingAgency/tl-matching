@@ -111,6 +111,7 @@
     <Build Include="Views\MatchingServiceProviderEmployerReport.sql" />
     <Build Include="Indexes\IX_Employer_CrmId.sql" />
     <Build Include="Indexes\IX_ProviderQualification_QualificationId.sql" />
+    <None Include="PostDeployment\Remove EmployerFeedbackSent From Opportunity.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
