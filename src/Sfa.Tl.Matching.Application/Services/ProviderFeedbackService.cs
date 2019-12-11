@@ -8,6 +8,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
 namespace Sfa.Tl.Matching.Application.Services
@@ -43,84 +44,67 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 if (!IsNthWorkingDay(_configuration.ProviderFeedbackWorkingDayInMonth))
                 {
-                    _logger.LogInformation("Provider feedback service exited because today is not a valid day for processing.");
+                    _logger.LogInformation(
+                        "Provider feedback service exited because today is not a valid day for processing.");
                     return 0;
                 }
 
                 var previousMonthDate = _dateTimeProvider.UtcNow().AddMonths(-1);
-                var referrals = await _opportunityRepository.GetReferralsForProviderFeedbackAsync(previousMonthDate);
                 var previousMonth = previousMonthDate.ToString("MMMM");
+                var referrals = await _opportunityRepository.GetReferralsForProviderFeedbackAsync(previousMonthDate);
 
-                var referralsGroupedByProvider = referrals.GroupBy(r => r.ProviderId)
+                var referralsGroupedByProvider = referrals
+                    .GroupBy(r => r.ProviderId)
                     .ToDictionary(r => r.Key, r => r.ToList());
 
-                foreach (var providerGroup in referralsGroupedByProvider)
+                foreach (var (_, value) in referralsGroupedByProvider)
                 {
-                    var providerId = providerGroup.Key;
-                    var provider = providerGroup.Value.First();
-                    var providerName = provider.ProviderName;
-                    var providerDisplayName = provider.ProviderDisplayName;
-                    var primaryContactEmail = provider.PrimaryContactEmail;
-                    var primaryContact = provider.PrimaryContact;
-                    var secondaryContactEmail = provider.SecondaryContactEmail;
-                    var secondaryContact = provider.SecondaryContact;
+                    var provider = value.First();
 
-                    var employersList = new StringBuilder();
+                    var tokens = CreateTokens(value, previousMonth);
 
-                    var employers = providerGroup.Value.GroupBy(r => r.EmployerCompanyName)
-                        .ToDictionary(r => r.Key, r => r.OrderByDescending(e => e.EmployerCompanyName)
-                            .ToList());
 
-                    foreach (var employer in employers)
-                    {
-                        var companyName = employer.Key;
-                        employersList.AppendLine($"* {companyName} ");
+                    var secondaryContactEmailDetails = new StringBuilder();
 
-                        foreach (var venue in employer.Value)
-                        {
-                            var hasFirstRouteBeenShown = false;
-                            foreach (var route in venue.Routes)
-                            {
-                                if (hasFirstRouteBeenShown)
-                                {
-                                    employersList.Append($" and ");
-                                }
-                                
-                                hasFirstRouteBeenShown = true;
-                                employersList.AppendLine($"for students studying {route.ToLower()} courses at {venue.Town} {venue.Postcode}");
-                            }
-                            employersList.AppendLine("");
-                        }
-
-                        employersList.AppendLine("");
-                    }
-
-                    var otherEmailDetails = new StringBuilder();
-
-                    //TODO: Deal with secondary email properly
                     if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
                         && provider.SecondaryContactEmail != provider.PrimaryContactEmail)
                     {
-                        otherEmailDetails.Append("We also sent this email to ");
-                        otherEmailDetails.Append($"{provider.SecondaryContactEmail} ");
-                        otherEmailDetails.Append($"who we have as {providerDisplayName}’s secondary contact for industry placements. ");
-                        otherEmailDetails.Append("Please coordinate your response with them.");
+                        secondaryContactEmailDetails.Append("We also sent this email to ");
+                        secondaryContactEmailDetails.Append($"{provider.SecondaryContactEmail} ");
+                        secondaryContactEmailDetails.Append(
+                            $"who we have as {provider.ProviderDisplayName}’s secondary contact for industry placements. ");
+                        secondaryContactEmailDetails.AppendLine("Please coordinate your response with them.");
                     }
 
-                    var tokens = new Dictionary<string, string>
-                    {
-                        { "contact_name", primaryContact },
-                        { "previous_month", previousMonth },
-                        { "provider_name", providerDisplayName },
-                        { "employers_list", employersList.ToString() },
-                        { "other_email_details", otherEmailDetails.ToString() },
-                    };
+                    tokens["other_email_details"] = secondaryContactEmailDetails.ToString();
 
                     await _emailService.SendEmailAsync(null, null,
                         EmailTemplateName.ProviderFeedbackV2.ToString(),
-                        primaryContactEmail,
+                        provider.PrimaryContactEmail,
                         tokens,
                         userName);
+
+                    if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail))
+                    {
+                        var primaryContactEmailDetails = new StringBuilder();
+
+                        if (provider.SecondaryContactEmail != provider.PrimaryContactEmail)
+                        {
+                            primaryContactEmailDetails.Append("We also sent this email to ");
+                            primaryContactEmailDetails.Append($"{provider.PrimaryContact} ");
+                            primaryContactEmailDetails.Append($"who we have as {provider.ProviderDisplayName}’s primary contact for industry placements. ");
+                            primaryContactEmailDetails.AppendLine("Please coordinate your response with them.");
+                        }
+
+                        tokens["contact_name"] = provider.SecondaryContact;
+                        tokens["other_email_details"] = primaryContactEmailDetails.ToString();
+
+                        await _emailService.SendEmailAsync(null, null,
+                            EmailTemplateName.ProviderFeedbackV2.ToString(),
+                            provider.SecondaryContactEmail,
+                            tokens,
+                            userName);
+                    }
                 }
 
                 return referralsGroupedByProvider.Count;
@@ -132,6 +116,63 @@ namespace Sfa.Tl.Matching.Application.Services
                 _logger.LogError(ex, errorMessage);
                 throw;
             }
+        }
+
+        private static IDictionary<string, string> CreateTokens(
+            IReadOnlyCollection<ProviderFeedbackDto> providerFeedbackDtos,
+            string previousMonth)
+        {
+            var provider = providerFeedbackDtos.First();
+            var employersList = new StringBuilder();
+
+            var employers = providerFeedbackDtos
+                .GroupBy(p => p.EmployerCompanyName)
+                .ToDictionary(p => p.Key, p => p.OrderByDescending(e => e.EmployerCompanyName)
+                    .ToList());
+
+            foreach (var employer in employers.OrderBy(e => e.Key))
+            {
+                var companyName = employer.Key;
+                employersList.AppendLine($"* {companyName} ");
+
+                foreach (var venue in employer.Value)
+                {
+                    var hasFirstRouteBeenShown = false;
+                    foreach (var route in venue.Routes.OrderBy(r => r))
+                    {
+                        if (hasFirstRouteBeenShown)
+                        {
+                            employersList.Append(" and ");
+                        }
+
+                        hasFirstRouteBeenShown = true;
+                        employersList.AppendLine($"for students studying {route.ToLower()} courses at {venue.Town} {venue.Postcode}");
+                    }
+                    employersList.AppendLine("");
+                }
+
+                employersList.AppendLine("");
+            }
+
+            var otherEmailDetails = new StringBuilder();
+            if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
+                && provider.SecondaryContactEmail != provider.PrimaryContactEmail)
+            {
+                otherEmailDetails.Append("We also sent this email to ");
+                otherEmailDetails.Append($"{provider.SecondaryContactEmail} ");
+                otherEmailDetails.Append($"who we have as {provider.ProviderDisplayName}’s secondary contact for industry placements. ");
+                otherEmailDetails.AppendLine("Please coordinate your response with them.");
+            }
+
+            var tokens = new Dictionary<string, string>
+            {
+                { "contact_name", provider.PrimaryContact },
+                { "previous_month", previousMonth },
+                { "provider_name", provider.ProviderDisplayName },
+                { "employers_list", employersList.ToString() },
+                { "other_email_details", otherEmailDetails.ToString() },
+            };
+            return tokens;
         }
 
         public bool IsNthWorkingDay(int workingDay)
