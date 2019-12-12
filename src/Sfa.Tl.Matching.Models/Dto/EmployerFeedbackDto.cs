@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string JobRole { get; set; }
         public string JobRoleDetail =>
             string.IsNullOrEmpty(JobRole) || JobRole == "None given"
-                ? Route
+                ? $"{Route} {StudentsDetail}"
                 : JobRole;
         public string Route { get; set; }
         public int? Placements { get; set; }
@@ -19,13 +19,13 @@ namespace Sfa.Tl.Matching.Models.Dto
             Placements.HasValue
                 ? Placements.ToString()
                 : "At least 1";
-        public string StudentsDetail =>
-            (Placements.HasValue && Placements.Value == 1)
-                || PlacementsDetail == "At least 1"
-                ? "student"
-                : "students";
         public string Town { get; set; }
         public string Postcode { get; set; }
         public DateTime? ModifiedOn { get; set; }
+        private string StudentsDetail =>
+            (Placements.HasValue && Placements.Value == 1)
+            || PlacementsDetail == "At least 1"
+                ? "student"
+                : "students";
     }
 }

@@ -108,15 +108,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static string BuildOpportunityList(IEnumerable<EmployerFeedbackDto> employerFeedbackDtos)
         {
-            var opportunityListBuilder = new StringBuilder();
-            foreach (var employeeFeedback in employerFeedbackDtos)
-            {
-                opportunityListBuilder.AppendLine($"* {employeeFeedback.PlacementsDetail} x " +
-                                                  $"{employeeFeedback.JobRoleDetail} {employeeFeedback.StudentsDetail} at {employeeFeedback.Town} " +
-                                                  $"{employeeFeedback.Postcode} on {employeeFeedback.ModifiedOn:dd MMMM yyyy}");
-            }
+            var opportunityList = employerFeedbackDtos.Select(employeeFeedback => 
+                $"* {employeeFeedback.PlacementsDetail} x " + $"{employeeFeedback.JobRoleDetail} " +
+                $"at {employeeFeedback.Town} " + $"{employeeFeedback.Postcode} " +
+                $"on {employeeFeedback.ModifiedOn:dd MMMM yyyy}").ToList();
 
-            return opportunityListBuilder.ToString();
+            return string.Join("\r\n", opportunityList);
         }
     }
 }
