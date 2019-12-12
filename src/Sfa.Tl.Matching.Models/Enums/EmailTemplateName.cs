@@ -25,6 +25,7 @@ namespace Sfa.Tl.Matching.Models.Enums
         ProviderReferralV4,
         ProviderFeedback,
         EmployerAupaBlank,
-        EmailDeliveryStatus
+        EmailDeliveryStatus,
+        SecondaryProviderReferral
     }
 }

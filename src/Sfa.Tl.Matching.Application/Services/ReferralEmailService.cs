@@ -145,7 +145,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmailAsync(template, opportunityId, referral.OpportunityItemId, referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
+                        await SendEmailAsync(EmailTemplateName.SecondaryProviderReferral, opportunityId, referral.OpportunityItemId, referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
                     }
 
                     await CompleteSelectedReferralsAsync(opportunityId, referral.OpportunityItemId, username);
