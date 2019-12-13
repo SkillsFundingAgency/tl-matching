@@ -18,7 +18,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 {
-    public class When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails_With_Single_Employer
+    public class When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails_With_Multiple_Employers
         : IClassFixture<EmployerFeedbackFixture>
     {
         private readonly EmployerFeedbackFixture _testFixture;
@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly int _result;
 
-        public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails_With_Single_Employer(
+        public When_EmployerFeedbackService_Is_Called_To_Send_Employer_Feedback_Emails_With_Multiple_Employers(
             EmployerFeedbackFixture testFixture)
         {
             _testFixture = testFixture;
@@ -43,7 +43,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityRepository.GetReferralsForEmployerFeedbackAsync(Arg.Any<DateTime>())
-                .Returns(new EmployerFeedbackDtoListBuilder().Build());
+                .Returns(new EmployerFeedbackDtoListBuilder().AddAnotherEmployer()
+                    .Build());
 
             var bankHolidays = new BankHolidayListBuilder().Build().AsQueryable();
 
@@ -89,14 +90,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Expected_Tokens()
         {
-            const string expectedOpportunityList = "* 1 x Route student at Town CV1 2WT on 12 December 2019\r\n"
+            const string expectedOpportunityListForEmail1 = "* 1 x Route student at Town CV1 2WT on 12 December 2019\r\n"
                                                         + "* 3 x Job Role at Another Town CV2 3WT on 01 December 2019";
 
-            var expectedTokens = new Dictionary<string, string>
+            var expectedTokensForEmail1 = new Dictionary<string, string>
             {
                 { "employer_contact_name",  "Employer Contact" },
                 { "previous_month", "November" },
-                { "opportunity_list", expectedOpportunityList },
+                { "opportunity_list", expectedOpportunityListForEmail1 },
                 { "opportunity_item_id_1", "1" },
                 { "opportunity_item_id_2", "2" }
             };
@@ -107,14 +108,33 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                     Arg.Is<string>(templateName => templateName == EmailTemplateName.EmployerFeedbackV2.ToString()),
                     Arg.Is<string>(toAddress => toAddress == "employer.contact@employer.co.uk"),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokens)),
+                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokensForEmail1)),
+                    Arg.Is<string>(createdBy => createdBy == "TestUser"));
+
+            const string expectedOpportunityListForEmail2 = "* 3 x Another Job Role at Another Town CV1 4WT on 01 December 2019";
+
+            var expectedTokensForEmail2 = new Dictionary<string, string>
+            {
+                { "employer_contact_name",  "Another Employer Contact" },
+                { "previous_month", "November" },
+                { "opportunity_list", expectedOpportunityListForEmail2 },
+                { "opportunity_item_id_1", "3" }
+            };
+
+            _emailService
+                .Received(1)
+                .SendEmailAsync(null, null,
+                    Arg.Is<string>(templateName => templateName == EmailTemplateName.EmployerFeedbackV2.ToString()),
+                    Arg.Is<string>(toAddress => toAddress == "another.employer.contact@employer.co.uk"),
+                    Arg.Is<IDictionary<string, string>>(
+                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokensForEmail2)),
                     Arg.Is<string>(createdBy => createdBy == "TestUser"));
         }
 
         [Fact]
         public void Then_Result_Has_Expected_Value()
         {
-            _result.Should().Be(1);
+            _result.Should().Be(2);
         }
     }
 }
