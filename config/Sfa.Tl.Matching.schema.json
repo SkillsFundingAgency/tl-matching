@@ -85,15 +85,15 @@
       "type": "string",
       "environmentVariable": "CalendarJsonUrl"
     },
-    "EmployerFeedbackWorkingDayOfMonth": {
+    "EmployerFeedbackWorkingDayInMonth": {
       "type": "integer",
       "default": 10,
-      "environmentVariable": "EmployerFeedbackWorkingDayOfMonth"
+      "environmentVariable": "EmployerFeedbackWorkingDayInMonth"
     },
-    "ProviderFeedbackWorkingDayOfMonth": {
+    "ProviderFeedbackWorkingDayInMonth": {
       "type": "integer",
       "default": 10,
-      "environmentVariable": "ProviderFeedbackWorkingDayOfMonth"
+      "environmentVariable": "ProviderFeedbackWorkingDayInMonth"
     },
     "BlobStorageConnectionString": {
       "type": "string",
