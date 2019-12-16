@@ -87,12 +87,10 @@
     },
     "EmployerFeedbackWorkingDayInMonth": {
       "type": "integer",
-      "default": 10,
       "environmentVariable": "EmployerFeedbackWorkingDayInMonth"
     },
     "ProviderFeedbackWorkingDayInMonth": {
       "type": "integer",
-      "default": 10,
       "environmentVariable": "ProviderFeedbackWorkingDayInMonth"
     },
     "BlobStorageConnectionString": {
