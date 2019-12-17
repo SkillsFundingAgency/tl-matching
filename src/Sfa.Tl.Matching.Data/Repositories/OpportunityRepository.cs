@@ -339,12 +339,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     on r.ProviderVenueId equals pv.Id
                 join p in _dbContext.Provider
                     on pv.ProviderId equals p.Id
-                join pq in _dbContext.ProviderQualification 
-                    on pv.Id equals pq.ProviderVenueId
-                join qrm in _dbContext.QualificationRouteMapping
-                    on pq.Id equals qrm.QualificationId
                 join rt in _dbContext.Route
-                    on qrm.RouteId equals rt.Id
+                    on oi.RouteId equals rt.Id
                 where o.EmployerCrmId.HasValue
                       && oi.IsCompleted
                       && oi.ModifiedOn.HasValue
