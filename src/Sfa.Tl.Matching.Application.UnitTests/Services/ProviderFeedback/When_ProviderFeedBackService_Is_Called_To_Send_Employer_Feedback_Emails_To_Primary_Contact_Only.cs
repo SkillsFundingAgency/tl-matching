@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 "* Company\r\n"
                 + "for students studying test route 1 courses at Town AA1 1AA\r\n"
                 + "and for students studying test route 2 courses at Town AA1 1AA\r\n"
-                + "\r\n\r\n";
+                + "\r\n";
 
             var expectedTokens = new Dictionary<string, string>
             {

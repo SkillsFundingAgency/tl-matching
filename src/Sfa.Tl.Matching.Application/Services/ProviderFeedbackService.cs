@@ -129,9 +129,9 @@ namespace Sfa.Tl.Matching.Application.Services
                 var companyName = employer.Key;
                 employersList.AppendLine($"* {companyName}");
 
+                var hasFirstRouteBeenShown = false;
                 foreach (var venue in employer.Value)
                 {
-                    var hasFirstRouteBeenShown = false;
                     foreach (var route in venue.Routes.OrderBy(r => r))
                     {
                         if (hasFirstRouteBeenShown)
@@ -144,7 +144,7 @@ namespace Sfa.Tl.Matching.Application.Services
                             $"for students studying {route.ToLower()} courses at {venue.Town} {venue.Postcode}");
                     }
 
-                    employersList.AppendLine("");
+                    //employersList.AppendLine("");
                 }
 
                 employersList.AppendLine("");
