@@ -360,8 +360,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     p.SecondaryContact,
                     p.SecondaryContactEmail,
                     EmployerCompanyName = e.CompanyName,
-                    pv.Town,
-                    pv.Postcode,
+                    oi.Town,
+                    oi.Postcode,
                     RouteName = rt.Name
                 }).Distinct().ToListAsync();
 
