@@ -90,8 +90,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Expected_Tokens()
         {
-            const string expectedOpportunityListForEmail1 = "* 1 x Route student at Town CV1 2WT on 12 December 2019\r\n"
-                                                        + "* 3 x Job Role at Another Town CV2 3WT on 01 December 2019";
+            const string expectedOpportunityListForEmail1 = "* 1 x Route student at Town CV1 2WT on 12 December 2019\r\n" +
+                                                   "* 7 x And Another Route Again students at And Another Town Again CV7 7WT on 07 December 2019\r\n" +
+                                                   "* At least 1 x And Another Route Again 2 student at And Another Town Again 2 CV5 5WT on 05 December 2019\r\n" +
+                                                   "* At least 1 x Another Job Role at And Another Town CV3 4WT on 02 December 2019\r\n" +
+                                                   "* 3 x Job Role at Another Town CV2 3WT on 01 December 2019";
 
             var expectedTokensForEmail1 = new Dictionary<string, string>
             {
@@ -99,7 +102,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 { "previous_month", "November" },
                 { "opportunity_list", expectedOpportunityListForEmail1 },
                 { "opportunity_item_id_1", "1" },
-                { "opportunity_item_id_2", "2" }
+                { "opportunity_item_id_2", "4" },
+                { "opportunity_item_id_3", "5" },
+                { "opportunity_item_id_4", "3" },
+                { "opportunity_item_id_5", "2" }
             };
 
             _emailService
@@ -118,7 +124,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 { "employer_contact_name",  "Another Employer Contact" },
                 { "previous_month", "November" },
                 { "opportunity_list", expectedOpportunityListForEmail2 },
-                { "opportunity_item_id_1", "3" }
+                { "opportunity_item_id_1", "6" }
             };
 
             _emailService

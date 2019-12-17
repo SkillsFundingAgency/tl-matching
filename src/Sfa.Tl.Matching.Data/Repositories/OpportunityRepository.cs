@@ -313,6 +313,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     EmployerContactEmail = o.EmployerContactEmail,
                     JobRole = oi.JobRole,
                     Route = ro.Name,
+                    PlacementsKnown = oi.PlacementsKnown,
                     Placements = oi.Placements,
                     ModifiedOn = oi.ModifiedOn,
                     Town = pv.Town,

@@ -15,16 +15,17 @@ namespace Sfa.Tl.Matching.Models.Dto
                 : JobRole;
         public string Route { get; set; }
         public int? Placements { get; set; }
+        public bool? PlacementsKnown { get; set; }
         public string PlacementsDetail =>
-            Placements.HasValue
+            PlacementsKnown.GetValueOrDefault()
                 ? Placements.ToString()
                 : "At least 1";
         public string Town { get; set; }
         public string Postcode { get; set; }
         public DateTime? ModifiedOn { get; set; }
         private string StudentsDetail =>
-            (Placements.HasValue && Placements.Value == 1)
-            || PlacementsDetail == "At least 1"
+            PlacementsDetail == "At least 1" 
+            || (PlacementsKnown.GetValueOrDefault() && Placements.HasValue && Placements.Value == 1)
                 ? "student"
                 : "students";
     }
