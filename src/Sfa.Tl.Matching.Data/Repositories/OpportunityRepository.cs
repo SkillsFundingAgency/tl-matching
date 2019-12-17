@@ -316,8 +316,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     PlacementsKnown = oi.PlacementsKnown,
                     Placements = oi.Placements,
                     ModifiedOn = oi.ModifiedOn,
-                    Town = pv.Town,
-                    Postcode = pv.Postcode
+                    Town = oi.Town,
+                    Postcode = oi.Postcode
                 }).ToListAsync();
 
             return dto;
@@ -360,8 +360,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     p.SecondaryContact,
                     p.SecondaryContactEmail,
                     EmployerCompanyName = e.CompanyName,
-                    oi.Town,
-                    oi.Postcode,
+                    pv.Town,
+                    pv.Postcode,
                     RouteName = rt.Name
                 }).Distinct().ToListAsync();
 
