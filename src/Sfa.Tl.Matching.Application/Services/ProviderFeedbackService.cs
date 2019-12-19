@@ -81,18 +81,15 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     numberOfEmailsSent += await SendEmailsAsync(provider.PrimaryContactEmail, tokens, userName);
 
-                    if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail))
+                    if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
+                        && provider.SecondaryContactEmail != provider.PrimaryContactEmail)
                     {
                         var primaryContactEmailDetails = new StringBuilder();
-
-                        if (provider.SecondaryContactEmail != provider.PrimaryContactEmail)
-                        {
-                            primaryContactEmailDetails.Append("We also sent this email to ");
-                            primaryContactEmailDetails.Append($"{provider.PrimaryContact} ");
-                            primaryContactEmailDetails.Append(
-                                $"who we have as {provider.ProviderDisplayName}’s primary contact for industry placements. ");
-                            primaryContactEmailDetails.AppendLine("Please coordinate your response with them.");
-                        }
+                        primaryContactEmailDetails.Append("We also sent this email to ");
+                        primaryContactEmailDetails.Append($"{provider.PrimaryContact} ");
+                        primaryContactEmailDetails.Append(
+                            $"who we have as {provider.ProviderDisplayName}’s primary contact for industry placements. ");
+                        primaryContactEmailDetails.AppendLine("Please coordinate your response with them.");
 
                         tokens["contact_name"] = provider.SecondaryContact;
                         tokens["other_email_details"] = primaryContactEmailDetails.ToString();
@@ -143,12 +140,16 @@ namespace Sfa.Tl.Matching.Application.Services
                         employersList.AppendLine(
                             $"for students studying {route.ToLower()} courses at {venue.Town} {venue.Postcode}");
                     }
-
-                    //employersList.AppendLine("");
                 }
 
                 employersList.AppendLine("");
             }
+
+            var contact = provider.SecondaryContactEmail == provider.PrimaryContactEmail
+                      && !string.IsNullOrWhiteSpace(provider.SecondaryContact)
+                      && provider.SecondaryContact != provider.PrimaryContact
+                ? $"{provider.PrimaryContact} or {provider.SecondaryContact}"
+                : provider.PrimaryContact;
 
             var otherEmailDetails = new StringBuilder();
             if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
@@ -163,12 +164,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var tokens = new Dictionary<string, string>
             {
-                {"contact_name", provider.PrimaryContact},
+                {"contact_name", contact},
                 {"previous_month", previousMonth},
                 {"provider_name", provider.ProviderDisplayName},
                 {"employers_list", employersList.ToString()},
                 {"other_email_details", otherEmailDetails.ToString()},
             };
+
             return tokens;
         }
 
