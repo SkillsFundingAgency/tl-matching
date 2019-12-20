@@ -91,7 +91,7 @@ namespace Sfa.Tl.Matching.Application.Services
                             $"who we have as {provider.ProviderDisplayName}’s primary contact for industry placements. ");
                         primaryContactEmailDetails.AppendLine("Please coordinate your response with them.");
 
-                        tokens["contact_name"] = provider.SecondaryContact;
+                        tokens["contact_name"] = provider.SecondaryContact?.Trim();
                         tokens["other_email_details"] = primaryContactEmailDetails.ToString();
 
                         numberOfEmailsSent += await SendEmailsAsync(provider.SecondaryContactEmail, tokens, userName);
@@ -145,11 +145,14 @@ namespace Sfa.Tl.Matching.Application.Services
                 employersList.AppendLine("");
             }
 
-            var contact = provider.SecondaryContactEmail == provider.PrimaryContactEmail
-                      && !string.IsNullOrWhiteSpace(provider.SecondaryContact)
-                      && provider.SecondaryContact != provider.PrimaryContact
-                ? $"{provider.PrimaryContact} or {provider.SecondaryContact}"
-                : provider.PrimaryContact;
+            var primaryContactName = provider.PrimaryContact?.Trim();
+            var secondaryContactName = provider.SecondaryContact?.Trim();
+
+            var contactName = provider.SecondaryContactEmail == provider.PrimaryContactEmail
+                      && !string.IsNullOrWhiteSpace(secondaryContactName)
+                      && secondaryContactName != primaryContactName
+                ? $"{primaryContactName} or {secondaryContactName}"
+                : primaryContactName;
 
             var otherEmailDetails = new StringBuilder();
             if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
@@ -164,7 +167,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var tokens = new Dictionary<string, string>
             {
-                {"contact_name", contact},
+                {"contact_name", contactName},
                 {"previous_month", previousMonth},
                 {"provider_name", provider.ProviderDisplayName},
                 {"employers_list", employersList.ToString()},
