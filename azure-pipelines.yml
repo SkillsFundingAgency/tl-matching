@@ -11,7 +11,7 @@ jobs:
 - job: 'CodeBuild'
   pool:
       name: 'Azure Pipelines'
-      vmImage: 'ubuntu-16.04'
+      vmImage: 'windows-2019'
   workspace:
     clean: all
   steps:
@@ -98,7 +98,7 @@ jobs:
 - job: 'DACPACBuild'
   pool:
       name: 'Azure Pipelines'
-      vmImage: 'ubuntu-16.04'
+      vmImage: 'windows-2019'
   workspace:
     clean: all
   steps:
