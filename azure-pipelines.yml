@@ -10,7 +10,8 @@ variables:
 jobs:
 - job: 'CodeBuild'
   pool:
-    name: 'Continuous Integration 02 - SSD - 160ACU'
+      name: 'Azure Pipelines'
+      vmImage: 'ubuntu-16.04'
   workspace:
     clean: all
   steps:
@@ -96,7 +97,8 @@ jobs:
 
 - job: 'DACPACBuild'
   pool:
-    name: 'Continuous Integration 02 - SSD - 160ACU'
+      name: 'Azure Pipelines'
+      vmImage: 'ubuntu-16.04'
   workspace:
     clean: all
   steps:
