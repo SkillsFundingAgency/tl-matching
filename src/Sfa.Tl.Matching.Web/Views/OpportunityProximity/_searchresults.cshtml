@@ -37,7 +37,7 @@
                                     <span id="tl-provider" class="tl-search-results-flag">T level provider</span>
                                 }
 
-                                @if (searchResult.ProviderVenueName == searchResult.ProviderVenuePostcode)
+                                @if (string.Compare(searchResult.ProviderVenueName, searchResult.ProviderVenuePostcode, StringComparison.InvariantCultureIgnoreCase) == 0)
                                 {
                                     @searchResult.ProviderDisplayName
                                     <ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
@@ -74,7 +74,7 @@
                 </li>
             }
         </ol>
-        
+
         <p class="govuk-body">
             <a asp-route="SaveProvisionGap"
                asp-route-SearchResultProviderCount="@Model.SearchResults.SearchResultProviderCount"

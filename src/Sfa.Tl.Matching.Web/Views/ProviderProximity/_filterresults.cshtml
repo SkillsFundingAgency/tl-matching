@@ -25,7 +25,7 @@
             <span id="tl-provider" class="tl-search-results-flag">T level provider</span>
         }
 
-        @if (searchResult.ProviderVenueName == searchResult.ProviderVenuePostcode)
+        @if (string.Compare(searchResult.ProviderVenueName, searchResult.ProviderVenuePostcode, StringComparison.InvariantCultureIgnoreCase) == 0)
         {
             <h2 class="govuk-heading-m govuk-!-margin-bottom-1">@searchResult.ProviderDisplayName</h2>
             <ul id="tl-venue-detail-list" class="tl-inline-list tl-inline-list--bar govuk-!-margin-top-1">
