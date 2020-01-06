@@ -13,6 +13,9 @@
 		oi.Placements,
 		oi.JobRole,
 		rt.[Name] as RouteName,
+		pg.NoSuitableStudent, 
+		pg.HadBadExperience, 
+		pg.ProvidersTooFarAway, 
 		oi.CreatedBy AS Username,
 		oi.CreatedOn,
 		oi.ModifiedOn
@@ -20,5 +23,6 @@
 		INNER JOIN OpportunityItem as oi on o.Id = oi.OpportunityId
 		INNER JOIN [Route] as rt on rt.Id = oi.RouteId
 		LEFT JOIN Employer as e on  e.CrmId = o.EmployerCrmId
+		LEFT JOIN ProvisionGap as pg on oi.Id = pg.OpportunityItemId
 	WHERE 
 		oi.IsSaved = 1

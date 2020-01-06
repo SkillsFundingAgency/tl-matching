@@ -17,6 +17,9 @@ namespace Sfa.Tl.Matching.Domain.Models
         public int? Placements { get; set; }
         public string JobRole { get; set; }
         public string RouteName { get; set; }
+        public bool? NoSuitableStudent { get; set; }
+        public bool? HadBadExperience { get; set; }
+        public bool? ProvidersTooFarAway { get; set; }
         public string UserName { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public DateTime? CreatedOn { get; set; }
