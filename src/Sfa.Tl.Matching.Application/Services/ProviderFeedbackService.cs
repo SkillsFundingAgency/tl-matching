@@ -44,10 +44,11 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 var numberOfEmailsSent = 0;
 
-                if (!IsNthWorkingDay(_configuration.ProviderFeedbackWorkingDayInMonth))
+                if (!_configuration.ProviderFeedbackEmailsEnabled 
+                    || !IsNthWorkingDay(_configuration.ProviderFeedbackWorkingDayInMonth))
                 {
                     _logger.LogInformation(
-                        "Provider feedback service exited because today is not a valid day for processing.");
+                        "Provider feedback service exited because emails not enabled or today is not a valid day for processing.");
                     return numberOfEmailsSent;
                 }
 

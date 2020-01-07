@@ -15,6 +15,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
         {
             Configuration = new MatchingConfiguration
             {
+                EmployerFeedbackEmailsEnabled = true,
                 EmployerFeedbackWorkingDayInMonth = 10,
                 SendEmailEnabled = true
             };

@@ -27,6 +27,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         {
             Configuration = new MatchingConfiguration
             {
+                ProviderFeedbackEmailsEnabled = true,
                 ProviderFeedbackWorkingDayInMonth = 10,
                 SendEmailEnabled = true
             };
@@ -50,7 +51,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             var mockContext = Substitute.For<MatchingDbContext>(contextOptions);
             mockContext.Set<BankHoliday>().Returns(mockSet);
 
-            //IRepository<BankHoliday> 
             BankHolidayRepository =
                 new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
 

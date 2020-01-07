@@ -41,7 +41,8 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             try
             {
-                if (!IsNthWorkingDay(_configuration.EmployerFeedbackWorkingDayInMonth))
+                if (!_configuration.EmployerFeedbackEmailsEnabled
+                    || !IsNthWorkingDay(_configuration.EmployerFeedbackWorkingDayInMonth))
                 {
                     _logger.LogInformation("Employer feedback service exited because today is not a valid day for processing.");
                     return 0;

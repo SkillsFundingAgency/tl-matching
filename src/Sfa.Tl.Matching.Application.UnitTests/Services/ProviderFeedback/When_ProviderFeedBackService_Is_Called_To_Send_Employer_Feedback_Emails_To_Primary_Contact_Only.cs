@@ -36,8 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Returns(new DateTime(2019, 12, 13));
 
             _emailService = Substitute.For<IEmailService>();
-
-
+            
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
 
             _opportunityRepository
