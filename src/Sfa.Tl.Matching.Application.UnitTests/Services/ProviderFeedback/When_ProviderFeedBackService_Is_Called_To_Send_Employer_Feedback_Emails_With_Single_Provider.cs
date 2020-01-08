@@ -39,7 +39,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
             _emailService
                 .When(x => x.SendEmailAsync(Arg.Any<int?>(),
-                    Arg.Any<int?>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),

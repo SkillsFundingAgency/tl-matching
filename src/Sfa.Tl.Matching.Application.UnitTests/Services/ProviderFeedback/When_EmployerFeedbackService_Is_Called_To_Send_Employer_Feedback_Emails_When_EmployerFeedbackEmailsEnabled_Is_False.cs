@@ -85,7 +85,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         {
             _emailService
                  .DidNotReceive()
-                 .SendEmailAsync(Arg.Any<int>(), Arg.Any<int>(),
+                 .SendEmailAsync(Arg.Any<int>(), 
                      Arg.Any<string>(),
                      Arg.Any<string>(),
                      Arg.Any<IDictionary<string, string>>(),
