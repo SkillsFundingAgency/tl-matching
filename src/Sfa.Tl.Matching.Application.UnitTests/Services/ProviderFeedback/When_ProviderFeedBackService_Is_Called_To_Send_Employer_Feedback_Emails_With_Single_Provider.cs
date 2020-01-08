@@ -20,6 +20,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly int _result;
+        private readonly IDictionary<string, string> _otherEmails = new Dictionary<string, string>();
 
         public When_ProviderFeedBackService_Is_Called_To_Send_Employer_Feedback_Emails_With_Single_Provider(
             ProviderFeedbackFixture testFixture)
@@ -35,6 +36,23 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Returns(new DateTime(2019, 12, 13));
 
             _emailService = Substitute.For<IEmailService>();
+
+            _emailService
+                .When(x => x.SendEmailAsync(Arg.Any<int?>(),
+                    Arg.Any<int?>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>()))
+                .Do(x =>
+                {
+                    var address = x.ArgAt<string>(3);
+                    var tokens = x.Arg<Dictionary<string, string>>();
+                    if (tokens.TryGetValue("other_email_details", out var contact))
+                    {
+                        _otherEmails[address] = contact;
+                    }
+                });
 
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             
@@ -97,6 +115,31 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Is<string>(createdBy => createdBy == "TestUser"));
+        }
+        
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Expected_Other_Emails_Tokens_For_Primary_Contact()
+        {
+            var expected = "We also sent this email to " +
+                           "Provider Secondary Contact " +
+                           "who we have as Provider display name’s " +
+                           "secondary contact for industry placements. " +
+                           "Please coordinate your response with them.\r\n";
+            _otherEmails.Should().ContainKey("primary.contact@provider.co.uk");
+            _otherEmails["primary.contact@provider.co.uk"].Should().Be(expected);
+        }
+        
+        [Fact]
+        public void Then_EmailService_SendEmail_Is_Called_With_Expected_Other_Emails_Tokens_For_Secondary_Contact()
+        {
+            var expected = "We also sent this email to " +
+                           "Provider Contact " +
+                           "who we have as Provider display name’s " +
+                           "primary contact for industry placements. " +
+                           "Please coordinate your response with them.\r\n";
+
+            _otherEmails.Should().ContainKey("secondary.contact@provider.co.uk");
+            _otherEmails["secondary.contact@provider.co.uk"].Should().Be(expected);
         }
 
         [Fact]

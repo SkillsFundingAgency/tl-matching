@@ -72,7 +72,7 @@ namespace Sfa.Tl.Matching.Application.Services
                         && provider.SecondaryContactEmail != provider.PrimaryContactEmail)
                     {
                         secondaryContactEmailDetails.Append("We also sent this email to ");
-                        secondaryContactEmailDetails.Append($"{provider.SecondaryContactEmail} ");
+                        secondaryContactEmailDetails.Append($"{provider.SecondaryContact} ");
                         secondaryContactEmailDetails.Append(
                             $"who we have as {provider.ProviderDisplayName}’s secondary contact for industry placements. ");
                         secondaryContactEmailDetails.AppendLine("Please coordinate your response with them.");
