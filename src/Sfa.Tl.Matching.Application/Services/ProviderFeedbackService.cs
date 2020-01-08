@@ -68,8 +68,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     var secondaryContactEmailDetails = new StringBuilder();
 
-                    if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
-                        && provider.SecondaryContactEmail != provider.PrimaryContactEmail)
+                    if (ShouldSendSecondaryEmail(provider))
                     {
                         secondaryContactEmailDetails.Append("We also sent this email to ");
                         secondaryContactEmailDetails.Append($"{provider.SecondaryContact} ");
@@ -82,8 +81,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     numberOfEmailsSent += await SendEmailsAsync(provider.PrimaryContactEmail, tokens, userName);
 
-                    if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
-                        && provider.SecondaryContactEmail != provider.PrimaryContactEmail)
+                    if (ShouldSendSecondaryEmail(provider))
                     {
                         var primaryContactEmailDetails = new StringBuilder();
                         primaryContactEmailDetails.Append("We also sent this email to ");
@@ -156,8 +154,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 : primaryContactName;
 
             var otherEmailDetails = new StringBuilder();
-            if (!string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
-                && provider.SecondaryContactEmail != provider.PrimaryContactEmail)
+            if (ShouldSendSecondaryEmail(provider))
             {
                 otherEmailDetails.Append("We also sent this email to ");
                 otherEmailDetails.Append($"{provider.SecondaryContactEmail} ");
@@ -198,6 +195,13 @@ namespace Sfa.Tl.Matching.Application.Services
                 .ToList();
 
             return today == _dateTimeProvider.GetNthWorkingDayDate(today, workingDay, holidays);
+        }
+
+        public static bool ShouldSendSecondaryEmail(ProviderFeedbackDto provider)
+        {
+            return !string.IsNullOrWhiteSpace(provider.SecondaryContactEmail)
+                   && !string.IsNullOrWhiteSpace(provider.SecondaryContact)
+                   && provider.SecondaryContactEmail != provider.PrimaryContactEmail;
         }
     }
 }
