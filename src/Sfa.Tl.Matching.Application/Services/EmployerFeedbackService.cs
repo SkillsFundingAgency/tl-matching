@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 {
                     var tokens = CreateTokens(value, previousMonth);
 
-                    await _emailService.SendEmailAsync(null, null,
+                    await _emailService.SendEmailAsync(null,
                         EmailTemplateName.EmployerFeedbackV2.ToString(),
                         value.First().EmployerContactEmail,
                         tokens,
