@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                     Arg.Any<string>()))
                 .Do(x =>
                 {
-                    var address = x.ArgAt<string>(3);
+                    var address = x.ArgAt<string>(2);
                     var tokens = x.Arg<Dictionary<string, string>>();
                     if (tokens.TryGetValue("other_email_details", out var contact))
                     {
