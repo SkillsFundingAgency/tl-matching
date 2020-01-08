@@ -85,9 +85,17 @@
       "type": "string",
       "environmentVariable": "CalendarJsonUrl"
     },
+    "EmployerFeedbackEmailsEnabled": {
+      "type": "boolean",
+      "environmentVariable": "EmployerFeedbackEmailsEnabled"
+    },
     "EmployerFeedbackWorkingDayInMonth": {
       "type": "integer",
       "environmentVariable": "EmployerFeedbackWorkingDayInMonth"
+    },
+    "ProviderFeedbackEmailsEnabled": {
+      "type": "boolean",
+      "environmentVariable": "ProviderFeedbackEmailsEnabled"
     },
     "ProviderFeedbackWorkingDayInMonth": {
       "type": "integer",
