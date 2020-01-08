@@ -157,7 +157,7 @@ namespace Sfa.Tl.Matching.Application.Services
             IDictionary<string, string> tokens, 
             string createdBy)
         {
-            await _emailService.SendEmailAsync(opportunityId, null, template.ToString(),
+            await _emailService.SendEmailAsync(opportunityId, template.ToString(),
                     toAddress,
                     tokens, createdBy);
         }

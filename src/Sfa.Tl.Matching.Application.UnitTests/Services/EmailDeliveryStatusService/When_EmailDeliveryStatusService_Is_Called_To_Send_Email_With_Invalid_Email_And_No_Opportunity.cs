@@ -42,7 +42,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 {
                     NotificationId = _notificationId,
                     OpportunityId = null,
-                    OpportunityItemId = null,
                     SentTo = "sent-to@email.com",
                     Status = "permanent-failure",
                     EmailTemplateId = 11,
@@ -88,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         [Fact]
         public void Then_EmailService_SendEmailAsync_Is_Called_Exactly_Once()
         {
-            _emailService.Received(1).SendEmailAsync(null, null,
+            _emailService.Received(1).SendEmailAsync(null,
                 EmailTemplateName.EmailDeliveryStatus.ToString(),
                 SupportEmailAddress,
                 Arg.Is<IDictionary<string, string>>(tokens =>

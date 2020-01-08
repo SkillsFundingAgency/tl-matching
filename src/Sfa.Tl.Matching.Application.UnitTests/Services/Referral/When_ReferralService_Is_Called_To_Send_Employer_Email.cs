@@ -70,8 +70,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<int?>(), 
-                    Arg.Is<string>(
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
                         templateName => templateName == "EmployerReferralV4"),
                     Arg.Is<string>(
                         toAddress => toAddress == "employer.contact@employer.co.uk"),
@@ -84,8 +83,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<int?>(), 
-                    Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("employer_contact_name")
@@ -112,8 +110,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<int?>(), 
-                    Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Is<IDictionary<string, string>>(
                         tokens => tokens.ContainsKey("placements_list")

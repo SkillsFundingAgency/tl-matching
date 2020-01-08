@@ -38,8 +38,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _logger = logger;
         }
 
-        public async Task SendEmailAsync(int? opportunityId, int? opportunityItemId, string templateName,
-            string toAddress, IDictionary<string, string> personalisationTokens, string createdBy)
+        public async Task SendEmailAsync(int? opportunityId, string templateName, string toAddress, IDictionary<string, string> personalisationTokens, string createdBy)
         {
             if (!_configuration.SendEmailEnabled)
             {
@@ -55,7 +54,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             _logger.LogInformation($"Sending {templateName} email to {toAddress}");
 
-            await SendEmailAndSaveHistoryAsync(opportunityId, opportunityItemId, toAddress, emailTemplate, personalisationTokens, createdBy);
+            await SendEmailAndSaveHistoryAsync(opportunityId, toAddress, emailTemplate, personalisationTokens, createdBy);
         }
 
         public async Task<EmailDeliveryStatusDto> GetEmailBodyFromNotifyClientAsync(Guid notificationId)
@@ -95,7 +94,7 @@ namespace Sfa.Tl.Matching.Application.Services
             return 1;
         }
 
-        private async Task SendEmailAndSaveHistoryAsync(int? opportunityId, int? opportunityItemId, string recipient, EmailTemplate emailTemplate,
+        private async Task SendEmailAndSaveHistoryAsync(int? opportunityId, string recipient, EmailTemplate emailTemplate,
             IDictionary<string, string> personalisationTokens, string createdBy)
         {
             try
@@ -107,7 +106,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 Guid.TryParse(emailresponse.id, out var notificationId);
 
-                await SaveEmailHistoryAsync(notificationId, emailTemplate.Id, personalisationTokens, opportunityId, opportunityItemId,
+                await SaveEmailHistoryAsync(notificationId, emailTemplate.Id, personalisationTokens, opportunityId,
                     recipient, createdBy);
             }
             catch (Exception ex)
@@ -118,7 +117,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task SaveEmailHistoryAsync(Guid notificatonId, int emailTemplateId,
             IDictionary<string, string> tokens,
-            int? opportunityId, int? opportunityItemId, string emailAddress, string createdBy)
+            int? opportunityId, string emailAddress, string createdBy)
         {
             var placeholders = ConvertTokensToEmailPlaceholderDtos(tokens, createdBy);
 
@@ -130,7 +129,6 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 NotificationId = notificatonId,
                 OpportunityId = opportunityId,
-                OpportunityItemId = opportunityItemId,
                 EmailTemplateId = emailTemplateId,
                 EmailPlaceholder = emailPlaceholders,
                 SentTo = emailAddress,

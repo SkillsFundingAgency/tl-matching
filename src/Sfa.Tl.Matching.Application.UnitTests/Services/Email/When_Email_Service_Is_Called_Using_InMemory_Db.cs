@@ -58,12 +58,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
             await DataBuilder.SetEmailTemplate(dbContext, emailTemplate);
-
-            var oppItems = opportunity.OpportunityItem.Where(item => item.OpportunityId == opportunity.Id).Select(item => item.Id);
-
-
             //Act
-            await sut.SendEmailAsync(opportunity.Id, oppItems.FirstOrDefault(), emailTemplate.TemplateName, "test@test.com", tokens, "System");
+            await sut.SendEmailAsync(opportunity.Id, emailTemplate.TemplateName, "test@test.com", tokens, "System");
 
             //Assert
             Guid.TryParse(emailNotificationResponse.id, out var notificationId);
@@ -111,11 +107,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
             await DataBuilder.SetEmailTemplate(dbContext, emailTemplate);
 
-            var oppItems = opportunity.OpportunityItem.Where(item => item.OpportunityId == opportunity.Id).Select(item => item.Id);
-
-
             //Act
-            await sut.SendEmailAsync(opportunity.Id, oppItems.FirstOrDefault(), "", "test@test.com", tokens, "System");
+            await sut.SendEmailAsync(opportunity.Id, "", "test@test.com", tokens, "System");
 
             //Assert
             Guid.TryParse(emailNotificationResponse.id, out var notificationId);
@@ -207,10 +200,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
             await DataBuilder.SetEmailTemplate(dbContext, emailTemplate);
-            var oppItems = opportunity.OpportunityItem.Where(item => item.OpportunityId == opportunity.Id).Select(item => item.Id);
 
             //Act
-            await sut.SendEmailAsync(opportunity.Id, oppItems.FirstOrDefault(), emailTemplate.TemplateName, "test@test.com", tokens, "System");
+            await sut.SendEmailAsync(opportunity.Id, emailTemplate.TemplateName, "test@test.com", tokens, "System");
             
             //Assert
             var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
@@ -281,10 +273,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
             await DataBuilder.SetEmailTemplate(dbContext, emailTemplate);
-            var oppItems = opportunity.OpportunityItem.Where(item => item.OpportunityId == opportunity.Id).Select(item => item.Id);
 
             //Act
-            await sut.SendEmailAsync(opportunity.Id, oppItems.FirstOrDefault(), emailTemplate.TemplateName, "test@test.com", tokens, "System");
+            await sut.SendEmailAsync(opportunity.Id, emailTemplate.TemplateName, "test@test.com", tokens, "System");
 
             //Assert
             var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
