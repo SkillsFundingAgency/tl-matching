@@ -180,7 +180,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task<int> SendEmailsAsync(string toAddress, IDictionary<string, string> tokens, string userName)
         {
-            await _emailService.SendEmailAsync(null, null,
+            await _emailService.SendEmailAsync(null,
                 EmailTemplateName.ProviderFeedbackV2.ToString(),
                 toAddress,
                 tokens,

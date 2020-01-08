@@ -109,7 +109,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(null, null,
+                .SendEmailAsync(null,
                     Arg.Is<string>(templateName => templateName == EmailTemplateName.EmployerFeedbackV2.ToString()),
                     Arg.Is<string>(toAddress => toAddress == "employer.contact@employer.co.uk"),
                     Arg.Is<IDictionary<string, string>>(

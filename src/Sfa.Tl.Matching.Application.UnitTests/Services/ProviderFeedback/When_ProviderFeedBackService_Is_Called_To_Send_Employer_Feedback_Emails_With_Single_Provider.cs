@@ -109,9 +109,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _emailService
                 .Received(2)
                 .SendEmailAsync(Arg.Any<int?>(),
-                    Arg.Any<int?>(),
                     Arg.Is<string>(
-                        templateName => templateName == "ProviderFeedbackV2"),
+                    templateName => templateName == "ProviderFeedbackV2"),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Is<string>(createdBy => createdBy == "TestUser"));

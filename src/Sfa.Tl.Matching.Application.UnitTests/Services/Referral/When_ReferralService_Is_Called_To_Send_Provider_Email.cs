@@ -82,27 +82,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_Exactly_Once_With_ProviderReferral_Template()
+        public void Then_EmailService_SendEmail_Is_Called_Exactly_Twice_With_Expected_Parameters()
         {
             _emailService
-                .Received(1)
+                .Received(2)
                 .SendEmailAsync(Arg.Any<int?>(),
                     Arg.Is<string>(
                         templateName => templateName == "ProviderReferralV4"),
-                    Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Any<string>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_Exactly_Once_With_SecondaryProviderReferral_Template()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(),
-                    Arg.Any<int?>(),
-                    Arg.Is<string>(
-                        templateName => templateName == "SecondaryProviderReferral"),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Any<string>());
