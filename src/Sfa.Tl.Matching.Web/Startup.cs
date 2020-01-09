@@ -26,7 +26,6 @@ using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.SearchProviders;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
@@ -235,7 +234,6 @@ namespace Sfa.Tl.Matching.Web
         {
             services.AddHttpClient<ILocationApiClient, LocationApiClient>();
             services.AddHttpClient<IGoogleMapApiClient, GoogleMapApiClient>();
-            services.AddHttpClient<IGoogleDistanceMatrixApiClient, GoogleDistanceMatrixApiClient>();
         }
 
         private static void RegisterRepositories(IServiceCollection services)
