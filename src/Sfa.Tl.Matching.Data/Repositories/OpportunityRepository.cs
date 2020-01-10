@@ -289,7 +289,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime dateToSearch)
         {
             var firstDayOfMonth = new DateTime(dateToSearch.Year, dateToSearch.Month, 1, 0, 0, 0);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+            var firstDayOfFollowingMonth = firstDayOfMonth.AddMonths(1);
 
             var dto = await (from o in _dbContext.Opportunity
                 join oi in _dbContext.OpportunityItem
@@ -299,7 +299,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 where o.EmployerCrmId.HasValue 
                       && oi.IsCompleted
                       && oi.ModifiedOn.HasValue
-                      && (oi.ModifiedOn.Value >= firstDayOfMonth && oi.ModifiedOn.Value <= lastDayOfMonth)
+                      && (oi.ModifiedOn.Value >= firstDayOfMonth && oi.ModifiedOn.Value < firstDayOfFollowingMonth)
                       && oi.OpportunityType == OpportunityType.Referral.ToString()
                 select new EmployerFeedbackDto
                 {
@@ -322,7 +322,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public async Task<IList<ProviderFeedbackDto>> GetReferralsForProviderFeedbackAsync(DateTime dateToSearch)
         {
             var firstDayOfMonth = new DateTime(dateToSearch.Year, dateToSearch.Month, 1, 0, 0, 0);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddSeconds(-1);
+            var firstDayOfFollowingMonth = firstDayOfMonth.AddMonths(1);
             
             var allResults = await (from o in _dbContext.Opportunity
                 join oi in _dbContext.OpportunityItem
@@ -340,7 +340,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 where o.EmployerCrmId.HasValue
                       && oi.IsCompleted
                       && oi.ModifiedOn.HasValue
-                      && (oi.ModifiedOn.Value >= firstDayOfMonth && oi.ModifiedOn.Value <= lastDayOfMonth)
+                      && (oi.ModifiedOn.Value >= firstDayOfMonth && oi.ModifiedOn.Value < firstDayOfFollowingMonth)
                       && oi.OpportunityType == OpportunityType.Referral.ToString()
                 select new
                 {
