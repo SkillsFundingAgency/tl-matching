@@ -139,6 +139,7 @@ namespace Sfa.Tl.Matching.Application.Services
             "get-back-link",
             "404",
             "employer-search",
+            "saved-opportunities",
             "download-opportunity",
             "remove-opportunityItem",
             "provisiongap-opportunities",
