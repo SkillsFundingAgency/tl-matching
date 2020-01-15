@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -13,7 +14,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
     public class GenericRepository<T> : IRepository<T> where T : BaseEntity, new()
     {
         private readonly ILogger _logger;
-        
+
         // ReSharper disable InconsistentNaming
         protected readonly MatchingDbContext _dbContext;
 
@@ -77,11 +78,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             if (entities.Count == 0) return;
 
-            _dbContext.UpdateRange(entities);
-
             try
             {
-                await _dbContext.SaveChangesAsync();
+                await _dbContext.BulkUpdateAsync(entities);
             }
             catch (DbUpdateException due)
             {
@@ -106,20 +105,24 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public virtual async Task UpdateManyWithSpecifedColumnsOnlyAsync(IList<T> entities,
-            params Expression<Func<T, object>>[] properties)
+        public virtual async Task UpdateManyWithSpecifedColumnsOnlyAsync(IList<T> entities, params Expression<Func<T, object>>[] properties)
         {
-            foreach (var entity in entities)
-            {
-                foreach (var property in properties)
-                {
-                    _dbContext.Entry(entity).Property(property).IsModified = true;
-                }
-            }
-
             try
             {
-                await _dbContext.SaveChangesAsync();
+                var propList = properties.Select(pro =>
+                {
+                    switch (pro.Body)
+                    {
+                        case UnaryExpression expression:
+                            return ((MemberExpression)expression.Operand).Member.Name;
+                        case MemberExpression expression1:
+                            return expression1.Member.Name;
+                        default:
+                            throw new InvalidOperationException("unable to extract PropertyName for Bulk Update");
+                    }
+                }).ToList();
+ 
+                await _dbContext.BulkUpdateAsync(entities, config => config.PropertiesToInclude = propList);
             }
             catch (DbUpdateException due)
             {
@@ -170,7 +173,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         public virtual async Task DeleteManyAsync(IList<T> entities)
         {
             if (entities.Count == 0) return;
-             
+
             _dbContext.RemoveRange(entities);
 
             try

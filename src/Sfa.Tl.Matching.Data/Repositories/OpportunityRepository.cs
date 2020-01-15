@@ -127,52 +127,55 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<OpportunityBasketViewModel> GetOpportunityBasketAsync(int opportunityId)
         {
-            var opportunityBasket = await (from o in _dbContext.Opportunity
-                                           join e in _dbContext.Employer
-                                               on o.EmployerCrmId equals e.CrmId
-                                           where o.Id == opportunityId
-                                           select new OpportunityBasketViewModel
-                                           {
-                                               OpportunityId = o.Id,
-                                               CompanyName = e.CompanyName,
-                                               CompanyNameAka = e.AlsoKnownAs,
-                                               ProvisionGapItems = o.OpportunityItem
-                                                   .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString() &&
-                                                                oi.IsSaved && !oi.IsCompleted)
-                                                   .Select(oi => new BasketProvisionGapItemViewModel
-                                                   {
-                                                       OpportunityItemId = oi.Id,
-                                                       JobRole = oi.JobRole,
-                                                       Placements = oi.Placements,
-                                                       PlacementsKnown = oi.PlacementsKnown,
-                                                       Workplace = $"{oi.Town} {oi.Postcode}",
-                                                       Reason = GetReasons(oi.ProvisionGap),
-                                                       OpportunityType = oi.OpportunityType
-                                                   }).ToList(),
-                                               ReferralItems = o.OpportunityItem
-                                                   .Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString() &&
-                                                                oi.IsSaved && !oi.IsCompleted)
-                                                   .Select(oi => new BasketReferralItemViewModel
-                                                   {
-                                                       OpportunityItemId = oi.Id,
-                                                       JobRole = oi.JobRole,
-                                                       Workplace = $"{oi.Town} {oi.Postcode}",
-                                                       PlacementsKnown = oi.PlacementsKnown,
-                                                       Placements = oi.Placements,
-                                                       ProviderNames = (from r in oi.Referral
-                                                                        join pv in _dbContext.ProviderVenue on r.ProviderVenueId equals pv.Id
-                                                                        join p in _dbContext.Provider on pv.ProviderId equals p.Id
-                                                                        select new ProviderNameViewModel
-                                                                        {
-                                                                            DisplayName = p.DisplayName,
-                                                                            VenueName = pv.Name,
-                                                                            Postcode = pv.Postcode
-                                                                        }).ToList(),
-                                                       OpportunityType = oi.OpportunityType
-                                                   }).ToList()
-                                           }).SingleOrDefaultAsync();
+            var opportunityBasketitems = await _dbContext.OpportunityBasketItem
+                                                        .Where(o => o.OpportunityId == opportunityId)
+                                                        .ToListAsync();
 
-            return opportunityBasket;
+            var opportunity = opportunityBasketitems.First();
+            var opportunityTypes = opportunityBasketitems.GroupBy(grp => grp.OpportunityType).ToList();
+            var result = new OpportunityBasketViewModel
+            {
+                OpportunityId = opportunity.OpportunityId,
+                CompanyName = opportunity.CompanyName,
+                CompanyNameAka = opportunity.CompanyNameAka,
+                ProvisionGapItems = opportunityTypes.FirstOrDefault(grp => grp.Key == "ProvisionGap")
+                                 ?.Select(oi => new BasketProvisionGapItemViewModel
+                                 {
+                                     OpportunityItemId = oi.OpportunityItemId,
+                                     JobRole = oi.JobRole,
+                                     Placements = oi.Placements,
+                                     PlacementsKnown = oi.PlacementsKnown,
+                                     Workplace = oi.Workplace,
+                                     Reason = GetReasons(oi.HadBadExperience, oi.NoSuitableStudent, oi.ProvidersTooFarAway),
+                                     OpportunityType = oi.OpportunityType
+                                 }).ToList(),
+                ReferralItems = opportunityTypes.FirstOrDefault(grp => grp.Key == "Referral")
+                                ?.GroupBy(oi => new
+                                {
+                                    oi.OpportunityItemId,
+                                    oi.JobRole,
+                                    oi.Workplace,
+                                    oi.PlacementsKnown,
+                                    oi.Placements,
+                                    oi.OpportunityType
+                                }).Select(grp => new BasketReferralItemViewModel
+                                {
+                                    Workplace = grp.Key.Workplace,
+                                    OpportunityItemId = grp.Key.OpportunityItemId,
+                                    OpportunityType = grp.Key.OpportunityType,
+                                    JobRole = grp.Key.JobRole,
+                                    Placements = grp.Key.Placements,
+                                    PlacementsKnown = grp.Key.PlacementsKnown,
+                                    ProviderNames = grp.Select(g => new ProviderNameViewModel
+                                    {
+                                        DisplayName = g.DisplayName,
+                                        Postcode = g.Postcode,
+                                        VenueName = g.VenueName
+                                    }).ToList()
+                                }).ToList()
+            };
+
+            return result;
         }
 
         public async Task<OpportunityReportDto> GetPipelineOpportunitiesAsync(int opportunityId)
@@ -399,6 +402,24 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 reasons.Add("Providers do not have students doing the right course");
 
             if (provisionGap.ProvidersTooFarAway.HasValue && provisionGap.ProvidersTooFarAway.Value)
+                reasons.Add("Providers are too far away");
+
+            if (reasons.Count == 0)
+                reasons.Add("None available");
+
+            return string.Join(", ", reasons);
+        }
+        private static string GetReasons(bool? hadBadExperience, bool? noSuitableStudent, bool? providersTooFarAway)
+        {
+            var reasons = new List<string>();
+
+            if (hadBadExperience.HasValue && hadBadExperience.Value)
+                reasons.Add("Employer had a bad experience with them");
+
+            if (noSuitableStudent.HasValue && noSuitableStudent.Value)
+                reasons.Add("Providers do not have students doing the right course");
+
+            if (providersTooFarAway.HasValue && providersTooFarAway.Value)
                 reasons.Add("Providers are too far away");
 
             if (reasons.Count == 0)

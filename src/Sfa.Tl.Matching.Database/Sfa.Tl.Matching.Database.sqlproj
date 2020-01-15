@@ -69,6 +69,7 @@
     <None Include="Sfa.Tl.Matching.Database.Local.Int.Test.publish.xml" />
     <None Include="Sfa.Tl.Matching.Database.Local.publish.xml" />
     <None Include="PostDeployment\Seed UserProfile.sql" />
+    <None Include="Indexes\IX_OpportunityBaskekItem.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
@@ -111,6 +112,7 @@
     <Build Include="Views\MatchingServiceProviderEmployerReport.sql" />
     <Build Include="Indexes\IX_Employer_CrmId.sql" />
     <Build Include="Indexes\IX_ProviderQualification_QualificationId.sql" />
+    <Build Include="Views\OpportunityBasketItem.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

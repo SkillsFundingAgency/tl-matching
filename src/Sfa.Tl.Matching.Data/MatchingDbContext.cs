@@ -31,10 +31,11 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbSet<Route> Route { get; set; }
         public virtual DbSet<FunctionLog> FunctionLog { get; set; }
         public virtual DbSet<ServiceStatusHistory> ServiceStatusHistory { get; set; }
-        public virtual DbQuery<MatchingServiceOpportunityReport> MatchingServiceOpportunityReport { get; set; }
+         public virtual DbSet<UserCache> UserCache { get; set; }
+       public virtual DbQuery<MatchingServiceOpportunityReport> MatchingServiceOpportunityReport { get; set; }
         public virtual DbQuery<MatchingServiceProviderOpportunityReport> MatchingServiceProviderOpportunityReport { get; set; }
         public virtual DbQuery<MatchingServiceProviderEmployerReport> MatchingServiceProviderEmployerReport { get; set; }
-        public virtual DbSet<UserCache> UserCache { get; set; }
+        public virtual DbQuery<OpportunityBasketItem> OpportunityBasketItem { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
