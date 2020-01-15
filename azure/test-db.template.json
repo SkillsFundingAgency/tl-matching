@@ -21,7 +21,7 @@
         "sqlDatabaseTier": {
             "type": "string"
         },
-        "testRunnerOutboundIp": {
+        "sqlServerFirewallRules": {
             "type": "string"
         }
     },
