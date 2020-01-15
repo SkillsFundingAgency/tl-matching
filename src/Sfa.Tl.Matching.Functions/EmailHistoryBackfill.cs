@@ -17,6 +17,8 @@ namespace Sfa.Tl.Matching.Functions
 {
     public class EmailHistoryBackfill
     {
+        private static readonly HashSet<string> UsedOpporyunityItems = new HashSet<string>();
+
         [FunctionName("BackfillOpportunityItemId")]
         public async Task BackFillOpportunityItemIdAsync(
             [TimerTrigger("0 0 0 1 1 *", RunOnStartup = true)]
@@ -131,7 +133,7 @@ namespace Sfa.Tl.Matching.Functions
             return emailHistoriesWithPotentialOpportunityItems;
         }
 
-        private static int? GetOpportunityItemId(BaseEntity emailHistory,
+        private static int? GetOpportunityItemId(EmailHistory emailHistory,
             IEnumerable<PotentialOpportunityItems> potentialOpportunityItems)
         {
             var orderedOpportunityItems = 
@@ -139,10 +141,22 @@ namespace Sfa.Tl.Matching.Functions
 
             foreach (var oi in orderedOpportunityItems)
             {
-                if (DateTime.Compare(emailHistory.CreatedOn, oi.OpportunityItemModified.Value) >= 0)
+                if (DateTime.Compare(emailHistory.CreatedOn, oi.OpportunityItemModified.Value) < 0) 
+                    continue;
+
+                var opportunityItemIdToUse = oi.OpportunityItemId;
+                var key = $"{emailHistory.SentTo}:{emailHistory.EmailTemplateId}:{opportunityItemIdToUse}";
+                if (UsedOpporyunityItems.Contains(key))
                 {
-                    return oi.OpportunityItemId;
+                    var pseudoRandom = new Random(DateTime.Now.Second);
+                    var random = pseudoRandom.Next(0, orderedOpportunityItems.Count());
+                    opportunityItemIdToUse = orderedOpportunityItems.ElementAt(random).OpportunityItemId;
+                    key = $"{emailHistory.SentTo}:{emailHistory.EmailTemplateId}:{opportunityItemIdToUse}";
                 }
+
+                UsedOpporyunityItems.Add(key);
+
+                return opportunityItemIdToUse;
             }
 
             return null;
