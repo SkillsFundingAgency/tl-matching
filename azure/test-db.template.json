@@ -73,13 +73,8 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "firewallRuleNamePrefix": {
-                        "value": "AZURE_IP-"
-                    },
-                    "ipAddresses": {
-                        "value": [
-                            "[parameters('testRunnerOutboundIp')]"
-                        ]
+                    "sqlServerFirewallRules": {
+                        "value": "[parameters('sqlServerFirewallRules')]"
                     },
                     "serverName": {
                         "value": "[parameters('sharedSQLServerName')]"
