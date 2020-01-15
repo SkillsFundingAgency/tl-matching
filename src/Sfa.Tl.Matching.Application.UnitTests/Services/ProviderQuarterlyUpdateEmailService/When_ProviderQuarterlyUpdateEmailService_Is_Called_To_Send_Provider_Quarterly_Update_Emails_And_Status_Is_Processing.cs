@@ -39,13 +39,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>())
                 .Returns(backgroundProcessHistory);
 
-            var providerFeedbackService = new Application.Services.ProviderQuarterlyUpdateEmailService(
-                testFixture.Configuration, testFixture.Logger,
+            var providerQuarterlyUpdateEmailService = new Application.Services.ProviderQuarterlyUpdateEmailService(
+                testFixture.Logger,
                     _emailService,
                     _providerRepository, _backgroundProcessHistoryRepository,
                     messageQueueService, testFixture.DateTimeProvider);
 
-            _result = providerFeedbackService
+            _result = providerQuarterlyUpdateEmailService
                 .SendProviderQuarterlyUpdateEmailsAsync(1, "TestUser")
                 .GetAwaiter().GetResult();
         }

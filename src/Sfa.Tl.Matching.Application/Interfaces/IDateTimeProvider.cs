@@ -11,5 +11,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
         DateTime AddWorkingDays(DateTime startDate, TimeSpan timeSpan, IList<DateTime> holidays);
         bool IsHoliday(DateTime date, IList<DateTime> holidays);
         DateTime? GetReferralDateAsync(IList<DateTime> bankHolidays, string timeSpan);
+        DateTime GetNthWorkingDayDate(DateTime currentDate, int n, IList<DateTime> bankHolidays);
     }
 }

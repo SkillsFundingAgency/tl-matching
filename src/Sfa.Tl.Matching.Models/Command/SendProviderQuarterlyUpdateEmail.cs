@@ -1,6 +1,6 @@
 ﻿namespace Sfa.Tl.Matching.Models.Command
 {
-    public class SendProviderFeedbackEmail
+    public class SendProviderQuarterlyUpdateEmail
     {
         public int BackgroundProcessHistoryId { get; set; }
     }

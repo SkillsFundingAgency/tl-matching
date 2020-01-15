@@ -10,17 +10,17 @@ using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
+namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderQuarterlyUpdateEmail
 {
-    public class When_ProviderQuarterlyUpdateEmail_Controller_ConfirmSendProviderEmail_Post_Is_Called_With_SendEmail_True
+    public class When_ProviderQuarterlyUpdateEmail_Controller_ConfirmSendProviderEmail_Post_Is_Called_With_SendEmail_False
     {
         private readonly IActionResult _result;
-        private readonly IProviderQuarterlyUpdateEmailService _providerFeedbackService;
+        private readonly IProviderQuarterlyUpdateEmailService _providerQuarterlyUpdateEmailService;
 
-        public When_ProviderQuarterlyUpdateEmail_Controller_ConfirmSendProviderEmail_Post_Is_Called_With_SendEmail_True()
+        public When_ProviderQuarterlyUpdateEmail_Controller_ConfirmSendProviderEmail_Post_Is_Called_With_SendEmail_False()
         {
             var providerService = Substitute.For<IProviderService>();
-            _providerFeedbackService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
+            _providerQuarterlyUpdateEmailService = Substitute.For<IProviderQuarterlyUpdateEmailService>();
 
             const string adminEmail = "admin@admin.com";
             var configuration = new MatchingConfiguration
@@ -28,9 +28,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
                 AuthorisedAdminUserEmail = adminEmail
             };
 
-            var providerFeedbackController =
-                new ProviderQuarterlyUpdateEmailController(_providerFeedbackService, providerService, configuration);
-            var controllerWithClaims = new ClaimsBuilder<ProviderQuarterlyUpdateEmailController>(providerFeedbackController)
+            var providerQuarterlyUpdateEmailController =
+                new ProviderQuarterlyUpdateEmailController(_providerQuarterlyUpdateEmailService, providerService, configuration);
+            var controllerWithClaims = new ClaimsBuilder<ProviderQuarterlyUpdateEmailController>(providerQuarterlyUpdateEmailController)
                 .Add(ClaimTypes.Role, RolesExtensions.AdminUser)
                 .AddEmail(adminEmail)
                 .Build();
@@ -38,16 +38,16 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
             var viewModel = new ConfirmSendProviderEmailViewModel
             {
                 ProviderCount = 100,
-                SendEmail = true
+                SendEmail = false
             };
             _result = controllerWithClaims.ConfirmSendProviderEmailAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_ProviderFeedbackService_RequestProviderQuarterlyUpdateAsync_Is_Called_Exactly_Once()
+        public void Then_ProviderQuarterlyUpdateEmailService_RequestProviderQuarterlyUpdateAsync_Is_Not_Called()
         {
-            _providerFeedbackService
-                .Received(1)
+            _providerQuarterlyUpdateEmailService
+                .DidNotReceive()
                 .RequestProviderQuarterlyUpdateAsync(Arg.Any<string>());
         }
 
@@ -56,9 +56,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.ProviderFeedback
         {
             _result.Should().NotBeNull();
             _result.Should().BeOfType<RedirectToRouteResult>();
-
             var redirect = _result as RedirectToRouteResult;
             redirect.Should().NotBeNull();
+
             redirect?.RouteName.Should().BeEquivalentTo("SearchProvider");
         }
     }

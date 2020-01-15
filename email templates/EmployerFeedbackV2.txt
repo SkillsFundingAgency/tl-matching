@@ -1,0 +1,25 @@
+Dear ((employer_contact_name)),
+
+During ((previous_month)) we tried to help your business find students to do these industry placements:
+
+((opportunity_list))
+
+# Tell us how you’re getting on
+
+Have you had any contact with education providers about these roles? Have you found an industry placement student for them yet?
+
+[Give your feedback (opens in a new window or tab)](https://www.smartsurvey.co.uk/s/R4ZB0/)
+(the short survey should only take about a minute). 
+
+Your answers will help us improve the service we offer to employers.
+
+Thank you.
+
+Industry Placements – Employer Support Team
+[support.industryplacementmatching@education.gov.uk](mailto:support.industryplacementmatching@education.gov.uk?subject=Employer+feedback)
+National Apprenticeship Service
+
+---
+
+The National Apprenticeship Service is part of the Education and Skills Funding Agency (ESFA), an executive agency of the Department for Education (DfE). For further details of how our data is processed and your rights, please view the full ESFA privacy policy here:
+https://www.gov.uk/government/publications/esfa-privacy-notice

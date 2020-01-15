@@ -13,14 +13,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
     {
         private readonly MatchingConfiguration _configuration;
         private readonly IProviderService _providerService;
-        private readonly IProviderQuarterlyUpdateEmailService _providerFeedbackService;
+        private readonly IProviderQuarterlyUpdateEmailService _providerQuarterlyUpdateEmailService;
 
-        public ProviderQuarterlyUpdateEmailController(IProviderQuarterlyUpdateEmailService providerFeedbackService,
+        public ProviderQuarterlyUpdateEmailController(IProviderQuarterlyUpdateEmailService providerQuarterlyUpdateEmailService,
             IProviderService providerService,
             MatchingConfiguration configuration)
         {
             _providerService = providerService;
-            _providerFeedbackService = providerFeedbackService;
+            _providerQuarterlyUpdateEmailService = providerQuarterlyUpdateEmailService;
             _configuration = configuration;
         }
 
@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             if (viewModel.SendEmail.GetValueOrDefault())
             {
                 var user = HttpContext.User.GetUserName();
-                await _providerFeedbackService.RequestProviderQuarterlyUpdateAsync(user);
+                await _providerQuarterlyUpdateEmailService.RequestProviderQuarterlyUpdateAsync(user);
             }
 
             return RedirectToRoute("SearchProvider");

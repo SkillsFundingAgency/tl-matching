@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _configuration = configuration;
         }
 
-        public async Task PushProviderQuarterlyRequestMessageAsync(SendProviderFeedbackEmail providerRequest)
+        public async Task PushProviderQuarterlyRequestMessageAsync(SendProviderQuarterlyUpdateEmail providerRequest)
         {
             await PushMessageAsync(
                 JsonConvert.SerializeObject(providerRequest),

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -282,6 +283,107 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     })
                 .FirstOrDefaultAsync();
 
+            return dto;
+        }
+
+        public async Task<IList<EmployerFeedbackDto>> GetReferralsForEmployerFeedbackAsync(DateTime dateToSearch)
+        {
+            var firstDayOfMonth = new DateTime(dateToSearch.Year, dateToSearch.Month, 1, 0, 0, 0);
+            var firstDayOfFollowingMonth = firstDayOfMonth.AddMonths(1);
+
+            var dto = await (from o in _dbContext.Opportunity
+                join oi in _dbContext.OpportunityItem
+                    on o.Id equals oi.OpportunityId
+                join ro in _dbContext.Route
+                    on oi.RouteId equals ro.Id
+                where o.EmployerCrmId.HasValue 
+                      && oi.IsCompleted
+                      && oi.ModifiedOn.HasValue
+                      && (oi.ModifiedOn.Value >= firstDayOfMonth && oi.ModifiedOn.Value < firstDayOfFollowingMonth)
+                      && oi.OpportunityType == OpportunityType.Referral.ToString()
+                select new EmployerFeedbackDto
+                {
+                    OpportunityItemId = oi.Id,
+                    EmployerCrmId = o.EmployerCrmId.Value,
+                    EmployerContact = o.EmployerContact,
+                    EmployerContactEmail = o.EmployerContactEmail,
+                    JobRole = oi.JobRole,
+                    Route = ro.Name,
+                    PlacementsKnown = oi.PlacementsKnown,
+                    Placements = oi.Placements,
+                    ModifiedOn = oi.ModifiedOn,
+                    Town = oi.Town,
+                    Postcode = oi.Postcode
+                }).ToListAsync();
+
+            return dto;
+        }
+
+        public async Task<IList<ProviderFeedbackDto>> GetReferralsForProviderFeedbackAsync(DateTime dateToSearch)
+        {
+            var firstDayOfMonth = new DateTime(dateToSearch.Year, dateToSearch.Month, 1, 0, 0, 0);
+            var firstDayOfFollowingMonth = firstDayOfMonth.AddMonths(1);
+            
+            var allResults = await (from o in _dbContext.Opportunity
+                join oi in _dbContext.OpportunityItem
+                    on o.Id equals oi.OpportunityId
+                join r in _dbContext.Referral
+                    on oi.Id equals r.OpportunityItemId
+                join e in _dbContext.Employer
+                    on o.EmployerCrmId equals e.CrmId
+                join pv in _dbContext.ProviderVenue
+                    on r.ProviderVenueId equals pv.Id
+                join p in _dbContext.Provider
+                    on pv.ProviderId equals p.Id
+                join rt in _dbContext.Route
+                    on oi.RouteId equals rt.Id
+                where o.EmployerCrmId.HasValue
+                      && oi.IsCompleted
+                      && oi.ModifiedOn.HasValue
+                      && (oi.ModifiedOn.Value >= firstDayOfMonth && oi.ModifiedOn.Value < firstDayOfFollowingMonth)
+                      && oi.OpportunityType == OpportunityType.Referral.ToString()
+                select new
+                {
+                    ProviderId = p.Id,
+                    ProviderName = p.Name,
+                    ProviderDisplayName = p.DisplayName,
+                    p.PrimaryContact,
+                    p.PrimaryContactEmail,
+                    p.SecondaryContact,
+                    p.SecondaryContactEmail,
+                    EmployerCompanyName = e.CompanyName,
+                    pv.Town,
+                    pv.Postcode,
+                    RouteName = rt.Name
+                }).Distinct().ToListAsync();
+
+            var dto = allResults.GroupBy(grp => new {
+                    grp.ProviderId,
+                    grp.ProviderName,
+                    grp.ProviderDisplayName,
+                    grp.PrimaryContact,
+                    grp.PrimaryContactEmail,
+                    grp.SecondaryContact,
+                    grp.SecondaryContactEmail,
+                    grp.EmployerCompanyName,
+                    grp.Town,
+                    grp.Postcode
+                })
+                .Select(g => new ProviderFeedbackDto
+                {
+                    ProviderId = g.Key.ProviderId,
+                    ProviderName = g.Key.ProviderName,
+                    ProviderDisplayName = g.Key.ProviderDisplayName,
+                    Town = g.Key.Town,
+                    Postcode = g.Key.Postcode,
+                    PrimaryContact = g.Key.PrimaryContact,
+                    PrimaryContactEmail = g.Key.PrimaryContactEmail,
+                    SecondaryContact = g.Key.SecondaryContact,
+                    SecondaryContactEmail = g.Key.SecondaryContactEmail,
+                    EmployerCompanyName = g.Key.EmployerCompanyName,
+                    Routes = g.Select(r => r.RouteName)
+                }).OrderBy(p => p.EmployerCompanyName).ToList(); 
+            
             return dto;
         }
 

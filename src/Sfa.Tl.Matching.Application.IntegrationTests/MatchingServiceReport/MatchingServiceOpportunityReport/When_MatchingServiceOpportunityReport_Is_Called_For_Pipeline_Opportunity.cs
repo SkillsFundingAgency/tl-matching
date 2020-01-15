@@ -56,6 +56,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Mat
             var item = _result.SingleOrDefault(o => o.OpportunityItemId == _savedProvisionGapOpportunityItem.Id);
             item.Should().NotBeNull();
             item?.PipelineOpportunity.Should().BeTrue();
+            item?.NoSuitableStudent.Should().BeTrue();
+            item?.HadBadExperience.Should().BeTrue();
+            item?.ProvidersTooFarAway.Should().BeTrue();
         }
 
         public void Dispose()

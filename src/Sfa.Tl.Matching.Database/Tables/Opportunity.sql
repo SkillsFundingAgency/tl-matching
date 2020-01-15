@@ -5,6 +5,7 @@
 	[EmployerContact]		NVARCHAR(100) NULL,
 	[EmployerContactEmail]	VARCHAR(320) NULL,
 	[EmployerContactPhone]	VARCHAR(150) NULL,
+	--TODO: Remove EmployerFeedbackSentOn permanently in next release
 	[EmployerFeedbackSentOn] DATETIME2 NULL,
 	[CreatedOn]				DATETIME2 NOT NULL DEFAULT getutcdate(), 
 	[CreatedBy]				NVARCHAR(50) NULL, 

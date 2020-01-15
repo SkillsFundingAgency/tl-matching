@@ -34,13 +34,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 .GetProvidersWithFundingAsync()
                 .Returns(new ValidProviderWithFundingDtoListBuilder().Build());
 
-            var providerFeedbackService = new Application.Services.ProviderQuarterlyUpdateEmailService(
-                testFixture.Configuration, testFixture.Logger, 
+            var providerQuarterlyUpdateEmailService = new Application.Services.ProviderQuarterlyUpdateEmailService(testFixture.Logger, 
                 _emailService,
                 providerRepository, _backgroundProcessHistoryRepository,
                 _messageQueueService, testFixture.DateTimeProvider);
 
-            providerFeedbackService
+            providerQuarterlyUpdateEmailService
                 .RequestProviderQuarterlyUpdateAsync("TestUser")
                 .GetAwaiter().GetResult();
         }
@@ -61,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _messageQueueService
                 .Received(1)
-                .PushProviderQuarterlyRequestMessageAsync(Arg.Is<SendProviderFeedbackEmail>(message =>
+                .PushProviderQuarterlyRequestMessageAsync(Arg.Is<SendProviderQuarterlyUpdateEmail>(message =>
                     message.BackgroundProcessHistoryId == 1));
         }
 

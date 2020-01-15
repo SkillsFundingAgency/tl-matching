@@ -27,7 +27,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public async Task Then_Send_Email_To_Providers(
             [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
-            MatchingConfiguration config,
             [Frozen] Mapper mapper,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -48,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             //Act
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
@@ -86,7 +85,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public async Task Then_Send_Email_Is_Called_With_Placements_List(
             [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
-            MatchingConfiguration config,
             [Frozen] Mapper mapper,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -107,7 +105,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             //Act
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
@@ -149,7 +147,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public async Task Then_Send_Email_Is_Called_With_Employer_Details(
             [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
-            MatchingConfiguration config,
             [Frozen] Mapper mapper,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -170,7 +167,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
             
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
@@ -224,7 +221,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         public async Task Then_Background_Process_History_Status_Is_Completed(
             [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
-            MatchingConfiguration config,
             [Frozen] Mapper mapper,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -245,7 +241,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
                                                  && oi.IsSaved
@@ -302,7 +298,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             string secondaryContactEmail,
             [Frozen] MatchingDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
-            MatchingConfiguration config,
             [Frozen] Mapper mapper,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -326,7 +321,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-            var sut = new ReferralEmailService(mapper, config, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
             //Act
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");

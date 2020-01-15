@@ -62,7 +62,7 @@
       "type": "string",
       "environmentVariable": "GovNotifyAPIKey"
     },
-	"EmailDeliveryStatusToken": {
+    "EmailDeliveryStatusToken": {
       "type": "string",
       "environmentVariable": "EmailDeliveryStatusToken"
     },
@@ -85,10 +85,21 @@
       "type": "string",
       "environmentVariable": "CalendarJsonUrl"
     },
-    "EmployerFeedbackTimeSpan": {
-      "minLength": 1,
-      "type": "string",
-      "environmentVariable": "EmployerFeedbackTimeSpan"
+    "EmployerFeedbackEmailsEnabled": {
+      "type": "boolean",
+      "environmentVariable": "EmployerFeedbackEmailsEnabled"
+    },
+    "EmployerFeedbackWorkingDayInMonth": {
+      "type": "integer",
+      "environmentVariable": "EmployerFeedbackWorkingDayInMonth"
+    },
+    "ProviderFeedbackEmailsEnabled": {
+      "type": "boolean",
+      "environmentVariable": "ProviderFeedbackEmailsEnabled"
+    },
+    "ProviderFeedbackWorkingDayInMonth": {
+      "type": "integer",
+      "environmentVariable": "ProviderFeedbackWorkingDayInMonth"
     },
     "BlobStorageConnectionString": {
       "type": "string",
@@ -108,12 +119,12 @@
       "type": "string",
       "environmentVariable": "SqlConnectionString"
     },
-	"SupportInboxEmail": {
+    "SupportInboxEmail": {
       "minLength": 1,
       "type": "string",
       "environmentVariable": "SupportInboxEmail"
     },
-	"MatchingServiceSupportEmailAddress": {
+    "MatchingServiceSupportEmailAddress": {
       "minLength": 1,
       "type": "string",
       "environmentVariable": "MatchingServiceSupportEmailAddress"

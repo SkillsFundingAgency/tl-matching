@@ -9,7 +9,6 @@ using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 
@@ -18,7 +17,6 @@ namespace Sfa.Tl.Matching.Application.Services
     public class ReferralEmailService : IReferralEmailService
     {
         private readonly IMapper _mapper;
-        private readonly MatchingConfiguration _configuration;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
@@ -27,7 +25,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public ReferralEmailService(
                     IMapper mapper,
-                    MatchingConfiguration configuration,
                     IDateTimeProvider dateTimeProvider,
                     IEmailService emailService,
                     IOpportunityRepository opportunityRepository,
@@ -35,7 +32,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
         {
             _mapper = mapper;
-            _configuration = configuration;
             _dateTimeProvider = dateTimeProvider;
             _emailService = emailService;
             _opportunityRepository = opportunityRepository;
@@ -49,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             try
             {
-                var employerReferral = await GetEmployerReferralsAsync(opportunityId, itemIds);
+                var employerReferral = await _opportunityRepository.GetEmployerReferralsAsync(opportunityId, itemIds); 
                 var sb = new StringBuilder();
 
                 if (employerReferral == null) return;
@@ -106,7 +102,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             if (await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId) == null) return;
 
-            var referrals = await GetOpportunityReferralsAsync(opportunityId, itemIds);
+            var referrals = await _opportunityRepository.GetProviderOpportunitiesAsync(opportunityId, itemIds);
 
             try
             {
@@ -157,7 +153,7 @@ namespace Sfa.Tl.Matching.Application.Services
             }
         }
 
-        private string FormatContactDetails(string name, string phone, string email)
+        private static string FormatContactDetails(string name, string phone, string email)
         {
             var sb = new StringBuilder($"{name}");
 
@@ -188,12 +184,12 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task CompleteSelectedReferralsAsync(int opportunityId, int itemId, string username)
         {
-            var selectedOpportunityItemIds = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
-                                                                                      && oi.Id == itemId
-                                                                                      && oi.IsSaved
-                                                                                      && oi.IsSelectedForReferral
-                                                                                      && !oi.IsCompleted)
-                .Select(oi => oi.Id).ToList();
+            var selectedOpportunityItemIds = _opportunityItemRepository
+                .GetManyAsync(oi => oi.Opportunity.Id == opportunityId
+                                    && oi.Id == itemId
+                                    && oi.IsSaved
+                                    && oi.IsSelectedForReferral
+                                    && !oi.IsCompleted).Select(oi => oi.Id).ToList();
 
             if (selectedOpportunityItemIds.Count > 0)
             {
@@ -237,16 +233,6 @@ namespace Sfa.Tl.Matching.Application.Services
                 x => x.ModifiedBy);
         }
 
-        private async Task<EmployerReferralDto> GetEmployerReferralsAsync(int opportunityId, IEnumerable<int> itemIds)
-        {
-            return await _opportunityRepository.GetEmployerReferralsAsync(opportunityId, itemIds);
-        }
-
-        private async Task<IList<OpportunityReferralDto>> GetOpportunityReferralsAsync(int opportunityId, IEnumerable<int> itemIds)
-        {
-            return await _opportunityRepository.GetProviderOpportunitiesAsync(opportunityId, itemIds);
-        }
-
         private static string GetNumberOfPlacements(bool? placementsKnown, int? placements)
         {
             return placementsKnown.GetValueOrDefault()
@@ -256,11 +242,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, string toAddress, IDictionary<string, string> tokens, string createdBy)
         {
-            if (!_configuration.SendEmailEnabled)
-            {
-                return;
-            }
-
             await _emailService.SendEmailAsync(opportunityId, template.ToString(), toAddress, tokens, createdBy);
         }
 

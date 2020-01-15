@@ -5,6 +5,7 @@ namespace Sfa.Tl.Matching.Models.Enums
     public enum EmailTemplateName
     {
         EmployerFeedback,
+        EmployerFeedbackV2,
         [Description("Employer referral confirmation")]
         EmployerReferral,
         [Description("Employer referral confirmation")]
@@ -24,6 +25,7 @@ namespace Sfa.Tl.Matching.Models.Enums
         [Description("Provider referral")]
         ProviderReferralV4,
         ProviderFeedback,
+        ProviderFeedbackV2,
         EmployerAupaBlank,
         EmailDeliveryStatus
     }

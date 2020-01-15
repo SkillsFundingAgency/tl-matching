@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Functions
     public class ProviderQuarterlyUpdateEmail
     {
         [FunctionName("SendProviderQuarterlyUpdateEmails")]
-        public async Task SendProviderQuarterlyUpdateEmailsAsync([QueueTrigger(QueueName.ProviderQuarterlyRequestQueue, Connection = "BlobStorageConnectionString")]SendProviderFeedbackEmail providerRequestData, 
+        public async Task SendProviderQuarterlyUpdateEmailsAsync([QueueTrigger(QueueName.ProviderQuarterlyRequestQueue, Connection = "BlobStorageConnectionString")]SendProviderQuarterlyUpdateEmail providerRequestData, 
             ExecutionContext context,
             ILogger logger,
             [Inject] IProviderQuarterlyUpdateEmailService providerQuarterlyUpdateEmailService,

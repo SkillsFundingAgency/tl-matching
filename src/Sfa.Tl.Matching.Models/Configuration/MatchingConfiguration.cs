@@ -16,7 +16,10 @@ namespace Sfa.Tl.Matching.Models.Configuration
         public string GoogleMapsApiBaseUrl { get; set; }
         public string GoogleMapsApiKey { get; set; }
         public string CalendarJsonUrl { get; set; }
-        public string EmployerFeedbackTimeSpan { get; set; }
+        public bool EmployerFeedbackEmailsEnabled { get; set; }
+        public int EmployerFeedbackWorkingDayInMonth { get; set; }
+        public bool ProviderFeedbackEmailsEnabled { get; set; }
+        public int ProviderFeedbackWorkingDayInMonth { get; set; }
         public string MatchingServiceSupportEmailAddress { get; set; }
     }
 }

@@ -22,11 +22,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
             var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
-            var configuration = new MatchingConfiguration
-            {
-                SendEmailEnabled = true
-            };
-
+            
             var mapper = Substitute.For<IMapper>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
@@ -53,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 1
             };
 
-            var referralEmailService = new ReferralEmailService(mapper, configuration, datetimeProvider, _emailService,
+            var referralEmailService = new ReferralEmailService(mapper, datetimeProvider, _emailService,
                 opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo);
 
             referralEmailService.SendEmployerReferralEmailAsync(1, itemIds, 1, "system").GetAwaiter().GetResult();

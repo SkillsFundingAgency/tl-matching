@@ -14,7 +14,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         [Required(ErrorMessage = "You must enter a contact name for placements")]
         [MinLength(2, ErrorMessage = "You must enter a contact name using 2 or more characters")]
         [MaxLength(100, ErrorMessage = "You must enter a contact name that is 100 characters or fewer")]
-        [RegularExpression(@"^[a-zA-Z'\s-]*$", ErrorMessage = "You must enter a contact name using only letters, hyphens and apostrophes")]
+        [RegularExpression(@"^[a-zA-Z'’\s-]*$", ErrorMessage = "You must enter a contact name using only letters, hyphens and apostrophes")]
         public string PrimaryContact { get; set; }
 
         [Required(ErrorMessage = "You must enter a contact email for placements")]

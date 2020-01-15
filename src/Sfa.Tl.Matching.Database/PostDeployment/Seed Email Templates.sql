@@ -6,6 +6,7 @@ MERGE INTO [dbo].[EmailTemplate] AS Target
 USING (VALUES 
 	(N'EmployerReferral', N'4918d3d5-6694-4f11-975f-e91c255dd583'),
 	(N'EmployerFeedback', N'deb927d5-1fd3-43d3-9aae-fb826f2e77f8'),
+	(N'EmployerFeedbackV2', N'b0e07462-53a7-4b61-8b17-e3f3f69f13be'),
 	(N'ProviderReferral', N'5740b7d4-b421-4497-8649-81cd57dbc0b0'),
 	(N'ProviderQuarterlyUpdate', N'714e5adb-8f08-4b25-9be8-cb2f3fc66ed6'),
 	(N'EmployerReferralComplex', N'fed633ff-cf62-4060-9816-df036c89ba03'),
@@ -15,6 +16,7 @@ USING (VALUES
 	(N'ProviderReferralV4', N'b5de544b-60f7-42c2-9859-73c5db3dee5d'),
 	(N'EmployerReferralV4', N'1a69302f-de7d-45d4-89f3-68be12f7fe08'),
 	(N'ProviderFeedback', N'8249a0b6-40a5-46dd-a370-13c6a9651d2c'),
+	(N'ProviderFeedbackV2', N'bf90646f-8c95-4c8e-a770-567af1213a4d'),
 	(N'EmployerAupaBlank', N'18c53f52-25b3-4f77-89fc-582dc545d0ed'),
 	(N'FailedEmail', N'1489537d-d026-4da5-9d7d-cc979e9f0a28'),
 	(N'FailedEmailV2', N'374d9de8-84e6-44d2-b844-56e21fc1d457'),
