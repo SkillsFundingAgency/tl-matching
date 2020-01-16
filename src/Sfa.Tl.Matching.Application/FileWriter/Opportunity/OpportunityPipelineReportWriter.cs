@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using DocumentFormat.OpenXml;
@@ -13,11 +14,19 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
         public override byte[] WriteReport(OpportunityReportDto data)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = $"{assembly.GetName().Name}.Templates.PipelineOpportunitiesReportTemplate.xlsx";
+            const string templateName = "PipelineOpportunitiesReportTemplate.xlsx";
+            var resourceName = $"{assembly.GetName().Name}.Templates.{templateName}";
 
             using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
             using (var stream = new MemoryStream())
             {
+                if (templateStream == null)
+                {
+                    throw new NullReferenceException(
+                        $"No stream found for template {templateName}. " +
+                        "Make sure the template has been included in the project");
+                }
+
                 templateStream.CopyTo(stream);
 
                 using (var spreadSheet = SpreadsheetDocument.Open(stream, true))

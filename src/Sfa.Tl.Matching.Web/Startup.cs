@@ -30,6 +30,7 @@ using Sfa.Tl.Matching.Api.Clients.GoogleDistanceMatrix;
 using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileWriter.Opportunity;
+using Sfa.Tl.Matching.Application.FileWriter.Provider;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Event;
@@ -269,6 +270,7 @@ namespace Sfa.Tl.Matching.Web
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
             services.AddTransient<IFileWriter<OpportunityReportDto>, OpportunityPipelineReportWriter>();
+            services.AddTransient<IFileWriter<ProviderProximityReportDto>, ProviderProximityReportWriter>();
         }
     }
 }

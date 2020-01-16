@@ -9,6 +9,8 @@ namespace Sfa.Tl.Matching.Models.Dto
         public int SearchRadius { get; set; }
 
         public IList<int> SelectedRoutes { get; set; }
+        
+        public IList<string> SelectedRouteNames { get; set; }
 
         public string Longitude { get; set; }
 

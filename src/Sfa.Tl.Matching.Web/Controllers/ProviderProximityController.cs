@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -79,6 +83,36 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 searchCriteria = $"{viewModel.Postcode}-{filters}"
             });
+        }
+
+        [HttpGet]
+        [Route("download-providers/{postcode}/{filters?}", Name = "DownloadProviderSpreadsheet")]
+        public async Task<IActionResult> DownloadProviderProximitySpreadsheetAsync(string postcode, string filters)
+        {
+            var allFilters = string.IsNullOrWhiteSpace(filters) 
+                ? "" 
+                : WebUtility.UrlDecode(filters);
+            var filtersList = allFilters.Split('-', StringSplitOptions.RemoveEmptyEntries);
+
+            var routes = await _routePathService.GetRouteDictionaryAsync();
+            var selectedRouteIds = filtersList
+                .Select(f => routes.FirstOrDefault(x => x.Value == f))
+                .Select(key => key.Key)
+                .ToList();
+
+            var searchParameters = new ProviderProximitySearchParametersDto
+            {
+                Postcode = postcode,
+                SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
+                SelectedRouteNames = filtersList,
+                SelectedRoutes = selectedRouteIds
+            };
+
+            var downloadedFileInfo = await _providerProximityService.GetProviderProximitySpreadsheetDataAsync(searchParameters);
+
+            return File(downloadedFileInfo.FileContent,
+                downloadedFileInfo.ContentType,
+                downloadedFileInfo.FileName);
         }
 
         private async Task<bool> IsPostCodeValidAsync(ProviderProximitySearchParamViewModel viewModel)

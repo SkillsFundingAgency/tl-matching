@@ -9,6 +9,7 @@ using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
@@ -43,11 +44,12 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.ProviderProximity
                     PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
                 }));
 
-            var searchProvider = Substitute.For<ISearchProvider>();
-
-            var providerProximityService = new ProviderProximityService(searchProvider, locationService);
-
             var routePathService = Substitute.For<IRoutePathService>();
+            var searchProvider = Substitute.For<ISearchProvider>();
+            var datetimeProvider = Substitute.For<IDateTimeProvider>();
+            var fileWriter = Substitute.For<IFileWriter<ProviderProximityReportDto>>();
+
+            var providerProximityService = new ProviderProximityService(searchProvider, locationService, routePathService, fileWriter, datetimeProvider);
 
             routePathService.GetRouteSelectListItemsAsync().Returns(routes);
             routePathService.GetRouteDictionaryAsync().Returns(routeDictionary);

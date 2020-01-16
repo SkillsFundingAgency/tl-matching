@@ -12,5 +12,7 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task<IList<OpportunityProximitySearchResultByRouteViewModelItem>> SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(OpportunityProximitySearchParametersDto dto);
         
         Task<IList<ProviderProximitySearchResultViewModelItem>> SearchProvidersByPostcodeProximityAsync(ProviderProximitySearchParametersDto dto);
+        
+        Task<ProviderProximityReportDto> SearchProvidersByPostcodeProximityForReportAsync(ProviderProximitySearchParametersDto dto);
     }
 }
