@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -94,18 +92,11 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 : WebUtility.UrlDecode(filters);
             var filtersList = allFilters.Split('-', StringSplitOptions.RemoveEmptyEntries);
 
-            var routes = await _routePathService.GetRouteDictionaryAsync();
-            var selectedRouteIds = filtersList
-                .Select(f => routes.FirstOrDefault(x => x.Value == f))
-                .Select(key => key.Key)
-                .ToList();
-
             var searchParameters = new ProviderProximitySearchParametersDto
             {
                 Postcode = postcode,
                 SearchRadius = SearchParametersViewModel.DefaultSearchRadius,
-                SelectedRouteNames = filtersList,
-                SelectedRoutes = selectedRouteIds
+                SelectedRouteNames = filtersList
             };
 
             var downloadedFileInfo = await _providerProximityService.GetProviderProximitySpreadsheetDataAsync(searchParameters);

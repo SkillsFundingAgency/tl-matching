@@ -91,20 +91,25 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var searchResults = await _searchProvider.SearchProvidersByPostcodeProximityForReportAsync(searchParameters);
 
-            if (searchParameters.SelectedRoutes != null
-                && searchParameters.SelectedRoutes.Count > 0
+            if (searchParameters.SelectedRouteNames != null
+                && searchParameters.SelectedRouteNames.Count > 0
                 && searchResults != null)
             {
+                var routes = await _routePathService.GetRouteDictionaryAsync();
+
+                var selectedRouteIds = searchParameters.SelectedRouteNames
+                    .Select(r => routes.FirstOrDefault(x => x.Value == r))
+                    .Select(key => key.Key)
+                    .ToList();
+
                 var filteredProviders = searchResults.Providers
-                    .Where(s => s.Routes.Any(r => searchParameters.SelectedRoutes.Contains(r.RouteId)))
+                    .Where(s => s.Routes.Any(r => selectedRouteIds.Contains(r.RouteId)))
                     .Select(s => new ProviderProximityReportItemDto
                     {
-                        Latitude = s.Latitude,
                         Distance = s.Distance,
                         ProviderVenueTown = s.ProviderVenueTown,
                         ProviderName = s.ProviderName,
                         ProviderVenuePostcode = s.ProviderVenuePostcode,
-                        ProviderVenueId = s.ProviderVenueId,
                         ProviderDisplayName = s.ProviderDisplayName,
                         ProviderVenueName = s.ProviderVenueName,
                         PrimaryContact = s.PrimaryContact,
@@ -113,10 +118,8 @@ namespace Sfa.Tl.Matching.Application.Services
                         SecondaryContact = s.SecondaryContact,
                         SecondaryContactEmail = s.SecondaryContactEmail,
                         SecondaryContactPhone = s.SecondaryContactPhone,
-                        IsTLevelProvider = s.IsTLevelProvider,
-                        Longitude = s.Longitude,
                         Routes = s.Routes
-                            .Where(rt => searchParameters.SelectedRoutes.Contains(rt.RouteId))
+                            .Where(rt => selectedRouteIds.Contains(rt.RouteId))
                     })
                     .ToList();
 

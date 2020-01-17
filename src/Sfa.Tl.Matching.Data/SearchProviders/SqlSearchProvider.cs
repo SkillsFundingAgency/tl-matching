@@ -272,12 +272,10 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             })
             .Select(grp => new ProviderProximityReportItemDto
             {
-                Latitude = grp.Key.Latitude,
                 Distance = grp.Key.Distance,
                 ProviderVenueTown = grp.Key.ProviderVenueTown,
                 ProviderName = grp.Key.ProviderName,
                 ProviderVenuePostcode = grp.Key.ProviderVenuePostcode,
-                ProviderVenueId = grp.Key.ProviderVenueId,
                 ProviderDisplayName = grp.Key.ProviderDisplayName,
                 ProviderVenueName = grp.Key.ProviderVenueName,
                 PrimaryContact = grp.Key.PrimaryContact,
@@ -286,10 +284,8 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                 SecondaryContact = grp.Key.SecondaryContact,
                 SecondaryContactEmail = grp.Key.SecondaryContactEmail,
                 SecondaryContactPhone = grp.Key.SecondaryContactPhone,
-                IsTLevelProvider = grp.Key.IsTLevelProvider,
-                Longitude = grp.Key.Longitude,
                 Routes = grp.GroupBy(rt => new { rt.RouteName, rt.RouteId })
-                        .Select(rt => new RouteAndQualificationsViewModel
+                        .Select(rt => new RouteAndQualificationsDto
                         {
                             RouteName = rt.Key.RouteName,
                             RouteId = rt.Key.RouteId,

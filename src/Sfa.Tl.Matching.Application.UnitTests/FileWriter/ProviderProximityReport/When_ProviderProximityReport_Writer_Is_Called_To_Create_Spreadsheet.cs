@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
         }
 
         [Fact]
-        public void Then_Spreadsheet_First_Tab_Has_Providerss()
+        public void Then_Spreadsheet_First_Tab_Has_Providers()
         {
             using (var stream = new MemoryStream(_result))
             {

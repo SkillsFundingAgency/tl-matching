@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.ViewModel;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityReport.Builders
 {
@@ -22,7 +21,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
         {
             _dto.Providers.Add(new ProviderProximityReportItemDto
             {
-                ProviderVenueId = 1,
                 ProviderVenueTown = "Coventry",
                 ProviderVenuePostcode = "CV1 5FB",
                 Distance = 3.5,
@@ -35,10 +33,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
                 SecondaryContact = "Secondary contact",
                 SecondaryContactEmail = "Secondary contact email",
                 SecondaryContactPhone = "Secondary contact telephone",
-                IsTLevelProvider = true,
-                Routes = new List<RouteAndQualificationsViewModel>
+                Routes = new List<RouteAndQualificationsDto>
                 {
-                    new RouteAndQualificationsViewModel
+                    new RouteAndQualificationsDto
                     {
                         RouteId = 6,
                         RouteName = "Digital",
