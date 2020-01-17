@@ -7,7 +7,7 @@ using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Models.Configuration;
 
-namespace Sfa.Tl.Matching.Application.IntegrationTests
+namespace Sfa.Tl.Matching.Tests.Common
 {
     public class TestConfiguration
     {

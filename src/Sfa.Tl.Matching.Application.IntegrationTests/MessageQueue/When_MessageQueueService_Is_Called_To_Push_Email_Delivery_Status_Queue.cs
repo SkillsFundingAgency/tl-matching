@@ -7,6 +7,7 @@ using Microsoft.WindowsAzure.Storage.Queue;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Enums;
+using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue

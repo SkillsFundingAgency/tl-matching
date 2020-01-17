@@ -44,16 +44,11 @@
     <ProjectReference Include="..\Sfa.Tl.Matching.Data\Sfa.Tl.Matching.Data.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Domain\Sfa.Tl.Matching.Domain.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Models\Sfa.Tl.Matching.Models.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.Tests.Common\Sfa.Tl.Matching.Tests.Common.csproj" />
     <ProjectReference Include="..\Sfa.Tl.Matching.Web\Sfa.Tl.Matching.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.local.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="appsettings.test.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Employer\Employer-MissingMandatory.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
