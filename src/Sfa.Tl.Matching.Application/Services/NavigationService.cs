@@ -61,6 +61,8 @@ namespace Sfa.Tl.Matching.Application.Services
 
             if (urlList.FirstOrDefault()?.Url == currentUrl) return;
 
+            if (urlList.FirstOrDefault()?.Url.Contains("provider-results-for-opportunity") == true && currentUrl.Contains("provider-results-for-opportunity")) return;
+
             await CreateBackLinkDataAsync(userCache, urlList, currentUrl);
 
             if (currentUrl.Contains("Start"))
@@ -139,7 +141,6 @@ namespace Sfa.Tl.Matching.Application.Services
             "get-back-link",
             "404",
             "employer-search",
-            "saved-opportunities",
             "download-opportunity",
             "remove-opportunityItem",
             "provisiongap-opportunities",
