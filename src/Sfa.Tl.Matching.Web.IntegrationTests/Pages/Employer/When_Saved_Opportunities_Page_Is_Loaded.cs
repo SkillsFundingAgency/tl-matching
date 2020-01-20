@@ -7,13 +7,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 {
-    public class When_Saved_Opportunities_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Saved_Opportunities_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const string Title = "Saved opportunities";
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_Saved_Opportunities_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Saved_Opportunities_Page_Is_Loaded(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

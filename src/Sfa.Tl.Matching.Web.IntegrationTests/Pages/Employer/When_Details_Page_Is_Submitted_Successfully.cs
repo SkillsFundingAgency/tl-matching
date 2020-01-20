@@ -8,14 +8,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 {
-    public class When_Details_Page_Is_Submitted_Successfully : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Details_Page_Is_Submitted_Successfully : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_Details_Page_Is_Submitted_Successfully(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Details_Page_Is_Submitted_Successfully(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

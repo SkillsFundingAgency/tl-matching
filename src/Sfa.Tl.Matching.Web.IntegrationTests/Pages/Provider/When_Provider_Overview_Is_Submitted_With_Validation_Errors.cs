@@ -10,12 +10,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
 {
-    public class When_Provider_Overview_Is_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Provider_Overview_Is_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
         private const int ProviderId = 1;
 
-        public When_Provider_Overview_Is_Submitted_With_Validation_Errors(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Provider_Overview_Is_Submitted_With_Validation_Errors(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

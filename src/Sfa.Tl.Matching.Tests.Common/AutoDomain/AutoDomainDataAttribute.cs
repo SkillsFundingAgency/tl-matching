@@ -7,12 +7,11 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
 {
     public class AutoDomainDataAttribute : AutoDataAttribute
     {
-        public AutoDomainDataAttribute() : base(GetDefaultFixture)
+        public AutoDomainDataAttribute(bool useInMemoryDb = true) : base(() => GetDefaultFixture(useInMemoryDb))
         {
-
         }
 
-        public static IFixture GetDefaultFixture()
+        public static IFixture GetDefaultFixture(bool useInMemoryDb = true)
         {
             var autoNSubstituteCustomization = new AutoNSubstituteCustomization
             {
@@ -20,7 +19,7 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             };
 
             return new Fixture()
-                .Customize(new InMemoryDbContextCustomization())
+                .Customize(useInMemoryDb ? (ICustomization)(new InMemoryDbContextCustomization()) : new SqlServerDbContextCustomization())
                 .Customize(new OpportunityCustomization())
                 .Customize(new DomainCustomization())
                 .Customize(new HttpContextCustomization())
@@ -29,14 +28,6 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                 .Customize(new FactoryServiceCustomizations())
                 .Customize(new EmailHistoryCustomization())
                 .Customize(autoNSubstituteCustomization);
-
-        }
-    }
-    public class InlineAutoDomainDataAttribute : InlineAutoDataAttribute
-    {
-        public InlineAutoDomainDataAttribute(params object[] objects) : base(new AutoDomainDataAttribute(), objects)
-        {
-
         }
     }
 }

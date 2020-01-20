@@ -2,18 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builders;
-using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
-using Sfa.Tl.Matching.Tests.Common.Extensions;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
@@ -33,26 +27,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             };
 
             Logger = Substitute.For<ILogger<ProviderFeedbackService>>();
-
-            var bankHolidays = new BankHolidayListBuilder().Build().AsQueryable();
-
-            var mockSet = Substitute.For<DbSet<BankHoliday>, IAsyncEnumerable<BankHoliday>, IQueryable<BankHoliday>>();
-
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            ((IAsyncEnumerable<BankHoliday>)mockSet).GetEnumerator()
-                .Returns(new FakeAsyncEnumerator<BankHoliday>(bankHolidays.GetEnumerator()));
-            ((IQueryable<BankHoliday>)mockSet).Provider.Returns(
-                new FakeAsyncQueryProvider<BankHoliday>(bankHolidays.Provider));
-            ((IQueryable<BankHoliday>)mockSet).Expression.Returns(bankHolidays.Expression);
-            ((IQueryable<BankHoliday>)mockSet).ElementType.Returns(bankHolidays.ElementType);
-            ((IQueryable<BankHoliday>)mockSet).GetEnumerator().Returns(bankHolidays.GetEnumerator());
-
-            var contextOptions = new DbContextOptions<MatchingDbContext>();
-            var mockContext = Substitute.For<MatchingDbContext>(contextOptions);
-            mockContext.Set<BankHoliday>().Returns(mockSet);
-
-            BankHolidayRepository =
-                new GenericRepository<BankHoliday>(NullLogger<GenericRepository<BankHoliday>>.Instance, mockContext);
 
             BankHolidayRepository = Substitute.For<IRepository<BankHoliday>>();
             BankHolidayRepository

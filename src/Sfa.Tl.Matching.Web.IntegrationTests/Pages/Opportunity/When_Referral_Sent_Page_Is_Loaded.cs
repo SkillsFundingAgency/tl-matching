@@ -7,14 +7,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class When_Referral_Sent_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Referral_Sent_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const string Title = "Emails sent";
         private const int OpportunityId = 1000;
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_Referral_Sent_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Referral_Sent_Page_Is_Loaded(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

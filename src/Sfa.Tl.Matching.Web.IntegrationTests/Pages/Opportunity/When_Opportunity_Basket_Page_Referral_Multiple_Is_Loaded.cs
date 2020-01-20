@@ -7,16 +7,16 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class When_Opportunity_Basket_Page_Referral_Multiple_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Opportunity_Basket_Page_Referral_Multiple_Is_Loaded : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const string Title = "All opportunities";
         private const int OpportunityId = 1030;
         private const int OpportunityItem1Id = 1031;
         private const int OpportunityItem2Id = 1032;
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_Opportunity_Basket_Page_Referral_Multiple_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Opportunity_Basket_Page_Referral_Multiple_Is_Loaded(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

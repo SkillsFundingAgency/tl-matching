@@ -3,9 +3,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
 {
-    public class StandardUserTestStartup : TestStartup
+    public class StandardUserInMemoryStartup : InMemoryStartup
     {
-        public StandardUserTestStartup(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration, loggerFactory)
+        public StandardUserInMemoryStartup(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration, loggerFactory)
         {
         }
 

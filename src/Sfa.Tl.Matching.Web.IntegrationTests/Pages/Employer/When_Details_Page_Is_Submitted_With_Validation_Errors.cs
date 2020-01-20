@@ -10,14 +10,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 {
-    public class When_Details_Page_Is_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Details_Page_Is_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_Details_Page_Is_Submitted_With_Validation_Errors(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Details_Page_Is_Submitted_With_Validation_Errors(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

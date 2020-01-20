@@ -7,13 +7,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Provider
 {
-    public class When_Provider_Search_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Provider_Search_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const string Title = "Find a provider";
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_Provider_Search_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Provider_Search_Page_Is_Loaded(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

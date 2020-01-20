@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
             {
                 new ProviderVenue
                 {
-                    Id = 1,
+                    //Id = 1,
                     Name = "Venue 1 Name",
                     Provider = BuildProvider(true),
                     Postcode = "CV1 2WT",
@@ -33,7 +33,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 },
                 new ProviderVenue
                 {
-                    Id = 2,
+                    //Id = 2,
                     Name = "Venue 2 Name",
                     Provider = BuildProvider(true),
                     Postcode = "CV1 1EE",
@@ -59,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
         {
             return new Provider
             {
-                Id = 1,
+                //Id = 1,
                 UkPrn = 10203040,
                 Name = "SQL Search Provider",
                 DisplayName = "SQL Search Provider Display Name",
@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 {
                     Qualification = new Qualification
                     {
-                        Id = 1,
+                        //Id = 1,
                         LarId = "12345678",
                         Title = "Qualification Title",
                         ShortTitle = "Short Title",

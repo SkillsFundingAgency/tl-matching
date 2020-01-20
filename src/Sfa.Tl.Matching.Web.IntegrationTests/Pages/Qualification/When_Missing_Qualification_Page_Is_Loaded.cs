@@ -8,15 +8,15 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
 {
-    public class When_Missing_Qualification_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Missing_Qualification_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const string Title = "We need extra information for this qualification";
         private const int VenueId = 1;
         private const string LarId = "12345678";
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_Missing_Qualification_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Missing_Qualification_Page_Is_Loaded(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

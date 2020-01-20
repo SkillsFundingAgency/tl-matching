@@ -7,13 +7,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
 {
-    public class When_ProviderProximity_Results_Page_Is_Loaded_With_Postcode_And_Multiple_Filters : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_ProviderProximity_Results_Page_Is_Loaded_With_Postcode_And_Multiple_Filters : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const string Title = "All providers in an area";
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_ProviderProximity_Results_Page_Is_Loaded_With_Postcode_And_Multiple_Filters(CustomWebApplicationFactory<TestStartup> factory)
+        public When_ProviderProximity_Results_Page_Is_Loaded_With_Postcode_And_Multiple_Filters(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

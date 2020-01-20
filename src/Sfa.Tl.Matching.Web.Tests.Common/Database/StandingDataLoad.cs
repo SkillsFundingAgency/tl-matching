@@ -8,20 +8,21 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database
     {
         internal static void Load(MatchingDbContext context)
         {
+            var providerVenues = ProviderVenueData.Create();
             context.AddRange(EmailTemplateData.Create().ToList());
             context.AddRange(EmployerData.Create().ToList());
             context.AddRange(RouteAndPathData.Create().ToList());
-            context.AddRange(ProviderVenueData.Create());            
-            context.AddRange(OpportunityData.Create());
+            context.AddRange(providerVenues);            
+            context.AddRange(OpportunityData.Create(providerVenues));
             context.AddRange(ServiceStatusHistoryData.Create().ToList());
             context.AddRange(LearningAimReferenceData.Create().ToList());
-            context.AddRange(OpportunityData.CreateReferralSingle());
+            context.AddRange(OpportunityData.CreateReferralSingle(providerVenues.ElementAt(0)));
             context.AddRange(OpportunityData.CreateProvisionGapSingle());
-            context.AddRange(OpportunityData.CreateReferralMultiple());
-            context.AddRange(OpportunityData.CreateReferralMultipleAndProvisionGap());
-            context.AddRange(OpportunityData.CreateReferralSingleAndProvisionGap());
-            context.AddRange(OpportunityData.CreateProvidersMultiple());
-            context.AddRange(OpportunityData.CreateNReferrals(5000));
+            context.AddRange(OpportunityData.CreateReferralMultiple(providerVenues));
+            context.AddRange(OpportunityData.CreateReferralMultipleAndProvisionGap(providerVenues));
+            context.AddRange(OpportunityData.CreateReferralSingleAndProvisionGap(providerVenues.ElementAt(0)));
+            context.AddRange(OpportunityData.CreateProvidersMultiple(providerVenues));
+            context.AddRange(OpportunityData.CreateNReferrals(5000, providerVenues.ElementAt(0)));
 
             context.SaveChanges();
         }

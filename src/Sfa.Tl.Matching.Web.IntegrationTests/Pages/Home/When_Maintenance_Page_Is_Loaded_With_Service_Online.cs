@@ -7,13 +7,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Home
 {
-    public class When_Maintenance_Page_Is_Loaded_With_Service_Online : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Maintenance_Page_Is_Loaded_With_Service_Online : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const string Title = "Service under maintenance";
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_Maintenance_Page_Is_Loaded_With_Service_Online(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Maintenance_Page_Is_Loaded_With_Service_Online(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

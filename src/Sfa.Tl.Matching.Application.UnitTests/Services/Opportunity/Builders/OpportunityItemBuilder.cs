@@ -9,37 +9,44 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
     {
         private readonly OpportunityItem _opportunityItem;
 
-        public OpportunityItemBuilder()
+        public OpportunityItemBuilder(int id = 1, int opportunityId = 2)
         {
             _opportunityItem = new OpportunityItem
             {
-                Id = 1,
+                Id = id,
                 OpportunityId = 2,
+                Postcode = "Postcode",
+                RouteId = 1,
+                Placements = 1,
                 OpportunityType = OpportunityType.Referral.ToString(),
                 CreatedBy = "CreatedBy",
                 Opportunity = new Domain.Models.Opportunity
                 {
-                    Id = 2,
+                    Id = opportunityId,
                     CreatedBy = "CreatedBy"
                 }
             };
         }
 
-        public OpportunityItemBuilder AddEmployer()
+        public OpportunityItemBuilder AddEmployer(int id = 3)
         {
-            _opportunityItem.Opportunity.EmployerCrmId = new Guid("33333333-3333-3333-3333-333333333333");
+            var crmId = Guid.NewGuid();
+            _opportunityItem.Opportunity.EmployerCrmId = crmId;
             _opportunityItem.Opportunity.Employer = new Domain.Models.Employer
             {
-                Id = 3,
+                Id = id,
+                CrmId = crmId,
                 CompanyName = "CompanyName",
+                AlsoKnownAs = "AlsoKnownAs",
                 CreatedBy = "CreatedBy",
-                ModifiedBy = "ModifiedBy"
+                ModifiedBy = "ModifiedBy",
+                Owner = "Owner"
             };
 
             return this;
         }
 
-        public OpportunityItemBuilder AddProvisionGap()
+        public OpportunityItemBuilder AddProvisionGap(int id = 4, bool noSuitableStudent = true, bool hadBadExperience = true, bool providersTooFarAway = true)
         {
             if (_opportunityItem.ProvisionGap == null)
             {
@@ -50,11 +57,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity.Builders
             _opportunityItem.ProvisionGap.Add(
                 new ProvisionGap
                 {
-                    Id = 4,
+                    Id = id,
                     OpportunityItemId = 2,
-                    NoSuitableStudent = true,
-                    HadBadExperience = true,
-                    ProvidersTooFarAway = true,
+                    NoSuitableStudent = noSuitableStudent,
+                    HadBadExperience = hadBadExperience,
+                    ProvidersTooFarAway = providersTooFarAway,
                     CreatedBy = "CreatedBy"
                 });
 

@@ -18,7 +18,6 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
             var dbcontext = new MatchingDbContext(options);
             fixture.Register(() => dbcontext);
             fixture.Behaviors.Add(new OmitOnRecursionBehavior());
-            
         }
     }
 }

@@ -7,11 +7,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Dashboard
 {
-    public class When_Dashboard_Page_Is_Loaded_As_Standard_User : IClassFixture<CustomWebApplicationFactory<StandardUserTestStartup>>
+    public class When_Dashboard_Page_Is_Loaded_As_Standard_User : IClassFixture<CustomWebApplicationFactory<StandardUserInMemoryStartup>>
     {
-        private readonly CustomWebApplicationFactory<StandardUserTestStartup> _factory;
+        private readonly CustomWebApplicationFactory<StandardUserInMemoryStartup> _factory;
 
-        public When_Dashboard_Page_Is_Loaded_As_Standard_User(CustomWebApplicationFactory<StandardUserTestStartup> factory)
+        public When_Dashboard_Page_Is_Loaded_As_Standard_User(CustomWebApplicationFactory<StandardUserInMemoryStartup> factory)
         {
             _factory = factory;
         }

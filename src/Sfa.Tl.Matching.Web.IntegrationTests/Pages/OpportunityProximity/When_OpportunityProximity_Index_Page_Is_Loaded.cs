@@ -8,15 +8,15 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.OpportunityProximity
 {
-    public class When_OpportunityProximity_Index_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_OpportunityProximity_Index_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const string Title = "Set up placement opportunity";
         private const int OpportunityId = 0;
         private const int OpportunityItemId = 0;
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_OpportunityProximity_Index_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_OpportunityProximity_Index_Page_Is_Loaded(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

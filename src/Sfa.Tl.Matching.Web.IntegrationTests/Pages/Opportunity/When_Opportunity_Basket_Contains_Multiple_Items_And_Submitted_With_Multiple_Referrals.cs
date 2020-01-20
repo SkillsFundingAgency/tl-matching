@@ -9,12 +9,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Opportunity
 {
-    public class When_Opportunity_Basket_Contains_Multiple_Items_And_Submitted_With_Multiple_Referrals : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Opportunity_Basket_Contains_Multiple_Items_And_Submitted_With_Multiple_Referrals : IClassFixture<CustomWebApplicationFactory<SqlServerStartup>>
     {
         private const int OpportunityId = 3000;
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<SqlServerStartup> _factory;
 
-        public When_Opportunity_Basket_Contains_Multiple_Items_And_Submitted_With_Multiple_Referrals(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Opportunity_Basket_Contains_Multiple_Items_And_Submitted_With_Multiple_Referrals(CustomWebApplicationFactory<SqlServerStartup> factory)
         {
             _factory = factory;
         }

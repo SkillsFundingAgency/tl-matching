@@ -13,8 +13,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 {
-    public class When_ProviderFeedBackService_Is_Called_To_Send_Employer_Feedback_Emails_To_Primary_Contact_Only
-        : IClassFixture<ProviderFeedbackFixture>
+    public class When_ProviderFeedBackService_Is_Called_To_Send_Employer_Feedback_Emails_To_Primary_Contact_Only : IClassFixture<ProviderFeedbackFixture>
     {
         private readonly ProviderFeedbackFixture _testFixture;
         private readonly IDateTimeProvider _dateTimeProvider;
@@ -22,8 +21,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly int _result;
 
-        public When_ProviderFeedBackService_Is_Called_To_Send_Employer_Feedback_Emails_To_Primary_Contact_Only(
-            ProviderFeedbackFixture testFixture)
+        public When_ProviderFeedBackService_Is_Called_To_Send_Employer_Feedback_Emails_To_Primary_Contact_Only(ProviderFeedbackFixture testFixture)
         {
             _testFixture = testFixture;
 

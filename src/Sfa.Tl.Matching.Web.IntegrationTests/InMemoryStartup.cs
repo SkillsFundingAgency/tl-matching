@@ -8,9 +8,9 @@ using Sfa.Tl.Matching.Web.IntegrationTests.Helpers;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests
 {
-    public class TestStartup : Startup
+    public class InMemoryStartup : Startup
     {
-        public TestStartup(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration, loggerFactory)
+        public InMemoryStartup(IConfiguration configuration, ILoggerFactory loggerFactory) : base(configuration, loggerFactory)
         {
         }
 
@@ -21,6 +21,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests
                 PostcodeRetrieverBaseUrl = "https://postcodes.io",
                 GoogleMapsApiBaseUrl = "https://google.com"
             };
+
+            services.AddSingleton(MatchingConfiguration);
         }
 
         protected override bool ConfigurationIsLocalOrDev()

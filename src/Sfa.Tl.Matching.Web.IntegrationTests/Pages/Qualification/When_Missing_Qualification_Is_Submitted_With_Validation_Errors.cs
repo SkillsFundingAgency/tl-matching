@@ -10,13 +10,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Qualification
 {
-    public class When_Missing_Qualification_Is_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Missing_Qualification_Is_Submitted_With_Validation_Errors : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
         private const int VenueId = 1;
         private const string LarId = "12345678";
 
-        public When_Missing_Qualification_Is_Submitted_With_Validation_Errors(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Missing_Qualification_Is_Submitted_With_Validation_Errors(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

@@ -7,15 +7,15 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
 {
-    public class When_Employer_Consent_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class When_Employer_Consent_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<InMemoryStartup>>
     {
         private const string Title = "Confirm that we can share the employer’s contact details";
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
+        private readonly CustomWebApplicationFactory<InMemoryStartup> _factory;
 
-        public When_Employer_Consent_Page_Is_Loaded(CustomWebApplicationFactory<TestStartup> factory)
+        public When_Employer_Consent_Page_Is_Loaded(CustomWebApplicationFactory<InMemoryStartup> factory)
         {
             _factory = factory;
         }

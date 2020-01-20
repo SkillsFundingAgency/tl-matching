@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
             {
                 new Employer
                 {
-                    Id = 1,
+                    //Id = 1,
                     CrmId = new Guid("11111111-1111-1111-1111-111111111111"),
                     CompanyName = "Company Name",
                     AlsoKnownAs = "",
@@ -26,7 +26,7 @@ namespace Sfa.Tl.Matching.Web.Tests.Common.Database.StandingData
                 },
                 new Employer
                 {
-                    Id = 2,
+                    //Id = 2,
                     CrmId = new Guid("22222222-2222-2222-2222-222222222222"),
                     CompanyName = "Company Name For Selection",
                     AlsoKnownAs = "",

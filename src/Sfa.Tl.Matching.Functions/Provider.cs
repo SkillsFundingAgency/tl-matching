@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
@@ -30,24 +30,23 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogInformation($"Function {context.FunctionName} triggered");
 
-                var providers = new List<Domain.Models.Provider>();
+                var providers = await providerRepository
+                    .GetManyAsync(p => string.IsNullOrWhiteSpace(p.DisplayName))
+                    .ToListAsync();
 
-                if (providerRepository.GetManyAsync(p => string.IsNullOrWhiteSpace(p.DisplayName)).Any())
+                if (providers != null && providers.Any())
                 {
-                    foreach (var provider in providerRepository.GetManyAsync(p => true))
+                    providers.ForEach(provider =>
                     {
-                        var displayName =
-                            string.IsNullOrWhiteSpace(provider.DisplayName)
+                        var displayName = string.IsNullOrWhiteSpace(provider.DisplayName)
                                 ? provider.Name
                                 : provider.DisplayName;
 
                         displayName = displayName.ToTitleCase();
+
                         if (displayName != provider.DisplayName)
-                        {
                             provider.DisplayName = displayName;
-                            providers.Add(provider);
-                        }
-                    }
+                    });
 
                     await providerRepository.UpdateManyAsync(providers);
                 }
@@ -55,7 +54,7 @@ namespace Sfa.Tl.Matching.Functions
                 stopwatch.Stop();
 
                 logger.LogInformation($"Function {context.FunctionName} finished processing\n" +
-                                      $"\tRows saved: {providers.Count}\n" +
+                                      $"\tRows saved: {providers?.Count}\n" +
                                       $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
             }
             catch (Exception e)
