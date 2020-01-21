@@ -16,33 +16,33 @@ namespace Sfa.Tl.Matching.Application.FileReader.Employer
             RuleFor(dto => dto.AccountId)
                 .NotEmpty()
                 .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                .WithMessage($"'{nameof(EmployerStagingFileImportDto.CrmId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .WithMessage($"'{nameof(Domain.Models.Employer.CrmId)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .Must(dto => dto.IsGuid())
                 .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                .WithMessage($"'{nameof(EmployerStagingFileImportDto.CrmId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                .WithMessage($"'{nameof(Domain.Models.Employer.CrmId)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(dto => dto.Name)
                 .NotEmpty()
                 .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                .WithMessage($"'{nameof(EmployerStagingFileImportDto.CompanyName)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+                .WithMessage($"'{nameof(Domain.Models.Employer.CompanyName)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
 
             RuleFor(dto => dto.sfa_aupa)
                 .NotEmpty()
                 .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                .WithMessage($"'{nameof(EmployerStagingFileImportDto.Aupa)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+                .WithMessage($"'{nameof(Domain.Models.Employer.Aupa)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
                 .Must(dto => dto.IsAupaStatus())
                 .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                .WithMessage($"'{nameof(EmployerStagingFileImportDto.Aupa)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                .WithMessage($"'{nameof(Domain.Models.Employer.Aupa)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(dto => dto.CustomerTypeCode)
                 .Must(dto => dto.IsCompanyType())
                 .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-                .WithMessage($"'{nameof(EmployerStagingFileImportDto.CompanyType)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+                .WithMessage($"'CustomerTypeCode' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
             RuleFor(dto => dto.OwnerIdName)
                 .NotEmpty()
                 .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-                .WithMessage($"'{nameof(EmployerStagingFileImportDto.Owner)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
+                .WithMessage($"'{nameof(Domain.Models.Employer.Owner)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}");
         }
     }
 }

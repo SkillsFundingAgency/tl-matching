@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers
             {
                 File = formFile,
                 IsImportSuccessful = true,
-                SelectedImportType = DataImportType.Employer
+                SelectedImportType = DataImportType.LearningAimReference
             };
 
             var config = new MapperConfiguration(c =>
@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Mappers
             _result.Should().NotBeNull();
             _result.FileName.Should().Be($"{FormattedDateTimeNowUtc}{FileName}");
             _result.ContentType.Should().Be(FileContentType);
-            _result.ImportType.Should().Be(DataImportType.Employer);
+            _result.ImportType.Should().Be(DataImportType.LearningAimReference);
             _result.Data.Should().BeEquivalentTo(_data);
         }
     }

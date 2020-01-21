@@ -7,13 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
-using Sfa.Tl.Matching.Models.Dto;
 
 // ReSharper disable UnusedMember.Global
 
@@ -21,36 +18,6 @@ namespace Sfa.Tl.Matching.Functions
 {
     public static class Employer
     {
-        [FunctionName("ImportEmployer")]
-        public static async Task ImportEmployerAsync(
-            [BlobTrigger("employer/{name}", Connection = "BlobStorageConnectionString")]ICloudBlob blockBlob,
-            string name,
-            ExecutionContext context,
-            ILogger logger,
-            [Inject] IFileImportService<EmployerStagingFileImportDto> fileImportService
-        )
-        {
-            var stream = await blockBlob.OpenReadAsync(null, null, null);
-
-            logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
-                                  $"\tName:{name}\n" +
-                                  $"\tSize: {stream.Length} Bytes");
-
-            var stopwatch = Stopwatch.StartNew();
-            var createdRecords = await fileImportService.BulkImportAsync(new EmployerStagingFileImportDto
-            {
-                FileDataStream = stream,
-                CreatedBy = blockBlob.GetCreatedByMetadata()
-            });
-            stopwatch.Stop();
-
-            logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
-                                  $"\tName:{name}\n" +
-                                  $"\tRows saved: {createdRecords}\n" +
-                                  $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
-            logger.LogInformation($"Processing Employer blob\n Name:{name} \n Size: {stream.Length} Bytes");
-        }
-
         [FunctionName("EmployerCreatedHandler")]
         public static async Task<IActionResult> EmployerCreatedHandlerAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,

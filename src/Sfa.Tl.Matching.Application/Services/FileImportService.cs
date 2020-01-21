@@ -68,7 +68,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private static IEqualityComparer<TEntity> GetEqualityComparer()
         {
-            var comparerType = typeof(EmployerStagingEqualityComparer).Assembly.GetTypes()
+            var comparerType = typeof(LearningAimReferenceStagingEqualityComparer).Assembly.GetTypes()
                 .Single(comparer => comparer.GetInterfaces().Contains(typeof(IEqualityComparer<TEntity>)));
             return (IEqualityComparer<TEntity>)Activator.CreateInstance(comparerType);
         }

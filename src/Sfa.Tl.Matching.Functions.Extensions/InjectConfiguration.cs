@@ -87,8 +87,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
         private static void RegisterFileReaders(IServiceCollection services)
         {
-            RegisterExcelFileReader<EmployerStagingDto, EmployerStagingFileImportDto, EmployerStaging, EmployerStagingDataParser, EmployerStagingDataValidator, NullDataProcessor<EmployerStaging>>(services);
-
             RegisterCsvFileReader<LearningAimReferenceStagingDto, LearningAimReferenceStagingFileImportDto, LearningAimReferenceStaging, LearningAimReferenceStagingDataParser, LearningAimReferenceStagingDataValidator, NullDataProcessor<LearningAimReferenceStaging>>(services);
         }
 
