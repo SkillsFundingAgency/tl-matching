@@ -1,17 +1,21 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.FileReader;
+using Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Application.UnitTests.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
-using Path = System.IO.Path;
+using Sfa.Tl.Matching.Tests.Common;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.DuplicateRows
 {
@@ -19,7 +23,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
         where TImportDto : FileImportDto, new()
         where TDto : class, new()
         where TEntity : BaseEntity, new()
-
     {
         internal readonly IValidator<TImportDto> DataValidator;
         internal readonly IDataParser<TDto> DataParser;
@@ -36,7 +39,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
 
             DataParser = Substitute.For<IDataParser<TDto>>();
 
-            DataParser.Parse(Arg.Any<TImportDto>()).Returns(info => TestHelper.GetDataParser<TDto>().Parse(info.Arg<TImportDto>()));
+            DataParser.Parse(Arg.Any<TImportDto>())
+                .Returns(info => 
+                    GetDataParser().Parse(info.Arg<TImportDto>()));
 
             FunctionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
@@ -53,13 +58,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
             FileImportService = new FileImportService<TImportDto, TDto, TEntity>
             (
                 new NullLogger<FileImportService<TImportDto, TDto, TEntity>>(),
-                TestHelper.GetMapper(),
+                GetMapper(),
                 csvfileReader,
                 Repository,
                 Substitute.For<IDataProcessor<TEntity>>()
             );
 
-            var filePath = Path.Combine(TestHelper.GetTestExecutionDirectory(), $"Services\\FileImportService\\DuplicateRows\\{typeof(TEntity).Name}-DuplicateRows.csv");
+            var filePath = System.IO.Path.Combine(TestConfiguration.GetTestExecutionDirectory(), $"Services\\FileImportService\\DuplicateRows\\{typeof(TEntity).Name}-DuplicateRows.csv");
             using (var stream = File.Open(filePath, FileMode.Open))
             {
                 FileImportService.BulkImportAsync(new TImportDto
@@ -67,6 +72,20 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
                     FileDataStream = stream
                 }).GetAwaiter().GetResult();
             }
+        }
+
+        private static IMapper GetMapper()
+        {
+            var config = new MapperConfiguration(c => 
+                c.AddMaps(typeof(EmployerMapper).Assembly));
+            return new Mapper(config);
+        }
+
+        private static IDataParser<TDto> GetDataParser()
+        {
+            return (IDataParser<TDto>)Activator.CreateInstance(
+                typeof(LearningAimReferenceStagingDataParser).Assembly.GetTypes()
+                .First(t => typeof(IDataParser<TDto>).IsAssignableFrom(t)));
         }
     }
 }

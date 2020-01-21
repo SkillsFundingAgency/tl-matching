@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Tests.Common
 
         public static string GetTestExecutionDirectory()
         {
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            var codeBaseUrl = new Uri(Assembly.GetCallingAssembly().CodeBase);
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
             return Path.GetDirectoryName(codeBasePath);
         }
