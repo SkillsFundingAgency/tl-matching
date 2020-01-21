@@ -1,57 +1,47 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Dashboard
 {
-    public class When_Dashboard_Controller_Start_Is_Loaded_With_Service_Online_Status_And_No_Saved_Opportunities
+    public class When_Dashboard_Controller_Start_Is_Loaded_With_Service_Online_Status_And_No_Saved_Opportunities : IClassFixture<DashboardControllerFixture>
     {
+        private readonly DashboardControllerFixture _fixture;
         private readonly IActionResult _result;
-        private readonly IEmployerService _employerService;
-        private readonly IServiceStatusHistoryService _serviceStatusHistoryService;
-
-        public When_Dashboard_Controller_Start_Is_Loaded_With_Service_Online_Status_And_No_Saved_Opportunities()
+        
+        public When_Dashboard_Controller_Start_Is_Loaded_With_Service_Online_Status_And_No_Saved_Opportunities(DashboardControllerFixture fixture)
         {
-            _employerService = Substitute.For<IEmployerService>();
-            _serviceStatusHistoryService = Substitute.For<IServiceStatusHistoryService>();
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            _fixture = fixture;
 
-            var dashboardController = new DashboardController(_employerService, _serviceStatusHistoryService);
-            var controllerWithClaims = new ClaimsBuilder<DashboardController>(dashboardController)
-                .AddStandardUser()
-                .AddUserName("username")
-                .Build();
+            var controllerWithClaims = _fixture.GetControllerWithClaims;
 
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            _fixture.HttpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            _employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(0);
-            _serviceStatusHistoryService.GetLatestServiceStatusHistoryAsync()
+            _fixture.EmployerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(0);
+            _fixture.ServiceStatusHistoryService.GetLatestServiceStatusHistoryAsync()
                 .Returns(new ServiceStatusHistoryViewModel
                 {
                     IsOnline = true
                 });
 
-            _result = dashboardController.Start().GetAwaiter().GetResult();
+            _result = _fixture.SubjectUnderTest.Start().GetAwaiter().GetResult();
 
         }
 
         [Fact]
         public void Then_GetInProgressEmployerOpportunityCount_Is_Called_Exactly_Once()
         {
-            _employerService.Received(1).GetInProgressEmployerOpportunityCountAsync("username");
+            _fixture.EmployerService.Received(2).GetInProgressEmployerOpportunityCountAsync("username");
         }
 
         [Fact]
         public void Then_GetLatestServiceStatusHistory_Is_Called_Exactly_Once()
         {
-            _serviceStatusHistoryService.Received(1).GetLatestServiceStatusHistoryAsync();
+            _fixture.ServiceStatusHistoryService.Received(4).GetLatestServiceStatusHistoryAsync();
         }
 
         [Fact]
