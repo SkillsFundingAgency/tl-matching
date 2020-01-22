@@ -24,7 +24,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Fixtures
         public DashboardController SubjectUnderTest { get; }
         
         public DashboardController GetControllerWithClaims => new ClaimsBuilder<DashboardController>(SubjectUnderTest)
-                                                                        .AddStandardUser()
+                                                                        .AddStandardUserPermission()
                                                                         .AddUserName("username")
                                                                         .Build();
 

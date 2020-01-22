@@ -1,48 +1,34 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Check_Details_Is_Loaded
+    public class When_Employer_Check_Details_Is_Loaded : IClassFixture<EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel>>
     {
+        private readonly EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> _fixture;
         private readonly IActionResult _result;
 
-        private const int OpportunityId = 12;
-        private const int OpportunityItemId = 34;
-        private const string CompanyName = "CompanyName";
-        private const string EmployerContact = "EmployerContact";
-        private const string EmployerContactPhone = "EmployerContactPhone";
-        private const string EmployerContactEmail = "EmployerContactEmail";
-
-        public When_Employer_Check_Details_Is_Loaded()
+        public When_Employer_Check_Details_Is_Loaded(EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> fixture)
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
-            var mapper = new Mapper(config);
+            _fixture = fixture;
 
-            var employerService = Substitute.For<IEmployerService>();
-            var referralService = Substitute.For<IReferralService>();
-            employerService.GetOpportunityEmployerDetailAsync(Arg.Any<int>(), Arg.Any<int>()).Returns(new EmployerDetailsViewModel
+            _fixture.EmployerService.GetOpportunityEmployerDetailAsync(Arg.Any<int>(), Arg.Any<int>()).Returns(new EmployerDetailsViewModel
             {
-                OpportunityId = OpportunityId,
-                OpportunityItemId = OpportunityItemId,
-                CompanyName = CompanyName,
-                PrimaryContact = EmployerContact,
-                Phone = EmployerContactPhone,
-                Email = EmployerContactEmail
+                OpportunityId = _fixture.OpportunityId,
+                OpportunityItemId = _fixture.OpportunityItemId,
+                CompanyName = _fixture.CompanyName,
+                PrimaryContact = _fixture.EmployerContact,
+                Phone = _fixture.EmployerContactPhone,
+                Email = _fixture.EmployerContactEmail
             });
 
-            var employerController = new EmployerController(employerService, Substitute.For<IOpportunityService>(),
-                referralService, mapper);
-
-            _result = employerController.CheckEmployerDetailsAsync(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
+            _result = _fixture.Sut.CheckEmployerDetailsAsync(_fixture.OpportunityId, _fixture.OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -58,12 +44,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var viewModel = _result.GetViewModel<EmployerDetailsViewModel>();
             viewModel.Should().NotBeNull();
 
-            viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
-            viewModel.OpportunityId.Should().Be(OpportunityId);
-            viewModel.CompanyName.Should().Be(CompanyName);
-            viewModel.PrimaryContact.Should().Be(EmployerContact);
-            viewModel.Phone.Should().Be(EmployerContactPhone);
-            viewModel.Email.Should().Be(EmployerContactEmail);
+            viewModel.OpportunityItemId.Should().Be(_fixture.OpportunityItemId);
+            viewModel.OpportunityId.Should().Be(_fixture.OpportunityId);
+            viewModel.CompanyName.Should().Be(_fixture.CompanyName);
+            viewModel.PrimaryContact.Should().Be(_fixture.EmployerContact);
+            viewModel.Phone.Should().Be(_fixture.EmployerContactPhone);
+            viewModel.Email.Should().Be(_fixture.EmployerContactEmail);
         }
     }
 }

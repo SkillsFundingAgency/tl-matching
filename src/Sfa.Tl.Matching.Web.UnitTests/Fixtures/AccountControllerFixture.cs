@@ -25,6 +25,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Fixtures
             new ClaimsBuilder<AccountController>(AccountController).AddUserName("username").Build();
 
         public AccountController GetStandardLoginUser =>
-            new ClaimsBuilder<AccountController>(AccountController).AddStandardUser().Build();
+            new ClaimsBuilder<AccountController>(AccountController).AddStandardUserPermission().Build();
     }
 }

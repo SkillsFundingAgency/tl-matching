@@ -1,33 +1,29 @@
 ﻿using System;
-using System.Security.Claims;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Extensions;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_SaveOpportunityCompanyName_Is_Submitted_And_Employer_Is_Already_In_Opportunity_As_Same_User
+    public class When_Employer_SaveOpportunityCompanyName_Is_Submitted_And_Employer_Is_Already_In_Opportunity_As_Same_User : IClassFixture<EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel>>
     {
+        private readonly EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> _fixture;
         private readonly IActionResult _result;
-        private readonly EmployerController _employerController;
-
-        public When_Employer_SaveOpportunityCompanyName_Is_Submitted_And_Employer_Is_Already_In_Opportunity_As_Same_User()
+        
+        public When_Employer_SaveOpportunityCompanyName_Is_Submitted_And_Employer_Is_Already_In_Opportunity_As_Same_User(EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> fixture)
         {
-            var employerService = Substitute.For<IEmployerService>();
-            employerService.ValidateCompanyNameAndCrmIdAsync(Arg.Any<Guid>(), Arg.Any<string>())
+            _fixture = fixture;
+
+            _fixture.EmployerService.ValidateCompanyNameAndCrmIdAsync(Arg.Any<Guid>(), Arg.Any<string>())
                 .Returns(true);
-            employerService.GetEmployerOpportunityOwnerAsync(Arg.Any<Guid>())
+
+            _fixture.EmployerService.GetEmployerOpportunityOwnerAsync(Arg.Any<Guid>())
                 .Returns("Same User");
-            var opportunityService = Substitute.For<IOpportunityService>();
-            var referralService = Substitute.For<IReferralService>();
 
             var viewModel = new FindEmployerViewModel
             {
@@ -35,14 +31,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                 CompanyName = "Company Name"
             };
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
-            var mapper = new Mapper(config);
-
-            _employerController = new EmployerController(employerService, opportunityService, referralService, mapper);
-            var controllerWithClaims = new ClaimsBuilder<EmployerController>(_employerController)
-                .Add(ClaimTypes.Role, RolesExtensions.StandardUser)
-                .AddUserName("Same User")
-                .Build();
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("Same User");
 
             _result = controllerWithClaims.SaveOpportunityCompanyNameAsync(viewModel).GetAwaiter().GetResult();
         }
@@ -57,12 +46,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_Model_State_Has_CompanyName_Error()
         {
-            _employerController.ViewData.ModelState.Should().ContainSingle();
+            _fixture.Sut.ViewData.ModelState.Should().ContainSingle();
 
-            _employerController.ViewData.ModelState.ContainsKey(nameof(FindEmployerViewModel.CompanyName))
+            _fixture.Sut.ViewData.ModelState.ContainsKey(nameof(FindEmployerViewModel.CompanyName))
                 .Should().BeTrue();
 
-            var modelStateEntry = _employerController.ViewData.ModelState[nameof(FindEmployerViewModel.CompanyName)];
+            var modelStateEntry = _fixture.Sut.ViewData.ModelState[nameof(FindEmployerViewModel.CompanyName)];
+
             modelStateEntry
                 .Errors[0]
                 .ErrorMessage

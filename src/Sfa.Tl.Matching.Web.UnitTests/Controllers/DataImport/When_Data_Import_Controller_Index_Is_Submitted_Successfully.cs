@@ -1,27 +1,23 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 {
-    public class When_Data_Import_Controller_Index_Is_Submitted_Successfully
+    public class When_Data_Import_Controller_Index_Is_Submitted_Successfully : IClassFixture<DataImportControllerFixture>
     {
+        private readonly DataImportControllerFixture _fixture;
         private readonly IActionResult _result;
-        private readonly DataUploadDto _dataUploadDto;
-        private readonly IDataBlobUploadService _dataBlobUploadService;
-
-        public When_Data_Import_Controller_Index_Is_Submitted_Successfully()
+        
+        public When_Data_Import_Controller_Index_Is_Submitted_Successfully(DataImportControllerFixture fixture)
         {
-            _dataUploadDto = new DataUploadDto();
+            _fixture = fixture;
             var formFile = Substitute.For<IFormFile>();
 
             var viewModel = new DataImportParametersViewModel
@@ -29,18 +25,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
                 SelectedImportType = DataImportType.LearningAimReference,
                 File = formFile
             };
-            var mapper = Substitute.For<IMapper>();
-            mapper.Map<DataUploadDto>(viewModel).Returns(_dataUploadDto);
+            
+            _fixture.Mapper.Map<DataUploadDto>(viewModel).Returns(_fixture.Dto);
 
-            _dataBlobUploadService = Substitute.For<IDataBlobUploadService>();
             formFile.ContentType.Returns("application/vnd.ms-excel");
 
-            var dataImportController = new DataImportController(mapper, _dataBlobUploadService);
-            var controllerWithClaims = new ClaimsBuilder<DataImportController>(dataImportController)
-                .AddUserName("username")
-                .Build();
-
-            _result = controllerWithClaims.Index(viewModel).Result;
+            _result = _fixture.ControllerWithClaims.Index(viewModel).Result;
         }
 
         [Fact]
@@ -54,6 +44,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
         [Fact]
         public void Then_Service_Upload_Is_Called_Exactly_Once() =>
-            _dataBlobUploadService.ReceivedWithAnyArgs(1).UploadAsync(_dataUploadDto);
+            _fixture.DataUploadService.ReceivedWithAnyArgs(2).UploadAsync(_fixture.Dto);
     }
 }

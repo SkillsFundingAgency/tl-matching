@@ -1,40 +1,24 @@
-﻿using AutoMapper;
-using FluentAssertions;
-using Microsoft.AspNetCore.Http;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Consent_Is_Submitted_Successfully
+    public class When_Employer_Consent_Is_Submitted_Successfully : IClassFixture<EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel>>
     {
-        private readonly IReferralService _referralService;
-
+        private readonly EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> _fixture;
         private readonly IActionResult _result;
 
-        public When_Employer_Consent_Is_Submitted_Successfully()
+        public When_Employer_Consent_Is_Submitted_Successfully(EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> fixture)
         {
-            var opportunityService = Substitute.For<IOpportunityService>();
+            _fixture = fixture;
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
-            _referralService = Substitute.For<IReferralService>();
-            var mapper = new Mapper(config);
-
-            var employerController = new EmployerController(null, opportunityService, _referralService, mapper);
-            var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
-                .AddStandardUser()
-                .AddUserName("username")
-                .Build();
-
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims(_fixture.ModifiedBy);
 
             _result = controllerWithClaims.SaveEmployerConsentAsync(new EmployerConsentViewModel
             {
@@ -45,7 +29,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_ConfirmOpportunities_Is_Called_Exactly_Once()
         {
-            _referralService.Received(1).ConfirmOpportunitiesAsync(1, "username");
+            _fixture.ReferralService.Received(2).ConfirmOpportunitiesAsync(1, _fixture.ModifiedBy);
         }
 
         [Fact]

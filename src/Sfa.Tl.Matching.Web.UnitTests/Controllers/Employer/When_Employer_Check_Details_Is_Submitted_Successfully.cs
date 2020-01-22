@@ -1,82 +1,49 @@
-﻿using AutoMapper;
-using FluentAssertions;
-using Microsoft.AspNetCore.Http;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Check_Details_Is_Submitted_Successfully
+    public class When_Employer_Check_Details_Is_Submitted_Successfully : IClassFixture<EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel>>
     {
-        private readonly IOpportunityService _opportunityService;
-        private const string Contact = "EmployerContact";
-        private const string ContactPhone = "123456789";
-        private const string ContactEmail = "EmployerContactEmail";
-        private const string ModifiedBy = "ModifiedBy";
-
-        private readonly EmployerDetailsViewModel _viewModel = new EmployerDetailsViewModel
-        {
-            OpportunityItemId = OpportunityItemId,
-            OpportunityId = OpportunityId,
-            PrimaryContact = Contact,
-            Email = ContactEmail,
-            Phone = ContactPhone
-        };
-
-        private const int OpportunityId = 1;
-        private const int OpportunityItemId = 2;
-
+        private readonly EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> _fixture;
         private readonly IActionResult _result;
 
-        public When_Employer_Check_Details_Is_Submitted_Successfully()
+        public When_Employer_Check_Details_Is_Submitted_Successfully(EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> fixture)
         {
-            _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsReferralOpportunityItemAsync(OpportunityItemId).Returns(true);
+            _fixture = fixture;
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
-            var referralService = Substitute.For<IReferralService>();
-
-            var config = new MapperConfiguration(c =>
+            var viewModel = new EmployerDetailsViewModel
             {
-                c.AddMaps(typeof(EmployerDtoMapper).Assembly);
-                c.ConstructServicesUsing(type =>
-                    type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpcontextAccesor) :
-                        type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<EmployerDetailsViewModel, EmployerDetailDto>(httpcontextAccesor) :
-                            type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<EmployerDetailsViewModel, EmployerDetailDto>(new DateTimeProvider()) :
-                                null);
-            });
-            var mapper = new Mapper(config);
+                OpportunityItemId = _fixture.OpportunityItemId,
+                OpportunityId = _fixture.OpportunityId,
+                PrimaryContact = _fixture.EmployerContact,
+                Email = _fixture.EmployerContactEmail,
+                Phone = _fixture.EmployerContactPhone
+            };
 
-            var employerController = new EmployerController(null, _opportunityService, referralService, mapper);
-            var controllerWithClaims = new ClaimsBuilder<EmployerController>(employerController)
-                .AddStandardUser()
-                .AddUserName(ModifiedBy)
-                .Build();
+            _fixture.OpportunityService.IsReferralOpportunityItemAsync(_fixture.OpportunityItemId).Returns(true);
 
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims(_fixture.ModifiedBy);
 
-            _result = controllerWithClaims.SaveCheckOpportunityEmployerDetailsAsync(_viewModel).GetAwaiter().GetResult();
+            _fixture.HttpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+
+            _result = controllerWithClaims.SaveCheckOpportunityEmployerDetailsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_SaveEmployerDetail_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).UpdateOpportunityAsync(Arg.Is<EmployerDetailDto>(a =>
-                a.PrimaryContact == Contact &&
-                a.Email == ContactEmail &&
-                a.Phone == ContactPhone &&
-                a.ModifiedBy == ModifiedBy));
+            _fixture.OpportunityService.Received(2).UpdateOpportunityAsync(Arg.Is<EmployerDetailDto>(a =>
+                a.PrimaryContact == _fixture.EmployerContact &&
+                a.Email == _fixture.EmployerContactEmail &&
+                a.Phone == _fixture.EmployerContactPhone &&
+                a.ModifiedBy == _fixture.ModifiedBy));
         }
 
         [Fact]
@@ -87,8 +54,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             var redirect = _result as RedirectToRouteResult;
             redirect.Should().NotBeNull();
             redirect?.RouteName.Should().BeEquivalentTo("GetEmployerConsent");
-            redirect?.RouteValues["opportunityId"].Should().Be(1);
-            redirect?.RouteValues["opportunityItemId"].Should().Be(2);
+            redirect?.RouteValues["opportunityId"].Should().Be(12);
+            redirect?.RouteValues["opportunityItemId"].Should().Be(34);
         }
     }
 }

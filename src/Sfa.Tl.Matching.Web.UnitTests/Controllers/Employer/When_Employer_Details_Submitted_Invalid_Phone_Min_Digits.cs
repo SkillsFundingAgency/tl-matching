@@ -1,37 +1,27 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Details_Submitted_Invalid_Phone_Min_Digits
+    public class When_Employer_Details_Submitted_Invalid_Phone_Min_Digits : IClassFixture<EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel>>
     {
+        private readonly EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> _fixture;
         private readonly IActionResult _result;
-        private readonly EmployerController _employerController;
-
-        public When_Employer_Details_Submitted_Invalid_Phone_Min_Digits()
+        
+        public When_Employer_Details_Submitted_Invalid_Phone_Min_Digits(EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> fixture)
         {
-            var employerService = Substitute.For<IEmployerService>();
-            var opportunityService = Substitute.For<IOpportunityService>();
-            var referralService = Substitute.For<IReferralService>();
-
+            _fixture = fixture;
+            
             var viewModel = new EmployerDetailsViewModel
             {
                 Phone = "1"
             };
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
-            var mapper = new Mapper(config);
-
-            _employerController = new EmployerController(employerService, opportunityService, referralService, mapper);
-
-            _result = _employerController.SaveOpportunityEmployerDetailsAsync(viewModel).GetAwaiter().GetResult();
+            _result = _fixture.Sut.SaveOpportunityEmployerDetailsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -43,14 +33,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 
         [Fact]
         public void Then_Model_State_Has_ContactPhone_Error()
-        { 
-            _employerController.ViewData.ModelState.Should().ContainSingle();
+        {
+            _fixture.Sut.ViewData.ModelState.Should().ContainSingle();
 
-            _employerController.ViewData.ModelState.ContainsKey(nameof(EmployerDetailsViewModel.Phone))
+            _fixture.Sut.ViewData.ModelState.ContainsKey(nameof(EmployerDetailsViewModel.Phone))
                 .Should().BeTrue();
-        
-            var modelStateEntry =
-                _employerController.ViewData.ModelState[nameof(EmployerDetailsViewModel.Phone)];
+
+            var modelStateEntry = _fixture.Sut.ViewData.ModelState[nameof(EmployerDetailsViewModel.Phone)];
+            
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must enter a telephone number that has 7 or more numbers");
         }
     }

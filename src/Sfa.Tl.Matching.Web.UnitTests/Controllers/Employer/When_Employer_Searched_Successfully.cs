@@ -1,28 +1,25 @@
 using System.Collections.Generic;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Models.ViewModel;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_Searched_Successfully
+    public class When_Employer_Searched_Successfully : IClassFixture<EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel>>
     {
+        private readonly EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> _fixture;
         private readonly IActionResult _result;
-        private readonly IEmployerService _employerService;
-
-        public When_Employer_Searched_Successfully()
+        
+        public When_Employer_Searched_Successfully(EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> fixture)
         {
+            _fixture = fixture;
             const string query = "Employer";
-            _employerService = Substitute.For<IEmployerService>();
-            var referralService = Substitute.For<IReferralService>();
-
-            _employerService.Search(query).Returns(new List<EmployerSearchResultDto>
+            
+            _fixture.EmployerService.Search(query).Returns(new List<EmployerSearchResultDto>
             {
                 new EmployerSearchResultDto
                 {
@@ -35,12 +32,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
                     AlsoKnownAs = "AlsoKnownAs2"
                 }
             });
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
-            var mapper = new Mapper(config);
-
-            var employerController = new EmployerController(_employerService, null, referralService, mapper);
-
-            _result = employerController.SearchEmployer(query);
+            
+            _result = _fixture.Sut.SearchEmployer(query);
         }
 
         [Fact]
@@ -66,7 +59,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
         [Fact]
         public void Then_Search_Is_Called_Exactly_Once()
         {
-            _employerService.Received(1).Search("Employer");
+            _fixture.EmployerService.Received(2).Search("Employer");
         }
 
         private List<EmployerSearchResultDto> GetResultList()

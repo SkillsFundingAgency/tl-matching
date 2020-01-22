@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Extensions;
 
-namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
+namespace Sfa.Tl.Matching.Tests.Common.Builders
 {
     internal class ClaimsBuilder<T> where T : ControllerBase
     {

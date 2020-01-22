@@ -1,56 +1,41 @@
-using System;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
 {
-    public class When_Employer_GetOpportunityCompanyName_Is_Loaded
+    public class When_Employer_GetOpportunityCompanyName_Is_Loaded : IClassFixture<EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel>>
     {
+        private readonly EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> _fixture;
         private readonly IActionResult _result;
-        private readonly IEmployerService _employerService;
-        private const int OpportunityId = 1;
-        private const int OpportunityItemId = 12;
-        private readonly Guid _employerCrmId = new Guid("11111111-1111-1111-1111-111111111111");
-
-        private const string CompanyName = "CompanyName";
-
-        public When_Employer_GetOpportunityCompanyName_Is_Loaded()
+        
+        public When_Employer_GetOpportunityCompanyName_Is_Loaded(EmployerControllerFixture<EmployerDetailDto, EmployerDetailsViewModel> fixture)
         {
-            _employerService = Substitute.For<IEmployerService>();
-            var opportunityService = Substitute.For<IOpportunityService>();
-            var referralService = Substitute.For<IReferralService>();
+            _fixture = fixture;
 
-            _employerService.GetOpportunityEmployerAsync(OpportunityId, OpportunityItemId)
+            _fixture.EmployerService.GetOpportunityEmployerAsync(_fixture.OpportunityId, _fixture.OpportunityItemId)
                 .Returns(new FindEmployerViewModel
                 {
-                    OpportunityId = OpportunityId,
-                    OpportunityItemId = OpportunityItemId,
-                    SelectedEmployerCrmId = _employerCrmId,
-                    CompanyName = CompanyName
+                    OpportunityId = _fixture.OpportunityId,
+                    OpportunityItemId = _fixture.OpportunityItemId,
+                    SelectedEmployerCrmId = _fixture.EmployerCrmId,
+                    CompanyName = _fixture.CompanyName
                 });
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
-            var mapper = new Mapper(config);
-
-            var employerController = new EmployerController(_employerService, opportunityService, referralService, mapper);
-
-            _result = employerController.GetOpportunityCompanyNameAsync(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
+            _result = _fixture.Sut.GetOpportunityCompanyNameAsync(_fixture.OpportunityId, _fixture.OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetOpportunityEmployer_Is_Called_Exactly_Once()
         {
-            _employerService
+            _fixture.EmployerService
                 .Received(1)
-                .GetOpportunityEmployerAsync(OpportunityId, OpportunityItemId);
+                .GetOpportunityEmployerAsync(_fixture.OpportunityId, _fixture.OpportunityItemId);
         }
 
         [Fact]
@@ -64,10 +49,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Employer
             viewResult?.Model.Should().NotBeNull();
 
             var viewModel = _result.GetViewModel<FindEmployerViewModel>();
-            viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
-            viewModel.OpportunityId.Should().Be(OpportunityId);
-            viewModel.SelectedEmployerCrmId.Should().Be(_employerCrmId);
-            viewModel.CompanyName.Should().Be(CompanyName);
+            viewModel.OpportunityItemId.Should().Be(_fixture.OpportunityItemId);
+            viewModel.OpportunityId.Should().Be(_fixture.OpportunityId);
+            viewModel.SelectedEmployerCrmId.Should().Be(_fixture.EmployerCrmId);
+            viewModel.CompanyName.Should().Be(_fixture.CompanyName);
         }
     }
 }

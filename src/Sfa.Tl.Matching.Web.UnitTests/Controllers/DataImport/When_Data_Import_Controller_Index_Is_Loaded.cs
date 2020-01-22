@@ -1,28 +1,21 @@
-using AutoMapper;
 using FluentAssertions;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
-using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 {
-    public class When_Data_Import_Controller_Index_Is_Loaded
+    public class When_Data_Import_Controller_Index_Is_Loaded : IClassFixture<DataImportControllerFixture>
     {
         private readonly IActionResult _result;
 
-        public When_Data_Import_Controller_Index_Is_Loaded()
+        public When_Data_Import_Controller_Index_Is_Loaded(DataImportControllerFixture fixture)
         {
-            var mapper = Substitute.For<IMapper>();
-            var dataBlobUploadService = Substitute.For<IDataBlobUploadService>();
-            var dataImportController = new DataImportController(mapper, dataBlobUploadService);
-
-            _result = dataImportController.Index();
+            _result = fixture.Sut.Index();
         }
 
         [Fact]
