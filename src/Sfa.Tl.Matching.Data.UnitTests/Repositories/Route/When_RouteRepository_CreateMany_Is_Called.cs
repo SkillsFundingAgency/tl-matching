@@ -1,33 +1,55 @@
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Builders;
-using Sfa.Tl.Matching.Tests.Common;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
 {
-    public class When_RouteRepository_CreateMany_Is_Called
+    public class When_RouteRepository_CreateMany_Is_Called : IClassFixture<RouteTestFixture>
     {
         private readonly int _result;
+        private readonly int _rowsInDb;
 
-        public When_RouteRepository_CreateMany_Is_Called()
+        public When_RouteRepository_CreateMany_Is_Called(RouteTestFixture testFixture)
         {
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Route>>>();
-
-            using (var dbContext = InMemoryDbContext.Create())
+            var routes = new List<Domain.Models.Route>
             {
-                var data = new ValidRouteListBuilder().Build();
+                new Domain.Models.Route
+                {
+                    Id = 991,
+                    Name = "Route 991",
+                    CreatedBy =  EntityCreationConstants.CreatedByUser
+                },
+                new Domain.Models.Route
+                {
+                    Id = 992,
+                    Name = "Route 992",
+                    CreatedBy =  EntityCreationConstants.CreatedByUser
+                }
+            };
 
-                var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
-                    .GetAwaiter().GetResult();
+            testFixture.Builder.ClearData();
+
+            _result = testFixture.Repository.CreateManyAsync(routes)
+                .GetAwaiter().GetResult();
+
+            _rowsInDb = testFixture.MatchingDbContext.Route.Count();
+
+            foreach (var r in routes)
+            {
+                testFixture.Builder.Routes.Add(r);
             }
         }
 
         [Fact]
         public void Then_Two_Records_Should_Have_Been_Created() =>
             _result.Should().Be(2);
+
+        [Fact]
+        public void Then_Two_Records_Should_Be_In_The_Database()
+        {
+            _rowsInDb.Should().Be(2);
+        }
     }
 }

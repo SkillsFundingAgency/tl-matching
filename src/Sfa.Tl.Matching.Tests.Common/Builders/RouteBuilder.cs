@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Tests.Common.Extensions;
@@ -17,18 +18,23 @@ namespace Sfa.Tl.Matching.Tests.Common.Builders
             Routes = new List<Route>();
         }
 
-        public RouteBuilder CreateRoutes(int numberOfRoutes = 1)
+        public RouteBuilder CreateRoutes(int numberOfRoutes = 1, string createdBy = null,
+            DateTime? createdOn = null, string modifiedBy = null, DateTime? modifiedOn = null)
         {
             for (var i = 0; i < numberOfRoutes; i++)
             {
                 var routeNumber = i + 1;
-                CreateRoute(routeNumber, $"Route {routeNumber}", $"Keyword{routeNumber}", $"Route {routeNumber} summary");
+                CreateRoute(routeNumber, $"Route {routeNumber}",
+                    $"Keyword{routeNumber}", $"Route {routeNumber} summary",
+                    createdBy, createdOn, modifiedBy, modifiedOn);
             }
 
             return this;
         }
 
-        public RouteBuilder CreateRoute(int id, string name, string keywords = "", string summary = "")
+        public RouteBuilder CreateRoute(int id, string name, string keywords = "", string summary = "",
+            string createdBy = null, DateTime? createdOn = null,
+            string modifiedBy = null, DateTime? modifiedOn = null)
         {
             var route = new Route
             {
@@ -36,7 +42,10 @@ namespace Sfa.Tl.Matching.Tests.Common.Builders
                 Name = name,
                 Keywords = keywords,
                 Summary = summary,
-                CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
+                CreatedBy = createdBy,
+                CreatedOn = createdOn ?? default(DateTime),
+                ModifiedBy = modifiedBy,
+                ModifiedOn = modifiedOn,
             };
 
             Routes.Add(route);
@@ -50,6 +59,8 @@ namespace Sfa.Tl.Matching.Tests.Common.Builders
                 _context.Route.RemoveRange(Routes);
 
             _context.SaveChanges();
+
+            Routes.Clear();
 
             return this;
         }

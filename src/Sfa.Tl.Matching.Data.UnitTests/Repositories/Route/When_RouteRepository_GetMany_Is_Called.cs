@@ -1,32 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Builders;
-using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
 {
-    public class When_RouteRepository_GetMany_Is_Called
+    public class When_RouteRepository_GetMany_Is_Called : IClassFixture<RouteTestFixture>
     {
         private readonly IEnumerable<Domain.Models.Route> _result;
 
-        public When_RouteRepository_GetMany_Is_Called()
+        public When_RouteRepository_GetMany_Is_Called(RouteTestFixture testFixture)
         {
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Route>>>();
-
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.AddRange(new ValidRouteListBuilder().Build());
-                dbContext.SaveChanges();
-
-                var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
-                _result = repository.GetManyAsync().ToList();
-            }
+            _result = testFixture.Repository.GetManyAsync().ToList();
         }
 
         [Fact]
@@ -38,8 +24,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
         {
             _result.First().Id.Should().Be(1);
             _result.First().Name.Should().BeEquivalentTo("Route 1");
-            _result.First().Keywords.Should().BeEquivalentTo("Keyword");
-            _result.First().Summary.Should().BeEquivalentTo("Route summary");
+            _result.First().Keywords.Should().BeEquivalentTo("Keyword1");
+            _result.First().Summary.Should().BeEquivalentTo("Route 1 summary");
             _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
             _result.First().CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
             _result.First().ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);

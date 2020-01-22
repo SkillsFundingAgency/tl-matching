@@ -1,43 +1,30 @@
 ﻿using System;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Route.Builders;
-using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
 {
-    public class When_RouteRepository_Update_Is_Called
+    public class When_RouteRepository_Update_Is_Called : IClassFixture<RouteTestFixture>
     {
         private readonly Domain.Models.Route _result;
 
-        public When_RouteRepository_Update_Is_Called()
+        public When_RouteRepository_Update_Is_Called(RouteTestFixture testFixture)
         {
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Route>>>();
+            var entity = testFixture.Repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var entity = new ValidRouteBuilder().Build();
-                dbContext.Add(entity);
-                dbContext.SaveChanges();
+            entity.Name = "Updated Route Name";
+            entity.Keywords = "Updated Keywords";
+            entity.Summary = "Updated Summary";
 
-                var repository = new GenericRepository<Domain.Models.Route>(logger, dbContext);
+            entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
+            entity.ModifiedBy = "UpdateTestUser";
 
-                entity.Name = "Updated Route Name";
-                entity.Keywords = "Updated Keywords";
-                entity.Summary = "Updated Summary";
+            testFixture.Repository.UpdateAsync(entity).GetAwaiter().GetResult();
 
-                entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
-                entity.ModifiedBy = "UpdateTestUser";
-
-                repository.UpdateAsync(entity).GetAwaiter().GetResult();
-
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            _result = testFixture.Repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]
