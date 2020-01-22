@@ -64,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService.Dupli
                 Substitute.For<IDataProcessor<TEntity>>()
             );
 
-            var filePath = System.IO.Path.Combine(TestConfiguration.GetTestExecutionDirectory(), $"Services\\FileImportService\\DuplicateRows\\{typeof(TEntity).Name}-DuplicateRows.csv");
+            var filePath = System.IO.Path.Combine(TestHelper.GetTestExecutionDirectory(), $"Services\\FileImportService\\DuplicateRows\\{typeof(TEntity).Name}-DuplicateRows.csv");
             using (var stream = File.Open(filePath, FileMode.Open))
             {
                 FileImportService.BulkImportAsync(new TImportDto

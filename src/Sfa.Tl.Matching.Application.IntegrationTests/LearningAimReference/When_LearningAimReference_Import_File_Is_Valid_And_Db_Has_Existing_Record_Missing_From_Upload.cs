@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
         public When_LearningAimReference_Import_File_Is_Valid_And_Db_Has_Existing_Record_Missing_From_Upload(LearningAimReferenceTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
+            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
             _testFixture.ResetData();
             _testFixture.AddExisting("00100310", "LearningAimReference_Existing_Record_Missing_From_Upload");
             _testFixture.AddExisting("00100309", "LearningAimReference_Existing_Matching_Record");

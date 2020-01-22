@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
         public When_LearningAimReference_Import_File_Is_Invalid(LearningAimReferenceTestFixture testFixture)
         {
             _testFixture = testFixture;
-            _testExecutionDirectory = TestConfiguration.GetTestExecutionDirectory();
+            _testExecutionDirectory = TestHelper.GetTestExecutionDirectory();
             _testFixture.ResetData();
         }
 
