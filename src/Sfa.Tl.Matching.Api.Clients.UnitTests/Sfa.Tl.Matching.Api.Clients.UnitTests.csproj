@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sfa.Tl.Matching.Api.Clients\Sfa.Tl.Matching.Api.Clients.csproj" />
+    <ProjectReference Include="..\Sfa.Tl.Matching.Tests.Common\Sfa.Tl.Matching.Tests.Common.csproj" />
   </ItemGroup>
 
 </Project>

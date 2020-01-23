@@ -1,41 +1,24 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
-using Sfa.Tl.Matching.Api.Clients.GeoLocations;
 using Sfa.Tl.Matching.Api.Clients.UnitTests.Factories;
-using Sfa.Tl.Matching.Models.Configuration;
-using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 {
-    public class When_LocationApiClient_Is_Called_To_GetTerminatedGeoLocationData
+    public class When_LocationApiClient_Is_Called_To_GetTerminatedGeoLocationData : IClassFixture<LocationApiClientFixture>
     {
-        private readonly LocationApiClient _locationApiClient;
+        private readonly LocationApiClientFixture _fixture;
 
-        public When_LocationApiClient_Is_Called_To_GetTerminatedGeoLocationData()
+        public When_LocationApiClient_Is_Called_To_GetTerminatedGeoLocationData(LocationApiClientFixture fixture)
         {
-            var responseData = new PostcodeLookupResultDto
-            {
-                Postcode = "S70 2YW",
-                Latitude = "50.001",
-                Longitude = "-1.234"
-            };
-
-            var httpClient = new TerminatedPostcodesTestHttpClientFactory()
-                .Get("S70 2YW", responseData);
-
-            _locationApiClient = new LocationApiClient(httpClient,
-                new MatchingConfiguration
-                {
-                    PostcodeRetrieverBaseUrl = "https://example.com/"
-                });
+            _fixture = fixture;
+            fixture.GetTerminatedPostCodeHttpClient("S70 2YW");
         }
 
         [Fact]
         public async Task Then_Terminated_Postcode_Is_Returned_Correctly()
         {
-            var postcodeData = await _locationApiClient
-                .GetTerminatedPostcodeGeoLocationDataAsync("S702YW");
+            var postcodeData = await _fixture.LocationApiClient.GetTerminatedPostcodeGeoLocationDataAsync("S702YW");
 
             postcodeData.Should().NotBeNull();
             postcodeData.Postcode.Should().Be("S70 2YW");

@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Sfa.Tl.Matching.Api.Clients.UnitTests
+namespace Sfa.Tl.Matching.Tests.Common.HttpClient
 {
     public class FakeHttpMessageHandler : DelegatingHandler
     {
