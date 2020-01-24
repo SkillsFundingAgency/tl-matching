@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Providers.Count.Should().Be(1);
 
             var item = _results.Providers.First();
-            item.ProviderName.Should().Be("SQL Search Provider");
+            item.ProviderName.Should().Be("SQL Search Provider (CV1 2WT)");
             item.ProviderDisplayName.Should().Be("SQL Search Provider");
 
             item.ProviderVenuePostcode.Should().Be("CV1 2WT");

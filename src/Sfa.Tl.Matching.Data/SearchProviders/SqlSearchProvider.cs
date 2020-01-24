@@ -258,7 +258,6 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
                 g.Latitude,
                 g.Longitude,
                 g.ProviderDisplayName,
-                g.ProviderName,
                 g.PrimaryContact,
                 g.PrimaryContactEmail,
                 g.PrimaryContactPhone,
@@ -274,7 +273,6 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             {
                 Distance = grp.Key.Distance,
                 ProviderVenueTown = grp.Key.ProviderVenueTown,
-                ProviderName = grp.Key.ProviderName,
                 ProviderVenuePostcode = grp.Key.ProviderVenuePostcode,
                 ProviderDisplayName = grp.Key.ProviderDisplayName,
                 ProviderVenueName = grp.Key.ProviderVenueName,
