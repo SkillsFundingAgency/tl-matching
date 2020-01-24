@@ -1,4 +1,4 @@
-﻿@using System.Net
+﻿@using System.Text
 
 @model Sfa.Tl.Matching.Models.ViewModel.ProviderProximitySearchViewModel
 
@@ -21,17 +21,17 @@
 
 <p class="govuk-body">
     @{
-        var filters = "";
+        var filters = new StringBuilder();
         for (var i = 0; i < Model.SearchParameters.Filters.Length; i++)
         {
             if (Model.SearchParameters.Filters[i].IsSelected)
             {
-                filters += $"{(filters.Length > 0 ? "-" : "")}{WebUtility.UrlEncode(Model.SearchParameters.Filters[i].Name)}";
+                filters.Append($"{(filters.Length > 0 ? "-" : "")}{Model.SearchParameters.Filters[i].Name}");
             }
         }
         <a asp-route="DownloadProviderSpreadsheet"
            asp-route-postcode="@Model.SearchParameters.Postcode"
-           asp-route-filters="@filters"
+           asp-route-filters="@filters.ToString()"
            class="govuk-link" id="tl-download-providers">Download results data as a spreadsheet</a>
     }
 </p>
