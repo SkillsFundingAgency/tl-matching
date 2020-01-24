@@ -1,61 +1,31 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Controller_Save_Referral_Update_Opportunity
+    public class When_Opportunity_Controller_Save_Referral_Update_Opportunity : IClassFixture<OpportunityControllerFixture<OpportunityDto, SaveReferralViewModel>>
     {
-        private readonly IOpportunityService _opportunityService;
-        private const string UserName = "username";
-        private const string Email = "email@address.com";
-
+        private readonly OpportunityControllerFixture<OpportunityDto, SaveReferralViewModel> _fixture;
         private readonly IActionResult _result;
 
-        public When_Opportunity_Controller_Save_Referral_Update_Opportunity()
+        public When_Opportunity_Controller_Save_Referral_Update_Opportunity(OpportunityControllerFixture<OpportunityDto, SaveReferralViewModel> fixture)
         {
-            const int opportunityId = 1;
-            const int opportunityItemId = 2;
-            _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.IsNewReferralAsync(opportunityItemId).Returns(false);
+            _fixture = fixture;
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            _fixture.OpportunityService.IsNewReferralAsync(_fixture.OpportunityItemId).Returns(false);
 
-            var config = new MapperConfiguration(c =>
-            {
-                c.AddMaps(typeof(EmployerDtoMapper).Assembly);
-                c.ConstructServicesUsing(type =>
-                {
-                    if (type.FullName.Contains("LoggedInUserEmailResolver"))
-                        return new LoggedInUserEmailResolver<SaveReferralViewModel, OpportunityDto>(httpcontextAccesor);
-                    if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SaveReferralViewModel"))
-                        return new LoggedInUserNameResolver<SaveReferralViewModel, OpportunityDto>(httpcontextAccesor);
-                    if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SelectedProviderViewModel"))
-                        return new LoggedInUserNameResolver<SelectedProviderViewModel, ReferralDto>(httpcontextAccesor);
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("username");
 
-                    return null;
-                });
-            });
-            var mapper = new Mapper(config);
-
-            var opportunityController = new OpportunityController(_opportunityService,  mapper);
-            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
-                .AddUserName(UserName)
-                .AddEmail(Email)
-                .Build();
-
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            _fixture.HttpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             var viewModel = new SaveReferralViewModel
             {
@@ -63,8 +33,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 SelectedRouteId = 1,
                 Postcode = "cv12wt",
                 SearchRadius = 10,
-                OpportunityId = opportunityId,
-                OpportunityItemId = opportunityItemId,
+                OpportunityId = _fixture.OpportunityId,
+                OpportunityItemId = _fixture.OpportunityItemId,
                 SelectedProvider = new[]
                 {
                     new SelectedProviderViewModel
@@ -96,7 +66,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_CreateOpportunity_Is_Not_Called()
         {
-            _opportunityService
+            _fixture.OpportunityService
                 .DidNotReceive()
                 .CreateOpportunityAsync(Arg.Any<OpportunityDto>());
         }
@@ -104,7 +74,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_CreateOpportunityItem_Is_Not_Called()
         {
-            _opportunityService
+            _fixture.OpportunityService
                 .DidNotReceive()
                 .CreateOpportunityItemAsync(Arg.Any<OpportunityItemDto>());
         }
@@ -112,8 +82,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_UpdateOpportunityItem_Is_Called_Exactly_Once()
         {
-            _opportunityService
-                .Received(1)
+            _fixture.OpportunityService
+                .Received(4)
                 .UpdateOpportunityItemAsync(Arg.Any<ProviderSearchDto>());
         }
 
@@ -124,7 +94,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("GetPlacementInformation");
-            result?.RouteValues["opportunityItemId"].Should().Be(2);
+            result?.RouteValues["opportunityItemId"].Should().Be(_fixture.OpportunityItemId);
         }
     }
 }

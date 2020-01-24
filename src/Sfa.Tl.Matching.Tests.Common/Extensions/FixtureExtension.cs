@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sfa.Tl.Matching.Application.Mappers;
@@ -11,11 +10,13 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
 {
     public static class FixtureExtension
     {
+        private const string Email = "email@address.com";
         public static T ControllerWithClaims<T>(this T result, string username) where T : ControllerBase
         {
             var data = new ClaimsBuilder<T>(result)
                 .AddStandardUserPermission()
                 .AddUserName(username)
+                .AddEmail(Email)
                 .Build();
 
             return data;

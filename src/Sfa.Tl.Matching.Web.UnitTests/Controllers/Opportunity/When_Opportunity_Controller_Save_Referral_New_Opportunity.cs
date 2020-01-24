@@ -1,63 +1,35 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Controller_Save_Referral_New_Opportunity
+    public class When_Opportunity_Controller_Save_Referral_New_Opportunity : IClassFixture<OpportunityControllerFixture<OpportunityDto, SaveProvisionGapViewModel>>
     {
-        private readonly IOpportunityService _opportunityService;
-        private const string UserName = "username";
-        private const string Email = "email@address.com";
-
+        private readonly OpportunityControllerFixture<OpportunityDto, SaveProvisionGapViewModel> _fixture;
         private readonly IActionResult _result;
 
-        public When_Opportunity_Controller_Save_Referral_New_Opportunity()
+        public When_Opportunity_Controller_Save_Referral_New_Opportunity(OpportunityControllerFixture<OpportunityDto, SaveProvisionGapViewModel> fixture)
         {
-            _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService
+            _fixture = fixture;
+
+            _fixture.OpportunityService
                 .IsNewReferralAsync(Arg.Any<int>())
                 .Returns(true);
 
-            _opportunityService.CreateOpportunityItemAsync(Arg.Any<OpportunityItemDto>()).Returns(2);
+            _fixture.OpportunityService.CreateOpportunityItemAsync(Arg.Any<OpportunityItemDto>()).Returns(2);
 
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("username");
 
-            var config = new MapperConfiguration(c =>
-            {
-                c.AddMaps(typeof(EmployerDtoMapper).Assembly);
-                c.ConstructServicesUsing(type =>
-                {
-                    if (type.FullName.Contains("LoggedInUserEmailResolver"))
-                        return new LoggedInUserEmailResolver<SaveReferralViewModel, OpportunityDto>(httpcontextAccesor);
-                    if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SaveReferralViewModel"))
-                        return new LoggedInUserNameResolver<SaveReferralViewModel, OpportunityDto>(httpcontextAccesor);
-                    if (type.FullName.Contains("LoggedInUserNameResolver") && type.FullName.Contains("SelectedProviderViewModel"))
-                        return new LoggedInUserNameResolver<SelectedProviderViewModel, ReferralDto>(httpcontextAccesor);
-
-                    return null;
-                });
-            });
-            var mapper = new Mapper(config);
-
-            var opportunityController = new OpportunityController(_opportunityService, mapper);
-            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
-                .AddUserName(UserName)
-                .AddEmail(Email)
-                .Build();
-
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
+            _fixture.HttpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
             var viewModel = new SaveReferralViewModel
             {
@@ -97,7 +69,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_UpdateOpportunity_Is_Not_Called()
         {
-            _opportunityService
+            _fixture.OpportunityService
                 .DidNotReceive()
                 .UpdateOpportunityAsync(Arg.Any<ProviderSearchDto>());
         }
@@ -105,7 +77,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_UpdateOpportunityItem_Is_Not_Called()
         {
-            _opportunityService
+            _fixture.OpportunityService
                 .DidNotReceive()
                 .UpdateOpportunityItemAsync(Arg.Any<ProviderSearchDto>());
         }
@@ -113,15 +85,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_CreateOpportunity_Is_Called_Exactly_Once()
         {
-            _opportunityService
-                .Received(1)
+            _fixture.OpportunityService
+                .Received(2)
                 .CreateOpportunityAsync(Arg.Any<OpportunityDto>());
         }
 
         [Fact]
         public void Then_CreateOpportunityItem_Is_Called_Exactly_Once()
         {
-            _opportunityService
+            _fixture.OpportunityService
                 .Received(1)
                 .CreateOpportunityItemAsync(Arg.Any<OpportunityItemDto>());
         }

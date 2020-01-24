@@ -1,40 +1,32 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Referrals
+    public class When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Referrals : IClassFixture<OpportunityControllerFixture>
     {
+        private readonly OpportunityControllerFixture _fixture;
         private readonly IActionResult _result;
-        private readonly IOpportunityService _opportunityService;
-        private readonly OpportunityController _opportunityController;
-
-        public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Referrals()
+        
+        public When_Opportunity_Controller_SaveSelectedOpportunities_Is_Called_With_No_Selected_Referrals(OpportunityControllerFixture fixture)
         {
-            _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunityBasketAsync(1)
+            _fixture = fixture;
+            
+            _fixture.OpportunityService.GetOpportunityBasketAsync(_fixture.OpportunityId)
                 .Returns(new OpportunityBasketViewModel());
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerDtoMapper).Assembly));
-            var mapper = new Mapper(config);
-
-            _opportunityController = new OpportunityController(_opportunityService, mapper);
-
-            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(_opportunityController).Build();
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("username");
 
             _result = controllerWithClaims.SaveSelectedOpportunitiesAsync(new ContinueOpportunityViewModel
             {
-                OpportunityId = 1,
+                OpportunityId = _fixture.OpportunityId,
                 SubmitAction = "SaveSelectedOpportunities",
                 SelectedOpportunity = new List<SelectedOpportunityItemViewModel>
                 {
@@ -50,13 +42,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_OpportunityService_GetOpportunityBasket_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetOpportunityBasketAsync(1);
+            _fixture.OpportunityService.Received(2).GetOpportunityBasketAsync(_fixture.OpportunityId);
         }
 
         [Fact]
         public void Then_OpportunityService_ContinueWithOpportunities_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().ContinueWithOpportunitiesAsync(Arg.Any<ContinueOpportunityViewModel>());
+            _fixture.OpportunityService.DidNotReceive().ContinueWithOpportunitiesAsync(Arg.Any<ContinueOpportunityViewModel>());
         }
 
         [Fact]
@@ -72,9 +64,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_ModelState_Is_Not_Valid()
         {
-            _opportunityController.ViewData.ModelState.IsValid.Should().BeFalse();
-            _opportunityController.ViewData.ModelState.Count.Should().Be(1);
-            _opportunityController.ViewData.ModelState["ReferralItems[0].IsSelected"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must select an opportunity to continue");
+            _fixture.Sut.ViewData.ModelState.IsValid.Should().BeFalse();
+            _fixture.Sut.ViewData.ModelState.Count.Should().Be(1);
+            _fixture.Sut.ViewData.ModelState["ReferralItems[0].IsSelected"].Errors.Should().ContainSingle(error =>
+                error.ErrorMessage == "You must select an opportunity to continue");
         }
     }
 }
