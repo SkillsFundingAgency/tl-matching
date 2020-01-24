@@ -3,8 +3,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Sfa.Tl.Matching.Web.Controllers;
 
@@ -15,7 +13,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Fixtures
     where TViewModel: class
     {
         internal int OpportunityId;
-
         internal int OpportunityItemId;
         internal string CompanyName;
         internal string EmployerContact;
@@ -38,14 +35,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Fixtures
 
             ReferralService = Substitute.For<IReferralService>();
 
-            //var config = FixtureExtension
-            //    .ConfigureAutoMapper<EmployerDetailDto, EmployerDetailsViewModel>(HttpcontextAccesor);
-
             var config = FixtureExtension.ConfigureAutoMapper<TDto, TViewModel>(HttpcontextAccesor);
-
-            //FindEmployerViewModel
-            //CompanyNameDto
-
             var mapper = new Mapper(config);
 
             SetValues();

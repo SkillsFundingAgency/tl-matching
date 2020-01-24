@@ -1,42 +1,34 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Basket_Is_Loaded
+    public class When_Opportunity_Basket_Is_Loaded : IClassFixture<OpportunityControllerFixture>
     {
-        private readonly IOpportunityService _opportunityService;
+        private readonly OpportunityControllerFixture _fixture;
         private readonly IActionResult _result;
 
-        public When_Opportunity_Basket_Is_Loaded()
+        public When_Opportunity_Basket_Is_Loaded( OpportunityControllerFixture fixture)
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
+            _fixture = fixture;
 
-            var mapper = new Mapper(config);
-
-            _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetOpportunityBasketAsync(1).Returns(new OpportunityBasketViewModel
+            _fixture.OpportunityService.GetOpportunityBasketAsync(_fixture.OpportunityId).Returns(new OpportunityBasketViewModel
             {
-                OpportunityId = 1,
-                CompanyName = "Company Name",
-                CompanyNameAka = "Also Known As"
+                OpportunityId = _fixture.OpportunityId,
+                CompanyName = _fixture.CompanyName,
+                CompanyNameAka = _fixture.CompanyNameAka
             });
 
-            var opportunityController = new OpportunityController(_opportunityService, mapper);
-            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
-                .AddUserName("CreatedBy")
-                .Build();
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("CreatedBy");
 
-            _result = controllerWithClaims.GetOpportunityBasketAsync(1, 1).GetAwaiter().GetResult();
+            _result = controllerWithClaims.GetOpportunityBasketAsync(_fixture.OpportunityId, _fixture.OpportunityItemId)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -47,9 +39,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
             var viewModel = _result.GetViewModel<OpportunityBasketViewModel>();
-            viewModel.CompanyName.Should().Be("Company Name");
-            viewModel.CompanyNameAka.Should().Be("Also Known As");
-            viewModel.CompanyNameWithAka.Should().Be("Company Name (Also Known As)");
+            viewModel.CompanyName.Should().Be(_fixture.CompanyName);
+            viewModel.CompanyNameAka.Should().Be(_fixture.CompanyNameAka);
+            viewModel.CompanyNameWithAka.Should().Be($"{_fixture.CompanyName} ({_fixture.CompanyNameAka})");
         }
 
         [Fact]
@@ -57,8 +49,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         {
             Received.InOrder(() =>
                 {
-                    _opportunityService.Received(1).ClearOpportunityItemsSelectedForReferralAsync(1);
-                    _opportunityService.Received(1).GetOpportunityBasketAsync(1);
+                    _fixture.OpportunityService.Received(1).ClearOpportunityItemsSelectedForReferralAsync(_fixture.OpportunityId);
+                    _fixture.OpportunityService.Received(1).GetOpportunityBasketAsync(_fixture.OpportunityId);
 
                 });
         }

@@ -1,35 +1,24 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Opportunity_Controller_Delete_Referral
+    public class When_Opportunity_Controller_Delete_Referral : IClassFixture<OpportunityControllerFixture>
     {
-        private readonly IOpportunityService _opportunityService;
+        private readonly OpportunityControllerFixture _fixture;
         private readonly IActionResult _result;
-        private const int OpportunityItemId = 2;
-        private const int ReferralIdToDelete = 3;
-
-        public When_Opportunity_Controller_Delete_Referral()
+        
+        public When_Opportunity_Controller_Delete_Referral(OpportunityControllerFixture fixture)
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(CheckAnswersDtoMapper).Assembly));
-            var mapper = new Mapper(config);
+            _fixture = fixture;
+            
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("CreatedBy");
 
-            _opportunityService = Substitute.For<IOpportunityService>();
-
-            var opportunityController = new OpportunityController(_opportunityService, mapper);
-            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
-                .AddUserName("CreatedBy")
-                .Build();
-
-            _result = controllerWithClaims.DeleteReferralAsync(ReferralIdToDelete, OpportunityItemId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.DeleteReferralAsync(_fixture.ReferralIdToDelete, _fixture.OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -42,13 +31,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             result.Should().NotBeNull();
 
             result?.RouteName.Should().Be("GetCheckAnswers");
-            result?.RouteValues["opportunityItemId"].Should().Be(OpportunityItemId);
+            result?.RouteValues["opportunityItemId"].Should().Be(_fixture.OpportunityItemId);
         }
 
         [Fact]
         public void Then_DeleteReferralAsync_Is_Called_Exactly_Once_In_Correct_Order()
         {
-            _opportunityService.Received(1).DeleteReferralAsync(ReferralIdToDelete);
+            _fixture.OpportunityService.Received(1).DeleteReferralAsync(_fixture.ReferralIdToDelete);
         }
     }
 }

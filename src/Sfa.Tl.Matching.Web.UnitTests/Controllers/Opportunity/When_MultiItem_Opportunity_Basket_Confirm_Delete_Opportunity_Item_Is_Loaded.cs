@@ -1,44 +1,34 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_MultiItem_Opportunity_Basket_Confirm_Delete_Opportunity_Item_Is_Loaded
+    public class When_MultiItem_Opportunity_Basket_Confirm_Delete_Opportunity_Item_Is_Loaded : IClassFixture<OpportunityControllerFixture>
     {
-        private readonly IOpportunityService _opportunityService;
+        private readonly OpportunityControllerFixture _fixture;
         private readonly IActionResult _result;
 
-        public When_MultiItem_Opportunity_Basket_Confirm_Delete_Opportunity_Item_Is_Loaded()
+        public When_MultiItem_Opportunity_Basket_Confirm_Delete_Opportunity_Item_Is_Loaded(OpportunityControllerFixture fixture)
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
-
-            var mapper = new Mapper(config);
-
-            _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetConfirmDeleteOpportunityItemAsync(1).Returns(new ConfirmDeleteOpportunityItemViewModel
+            _fixture = fixture;
+            _fixture.OpportunityService.GetConfirmDeleteOpportunityItemAsync(1).Returns(new ConfirmDeleteOpportunityItemViewModel
             {
-                OpportunityItemId = 1,
-                OpportunityId = 2,
-                CompanyName = "Company Name1",
-                CompanyNameAka = "Also Known As 1",
-                Postcode = "PostCode1",
-                JobRole = "JobRole1",
-                BasketItemCount = 2,
+                OpportunityItemId = _fixture.OpportunityItemId,
+                OpportunityId = _fixture.OpportunityId,
+                CompanyName = _fixture.CompanyName,
+                CompanyNameAka = _fixture.CompanyNameAka,
+                Postcode = _fixture.Postcode,
+                JobRole = _fixture.JobRole,
+                BasketItemCount = _fixture.BasketItemCount,
             });
 
-            var opportunityController = new OpportunityController(_opportunityService, mapper);
-            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
-                .AddUserName("CreatedBy")
-                .Build();
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("CreatedBy");
 
             _result = controllerWithClaims.GetConfirmDeleteOpportunityItemAsync(1).GetAwaiter().GetResult();
         }
@@ -66,7 +56,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void GetConfirmDeleteOpportunityItemAsync_Is_Called_Exactly_Once_In_Correct_Order()
         {
-            _opportunityService.Received(1).GetConfirmDeleteOpportunityItemAsync(1);
+            _fixture.OpportunityService.Received(1).GetConfirmDeleteOpportunityItemAsync(1);
         }
     }
 }

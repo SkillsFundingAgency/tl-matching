@@ -29,6 +29,7 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
             {
                 c.AddMaps(typeof(EmployerDtoMapper).Assembly);
                 c.AddMaps(typeof(BankHolidayMapper).Assembly);
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
                 c.ConstructServicesUsing(type =>
                     type.Name.Contains(
                         "Application.Mappers.Resolver.LoggedInUserEmailResolverLoggedInUserEmailResolver")
@@ -51,18 +52,16 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
 
             return config;
         }
-
-        private static Func<Type, object> AddMapperServiceResolver<TDto, TViewModel>(IHttpContextAccessor httpContextAccessor)
-            where TDto : class
-            where TViewModel : class
+        public static MapperConfiguration ConfigureAutoMapper()
         {
-            return type => type.Name.Contains("LoggedInUserEmailResolver") ?
-                new Application.Mappers.Resolver.LoggedInUserEmailResolver<TViewModel, TDto>(httpContextAccessor) :
-                type.Name.Contains("LoggedInUserNameResolver") ?
-                    (object)new Application.Mappers.Resolver.LoggedInUserNameResolver<TViewModel, TDto>(httpContextAccessor) :
-                    type.Name.Contains("UtcNowResolver") ?
-                        new Application.Mappers.Resolver.UtcNowResolver<TViewModel, TDto>(new DateTimeProvider()) :
-                        null;
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(EmployerDtoMapper).Assembly);
+                c.AddMaps(typeof(BankHolidayMapper).Assembly);
+                c.AddMaps(typeof(OpportunityMapper).Assembly);
+            });
+
+            return config;
         }
 
     }
