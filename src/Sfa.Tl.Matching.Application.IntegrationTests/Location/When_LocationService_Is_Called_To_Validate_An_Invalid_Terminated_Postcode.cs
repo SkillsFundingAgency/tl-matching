@@ -1,7 +1,4 @@
-﻿using System.Net.Http;
-using FluentAssertions;
-using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Models.Configuration;
+﻿using FluentAssertions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Location

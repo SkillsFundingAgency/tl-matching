@@ -1,27 +1,20 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
-using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Enums;
-using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
 {
-    public class When_MessageQueueService_Is_Called_To_Push_New_Provider_Quarterly_Request_Message
+    public class When_MessageQueueService_Is_Called_To_Push_New_Provider_Quarterly_Request_Message : IClassFixture<MessageQueueServiceFixture>
     {
-        private readonly MessageQueueService _messageQueueService;
-        private readonly CloudQueue _queue;
+        private readonly MessageQueueServiceFixture _fixture;
 
-        public When_MessageQueueService_Is_Called_To_Push_New_Provider_Quarterly_Request_Message()
+        public When_MessageQueueService_Is_Called_To_Push_New_Provider_Quarterly_Request_Message(MessageQueueServiceFixture fixture)
         {
-            var storageAccount = CloudStorageAccount.Parse(TestConfiguration.MatchingConfiguration.BlobStorageConnectionString);
-            var queueClient = storageAccount.CreateCloudQueueClient();
-            _queue = queueClient.GetQueueReference(QueueName.ProviderQuarterlyRequestQueue);
-            _messageQueueService = new MessageQueueService(new NullLogger<MessageQueueService>(), TestConfiguration.MatchingConfiguration);
+            _fixture = fixture;
+            _fixture.GetMessageQueueServiceWithQueue(QueueName.ProviderQuarterlyRequestQueue);
         }
 
         [Fact]
@@ -30,9 +23,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
             CloudQueueMessage retrievedMessage = null;
             try
             {
-                await _messageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderQuarterlyUpdateEmail
-                    {BackgroundProcessHistoryId = 1001});
-                retrievedMessage = await _queue.GetMessageAsync();
+                await _fixture.MessageQueueService.PushProviderQuarterlyRequestMessageAsync(new SendProviderQuarterlyUpdateEmail { BackgroundProcessHistoryId = 1001 });
+                retrievedMessage = await _fixture.Queue.GetMessageAsync();
                 retrievedMessage.Should().NotBeNull();
                 retrievedMessage.AsString.Should().Contain("1001");
             }
@@ -40,7 +32,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
             {
                 if (retrievedMessage != null)
                 {
-                    await _queue.DeleteMessageAsync(retrievedMessage);
+                    await _fixture.Queue.DeleteMessageAsync(retrievedMessage);
                 }
             }
         }

@@ -1,56 +1,40 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
-using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
 {
-    public class When_OpportunityProximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode
+    public class When_OpportunityProximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode : IClassFixture<OpportunityProximityControllerFixture>
     {
+        private readonly OpportunityProximityControllerFixture _fixture;
         private readonly IActionResult _result;
-        private readonly IRoutePathService _routeService;
 
-        public When_OpportunityProximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode()
+        public When_OpportunityProximity_Controller_FindProviders_Is_Called_With_Unformatted_Postcode(OpportunityProximityControllerFixture fixture)
         {
+            _fixture = fixture;
             const string requestPostcode = "cV12 Wt";
-            var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
-
-            var locationService = new LocationService(new LocationApiClient(httpClient, new MatchingConfiguration
+            var routes = new List<SelectListItem>
             {
-                PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
-            }));
-
-            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), locationService);
-
-            _routeService = Substitute.For<IRoutePathService>();
-            _routeService.GetRouteIdsAsync().Returns(new List<int> { 1, 2 });
-
-            var opportunityService = Substitute.For<IOpportunityService>();
-
-            var opportunityProximityController = new OpportunityProximityController(_routeService, opportunityProximityService, opportunityService, locationService);
+                new SelectListItem {Text = "1", Value = "Route 1"},
+                new SelectListItem {Text = "2", Value = "Route 2"}
+            };
+            
+            fixture.GetOpportunityProximityController(requestPostcode);
+            fixture.RoutePathService.GetRouteIdsAsync().Returns(new List<int> { 1, 2 });
 
             var viewModel = new SearchParametersViewModel
             {
-                RoutesSelectList = new List<SelectListItem>
-                {
-                    new SelectListItem { Text = "1", Value = "Route 1" },
-                    new SelectListItem { Text = "2", Value = "Route 2" }
-                },
-                SelectedRouteId = 1,
+                RoutesSelectList = routes,
+                SelectedRouteId = int.Parse(routes.First().Text),
                 Postcode = requestPostcode
             };
 
-            _result = opportunityProximityController.FindProviders(viewModel).GetAwaiter().GetResult();
+            _result = fixture.OpportunityProximityController.FindProviders(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -69,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
         [Fact]
         public void Then_RouteService_GetRouteIdsAsync_Is_Called_exactly_Once()
         {
-            _routeService.Received(1).GetRouteIdsAsync();
+            _fixture.RoutePathService.Received(1).GetRouteIdsAsync();
         }
     }
 }

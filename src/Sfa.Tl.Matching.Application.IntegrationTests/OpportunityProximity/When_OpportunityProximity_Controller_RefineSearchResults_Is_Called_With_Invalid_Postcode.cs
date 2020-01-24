@@ -3,55 +3,36 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
-using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Data.Interfaces;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
 {
-    public class When_OpportunityProximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode
+    public class When_OpportunityProximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode : IClassFixture<OpportunityProximityControllerFixture>
     {
+        private readonly OpportunityProximityControllerFixture _fixture;
         private readonly IActionResult _result;
-        private readonly OpportunityProximityController _opportunityProximityController;
 
-        public When_OpportunityProximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode()
+        public When_OpportunityProximity_Controller_RefineSearchResults_Is_Called_With_Invalid_Postcode(OpportunityProximityControllerFixture fixture)
         {
+            _fixture = fixture;
             const string requestPostcode = "CV1234";
-            var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
 
             var routes = new List<SelectListItem>
             {
                 new SelectListItem {Text = "1", Value = "Route 1"}
             };
 
-            var locationService = new LocationService(new LocationApiClient(httpClient, new MatchingConfiguration
-            {
-                PostcodeRetrieverBaseUrl = "https://api.postcodes.io"
-
-            }));
-
-            var opportunityProximityService = new OpportunityProximityService(Substitute.For<ISearchProvider>(), locationService);
-
-            var routePathService = Substitute.For<IRoutePathService>();
-            routePathService.GetRouteSelectListItemsAsync().Returns(routes);
-
-            var opportunityService = Substitute.For<IOpportunityService>();
-
-            _opportunityProximityController = new OpportunityProximityController(routePathService, opportunityProximityService, opportunityService, locationService);
-
+            _fixture.GetOpportunityProximityController(requestPostcode);
+            _fixture.RoutePathService.GetRouteSelectListItemsAsync().Returns(routes);
+            
             var viewModel = new SearchParametersViewModel
             {
                 Postcode = "CV1234",
                 SelectedRouteId = 1
             };
 
-            _result = _opportunityProximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
+            _result = _fixture.OpportunityProximityController.RefineSearchResultsAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -67,8 +48,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.OpportunityProximity
         [Fact]
         public void Then_Model_Contains_Postcode_Error()
         {
-            _opportunityProximityController.ViewData.ModelState.IsValid.Should().BeFalse();
-            _opportunityProximityController.ViewData.ModelState["Postcode"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must enter a real postcode");
+            _fixture.OpportunityProximityController.ViewData.ModelState.IsValid.Should().BeFalse();
+            _fixture.OpportunityProximityController.ViewData.ModelState["Postcode"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must enter a real postcode");
         }
     }
 }

@@ -5,13 +5,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 {
-    public class When_Opportunity_Is_Created : IClassFixture<OpportunityTestFixture>
+    public class When_OpportunityService_CreateOpportunity_Is_Called : IClassFixture<OpportunityTestFixture>
     {
         private readonly OpportunityTestFixture _testFixture;
         private const string EmployerContact = "Contact for Opportunity Test";
         private readonly int _opportunityId;
 
-        public When_Opportunity_Is_Created(OpportunityTestFixture testFixture)
+        public When_OpportunityService_CreateOpportunity_Is_Called(OpportunityTestFixture testFixture)
         {
             _testFixture = testFixture;
             _testFixture.ResetData(EmployerContact);

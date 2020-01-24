@@ -1,29 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
-using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Command;
 using Sfa.Tl.Matching.Models.Enums;
-using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
 {
-    public class When_MessageQueueService_Is_Called_To_Push_Email_Delivery_Status_Queue
+    public class When_MessageQueueService_Is_Called_To_Push_Email_Delivery_Status_Queue :IClassFixture<MessageQueueServiceFixture>
     {
-        private readonly MessageQueueService _messageQueueService;
-        private readonly CloudQueue _queue;
+        private readonly MessageQueueServiceFixture _fixture;
 
-        public When_MessageQueueService_Is_Called_To_Push_Email_Delivery_Status_Queue()
+        public When_MessageQueueService_Is_Called_To_Push_Email_Delivery_Status_Queue(MessageQueueServiceFixture fixture)
         {
-            var storageAccount = CloudStorageAccount.Parse(TestConfiguration.MatchingConfiguration.BlobStorageConnectionString);
-            var queueClient = storageAccount.CreateCloudQueueClient();
-            _queue = queueClient.GetQueueReference(QueueName.EmailDeliveryStatusQueue);
-            _messageQueueService = new MessageQueueService(new NullLogger<MessageQueueService>(), TestConfiguration.MatchingConfiguration);
-
+            _fixture = fixture;
+            _fixture.GetMessageQueueServiceWithQueue(QueueName.EmailDeliveryStatusQueue);
         }
 
         [Fact]
@@ -33,12 +25,12 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
             try
             {
                 var notificationId = new Guid();
-                await _messageQueueService.PushEmailDeliveryStatusMessageAsync(new SendEmailDeliveryStatus
+                await _fixture.MessageQueueService.PushEmailDeliveryStatusMessageAsync(new SendEmailDeliveryStatus
                 {
                     NotificationId = notificationId
                 });
 
-                retrievedMessage = await _queue.GetMessageAsync();
+                retrievedMessage = await _fixture.Queue.GetMessageAsync();
                 retrievedMessage.Should().NotBeNull();
                 retrievedMessage.As<Guid>().Should().Be(notificationId);
             }
@@ -46,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MessageQueue
             {
                 if (retrievedMessage != null)
                 {
-                    await _queue.DeleteMessageAsync(retrievedMessage);
+                    await _fixture.Queue.DeleteMessageAsync(retrievedMessage);
                 }
             }
         }
