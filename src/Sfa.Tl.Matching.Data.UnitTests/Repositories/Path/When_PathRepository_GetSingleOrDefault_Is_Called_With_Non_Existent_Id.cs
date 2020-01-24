@@ -1,30 +1,16 @@
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Path.Builders;
-using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
 {
-    public class When_PathRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id
+    public class When_PathRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id : IClassFixture<PathTestFixture>
     {
         private readonly Domain.Models.Path _result;
 
-        public When_PathRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id()
+        public When_PathRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id(PathTestFixture testFixture)
         {
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Path>>>();
-
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.Add(new ValidPathBuilder().Build());
-                dbContext.SaveChanges();
-
-                var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 2)
-                    .GetAwaiter().GetResult();
-            }
+            _result = testFixture.Repository.GetSingleOrDefaultAsync(x => x.Id == 99)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

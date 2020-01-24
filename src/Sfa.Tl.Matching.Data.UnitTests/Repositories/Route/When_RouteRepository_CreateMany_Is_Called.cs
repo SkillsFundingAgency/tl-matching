@@ -36,9 +36,9 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
 
             _rowsInDb = testFixture.MatchingDbContext.Route.Count();
 
-            foreach (var r in routes)
+            foreach (var route in routes)
             {
-                testFixture.Builder.Routes.Add(r);
+                testFixture.Builder.Routes.Add(route);
             }
         }
 
@@ -47,9 +47,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
             _result.Should().Be(2);
 
         [Fact]
-        public void Then_Two_Records_Should_Be_In_The_Database()
-        {
+        public void Then_Two_Records_Should_Be_In_The_Database() =>
             _rowsInDb.Should().Be(2);
-        }
     }
 }

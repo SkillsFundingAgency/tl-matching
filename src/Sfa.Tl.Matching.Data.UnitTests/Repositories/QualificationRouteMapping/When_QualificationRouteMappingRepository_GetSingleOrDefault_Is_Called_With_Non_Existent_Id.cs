@@ -1,30 +1,16 @@
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping.Builders;
-using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
 {
-    public class When_QualificationRouteMappingRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id
+    public class When_QualificationRouteMappingRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id : IClassFixture<QualificationRouteMappingTestFixture>
     {
         private readonly Domain.Models.QualificationRouteMapping _result;
 
-        public When_QualificationRouteMappingRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id()
+        public When_QualificationRouteMappingRepository_GetSingleOrDefault_Is_Called_With_Non_Existent_Id(QualificationRouteMappingTestFixture testFixture)
         {
-            var logger = Substitute.For<ILogger<QualificationRouteMappingRepository>>();
-
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                dbContext.Add(new ValidQualificationRouteMappingBuilder().Build());
-                dbContext.SaveChanges();
-
-                var repository = new QualificationRouteMappingRepository(logger, dbContext);
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 2)
-                    .GetAwaiter().GetResult();
-            }
+            _result = testFixture.Repository.GetSingleOrDefaultAsync(x => x.Id == 99)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

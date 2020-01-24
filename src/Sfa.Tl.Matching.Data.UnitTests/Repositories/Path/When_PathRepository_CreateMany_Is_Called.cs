@@ -1,33 +1,53 @@
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Path.Builders;
-using Sfa.Tl.Matching.Tests.Common;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
 {
-    public class When_PathRepository_CreateMany_Is_Called
+    public class When_PathRepository_CreateMany_Is_Called : IClassFixture<PathTestFixture>
     {
         private readonly int _result;
+        private readonly int _rowsInDb;
 
-        public When_PathRepository_CreateMany_Is_Called()
+        public When_PathRepository_CreateMany_Is_Called(PathTestFixture testFixture)
         {
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Path>>>();
-
-            using (var dbContext = InMemoryDbContext.Create())
+            var paths = new List<Domain.Models.Path>
             {
-                var data = new ValidPathListBuilder().Build();
+                new Domain.Models.Path
+                {
+                    Id = 991,
+                    Name = "Path 991",
+                    CreatedBy =  EntityCreationConstants.CreatedByUser
+                },
+                new Domain.Models.Path
+                {
+                    Id = 992,
+                    Name = "Path 992",
+                    CreatedBy =  EntityCreationConstants.CreatedByUser
+                }
+            };
 
-                var repository = new GenericRepository<Domain.Models.Path>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
-                    .GetAwaiter().GetResult();
+            testFixture.Builder.ClearData();
+
+            _result = testFixture.Repository.CreateManyAsync(paths)
+                .GetAwaiter().GetResult();
+
+            _rowsInDb = testFixture.MatchingDbContext.Path.Count();
+
+            foreach (var path in paths)
+            {
+                testFixture.Builder.Paths.Add(path);
             }
         }
 
         [Fact]
         public void Then_Two_Records_Should_Have_Been_Created() =>
             _result.Should().Be(2);
+
+        [Fact]
+        public void Then_Two_Records_Should_Be_In_The_Database() =>
+            _rowsInDb.Should().Be(2);
     }
 }
