@@ -5,7 +5,7 @@ using FluentAssertions;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.IntegrationTests.BankHoliday
+namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 {
     public class When_Calendar_Api_Is_Called_To_Get_Bank_Holidays : IClassFixture<CalendarApiFixture>
     {

@@ -10,7 +10,7 @@ namespace Sfa.Tl.Matching.Tests.Common.HttpClient
     {
         protected System.Net.Http.HttpClient CreateMockClient(object response, string uri, string contentType = "application/json", HttpStatusCode statusCode = HttpStatusCode.OK)
         {
-            var serialised = JsonConvert.SerializeObject(response);
+            var serialised = response is string stringResponse ? stringResponse : JsonConvert.SerializeObject(response);
 
             var httpResponseMessage = new HttpResponseMessage(statusCode)
             {

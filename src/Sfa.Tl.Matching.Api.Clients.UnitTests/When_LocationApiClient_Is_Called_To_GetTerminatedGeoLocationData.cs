@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
-using Sfa.Tl.Matching.Api.Clients.UnitTests.Factories;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Api.Clients.UnitTests

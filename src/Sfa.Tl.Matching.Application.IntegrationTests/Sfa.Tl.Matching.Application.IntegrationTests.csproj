@@ -9,11 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="BankHoliday\TestBankHolidays.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="BankHoliday\TestBankHolidays.json" />
+    <Compile Remove="BankHoliday\**" />
+    <EmbeddedResource Remove="BankHoliday\**" />
+    <None Remove="BankHoliday\**" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,7 +2,7 @@ using Sfa.Tl.Matching.Api.Clients.GoogleMaps;
 using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Tests.Common.HttpClient;
 
-namespace Sfa.Tl.Matching.Api.Clients.UnitTests.Factories
+namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 {
     public class GoogleMapsApiClientFixture : TestHttpClientFactory
     {
