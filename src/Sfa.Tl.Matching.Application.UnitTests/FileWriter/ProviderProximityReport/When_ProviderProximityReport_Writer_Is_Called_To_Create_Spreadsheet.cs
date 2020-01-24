@@ -61,7 +61,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
                     //Check row header cell has correct postode in distance column
                     var cells = rows[1].Descendants<Cell>().ToList();
                     cells.Count.Should().Be(11);
-                    cells[3].InnerText.Should().Be("Distance from CV1 2WT");
+                    cells[2].InnerText.Should().Be("Distance from CV1 2WT");
 
                     //Check detail row
                     cells = rows[2].Descendants<Cell>().ToList();

@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Provider
             UpdateTextCell(cells[0], skillsHeaderBuilder.ToString());
 
             cells = rows[1].Descendants<Cell>().ToList();
-            UpdateTextCell(cells[3], $"Distance from {dto.Postcode}");
+            UpdateTextCell(cells[2], $"Distance from {dto.Postcode}");
 
             var rowIndex = 4;
 
