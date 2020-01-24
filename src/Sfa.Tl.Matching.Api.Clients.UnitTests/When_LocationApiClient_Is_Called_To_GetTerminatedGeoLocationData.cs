@@ -11,7 +11,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
         public When_LocationApiClient_Is_Called_To_GetTerminatedGeoLocationData(LocationApiClientFixture fixture)
         {
             _fixture = fixture;
-            fixture.GetTerminatedPostCodeHttpClient("S70 2YW");
+            fixture.GetPostCodeHttpClient("S70 2YW", "terminated_postcodes");
         }
 
         [Fact]
