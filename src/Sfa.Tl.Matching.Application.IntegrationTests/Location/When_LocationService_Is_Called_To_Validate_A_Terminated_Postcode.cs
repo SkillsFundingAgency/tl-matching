@@ -1,25 +1,17 @@
 ﻿using FluentAssertions;
-using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
-using Sfa.Tl.Matching.Models.Configuration;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
 {
-    public class When_LocationService_Is_Called_To_Validate_A_Terminated_Postcode
+    public class When_LocationService_Is_Called_To_Validate_A_Terminated_Postcode : IClassFixture<LocationApiClientFixture>
     {
         private readonly (bool, string) _postcodeResultDto;
 
-        public When_LocationService_Is_Called_To_Validate_A_Terminated_Postcode()
+        public When_LocationService_Is_Called_To_Validate_A_Terminated_Postcode(LocationApiClientFixture fixture)
         {
             const string requestPostcode = "S70 2YW";
-            var httpClient = new TestPostcodesIoHttpClient().Get(requestPostcode);
-
-            var locationService = new LocationApiClient(httpClient, new MatchingConfiguration
-            {
-                PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
-            });
-            _postcodeResultDto = locationService.IsTerminatedPostcodeAsync(requestPostcode).GetAwaiter().GetResult();
+            fixture.GetLocationApiClient(requestPostcode);
+            _postcodeResultDto = fixture.LocationApiClient.IsTerminatedPostcodeAsync(requestPostcode).GetAwaiter().GetResult();
         }
 
         [Fact]

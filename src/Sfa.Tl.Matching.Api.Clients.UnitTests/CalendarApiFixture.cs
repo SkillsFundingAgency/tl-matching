@@ -13,7 +13,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
 
         public void GetCalendarApiClient()
         {
-            var httpClient = CreateMockClient(GetTestJson(), "https://raw.githubusercontent.com/alphagov/calendars/master/lib/data/bank-holidays.json");
+            var httpClient = CreateHttpClient(GetTestJson(), "https://raw.githubusercontent.com/alphagov/calendars/master/lib/data/bank-holidays.json");
             CalendarApiClient = new CalendarApiClient(httpClient, new MatchingConfiguration
             {
                 CalendarJsonUrl = "https://raw.githubusercontent.com/alphagov/calendars/master/lib/data/bank-holidays.json"

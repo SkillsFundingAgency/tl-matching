@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
                 Status = "OK"
             };
 
-            var httpClient = CreateMockClient(response, $"https://example.com/postcodes/{requestPostcode.Replace(" ", "")}");
+            var httpClient = CreateHttpClient(response, $"https://example.com/postcodes/{requestPostcode.Replace(" ", "")}");
 
             LocationApiClient = new LocationApiClient(httpClient, new MatchingConfiguration
             {
@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
                 Status = "OK"
             };
 
-            var httpClient = CreateMockClient(response, $"https://example.com/terminated_postcodes/{requestPostcode.Replace(" ", "")}");
+            var httpClient = CreateHttpClient(response, $"https://example.com/terminated_postcodes/{requestPostcode.Replace(" ", "")}");
 
             LocationApiClient = new LocationApiClient(httpClient, new MatchingConfiguration
             {

@@ -8,8 +8,17 @@ namespace Sfa.Tl.Matching.Tests.Common.HttpClient
 {
     public abstract class TestHttpClientFactory
     {
-        protected System.Net.Http.HttpClient CreateMockClient(object response, string uri, string contentType = "application/json", HttpStatusCode statusCode = HttpStatusCode.OK)
+        private readonly bool _isMockedHttpClient;
+
+        public TestHttpClientFactory()
         {
+            _isMockedHttpClient = TestConfiguration.IsMockedHttpClient;
+        }
+        
+        protected System.Net.Http.HttpClient CreateHttpClient(object response, string uri, string contentType = "application/json", HttpStatusCode statusCode = HttpStatusCode.OK)
+        {
+            if (!_isMockedHttpClient) return new System.Net.Http.HttpClient();
+            
             var serialised = response is string stringResponse ? stringResponse : JsonConvert.SerializeObject(response);
 
             var httpResponseMessage = new HttpResponseMessage(statusCode)

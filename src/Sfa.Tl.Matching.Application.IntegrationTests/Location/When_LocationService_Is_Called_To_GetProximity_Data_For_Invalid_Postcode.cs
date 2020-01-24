@@ -2,24 +2,18 @@
 using System.Net.Http;
 using FluentAssertions;
 using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
-using Sfa.Tl.Matching.Models.Configuration;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
 {
-    public class When_LocationService_Is_Called_To_GetProximity_Data_For_Invalid_Postcode
+    public class When_LocationService_Is_Called_To_GetProximity_Data_For_Invalid_Postcode : IClassFixture<LocationApiClientFixture>
     {
-        private readonly ILocationService _locationService;
+        private readonly ILocationApiClient _locationService;
 
-        public When_LocationService_Is_Called_To_GetProximity_Data_For_Invalid_Postcode()
+        public When_LocationService_Is_Called_To_GetProximity_Data_For_Invalid_Postcode(LocationApiClientFixture fixture)
         {
-            _locationService = new LocationService(
-                new LocationApiClient(new HttpClient(), new MatchingConfiguration
-                {
-                    PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
-                }));
+            fixture.GetLocationApiClient(String.Empty);
+            _locationService = fixture.LocationApiClient;
         }
 
         [Fact]

@@ -1,19 +1,17 @@
-﻿using System.Net.Http;
+﻿using System.Net;
 using FluentAssertions;
-using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Models.Configuration;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
 {
-    public class When_LocationService_Is_Called_To_Validate_An_Invalid_Postcode
+    public class When_LocationService_Is_Called_To_Validate_An_Invalid_Postcode : IClassFixture<LocationApiClientFixture>
     {
         private readonly (bool, string) _result;
 
-        public When_LocationService_Is_Called_To_Validate_An_Invalid_Postcode()
+        public When_LocationService_Is_Called_To_Validate_An_Invalid_Postcode(LocationApiClientFixture fixture)
         {
-            var locationService = new LocationApiClient(new HttpClient(), new MatchingConfiguration { PostcodeRetrieverBaseUrl = "https://api.postcodes.io/postcodes" });
-            _result = locationService.IsValidPostcodeAsync("CV1234").GetAwaiter().GetResult();
+            fixture.GetLocationApiClient("CV1234", HttpStatusCode.NotFound);
+            _result = fixture.LocationApiClient.IsValidPostcodeAsync("CV1234").GetAwaiter().GetResult();
         }
 
         [Fact]

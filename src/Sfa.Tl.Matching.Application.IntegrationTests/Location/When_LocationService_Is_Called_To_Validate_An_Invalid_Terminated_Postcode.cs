@@ -6,17 +6,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
 {
-    public class When_LocationService_Is_Called_To_Validate_An_Invalid_Terminated_Postcode
+    public class When_LocationService_Is_Called_To_Validate_An_Invalid_Terminated_Postcode : IClassFixture<LocationApiClientFixture>
     {
         private readonly (bool, string) _result;
 
-        public When_LocationService_Is_Called_To_Validate_An_Invalid_Terminated_Postcode()
+        public When_LocationService_Is_Called_To_Validate_An_Invalid_Terminated_Postcode(LocationApiClientFixture fixture)
         {
-            var locationService = new LocationApiClient(new HttpClient(), new MatchingConfiguration
-            {
-                PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
-            });
-            _result = locationService.IsTerminatedPostcodeAsync("CV1 2WT").GetAwaiter().GetResult();
+            fixture.GetLocationApiClient("CV1 2WT");
+            _result = fixture.LocationApiClient.IsTerminatedPostcodeAsync("CV1 2WT").GetAwaiter().GetResult();
         }
 
         [Fact]

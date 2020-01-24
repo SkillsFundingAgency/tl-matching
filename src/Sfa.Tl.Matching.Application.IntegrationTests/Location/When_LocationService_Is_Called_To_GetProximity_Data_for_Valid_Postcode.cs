@@ -1,25 +1,18 @@
 ﻿using FluentAssertions;
-using Sfa.Tl.Matching.Api.Clients.GeoLocations;
-using Sfa.Tl.Matching.Application.IntegrationTests.TestClients;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Location
 {
-    public class When_LocationService_Is_Called_To_GetProximity_Data_For_Valid_Postcode
+    public class When_LocationService_Is_Called_To_GetProximity_Data_For_Valid_Postcode : IClassFixture<LocationApiClientFixture>
     {
         private readonly PostcodeLookupResultDto _postcodeLookupResultDto;
 
-        public When_LocationService_Is_Called_To_GetProximity_Data_For_Valid_Postcode()
+        public When_LocationService_Is_Called_To_GetProximity_Data_For_Valid_Postcode(LocationApiClientFixture fixture)
         {
-            var httpClient = new TestPostcodesIoHttpClient().Get();
-
-            var locationService = new LocationApiClient(httpClient, new MatchingConfiguration
-            {
-                PostcodeRetrieverBaseUrl = "https://api.postcodes.io/"
-            });
-            _postcodeLookupResultDto = locationService.GetGeoLocationDataAsync("CV1 2WT").GetAwaiter().GetResult();
+            fixture.GetLocationApiClient("CV1 2WT");
+            
+            _postcodeLookupResultDto = fixture.LocationApiClient.GetGeoLocationDataAsync("CV1 2WT").GetAwaiter().GetResult();
         }
 
         [Fact]

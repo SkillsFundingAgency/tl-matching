@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Api.Clients.UnitTests
                 Status = "OK"
             };
 
-            var httpClient = CreateMockClient(response, "https://example.com/place/textsearch/json?region=uk&radius=1&key=TEST_KEY&query=CV12WT");
+            var httpClient = CreateHttpClient(response, "https://example.com/place/textsearch/json?region=uk&radius=1&key=TEST_KEY&query=CV12WT");
 
             GoogleMapsApiClient = new GoogleMapApiClient(httpClient, new MatchingConfiguration
             {
