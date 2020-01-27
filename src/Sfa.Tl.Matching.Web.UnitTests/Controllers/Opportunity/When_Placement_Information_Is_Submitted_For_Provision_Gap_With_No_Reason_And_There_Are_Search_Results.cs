@@ -1,29 +1,25 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Placement_Information_Is_Submitted_For_Provision_Gap_With_No_Reason_And_There_Are_Search_Results
+    public class When_Placement_Information_Is_Submitted_For_Provision_Gap_With_No_Reason_And_There_Are_Search_Results : IClassFixture<OpportunityControllerFixture>
     {
+        private readonly OpportunityControllerFixture _fixture;
         private readonly IActionResult _result;
-        private readonly OpportunityController _opportunityController;
-
-        public When_Placement_Information_Is_Submitted_For_Provision_Gap_With_No_Reason_And_There_Are_Search_Results()
+        
+        public When_Placement_Information_Is_Submitted_For_Provision_Gap_With_No_Reason_And_There_Are_Search_Results(OpportunityControllerFixture fixture)
         {
-            var opportunityService = Substitute.For<IOpportunityService>();
-
+            _fixture = fixture;
+            
             var viewModel = new PlacementInformationSaveViewModel
             {
-                OpportunityId = 1,
-                OpportunityItemId = 1,
+                OpportunityId = _fixture.OpportunityId,
+                OpportunityItemId = _fixture.OpportunityItemId,
                 OpportunityType = OpportunityType.ProvisionGap,
                 SearchResultProviderCount = 1,
                 NoSuitableStudent = false,
@@ -31,12 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 ProvidersTooFarAway = false
             };
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(EmployerMapper).Assembly));
-            var mapper = new Mapper(config);
-
-            _opportunityController = new OpportunityController(opportunityService, mapper);
-
-            _result = _opportunityController.SavePlacementInformationAsync(viewModel).GetAwaiter().GetResult();
+            _result = _fixture.Sut.SavePlacementInformationAsync(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -49,12 +40,12 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void Then_Model_State_Has_No_Reason_Given_Error()
         {
-            _opportunityController.ViewData.ModelState.Should().ContainSingle();
+            _fixture.Sut.ViewData.ModelState.Should().ContainSingle();
 
-            _opportunityController.ViewData.ModelState.ContainsKey(nameof(PlacementInformationSaveViewModel.NoSuitableStudent))
+            _fixture.Sut.ViewData.ModelState.ContainsKey(nameof(PlacementInformationSaveViewModel.NoSuitableStudent))
                 .Should().BeTrue();
 
-            var modelStateEntry = _opportunityController.ViewData.ModelState[nameof(PlacementInformationSaveViewModel.NoSuitableStudent)];
+            var modelStateEntry = _fixture.Sut.ViewData.ModelState[nameof(PlacementInformationSaveViewModel.NoSuitableStudent)];
             modelStateEntry.Errors[0].ErrorMessage.Should().Be("You must tell us why the employer did not choose a provider");
         }
     }

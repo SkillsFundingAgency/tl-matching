@@ -41,8 +41,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
             var viewModel = _result.GetViewModel<ConfirmDeleteOpportunityItemViewModel>();
-            viewModel.OpportunityItemId.Should().Be(1);
-            viewModel.OpportunityId.Should().Be(2);
+            viewModel.OpportunityItemId.Should().Be(_fixture.OpportunityItemId);
+            viewModel.OpportunityId.Should().Be(_fixture.OpportunityId);
             viewModel.CompanyName.Should().Be("Company Name1");
             viewModel.CompanyNameAka.Should().Be("Also Known As 1");
             viewModel.CompanyNameWithAka.Should().Be("Company Name1 (Also Known As 1)");
