@@ -1,57 +1,28 @@
-﻿using AutoMapper;
-using FluentAssertions;
-using Microsoft.AspNetCore.Http;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully
+    public class When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully : IClassFixture<OpportunityControllerFixture<CheckAnswersDto, CheckAnswersViewModel>>
     {
-        private const string ModifiedBy = "ModifiedBy";
-        private const int OpportunityId = 1;
-        private const int OpportunityItemId = 2;
-
-        private readonly IOpportunityService _opportunityService;
+        private readonly OpportunityControllerFixture<CheckAnswersDto, CheckAnswersViewModel> _fixture;
         private readonly IActionResult _result;
 
-        public When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully()
+        public When_Recording_Referrals_And_Check_Answers_Is_Submitted_Successfully(OpportunityControllerFixture<CheckAnswersDto, CheckAnswersViewModel> fixture)
         {
-            var httpcontextAccesor = Substitute.For<IHttpContextAccessor>();
+            _fixture = fixture;
+            
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("ModifiedBy");
 
-            var config = new MapperConfiguration(c =>
-            {
-                c.AddMaps(typeof(CheckAnswersDtoMapper).Assembly);
-                c.ConstructServicesUsing(type =>
-                    type.Name.Contains("LoggedInUserEmailResolver") ?
-                        new LoggedInUserEmailResolver<CheckAnswersViewModel, CheckAnswersDto>(httpcontextAccesor) :
-                        type.Name.Contains("LoggedInUserNameResolver") ?
-                            (object)new LoggedInUserNameResolver<CheckAnswersViewModel, CheckAnswersDto>(httpcontextAccesor) :
-                            type.Name.Contains("UtcNowResolver") ?
-                                new UtcNowResolver<CheckAnswersViewModel, CheckAnswersDto>(new DateTimeProvider()) :
-                                null);
-            });
+            _fixture.HttpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
 
-            var mapper = new Mapper(config);
-
-            _opportunityService = Substitute.For<IOpportunityService>();
-
-            var opportunityController = new OpportunityController(_opportunityService,  mapper);
-            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
-                .AddUserName(ModifiedBy)
-                .Build();
-
-            httpcontextAccesor.HttpContext.Returns(controllerWithClaims.HttpContext);
-
-            _result = controllerWithClaims.SaveCheckAnswers(OpportunityId, OpportunityItemId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.SaveCheckAnswers(_fixture.OpportunityId, _fixture.OpportunityItemId).GetAwaiter().GetResult();
         }
         
         [Fact]
@@ -60,15 +31,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var result = _result as RedirectToRouteResult;
             result.Should().NotBeNull();
             result?.RouteName.Should().Be("GetOpportunityBasket");
-            result?.RouteValues["opportunityId"].Should().Be(1);
-            result?.RouteValues["opportunityItemId"].Should().Be(2);
+            result?.RouteValues["opportunityId"].Should().Be(_fixture.OpportunityId);
+            result?.RouteValues["opportunityItemId"].Should().Be(_fixture.OpportunityItemId);
         }
 
         [Fact]
         public void Then_UpdateOpportunityItemAsync_Is_Called_Exactly_Once()
         {
             // TODO Assert args
-            _opportunityService.Received(1).UpdateOpportunityItemAsync(Arg.Any<CheckAnswersDto>());
+            _fixture.OpportunityService.Received(2).UpdateOpportunityItemAsync(Arg.Any<CheckAnswersDto>());
         }
     }
 }

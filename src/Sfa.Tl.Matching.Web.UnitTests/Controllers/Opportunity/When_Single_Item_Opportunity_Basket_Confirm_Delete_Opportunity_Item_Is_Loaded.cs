@@ -1,33 +1,27 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Single_Item_Opportunity_Basket_Confirm_Delete_Opportunity_Item_Is_Loaded
+    public class When_Single_Item_Opportunity_Basket_Confirm_Delete_Opportunity_Item_Is_Loaded : IClassFixture<OpportunityControllerFixture>
     {
-        private readonly IOpportunityService _opportunityService;
+        private readonly OpportunityControllerFixture _fixture;
         private readonly IActionResult _result;
 
-        public When_Single_Item_Opportunity_Basket_Confirm_Delete_Opportunity_Item_Is_Loaded()
+        public When_Single_Item_Opportunity_Basket_Confirm_Delete_Opportunity_Item_Is_Loaded(OpportunityControllerFixture fixture)
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
+            _fixture = fixture;
 
-            var mapper = new Mapper(config);
-
-            _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetConfirmDeleteOpportunityItemAsync(1).Returns(new ConfirmDeleteOpportunityItemViewModel
+            _fixture.OpportunityService.GetConfirmDeleteOpportunityItemAsync(_fixture.OpportunityId).Returns(new ConfirmDeleteOpportunityItemViewModel
             {
-                OpportunityItemId = 1,
-                OpportunityId = 2,
+                OpportunityItemId = _fixture.OpportunityItemId,
+                OpportunityId = _fixture.OpportunityId,
                 CompanyName = "Company Name",
                 CompanyNameAka = "Also Known As",
                 Postcode = "PostCode",
@@ -36,12 +30,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 Placements = 1,
             });
 
-            var opportunityController = new OpportunityController(_opportunityService, mapper);
-            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
-                .AddUserName("CreatedBy")
-                .Build();
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("CreatedBy");
 
-            _result = controllerWithClaims.GetConfirmDeleteOpportunityItemAsync(1).GetAwaiter().GetResult();
+            _result = controllerWithClaims.GetConfirmDeleteOpportunityItemAsync(_fixture.OpportunityId).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -52,8 +43,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             var viewResult = _result as ViewResult;
             viewResult?.Model.Should().NotBeNull();
             var viewModel = _result.GetViewModel<ConfirmDeleteOpportunityItemViewModel>();
-            viewModel.OpportunityItemId.Should().Be(1);
-            viewModel.OpportunityId.Should().Be(2);
+            viewModel.OpportunityItemId.Should().Be(_fixture.OpportunityItemId);
+            viewModel.OpportunityId.Should().Be(_fixture.OpportunityId);
             viewModel.CompanyName.Should().Be("Company Name");
             viewModel.CompanyNameAka.Should().Be("Also Known As");
             viewModel.CompanyNameWithAka.Should().Be("Company Name (Also Known As)");
@@ -67,7 +58,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void GetConfirmDeleteOpportunityItemAsync_Is_Called_Exactly_Once_In_Correct_Order()
         {
-            _opportunityService.Received(1).GetConfirmDeleteOpportunityItemAsync(1);
+            _fixture.OpportunityService.Received(1).GetConfirmDeleteOpportunityItemAsync(1);
         }
     }
 }

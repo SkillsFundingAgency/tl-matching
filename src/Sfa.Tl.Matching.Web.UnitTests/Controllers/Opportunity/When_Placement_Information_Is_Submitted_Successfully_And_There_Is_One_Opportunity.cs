@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             };
 
 
-            _fixture.OpportunityService.GetSavedOpportunityItemCountAsync(1).Returns(0);
+            _fixture.OpportunityService.GetSavedOpportunityItemCountAsync(_fixture.OpportunityId).Returns(0);
 
             var controllerWithClaims = _fixture.Sut.ControllerWithClaims("username");
 

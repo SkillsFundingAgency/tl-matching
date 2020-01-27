@@ -1,42 +1,33 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Placement_Information_Loaded_With_Placements_Unknown
+    public class When_Placement_Information_Loaded_With_Placements_Unknown : IClassFixture<OpportunityControllerFixture>
     {
+        private readonly OpportunityControllerFixture _fixture;
         private readonly IActionResult _result;
 
         private readonly PlacementInformationSaveDto _dto = new PlacementInformationSaveDto();
         private const bool PlacementsKnown = false;
         private const int Placements = 5;
-        private const int OpportunityId = 1;
-        private const int OpportunityItemId = 12;
-
-        public When_Placement_Information_Loaded_With_Placements_Unknown()
+        
+        public When_Placement_Information_Loaded_With_Placements_Unknown(OpportunityControllerFixture fixture)
         {
-            _dto.OpportunityId = OpportunityId;
+            _fixture = fixture;
+            _dto.OpportunityId = _fixture.OpportunityId;
             _dto.PlacementsKnown = PlacementsKnown;
             _dto.Placements = Placements;
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(PlacementInformationSaveDtoMapper).Assembly));
-            var mapper = new Mapper(config);
-            
-            var opportunityService = Substitute.For<IOpportunityService>();
-            opportunityService.GetPlacementInformationAsync(Arg.Any<int>()).Returns(_dto);
+            _fixture.OpportunityService.GetPlacementInformationAsync(Arg.Any<int>()).Returns(_dto);
 
-            var opportunityController = new OpportunityController(opportunityService,  mapper);
-
-            _result = opportunityController.GetPlacementInformationAsync(OpportunityItemId).GetAwaiter().GetResult();
+            _result = _fixture.Sut.GetPlacementInformationAsync(_fixture.OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]

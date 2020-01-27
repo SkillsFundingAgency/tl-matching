@@ -1,47 +1,38 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Recording_Referrals_And_Check_Answers_Is_Loaded
+    public class When_Recording_Referrals_And_Check_Answers_Is_Loaded : IClassFixture<OpportunityControllerFixture>
     {
-        private readonly IOpportunityService _opportunityService;
-        private const string CreatedBy = "CreatedBy";
+        private readonly OpportunityControllerFixture _fixture;
         private readonly IActionResult _result;
 
-        private const int OpportunityItemId = 2;
-
-        public When_Recording_Referrals_And_Check_Answers_Is_Loaded()
+        
+        public When_Recording_Referrals_And_Check_Answers_Is_Loaded(OpportunityControllerFixture fixture)
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(CheckAnswersDtoMapper).Assembly));
-            var mapper = new Mapper(config);
-
+            _fixture = fixture;
+            
             var dto = new ValidCheckAnswersDtoBuilder().Build();
 
-            _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetCheckAnswersAsync(OpportunityItemId).Returns(dto);
+            _fixture.OpportunityService.GetCheckAnswersAsync(_fixture.OpportunityItemId).Returns(dto);
 
-            var opportunityController = new OpportunityController(_opportunityService,  mapper);
-            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
-                .AddUserName(CreatedBy)
-                .Build();
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("CreatedBy");
 
-            _result = controllerWithClaims.GetCheckAnswersAsync(OpportunityItemId).GetAwaiter().GetResult();
+            _result = controllerWithClaims.GetCheckAnswersAsync(_fixture.OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetCheckAnswers_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetCheckAnswersAsync(OpportunityItemId);
+            _fixture.OpportunityService.Received(1).GetCheckAnswersAsync(_fixture.OpportunityItemId);
         }
         
         [Fact]
@@ -54,7 +45,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewResult?.Model.Should().NotBeNull();
 
             var viewModel = _result.GetViewModel<CheckAnswersViewModel>();
-            viewModel.OpportunityItemId.Should().Be(OpportunityItemId);
+            viewModel.OpportunityItemId.Should().Be(_fixture.OpportunityItemId);
             viewModel.CompanyName.Should().Be("CompanyName");
             viewModel.CompanyNameAka.Should().Be("AlsoKnownAs");
             viewModel.CompanyNameWithAka.Should().Be("CompanyName (AlsoKnownAs)");

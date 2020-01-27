@@ -1,41 +1,35 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Placement_Information_Loaded
+    public class When_Placement_Information_Loaded : IClassFixture<OpportunityControllerFixture>
     {
+        private readonly OpportunityControllerFixture _fixture;
         private readonly IActionResult _result;
-        private readonly IOpportunityService _opportunityService;
-
-        private const string JobRole = "JobRole";
-        private const string CompanyName = "CompanyName";
-        private const string CompanyNameAka = "AlsoKnownAs";
+        
         private const bool PlacementsKnown = true;
         private const int Placements = 5;
-        private const int OpportunityId = 1;
-        private const int OpportunityItemId = 12;
 
-        public When_Placement_Information_Loaded()
+        public When_Placement_Information_Loaded(OpportunityControllerFixture fixture)
         {
+            _fixture = fixture;
+            
             var dto = new PlacementInformationSaveDto
             {
-                OpportunityId = OpportunityId,
-                OpportunityItemId = OpportunityItemId,
-                JobRole = JobRole,
+                OpportunityId = _fixture.OpportunityId,
+                OpportunityItemId = _fixture.OpportunityItemId,
+                JobRole = _fixture.JobRole,
                 OpportunityType = OpportunityType.Referral,
-                CompanyName = CompanyName,
-                CompanyNameAka = CompanyNameAka,
+                CompanyName = _fixture.CompanyName,
+                CompanyNameAka = _fixture.CompanyNameAka,
                 PlacementsKnown = PlacementsKnown,
                 Placements = Placements,
                 NoSuitableStudent = true,
@@ -43,21 +37,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
                 ProvidersTooFarAway = true
             };
 
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(PlacementInformationSaveDtoMapper).Assembly));
-            var mapper = new Mapper(config);
+            _fixture.OpportunityService.GetPlacementInformationAsync(_fixture.OpportunityItemId).Returns(dto);
 
-            _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetPlacementInformationAsync(OpportunityItemId).Returns(dto);
-
-            var opportunityController = new OpportunityController(_opportunityService, mapper);
-
-            _result = opportunityController.GetPlacementInformationAsync(OpportunityItemId).GetAwaiter().GetResult();
+            _result = _fixture.Sut.GetPlacementInformationAsync(_fixture.OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_GetPlacementInformation_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetPlacementInformationAsync(OpportunityItemId);
+            _fixture.OpportunityService.Received(2).GetPlacementInformationAsync(_fixture.OpportunityItemId);
         }
 
         [Fact]
@@ -70,14 +58,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
             viewResult?.Model.Should().NotBeNull();
 
             var viewModel = _result.GetViewModel<PlacementInformationSaveViewModel>();
-            viewModel.OpportunityId.Should().Be(OpportunityId);
-            viewModel.JobRole.Should().Be(JobRole);
+            viewModel.OpportunityId.Should().Be(_fixture.OpportunityId);
+            viewModel.JobRole.Should().Be(_fixture.JobRole);
             viewModel.PlacementsKnown.Should().Be(PlacementsKnown);
             viewModel.Placements.Should().Be(Placements);
             viewModel.OpportunityType.Should().Be(OpportunityType.Referral);
-            viewModel.CompanyName.Should().Be(CompanyName);
-            viewModel.CompanyNameAka.Should().Be(CompanyNameAka);
-            viewModel.CompanyNameWithAka.Should().Be($"{CompanyName} ({CompanyNameAka})");
+            viewModel.CompanyName.Should().Be(_fixture.CompanyName);
+            viewModel.CompanyNameAka.Should().Be(_fixture.CompanyNameAka);
+            viewModel.CompanyNameWithAka.Should().Be($"{_fixture.CompanyName} ({_fixture.CompanyNameAka})");
 
             viewModel.NoSuitableStudent.Should().BeTrue();
             viewModel.HadBadExperience.Should().BeTrue();

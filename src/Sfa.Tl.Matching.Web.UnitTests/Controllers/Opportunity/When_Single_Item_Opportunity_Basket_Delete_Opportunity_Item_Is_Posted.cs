@@ -1,35 +1,29 @@
-﻿using AutoMapper;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Application.Mappers;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
 {
-    public class When_Single_Item_Opportunity_Basket_Delete_Opportunity_Item_Is_Posted
+    public class When_Single_Item_Opportunity_Basket_Delete_Opportunity_Item_Is_Posted : IClassFixture<OpportunityControllerFixture>
     {
-        private readonly IOpportunityService _opportunityService;
+        private readonly OpportunityControllerFixture _fixture;
         private readonly IActionResult _result;
 
-        public When_Single_Item_Opportunity_Basket_Delete_Opportunity_Item_Is_Posted()
+        public When_Single_Item_Opportunity_Basket_Delete_Opportunity_Item_Is_Posted(OpportunityControllerFixture fixture)
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
+            _fixture = fixture;
+            
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("CreatedBy");
 
-            var mapper = new Mapper(config);
-
-            _opportunityService = Substitute.For<IOpportunityService>();
-
-            var opportunityController = new OpportunityController(_opportunityService, mapper);
-            var controllerWithClaims = new ClaimsBuilder<OpportunityController>(opportunityController)
-                .AddUserName("CreatedBy")
-                .Build();
-
-            _result = controllerWithClaims.DeleteOpportunityItemAsync(new DeleteOpportunityItemViewModel { OpportunityId = 1, OpportunityItemId = 2, BasketItemCount = 1 }).GetAwaiter().GetResult();
+            _result = controllerWithClaims.DeleteOpportunityItemAsync(new DeleteOpportunityItemViewModel
+            {
+                OpportunityId = _fixture.OpportunityId, OpportunityItemId = _fixture.OpportunityItemId,
+                BasketItemCount = 1
+            }).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -47,7 +41,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Opportunity
         [Fact]
         public void DeleteOpportunityItemAsync_Is_Called_Exactly_Once_In_Correct_Order()
         {
-            _opportunityService.Received(1).DeleteOpportunityItemAsync(1, 2);
+            _fixture.OpportunityService.Received(2).DeleteOpportunityItemAsync(_fixture.OpportunityId, _fixture.OpportunityItemId);
         }
     }
 }

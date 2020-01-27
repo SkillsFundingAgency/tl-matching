@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -38,6 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Fixtures
         internal string JobRole;
         internal int BasketItemCount;
         internal int ReferralIdToDelete;
+        internal Guid EmployerCrmId;
 
         internal IOpportunityService OpportunityService;
         internal IHttpContextAccessor HttpcontextAccesor;
