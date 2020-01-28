@@ -1,33 +1,34 @@
+using System.Linq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory.Builders;
-using Sfa.Tl.Matching.Tests.Common;
+using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BackgroundProcessHistory
 {
-    public class When_BackgroundProcessHistoryRepository_CreateMany_Is_Called
+    public class When_BackgroundProcessHistoryRepository_CreateMany_Is_Called : IClassFixture<BackgroundProcessHistoryTestFixture>
     {
         private readonly int _result;
+        private readonly int _rowsInDb;
 
-        public When_BackgroundProcessHistoryRepository_CreateMany_Is_Called()
+        public When_BackgroundProcessHistoryRepository_CreateMany_Is_Called(BackgroundProcessHistoryTestFixture testFixture)
         {
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.BackgroundProcessHistory>>>();
+            testFixture.Builder
+                .ClearData()
+                .CreateBackgroundProcessHistory(3, 1, "Process 3", "Pending", createdBy: EntityCreationConstants.CreatedByUser)
+                .CreateBackgroundProcessHistory(4, 2, "Process 4", "Pending", createdBy: EntityCreationConstants.CreatedByUser);
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var data = new ValidBackgroundProcessHistoryListBuilder().Build();
-
-                var repository = new GenericRepository<Domain.Models.BackgroundProcessHistory>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
+            _result = testFixture.Repository.CreateManyAsync(testFixture.Builder.BackgroundProcessHistories)
                     .GetAwaiter().GetResult();
-            }
+
+            _rowsInDb = testFixture.MatchingDbContext.BackgroundProcessHistory.Count();
         }
 
         [Fact]
         public void Then_Two_Records_Should_Have_Been_Created() =>
             _result.Should().Be(2);
+
+        [Fact]
+        public void Then_Two_Records_Should_Be_In_The_Database() =>
+            _rowsInDb.Should().Be(2);
     }
 }

@@ -1,43 +1,29 @@
 ﻿using System;
-using System.Linq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.BankHoliday.Builders;
-using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.BankHoliday
 {
-    public class When_BankHolidayRepository_Update_Is_Called
+    public class When_BankHolidayRepository_Update_Is_Called : IClassFixture<BankHolidayTestFixture>
     {
         private readonly Domain.Models.BankHoliday _result;
 
-        public When_BankHolidayRepository_Update_Is_Called()
+        public When_BankHolidayRepository_Update_Is_Called(BankHolidayTestFixture testFixture)
         {
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.BankHoliday>>>();
+            var entity = testFixture.Repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var entity = new ValidBankHolidayListBuilder().Build().First();
-                dbContext.Add(entity);
-                dbContext.SaveChanges();
+            entity.Date = DateTime.Parse("2019-08-29");
+            entity.Title = "Updated bank holiday";
 
-                var repository = new GenericRepository<Domain.Models.BankHoliday>(logger, dbContext);
+            entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
+            entity.ModifiedBy = "UpdateTestUser";
 
-                entity.Date = DateTime.Parse("2019-08-29");
-                entity.Title = "Updated bank holiday";
+            testFixture.Repository.UpdateAsync(entity).GetAwaiter().GetResult();
 
-                entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
-                entity.ModifiedBy = "UpdateTestUser";
-
-                repository.UpdateAsync(entity).GetAwaiter().GetResult();
-
-                _result = repository.GetSingleOrDefaultAsync(x => x.Id == 1)
-                    .GetAwaiter().GetResult();
-            }
+            _result = testFixture.Repository.GetSingleOrDefaultAsync(x => x.Id == 1)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]
