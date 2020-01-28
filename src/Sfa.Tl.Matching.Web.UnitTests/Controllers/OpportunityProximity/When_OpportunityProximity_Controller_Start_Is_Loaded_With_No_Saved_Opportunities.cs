@@ -1,39 +1,30 @@
-using System.Security.Claims;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Extensions;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Sfa.Tl.Matching.Web.UnitTests.Controllers.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 {
-    public class When_OpportunityProximity_Controller_Start_Is_Loaded_With_No_Saved_Opportunities
+    public class When_OpportunityProximity_Controller_Start_Is_Loaded_With_No_Saved_Opportunities : IClassFixture<DashboardControllerFixture>
     {
         private readonly IActionResult _result;
 
         public When_OpportunityProximity_Controller_Start_Is_Loaded_With_No_Saved_Opportunities()
         {
-            var employerService = Substitute.For<IEmployerService>();
-            var serviceStatusService = Substitute.For<IServiceStatusHistoryService>();
+            var fixture = new DashboardControllerFixture();
 
-            employerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(0);
-            serviceStatusService.GetLatestServiceStatusHistoryAsync().Returns(new ServiceStatusHistoryViewModel
+            fixture.EmployerService.GetInProgressEmployerOpportunityCountAsync("username").Returns(0);
+            fixture.ServiceStatusHistoryService.GetLatestServiceStatusHistoryAsync().Returns(new ServiceStatusHistoryViewModel
             {
                 IsOnline = false
             });
 
             
-            var dashboardController = new DashboardController(employerService, serviceStatusService);
-
-            var controllerWithClaims = new ClaimsBuilder<DashboardController>(dashboardController)
-                .Add(ClaimTypes.Role, RolesExtensions.StandardUser)
-                .AddUserName("username")
-                .Build();
+            var controllerWithClaims = fixture.SubjectUnderTest.ControllerWithClaims("username");
 
             _result = controllerWithClaims.Start().GetAwaiter().GetResult();
         }

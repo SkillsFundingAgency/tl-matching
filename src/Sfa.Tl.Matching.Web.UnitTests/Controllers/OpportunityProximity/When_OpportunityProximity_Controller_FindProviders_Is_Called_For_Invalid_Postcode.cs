@@ -3,31 +3,23 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 {
-    public class When_OpportunityProximity_Controller_FindProviders_Is_Called_For_Invalid_Postcode
+    public class When_OpportunityProximity_Controller_FindProviders_Is_Called_For_Invalid_Postcode : IClassFixture<OpportunityProximityControllerFixture>
     {
         private readonly IActionResult _result;
-        private readonly IRoutePathService _routeService;
+        private readonly OpportunityProximityControllerFixture _fixture;
 
         public When_OpportunityProximity_Controller_FindProviders_Is_Called_For_Invalid_Postcode()
         {
-            var locationService = Substitute.For<ILocationService>();
-            locationService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((false, null));
-
-            var opportunityProximityService = Substitute.For<IOpportunityProximityService>();
-
-            _routeService = Substitute.For<IRoutePathService>();
-            _routeService.GetRouteIdsAsync().Returns(new List<int> { 1, 2 });
-
-            var opportunityService = Substitute.For<IOpportunityService>();
-
-            var opportunityProximityController = new OpportunityProximityController(_routeService, opportunityProximityService, opportunityService, locationService);
+            _fixture = new OpportunityProximityControllerFixture();
+            
+            _fixture.LocationService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((false, null));
+            _fixture.RouteService.GetRouteIdsAsync().Returns(new List<int> { 1, 2 });
 
             const string postcode = "XYZ A12";
 
@@ -41,7 +33,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                 SelectedRouteId = 1,
                 Postcode = postcode
             };
-            _result = opportunityProximityController.FindProviders(viewModel).GetAwaiter().GetResult();
+
+            _result = _fixture.Sut.FindProviders(viewModel).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -68,7 +61,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_RouteService_GetRouteIdsAsync_Is_Called_exactly_Once()
         {
-            _routeService.Received(1).GetRouteIdsAsync();
+            _fixture.RouteService.Received(1).GetRouteIdsAsync();
         }
     }
 }
