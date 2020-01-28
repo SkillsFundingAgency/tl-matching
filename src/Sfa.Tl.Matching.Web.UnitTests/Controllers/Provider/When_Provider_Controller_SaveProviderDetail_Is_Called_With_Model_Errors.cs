@@ -1,31 +1,26 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_No_Venues
+    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_No_Venues : IClassFixture<ProviderControllerFixture>
     {
         private readonly IActionResult _result;
-        private readonly IProviderService _providerService;
-        private readonly ProviderController _providerController;
-
+        private readonly ProviderControllerFixture _fixture;
+        
         public When_Provider_Controller_SaveProviderDetail_Is_Called_With_No_Venues()
         {
-            _providerService = Substitute.For<IProviderService>();
-            _providerController = new ProviderController(_providerService, new MatchingConfiguration());
-
-            _result = _providerController.SaveProviderDetailAsync(new ProviderDetailViewModel()).GetAwaiter().GetResult();
+            _fixture = new ProviderControllerFixture();
+            _result = _fixture.Sut.SaveProviderDetailAsync(new ProviderDetailViewModel()).GetAwaiter().GetResult();
         }
 
         [Fact]
         public void Then_ProviderService_Is_Not_Called() =>
-            _providerService.DidNotReceiveWithAnyArgs();
+            _fixture.ProviderService.DidNotReceiveWithAnyArgs();
 
         [Fact]
         public void Then_Model_Is_Not_Null()
@@ -43,9 +38,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             _result.Should().NotBeNull();
             _result.Should().BeAssignableTo<ViewResult>();
 
-            _providerController.ViewData.ModelState.IsValid.Should().BeFalse();
-            _providerController.ViewData.ModelState.Count.Should().Be(1);
-            _providerController.ViewData.ModelState["ProviderVenue"].Errors.Should().ContainSingle(error => error.ErrorMessage == "You must add a venue for this provider");
+            _fixture.Sut.ViewData.ModelState.IsValid.Should().BeFalse();
+            _fixture.Sut.ViewData.ModelState.Count.Should().Be(1);
+            _fixture.Sut.ViewData.ModelState["ProviderVenue"].Errors.Should().ContainSingle(error =>
+                error.ErrorMessage == "You must add a venue for this provider");
         }
     }
 }

@@ -1,19 +1,17 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_New_And_CdfProvider_Is_No
+    public class When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_New_And_CdfProvider_Is_No : IClassFixture<ProviderControllerFixture>
     {
         private readonly IActionResult _result;
-        private readonly IProviderService _providerService;
+        private readonly ProviderControllerFixture _fixture;
         private readonly ProviderDetailViewModel _viewModel = new ProviderDetailViewModel
         {
             SubmitAction = "SaveSection",
@@ -22,10 +20,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
         public When_Provider_Controller_SaveProviderDetail_Is_Called_With_SubmitAction_SaveSection_New_And_CdfProvider_Is_No()
         {
-            _providerService = Substitute.For<IProviderService>();
+            _fixture = new ProviderControllerFixture();
 
-            var providerController = new ProviderController(_providerService, new MatchingConfiguration());
-            var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
+            var controllerWithClaims = _fixture.Sut.ControllerWithClaims("username");
 
             _result = controllerWithClaims.SaveProviderDetailAsync(_viewModel).GetAwaiter().GetResult();
         }
@@ -42,7 +39,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
         [Fact]
         public void Then_ProviderService_UpdateProviderDetailSectionAsync_Is_Not_Called()
         {
-            _providerService.DidNotReceive().UpdateProviderDetailSectionAsync(Arg.Is(_viewModel));
+            _fixture.ProviderService.DidNotReceive().UpdateProviderDetailSectionAsync(Arg.Is(_viewModel));
         }
     }
 }

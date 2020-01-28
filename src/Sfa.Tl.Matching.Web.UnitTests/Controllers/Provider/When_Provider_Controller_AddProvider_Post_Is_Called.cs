@@ -1,31 +1,28 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_AddProvider_Post_Is_Called
+    public class When_Provider_Controller_AddProvider_Post_Is_Called : IClassFixture<ProviderControllerFixture>
     {
         private readonly IActionResult _result;
 
         public When_Provider_Controller_AddProvider_Post_Is_Called()
         {
-            var providerService = Substitute.For<IProviderService>();
-
-            var providerController = new ProviderController(providerService, new MatchingConfiguration());
-            var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
+            var fixture = new ProviderControllerFixture();
+            
+            var controllerWithClaims = fixture.Sut.ControllerWithClaims("username");
 
             var viewModel = new AddProviderViewModel
             {
                 UkPrn = 123,
                 Name = "ProviderName"
             };
+
             _result = controllerWithClaims.AddProvider(viewModel);
         }
 

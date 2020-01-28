@@ -1,16 +1,13 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using NSubstitute;
-using Sfa.Tl.Matching.Application.Interfaces;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.ViewModel;
-using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
+using Sfa.Tl.Matching.Web.UnitTests.Fixtures;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 {
-    public class When_Provider_Controller_CreateProviderDetail_Is_Called_With_SubmitAction_SaveSection_And_CdfProvider_Is_No
+    public class When_Provider_Controller_CreateProviderDetail_Is_Called_With_SubmitAction_SaveSection_And_CdfProvider_Is_No : IClassFixture<ProviderControllerFixture>
     {
         private readonly IActionResult _result;
         private readonly CreateProviderDetailViewModel _viewModel = new CreateProviderDetailViewModel
@@ -21,10 +18,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
 
         public When_Provider_Controller_CreateProviderDetail_Is_Called_With_SubmitAction_SaveSection_And_CdfProvider_Is_No()
         {
-            var providerService = Substitute.For<IProviderService>();
-
-            var providerController = new ProviderController(providerService, new MatchingConfiguration());
-            var controllerWithClaims = new ClaimsBuilder<ProviderController>(providerController).Build();
+            var fixture = new ProviderControllerFixture();
+            
+            var controllerWithClaims = fixture.Sut.ControllerWithClaims("username");
 
             _result = controllerWithClaims.CreateProviderDetailAsync(_viewModel).GetAwaiter().GetResult();
         }
