@@ -1,29 +1,21 @@
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Sfa.Tl.Matching.Data.Repositories;
-using Sfa.Tl.Matching.Data.UnitTests.Repositories.Qualification.Builders;
-using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Qualification
 {
-    public class When_QualificationRepository_CreateMany_Is_Called
+    public class When_QualificationRepository_CreateMany_Is_Called : IClassFixture<QualificationTestFixture>
     {
         private readonly int _result;
 
-        public When_QualificationRepository_CreateMany_Is_Called()
+        public When_QualificationRepository_CreateMany_Is_Called(QualificationTestFixture testFixture)
         {
-            var logger = Substitute.For<ILogger<GenericRepository<Domain.Models.Qualification>>>();
+            testFixture.Builder
+                .ClearData()
+                .CreateQualification(1, "1000", "Title", "Short Title")
+                .CreateQualification(2, "1001", "Title 2", "Short Title 2");
 
-            using (var dbContext = InMemoryDbContext.Create())
-            {
-                var data = new ValidQualificationListBuilder().Build();
-
-                var repository = new GenericRepository<Domain.Models.Qualification>(logger, dbContext);
-                _result = repository.CreateManyAsync(data)
-                    .GetAwaiter().GetResult();
-            }
+            _result = testFixture.Repository.CreateManyAsync(testFixture.Builder.Qualifications)
+                .GetAwaiter().GetResult();
         }
 
         [Fact]

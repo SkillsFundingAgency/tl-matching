@@ -20,9 +20,9 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
         {
             _result.Count().Should().Be(2);
             _result.First().Id.Should().Be(1);
-            _result.First().Qualification.LarId.Should().Be("1234567X");
-            _result.First().Qualification.Title.Should().BeEquivalentTo("Full Qualification Title");
-            _result.First().Qualification.ShortTitle.Should().BeEquivalentTo("Short Title");
+            _result.First().Qualification.LarId.Should().Be("1000X");
+            _result.First().Qualification.Title.Should().BeEquivalentTo("Qualification Title 1");
+            _result.First().Qualification.ShortTitle.Should().BeEquivalentTo("Short Title 1");
             _result.First().RouteId.Should().Be(2);
             _result.First().Source.Should().BeEquivalentTo("Test");
             _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);

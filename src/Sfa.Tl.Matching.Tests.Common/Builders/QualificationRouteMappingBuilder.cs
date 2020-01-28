@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Tests.Common.Extensions;
@@ -9,63 +10,71 @@ namespace Sfa.Tl.Matching.Tests.Common.Builders
     public class QualificationRouteMappingBuilder
     {
         private readonly MatchingDbContext _context;
+        private readonly QualificationBuilder _qualificationBuilder;
 
         public IList<QualificationRouteMapping> QualificationRouteMappings { get; }
-
+        
         public QualificationRouteMappingBuilder(MatchingDbContext context)
         {
             _context = context;
+            _qualificationBuilder = new QualificationBuilder(_context);
             QualificationRouteMappings = new List<QualificationRouteMapping>();
         }
 
         public QualificationRouteMappingBuilder CreateQualificationRouteMappings(int numberOfQualificationRouteMappings = 1, string createdBy = null,
             DateTime? createdOn = null, string modifiedBy = null, DateTime? modifiedOn = null)
         {
-            //TODO: Refactor to call method below
-            var qualificationRouteMapping = new Domain.Models.QualificationRouteMapping
-            {
-                Id = 1,
-                RouteId = 2,
-                Source = "Test",
-                CreatedBy = createdBy,
-                CreatedOn = createdOn ?? default(DateTime),
-                ModifiedBy = modifiedBy,
-                ModifiedOn = modifiedOn,
-                Qualification = new Domain.Models.Qualification
-                {
-                    LarId = "1234567X",
-                    Title = "Full Qualification Title",
-                    ShortTitle = "Short Title"
-                }
-            };
-            QualificationRouteMappings.Add(qualificationRouteMapping);
+            //var qualificationRouteMapping = new QualificationRouteMapping
+            //{
+            //    Id = 1,
+            //    RouteId = 2,
+            //    Source = "Test",
+            //    CreatedBy = createdBy,
+            //    CreatedOn = createdOn ?? default(DateTime),
+            //    ModifiedBy = modifiedBy,
+            //    ModifiedOn = modifiedOn,
+            //    Qualification = _qualificationBuilder.CreateQualification(
+            //        1, "1234567X", "Full Qualification Title",
+            //        "Short Title"
+            //    ).Qualifications.Last()
+            //};
+            //QualificationRouteMappings.Add(qualificationRouteMapping);
 
-            qualificationRouteMapping = new Domain.Models.QualificationRouteMapping
-            {
-                Id = 2,
-                RouteId = 3,
-                Source = "Test",
-                CreatedBy = createdBy,
-                CreatedOn = createdOn ?? default(DateTime),
-                ModifiedBy = modifiedBy,
-                ModifiedOn = modifiedOn,
-                Qualification = new Domain.Models.Qualification
-                {
-                    LarId = "7654321X",
-                    Title = "Another Qualification Title",
-                    ShortTitle = "Another Short Title"
-                }
-            };
-            QualificationRouteMappings.Add(qualificationRouteMapping);
-            return this;
-
-
+            //qualificationRouteMapping = new QualificationRouteMapping
+            //{
+            //    Id = 2,
+            //    RouteId = 3,
+            //    Source = "Test",
+            //    CreatedBy = createdBy,
+            //    CreatedOn = createdOn ?? default(DateTime),
+            //    ModifiedBy = modifiedBy,
+            //    ModifiedOn = modifiedOn,
+            //    Qualification = _qualificationBuilder.CreateQualification(
+            //        1, 
+            //        "7654321X",
+            //        "Another Qualification Title",
+            //        "Another Short Title"
+            //        ).Qualifications.Last()
+            //};
+            //QualificationRouteMappings.Add(qualificationRouteMapping);
+            
             for (var i = 0; i < numberOfQualificationRouteMappings; i++)
             {
                 var qualificationRouteMappingNumber = i + 1;
+                var qualificationNumber = i + 1;
                 var routeId = i + 2;
+
+                var qualification =  _qualificationBuilder.CreateQualification(
+                    qualificationRouteMappingNumber,
+                    $"{qualificationNumber}000X",
+                            $"Qualification Title {qualificationRouteMappingNumber}",
+                            $"Short Title {qualificationRouteMappingNumber}",
+                    createdBy, createdOn, modifiedBy, modifiedOn
+                    ).Qualifications.Last();
+
                 CreateQualificationRouteMapping(qualificationRouteMappingNumber, routeId,
                     "Test",
+                    qualification,
                     createdBy, createdOn, modifiedBy, modifiedOn);
             }
 
@@ -73,7 +82,8 @@ namespace Sfa.Tl.Matching.Tests.Common.Builders
         }
 
         public QualificationRouteMappingBuilder CreateQualificationRouteMapping(int id, int routeId, 
-            string source = "Test",
+            string source = "Test", 
+            Qualification qualification = null,
             string createdBy = null, DateTime? createdOn = null,
             string modifiedBy = null, DateTime? modifiedOn = null)
         {
@@ -86,6 +96,7 @@ namespace Sfa.Tl.Matching.Tests.Common.Builders
                 CreatedOn = createdOn ?? default(DateTime),
                 ModifiedBy = modifiedBy,
                 ModifiedOn = modifiedOn,
+                Qualification = qualification
             };
 
             QualificationRouteMappings.Add(qualificationRouteMapping);

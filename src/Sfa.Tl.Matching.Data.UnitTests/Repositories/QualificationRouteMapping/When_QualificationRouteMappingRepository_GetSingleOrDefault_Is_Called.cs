@@ -18,9 +18,9 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.QualificationRouteMapping
         public void Then_Fields_Are_As_Expected()
         {
             _result.Id.Should().Be(1);
-            _result.Qualification.LarId.Should().BeEquivalentTo("1234567X");
-            _result.Qualification.Title.Should().BeEquivalentTo("Full Qualification Title");
-            _result.Qualification.ShortTitle.Should().BeEquivalentTo("Short Title");
+            _result.Qualification.LarId.Should().BeEquivalentTo("1000X");
+            _result.Qualification.Title.Should().BeEquivalentTo("Qualification Title 1");
+            _result.Qualification.ShortTitle.Should().BeEquivalentTo("Short Title 1");
             _result.RouteId.Should().Be(2);
             _result.Source.Should().BeEquivalentTo("Test");
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);

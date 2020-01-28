@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
@@ -13,33 +12,15 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Path
 
         public When_PathRepository_CreateMany_Is_Called(PathTestFixture testFixture)
         {
-            var paths = new List<Domain.Models.Path>
-            {
-                new Domain.Models.Path
-                {
-                    Id = 991,
-                    Name = "Path 991",
-                    CreatedBy =  EntityCreationConstants.CreatedByUser
-                },
-                new Domain.Models.Path
-                {
-                    Id = 992,
-                    Name = "Path 992",
-                    CreatedBy =  EntityCreationConstants.CreatedByUser
-                }
-            };
+            testFixture.Builder
+                .ClearData()
+                .CreatePath(3, "Path 3", createdBy: EntityCreationConstants.CreatedByUser)
+                .CreatePath(4, "Path 4", createdBy: EntityCreationConstants.CreatedByUser);
 
-            testFixture.Builder.ClearData();
-
-            _result = testFixture.Repository.CreateManyAsync(paths)
+            _result = testFixture.Repository.CreateManyAsync(testFixture.Builder.Paths)
                 .GetAwaiter().GetResult();
 
             _rowsInDb = testFixture.MatchingDbContext.Path.Count();
-
-            foreach (var path in paths)
-            {
-                testFixture.Builder.Paths.Add(path);
-            }
         }
 
         [Fact]

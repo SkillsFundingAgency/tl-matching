@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Sfa.Tl.Matching.Data.UnitTests.Repositories.Constants;
@@ -13,33 +12,15 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Route
 
         public When_RouteRepository_CreateMany_Is_Called(RouteTestFixture testFixture)
         {
-            var routes = new List<Domain.Models.Route>
-            {
-                new Domain.Models.Route
-                {
-                    Id = 991,
-                    Name = "Route 991",
-                    CreatedBy =  EntityCreationConstants.CreatedByUser
-                },
-                new Domain.Models.Route
-                {
-                    Id = 992,
-                    Name = "Route 992",
-                    CreatedBy =  EntityCreationConstants.CreatedByUser
-                }
-            };
+            testFixture.Builder
+                .ClearData()
+                .CreateRoute(3, "Route 3", createdBy: EntityCreationConstants.CreatedByUser)
+                .CreateRoute(4, "Route 4", createdBy: EntityCreationConstants.CreatedByUser);
 
-            testFixture.Builder.ClearData();
-
-            _result = testFixture.Repository.CreateManyAsync(routes)
+            _result = testFixture.Repository.CreateManyAsync(testFixture.Builder.Routes)
                 .GetAwaiter().GetResult();
 
             _rowsInDb = testFixture.MatchingDbContext.Route.Count();
-
-            foreach (var route in routes)
-            {
-                testFixture.Builder.Routes.Add(route);
-            }
         }
 
         [Fact]
