@@ -26,5 +26,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
             var displayText = ProviderDisplayExtensions.GetProviderEmailDisplayText(venue, postcode, displayName);
             displayText.Should().Be(result);
         }
+
+        [Theory(DisplayName = "GetProviderReportDisplayText Data Tests")]
+        [InlineData("venue", "CV1 2WT", "display name", true, "venue (part of display name)")]
+        [InlineData("CV1 2WT", "CV1 2WT", "display name", true, "display name")]
+        [InlineData("cv1 2wt", "CV1 2WT", "display name", true, "display name")]
+        public void GetProviderReportDisplayText(string venue, string postcode, string displayName, bool includePartOf, string result)
+        {
+            var displayText = ProviderDisplayExtensions.GetProvideReportDisplayText(venue, postcode, displayName, includePartOf);
+            displayText.Should().Be(result);
+        }
     }
 }

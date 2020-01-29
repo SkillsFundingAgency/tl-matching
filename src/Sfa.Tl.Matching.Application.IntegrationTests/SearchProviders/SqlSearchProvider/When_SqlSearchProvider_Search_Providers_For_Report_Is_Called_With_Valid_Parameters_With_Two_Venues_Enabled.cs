@@ -49,7 +49,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             _results.Providers.Count.Should().Be(2);
 
             var firstItem = _results.Providers.First();
-            firstItem.ProviderName.Should().Be("SQL Search Provider (CV1 2WT)");
+            firstItem.ProviderName.Should().Be("SQL Search Provider");
             firstItem.ProviderDisplayName.Should().Be("SQL Search Provider");
 
             firstItem.ProviderVenuePostcode.Should().Be("CV1 2WT");
@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearch
             qualification.Should().Be("Short Title");
 
             var secondItem = _results.Providers.Skip(1).First();
-            secondItem.ProviderName.Should().Be("SQL Search Provider (CV1 2WT)");
+            secondItem.ProviderName.Should().Be("SQL Search Provider");
             secondItem.ProviderDisplayName.Should().Be("SQL Search Provider");
         }
 

@@ -67,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
                     cells = rows[1].Descendants<Cell>().ToList();
                     cells.Count.Should().Be(11);
 
-                    cells[0].InnerText.Should().Be("Coventry Cathedral part of Provider Display Name (CV1 5FB)");
+                    cells[0].InnerText.Should().Be("Coventry Cathedral (part of Provider Display Name)");
                     cells[1].InnerText.Should().Be("Coventry CV1 5FB");
                     cells[2].InnerText.Should().Be("3.5 miles");
                     cells[3].InnerText.Should().Be("Digital");
