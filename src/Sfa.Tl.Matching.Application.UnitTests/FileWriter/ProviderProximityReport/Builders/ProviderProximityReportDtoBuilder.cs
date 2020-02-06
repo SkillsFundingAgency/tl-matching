@@ -24,7 +24,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
                 ProviderVenueTown = "Coventry",
                 ProviderVenuePostcode = "CV1 5FB",
                 Distance = 3.5,
-                ProviderName = "Provider",
                 ProviderDisplayName = "Provider Display Name",
                 ProviderVenueName = "Coventry Cathedral",
                 PrimaryContact = "Primary contact",

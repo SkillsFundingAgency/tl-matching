@@ -57,31 +57,18 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
                     sheetData.Should().NotBeNull();
 
                     var rows = sheetData.Descendants<Row>().ToList();
-                    rows.Count.Should().Be(3);
+                    rows.Count.Should().Be(2);
 
-                    //Check list of skills in the first row
-                    var cells = rows[0].Descendants<Cell>().ToList();
-
-
-                    //var cell = sheetData.Descendants<Cell>().
-                    //    FirstOrDefault(c => c.CellReference == "A1");
-                    
-                    cells[0].InnerText.Should().Be(
-                        "Showing providers with courses in these skill areas: " +
-                        "Creative and design, " +
-                        "Digital, " +
-                        "Health and science");
-                    
                     //Check row header cell has correct postode in distance column
-                    cells = rows[1].Descendants<Cell>().ToList();
+                    var cells = rows[0].Descendants<Cell>().ToList();
                     cells.Count.Should().Be(11);
-                    cells[3].InnerText.Should().Be("Distance from CV1 2WT");
+                    cells[2].InnerText.Should().Be("Distance from CV1 2WT");
 
                     //Check detail row
-                    cells = rows[2].Descendants<Cell>().ToList();
+                    cells = rows[1].Descendants<Cell>().ToList();
                     cells.Count.Should().Be(11);
 
-                    cells[0].InnerText.Should().Be("Provider");
+                    cells[0].InnerText.Should().Be("Coventry Cathedral (part of Provider Display Name)");
                     cells[1].InnerText.Should().Be("Coventry CV1 5FB");
                     cells[2].InnerText.Should().Be("3.5 miles");
                     cells[3].InnerText.Should().Be("Digital");

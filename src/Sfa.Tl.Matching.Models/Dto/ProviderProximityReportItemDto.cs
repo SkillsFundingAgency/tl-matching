@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sfa.Tl.Matching.Models.Extensions;
 
 namespace Sfa.Tl.Matching.Models.Dto
 {
@@ -7,7 +8,7 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ProviderVenueTown { get; set; }
         public string ProviderVenuePostcode { get; set; }
         public double? Distance { get; set; }
-        public string ProviderName { get; set; }
+        public string ProviderName => ProviderDisplayExtensions.GetProvideReportDisplayText(ProviderVenueName, ProviderVenuePostcode, ProviderDisplayName);
         public string ProviderDisplayName { get; set; }
         public string ProviderVenueName { get; set; }
         

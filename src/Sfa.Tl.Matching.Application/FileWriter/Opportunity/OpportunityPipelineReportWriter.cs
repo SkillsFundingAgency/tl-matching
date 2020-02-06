@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
                     ? CreateTextCell(3, rowIndex, placements)
                     : CreateTextCell(3, rowIndex, referral.PlacementsDetail));
 
-                row.AppendChild(CreateTextCell(4, rowIndex, referral.ProviderName));
+                row.AppendChild(CreateTextCell(4, rowIndex, referral.ProviderNameForReport));
                 row.AppendChild(CreateTextCell(5, rowIndex, referral.ProviderVenueTownAndPostcode));
                 row.AppendChild(CreateTextCell(6, rowIndex, $"{referral.DistanceFromEmployer:#0.0} miles"));
                 row.AppendChild(CreateTextCell(7, rowIndex, referral.PrimaryContact));

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -47,29 +46,11 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Provider
 
         private void WriteProvidersToSheet(ProviderProximityReportDto dto, OpenXmlElement sheetData)
         {
-            var skillsHeaderBuilder = new StringBuilder();
-
-            if (dto.SkillAreas != null && dto.SkillAreas.Count > 0)
-            {
-                skillsHeaderBuilder.Append("Showing providers with courses in these skill areas: ");
-
-                for (var i = 0; i < dto.SkillAreas.Count; i++)
-                {
-                    skillsHeaderBuilder.Append(dto.SkillAreas[i]);
-                    if (i < dto.SkillAreas.Count - 1)
-                        skillsHeaderBuilder.Append(", ");
-                }
-            }
-
             var rows = sheetData.Descendants<Row>().ToList();
             var cells = rows[0].Descendants<Cell>().ToList();
+            UpdateTextCell(cells[2], $"Distance from {dto.Postcode}");
 
-            UpdateTextCell(cells[0], skillsHeaderBuilder.ToString());
-
-            cells = rows[1].Descendants<Cell>().ToList();
-            UpdateTextCell(cells[3], $"Distance from {dto.Postcode}");
-
-            var rowIndex = 4;
+            var rowIndex = 3;
 
             foreach (var provider in dto.Providers)
             {

@@ -108,7 +108,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     {
                         Distance = s.Distance,
                         ProviderVenueTown = s.ProviderVenueTown,
-                        ProviderName = s.ProviderName,
                         ProviderVenuePostcode = s.ProviderVenuePostcode,
                         ProviderDisplayName = s.ProviderDisplayName,
                         ProviderVenueName = s.ProviderVenueName,
