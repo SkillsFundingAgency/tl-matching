@@ -24,6 +24,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string SecondaryContactEmail { get; set; }
         public string SecondaryContactPhone { get; set; }
         public string ProviderDisplayName { get; set; }
-        public string ProviderName => ProviderDisplayExtensions.GetDisplayText(ProviderVenueName, Postcode, ProviderDisplayName);
+        public string ProviderNameForReport => ProviderDisplayExtensions.GetProvideReportDisplayText(ProviderVenueName, Postcode, ProviderDisplayName);
     }
 }

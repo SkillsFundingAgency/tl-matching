@@ -19,5 +19,14 @@ namespace Sfa.Tl.Matching.Models.Extensions
                 ? $"{displayName}"
                 : $"{venueName}";
         }
+
+        public static string GetProvideReportDisplayText(string venueName, string postcode, string displayName, bool includePartOf = true)
+        {
+            return string.Compare(venueName, postcode, StringComparison.InvariantCultureIgnoreCase) == 0
+                ? $"{displayName}"
+                : includePartOf ?
+                    $"{venueName} (part of {displayName})"
+                    : $"{venueName}";
+        }
     }
 }

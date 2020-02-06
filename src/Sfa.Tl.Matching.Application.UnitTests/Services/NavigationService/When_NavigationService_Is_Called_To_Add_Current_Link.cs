@@ -107,5 +107,116 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.NavigationService
             addedItem.Should().BeNull();
         }
 
+        [Theory, AutoDomainData]
+        public async Task Then_Do_Not_Add_Multiple_Provider_ResultsTo_Back_Link(
+            MatchingDbContext dbContext,
+            HttpContext httpContext,
+            HttpContextAccessor httpContextAccessor,
+            ILogger<GenericRepository<UserCache>> logger
+        )
+        {
+            httpContextAccessor.HttpContext = httpContext;
+
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(UserCacheMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserNameResolver") ?
+                        (object)new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
+                        type.Name.Contains("UtcNowResolver") ?
+                            new UtcNowResolver<UserCacheDto, UserCache>(new DateTimeProvider()) :
+                            null);
+            });
+
+            //Arrange
+            var mapper = new Mapper(config);
+            var repo = new GenericRepository<UserCache>(logger, dbContext);
+            var username = httpContextAccessor.HttpContext.User.GetUserName();
+
+            var expectedList = new List<string>
+            {
+                "/Start",
+                "/find-providers",
+                "/test-url",
+                "/any-url",
+                "/provider-results-for-opportunity-0-item"
+            };
+
+            var sut = new Application.Services.NavigationService(mapper, repo);
+
+            //Act
+            await sut.AddCurrentUrlAsync("/Start", username);
+            await sut.AddCurrentUrlAsync("/find-providers", username);
+            await sut.AddCurrentUrlAsync("/test-url", username);
+            await sut.AddCurrentUrlAsync("/any-url", username);
+            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-0-item", username);
+            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-1-item", username);
+            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-2-item", username);
+            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-0-item-0-within-30-miles-of-MK9%203XS-for-route-5", username);
+            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-0-item-0-within-30-miles-of-MK9%203XS-for-route-1", username);
+
+            var addedItem = await repo.GetFirstOrDefaultAsync(x => x.CreatedBy == username);
+
+            //Assert
+            addedItem.Value.Should().NotBeNull();
+            addedItem.Value.Select(x => x.Url).Should().BeEquivalentTo(expectedList);
+            addedItem.Value.Select(x => x.Id).Should().Contain(1);
+        }
+
+        [Theory, AutoDomainData]
+        public async Task Then_Do_Not_Add_Redundant_Link_To_The_Back_Link(
+            MatchingDbContext dbContext,
+            HttpContext httpContext,
+            HttpContextAccessor httpContextAccessor,
+            ILogger<GenericRepository<UserCache>> logger
+        )
+        {
+            httpContextAccessor.HttpContext = httpContext;
+
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddMaps(typeof(UserCacheMapper).Assembly);
+                c.ConstructServicesUsing(type =>
+                    type.Name.Contains("LoggedInUserNameResolver") ?
+                        (object)new LoggedInUserNameResolver<UserCacheDto, UserCache>(httpContextAccessor) :
+                        type.Name.Contains("UtcNowResolver") ?
+                            new UtcNowResolver<UserCacheDto, UserCache>(new DateTimeProvider()) :
+                            null);
+            });
+
+            //Arrange
+            var mapper = new Mapper(config);
+            var repo = new GenericRepository<UserCache>(logger, dbContext);
+            var username = httpContextAccessor.HttpContext.User.GetUserName();
+
+            var expectedList = new List<string>
+            {
+                "/Start",
+                "/find-providers",
+                "/test-url",
+                "/provider-results-for-opportunity-0-item"
+            };
+
+            var sut = new Application.Services.NavigationService(mapper, repo);
+
+            //Act
+            await sut.AddCurrentUrlAsync("/Start", username);
+            await sut.AddCurrentUrlAsync("/find-providers", username);
+            await sut.AddCurrentUrlAsync("/find-providers", username);
+            await sut.AddCurrentUrlAsync("/test-url", username);
+            await sut.AddCurrentUrlAsync("/test-url", username);
+            await sut.AddCurrentUrlAsync("/provider-results-for-opportunity-0-item", username);
+
+            var addedItem = await repo.GetFirstOrDefaultAsync(x => x.CreatedBy == username);
+
+            //Assert
+            addedItem.Value.Should().NotBeNullOrEmpty();
+            addedItem.Value.Select(x => x.Url).Should().BeEquivalentTo(expectedList);
+            addedItem.Value.Select(x => x.Id).Should().Contain(1);
+            addedItem.Value.Should().Contain(url => url.Id == 1).Which.Url.Should().Contain("/Start");
+            addedItem.Value.Should().Contain(url => url.Id == 2).Which.Url.Should().Contain("/find-providers");
+            addedItem.Value.Should().Contain(url => url.Id == 3).Which.Url.Should().Contain("/test-url");
+            addedItem.Value.Should().Contain(url => url.Id == 4).Which.Url.Should().Contain("/provider-results-for-opportunity-0-item");
+        }
     }
 }

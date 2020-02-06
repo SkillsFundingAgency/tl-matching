@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Sfa.Tl.Matching.Application.Interfaces;
@@ -78,7 +79,25 @@ namespace Sfa.Tl.Matching.Application.FileWriter
             cell.AppendChild(value);
             return cell;
         }
-        
+
+        public static Cell UpdateTextCell(Cell cell, string text)
+        {
+            if (cell.DataType == "s")
+            {
+                cell.RemoveAllChildren();
+                cell.DataType = CellValues.InlineString;
+                cell.Append(new InlineString(
+                        new Text(text)));
+            }
+            else
+            {
+                cell.CellValue = new CellValue(text);
+                cell.DataType = new EnumValue<CellValues>(CellValues.String);
+            }
+
+            return cell;
+        }
+
         public static string GetColumnName(int columnIndex)
         {
             var dividend = columnIndex;

@@ -6,11 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Templates\PipelineOpportunitiesReportTemplate.xlsx" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Templates\PipelineOpportunitiesReportTemplate.xlsx" />
+    <EmbeddedResource Include="Templates\ShowMeEverythingReportTemplate.xlsx" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,6 @@
-﻿@model Sfa.Tl.Matching.Models.ViewModel.ProviderProximitySearchViewModel
+﻿@using System.Text
+
+@model Sfa.Tl.Matching.Models.ViewModel.ProviderProximitySearchViewModel
 
 @{ var result = Model.SearchResults.SearchResultProviderCount == 1 ? "result" : "results"; }
 <p class="govuk-body">
@@ -16,6 +18,24 @@
         }
     }
 </p>
+
+<p class="govuk-body">
+    @{
+        var filters = new StringBuilder();
+        for (var i = 0; i < Model.SearchParameters.Filters.Length; i++)
+        {
+            if (Model.SearchParameters.Filters[i].IsSelected)
+            {
+                filters.Append($"{(filters.Length > 0 ? "-" : "")}{Model.SearchParameters.Filters[i].Name}");
+            }
+        }
+        <a asp-route="DownloadProviderSpreadsheet"
+           asp-route-postcode="@Model.SearchParameters.Postcode"
+           asp-route-filters="@filters.ToString()"
+           class="govuk-link" id="tl-download-providers">Download results data as a spreadsheet</a>
+    }
+</p>
+
 <div class="tl-search-results">
     @foreach (var searchResult in Model.SearchResults.Results)
     {

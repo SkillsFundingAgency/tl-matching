@@ -41,7 +41,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderProximity
                     Latitude = "1.2"
                 });
 
-            var service = new ProviderProximityService(_searchProvider, _locationService);
+            var routePathService = Substitute.For<IRoutePathService>();
+            var datetimeProvider = Substitute.For<IDateTimeProvider>();
+            var fileWriter = Substitute.For<IFileWriter<ProviderProximityReportDto>>();
+
+            var service = new ProviderProximityService(_searchProvider, _locationService, routePathService, fileWriter, datetimeProvider);
 
             _result = service.SearchProvidersByPostcodeProximityAsync(dto).GetAwaiter().GetResult();
         }
