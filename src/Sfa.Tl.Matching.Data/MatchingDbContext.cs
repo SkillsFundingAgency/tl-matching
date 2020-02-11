@@ -34,6 +34,7 @@ namespace Sfa.Tl.Matching.Data
         public virtual DbQuery<MatchingServiceOpportunityReport> MatchingServiceOpportunityReport { get; set; }
         public virtual DbQuery<MatchingServiceProviderOpportunityReport> MatchingServiceProviderOpportunityReport { get; set; }
         public virtual DbQuery<MatchingServiceProviderEmployerReport> MatchingServiceProviderEmployerReport { get; set; }
+        public virtual DbQuery<OpportunityBasketItem> OpportunityBasketItem { get; set; }
         public virtual DbSet<UserCache> UserCache { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
