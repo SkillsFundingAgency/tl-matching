@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using AutoMapper;
 using FluentAssertions;
@@ -33,19 +34,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                                 [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
-            opportunityItem.OpportunityType = "ProvisionGap";
-            opportunityItem.IsSaved = true;
-            opportunityItem.IsCompleted = false;
-
-            await dbContext.OpportunityItem.AddAsync(opportunityItem);
-            await dbContext.SaveChangesAsync();
-
-            await SetProvisionGapData(dbContext, true, false, true);
+            await SetProvisionGapData(dbContext, opportunityItem, true, false, true);
 
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient, 
+                provisionGapRepository, referralRepository, googleMapApiClient,
                 opportunityPipelineReportWriter, dateTimeProvider);
 
             var result = await sut.GetOpportunityBasketAsync(opportunityItem.OpportunityId);
@@ -69,19 +63,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
-            opportunityItem.OpportunityType = "ProvisionGap";
-            opportunityItem.IsSaved = true;
-            opportunityItem.IsCompleted = false;
+            await SetProvisionGapData(dbContext, opportunityItem, true, false, false);
 
-            await dbContext.OpportunityItem.AddAsync(opportunityItem);
-            await dbContext.SaveChangesAsync();
-
-            await SetProvisionGapData(dbContext, true, false, false);
-            
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient, 
+                provisionGapRepository, referralRepository, googleMapApiClient,
                 opportunityPipelineReportWriter, dateTimeProvider);
 
             var result = await sut.GetOpportunityBasketAsync(opportunityItem.OpportunityId);
@@ -107,19 +94,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
-            opportunityItem.OpportunityType = "ProvisionGap";
-            opportunityItem.IsSaved = true;
-            opportunityItem.IsCompleted = false;
-
-            await dbContext.OpportunityItem.AddAsync(opportunityItem);
-            await dbContext.SaveChangesAsync();
-
-            await SetProvisionGapData(dbContext, false, true, false);
+            await SetProvisionGapData(dbContext, opportunityItem, false, true, false);
 
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient, 
+                provisionGapRepository, referralRepository, googleMapApiClient,
                 opportunityPipelineReportWriter, dateTimeProvider);
 
             var result = await sut.GetOpportunityBasketAsync(opportunityItem.OpportunityId);
@@ -129,7 +109,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 
             result.ProvisionGapItems.Should().Contain(model => model.OpportunityType == "ProvisionGap").Which.Reason
                 .Should().NotContain("Employer had a bad experience with them");
-
         }
 
         [Theory, AutoDomainData]
@@ -146,19 +125,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             [Frozen] IDateTimeProvider dateTimeProvider
         )
         {
-            opportunityItem.OpportunityType = "ProvisionGap";
-            opportunityItem.IsSaved = true;
-            opportunityItem.IsCompleted = false;
-
-            await dbContext.OpportunityItem.AddAsync(opportunityItem);
-            await dbContext.SaveChangesAsync();
-
-            await SetProvisionGapData(dbContext, false, false, true);
+            await SetProvisionGapData(dbContext, opportunityItem, false, false, true);
 
             var opportunityRepository = new OpportunityRepository(logger, dbContext);
 
             var sut = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
-                provisionGapRepository, referralRepository, googleMapApiClient, 
+                provisionGapRepository, referralRepository, googleMapApiClient,
                 opportunityPipelineReportWriter, dateTimeProvider);
 
             var result = await sut.GetOpportunityBasketAsync(opportunityItem.OpportunityId);
@@ -174,11 +146,27 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
 
         private static async Task SetProvisionGapData(
-                            MatchingDbContext dbContext, 
-                            bool hasBadExperience, 
-                            bool hasNosuitableStudent, 
+                            MatchingDbContext dbContext,
+                            OpportunityItem opportunityItem,
+                            bool hasBadExperience,
+                            bool hasNosuitableStudent,
                             bool areProvidersTooFarAway)
         {
+            opportunityItem.OpportunityType = "ProvisionGap";
+            opportunityItem.IsSaved = true;
+            opportunityItem.IsCompleted = false;
+
+            //Need to remove extra referral/provision gap rows created as AutoDomainData
+            foreach (var x in opportunityItem.ProvisionGap.Where(pg => pg.Id != opportunityItem.ProvisionGap.First().Id).ToList())
+            {
+                opportunityItem.ProvisionGap.Remove(x);
+            }
+            opportunityItem.Referral.Clear();
+
+            await dbContext.OpportunityItem.AddAsync(opportunityItem);
+            await dbContext.SaveChangesAsync();
+
+            //Set up the provision gap record
             var provisionGap = await dbContext.ProvisionGap.FirstOrDefaultAsync();
 
             provisionGap.HadBadExperience = hasBadExperience;
