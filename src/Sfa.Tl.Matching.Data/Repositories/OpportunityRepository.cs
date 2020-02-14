@@ -126,12 +126,10 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
         public async Task<OpportunityBasketViewModel> GetOpportunityBasketAsync(int opportunityId)
         {
-            var opportunityBasketitems = await _dbContext.OpportunityBasketItem
-                                                        .Where(o => o.OpportunityId == opportunityId)
-                                                        .ToListAsync();
+            var opportunityBasketItems = await GetOpportunityBasketDataAsync(opportunityId);
 
-            var opportunity = opportunityBasketitems.First();
-            var opportunityTypes = opportunityBasketitems.GroupBy(grp => grp.OpportunityType).ToList();
+            var opportunity = opportunityBasketItems.First();
+            var opportunityTypes = opportunityBasketItems.GroupBy(grp => grp.OpportunityType).ToList();
             var result = new OpportunityBasketViewModel
             {
                 OpportunityId = opportunity.OpportunityId,
@@ -175,6 +173,55 @@ namespace Sfa.Tl.Matching.Data.Repositories
             };
 
             return result;
+        }
+
+        private async Task<IList<OpportunityBasketItem>> GetOpportunityBasketDataAsync(int opportunityId)
+        {
+            var opportunityBasketItems = await
+                (from o in _dbContext.Opportunity
+                 join oi in _dbContext.OpportunityItem
+                     on o.Id equals oi.OpportunityId
+                 join e in _dbContext.Employer
+                     on o.EmployerCrmId equals e.CrmId
+                 join provisionGap in _dbContext.ProvisionGap
+                     on oi.Id equals provisionGap.OpportunityItemId
+                     into pgItems
+                 from pg in pgItems.DefaultIfEmpty()
+                 join referral in _dbContext.Referral
+                     on oi.Id equals referral.OpportunityItemId
+                     into rItems
+                 from r in rItems.DefaultIfEmpty()
+                 join venue in _dbContext.ProviderVenue
+                     on r.ProviderVenueId equals venue.Id
+                     into pvItems
+                 from pv in pvItems.DefaultIfEmpty()
+                 join provider in _dbContext.Provider
+                     on pv.ProviderId equals provider.Id
+                     into pItems
+                 from p in pItems.DefaultIfEmpty()
+                 where o.Id == opportunityId
+                       && oi.IsSaved
+                       && !oi.IsCompleted
+                 select new OpportunityBasketItem
+                 {
+                     OpportunityId = o.Id,
+                     CompanyName = e.CompanyName,
+                     CompanyNameAka = e.AlsoKnownAs,
+                     OpportunityItemId = oi.Id,
+                     JobRole = oi.JobRole,
+                     Placements = oi.Placements,
+                     PlacementsKnown = oi.PlacementsKnown,
+                     Workplace = oi.Town + ' ' + oi.Postcode,
+                     OpportunityType = oi.OpportunityType,
+                     HadBadExperience = pg.HadBadExperience,
+                     NoSuitableStudent = pg.NoSuitableStudent,
+                     ProvidersTooFarAway = pg.ProvidersTooFarAway,
+                     DisplayName = p.DisplayName,
+                     VenueName = pv.Name,
+                     Postcode = pv.Postcode
+                 }).ToListAsync();
+
+            return opportunityBasketItems;
         }
 
         public async Task<OpportunityReportDto> GetPipelineOpportunitiesAsync(int opportunityId)

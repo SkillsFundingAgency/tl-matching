@@ -8,7 +8,7 @@
         public string CompanyName { get; set; }
         public string CompanyNameAka { get; set; }
         public string JobRole { get; set; }
-        public int Placements { get; set; }
+        public int? Placements { get; set; }
         public bool? PlacementsKnown { get; set; }
         public string Workplace { get; set; }
         public bool? HadBadExperience { get; set; }
