@@ -17,14 +17,14 @@
     <section class="govuk-tabs__panel" id="providers">
             @if (Model.ReferralCount == 1)
             {
-                <partial name="_basketReferralSingle" , model="Model.ReferralItems[0]" />
+                <partial name="_basketReferralSingle" model="Model.ReferralItems[0]" />
             }
             else
             {
-                <partial name="_basketReferralMultiple" , model="Model" />
+                <partial name="_basketReferralMultiple" model="Model" />
             }
     </section>
     <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="no-providers">
-            <partial name="_basketProvisionGap" , model="Model.ProvisionGapItems" />
+            <partial name="_basketProvisionGap" model="Model.ProvisionGapItems" />
     </section>
 </div>
