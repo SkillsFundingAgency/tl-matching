@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var provider = _mapper.Map<ProviderDetailViewModel, Provider>(viewModel);
 
-            await _repository.UpdateWithSpecifedColumnsOnlyAsync(provider,
+            await _repository.UpdateWithSpecifiedColumnsOnlyAsync(provider,
                 x => x.IsCdfProvider,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);

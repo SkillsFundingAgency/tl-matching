@@ -90,7 +90,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public virtual async Task UpdateWithSpecifedColumnsOnlyAsync(T entity, params Expression<Func<T, object>>[] properties)
+        public virtual async Task UpdateWithSpecifiedColumnsOnlyAsync(T entity, params Expression<Func<T, object>>[] properties)
         {
             foreach (var property in properties)
                 _dbContext.Entry(entity).Property(property).IsModified = true;
@@ -106,7 +106,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public virtual async Task UpdateManyWithSpecifedColumnsOnlyAsync(IList<T> entities,
+        public virtual async Task UpdateManyWithSpecifiedColumnsOnlyAsync(IList<T> entities,
             params Expression<Func<T, object>>[] properties)
         {
             foreach (var entity in entities)

@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderVenue
         {
             _providerVenueRepository
                 .Received(1)
-                .UpdateWithSpecifedColumnsOnlyAsync(Arg.Is<Domain.Models.ProviderVenue>(
+                .UpdateWithSpecifiedColumnsOnlyAsync(Arg.Is<Domain.Models.ProviderVenue>(
                     pv =>
                         pv.Id == 1 &&
                         pv.IsRemoved

@@ -343,7 +343,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var opportunityItemsToBeUpdated = _mapper.Map<List<OpportunityItem>>(opportunityItemsToBeReset);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(opportunityItemsToBeUpdated,
+            await _opportunityItemRepository.UpdateManyWithSpecifiedColumnsOnlyAsync(opportunityItemsToBeUpdated,
                 x => x.IsSelectedForReferral,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
@@ -417,7 +417,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
+            await _opportunityItemRepository.UpdateManyWithSpecifiedColumnsOnlyAsync(updates,
                 x => x.IsCompleted,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
@@ -433,7 +433,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updates = _mapper.Map<List<OpportunityItem>>(itemsForReferral);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
+            await _opportunityItemRepository.UpdateManyWithSpecifiedColumnsOnlyAsync(updates,
                 x => x.IsSelectedForReferral,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);

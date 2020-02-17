@@ -227,7 +227,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
+            await _opportunityItemRepository.UpdateManyWithSpecifiedColumnsOnlyAsync(updates,
                 x => x.IsCompleted,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
@@ -260,7 +260,7 @@ namespace Sfa.Tl.Matching.Application.Services
             backgroundProcessHistory.ModifiedBy = userName;
             backgroundProcessHistory.ModifiedOn = _dateTimeProvider.UtcNow();
 
-            await _backgroundProcessHistoryRepository.UpdateWithSpecifedColumnsOnlyAsync(backgroundProcessHistory,
+            await _backgroundProcessHistoryRepository.UpdateWithSpecifiedColumnsOnlyAsync(backgroundProcessHistory,
                 history => history.RecordCount,
                 history => history.Status,
                 history => history.StatusMessage,

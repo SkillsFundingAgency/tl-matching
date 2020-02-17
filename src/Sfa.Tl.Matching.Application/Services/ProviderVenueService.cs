@@ -103,7 +103,7 @@ namespace Sfa.Tl.Matching.Application.Services
             var providerVenue = _mapper.Map<RemoveProviderVenueViewModel, ProviderVenue>(viewModel);
             providerVenue.IsRemoved = true;
 
-            await _providerVenueRepository.UpdateWithSpecifedColumnsOnlyAsync(providerVenue,
+            await _providerVenueRepository.UpdateWithSpecifiedColumnsOnlyAsync(providerVenue,
                 x => x.IsRemoved,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
