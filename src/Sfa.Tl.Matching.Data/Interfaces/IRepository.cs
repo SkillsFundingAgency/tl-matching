@@ -16,6 +16,10 @@ namespace Sfa.Tl.Matching.Data.Interfaces
         Task UpdateWithSpecifiedColumnsOnlyAsync(T entity, params Expression<Func<T, object>>[] properties);
         Task UpdateManyWithSpecifiedColumnsOnlyAsync(IList<T> entities, params Expression<Func<T, object>>[] properties);
 
+        Task BulkUpdateManyAsync(IList<T> entities);
+
+        Task BulkUpdateManyWithSpecifiedColumnsOnlyAsync(IList<T> entities, params Expression<Func<T, object>>[] properties);
+
         Task<int> DeleteAsync(int id);
         Task DeleteAsync(T entity);
         Task DeleteManyAsync(IList<T> entities);
