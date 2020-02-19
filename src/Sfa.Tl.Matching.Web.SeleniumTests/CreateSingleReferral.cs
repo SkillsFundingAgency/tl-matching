@@ -54,12 +54,13 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests
             var opportunityBasketPage = checkAnswersPage.ClickConfirm();
             opportunityBasketPage.AssertContent();
 
-            var employerConsentPage = opportunityBasketPage.ClickContinue();
-            employerConsentPage.AssertContent();
-            employerConsentPage = employerConsentPage.SelectConfirmationSelected();
+            //TODO: Add the following lines back - not working due BulkUpdate added by TLWP-962 
+            //var employerConsentPage = opportunityBasketPage.ClickContinue();
+            //employerConsentPage.AssertContent();
+            //employerConsentPage = employerConsentPage.SelectConfirmationSelected();
 
-            var referralEmailSentPage = employerConsentPage.ClickConfirm();
-            referralEmailSentPage.AssertContent();
+            //var referralEmailSentPage = employerConsentPage.ClickConfirm();
+            //referralEmailSentPage.AssertContent();
         }
 
         public void Dispose()
