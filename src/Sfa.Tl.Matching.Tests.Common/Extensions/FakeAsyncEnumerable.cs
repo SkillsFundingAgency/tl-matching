@@ -8,6 +8,8 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
     {
         public FakeAsyncEnumerable(Expression expression) : base(expression) { }
 
+        public FakeAsyncEnumerable(IEnumerable<T> enumerable) : base(enumerable) { }
+
         public IAsyncEnumerator<T> GetEnumerator()
         {
             return new FakeAsyncEnumerator<T>(this.AsEnumerable().GetEnumerator());

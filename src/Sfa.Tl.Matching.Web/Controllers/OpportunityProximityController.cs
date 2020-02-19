@@ -148,14 +148,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
                     && viewModel.OpportunityItemId == 0))
                 return resultsViewModel;
 
-            var selectedResultsViewModel = SetProviderIsSelected(resultsViewModel);
+            var selectedResultsViewModel = await SetProviderIsSelectedAsync(resultsViewModel);
 
             return selectedResultsViewModel;
         }
 
-        private OpportunityProximitySearchViewModel SetProviderIsSelected(OpportunityProximitySearchViewModel resultsViewModel)
+        private async Task<OpportunityProximitySearchViewModel> SetProviderIsSelectedAsync(OpportunityProximitySearchViewModel resultsViewModel)
         {
-            var referrals = _opportunityService.GetReferrals(resultsViewModel.SearchParameters.OpportunityItemId);
+            var referrals = await _opportunityService.GetReferralsAsync(resultsViewModel.SearchParameters.OpportunityItemId);
             foreach (var result in resultsViewModel.SearchResults.Results)
             {
                 if (referrals.Any(r => r.ProviderVenueId == result.ProviderVenueId))

@@ -54,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                 .Returns(providerSearchResultDto);
 
             _opportunityService = Substitute.For<IOpportunityService>();
-            _opportunityService.GetReferrals(OpportunityItemId).Returns(new List<ReferralDto>
+            _opportunityService.GetReferralsAsync(OpportunityItemId).Returns(new List<ReferralDto>
             {
                 new ReferralDto
                 {
@@ -102,7 +102,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_GetReferrals_Is_Called_Exactly_Once()
         {
-            _opportunityService.Received(1).GetReferrals(OpportunityItemId);
+            _opportunityService.Received(1).GetReferralsAsync(OpportunityItemId);
         }
 
         [Fact]

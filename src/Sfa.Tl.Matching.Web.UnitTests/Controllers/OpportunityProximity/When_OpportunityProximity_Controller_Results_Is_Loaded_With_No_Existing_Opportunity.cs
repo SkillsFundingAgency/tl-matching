@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_GetReferrals_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().GetReferrals(Arg.Any<int>());
+            _opportunityService.DidNotReceive().GetReferralsAsync(Arg.Any<int>());
         }
 
         [Fact]

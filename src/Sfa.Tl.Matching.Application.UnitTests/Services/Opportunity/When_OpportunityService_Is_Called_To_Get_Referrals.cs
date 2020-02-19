@@ -12,13 +12,14 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
 {
     public class When_OpportunityService_Is_Called_To_Get_Referrals
     {
-        private readonly List<ReferralDto> _referralDtos;
+        private readonly IList<ReferralDto> _referralDtos;
         private readonly IRepository<Domain.Models.Referral> _referralRepository;
 
         private const int OpportunityItemId = 1;
@@ -27,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         {
             var config = new MapperConfiguration(c => c.AddMaps(typeof(OpportunityMapper).Assembly));
             var mapper = new Mapper(config);
-            
+
             var opportunityRepository = Substitute.For<IOpportunityRepository>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
             var provisionGapRepository = Substitute.For<IRepository<ProvisionGap>>();
@@ -36,28 +37,32 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
             var dateTimeProvider = Substitute.For<IDateTimeProvider>();
 
             _referralRepository = Substitute.For<IRepository<Domain.Models.Referral>>();
-
-            _referralRepository.GetManyAsync(Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>()).Returns(
-                new List<Domain.Models.Referral>
-                {
-                    new Domain.Models.Referral
-                    {
-                        ProviderVenue = new Domain.Models.ProviderVenue
+           
+            _referralRepository.GetManyAsync(
+                Arg.Any<Expression<Func<Domain.Models.Referral, bool>>>())
+                .Returns(new FakeAsyncEnumerable<Domain.Models.Referral>(
+                    new List<Domain.Models.Referral>
                         {
-                            Postcode = "AA1 1AA",
-                            Provider = new Domain.Models.Provider
+                            new Domain.Models.Referral
                             {
-                                Name = "Provider1"
+                                ProviderVenue = new Domain.Models.ProviderVenue
+                                {
+                                    Postcode = "AA1 1AA",
+                                    Provider = new Domain.Models.Provider
+                                    {
+                                        Name = "Provider1"
+                                    }
+                                }
                             }
                         }
-                    }
-                }.AsQueryable());
+                        .AsQueryable()
+                ));
 
-            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository, 
+            var opportunityService = new OpportunityService(mapper, opportunityRepository, opportunityItemRepository,
                 provisionGapRepository, _referralRepository, googleMapApiClient,
                 opportunityPipelineReportWriter, dateTimeProvider);
 
-            _referralDtos = opportunityService.GetReferrals(OpportunityItemId);
+            _referralDtos = opportunityService.GetReferralsAsync(OpportunityItemId).GetAwaiter().GetResult();
         }
 
         [Fact]
