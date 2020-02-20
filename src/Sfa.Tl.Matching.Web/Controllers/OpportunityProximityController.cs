@@ -122,7 +122,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchRadius = SearchParametersViewModel.DefaultSearchRadius
             });
 
-            var additionalResults = searchResults.Any() 
+            var additionalResults = searchResults.Any()
                 ? new List<OpportunityProximitySearchResultByRouteViewModelItem>()
                 : await _opportunityProximityService.SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(new OpportunityProximitySearchParametersDto
                 {
@@ -135,7 +135,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 SearchResults = new OpportunityProximitySearchResultsViewModel
                 {
-                    Results =  searchResults,
+                    Results = searchResults,
                     AdditionalResults = additionalResults
                 },
                 SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
@@ -143,14 +143,20 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 OpportunityItemId = viewModel.OpportunityItemId
             };
 
-            if (!searchResults.Any() 
-                || (viewModel.OpportunityId == 0 
-                    && viewModel.OpportunityItemId == 0))
-                return resultsViewModel;
+            if (searchResults.Any() 
+                && viewModel.OpportunityId != 0 
+                && viewModel.OpportunityItemId != 0)
+            {
+                var opportunityItem =
+                    await _opportunityService.GetOpportunityItemAsync(resultsViewModel.SearchParameters
+                        .OpportunityItemId);
+                if (opportunityItem != null && opportunityItem.Postcode == resultsViewModel.SearchParameters.Postcode)
+                {
+                    return await SetProviderIsSelectedAsync(resultsViewModel);
+                }
+            }
 
-            var selectedResultsViewModel = await SetProviderIsSelectedAsync(resultsViewModel);
-
-            return selectedResultsViewModel;
+            return resultsViewModel;
         }
 
         private async Task<OpportunityProximitySearchViewModel> SetProviderIsSelectedAsync(OpportunityProximitySearchViewModel resultsViewModel)
