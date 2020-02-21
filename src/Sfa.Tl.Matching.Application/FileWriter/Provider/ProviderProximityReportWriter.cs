@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -14,7 +15,8 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Provider
         public override byte[] WriteReport(ProviderProximityReportDto data)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            const string templateName = "ShowMeEverythingReportTemplate.xlsx";
+            string templateName = data.SkillAreas.Any() ? ApplicationConstants.ShowMeEverythingReportTemplateWithSearchFilters 
+                : ApplicationConstants.ShowMeEverythingReportTemplate;  
             var resourceName = $"{assembly.GetName().Name}.Templates.{templateName}";
 
             using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
@@ -48,9 +50,27 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Provider
         {
             var rows = sheetData.Descendants<Row>().ToList();
             var cells = rows[0].Descendants<Cell>().ToList();
-            UpdateTextCell(cells[2], $"Distance from {dto.Postcode}");
 
             var rowIndex = 3;
+
+            if (dto.SkillAreas.Any())
+            {
+                var skillsHeaderBuilder = new StringBuilder();
+
+                for (var i = 0; i < dto.SkillAreas.Count; i++)
+                {
+                    skillsHeaderBuilder.Append(dto.SkillAreas[i]);
+                    if (i < dto.SkillAreas.Count - 1)
+                        skillsHeaderBuilder.Append(", ");
+                }
+
+                UpdateTextCell(cells[2], skillsHeaderBuilder.ToString());
+
+                rowIndex = 5;
+                cells = rows[1].Descendants<Cell>().ToList();
+            }
+                        
+            UpdateTextCell(cells[2], $"Distance from {dto.Postcode}");
 
             foreach (var provider in dto.Providers)
             {
