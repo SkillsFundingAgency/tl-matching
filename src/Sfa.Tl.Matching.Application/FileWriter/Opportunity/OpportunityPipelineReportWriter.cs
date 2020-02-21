@@ -5,6 +5,7 @@ using System.Reflection;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Sfa.Tl.Matching.Application.Constants;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
@@ -14,7 +15,7 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Opportunity
         public override byte[] WriteReport(OpportunityReportDto data)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            const string templateName = "PipelineOpportunitiesReportTemplate.xlsx";
+            var templateName = ApplicationConstants.PipelineOpportunitiesReportTemplate;
             var resourceName = $"{assembly.GetName().Name}.Templates.{templateName}";
 
             using (var templateStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))

@@ -6,6 +6,7 @@ using System.Text;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Sfa.Tl.Matching.Application.Constants;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.FileWriter.Provider
@@ -61,7 +62,7 @@ namespace Sfa.Tl.Matching.Application.FileWriter.Provider
                 {
                     skillsHeaderBuilder.Append(dto.SkillAreas[i]);
                     if (i < dto.SkillAreas.Count - 1)
-                        skillsHeaderBuilder.Append(", ");
+                        skillsHeaderBuilder.Append("; ");
                 }
 
                 UpdateTextCell(cells[2], skillsHeaderBuilder.ToString());

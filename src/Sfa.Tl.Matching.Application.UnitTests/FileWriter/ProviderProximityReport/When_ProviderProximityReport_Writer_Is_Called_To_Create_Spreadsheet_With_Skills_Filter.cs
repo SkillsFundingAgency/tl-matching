@@ -98,7 +98,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileWriter.ProviderProximityRepo
         private static void AssertRowSearchFilter(List<Row> rows, int rowIndex)
         {
             var cells = rows[rowIndex].Descendants<Cell>().ToList();
-            cells[2].InnerText.Should().Be("Creative and design, Digital, Health and science");
+            cells[2].InnerText.Should().Be("Creative and design; Digital; Health and science");
         }
 
         private static void AssertRowHeader(List<Row> rows, int rowIndex)
