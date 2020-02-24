@@ -95,14 +95,20 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             if (entities.Count == 0) return;
 
-            try
+            using (var transaction = _dbContext.Database.BeginTransaction())
             {
-                await _dbContext.BulkUpdateAsync(entities);
-            }
-            catch (DbUpdateException due)
-            {
-                _logger.LogError(due.Message, due.InnerException);
-                throw;
+                try
+                {
+                    await _dbContext.BulkUpdateAsync(entities,
+                        config => config.UseTempDB = true);
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message, ex.InnerException);
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
 
@@ -161,7 +167,25 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     }
                 }).ToList();
 
-                await _dbContext.BulkUpdateAsync(entities, config => config.PropertiesToInclude = propList);
+                using (var transaction = _dbContext.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        await _dbContext.BulkUpdateAsync(entities,
+                        config =>
+                            {
+                                config.PropertiesToInclude = propList;
+                                config.UseTempDB = true;
+                            });
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex.Message, ex.InnerException);
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
             }
             catch (DbUpdateException due)
             {
