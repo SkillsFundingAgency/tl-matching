@@ -51,7 +51,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             _opportunityProximityService
                 .SearchOpportunitiesByPostcodeProximityAsync(Arg.Is<OpportunityProximitySearchParametersDto>(a =>
-                    a.Postcode == NewPostcode && a.SelectedRouteId == RouteId))
+                    a.Postcode == NewPostcode && 
+                    a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
             _opportunityService = Substitute.For<IOpportunityService>();
@@ -60,7 +61,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                 {
                     OpportunityId = OpportunityId,
                     OpportunityItemId = OpportunityItemId,
-                    Postcode = Postcode
+                    Postcode = Postcode,
+                    RouteId = RouteId
                 });
 
             _opportunityService.GetReferralsAsync(OpportunityItemId).Returns(new List<ReferralDto>

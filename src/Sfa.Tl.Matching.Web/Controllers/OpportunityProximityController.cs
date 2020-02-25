@@ -150,7 +150,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 var opportunityItem =
                     await _opportunityService.GetOpportunityItemAsync(resultsViewModel.SearchParameters
                         .OpportunityItemId);
-                if (opportunityItem != null && opportunityItem.Postcode == resultsViewModel.SearchParameters.Postcode)
+                
+                if (opportunityItem != null && 
+                    opportunityItem.Postcode == resultsViewModel.SearchParameters.Postcode && 
+                    opportunityItem.RouteId == resultsViewModel.SearchParameters.SelectedRouteId)
                 {
                     return await SetProviderIsSelectedAsync(resultsViewModel);
                 }
