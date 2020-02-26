@@ -90,29 +90,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             RegisterCsvFileReader<LearningAimReferenceStagingDto, LearningAimReferenceStagingFileImportDto, LearningAimReferenceStaging, LearningAimReferenceStagingDataParser, LearningAimReferenceStagingDataValidator, NullDataProcessor<LearningAimReferenceStaging>>(services);
         }
 
-        private static void RegisterExcelFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
-                where TDto : class, new()
-                where TImportDto : FileImportDto
-                where TEntity : BaseEntity, new()
-                where TParser : class, IDataParser<TDto>
-                where TValidator : class, IValidator<TImportDto>
-                where TDataProcessor : class, IDataProcessor<TEntity>
-        {
-            services.AddTransient<IDataParser<TDto>, TParser>();
-            services.AddTransient<IValidator<TImportDto>, TValidator>();
-            services.AddTransient<IDataProcessor<TEntity>, TDataProcessor>();
-
-            services.AddTransient<IFileReader<TImportDto, TDto>, ExcelFileReader<TImportDto, TDto>>(provider =>
-                new ExcelFileReader<TImportDto, TDto>(
-                    provider.GetService<ILogger<ExcelFileReader<TImportDto, TDto>>>(),
-                    provider.GetService<IDataParser<TDto>>(),
-                    (IValidator<TImportDto>)provider.GetServices(typeof(IValidator<TImportDto>)).Single(t => t.GetType() == typeof(TValidator)),
-                    provider.GetService<IRepository<FunctionLog>>()
-                    ));
-
-            services.AddTransient<IFileImportService<TImportDto>, FileImportService<TImportDto, TDto, TEntity>>();
-        }
-
         private static void RegisterCsvFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
                 where TDto : class, new()
                 where TImportDto : FileImportDto
