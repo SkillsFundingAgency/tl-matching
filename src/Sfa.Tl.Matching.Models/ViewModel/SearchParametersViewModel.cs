@@ -11,6 +11,8 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         [Required(ErrorMessage = "You must enter a postcode")]
         public string Postcode { get; set; }
         public int? SelectedRouteId { get; set; }
+        public string PreviousPostcode { get; set; }
+        public int? PreviousSelectedRouteId { get; set; }
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
         public string CompanyNameWithAka { get; set; }
