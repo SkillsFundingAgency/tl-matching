@@ -51,31 +51,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             //Act
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-
-            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
-                                                 && oi.IsSaved
-                                                 && oi.IsSelectedForReferral).Select(oi => oi.Id);
-
             //Assert
-            var data = (from op in dbContext.Opportunity
-                        join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                        join emp in dbContext.Employer on op.EmployerCrmId equals emp.CrmId
-                        join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
-                        join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
-                        join p in dbContext.Provider on pv.ProviderId equals p.Id
-                        join r in dbContext.Route on oi.RouteId equals r.Id
-                        orderby re.DistanceFromEmployer
-                        where op.Id == opportunity.Id
-                              && itemIds.Contains(oi.Id)
-                              && oi.IsSelectedForReferral
-                              && oi.IsSaved
-                              && p.IsCdfProvider
-                              && p.IsEnabledForReferral
-                              && pv.IsEnabledForReferral
-                              && !pv.IsRemoved
-                        select oi.Id
-                ).ToList();
-
             await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
@@ -108,30 +84,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             //Act
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
-
-
-            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
-                                                 && oi.IsSaved
-                                                 && oi.IsSelectedForReferral).Select(oi => oi.Id);
-
-            var data = (from op in dbContext.Opportunity
-                        join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                        join emp in dbContext.Employer on op.EmployerCrmId equals emp.CrmId
-                        join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
-                        join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
-                        join p in dbContext.Provider on pv.ProviderId equals p.Id
-                        join r in dbContext.Route on oi.RouteId equals r.Id
-                        orderby re.DistanceFromEmployer
-                        where op.Id == opportunity.Id
-                              && itemIds.Contains(oi.Id)
-                              && oi.IsSelectedForReferral
-                              && oi.IsSaved
-                              && p.IsCdfProvider
-                              && p.IsEnabledForReferral
-                              && pv.IsEnabledForReferral
-                              && !pv.IsRemoved
-                        select oi.Id
-                ).ToList();
 
             //Assert
             await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
@@ -168,33 +120,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             
             var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
-            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
-                                                 && oi.IsSaved
-                                                 && oi.IsSelectedForReferral).Select(oi => oi.Id);
-
             //Act
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
             //Assert
-            var data = (from op in dbContext.Opportunity
-                        join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                        join emp in dbContext.Employer on op.EmployerCrmId equals emp.CrmId
-                        join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
-                        join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
-                        join p in dbContext.Provider on pv.ProviderId equals p.Id
-                        join r in dbContext.Route on oi.RouteId equals r.Id
-                        orderby re.DistanceFromEmployer
-                        where op.Id == opportunity.Id
-                              && itemIds.Contains(oi.Id)
-                              && oi.IsSelectedForReferral
-                              && oi.IsSaved
-                              && p.IsCdfProvider
-                              && p.IsEnabledForReferral
-                              && pv.IsEnabledForReferral
-                              && !pv.IsRemoved
-                        select oi.Id
-                ).ToList();
-
             await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
                 Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
@@ -241,30 +170,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
             var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
-
-            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
-                                                 && oi.IsSaved
-                                                 && oi.IsSelectedForReferral
-                                                 && !oi.IsCompleted).Select(oi => oi.Id);
-
-            var referrals = (from op in dbContext.Opportunity
-                    join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                    join emp in dbContext.Employer on op.EmployerCrmId equals emp.CrmId
-                    join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
-                    join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
-                    join p in dbContext.Provider on pv.ProviderId equals p.Id
-                    join r in dbContext.Route on oi.RouteId equals r.Id
-                    orderby re.DistanceFromEmployer
-                    where op.Id == opportunity.Id
-                          && itemIds.Contains(oi.Id)
-                          && oi.IsSelectedForReferral
-                          && oi.IsSaved
-                          && p.IsCdfProvider
-                          && p.IsEnabledForReferral
-                          && pv.IsEnabledForReferral
-                          && !pv.IsRemoved
-                    select oi.Id
-                ).ToList();
 
             //Act
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
@@ -324,30 +229,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             //Act
             await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
-
-
-            var itemIds = itemRepo.GetManyAsync(oi => oi.Opportunity.Id == opportunity.Id
-                                                 && oi.IsSaved
-                                                 && oi.IsSelectedForReferral).Select(oi => oi.Id);
-
-            var data = (from op in dbContext.Opportunity
-                        join oi in dbContext.OpportunityItem on op.Id equals oi.OpportunityId
-                        join emp in dbContext.Employer on op.EmployerCrmId equals emp.CrmId
-                        join re in dbContext.Referral on oi.Id equals re.OpportunityItemId
-                        join pv in dbContext.ProviderVenue on re.ProviderVenueId equals pv.Id
-                        join p in dbContext.Provider on pv.ProviderId equals p.Id
-                        join r in dbContext.Route on oi.RouteId equals r.Id
-                        orderby re.DistanceFromEmployer
-                        where op.Id == opportunity.Id
-                              && itemIds.Contains(oi.Id)
-                              && oi.IsSelectedForReferral
-                              && oi.IsSaved
-                              && p.IsCdfProvider
-                              && p.IsEnabledForReferral
-                              && pv.IsEnabledForReferral
-                              && !pv.IsRemoved
-                        select oi.Id
-                ).ToList();
 
             //Assert
             await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),

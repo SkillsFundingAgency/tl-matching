@@ -5,6 +5,7 @@ using FluentAssertions;
 using Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Builders;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Tests.Common;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.MatchingServiceOpportunityReport
