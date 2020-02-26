@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
             var viewModel = _result.GetViewModel<DataImportParametersViewModel>();
             viewModel.ImportType.Should().NotBeEmpty();
             viewModel.ImportType.Length.Should().BeGreaterThan(0);
-            viewModel.ImportType[1].Text.Should().Be(DataImportType.LearningAimReference.Humanize());
+            viewModel.ImportType[0].Text.Should().Be(DataImportType.LearningAimReference.Humanize());
         }
     }
 }

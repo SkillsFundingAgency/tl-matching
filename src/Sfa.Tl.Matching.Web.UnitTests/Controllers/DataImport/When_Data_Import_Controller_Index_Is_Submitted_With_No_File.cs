@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
             var viewModel = new DataImportParametersViewModel
             {
-                SelectedImportType = DataImportType.Employer
+                SelectedImportType = DataImportType.LearningAimReference
             };
             _result = _dataImportController.Index(viewModel).Result;
         }

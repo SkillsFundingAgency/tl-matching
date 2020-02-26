@@ -26,14 +26,14 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport
 
             var viewModel = new DataImportParametersViewModel
             {
-                SelectedImportType = DataImportType.Employer,
+                SelectedImportType = DataImportType.LearningAimReference,
                 File = formFile
             };
             var mapper = Substitute.For<IMapper>();
             mapper.Map<DataUploadDto>(viewModel).Returns(_dataUploadDto);
 
             _dataBlobUploadService = Substitute.For<IDataBlobUploadService>();
-            formFile.ContentType.Returns("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            formFile.ContentType.Returns("application/vnd.ms-excel");
 
             var dataImportController = new DataImportController(mapper, _dataBlobUploadService);
             var controllerWithClaims = new ClaimsBuilder<DataImportController>(dataImportController)
