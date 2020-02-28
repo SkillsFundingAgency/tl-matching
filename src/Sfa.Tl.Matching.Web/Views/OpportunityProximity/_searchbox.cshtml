@@ -25,8 +25,9 @@
     <input asp-for="OpportunityId" type="hidden" />
     <input asp-for="OpportunityItemId" type="hidden" />
     <input asp-for="CompanyNameWithAka" type="hidden" />
-    <input type="hidden" name="PreviousPostcode" value="@Model.PreviousPostcode" />
-    <input type="hidden" name="PreviousSelectedRouteId" value="@Model.PreviousSelectedRouteId" />
+    <input type="hidden" asp-for="PreviousPostcode" value="@Model.PreviousPostcode" />
+    <input type="hidden" asp-for="PreviousSelectedRouteId" value="@Model.PreviousSelectedRouteId" />
+    <input type="hidden" asp-for="HasUserChangedSearchParameters" value="@Model.HasUserChangedSearchParameters" />
 
     <div class="tl-pane tl-pane__inline-form">
         <div class="govuk-grid-row">

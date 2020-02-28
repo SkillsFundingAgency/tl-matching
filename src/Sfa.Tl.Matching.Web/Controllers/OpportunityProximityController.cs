@@ -84,7 +84,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
             {
-
                 return View("Results", new OpportunityProximitySearchViewModel
                 {
                     SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
@@ -155,22 +154,29 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             if (searchResults.Any()
                 && viewModel.OpportunityId != 0
-                && viewModel.OpportunityItemId != 0)
+                && viewModel.OpportunityItemId != 0
+                && !viewModel.HasUserChangedSearchParameters)
             {
                 var opportunityItem =
                     await _opportunityService.GetOpportunityItemAsync(resultsViewModel.SearchParameters
                         .OpportunityItemId);
 
-                if (opportunityItem != null &&
-                    opportunityItem.Postcode == resultsViewModel.SearchParameters.Postcode &&
-                    opportunityItem.RouteId == resultsViewModel.SearchParameters.SelectedRouteId &&
-                    (resultsViewModel.SearchParameters.PreviousPostcode == null
-                     || resultsViewModel.SearchParameters.Postcode == resultsViewModel.SearchParameters.PreviousPostcode) &&
-                    (resultsViewModel.SearchParameters.PreviousSelectedRouteId == null
-                     || resultsViewModel.SearchParameters.SelectedRouteId == resultsViewModel.SearchParameters.PreviousSelectedRouteId))
+                if (opportunityItem != null
+                    && opportunityItem.Postcode == resultsViewModel.SearchParameters.Postcode
+                    && opportunityItem.RouteId == resultsViewModel.SearchParameters.SelectedRouteId)
                 {
                     await SetProviderIsSelectedAsync(resultsViewModel);
                 }
+            }
+
+            if (!resultsViewModel.SearchParameters.HasUserChangedSearchParameters
+                && (resultsViewModel.SearchParameters.PreviousPostcode != null
+                    && resultsViewModel.SearchParameters.PreviousPostcode != viewModel.Postcode) 
+                || (resultsViewModel.SearchParameters.PreviousSelectedRouteId != null
+                    && resultsViewModel.SearchParameters.PreviousSelectedRouteId != viewModel.SelectedRouteId))
+            {
+                //Set a flag to stop results being re-selected if user has changed search parameters
+                resultsViewModel.SearchParameters.HasUserChangedSearchParameters = true;
             }
 
             resultsViewModel.SearchParameters.PreviousPostcode = viewModel.Postcode;
@@ -207,7 +213,8 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 OpportunityItemId = viewModel.OpportunityItemId,
                 CompanyNameWithAka = viewModel.CompanyNameWithAka,
                 PreviousPostcode = viewModel.PreviousPostcode,
-                PreviousSelectedRouteId = viewModel.PreviousSelectedRouteId
+                PreviousSelectedRouteId = viewModel.PreviousSelectedRouteId,
+                HasUserChangedSearchParameters = viewModel.HasUserChangedSearchParameters
             };
         }
 

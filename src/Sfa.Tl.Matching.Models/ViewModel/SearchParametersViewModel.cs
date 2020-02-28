@@ -13,6 +13,7 @@ namespace Sfa.Tl.Matching.Models.ViewModel
         public int? SelectedRouteId { get; set; }
         public string PreviousPostcode { get; set; }
         public int? PreviousSelectedRouteId { get; set; }
+        public bool HasUserChangedSearchParameters { get; set; }
         public int OpportunityId { get; set; }
         public int OpportunityItemId { get; set; }
         public string CompanyNameWithAka { get; set; }

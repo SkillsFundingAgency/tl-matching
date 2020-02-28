@@ -46,7 +46,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             };
 
             var locationService = Substitute.For<ILocationService>();
+            locationService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, NewPostcode));
+
             var routeService = Substitute.For<IRoutePathService>();
+            routeService.GetRouteIdsAsync().Returns(new List<int> { 1, 2 });
 
             _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             _opportunityProximityService
