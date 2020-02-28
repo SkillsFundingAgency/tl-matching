@@ -63,6 +63,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetOpportunityProviderResults")]
         public async Task<IActionResult> GetOpportunityProviderResultsAsync(SearchParametersViewModel searchParametersViewModel)
         {
+            if (!ModelState.IsValid || !await IsSearchParametersValidAsync(searchParametersViewModel))
+            {
+                return View("Results", new OpportunityProximitySearchViewModel
+                {
+                    SearchParameters = await GetSearchParametersViewModelAsync(searchParametersViewModel),
+                    SearchResults = new OpportunityProximitySearchResultsViewModel(),
+                    IsValidSearch = false
+                });
+            }
+
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
 
             return View("Results", resultsViewModel);
