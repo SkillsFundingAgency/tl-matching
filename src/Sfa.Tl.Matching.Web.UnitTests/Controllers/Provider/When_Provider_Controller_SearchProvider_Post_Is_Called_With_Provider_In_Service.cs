@@ -84,7 +84,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Provider
             viewResult?.Model.Should().NotBeNull();
 
             var viewModel = _result.GetViewModel<ProviderSearchViewModel>();
-            viewModel.SearchResults.Results.Count().Should().Be(1);
+            viewModel.SearchResults.Results.Count.Should().Be(1);
             viewModel.SearchResults.Results.First().Id.Should().Be(1);
             viewModel.SearchResults.Results.First().UkPrn.Should().Be(10000546);
             viewModel.SearchResults.Results.First().Name.Should().Be("Test Provider");

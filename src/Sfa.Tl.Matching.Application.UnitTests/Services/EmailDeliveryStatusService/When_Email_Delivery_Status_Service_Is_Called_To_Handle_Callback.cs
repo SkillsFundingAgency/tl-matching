@@ -185,7 +185,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
 
             await emailHistoryRepository.DidNotReceive().GetFirstOrDefaultAsync(Arg.Any<Expression<Func<Domain.Models.EmailHistory, bool>>>());
 
-            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifiedColumnsOnlyAsync(
                 Arg.Any<Domain.Models.EmailHistory>(),
                 Arg.Any<Expression<Func<Domain.Models.EmailHistory, object>>[]>());
 

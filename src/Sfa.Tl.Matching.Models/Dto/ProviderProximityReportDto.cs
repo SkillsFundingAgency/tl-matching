@@ -7,6 +7,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string Postcode { get; set; }
 
         public IList<ProviderProximityReportItemDto> Providers{ get; set; }
-        public IList<string> SkillAreas { get; set; }
+        public IList<string> SkillAreas { get; set; } = new List<string>();
     }
 }

@@ -86,7 +86,7 @@ namespace Sfa.Tl.Matching.Application.Services
             data.ModifiedOn = DateTime.UtcNow;
             data.ModifiedBy = "System";
 
-            await _emailHistoryRepository.UpdateWithSpecifedColumnsOnlyAsync(data,
+            await _emailHistoryRepository.UpdateWithSpecifiedColumnsOnlyAsync(data,
                 history => history.Status,
                 history => history.ModifiedOn,
                 history => history.ModifiedBy);

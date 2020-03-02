@@ -81,10 +81,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.ProviderProximity
             var townAndPostcodeListItem = venueDetailList.Children[1] as IHtmlListItemElement;
             townAndPostcodeListItem.TextContent.Should().Be("Coventry CV1 2WT");
 
-            var travelTimes = searchResults.QuerySelector("#tl-travel-times");
-            travelTimes.Children.Length.Should().Be(1);
+            var journeyInfo = searchResults.QuerySelector("#tl-journey-info");
+            journeyInfo.Children.Length.Should().Be(1);
 
-            var distanceItem = travelTimes.Children[0] as IHtmlParagraphElement;
+            var distanceItem = journeyInfo.Children[0] as IHtmlParagraphElement;
             distanceItem.TextContent.Should().Be("0.0 miles");
 
             var qualificationList = searchResults.QuerySelector("#tl-qualification-list") as IHtmlUnorderedListElement;

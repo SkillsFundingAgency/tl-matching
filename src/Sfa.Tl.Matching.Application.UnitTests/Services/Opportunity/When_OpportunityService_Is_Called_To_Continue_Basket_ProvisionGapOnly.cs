@@ -86,11 +86,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
         
         [Fact]
-        public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_Exactly_Once_With_Two_Items_With_Expected_Values()
+        public void Then_BulkUpdateManyWithSpecifiedColumnsOnly_Is_Called_Exactly_Once_With_Two_Items_With_Expected_Values()
         {
             _opportunityItemRepository
                 .Received(1)
-                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
+                .BulkUpdateManyWithSpecifiedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
                         o => o.Count == 2
                              && o[0].Id == 1
                              && o[1].Id == 2

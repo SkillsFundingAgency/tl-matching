@@ -13,7 +13,6 @@ using Sfa.Tl.Matching.Application.Mappers.Resolver;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
@@ -138,10 +137,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
         }
         
         [Fact]
-        public void Then_UpdateManyWithSpecifedColumnsOnly_Is_Called_Exactly_Once_With_Four_Items_With_Expected_Values()
+        public void Then_UpdateManyWithSpecifiedColumnsOnly_Is_Called_Exactly_Once_With_Four_Items_With_Expected_Values()
         {
             _opportunityItemRepository.Received(1)
-                .UpdateManyWithSpecifedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
+                .UpdateManyWithSpecifiedColumnsOnlyAsync(Arg.Is<IList<OpportunityItem>>(
                         o => o.Count == 4
                              && o[0].Id == 1
                              && o[0].IsCompleted

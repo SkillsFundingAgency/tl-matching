@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,7 +6,6 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 using Sfa.Tl.Matching.Web.Controllers;
-using Sfa.Tl.Matching.Web.Mappers;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
@@ -19,9 +17,6 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
         public When_OpportunityProximity_Controller_FindProviders_Is_Called()
         {
-            var config = new MapperConfiguration(c => c.AddMaps(typeof(SearchParametersViewModelMapper).Assembly));
-            IMapper mapper = new Mapper(config);
-
             var locationService = Substitute.For<ILocationService>();
             locationService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, "CV1 2WT"));
 

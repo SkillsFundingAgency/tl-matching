@@ -131,9 +131,9 @@ namespace Sfa.Tl.Matching.Application.Services
             return dto;
         }
 
-        public List<ReferralDto> GetReferrals(int opportunityItemId)
+        public async Task<IList<ReferralDto>> GetReferralsAsync(int opportunityItemId)
         {
-            var referrals = _referralRepository.GetManyAsync(r => r.OpportunityItemId == opportunityItemId)
+            var referrals = await _referralRepository.GetManyAsync(r => r.OpportunityItemId == opportunityItemId)
                 .OrderBy(r => r.DistanceFromEmployer)
                 .Select(r => new ReferralDto
                 {
@@ -144,7 +144,7 @@ namespace Sfa.Tl.Matching.Application.Services
                     ProviderDisplayName = r.ProviderVenue.Provider.DisplayName,
                     ProviderVenueName = r.ProviderVenue.Name
                 })
-                .ToList();
+                .ToListAsync();
 
             return referrals;
         }
@@ -343,10 +343,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var opportunityItemsToBeUpdated = _mapper.Map<List<OpportunityItem>>(opportunityItemsToBeReset);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(opportunityItemsToBeUpdated,
-                x => x.IsSelectedForReferral,
-                x => x.ModifiedOn,
-                x => x.ModifiedBy);
+            if (opportunityItemsToBeUpdated.Count > 0)
+            {
+                await _opportunityItemRepository.BulkUpdateManyWithSpecifiedColumnsOnlyAsync(opportunityItemsToBeUpdated,
+                    x => x.IsSelectedForReferral,
+                                    x => x.ModifiedOn,
+                                    x => x.ModifiedBy);
+            }
         }
 
         public async Task ContinueWithOpportunitiesAsync(ContinueOpportunityViewModel viewModel)
@@ -417,7 +420,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updates = _mapper.Map<List<OpportunityItem>>(itemsToBeCompleted);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
+            await _opportunityItemRepository.BulkUpdateManyWithSpecifiedColumnsOnlyAsync(updates,
                 x => x.IsCompleted,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);
@@ -433,7 +436,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var updates = _mapper.Map<List<OpportunityItem>>(itemsForReferral);
 
-            await _opportunityItemRepository.UpdateManyWithSpecifedColumnsOnlyAsync(updates,
+            await _opportunityItemRepository.BulkUpdateManyWithSpecifiedColumnsOnlyAsync(updates,
                 x => x.IsSelectedForReferral,
                 x => x.ModifiedOn,
                 x => x.ModifiedBy);

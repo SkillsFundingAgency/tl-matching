@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 {
-    public class When_OpportunityProximity_Controller_Results_Is_Loaded_With_Existing_Opportunity
+    public class When_OpportunityProximity_Controller_Results_Is_Loaded_With_Existing_Opportunity_But_Different_Postcode
     {
         private readonly IActionResult _result;
         private readonly IOpportunityProximityService _opportunityProximityService;
@@ -28,9 +28,10 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         private const string ProviderVenueDisplayName = "Provider venue display name";
 
         private const string Postcode = "SW1A 2AA";
+        private const string NewPostcode = "CV1 2WT";
         private const int SelectedRouteId = 1;
 
-        public When_OpportunityProximity_Controller_Results_Is_Loaded_With_Existing_Opportunity()
+        public When_OpportunityProximity_Controller_Results_Is_Loaded_With_Existing_Opportunity_But_Different_Postcode()
         {
             var providerSearchResultDto = new List<OpportunityProximitySearchResultViewModelItem>
             {
@@ -45,7 +46,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             };
 
             var locationService = Substitute.For<ILocationService>();
-            locationService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, Postcode));
+            locationService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, NewPostcode));
 
             var routeService = Substitute.For<IRoutePathService>();
             routeService.GetRouteIdsAsync().Returns(new List<int> { 1, 2 });
@@ -53,7 +54,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             _opportunityProximityService
                 .SearchOpportunitiesByPostcodeProximityAsync(Arg.Is<OpportunityProximitySearchParametersDto>(a =>
-                    a.Postcode == Postcode && 
+                    a.Postcode == NewPostcode && 
                     a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
 
@@ -85,7 +86,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             _result = opportunityProximityController.GetOpportunityProviderResultsAsync(new SearchParametersViewModel
             {
                 SelectedRouteId = RouteId,
-                Postcode = Postcode,
+                Postcode = NewPostcode,
                 OpportunityId = OpportunityId,
                 OpportunityItemId = OpportunityItemId
             }).GetAwaiter().GetResult();
@@ -98,7 +99,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
                 .Received(1)
                 .SearchOpportunitiesByPostcodeProximityAsync(
                     Arg.Is<OpportunityProximitySearchParametersDto>(
-                        a => a.Postcode == Postcode &&
+                        a => a.Postcode == NewPostcode &&
                              a.SelectedRouteId == RouteId));
         }
         
@@ -120,9 +121,9 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         }
 
         [Fact]
-        public void Then_GetReferrals_Is_Called_Exactly_Once()
+        public void Then_GetReferrals_Is_Not_Called()
         {
-            _opportunityService.Received(1).GetReferralsAsync(OpportunityItemId);
+            _opportunityService.DidNotReceive().GetReferralsAsync(Arg.Any<int>());
         }
 
         [Fact]
@@ -150,7 +151,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
 
             viewModel.SearchParameters.Should().NotBeNull();
             var searchParametersViewModel = _result.GetViewModel<OpportunityProximitySearchViewModel>().SearchParameters;
-            searchParametersViewModel.Postcode.Should().Be(Postcode);
+            searchParametersViewModel.Postcode.Should().Be(NewPostcode);
             searchParametersViewModel.SelectedRouteId.Should().Be(SelectedRouteId);
             searchParametersViewModel.CompanyNameWithAka.Should().Be("CompanyName (AlsoKnownAs)");
 
@@ -162,7 +163,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             searchResultsViewModel.Results.Select(x => x.ProviderDisplayName).Should().Contain("Provider display name");
             searchResultsViewModel.Results.Select(x => x.ProviderVenueName).Should().Contain("Provider venue display name");
 
-            searchResultsViewModel.Results[0].IsSelected.Should().BeTrue();
+            searchResultsViewModel.Results[0].IsSelected.Should().BeFalse();
         }
     }
 }

@@ -9,10 +9,5 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Helpers
         {
             return await Task.FromResult("AddressDetails");
         }
-
-        public async Task GetJourneyDetails(string fromPostcode, string destinationPostcode)
-        {
-            await Task.FromResult(false);
-        }
     }
 }

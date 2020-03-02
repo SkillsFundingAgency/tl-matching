@@ -105,7 +105,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             result.StatusCode.Should().Be(200);
             result.Value.Should().Be("-1 records updated.");
 
-            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifiedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
                 Arg.Any<Expression<Func<EmailHistory, object>>[]>());
 
             await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
@@ -150,10 +150,10 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             result.StatusCode.Should().Be(400);
             result.Should().BeOfType<BadRequestObjectResult>();
 
-            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifiedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
                 Arg.Any<Expression<Func<EmailHistory, object>>[]>());
 
-            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifedColumnsOnlyAsync(
+            await emailHistoryRepository.DidNotReceive().UpdateWithSpecifiedColumnsOnlyAsync(
                 Arg.Is<EmailHistory>(eh =>
                     eh.Status == "delivered" && eh.ModifiedBy == "System"),
                 Arg.Any<Expression<Func<EmailHistory, object>>[]>());

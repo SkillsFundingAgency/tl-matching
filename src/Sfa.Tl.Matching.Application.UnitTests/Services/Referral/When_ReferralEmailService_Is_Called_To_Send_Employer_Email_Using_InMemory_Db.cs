@@ -15,7 +15,6 @@ using Sfa.Tl.Matching.Application.UnitTests.InMemoryDb;
 using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Models.Configuration;
 using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;

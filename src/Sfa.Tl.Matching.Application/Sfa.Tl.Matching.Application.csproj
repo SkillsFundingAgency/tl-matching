@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Templates\PipelineOpportunitiesReportTemplate.xlsx" />
+    <EmbeddedResource Include="Templates\ShowMeEverythingReportTemplateWithSearchFilters.xlsx" />
     <EmbeddedResource Include="Templates\ShowMeEverythingReportTemplate.xlsx" />
   </ItemGroup>
 

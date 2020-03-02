@@ -33,13 +33,15 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
             };
 
             var locationService = Substitute.For<ILocationService>();
+            locationService.IsValidPostcodeAsync(Arg.Any<string>()).Returns((true, Postcode));
+
+            var routeService = Substitute.For<IRoutePathService>();
+            routeService.GetRouteIdsAsync().Returns(new List<int> { 1, 2 });
 
             _opportunityProximityService = Substitute.For<IOpportunityProximityService>();
             _opportunityProximityService
                 .SearchOpportunitiesByPostcodeProximityAsync(Arg.Is<OpportunityProximitySearchParametersDto>(a => a.Postcode == Postcode && a.SelectedRouteId == RouteId))
                 .Returns(providerSearchResultDto);
-
-            var routeService = Substitute.For<IRoutePathService>();
 
             _opportunityService = Substitute.For<IOpportunityService>();
 
@@ -122,7 +124,7 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.OpportunityProximity
         [Fact]
         public void Then_GetReferrals_Is_Not_Called()
         {
-            _opportunityService.DidNotReceive().GetReferrals(Arg.Any<int>());
+            _opportunityService.DidNotReceive().GetReferralsAsync(Arg.Any<int>());
         }
 
         [Fact]

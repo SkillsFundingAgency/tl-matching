@@ -26,7 +26,7 @@ gulp.task('dev-copy-employer-js', function () {
         'node_modules/accessible-autocomplete/dist/accessible-autocomplete.min.js',
         'Frontend/src/javascripts/employer-search.js'
     ])
-        .pipe(concat('employer-search.js'))
+        .pipe(concat('employer-search.min.js'))
         .pipe(gulp.dest(paths.dist.defaultJs));
 });
 

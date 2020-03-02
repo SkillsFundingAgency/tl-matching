@@ -63,6 +63,16 @@ namespace Sfa.Tl.Matching.Web.Controllers
         [Route("provider-results-for-opportunity-{OpportunityId}-item-{OpportunityItemId}-within-30-miles-of-{Postcode}-for-route-{SelectedRouteId}", Name = "GetOpportunityProviderResults")]
         public async Task<IActionResult> GetOpportunityProviderResultsAsync(SearchParametersViewModel searchParametersViewModel)
         {
+            if (!ModelState.IsValid || !await IsSearchParametersValidAsync(searchParametersViewModel))
+            {
+                return View("Results", new OpportunityProximitySearchViewModel
+                {
+                    SearchParameters = await GetSearchParametersViewModelAsync(searchParametersViewModel),
+                    SearchResults = new OpportunityProximitySearchResultsViewModel(),
+                    IsValidSearch = false
+                });
+            }
+
             var resultsViewModel = await GetSearchResultsAsync(searchParametersViewModel);
 
             return View("Results", resultsViewModel);
@@ -74,7 +84,6 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             if (!ModelState.IsValid || !await IsSearchParametersValidAsync(viewModel))
             {
-
                 return View("Results", new OpportunityProximitySearchViewModel
                 {
                     SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
@@ -122,7 +131,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchRadius = SearchParametersViewModel.DefaultSearchRadius
             });
 
-            var additionalResults = searchResults.Any() 
+            var additionalResults = searchResults.Any()
                 ? new List<OpportunityProximitySearchResultByRouteViewModelItem>()
                 : await _opportunityProximityService.SearchOpportunitiesForOtherRoutesByPostcodeProximityAsync(new OpportunityProximitySearchParametersDto
                 {
@@ -135,7 +144,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 SearchResults = new OpportunityProximitySearchResultsViewModel
                 {
-                    Results =  searchResults,
+                    Results = searchResults,
                     AdditionalResults = additionalResults
                 },
                 SearchParameters = await GetSearchParametersViewModelAsync(viewModel),
@@ -143,26 +152,47 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 OpportunityItemId = viewModel.OpportunityItemId
             };
 
-            if (!searchResults.Any() 
-                || (viewModel.OpportunityId == 0 
-                    && viewModel.OpportunityItemId == 0))
-                return resultsViewModel;
+            if (searchResults.Any()
+                && viewModel.OpportunityId != 0
+                && viewModel.OpportunityItemId != 0
+                && !viewModel.HasUserChangedSearchParameters)
+            {
+                var opportunityItem =
+                    await _opportunityService.GetOpportunityItemAsync(resultsViewModel.SearchParameters
+                        .OpportunityItemId);
 
-            var selectedResultsViewModel = SetProviderIsSelected(resultsViewModel);
+                if (opportunityItem != null
+                    && opportunityItem.Postcode == resultsViewModel.SearchParameters.Postcode
+                    && opportunityItem.RouteId == resultsViewModel.SearchParameters.SelectedRouteId)
+                {
+                    await SetProviderIsSelectedAsync(resultsViewModel);
+                }
+            }
 
-            return selectedResultsViewModel;
+            if (!resultsViewModel.SearchParameters.HasUserChangedSearchParameters
+                && (resultsViewModel.SearchParameters.PreviousPostcode != null
+                    && resultsViewModel.SearchParameters.PreviousPostcode != viewModel.Postcode) 
+                || (resultsViewModel.SearchParameters.PreviousSelectedRouteId != null
+                    && resultsViewModel.SearchParameters.PreviousSelectedRouteId != viewModel.SelectedRouteId))
+            {
+                //Set a flag to stop results being re-selected if user has changed search parameters
+                resultsViewModel.SearchParameters.HasUserChangedSearchParameters = true;
+            }
+
+            resultsViewModel.SearchParameters.PreviousPostcode = viewModel.Postcode;
+            resultsViewModel.SearchParameters.PreviousSelectedRouteId = viewModel.SelectedRouteId;
+
+            return resultsViewModel;
         }
 
-        private OpportunityProximitySearchViewModel SetProviderIsSelected(OpportunityProximitySearchViewModel resultsViewModel)
+        private async Task SetProviderIsSelectedAsync(OpportunityProximitySearchViewModel resultsViewModel)
         {
-            var referrals = _opportunityService.GetReferrals(resultsViewModel.SearchParameters.OpportunityItemId);
+            var referrals = await _opportunityService.GetReferralsAsync(resultsViewModel.SearchParameters.OpportunityItemId);
             foreach (var result in resultsViewModel.SearchResults.Results)
             {
                 if (referrals.Any(r => r.ProviderVenueId == result.ProviderVenueId))
                     result.IsSelected = true;
             }
-
-            return resultsViewModel;
         }
 
         private async Task<SearchParametersViewModel> GetSearchParametersViewModelAsync(SearchParametersViewModel viewModel)
@@ -181,7 +211,10 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 Postcode = viewModel.Postcode?.Trim(),
                 OpportunityId = viewModel.OpportunityId,
                 OpportunityItemId = viewModel.OpportunityItemId,
-                CompanyNameWithAka = viewModel.CompanyNameWithAka
+                CompanyNameWithAka = viewModel.CompanyNameWithAka,
+                PreviousPostcode = viewModel.PreviousPostcode,
+                PreviousSelectedRouteId = viewModel.PreviousSelectedRouteId,
+                HasUserChangedSearchParameters = viewModel.HasUserChangedSearchParameters
             };
         }
 
