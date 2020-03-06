@@ -101,7 +101,6 @@ namespace Sfa.Tl.Matching.Application.Services
                     q.qualificationRouteMapping.RouteId
                 })
                 .OrderBy(q => q.Id)
-                .Take(51)
                 .ToListAsync();
 
             var searchResult = results

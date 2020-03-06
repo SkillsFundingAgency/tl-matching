@@ -16,6 +16,7 @@ using Sfa.Tl.Matching.Data;
 using Sfa.Tl.Matching.Data.Repositories;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Tests.Common;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.Opportunity
 {

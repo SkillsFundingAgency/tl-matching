@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
+using Sfa.Tl.Matching.Tests.Common;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.TestClients
 {

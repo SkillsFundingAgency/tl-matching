@@ -218,9 +218,14 @@ namespace Sfa.Tl.Matching.Web.Controllers
             {
                 searchResultItem.Routes = routes.Select(route =>
                 {
-                    route.IsSelected = searchResultItem.RouteIds.Contains(route.Id);
-                    
-                    return route;
+                    return new RouteSummaryViewModel
+                    {
+                        Id = route.Id,
+                        IsSelected = searchResultItem.RouteIds.Contains(route.Id),
+                        Name = route.Name,
+                        Summary = route.Summary
+                    };
+
                 }).ToList();
             }
         }

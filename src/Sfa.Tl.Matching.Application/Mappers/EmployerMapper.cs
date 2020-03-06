@@ -12,14 +12,6 @@ namespace Sfa.Tl.Matching.Application.Mappers
         {
             CreateMap<Employer, EmployerSearchResultDto>();
 
-            CreateMap<EmployerStagingDto, EmployerStaging>()
-                .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.ChecksumCol, config => config.Ignore())
-                .ForMember(m => m.CreatedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore())
-                ;
-
             CreateMap<CrmEmployerEventBase, Employer>()
                 .ForMember(m => m.CrmId, config => config.MapFrom(s => s.AccountId.ToGuid()))
                 .ForMember(m => m.CompanyName, config => config.MapFrom(s => s.Name))

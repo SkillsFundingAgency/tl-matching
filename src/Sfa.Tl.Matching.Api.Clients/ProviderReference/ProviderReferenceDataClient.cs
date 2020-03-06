@@ -28,6 +28,13 @@ namespace Sfa.Tl.Matching.Api.Clients.ProviderReference
 
             var response = await RetrieveAllAsync(query);
 
+            if (response == null)
+                throw new NullReferenceException("ProviderReferenceDataClient had null response");
+            if (response.ProviderQueryResponse == null)
+                throw new NullReferenceException("ProviderReferenceDataClient had null ProviderQueryResponse");
+            if (response.ProviderQueryResponse.MatchingProviderRecords == null)
+                throw new NullReferenceException("ProviderReferenceDataClient had null MatchingProviderRecords");
+
             _logger.LogInformation($"UKRLP service returned {response.ProviderQueryResponse.MatchingProviderRecords.LongLength} providers");
 
             results.AddRange(response.ProviderQueryResponse.MatchingProviderRecords);

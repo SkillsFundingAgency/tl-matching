@@ -25,8 +25,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.DataImport
         }
 
         [Theory]
-        [InlineData("", "", null, DataImportType.Employer, "You must select a file", 0)]
-        [InlineData("test.doc", "application/text", "my file content", DataImportType.Employer, "You must upload an Excel file with the XLSX file extension", 0)]
+        [InlineData("", "", null, DataImportType.LearningAimReference, "You must select a file", 0)]
         public async Task Then_The_Correct_Error_Message_Is_Displayed(string fileName, string fileContentType, string fileContent, DataImportType importType, string errorMessage, int errorSummaryIndex)
         {
             var client = _factory.CreateClient();

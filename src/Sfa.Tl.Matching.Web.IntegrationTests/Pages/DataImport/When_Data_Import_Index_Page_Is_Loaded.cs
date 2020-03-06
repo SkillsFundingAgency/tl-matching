@@ -44,8 +44,8 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.DataImport
             backLink.PathName.Should().Be("/Start");
             
             var importTypeList = documentHtml.GetElementById("SelectedImportType");
-            importTypeList.Children.Length.Should().Be(2);
-            importTypeList.Text().Should().Be("Employer CRM data\nLearning Aim Reference\n");
+            importTypeList.Children.Length.Should().Be(1);
+            importTypeList.Text().Should().Be("Learning Aim Reference\n");
             
             var upload = documentHtml.GetElementById("tl-upload") as IHtmlButtonElement;
             upload.TextContent.Trim().Should().Be("Upload");

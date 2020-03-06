@@ -45,30 +45,6 @@
     <None Update="Services\FileImportService\DuplicateRows\LearningAimReferenceStaging-DuplicateRows.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Services\FileImportService\DuplicateRows\EmployerStaging-DuplicateRows.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="FileReader\ExcelFileReader\Employer-MissingMandatory.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="FileReader\ExcelFileReader\Trim\EmployerStaging-Trim.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="FileReader\ExcelFileReader\TitleCase\Employer-TitleCase.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="FileReader\ExcelFileReader\Employer-Simple.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="FileReader\ExcelFileReader\Trim\Provider-Trim.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="FileReader\ExcelFileReader\Trim\ProviderQualification-Trim.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="FileReader\ExcelFileReader\Trim\ProviderVenue-Trim.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
