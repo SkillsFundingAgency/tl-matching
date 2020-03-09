@@ -33,11 +33,10 @@
                                 <div class="govuk-checkboxes__item">
                                     <input type="hidden" asp-for="@route.Id" name="Routes[@i].Id" />
 
-                                    <input type="checkbox" class="govuk-checkboxes__input"
+                                    <input id="tl-checkbox-@Model.QualificationId-@route.Id"  type="checkbox" class="govuk-checkboxes__input"
                                            asp-for="@Model.Routes[i].IsSelected"
                                            name="Routes[@i].IsSelected">
-                                    <label class="govuk-label govuk-checkboxes__label"
-                                           asp-for="@Model.Routes[i].IsSelected"
+                                    <label for="tl-checkbox-@Model.QualificationId-@route.Id" class="govuk-label govuk-checkboxes__label"
                                            name="Routes[@i].IsSelected">
                                         @route.Name
                                     </label>
@@ -49,7 +48,7 @@
             </div>
         </div>
         <div class="tl-table__cell tl-table__cell-10">
-            <button class="tl-qual-button govuk-button--disabled govuk-button govuk-!-margin-0" disabled>Save</button>
+            <button id="tl-button-save_@Model.QualificationId" class="tl-qual-button govuk-button--disabled govuk-button govuk-!-margin-0" disabled>Save</button>
         </div>
     </div>
 
