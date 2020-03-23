@@ -47,6 +47,12 @@ namespace Sfa.Tl.Matching.Data
                 .WithMany(e => e.Opportunity)
                 .HasPrincipalKey(e => e.CrmId)
                 .HasForeignKey(o => o.EmployerCrmId);
+
+            modelBuilder.Entity<Route>()
+            .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
+
+            modelBuilder.Entity<Qualification>()
+                .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
         }
     }
 }

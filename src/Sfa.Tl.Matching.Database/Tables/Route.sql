@@ -8,5 +8,6 @@
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 
 	[ModifiedBy] NVARCHAR(50) NULL
-	CONSTRAINT [PK_Route] PRIMARY KEY ([Id]),
+	CONSTRAINT [PK_Route] PRIMARY KEY ([Id]), 
+    [IsDeleted] BIT NOT NULL DEFAULT 0,
 )
