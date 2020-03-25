@@ -23,6 +23,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.IsDeleted, config => config.Ignore())
                 ;
 
             CreateMap<AddQualificationViewModel, Qualification>()
@@ -38,6 +39,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.IsDeleted, config => config.Ignore())
                 ;
 
             CreateMap<MissingQualificationViewModel, Qualification>()
@@ -52,6 +54,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.IsDeleted, config => config.Ignore())
                 ;
 
             CreateMap<SaveQualificationViewModel, Qualification>()
