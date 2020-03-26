@@ -22,223 +22,222 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
     public class When_ReferralEmailService_Is_Called_To_Send_Provider_Email_Using_InMemory_Db
     {
 
-        //[Theory, AutoDomainData]
-        //public async Task Then_Send_Email_To_Providers(
-        //    [Frozen] MatchingDbContext dbContext,
-        //    IDateTimeProvider dateTimeProvider,
-        //    [Frozen] Mapper mapper,
-        //    [Frozen] Domain.Models.Opportunity opportunity,
-        //    [Frozen] Domain.Models.Provider provider,
-        //    [Frozen] Domain.Models.ProviderVenue venue,
-        //    [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-        //    [Frozen] IEmailService emailService,
-        //    ILogger<OpportunityRepository> logger,
-        //    ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
-        //    ILogger<GenericRepository<OpportunityItem>> itemLogger
-        //)
-        //{
-        //    //Arrange
-        //    opportunity.IsDeleted = false;
-        //    backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
+        [Theory, AutoDomainData]
+        public async Task Then_Send_Email_To_Providers(
+            [Frozen] MatchingDbContext dbContext,
+            IDateTimeProvider dateTimeProvider,
+            [Frozen] Mapper mapper,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            [Frozen] IEmailService emailService,
+            ILogger<OpportunityRepository> logger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
+            ILogger<GenericRepository<OpportunityItem>> itemLogger
+        )
+        {
+            //Arrange
+            backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-        //    await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
-        //    var repo = new OpportunityRepository(logger, dbContext);
-        //    var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
-        //    var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
+            var repo = new OpportunityRepository(logger, dbContext);
+            var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
+            var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-        //    var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
-        //    //Act
-        //    await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
+            //Act
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-        //    //Assert
-        //    await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-        //        Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
-        //}
+            //Assert
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+        }
 
-        //[Theory, AutoDomainData]
-        //public async Task Then_Send_Email_Is_Called_With_Placements_List(
-        //    [Frozen] MatchingDbContext dbContext,
-        //    IDateTimeProvider dateTimeProvider,
-        //    [Frozen] Mapper mapper,
-        //    [Frozen] Domain.Models.Opportunity opportunity,
-        //    [Frozen] Domain.Models.Provider provider,
-        //    [Frozen] Domain.Models.ProviderVenue venue,
-        //    [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-        //    [Frozen] IEmailService emailService,
-        //    ILogger<OpportunityRepository> logger,
-        //    ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
-        //    ILogger<GenericRepository<OpportunityItem>> itemLogger
-        //)
-        //{
-        //    //Arrange
-        //    opportunity.IsDeleted = false;
-        //    backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
+        [Theory, AutoDomainData]
+        public async Task Then_Send_Email_Is_Called_With_Placements_List(
+            [Frozen] MatchingDbContext dbContext,
+            IDateTimeProvider dateTimeProvider,
+            [Frozen] Mapper mapper,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            [Frozen] IEmailService emailService,
+            ILogger<OpportunityRepository> logger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
+            ILogger<GenericRepository<OpportunityItem>> itemLogger
+        )
+        {
+            //Arrange
+            backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-        //    await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
-        //    var repo = new OpportunityRepository(logger, dbContext);
-        //    var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
-        //    var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
+            var repo = new OpportunityRepository(logger, dbContext);
+            var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
+            var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-        //    var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
+            var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
-        //    //Act
-        //    await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
+            //Act
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-        //    //Assert
-        //    await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-        //        Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+            //Assert
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
-        //    await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-        //        Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("employer_business_name")), Arg.Any<string>());
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("employer_business_name")), Arg.Any<string>());
 
-        //}
+        }
 
-        //[Theory, AutoDomainData]
-        //public async Task Then_Send_Email_Is_Called_With_Employer_Details(
-        //    [Frozen] MatchingDbContext dbContext,
-        //    IDateTimeProvider dateTimeProvider,
-        //    [Frozen] Mapper mapper,
-        //    [Frozen] Domain.Models.Opportunity opportunity,
-        //    [Frozen] Domain.Models.Provider provider,
-        //    [Frozen] Domain.Models.ProviderVenue venue,
-        //    [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-        //    [Frozen] IEmailService emailService,
-        //    ILogger<OpportunityRepository> logger,
-        //    ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
-        //    ILogger<GenericRepository<OpportunityItem>> itemLogger
-        //)
-        //{
-        //    //Arrange
-        //    opportunity.IsDeleted = false;
-        //    backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
+        [Theory, AutoDomainData]
+        public async Task Then_Send_Email_Is_Called_With_Employer_Details(
+            [Frozen] MatchingDbContext dbContext,
+            IDateTimeProvider dateTimeProvider,
+            [Frozen] Mapper mapper,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            [Frozen] IEmailService emailService,
+            ILogger<OpportunityRepository> logger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
+            ILogger<GenericRepository<OpportunityItem>> itemLogger
+        )
+        {
+            //Arrange
+            backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-        //    await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
-        //    var repo = new OpportunityRepository(logger, dbContext);
-        //    var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
-        //    var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
-            
-        //    var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
+            var repo = new OpportunityRepository(logger, dbContext);
+            var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
+            var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-        //    //Act
-        //    await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
+            var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
-        //    //Assert
-        //    await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-        //        Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+            //Act
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-        //    await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-        //        Arg.Is<IDictionary<string, string>>(tokens =>
-        //            tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == opportunity.Employer.CompanyName.ToTitleCase()), Arg.Any<string>());
+            //Assert
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
-        //    await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-        //        Arg.Is<IDictionary<string, string>>(tokens =>
-        //            tokens.ContainsKey("employer_contact_name") && tokens["employer_contact_name"] == opportunity.EmployerContact.ToTitleCase()), Arg.Any<string>());
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("employer_business_name") && tokens["employer_business_name"] == opportunity.Employer.CompanyName.ToTitleCase()), Arg.Any<string>());
 
-        //    await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-        //        Arg.Is<IDictionary<string, string>>(tokens =>
-        //            tokens.ContainsKey("employer_contact_number") && tokens["employer_contact_number"] == opportunity.EmployerContactPhone), Arg.Any<string>());
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("employer_contact_name") && tokens["employer_contact_name"] == opportunity.EmployerContact.ToTitleCase()), Arg.Any<string>());
 
-        //    await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-        //        Arg.Is<IDictionary<string, string>>(tokens =>
-        //            tokens.ContainsKey("employer_contact_email") && tokens["employer_contact_email"] == opportunity.EmployerContactEmail), Arg.Any<string>());
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("employer_contact_number") && tokens["employer_contact_number"] == opportunity.EmployerContactPhone), Arg.Any<string>());
 
-        //}
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Is<IDictionary<string, string>>(tokens =>
+                    tokens.ContainsKey("employer_contact_email") && tokens["employer_contact_email"] == opportunity.EmployerContactEmail), Arg.Any<string>());
 
-        //[Theory, AutoDomainData]
-        //public async Task Then_Background_Process_History_Status_Is_Completed(
-        //    [Frozen] MatchingDbContext dbContext,
-        //    IDateTimeProvider dateTimeProvider,
-        //    [Frozen] Mapper mapper,
-        //    [Frozen] Domain.Models.Opportunity opportunity,
-        //    [Frozen] Domain.Models.Provider provider,
-        //    [Frozen] Domain.Models.ProviderVenue venue,
-        //    [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-        //    [Frozen] IEmailService emailService,
-        //    ILogger<OpportunityRepository> logger,
-        //    ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
-        //    ILogger<GenericRepository<OpportunityItem>> itemLogger
-        //                )
-        //{
-        //    //Arrange
-        //    //opportunity.IsDeleted = false;
-        //    backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
+        }
 
-        //    await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+        [Theory, AutoDomainData]
+        public async Task Then_Background_Process_History_Status_Is_Completed(
+            [Frozen] MatchingDbContext dbContext,
+            IDateTimeProvider dateTimeProvider,
+            [Frozen] Mapper mapper,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            [Frozen] IEmailService emailService,
+            ILogger<OpportunityRepository> logger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
+            ILogger<GenericRepository<OpportunityItem>> itemLogger
+                        )
+        {
+            //Arrange
+            backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-        //    var repo = new OpportunityRepository(logger, dbContext);
-        //    var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
-        //    var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
-        //    var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
+            var repo = new OpportunityRepository(logger, dbContext);
+            var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
+            var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-        //    //Act
-        //    await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
+            var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
-        //    //Assert
-        //    await emailService.Received(4).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-        //        Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+            foreach (var route in dbContext.Route)
+            {
+                route.IsDeleted = false;
+            }
+            //Act
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-        //    var processStatus = dbContext.BackgroundProcessHistory
-        //        .FirstOrDefault(history => history.Id == backgroundProcessHistory.Id)
-        //        ?.Status;
+            //Assert
+            await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
 
-        //    processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Pending.ToString());
-        //    processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Processing.ToString());
-        //    processStatus.Should().Be(BackgroundProcessHistoryStatus.Complete.ToString());
-        //}
+            var processStatus = dbContext.BackgroundProcessHistory
+                .FirstOrDefault(history => history.Id == backgroundProcessHistory.Id)
+                ?.Status;
 
-        //[Theory]
-        //[InlineAutoDomainData("", "")]
-        //[InlineAutoDomainData("Test", "")]
-        //[InlineAutoDomainData("", "Test")]
-        //[InlineAutoDomainData(null, null)]
-        //[InlineAutoDomainData(null, "")]
-        //[InlineAutoDomainData("", null)]
-        //[InlineAutoDomainData("Test", null)]
-        //[InlineAutoDomainData(null, "Test")]
-        ////[InlineData("Test", "Test")]
-        //public async Task AND_Secondary_Contact_Name_or_Email_Is_Invalid_Then_Send_Email_Is_NOT_Called(
-        //    string secondaryContactName,
-        //    string secondaryContactEmail,
-        //    [Frozen] MatchingDbContext dbContext,
-        //    IDateTimeProvider dateTimeProvider,
-        //    [Frozen] Mapper mapper,
-        //    [Frozen] Domain.Models.Opportunity opportunity,
-        //    [Frozen] Domain.Models.Provider provider,
-        //    [Frozen] Domain.Models.ProviderVenue venue,
-        //    [Frozen] BackgroundProcessHistory backgroundProcessHistory,
-        //    [Frozen] IEmailService emailService,
-        //    ILogger<OpportunityRepository> logger,
-        //    ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
-        //    ILogger<GenericRepository<OpportunityItem>> itemLogger
-        //)
-        //{
-        //    //Arrange
-        //    opportunity.IsDeleted = false;
-        //    backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
+            processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Pending.ToString());
+            processStatus.Should().NotBe(BackgroundProcessHistoryStatus.Processing.ToString());
+            processStatus.Should().Be(BackgroundProcessHistoryStatus.Complete.ToString());
+        }
 
-        //    provider.SecondaryContact = secondaryContactName;
-        //    provider.SecondaryContactEmail = secondaryContactEmail;
+        [Theory]
+        [InlineAutoDomainData("", "")]
+        [InlineAutoDomainData("Test", "")]
+        [InlineAutoDomainData("", "Test")]
+        [InlineAutoDomainData(null, null)]
+        [InlineAutoDomainData(null, "")]
+        [InlineAutoDomainData("", null)]
+        [InlineAutoDomainData("Test", null)]
+        [InlineAutoDomainData(null, "Test")]
+        //[InlineData("Test", "Test")]
+        public async Task AND_Secondary_Contact_Name_or_Email_Is_Invalid_Then_Send_Email_Is_NOT_Called(
+            string secondaryContactName,
+            string secondaryContactEmail,
+            [Frozen] MatchingDbContext dbContext,
+            IDateTimeProvider dateTimeProvider,
+            [Frozen] Mapper mapper,
+            [Frozen] Domain.Models.Opportunity opportunity,
+            [Frozen] Domain.Models.Provider provider,
+            [Frozen] Domain.Models.ProviderVenue venue,
+            [Frozen] BackgroundProcessHistory backgroundProcessHistory,
+            [Frozen] IEmailService emailService,
+            ILogger<OpportunityRepository> logger,
+            ILogger<GenericRepository<BackgroundProcessHistory>> historyLogger,
+            ILogger<GenericRepository<OpportunityItem>> itemLogger
+        )
+        {
+            //Arrange
+            backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
-        //    await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
+            provider.SecondaryContact = secondaryContactName;
+            provider.SecondaryContactEmail = secondaryContactEmail;
 
-        //    var repo = new OpportunityRepository(logger, dbContext);
-        //    var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
-        //    var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
+            await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
-        //    var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
+            var repo = new OpportunityRepository(logger, dbContext);
+            var backgroundRepo = new GenericRepository<BackgroundProcessHistory>(historyLogger, dbContext);
+            var itemRepo = new GenericRepository<OpportunityItem>(itemLogger, dbContext);
 
-        //    //Act
-        //    await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
+            var sut = new ReferralEmailService(mapper, dateTimeProvider, emailService, repo, itemRepo, backgroundRepo);
 
-        //    //Assert
-        //    await emailService.Received(2).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
-        //        Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("employer_business_name")), Arg.Any<string>());
+            //Act
+            await sut.SendProviderReferralEmailAsync(opportunity.Id, opportunity.OpportunityItem.Select(oi => oi.Id), backgroundProcessHistory.Id, "System");
 
-        //}
+            //Assert
+            await emailService.Received(1).SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(),
+                Arg.Is<IDictionary<string, string>>(tokens => tokens.ContainsKey("employer_business_name")), Arg.Any<string>());
+
+        }
     }
 }
