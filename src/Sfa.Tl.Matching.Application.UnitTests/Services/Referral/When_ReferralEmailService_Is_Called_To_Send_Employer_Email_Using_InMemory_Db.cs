@@ -40,6 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                         )
         {
             //Arrange
+            opportunity.IsDeleted = false;
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
@@ -75,6 +76,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         )
         {
             //Arrange
+            opportunity.IsDeleted = false;
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
@@ -124,6 +126,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         )
         {
             //Arrange
+            opportunity.IsDeleted = false;
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
@@ -179,6 +182,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         )
         {
             //Arrange
+            opportunity.IsDeleted = false;
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory, false, false);
@@ -225,6 +229,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         )
         {
             //Arrange
+            opportunity.IsDeleted = false;
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory, false, false);
@@ -271,6 +276,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                         )
         {
             //Arrange
+            opportunity.IsDeleted = false;
             backgroundProcessHistory.Status = BackgroundProcessHistoryStatus.Pending.ToString();
 
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
