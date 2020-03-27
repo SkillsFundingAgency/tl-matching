@@ -6,8 +6,11 @@ namespace Sfa.Tl.Matching.Data
     // ReSharper disable UnusedMember.Global
     public class MatchingDbContext : DbContext
     {
-        public MatchingDbContext(DbContextOptions options) : base(options)
+        private readonly bool _applyQueryFilters;
+
+        public MatchingDbContext(DbContextOptions options, bool applyQueryFilters = true) : base(options)
         {
+            _applyQueryFilters = applyQueryFilters;
         }
 
         public virtual DbSet<BackgroundProcessHistory> BackgroundProcessHistory { get; set; }
@@ -48,14 +51,17 @@ namespace Sfa.Tl.Matching.Data
                 .HasPrincipalKey(e => e.CrmId)
                 .HasForeignKey(o => o.EmployerCrmId);
 
-            modelBuilder.Entity<Route>()
-            .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
+            if (_applyQueryFilters)
+            {
+                modelBuilder.Entity<Route>()
+                .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
 
-            modelBuilder.Entity<Qualification>()
-                .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
-            
-            modelBuilder.Entity<Opportunity>()
-                .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
+                modelBuilder.Entity<Qualification>()
+                    .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
+
+                modelBuilder.Entity<OpportunityItem>()
+                    .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
+            }
         }
     }
 }

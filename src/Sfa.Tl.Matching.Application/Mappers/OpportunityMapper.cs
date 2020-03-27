@@ -35,7 +35,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Opportunity, config => config.Ignore())
                 .ForMember(m => m.Route, config => config.Ignore())
                 .ForMember(m => m.Id, config => config.Ignore())
-                .ForMember(m => m.CreatedOn, config => config.Ignore());
+                .ForMember(m => m.CreatedOn, config => config.Ignore())
+                .ForMember(m => m.IsDeleted, config => config.Ignore()); ;
 
             CreateMap<ReferralDto, Referral>()
                 .ForMember(m => m.OpportunityItemId, o => o.Ignore())

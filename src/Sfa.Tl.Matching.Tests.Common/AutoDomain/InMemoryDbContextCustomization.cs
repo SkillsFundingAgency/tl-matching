@@ -15,7 +15,7 @@ namespace Sfa.Tl.Matching.Tests.Common.AutoDomain
                 .EnableSensitiveDataLogging()
                 .Options;
 
-            var dbcontext = new MatchingDbContext(options);
+            var dbcontext = new MatchingDbContext(options, false);
             fixture.Register(() => dbcontext);
             fixture.Behaviors.Add(new OmitOnRecursionBehavior());
             

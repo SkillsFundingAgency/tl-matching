@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Tests.Common
                         .UseNetTopologySuite())
                 .Options;
 
-            var matchingDbContext = new MatchingDbContext(dbOptions);
+            var matchingDbContext = new MatchingDbContext(dbOptions, false);
             return matchingDbContext;
         }
 

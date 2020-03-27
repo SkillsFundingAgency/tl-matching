@@ -19,6 +19,7 @@
 	[ModifiedOn]				DATETIME2 NULL, 
 	[ModifiedBy]				NVARCHAR(50) NULL
 	CONSTRAINT [PK_OpportunityItem] PRIMARY KEY ([Id]),
-	CONSTRAINT [FK_OpportunityItem_Opportunity] FOREIGN KEY ([OpportunityId]) REFERENCES [Opportunity]([Id]),
+	[IsDeleted] BIT NOT NULL DEFAULT 0, 
+    CONSTRAINT [FK_OpportunityItem_Opportunity] FOREIGN KEY ([OpportunityId]) REFERENCES [Opportunity]([Id]),
 	CONSTRAINT [FK_OpportunityItem_Route] FOREIGN KEY ([RouteId]) REFERENCES [Route]([Id])
 )

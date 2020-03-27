@@ -12,7 +12,7 @@ namespace Sfa.Tl.Matching.Tests.Common
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .EnableSensitiveDataLogging()
                 .Options;
-            var context = new MatchingDbContext(options);
+            var context = new MatchingDbContext(options, false);
 
             return context;
         }

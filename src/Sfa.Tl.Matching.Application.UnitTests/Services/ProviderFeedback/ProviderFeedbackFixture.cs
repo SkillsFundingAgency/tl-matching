@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             ((IQueryable<BankHoliday>)mockSet).GetEnumerator().Returns(bankHolidays.GetEnumerator());
 
             var contextOptions = new DbContextOptions<MatchingDbContext>();
-            var mockContext = Substitute.For<MatchingDbContext>(contextOptions);
+            var mockContext = Substitute.For<MatchingDbContext>(contextOptions, false);
             mockContext.Set<BankHoliday>().Returns(mockSet);
 
             BankHolidayRepository =
