@@ -35,6 +35,13 @@ WHERE Id IN (12, 13, 14, 15)
 Go
 
 --Update Qualification Delete Status
+CREATE TABLE #Qualification
+(
+	QualificationId INT
+)
+
+Go
+
 WITH QualificationObsoleteRouteCount (
     QualificationId, 
     RouteId
@@ -60,11 +67,21 @@ QualificationToDelete(QualificationId)
 AS (SELECT Distinct QORC.QualificationId
 FROM QualificationTotalObsoleteRouteCount  QORC
 LEFT JOIN QualificationAllRouteCount QARC ON QORC.QualificationId = QARC.QualificationId
-WHERE QORC.ObsoleteRouteCount = QARC.AllRouteCount)
+WHERE QORC.ObsoleteRouteCount = QARC.AllRouteCount
+)
+
+INSERT INTO #Qualification
+SELECT QualificationId FROM QualificationToDelete
 
 UPDATE [dbo].[Qualification]
 SET IsDeleted = 1
-WHERE [Id] IN (SELECT QualificationId FROM QualificationToDelete)
+WHERE [Id] IN (SELECT QualificationId FROM #Qualification)
+
+UPDATE [dbo].[ProviderQualification]
+SET IsDeleted = 1
+WHERE QualificationId IN (SELECT QualificationId FROM #Qualification)
+
+DROP TABLE #Qualification
 
 Go
 

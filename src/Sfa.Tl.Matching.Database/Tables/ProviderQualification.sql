@@ -9,6 +9,7 @@
 	[ModifiedOn] DATETIME2 NULL, 
 	[ModifiedBy] NVARCHAR(50) NULL 
 	CONSTRAINT [PK_ProviderQualification] PRIMARY KEY ([Id]), 
-	CONSTRAINT [FK_RProviderQualification_ProviderVenue] FOREIGN KEY ([ProviderVenueId]) REFERENCES [ProviderVenue]([Id]),
+	[IsDeleted] BIT NOT NULL DEFAULT 0, 
+    CONSTRAINT [FK_RProviderQualification_ProviderVenue] FOREIGN KEY ([ProviderVenueId]) REFERENCES [ProviderVenue]([Id]),
 	CONSTRAINT [FK_RProviderQualification_Qualification] FOREIGN KEY ([QualificationId]) REFERENCES [Qualification]([Id])
 )

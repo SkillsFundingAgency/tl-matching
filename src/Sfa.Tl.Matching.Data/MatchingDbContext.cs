@@ -58,6 +58,9 @@ namespace Sfa.Tl.Matching.Data
 
                 modelBuilder.Entity<Qualification>()
                     .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
+                
+                modelBuilder.Entity<ProviderQualification>()
+                    .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
 
                 modelBuilder.Entity<OpportunityItem>()
                     .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
