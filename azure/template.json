@@ -60,8 +60,7 @@
         "resourceNamePrefix": "[concat('tl-', toLower(parameters('environmentNameAbbreviation')))]",
         "workerASPName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-asp')]",
         "uiAppName": "[concat(variables('resourceNamePrefix'), '-mtchui-as')]",
-        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-fa')]",
-        "azureSearchName": "[concat(variables('resourceNamePrefix'), '-mtch-azs')]",
+        "workerFunctionAppName": "[concat(variables('resourceNamePrefix'), '-mtchwkr-fa')]",        
         "sqlDatabaseName": "[concat(variables('resourceNamePrefix'), '-mtch-db')]",
         "storageAccountName": "[replace(concat(variables('resourceNamePrefix'), 'mtchstr'), '-', '')]"
     },
@@ -307,23 +306,6 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "azure-search",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'azure-search.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "azureSearchName": {
-                        "value": "[variables('azureSearchName')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2017-05-10",
             "name": "sql-database",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
@@ -386,10 +368,6 @@
         "workerFunctionAppName": {
             "type": "string",
             "value": "[variables('workerFunctionAppName')]"
-        },
-        "azureSearchName": {
-            "type": "string",
-            "value": "[variables('azureSearchName')]"
         }
     }
 }
