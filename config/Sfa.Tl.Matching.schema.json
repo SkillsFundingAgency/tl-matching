@@ -27,32 +27,6 @@
       "type": "string",
       "environmentVariable": "AuthorisedAdminUserEmail"
     },
-    "AzureSearchConfiguration": {
-      "properties": {
-        "Name": {
-          "minLength": 1,
-          "type": "string",
-          "environmentVariable": "AzureSearchName"
-        },
-        "AdminApiKey": {
-          "minLength": 1,
-          "type": "string",
-          "environmentVariable": "AzureSearchAdminApiKey"
-        },
-        "QueryApiKey": {
-          "minLength": 1,
-          "type": "string",
-          "environmentVariable": "AzureSearchQueryApiKey"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "Name",
-        "AdminApiKey",
-        "QueryApiKey"
-      ],
-      "type": "object"
-    },
     "PostCodeRetrieverBaseUrl": {
       "minLength": 1,
       "type": "string",
