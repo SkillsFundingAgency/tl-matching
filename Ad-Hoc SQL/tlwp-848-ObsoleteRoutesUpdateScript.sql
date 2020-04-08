@@ -85,7 +85,7 @@ DROP TABLE #Qualification
 
 Go
 
---Update Opertunity Delete Status
+--Update OpportunityItem Delete Status
 
 UPDATE [dbo].[OpportunityItem]
 SET IsDeleted = 1

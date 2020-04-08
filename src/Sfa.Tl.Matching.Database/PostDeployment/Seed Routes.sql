@@ -28,7 +28,8 @@ ON Target.[Id] = Source.[Id]
 WHEN MATCHED 
 	 AND ((Target.[Name] <> Source.[Name] COLLATE Latin1_General_CS_AS)
 	   OR (Target.[Summary] IS NULL AND Source.[Summary] IS NOT NULL)
-	   OR (Target.[Summary] <> Source.[Summary] COLLATE Latin1_General_CS_AS)) 
+	   OR (Target.[Summary] <> Source.[Summary] COLLATE Latin1_General_CS_AS) 
+	   OR (Target.[IsDeleted] <> Source.[IsDeleted])) 
 THEN 
 UPDATE SET 
 	[Name] = Source.[Name],
