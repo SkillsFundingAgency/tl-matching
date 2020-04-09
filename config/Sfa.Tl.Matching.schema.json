@@ -83,11 +83,6 @@
       "type": "string",
       "environmentVariable": "ServiceBusConnectionString"
     },
-    "SessionRedisConnectionString": {
-      "minLength": 1,
-      "type": "string",
-      "environmentVariable": "SessionRedisConnectionString"
-    },
     "SqlConnectionString": {
       "minLength": 1,
       "type": "string",
@@ -107,7 +102,6 @@
   "additionalProperties": false,
   "required": [
     "Authentication",
-    "SessionRedisConnectionString",
     "SqlConnectionString"
   ],
   "type": "object"
