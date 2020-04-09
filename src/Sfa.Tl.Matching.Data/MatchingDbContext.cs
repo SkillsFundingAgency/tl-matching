@@ -54,11 +54,11 @@ namespace Sfa.Tl.Matching.Data
             if (_applyQueryFilters)
             {
                 modelBuilder.Entity<Route>()
-                .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
+                    .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
 
                 modelBuilder.Entity<Qualification>()
                     .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
-                
+
                 modelBuilder.Entity<ProviderQualification>()
                     .HasQueryFilter(post => EF.Property<bool>(post, "IsDeleted") == false);
 
