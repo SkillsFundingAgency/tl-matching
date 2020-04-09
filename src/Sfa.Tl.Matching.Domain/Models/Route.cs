@@ -11,5 +11,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public virtual ICollection<OpportunityItem> OpportunityItem { get; set; }
         public virtual ICollection<Path> Path { get; set; }
         public virtual ICollection<QualificationRouteMapping> QualificationRouteMapping { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

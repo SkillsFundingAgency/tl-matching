@@ -12,5 +12,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         
         public virtual ICollection<ProviderQualification> ProviderQualification { get; set; }
         public virtual ICollection<QualificationRouteMapping> QualificationRouteMapping { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

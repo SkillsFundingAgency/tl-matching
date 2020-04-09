@@ -16,7 +16,8 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.CreatedBy, config => config.MapFrom<LoggedInUserNameResolver<AddQualificationViewModel, ProviderQualification>>())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
                 .ForMember(m => m.ModifiedOn, config => config.Ignore())
-                .ForMember(m => m.ModifiedBy, config => config.Ignore());
+                .ForMember(m => m.ModifiedBy, config => config.Ignore())
+                .ForMember(m => m.IsDeleted, config => config.Ignore());
         }
     }
 }

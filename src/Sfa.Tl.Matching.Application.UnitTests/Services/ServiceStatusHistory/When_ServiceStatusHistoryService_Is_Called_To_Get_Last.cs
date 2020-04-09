@@ -45,7 +45,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
             ((IQueryable<Domain.Models.ServiceStatusHistory>)mockSet).GetEnumerator().Returns(serviceStatusHistories.GetEnumerator());
 
             var contextOptions = new DbContextOptions<MatchingDbContext>();
-            var mockContext = Substitute.For<MatchingDbContext>(contextOptions);
+            var mockContext = Substitute.For<MatchingDbContext>(contextOptions, false);
             mockContext.Set<Domain.Models.ServiceStatusHistory>().Returns(mockSet);
 
             var serviceStatusHistoryRepository =

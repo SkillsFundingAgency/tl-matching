@@ -10,5 +10,6 @@
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 
 	[ModifiedBy] NVARCHAR(50) NULL
-	CONSTRAINT [PK_Qualification] PRIMARY KEY ([Id]),
+	CONSTRAINT [PK_Qualification] PRIMARY KEY ([Id]), 
+    [IsDeleted] BIT NOT NULL DEFAULT 0,
 )

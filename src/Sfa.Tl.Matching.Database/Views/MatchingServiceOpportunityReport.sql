@@ -26,3 +26,4 @@
 		LEFT JOIN ProvisionGap as pg on oi.Id = pg.OpportunityItemId
 	WHERE 
 		oi.IsSaved = 1
+		AND (oi.IsCompleted = 1 or oi.IsDeleted = 0)

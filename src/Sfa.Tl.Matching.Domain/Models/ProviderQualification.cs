@@ -7,5 +7,6 @@
         public string Source { get; set; }
         public virtual ProviderVenue ProviderVenue { get; set; }
         public virtual Qualification Qualification { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

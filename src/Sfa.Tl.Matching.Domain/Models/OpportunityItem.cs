@@ -21,5 +21,6 @@ namespace Sfa.Tl.Matching.Domain.Models
         public virtual Route Route { get; set; }
         public virtual ICollection<ProvisionGap> ProvisionGap { get; set; }
         public virtual ICollection<Referral> Referral { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

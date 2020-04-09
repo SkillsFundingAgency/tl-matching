@@ -70,4 +70,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[LarId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="91172527-918e-4a9b-b5e8-a063f4d10aa3" ChangeDateTime="03/20/2020 14:42:01">
+    <Property Name="ElementName" Value="[dbo].[Route].[IsRemoved]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Route]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsDeleted" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d0aec599-3347-4659-9705-13eb20abe0f7" ChangeDateTime="03/20/2020 14:42:14">
+    <Property Name="ElementName" Value="[dbo].[Qualification].[IsRemoved]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Qualification]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsDeleted" />
+  </Operation>
 </Operations>

@@ -44,7 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
             ((IQueryable<Domain.Models.ProviderQualification>)mockSet).GetEnumerator().Returns(providerQualifications.GetEnumerator());
 
             var contextOptions = new DbContextOptions<MatchingDbContext>();
-            _mockContext = Substitute.For<MatchingDbContext>(contextOptions);
+            _mockContext = Substitute.For<MatchingDbContext>(contextOptions, false);
             _mockContext.Set<Domain.Models.ProviderQualification>().Returns(mockSet);
 
             IRepository<Domain.Models.ProviderQualification> repository = new GenericRepository<Domain.Models.ProviderQualification>(NullLogger<GenericRepository<Domain.Models.ProviderQualification>>.Instance, _mockContext);

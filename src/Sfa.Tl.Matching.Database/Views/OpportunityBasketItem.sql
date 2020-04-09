@@ -24,4 +24,6 @@
 			LEFT JOIN ProviderVenue AS PV on r.ProviderVenueId = pv.Id
 			LEFT JOIN Provider AS P on pv.ProviderId = p.Id
 		WHERE
-			oi.IsSaved = 1 AND oi.IsCompleted = 0
+			oi.IsSaved = 1 
+			AND oi.IsCompleted = 0
+			AND oi.IsDeleted = 0
