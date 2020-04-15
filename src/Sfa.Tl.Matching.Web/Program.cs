@@ -22,6 +22,10 @@ namespace Sfa.Tl.Matching.Web
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .ConfigureKestrel(webBuilder =>
+                {
+                    webBuilder.Limits.MaxRequestBodySize = null;
+                })
                 .ConfigureLogging(logging =>
                 {
                     logging.AddConsole();
