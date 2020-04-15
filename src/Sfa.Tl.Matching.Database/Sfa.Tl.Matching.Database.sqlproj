@@ -113,6 +113,8 @@
     <Build Include="Indexes\IX_Employer_CrmId.sql" />
     <Build Include="Indexes\IX_ProviderQualification_QualificationId.sql" />
     <Build Include="Views\OpportunityBasketItem.sql" />
+    <Build Include="Tables\LocalEnterprisePartnership.sql" />
+    <Build Include="Tables\PostcodeLookup.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
