@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using FluentAssertions;
@@ -44,9 +45,10 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.DataImport
             backLink.PathName.Should().Be("/Start");
             
             var importTypeList = documentHtml.GetElementById("SelectedImportType");
-            importTypeList.Children.Length.Should().Be(1);
-            importTypeList.Text().Should().Be("Learning Aim Reference\n");
-            
+            importTypeList.Children.Length.Should().Be(2);
+            importTypeList.Children[0].Text().Should().Be("Learning Aim Reference");
+            importTypeList.Children[1].Text().Should().Be("Local Enterprise Partnership");
+
             var upload = documentHtml.GetElementById("tl-upload") as IHtmlButtonElement;
             upload.TextContent.Trim().Should().Be("Upload");
             upload.Type.Should().Be("submit");
