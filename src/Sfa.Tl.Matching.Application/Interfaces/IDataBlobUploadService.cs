@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Application.Interfaces
@@ -8,8 +7,6 @@ namespace Sfa.Tl.Matching.Application.Interfaces
     {
         Task UploadAsync(DataUploadDto dto);
 
-        Task UploadFromStreamAsync(Stream stream, string containerName, string fileName, string contentType,
-            string createdByUserName);
-
+        Task UploadFromStreamAsync(DataStreamUploadDto dto);
     }
 }

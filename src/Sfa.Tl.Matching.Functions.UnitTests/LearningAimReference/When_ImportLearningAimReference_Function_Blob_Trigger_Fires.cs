@@ -19,7 +19,9 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LearningAimReference
             blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
             var context = new ExecutionContext();
             var logger = Substitute.For<ILogger>();
+
             _fileImportService = Substitute.For<IFileImportService<LearningAimReferenceStagingFileImportDto>>();
+            
             Functions.LearningAimReference.ImportLearningAimReferenceAsync(
                 blobStream,
                 "test",

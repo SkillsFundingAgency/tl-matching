@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Humanizer;
-using Sfa.Tl.Matching.Application.UnitTests.FileReader.LearningAimReference.Validation;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
@@ -10,7 +9,6 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.LocalEnterprisePartne
     public class When_LocalEnterprisePartnershipStaging_Row_Has_No_Name : IClassFixture<LocalEnterprisePartnershipStagingFileImportFixture>
     {
         private readonly LocalEnterprisePartnershipStagingFileImportFixture _fixture;
-
         public When_LocalEnterprisePartnershipStaging_Row_Has_No_Name(LocalEnterprisePartnershipStagingFileImportFixture fixture)
         {
             _fixture = fixture;
