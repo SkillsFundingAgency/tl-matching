@@ -17,6 +17,7 @@ using Sfa.Tl.Matching.Application.Configuration;
 using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging;
+using Sfa.Tl.Matching.Application.FileReader.LocalEnterprisePartnershipStaging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
@@ -88,6 +89,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         private static void RegisterFileReaders(IServiceCollection services)
         {
             RegisterCsvFileReader<LearningAimReferenceStagingDto, LearningAimReferenceStagingFileImportDto, LearningAimReferenceStaging, LearningAimReferenceStagingDataParser, LearningAimReferenceStagingDataValidator, NullDataProcessor<LearningAimReferenceStaging>>(services);
+            RegisterCsvFileReader<LocalEnterprisePartnershipStagingDto, LocalEnterprisePartnershipStagingFileImportDto, LocalEnterprisePartnership, LocalEnterprisePartnershipStagingDataParser, LocalEnterprisePartnershipStagingDataValidator, NullDataProcessor<LocalEnterprisePartnership>>(services);
         }
 
         private static void RegisterCsvFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)
@@ -142,6 +144,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             services.AddTransient<ISearchProvider, SqlSearchProvider>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+            services.AddTransient<IDataBlobUploadService, DataBlobUploadService>();
         }
 
         private static void RegisterNotificationsApi(IServiceCollection services, string apiKey)

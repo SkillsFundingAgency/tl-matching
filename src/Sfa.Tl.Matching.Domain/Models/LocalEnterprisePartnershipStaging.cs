@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Sfa.Tl.Matching.Domain.Models
 {
     // ReSharper disable once UnusedMember.Global
-    public class LocalEnterprisePartnership : BaseEntity
+    public class LocalEnterprisePartnershipStaging : BaseEntity
     {
         [MergeKey]
         public string Code { get; set; } 

@@ -98,8 +98,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.FileImportService
                 learningAimReferenceDtos.Add(new LearningAimReferenceStagingDto
                 {
                    Title = "LearningAimReference",
-                   LarId = (10000000 + i).ToString(),
-                   AwardOrgLarId = (10000000 + i).ToString(),
+                   LarId = $"10000000{i}",
+                   AwardOrgLarId = $"10000000{i}",
                    SourceCreatedOn = DateTime.UtcNow,
                    SourceModifiedOn = DateTime.UtcNow,
                    CreatedBy = "Test"

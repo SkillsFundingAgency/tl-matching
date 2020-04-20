@@ -7,5 +7,6 @@
 	[CreatedBy] NVARCHAR(50) NULL, 
 	[ModifiedOn] DATETIME2 NULL, 
 	[ModifiedBy] NVARCHAR(50) NULL,
+	[ChecksumCol] AS BINARY_CHECKSUM([Code], [Name])
 	CONSTRAINT [PK_LLocalEnterprisePartnership] PRIMARY KEY ([Id])
 )

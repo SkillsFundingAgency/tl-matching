@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
@@ -60,6 +61,18 @@ namespace Sfa.Tl.Matching.Application.FileReader
                 {
                     var row = await reader.ReadLineAsync();
                     var columnValues = row.Remove(0, 1).Remove(row.Length - 2).Split("\",\"");
+                    if (columnValues.Length == 1 && columnInfos.Count > 1)
+                    {
+                        columnValues = row.Split(",");
+                        for (int i = 0; i < columnValues.Length; i++)
+                        {
+                            if (columnValues[i].StartsWith("\"") && columnValues[i].EndsWith("\""))
+                            {
+                                columnValues[i] = columnValues[i].Remove(0, 1).Remove(row.Length - 2);
+                            }
+                        }
+
+                    }
                     ValidationResult validationResult;
 
                     foreach (var column in columnInfos)
