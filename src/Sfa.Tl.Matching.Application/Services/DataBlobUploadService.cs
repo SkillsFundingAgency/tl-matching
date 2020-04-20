@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -22,15 +23,33 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task UploadAsync(DataUploadDto dto)
         {
-            var blobContainer = await GetContainerAsync(dto.ImportType.ToString().ToLowerInvariant());
-
-            var blockBlob = blobContainer.GetBlockBlobReference(dto.FileName);
-            blockBlob.AddCreatedByMetadata(dto.UserName);
-            blockBlob.Properties.ContentType = dto.ContentType;
+            var blockBlob = await GetBlockBlobReference(
+                dto.ImportType.ToString().ToLowerInvariant(),
+                dto.FileName, dto.ContentType, dto.UserName);
 
             await blockBlob.UploadFromByteArrayAsync(dto.Data, 0, dto.Data.Length);
 
-            _logger.LogInformation($"successfuly uploaded {dto.FileName} to {dto.ImportType} folder");
+            _logger.LogInformation($"Successfuly uploaded {dto.FileName} to {dto.ImportType} folder");
+        }
+
+        public async Task UploadFromStreamAsync(Stream stream, string containerName, string fileName, string contentType, string createdByUserName)
+        {
+            var blockBlob = await GetBlockBlobReference(containerName, fileName, contentType, createdByUserName);
+
+            await blockBlob.UploadFromStreamAsync(stream);
+
+            _logger.LogInformation($"Successfuly uploaded {fileName} to {containerName} folder");
+        }
+
+        private async Task<CloudBlockBlob> GetBlockBlobReference(string containerName, string fileName,
+            string contentType, string createdByUserName)
+        {
+            var blobContainer = await GetContainerAsync(containerName);
+
+            var blockBlob = blobContainer.GetBlockBlobReference(fileName);
+            blockBlob.AddCreatedByMetadata(createdByUserName);
+            blockBlob.Properties.ContentType = contentType;
+            return blockBlob;
         }
 
         private async Task<CloudBlobContainer> GetContainerAsync(string containerName)

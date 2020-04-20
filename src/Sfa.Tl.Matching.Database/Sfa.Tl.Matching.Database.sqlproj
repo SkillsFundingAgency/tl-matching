@@ -115,6 +115,7 @@
     <Build Include="Views\OpportunityBasketItem.sql" />
     <Build Include="Tables\LocalEnterprisePartnership.sql" />
     <Build Include="Tables\PostcodeLookup.sql" />
+    <Build Include="Tables\LocalEnterprisePartnershipStaging.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

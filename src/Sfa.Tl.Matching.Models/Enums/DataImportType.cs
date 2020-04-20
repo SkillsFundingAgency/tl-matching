@@ -8,7 +8,7 @@ namespace Sfa.Tl.Matching.Models.Enums
     {
         [Description("Learning Aim Reference"), FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
         LearningAimReference,
-        [Description("Local Enterprise Partnership"), FileExtensions(Extensions = FileImportTypeExtensions.Zip)]
+        [Description("ONS Postcodes"), DisplayName("Local Enterprise Partnership"), FileExtensions(Extensions = FileImportTypeExtensions.Zip)]
         LocalEnterprisePartnership
     }
 }
