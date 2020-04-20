@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace Sfa.Tl.Matching.Models.Dto
 {
     public class LocalEnterprisePartnershipStagingDto

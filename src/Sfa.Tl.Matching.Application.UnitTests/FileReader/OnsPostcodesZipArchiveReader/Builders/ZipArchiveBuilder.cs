@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 
-namespace Sfa.Tl.Matching.Functions.UnitTests.LocalEnterprisePartnership.Builders
+namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.OnsPostcodesZipArchiveReader.Builders
 {
     public class ZipArchiveBuilder
     {

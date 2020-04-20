@@ -1,15 +1,15 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.IO.Compression;
+﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
+using Sfa.Tl.Matching.Data.Interfaces;
+using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Functions.Extensions;
 using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.Extensions;
 
 namespace Sfa.Tl.Matching.Functions
 {
@@ -22,34 +22,45 @@ namespace Sfa.Tl.Matching.Functions
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject]IDataBlobUploadService blobUploadService
-            //[Inject] IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> fileImportService
-        )
+            [Inject]IZipArchiveReader zipArchiveReader,
+            [Inject] IRepository<FunctionLog> functionlogRepository)
         {
-            var stream = await blockBlob.OpenReadAsync(null, null, null);
+            try
+            {
+                var stream = await blockBlob.OpenReadAsync(null, null, null);
 
-            var createdByUser = blockBlob.GetCreatedByMetadata();
+                logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
+                                      $"\tName:{name}\n" +
+                                      $"\tSize: {stream.Length} Bytes");
 
-            logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
-                                  $"\tName:{name}\n" +
-                                  $"\tSize: {stream.Length} Bytes");
+                var stopwatch = Stopwatch.StartNew();
 
-            var stopwatch = Stopwatch.StartNew();
+                var createdBlobs = await zipArchiveReader.ProcessAsync(new FileImportDto
+                {
+                    FileDataStream = stream,
+                    CreatedBy = blockBlob.GetCreatedByMetadata()
+                });
 
-            //var createdRecords = await fileImportService.BulkImportAsync(new LocalEnterprisePartnershipStagingFileImportDto
-            //{
-            //    FileDataStream = stream,
-            //    CreatedBy = blockBlob.GetCreatedByMetadata()
-            //});
-            //TODO: Move this to a service
-            ProcessZipFile(stream, blobUploadService, createdByUser, logger);
+                stopwatch.Stop();
 
-            stopwatch.Stop();
+                logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
+                                      $"\tName:{name}\n" +
+                                      $"\tBlobs createed: {createdBlobs}\n" +
+                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
+            }
+            catch (Exception e)
+            {
+                var errormessage = $"Error importing Ons Postcodes data. Internal Error Message {e}";
 
-            logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
-                                  $"\tName:{name}\n" +
-                                  //$"\tRows saved: {createdRecords}\n" +
-                                  $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
+                logger.LogError(errormessage);
+
+                await functionlogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = errormessage,
+                    FunctionName = context.FunctionName,
+                    RowNumber = -1
+                });
+            }
         }
 
         [FunctionName("ImportLocalEnterprisePartnership")]
@@ -59,92 +70,45 @@ namespace Sfa.Tl.Matching.Functions
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> fileImportService
-        )
+            [Inject] IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> fileImportService,
+            [Inject] IRepository<FunctionLog> functionlogRepository)
         {
-            var stream = await blockBlob.OpenReadAsync(null, null, null);
-
-            var createdByUser = blockBlob.GetCreatedByMetadata();
-
-            logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
-                                  $"\tName:{name}\n" +
-                                  $"\tSize: {stream.Length} Bytes");
-
-            var stopwatch = Stopwatch.StartNew();
-            
-            var createdRecords = await fileImportService.BulkImportAsync(new LocalEnterprisePartnershipStagingFileImportDto
+            try
             {
-                FileDataStream = stream,
-                CreatedBy = blockBlob.GetCreatedByMetadata()
-            });
+                var stream = await blockBlob.OpenReadAsync(null, null, null);
 
-            stopwatch.Stop();
+                logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
+                                      $"\tName:{name}\n" +
+                                      $"\tSize: {stream.Length} Bytes");
 
-            logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
-                                  $"\tName:{name}\n" +
-                                  //$"\tRows saved: {createdRecords}\n" +
-                                  $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
-        }
+                var stopwatch = Stopwatch.StartNew();
 
-        public void ProcessZipFile(Stream stream, IDataBlobUploadService blobUploadService, string createdByUser, ILogger logger)
-        {
-            using (var zipArchive = new ZipArchive(stream, ZipArchiveMode.Read))
-            {
-                //var directory = Configuration?["scriptOutputDirectory"] ?? $@"C:\temp\";
-                //var filePath = Helpers.FileHelpers.GetSqlFilePath(directory, SqlFileNamePrefix);
-                //Find the LEP file
-                //zipArchive.GetEntry();
-                
-                //using (var fileStreamWriter = new StreamWriter(filePath))
-                //{
-                foreach (var entry in zipArchive.Entries)
+                var createdRecords = await fileImportService.BulkImportAsync(new LocalEnterprisePartnershipStagingFileImportDto
                 {
-                    if (entry.FullName.StartsWith("Data/multi_csv/"))
-                    {
-                        Debug.WriteLine($"{entry.Name} - {entry.FullName}");
-                    }
+                    FileDataStream = stream,
+                    CreatedBy = blockBlob.GetCreatedByMetadata()
+                });
 
-                    if (entry.FullName.StartsWith("Documents/LEP names and codes EN"))
-                    {
-                        //var lepNames = zipArchive.GetEntry("Documents/LEP names and codes EN as at 04_17 v2.csv");
-                        using (var lepNamesStream = entry.Open())
-                        {
-                            //var reader = new BinaryReader(lepNamesStream);
-                            //TODO: Add an UploadFromStreamAsync - include some metadata + container name
-                            blobUploadService.UploadFromStreamAsync(
-                                stream,
-                                "localenterprisepartnership",
-                                entry.Name,
-                                FileImportTypeExtensions.Csv,
-                                createdByUser);
-                            //{
-                            //    //Data = reader.Read()
-                            //})
-                            /*
-                var blobContainer = await GetContainerAsync(
-                    string.IsNullOrEmpty(dto.ContainerName) 
-                        ? dto.ImportType.ToString().ToLowerInvariant() 
-                        : dto.ContainerName);
-                        */
-                            lepNamesStream.Dispose();
-                            //Save as "application/vnd.ms-excel"
-                        }
-                    }
+                stopwatch.Stop();
 
-                    //Console.WriteLine($"Processing zip file entry: {entry.Name}");
-                    //using (var entryStream = entry.Open())
-                    //{
-                    //    //var processor = ProcessorFactory.GetProcessor(entry.Name);
-                    //    //((IFileOutputProcessor)processor).FileStreamWriter = fileStreamWriter;
-                    //    //processor.Process(entryStream);
-                    //}
-                }
+                logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
+                                      $"\tName:{name}\n" +
+                                      $"\tRows saved: {createdRecords}\n" +
+                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
+            }
+            catch (Exception e)
+            {
+                var errormessage = $"Error importing LocalEnterprisePartnership data. Internal Error Message {e}";
 
+                logger.LogError(errormessage);
 
-                //WriteSqlEpilogue(fileStreamWriter);
-                //}
+                await functionlogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = errormessage,
+                    FunctionName = context.FunctionName,
+                    RowNumber = -1
+                });
             }
         }
-
     }
 }
