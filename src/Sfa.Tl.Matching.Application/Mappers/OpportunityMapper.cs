@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.Route, config => config.Ignore())
                 .ForMember(m => m.Id, config => config.Ignore())
                 .ForMember(m => m.CreatedOn, config => config.Ignore())
-                .ForMember(m => m.IsDeleted, config => config.Ignore()); ;
+                .ForMember(m => m.IsDeleted, config => config.Ignore());
 
             CreateMap<ReferralDto, Referral>()
                 .ForMember(m => m.OpportunityItemId, o => o.Ignore())
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
                 .ForMember(m => m.HadBadExperience, config => config.MapFrom(s => s.HadBadExperience))
                 .ForMember(m => m.ProvidersTooFarAway, config => config.MapFrom(s => s.ProvidersTooFarAway))
                 .ForAllOtherMembers(config => config.Ignore());
-            
+
             CreateMap<EmployerDetailDto, Opportunity>()
                 .ForMember(m => m.EmployerContact, o => o.MapFrom(s => s.PrimaryContact.ToTitleCase()))
                 .ForMember(m => m.EmployerContactEmail, o => o.MapFrom(s => s.Email))
@@ -88,7 +88,7 @@ namespace Sfa.Tl.Matching.Application.Mappers
             CreateMap<OpportunityItem, OpportunityItemDto>()
                 .ForMember(m => m.OpportunityType,
                     config => config.MapFrom(s =>
-                        ((OpportunityType) Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
+                        ((OpportunityType)Enum.Parse(typeof(OpportunityType), s.OpportunityType))))
                 .ForMember(m => m.OpportunityItemId, o => o.MapFrom(s => s.Id))
                 .ForMember(m => m.IsReferral, opt => opt.MapFrom(source => source.Referral.Any()))
                 .ForMember(m => m.EmployerFeedbackSent, config => config.Ignore())

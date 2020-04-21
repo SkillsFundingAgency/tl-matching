@@ -45,18 +45,6 @@ namespace Sfa.Tl.Matching.Application.Services
                    holidays.Any(hol => hol.Date == date.Date);
         }
 
-        public DateTime? GetReferralDateAsync(IList<DateTime> bankHolidays, string timeSpan)
-        {
-            var employerFeedbackTimespan = TimeSpan.Parse(timeSpan);
-
-            if (IsHoliday(UtcNow().Date, bankHolidays))
-                return null;
-
-            var referralDate = AddWorkingDays(UtcNow().Date, employerFeedbackTimespan, bankHolidays);
-
-            return referralDate;
-        }
-
         public DateTime GetNthWorkingDayDate(DateTime currentDate, int n, IList<DateTime> bankHolidays)
         {
             var year = currentDate.Year;
