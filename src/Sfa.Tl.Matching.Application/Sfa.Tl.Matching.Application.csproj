@@ -19,7 +19,7 @@
     <PackageReference Include="Humanizer.Core.uk" Version="2.7.9" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="3.0.10" />
-    <PackageReference Include="Notify" Version="2.5.1" />
+    <PackageReference Include="Notify" Version="2.7.0" />
   </ItemGroup>
 
   <ItemGroup>
