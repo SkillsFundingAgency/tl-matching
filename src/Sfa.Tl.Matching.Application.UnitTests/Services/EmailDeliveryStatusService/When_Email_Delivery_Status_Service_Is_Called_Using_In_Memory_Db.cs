@@ -48,7 +48,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             dbContext.Add(emailHistory);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             payload.Id = emailHistory.NotificationId.GetValueOrDefault();
 
@@ -98,7 +98,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             dbContext.Add(emailHistory);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             payload.Status = status;
             payload.Id = emailHistory.NotificationId.GetValueOrDefault();
@@ -148,7 +148,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             dbContext.Add(emailHistory);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             payload.Status = status;
             payload.Id = emailHistory.NotificationId.GetValueOrDefault();
@@ -199,7 +199,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             dbContext.Add(emailHistory);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             payload.Status = status;
             payload.Id = Guid.Empty;
@@ -248,7 +248,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
 
             dbContext.Add(emailHistory);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             var sut = SutSetUp(dbContext, opportunityRepoLogger, emailTemplateLogger, emailHistoryLogger,
                 emailDeliveryServiceStatusLogger, emailServiceLogger, notificationClient, configuration, messageQueueService);

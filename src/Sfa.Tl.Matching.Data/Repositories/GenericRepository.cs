@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             if (entities.Count == 0) return;
 
-            using (var transaction = _dbContext.Database.BeginTransaction())
+            using (var transaction = await _dbContext.Database.BeginTransactionAsync())
             {
                 try
                 {
@@ -167,7 +167,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     }
                 }).ToList();
 
-                using (var transaction = _dbContext.Database.BeginTransaction())
+                using (var transaction = await _dbContext.Database.BeginTransactionAsync())
                 {
                     try
                     {
