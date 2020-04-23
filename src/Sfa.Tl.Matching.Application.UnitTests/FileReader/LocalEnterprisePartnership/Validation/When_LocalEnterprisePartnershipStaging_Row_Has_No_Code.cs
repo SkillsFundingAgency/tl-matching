@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.LocalEnterprisePartnership.Validation
 {
-    public class When_LocalEnterprisePartnershipNameMapping_Row_Has_No_LarId : IClassFixture<LocalEnterprisePartnershipStagingFileImportFixture>
+    public class When_LocalEnterprisePartnershipStaging_Row_Has_No_Code : IClassFixture<LocalEnterprisePartnershipStagingFileImportFixture>
     {
         private readonly LocalEnterprisePartnershipStagingFileImportFixture _fixture;
 
-        public When_LocalEnterprisePartnershipNameMapping_Row_Has_No_LarId(LocalEnterprisePartnershipStagingFileImportFixture fixture)
+        public When_LocalEnterprisePartnershipStaging_Row_Has_No_Code(LocalEnterprisePartnershipStagingFileImportFixture fixture)
         {
             _fixture = fixture;
         }

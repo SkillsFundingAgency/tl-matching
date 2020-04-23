@@ -10,14 +10,14 @@ namespace Sfa.Tl.Matching.Application.FileReader.LocalEnterprisePartnershipStagi
         {
             if (!(fileImportDto is LocalEnterprisePartnershipStagingFileImportDto data)) return null;
 
-            var learningAimReferenceDto = new LocalEnterprisePartnershipStagingDto
+            var localEnterprisePartnershipStagingDto = new LocalEnterprisePartnershipStagingDto
             {
                 Code = data.Code,
                 Name = data.Name,
                 CreatedBy = data.CreatedBy
             };
 
-            return new List<LocalEnterprisePartnershipStagingDto> { learningAimReferenceDto };
+            return new List<LocalEnterprisePartnershipStagingDto> { localEnterprisePartnershipStagingDto };
         }
     }
 }

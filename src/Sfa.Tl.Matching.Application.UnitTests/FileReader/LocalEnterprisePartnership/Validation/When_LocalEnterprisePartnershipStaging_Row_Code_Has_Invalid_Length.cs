@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.LocalEnterprisePartnership.Validation
 {
-    public class When_LocalEnterprisePartnershipStaging_Row_LaarId_Has_Invalid_Length : IClassFixture<LocalEnterprisePartnershipStagingFileImportFixture>
+    public class When_LocalEnterprisePartnershipStaging_Row_Code_Has_Invalid_Length : IClassFixture<LocalEnterprisePartnershipStagingFileImportFixture>
     {
         private readonly LocalEnterprisePartnershipStagingFileImportFixture _fixture;
 
-        public When_LocalEnterprisePartnershipStaging_Row_LaarId_Has_Invalid_Length(LocalEnterprisePartnershipStagingFileImportFixture fixture)
+        public When_LocalEnterprisePartnershipStaging_Row_Code_Has_Invalid_Length(LocalEnterprisePartnershipStagingFileImportFixture fixture)
         {
             _fixture = fixture;
         }

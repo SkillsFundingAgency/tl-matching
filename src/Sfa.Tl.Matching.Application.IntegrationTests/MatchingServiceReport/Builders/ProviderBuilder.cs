@@ -39,11 +39,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                     {
                         IsRemoved = true,
                         IsEnabledForReferral = true,
-                        County = "test county" + venue,
-                        Name = "test name" + venue,
-                        Postcode = "POST PO" + venue,
-                        Source = "test" + venue,
-                        Town = "test town" + venue,
+                        County = $"test county{venue}",
+                        Name = $"test name{venue}",
+                        Postcode = $"POST PO{venue}",
+                        Source = $"test{venue}",
+                        Town = $"test town{venue}",
                         CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
                         ProviderQualification = new List<ProviderQualification>
                         {
