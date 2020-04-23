@@ -75,6 +75,9 @@
     <None Update="LocalEnterprisePartnership\LocalEnterprisePartnership_Empty_Db_Add.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="PostcodeLookup\PostcodeLookup_Empty_Db_Add.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -110,5 +110,53 @@ namespace Sfa.Tl.Matching.Functions
                 });
             }
         }
+
+        [FunctionName("ImportPostcodeLookup")]
+        public async Task ImportPostcodeLookupAsync(
+            [BlobTrigger("postcodes/{name}", Connection = "BlobStorageConnectionString")]
+            ICloudBlob blockBlob,
+            string name,
+            ExecutionContext context,
+            ILogger logger,
+            [Inject] IFileImportService<PostcodeLookupStagingFileImportDto> fileImportService,
+            [Inject] IRepository<FunctionLog> functionlogRepository)
+        {
+            try
+            {
+                var stream = await blockBlob.OpenReadAsync(null, null, null);
+
+                logger.LogInformation($"Function {context.FunctionName} processing blob\n" +
+                                      $"\tName:{name}\n" +
+                                      $"\tSize: {stream.Length} Bytes");
+
+                var stopwatch = Stopwatch.StartNew();
+
+                var createdRecords = await fileImportService.BulkImportAsync(new PostcodeLookupStagingFileImportDto
+                {
+                    FileDataStream = stream,
+                    CreatedBy = blockBlob.GetCreatedByMetadata()
+                });
+
+                stopwatch.Stop();
+
+                logger.LogInformation($"Function {context.FunctionName} processed blob\n" +
+                                      $"\tName:{name}\n" +
+                                      $"\tRows saved: {createdRecords}\n" +
+                                      $"\tTime taken: {stopwatch.ElapsedMilliseconds: #,###}ms");
+            }
+            catch (Exception e)
+            {
+                var errormessage = $"Error importing PostcodeLookup data. Internal Error Message {e}";
+
+                logger.LogError(errormessage);
+
+                await functionlogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = errormessage,
+                    FunctionName = context.FunctionName,
+                    RowNumber = -1
+                });
+            }
+        }
     }
 }

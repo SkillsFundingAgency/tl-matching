@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Castle.Core.Internal;
 using Sfa.Tl.Matching.Data;
-using Sfa.Tl.Matching.Domain.Models;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Builders
 {
@@ -14,20 +14,33 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
             _context = context;
         }
 
-        public PostcodeLookup CreatePostcodeLookup()
+        public IList<Domain.Models.PostcodeLookup> CreatePostcodeLookup(int postcodeCount = 1)
         {
-            var postcode = new PostcodeLookup
-            {
-                Postcode = "PO1 TST",
-                LepCode = "LEP000001",
-                CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
-            };
+            var postcodes = new List<Domain.Models.PostcodeLookup>();
 
-            _context.Add(postcode);
+            _context.AddRange(
+                Enumerable.Range(1, postcodeCount).Select(index =>
+                    new Domain.Models.PostcodeLookup
+                    {
+                        Postcode = $"POST PO{index}",
+                        LepCode = "LEP000001",
+                        CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests"
+                    }));
 
+            //for (var i = 0; i < postcodeCount; i++)
+            //{
+            //    postcodes.Add(new Domain.Models.PostcodeLookup
+            //    {
+            //        Postcode = $"POST PO{i}",
+            //        LepCode = "LEP000001",
+            //        CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests"
+            //    });
+            //}
+
+            _context.AddRange(postcodes);
             _context.SaveChanges();
 
-            return postcode;
+            return postcodes;
         }
 
         public void ClearData()

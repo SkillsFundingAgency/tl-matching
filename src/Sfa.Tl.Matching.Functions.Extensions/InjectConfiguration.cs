@@ -18,6 +18,7 @@ using Sfa.Tl.Matching.Application.FileReader;
 using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging;
 using Sfa.Tl.Matching.Application.FileReader.LocalEnterprisePartnershipStaging;
+using Sfa.Tl.Matching.Application.FileReader.PostcodeLookupStaging;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
@@ -90,6 +91,7 @@ namespace Sfa.Tl.Matching.Functions.Extensions
         {
             RegisterCsvFileReader<LearningAimReferenceStagingDto, LearningAimReferenceStagingFileImportDto, LearningAimReferenceStaging, LearningAimReferenceStagingDataParser, LearningAimReferenceStagingDataValidator, NullDataProcessor<LearningAimReferenceStaging>>(services);
             RegisterCsvFileReader<LocalEnterprisePartnershipStagingDto, LocalEnterprisePartnershipStagingFileImportDto, LocalEnterprisePartnershipStaging, LocalEnterprisePartnershipStagingDataParser, LocalEnterprisePartnershipStagingDataValidator, NullDataProcessor<LocalEnterprisePartnershipStaging>>(services);
+            RegisterCsvFileReader<PostcodeLookupStagingDto, PostcodeLookupStagingFileImportDto, PostcodeLookupStaging, PostcodeLookupStagingDataParser, PostcodeLookupStagingDataValidator, NullDataProcessor<PostcodeLookupStaging>>(services);
             
             services.AddTransient<IZipArchiveReader, OnsPostcodesZipArchiveReader>();
         }

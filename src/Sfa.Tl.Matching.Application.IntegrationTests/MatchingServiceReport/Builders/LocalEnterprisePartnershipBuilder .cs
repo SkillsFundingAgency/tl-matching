@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
             {
                 Code = "LEP000001",
                 Name = "LEP Name",
-                CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
+                CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests"
             };
 
             _context.Add(lep);

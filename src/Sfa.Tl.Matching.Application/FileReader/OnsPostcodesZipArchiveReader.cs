@@ -24,9 +24,26 @@ namespace Sfa.Tl.Matching.Application.FileReader
             {
                 foreach (var entry in zipArchive.Entries)
                 {
-                    if (entry.FullName.StartsWith("Data/multi_csv/"))
+                    //if (entry.FullName.StartsWith("Data/multi_csv/"))
+                    //{
+                    //    Debug.WriteLine($"{entry.Name} - {entry.FullName}");
+                    //}
+
+                    if (entry.FullName.StartsWith("Data"))
                     {
                         Debug.WriteLine($"{entry.Name} - {entry.FullName}");
+                    }
+
+                    //Data/ONSPD_MAY_2019_UK.csv
+                    if (entry.FullName.StartsWith("Data/ONSPD_", StringComparison.InvariantCultureIgnoreCase) &&
+                        entry.Name.EndsWith(".csv", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        await UploadBlobAsync(entry,
+                            "postcodes",
+                            FileImportTypeExtensions.Csv,
+                            fileImportDto.CreatedBy);
+
+                        outputBlobCount++;
                     }
 
                     if (entry.FullName.StartsWith("Documents/LEP names and codes EN", StringComparison.InvariantCultureIgnoreCase) && 

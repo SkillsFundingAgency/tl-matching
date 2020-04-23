@@ -11,12 +11,12 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Functions.UnitTests.LocalEnterprisePartnership
 {
-    public class When_ImportLocalEnterprisePartnership_Function_Blob_Trigger_Fires
+    public class When_ImportPostcodeLookup_Function_Blob_Trigger_Fires
     {
-        private readonly IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> _fileImportService;
+        private readonly IFileImportService<PostcodeLookupStagingFileImportDto> _fileImportService;
         private readonly IRepository<FunctionLog> _functionLogRepository;
 
-        public When_ImportLocalEnterprisePartnership_Function_Blob_Trigger_Fires()
+        public When_ImportPostcodeLookup_Function_Blob_Trigger_Fires()
         {
             var blobStream = Substitute.For<ICloudBlob>();
             blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
@@ -26,10 +26,10 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LocalEnterprisePartnership
 
             _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            _fileImportService = Substitute.For<IFileImportService<LocalEnterprisePartnershipStagingFileImportDto>>();
+            _fileImportService = Substitute.For<IFileImportService<PostcodeLookupStagingFileImportDto>>();
 
             var localEnterprisePartnership = new Functions.LocalEnterprisePartnership();
-            localEnterprisePartnership.ImportLocalEnterprisePartnershipAsync(
+            localEnterprisePartnership.ImportPostcodeLookupAsync(
                 blobStream,
                 "test",
                 context,
@@ -43,7 +43,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LocalEnterprisePartnership
         {
             _fileImportService
                 .Received(1)
-                .BulkImportAsync(Arg.Any<LocalEnterprisePartnershipStagingFileImportDto>());
+                .BulkImportAsync(Arg.Any<PostcodeLookupStagingFileImportDto>());
         }
 
         [Fact]
