@@ -99,7 +99,6 @@
     <Build Include="Tables\OpportunityItem.sql" />
     <Build Include="Tables\Opportunity.sql" />
     <None Include="PostDeployment\Remove Obsolete Tables.sql" />
-    <Build Include="Tables\OLDOpportunity.sql" />
     <Build Include="Tables\BankHoliday.sql" />
     <Build Include="Tables\ServiceStatusHistory.sql" />
     <Build Include="Tables\UserCache.sql" />
