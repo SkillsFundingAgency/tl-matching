@@ -10,8 +10,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Extensions
     {
         [Theory(DisplayName = "GetFileExtensionType Data Tests")]
         [InlineData(DataImportType.LearningAimReference, FileImportTypeExtensions.Csv)]
-        [InlineData(DataImportType.OnsPostcodes, FileImportTypeExtensions.Zip)]
-        public void RoundToNearestMinuteDataTests(DataImportType importType, string result)
+        [InlineData(DataImportType.LocalEnterprisePartnership, FileImportTypeExtensions.Csv)]
+        [InlineData(DataImportType.Postcodes, FileImportTypeExtensions.Csv)]
+        public void GetFileExtensionTypeDataTests(DataImportType importType, string result)
         {
             var extensionType = importType.GetFileExtensionType();
             extensionType.Should().Be(result);

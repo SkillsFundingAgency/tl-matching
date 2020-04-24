@@ -10,9 +10,13 @@ namespace Sfa.Tl.Matching.Models.Enums
         [FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
         LearningAimReference,
 
-        [Description("ONS Postcodes")]
-        [DisplayName("Local Enterprise Partnership")]
-        [FileExtensions(Extensions = FileImportTypeExtensions.Zip)]
-        OnsPostcodes
+        [Description("Local Enterprise Partnership")]
+        [FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
+        LocalEnterprisePartnership,
+
+        [Description("Postcodes")]
+        [DisplayName("ONS Postcodes")]
+        [FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
+        Postcodes
     }
 }
