@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
             {
                 Town = "test town",
                 JobRole = "test job role",
-                Postcode = "PO1 TST",
+                Postcode = "POST PO1",
 
                 Placements = 1,
                 PlacementsKnown = true,
@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
             {
                 Town = "test town",
                 JobRole = "test job role",
-                Postcode = "PO1 TST",
+                Postcode = "POST PO1",
 
                 Placements = 1,
                 PlacementsKnown = true,
