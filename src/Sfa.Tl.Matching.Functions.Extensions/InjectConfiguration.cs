@@ -92,8 +92,6 @@ namespace Sfa.Tl.Matching.Functions.Extensions
             RegisterCsvFileReader<LearningAimReferenceStagingDto, LearningAimReferenceStagingFileImportDto, LearningAimReferenceStaging, LearningAimReferenceStagingDataParser, LearningAimReferenceStagingDataValidator, NullDataProcessor<LearningAimReferenceStaging>>(services);
             RegisterCsvFileReader<LocalEnterprisePartnershipStagingDto, LocalEnterprisePartnershipStagingFileImportDto, LocalEnterprisePartnershipStaging, LocalEnterprisePartnershipStagingDataParser, LocalEnterprisePartnershipStagingDataValidator, NullDataProcessor<LocalEnterprisePartnershipStaging>>(services);
             RegisterCsvFileReader<PostcodeLookupStagingDto, PostcodeLookupStagingFileImportDto, PostcodeLookupStaging, PostcodeLookupStagingDataParser, PostcodeLookupStagingDataValidator, NullDataProcessor<PostcodeLookupStaging>>(services);
-            
-            services.AddTransient<IZipArchiveReader, OnsPostcodesZipArchiveReader>();
         }
 
         private static void RegisterCsvFileReader<TDto, TImportDto, TEntity, TParser, TValidator, TDataProcessor>(IServiceCollection services)

@@ -13,16 +13,16 @@ using Sfa.Tl.Matching.Models.Dto;
 
 namespace Sfa.Tl.Matching.Functions
 {
-    public class LocalEnterprisePartnership
+    public class PostcodeLookup
     {
-        [FunctionName("ImportLocalEnterprisePartnership")]
-        public async Task ImportLocalEnterprisePartnershipAsync(
-            [BlobTrigger("localenterprisepartnership/{name}", Connection = "BlobStorageConnectionString")]
+        [FunctionName("ImportPostcodeLookup")]
+        public async Task ImportPostcodeLookupAsync(
+            [BlobTrigger("postcodes/{name}", Connection = "BlobStorageConnectionString")]
             ICloudBlob blockBlob,
             string name,
             ExecutionContext context,
             ILogger logger,
-            [Inject] IFileImportService<LocalEnterprisePartnershipStagingFileImportDto> fileImportService,
+            [Inject] IFileImportService<PostcodeLookupStagingFileImportDto> fileImportService,
             [Inject] IRepository<FunctionLog> functionlogRepository)
         {
             try
@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 var stopwatch = Stopwatch.StartNew();
 
-                var createdRecords = await fileImportService.BulkImportAsync(new LocalEnterprisePartnershipStagingFileImportDto
+                var createdRecords = await fileImportService.BulkImportAsync(new PostcodeLookupStagingFileImportDto
                 {
                     FileDataStream = stream,
                     CreatedBy = blockBlob.GetCreatedByMetadata()
@@ -50,7 +50,7 @@ namespace Sfa.Tl.Matching.Functions
             }
             catch (Exception e)
             {
-                var errormessage = $"Error importing LocalEnterprisePartnership data. Internal Error Message {e}";
+                var errormessage = $"Error importing PostcodeLookup data. Internal Error Message {e}";
 
                 logger.LogError(errormessage);
 

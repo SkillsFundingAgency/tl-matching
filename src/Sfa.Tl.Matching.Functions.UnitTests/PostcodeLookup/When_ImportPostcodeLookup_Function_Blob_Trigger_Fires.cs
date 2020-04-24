@@ -9,7 +9,7 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Functions.UnitTests.LocalEnterprisePartnership
+namespace Sfa.Tl.Matching.Functions.UnitTests.PostcodeLookup
 {
     public class When_ImportPostcodeLookup_Function_Blob_Trigger_Fires
     {
@@ -28,8 +28,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.LocalEnterprisePartnership
 
             _fileImportService = Substitute.For<IFileImportService<PostcodeLookupStagingFileImportDto>>();
 
-            var localEnterprisePartnership = new Functions.LocalEnterprisePartnership();
-            localEnterprisePartnership.ImportPostcodeLookupAsync(
+            var postcodeLookup = new Functions.PostcodeLookup();
+            postcodeLookup.ImportPostcodeLookupAsync(
                 blobStream,
                 "test",
                 context,
