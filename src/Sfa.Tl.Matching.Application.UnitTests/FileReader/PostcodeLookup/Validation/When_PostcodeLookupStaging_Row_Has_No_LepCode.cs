@@ -1,7 +1,4 @@
 ﻿using FluentAssertions;
-using Humanizer;
-using Sfa.Tl.Matching.Models.Dto;
-using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.PostcodeLookup.Validation
