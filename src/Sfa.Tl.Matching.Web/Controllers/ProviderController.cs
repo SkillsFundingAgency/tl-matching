@@ -200,10 +200,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
         {
             searchParametersViewModel.ShowAllProvider = true;
 
-            return new ProviderSearchViewModel(searchParametersViewModel)
-            {
-                IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
-            };
+            return new ProviderSearchViewModel(searchParametersViewModel);
         }
 
         private ProviderSearchViewModel GetProviderSearchUkRlpViewModel(ProviderSearchParametersViewModel searchParametersViewModel, ProviderSearchResultDto dto)
@@ -213,8 +210,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 SearchResults =
                 {
                     IsUkRlp = true
-                },
-                IsAuthorisedUser = HttpContext.User.IsAuthorisedAdminUser(_configuration.AuthorisedAdminUserEmail)
+                }
             };
             viewModel.SearchResults.Results.Add(new ProviderSearchResultItemViewModel
             {
