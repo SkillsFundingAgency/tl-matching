@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
     public class When_Details_Page_Is_Loaded : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
         private const string Title = "Confirm contact details for industry placements";
+        private const string HeaderText = "Confirm that the employer’s contact details for industry placements are accurate and up-to-date";
         private const int OpportunityId = 1000;
         private const int OpportunityItemId = 2000;
 
@@ -37,7 +38,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Employer
             documentHtml.Title.Should().Be($"{Title} - {Constants.ServiceName} - GOV.UK");
 
             var header1 = documentHtml.QuerySelector(".govuk-heading-l");
-            header1.TextContent.Should().Be(Title);
+            header1.TextContent.Should().Be(HeaderText);
 
             var employerName = documentHtml.QuerySelector(".govuk-caption-l");
             employerName.TextContent.Should().Be("Company Name");
