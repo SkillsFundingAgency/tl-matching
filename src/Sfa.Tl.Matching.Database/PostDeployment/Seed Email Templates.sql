@@ -15,6 +15,8 @@ USING (VALUES
 	(N'EmployerReferralV3', N'66fffc15-2a48-4143-a729-b484f5c26980'),
 	(N'ProviderReferralV4', N'b5de544b-60f7-42c2-9859-73c5db3dee5d'),
 	(N'EmployerReferralV4', N'1a69302f-de7d-45d4-89f3-68be12f7fe08'),
+	(N'ProviderReferralV5', N'33b65be0-b98c-41ae-94bb-e0723f8fbd24'),
+	(N'EmployerReferralV5', N'7f34b79c-ca08-4132-99e2-5727e6a9e9e3'),
 	(N'ProviderFeedback', N'8249a0b6-40a5-46dd-a370-13c6a9651d2c'),
 	(N'ProviderFeedbackV2', N'bf90646f-8c95-4c8e-a770-567af1213a4d'),
 	(N'EmployerAupaBlank', N'18c53f52-25b3-4f77-89fc-582dc545d0ed'),

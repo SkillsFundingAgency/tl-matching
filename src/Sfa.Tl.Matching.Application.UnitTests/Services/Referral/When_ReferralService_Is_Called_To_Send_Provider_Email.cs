@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .Received(2)
                 .SendEmailAsync(Arg.Any<int?>(),
                     Arg.Is<string>(
-                        templateName => templateName == "ProviderReferralV4"),
+                        templateName => templateName == "ProviderReferralV5"),
                     Arg.Any<string>(),
                     Arg.Any<IDictionary<string, string>>(),
                     Arg.Any<string>());

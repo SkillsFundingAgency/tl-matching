@@ -70,7 +70,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             _emailService
                 .Received(1)
                 .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
-                        templateName => templateName == "EmployerReferralV4"),
+                        templateName => templateName == "EmployerReferralV5"),
                     Arg.Is<string>(
                         toAddress => toAddress == "employer.contact@employer.co.uk"),
                     Arg.Any<IDictionary<string, string>>(),
