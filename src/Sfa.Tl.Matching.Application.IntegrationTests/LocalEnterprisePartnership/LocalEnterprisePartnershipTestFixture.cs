@@ -34,8 +34,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LocalEnterprisePartnershi
             MatchingDbContext = testConfig.GetDbContext();
             var matchingConfiguration = TestConfiguration.MatchingConfiguration;
 
-            var repository = new SqlBulkInsertRepository<LocalEnterprisePartnershipStaging>(loggerRepository, matchingConfiguration);
             var functionLogRepository = new GenericRepository<FunctionLog>(new NullLogger<GenericRepository<FunctionLog>>(), MatchingDbContext);
+            var repository = new SqlBulkInsertRepository<LocalEnterprisePartnershipStaging>(loggerRepository, matchingConfiguration, functionLogRepository);
             
             var dataValidator = new LocalEnterprisePartnershipStagingDataValidator();
             var dataParser = new LocalEnterprisePartnershipStagingDataParser();

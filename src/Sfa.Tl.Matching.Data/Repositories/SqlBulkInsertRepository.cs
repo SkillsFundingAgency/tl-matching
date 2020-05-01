@@ -19,18 +19,29 @@ namespace Sfa.Tl.Matching.Data.Repositories
     {
         private readonly ILogger<SqlBulkInsertRepository<T>> _logger;
         private readonly MatchingConfiguration _matchingConfiguration;
+        private readonly IRepository<FunctionLog> _functionlogRepository;
 
-        public SqlBulkInsertRepository(ILogger<SqlBulkInsertRepository<T>> logger, MatchingConfiguration matchingConfiguration)
+        public SqlBulkInsertRepository(ILogger<SqlBulkInsertRepository<T>> logger, 
+            MatchingConfiguration matchingConfiguration,
+            IRepository<FunctionLog> functionlogRepository)
         {
             _logger = logger;
             _matchingConfiguration = matchingConfiguration;
+            _functionlogRepository = functionlogRepository;
         }
 
         public async Task BulkInsertAsync(IList<T> entities)
         {
             var dataTable = entities.ToDataTable();
 
-            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            await _functionlogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"BulkInsertAsync preparing to write {entities.Count} entities",
+                FunctionName = this.GetType().Name,
+                RowNumber = -1
+            });
+
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 20, 0), TransactionScopeAsyncFlowOption.Enabled))
             {
                 using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
                 {
@@ -89,13 +100,27 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 }
                 transactionScope.Complete();
             }
+
+            await _functionlogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"BulkInsertAsync done",
+                FunctionName = this.GetType().Name,
+                RowNumber = -1
+            });
         }
 
         public async Task<int> MergeFromStagingAsync()
         {
             int numberOfRecordsAffected;
 
-            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            await _functionlogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"MergeFromStagingAsync preparing to write merge",
+                FunctionName = this.GetType().Name,
+                RowNumber = -1
+            });
+
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(0, 20, 0), TransactionScopeAsyncFlowOption.Enabled))
             {
                 using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
                 {
@@ -137,6 +162,13 @@ namespace Sfa.Tl.Matching.Data.Repositories
                 }
                 transactionScope.Complete();
             }
+
+            await _functionlogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"MergeFromStagingAsync done - {numberOfRecordsAffected} records",
+                FunctionName = this.GetType().Name,
+                RowNumber = -1
+            });
 
             return numberOfRecordsAffected;
         }
