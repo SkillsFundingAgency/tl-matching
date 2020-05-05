@@ -46,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                     SentTo = "sent-to@email.com",
                     Status = "permanent-failure",
                     EmailTemplateId = 14,
-                    EmailTemplateName = "EmployerReferralV4",
+                    EmailTemplateName = "EmployerReferralV5",
                     CreatedBy = "CreatedBy"
                 });
 
