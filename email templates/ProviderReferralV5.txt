@@ -13,7 +13,7 @@ The employer is:
 You do not need to do anything else. Keep this email as a reminder of this employer’s placement requirements. 
 
 # If not, you must contact them
-Please contact them within the next 2 to 3 working days, even if you do not have suitable students for them at present. We will follow this up next month to check how your discussions are going.
+Please contact them within the next 2 to 3 working days, even if you do not have suitable students for them right now. We will follow this up next month to check how your discussions are going.
 
 * Employer name:  ((employer_business_name))
 * Contact name: ((employer_contact_name))
