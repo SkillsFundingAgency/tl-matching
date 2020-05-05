@@ -14,6 +14,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
         private readonly By _confirmButton = By.Id("tl-confirm");
 
         private const string Title = "Confirm contact details for industry placements";
+        private const string HeaderText = "Confirm that the employer’s contact details for industry placements are accurate and up-to-date";
 
         public DetailsPage(IWebDriver driver) : base(driver)
         {
@@ -64,7 +65,7 @@ namespace Sfa.Tl.Matching.Web.SeleniumTests.PageObjects.Employer
         public void AssertContent()
         {
             AssertTitle(Title);
-            AssertHeader1(Title);
+            AssertHeader1(HeaderText);
         }
     }
 }
