@@ -34,8 +34,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.PostcodeLookup
             MatchingDbContext = testConfig.GetDbContext();
             var matchingConfiguration = TestConfiguration.MatchingConfiguration;
 
+            var repository = new SqlBulkInsertRepository<PostcodeLookupStaging>(loggerRepository, matchingConfiguration);
             var functionLogRepository = new GenericRepository<FunctionLog>(new NullLogger<GenericRepository<FunctionLog>>(), MatchingDbContext);
-            var repository = new SqlBulkInsertRepository<PostcodeLookupStaging>(loggerRepository, matchingConfiguration, functionLogRepository);
             
             var dataValidator = new PostcodeLookupStagingDataValidator();
             var dataParser = new PostcodeLookupStagingDataParser();

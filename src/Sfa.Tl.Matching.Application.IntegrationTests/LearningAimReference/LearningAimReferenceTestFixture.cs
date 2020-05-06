@@ -34,9 +34,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
             MatchingDbContext = testConfig.GetDbContext();
             var matchingConfiguration = TestConfiguration.MatchingConfiguration;
 
+            var repository = new SqlBulkInsertRepository<LearningAimReferenceStaging>(loggerRepository, matchingConfiguration);
             var functionLogRepository = new GenericRepository<FunctionLog>(new NullLogger<GenericRepository<FunctionLog>>(), MatchingDbContext);
-            var repository = new SqlBulkInsertRepository<LearningAimReferenceStaging>(loggerRepository, matchingConfiguration, functionLogRepository);
-
+            
             var dataValidator = new LearningAimReferenceStagingDataValidator();
             var dataParser = new LearningAimReferenceStagingDataParser();
             var nullDataProcessor = new NullDataProcessor<LearningAimReferenceStaging>();
