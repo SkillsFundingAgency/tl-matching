@@ -17,6 +17,8 @@ namespace Sfa.Tl.Matching.Data.Repositories
 {
     public class SqlBulkInsertRepository<T> : IBulkInsertRepository<T> where T : BaseEntity, new()
     {
+        private const int DefaultCommandTimeout = 1200;
+
         private readonly ILogger<SqlBulkInsertRepository<T>> _logger;
         private readonly MatchingConfiguration _matchingConfiguration;
 
@@ -26,7 +28,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             _matchingConfiguration = matchingConfiguration;
         }
 
-        public async Task BulkInsertAsync(IList<T> entities)
+        public async Task BulkInsertAsync(IEnumerable<T> entities)
         {
             var dataTable = entities.ToDataTable();
 
@@ -39,7 +41,11 @@ namespace Sfa.Tl.Matching.Data.Repositories
                     using (var transaction = connection.BeginTransaction())
                     {
                         //var deleteCommand = new SqlCommand($"DELETE FROM {typeof(T).Name}; DBCC CHECKIDENT ('dbo.{typeof(T).Name}',RESEED, 0);", connection, transaction);
-                        var deleteCommand = new SqlCommand($"DELETE FROM {typeof(T).Name};", connection, transaction);
+                        var deleteCommand = new SqlCommand($"DELETE FROM {typeof(T).Name};", connection, transaction)
+                        {
+                            CommandTimeout = DefaultCommandTimeout
+                        };
+                        
                         deleteCommand.ExecuteNonQuery();
 
                         using (var bulkCopy = CreateSqlBulkCopy(connection, transaction, dataTable))
@@ -108,7 +114,10 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         {
                             var mergeSql = GetMergeSql();
 
-                            var mergeCommand = new SqlCommand(mergeSql, connection, transaction) { CommandTimeout = 120 };
+                            var mergeCommand = new SqlCommand(mergeSql, connection, transaction)
+                            {
+                                CommandTimeout = DefaultCommandTimeout
+                            };
 
                             numberOfRecordsAffected = await mergeCommand.ExecuteNonQueryAsync();
 
@@ -174,6 +183,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             var bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction)
             {
                 BatchSize = 100000,
+                BulkCopyTimeout = 0,
                 DestinationTableName = $"dbo.{typeof(T).Name}"
             };
 

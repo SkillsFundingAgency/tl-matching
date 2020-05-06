@@ -8,7 +8,8 @@ namespace Sfa.Tl.Matching.Models.Dto
         public override Stream FileDataStream { get; set; }
         public override int? NumberOfHeaderRows => 1;
 
-        [Column(Order = 0)] public string Postcode { get; set; }
+        //Use the "pcds" column from the input - this is outward code + space + inward code
+        [Column(Order = 2)] public string Postcode { get; set; }
         [Column(Order = 44)] public string LepCode { get; set; }
     }
 }
