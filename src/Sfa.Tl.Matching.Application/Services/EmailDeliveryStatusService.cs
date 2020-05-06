@@ -132,6 +132,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 case EmailTemplateName.EmployerReferralComplex:
                 case EmailTemplateName.EmployerReferralV3:
                 case EmailTemplateName.EmployerReferralV4:
+                case EmailTemplateName.EmployerReferralV5:
                     emailBodyDto = await _opportunityRepository.GetEmailDeliveryStatusForEmployerAsync(
                         emailHistoryDto.OpportunityId.Value,
                         emailHistoryDto.SentTo);
@@ -143,6 +144,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 case EmailTemplateName.ProviderReferralComplex:
                 case EmailTemplateName.ProviderReferralV3:
                 case EmailTemplateName.ProviderReferralV4:
+                case EmailTemplateName.ProviderReferralV5:
                     emailBodyDto = await _opportunityRepository.GetEmailDeliveryStatusForProviderAsync(
                         emailHistoryDto.OpportunityId.Value,
                         emailHistoryDto.SentTo);
