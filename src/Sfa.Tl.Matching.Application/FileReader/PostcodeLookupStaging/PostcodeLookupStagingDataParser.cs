@@ -13,7 +13,8 @@ namespace Sfa.Tl.Matching.Application.FileReader.PostcodeLookupStaging
             var postcodeLookupStagingDto = new PostcodeLookupStagingDto
             {
                 Postcode = data.Postcode,
-                LepCode = data.LepCode,
+                PrimaryLepCode = data.PrimaryLepCode,
+                SecondaryLepCode = data.SecondaryLepCode,
                 CreatedBy = data.CreatedBy
             };
 

@@ -7,7 +7,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.PostcodeLookup.Builde
         public PostcodeLookupStagingFileImportDto Build() => new PostcodeLookupStagingFileImportDto
         {
             Postcode = "CA1 1AA",
-            LepCode = "E37000007",
+            PrimaryLepCode = "E37000007",
+            SecondaryLepCode = "E37000008",
             CreatedBy = "CreatedBy"
         };
     }

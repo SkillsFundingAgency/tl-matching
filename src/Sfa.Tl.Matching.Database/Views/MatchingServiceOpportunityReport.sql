@@ -27,7 +27,7 @@
 		LEFT JOIN Employer as e on  e.CrmId = o.EmployerCrmId
 		LEFT JOIN ProvisionGap as pg on oi.Id = pg.OpportunityItemId
 		LEFT JOIN [PostcodeLookup] as pl on pl.Postcode = oi.Postcode
-		LEFT JOIN [dbo].[LocalEnterprisePartnership] as lep on lep.Code = pl.LepCode
+		LEFT JOIN [dbo].[LocalEnterprisePartnership] as lep on lep.Code = pl.PrimaryLepCode
 	WHERE 
 		oi.IsSaved = 1
 		AND (oi.IsCompleted = 1 or oi.IsDeleted = 0)

@@ -12,7 +12,9 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
             if (ReferenceEquals(x, null)) return false;
             if (ReferenceEquals(y, null)) return false;
             if (x.GetType() != y.GetType()) return false;
-            return string.Equals(x.Postcode, y.Postcode) && string.Equals(x.LepCode, y.LepCode);
+            return string.Equals(x.Postcode, y.Postcode)
+                   && string.Equals(x.PrimaryLepCode, y.PrimaryLepCode)
+                   && string.Equals(x.SecondaryLepCode, y.SecondaryLepCode);
         }
 
         public int GetHashCode(PostcodeLookupStaging obj)
@@ -20,7 +22,9 @@ namespace Sfa.Tl.Matching.Domain.EqualityComparer
             unchecked
             {
                 var hashCode = (obj.Postcode != null ? obj.Postcode.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (obj.LepCode != null ? obj.LepCode.GetHashCode() : 0);
+                hashCode = (hashCode * 397)
+                           ^ (obj.PrimaryLepCode != null ? obj.PrimaryLepCode.GetHashCode() : 0)
+                           ^ (obj.SecondaryLepCode != null ? obj.SecondaryLepCode.GetHashCode() : 0);
                 return hashCode;
             }
         }

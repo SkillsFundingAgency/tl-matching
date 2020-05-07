@@ -23,7 +23,8 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                     new Domain.Models.PostcodeLookup
                     {
                         Postcode = $"POST PO{index}",
-                        LepCode = "LEP000001",
+                        PrimaryLepCode = "LEP000001",
+                        SecondaryLepCode = "LEP000002",
                         CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests"
                     }));
 

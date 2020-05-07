@@ -15,9 +15,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.PostcodeLookup.Valida
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void Then_Validation_Result_Is_Valid(string lepCode)
+        public void Then_Validation_Result_Is_Valid(string primaryLepCode)
         {
-            _fixture.Dto.LepCode = lepCode;
+            _fixture.Dto.PrimaryLepCode = primaryLepCode;
             var validationResult = _fixture.Validator.Validate(_fixture.Dto);
             validationResult.IsValid.Should().BeTrue();
             validationResult.Errors.Count.Should().Be(0);

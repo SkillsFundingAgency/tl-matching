@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.PostcodeLookup
 
             _createdRecordCount.Should().Be(1);
 
-            var postcodeLookup = _testFixture.MatchingDbContext.PostcodeLookup.FirstOrDefault(e => e.LepCode == LepCode);
+            var postcodeLookup = _testFixture.MatchingDbContext.PostcodeLookup.FirstOrDefault(e => e.PrimaryLepCode == LepCode);
             postcodeLookup.Should().NotBeNull();
         }
 

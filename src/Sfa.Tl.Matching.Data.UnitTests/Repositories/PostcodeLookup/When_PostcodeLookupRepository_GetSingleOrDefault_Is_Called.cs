@@ -33,7 +33,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.PostcodeLookup
         {
             _result.Id.Should().Be(1);
             _result.Postcode.Should().BeEquivalentTo("CV1 2WT");
-            _result.LepCode.Should().BeEquivalentTo("E37000012");
+            _result.PrimaryLepCode.Should().BeEquivalentTo("E37000012");
+            _result.SecondaryLepCode.Should().BeEquivalentTo("E37000013");
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
             _result.ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);

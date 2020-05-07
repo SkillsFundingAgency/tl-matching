@@ -22,4 +22,4 @@
 			GROUP BY 
 				R.[Name], pv.[Postcode], p.[Name], p.[Id]) t
 	LEFT JOIN [PostcodeLookup] as pl on pl.Postcode = t.ProviderVenuePostCode
-	LEFT JOIN [dbo].[LocalEnterprisePartnership] as lep on lep.Code = pl.LepCode
+	LEFT JOIN [dbo].[LocalEnterprisePartnership] as lep on lep.Code = pl.PrimaryLepCode

@@ -26,8 +26,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.PostcodeLookup.Parsin
         {
             _firstPostcodeLookupNameMappingDto.Postcode
                 .Should().Be("CA1 1AA");
-            _firstPostcodeLookupNameMappingDto.LepCode
+            _firstPostcodeLookupNameMappingDto.PrimaryLepCode
                 .Should().Be("E37000007");
+            _firstPostcodeLookupNameMappingDto.SecondaryLepCode
+                .Should().Be("E37000008");
             _firstPostcodeLookupNameMappingDto.CreatedBy
                 .Should().Be("CreatedBy");
         }

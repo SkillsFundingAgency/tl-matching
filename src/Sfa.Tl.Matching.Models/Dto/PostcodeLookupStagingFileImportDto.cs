@@ -10,6 +10,7 @@ namespace Sfa.Tl.Matching.Models.Dto
 
         //Use the "pcds" column from the input - this is outward code + space + inward code
         [Column(Order = 2)] public string Postcode { get; set; }
-        [Column(Order = 44)] public string LepCode { get; set; }
+        [Column(Order = 44)] public string PrimaryLepCode { get; set; }
+        [Column(Order = 45)] public string SecondaryLepCode { get; set; }
     }
 }

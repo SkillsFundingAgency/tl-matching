@@ -11,7 +11,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.PostcodeLookup.Valida
         public When_PostcodeLookupStaging_Row_Is_Valid(PostcodeLookupStagingFileImportFixture fixture)
         {
             fixture.Dto.Postcode = "CV1 2WT";
-            fixture.Dto.LepCode = "L00000001";
+            fixture.Dto.PrimaryLepCode = "L00000001";
+            fixture.Dto.SecondaryLepCode = "L00000002";
 
             _validationResult = fixture.Validator.Validate(fixture.Dto);
         }

@@ -7,7 +7,8 @@ namespace Sfa.Tl.Matching.Domain.Models
     {
         [MergeKey]
         public string Postcode { get; set; } 
-        public string LepCode { get; set; }
+        public string PrimaryLepCode { get; set; }
+        public string SecondaryLepCode { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public int ChecksumCol { get; set; }

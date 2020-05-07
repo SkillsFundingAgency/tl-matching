@@ -8,7 +8,8 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.PostcodeLookup.Builders
         {
             Id = 1,
             Postcode = "CV1 2WT",
-            LepCode = "E37000012",
+            PrimaryLepCode = "E37000012",
+            SecondaryLepCode = "E37000013",
             CreatedBy = EntityCreationConstants.CreatedByUser,
             CreatedOn = EntityCreationConstants.CreatedOn,
             ModifiedBy = EntityCreationConstants.ModifiedByUser,

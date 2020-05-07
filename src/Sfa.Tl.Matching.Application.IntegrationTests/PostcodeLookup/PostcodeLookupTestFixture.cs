@@ -58,7 +58,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.PostcodeLookup
                 return;
             }
 
-            var postcodeLookup = MatchingDbContext.PostcodeLookup.FirstOrDefault(e => e.LepCode == lepCode);
+            var postcodeLookup = MatchingDbContext.PostcodeLookup.FirstOrDefault(e => e.PrimaryLepCode == lepCode);
 
             if (postcodeLookup == null) return;
             
@@ -67,16 +67,17 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.PostcodeLookup
             count.Should().Be(1);
         }
 
-        public void AddExisting(string postcode, string lepCode)
+        public void AddExisting(string postcode, string primaryLepCode, string secondaryLepCode)
         {
-            var postcodeLookup = MatchingDbContext.PostcodeLookup.FirstOrDefault(e => e.LepCode == lepCode);
+            var postcodeLookup = MatchingDbContext.PostcodeLookup.FirstOrDefault(e => e.PrimaryLepCode == primaryLepCode);
 
             if (postcodeLookup != null) return;
             
             MatchingDbContext.PostcodeLookup.Add(new Domain.Models.PostcodeLookup
             {
                 Postcode = postcode,
-                LepCode = lepCode
+                PrimaryLepCode = primaryLepCode,
+                SecondaryLepCode = secondaryLepCode,
             });
 
             var count = MatchingDbContext.SaveChanges();

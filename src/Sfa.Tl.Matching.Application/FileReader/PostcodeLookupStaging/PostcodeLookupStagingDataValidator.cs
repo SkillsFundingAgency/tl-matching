@@ -17,13 +17,16 @@ namespace Sfa.Tl.Matching.Application.FileReader.PostcodeLookupStaging
             //.WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
             //.WithMessage($"'{nameof(PostcodeLookupStagingFileImportDto.Postcode)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
 
-            //RuleFor(dto => dto.LepCode)
+            //No rule for SecondaryLepCode - it isn't consistently present in file
+            //RuleFor(dto => dto.PrimaryLepCode)
             //    .NotEmpty()
             //    .WithErrorCode(ValidationErrorCode.MissingMandatoryData.ToString())
-            //    .WithMessage($"'{nameof(PostcodeLookupStagingFileImportDto.LepCode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
+            //    .WithMessage($"'{nameof(PostcodeLookupStagingFileImportDto.PrimaryLepCode)}' - {ValidationErrorCode.MissingMandatoryData.Humanize()}")
             //    .Length(9)
             //    .WithErrorCode(ValidationErrorCode.InvalidFormat.ToString())
-            //    .WithMessage($"'{nameof(PostcodeLookupStagingFileImportDto.LepCode)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+            //    .WithMessage($"'{nameof(PostcodeLookupStagingFileImportDto.PrimaryLepCode)}' - {ValidationErrorCode.InvalidFormat.Humanize()}");
+
+            //Also no rule for SecondaryLepCode
         }
     }
 }
