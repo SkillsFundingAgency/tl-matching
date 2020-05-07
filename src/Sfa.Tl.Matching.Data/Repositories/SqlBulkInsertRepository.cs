@@ -40,13 +40,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
                     using (var transaction = connection.BeginTransaction())
                     {
-                        //var deleteCommand = new SqlCommand($"DELETE FROM {typeof(T).Name}; DBCC CHECKIDENT ('dbo.{typeof(T).Name}',RESEED, 0);", connection, transaction);
-                        var deleteCommand = new SqlCommand($"DELETE FROM {typeof(T).Name};", connection, transaction)
+                        var truncateCommand = new SqlCommand($"TRUNCATE TABLE {typeof(T).Name};", connection, transaction)
                         {
                             CommandTimeout = DefaultCommandTimeout
                         };
-                        
-                        deleteCommand.ExecuteNonQuery();
+
+                        truncateCommand.ExecuteNonQuery();
 
                         using (var bulkCopy = CreateSqlBulkCopy(connection, transaction, dataTable))
                         {

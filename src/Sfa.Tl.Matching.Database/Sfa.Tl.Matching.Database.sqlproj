@@ -117,6 +117,7 @@
     <Build Include="Tables\LocalEnterprisePartnershipStaging.sql" />
     <Build Include="Tables\PostcodeLookupStaging.sql" />
     <Build Include="Indexes\IX_LocalEnterprisePartnership_Code.sql" />
+    <None Include="PostDeployment\Set Permissions.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />
