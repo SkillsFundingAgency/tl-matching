@@ -83,7 +83,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     }
                     catch (Exception exception)
                     {
-                        validationResult = new ValidationResult { Errors = { new ValidationFailure(nameof(TDto), exception.ToString()) } };
+                        validationResult = new ValidationResult { Errors = { new ValidationFailure(typeof(TDto).Name, exception.ToString()) } };
                     }
 
                     if (!validationResult.IsValid)

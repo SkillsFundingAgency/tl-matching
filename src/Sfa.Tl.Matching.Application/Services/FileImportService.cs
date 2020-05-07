@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> BulkImportAsync(TImportDto fileImportDto)
         {
-            _logger.LogInformation($"Processing { nameof(TImportDto) }.");
+            _logger.LogInformation($"Processing { typeof(TImportDto).Name }.");
 
             var dataDtos = await _fileReader.ValidateAndParseFileAsync(fileImportDto);
 
@@ -55,7 +55,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             _dataProcessor.PreProcessingHandler(entities);
 
-            _logger.LogInformation($"Saving { entities.Count } { nameof(TEntity) }.");
+            _logger.LogInformation($"Saving { entities.Count } { typeof(TImportDto).Name }.");
 
             await _repository.BulkInsertAsync(entities);
 
