@@ -61,12 +61,6 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.Dashboard
             var dataImportLink = documentHtml.GetElementById("tl-dash-uploaddata") as IHtmlAnchorElement;
             dataImportLink.TextContent.Should().Be("Manually upload data");
             dataImportLink.PathName.Should().Be($"/DataImport");
-
-            var serviceMaintenanceLink = documentHtml.GetElementById("tl-dash-takeoffline") as IHtmlAnchorElement;
-            serviceMaintenanceLink.TextContent.Should().Be("Take service offline");
-            serviceMaintenanceLink.PathName.Should().Be($"/service-under-maintenance");
-
-
         }
 
     }
