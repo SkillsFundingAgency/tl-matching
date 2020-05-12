@@ -35,19 +35,47 @@ namespace Sfa.Tl.Matching.Functions
                                       $"\tName:{name}\n" +
                                       $"\tSize: {stream.Length} Bytes");
 
+                var createdRecords = 0;
+
                 var stopwatch = Stopwatch.StartNew();
 
-                var createdBy = blockBlob.GetCreatedByMetadata();
-                var fileDataStream =
-                    blockBlob.Name.EndsWith(".zip")
-                        ? await ExtractFromZipAsync(stream)
-                        : stream;
-
-                var createdRecords = await fileImportService.BulkImportAsync(new PostcodeLookupStagingFileImportDto
+                using (var ms = new MemoryStream())
                 {
-                    FileDataStream = fileDataStream,
-                    CreatedBy = createdBy
-                });
+                    //await stream.CopyToAsync(ms);
+
+                    var buffer = new byte[stream.Length];
+                    int read;
+
+                    while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    {
+                        await ms.WriteAsync(buffer, 0, read);
+                    }
+
+                    //ms.Seek(0, SeekOrigin.Begin);
+
+                    using (var zipArchive = new ZipArchive(ms, ZipArchiveMode.Read))
+                    {
+                        foreach (var entry in zipArchive.Entries)
+                        {
+                            if (zipArchive.Entries.Count == 1
+                                || (entry.FullName.StartsWith("Data/ONSPD")
+                                    && entry.Name.StartsWith(".csv")))
+                            {
+                                using (var entryStream = entry.Open())
+                                {
+                                    createdRecords = await fileImportService.BulkImportAsync(
+                                        new PostcodeLookupStagingFileImportDto
+                                        {
+                                            FileDataStream = entryStream,
+                                            CreatedBy = blockBlob.GetCreatedByMetadata()
+                                        });
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
 
                 stopwatch.Stop();
 
@@ -69,46 +97,6 @@ namespace Sfa.Tl.Matching.Functions
                     RowNumber = -1
                 });
             }
-        }
-
-        private async Task<Stream> ExtractFromZipAsync(Stream stream)
-        {
-            var outputStream = new MemoryStream();
-
-            using (var ms = new MemoryStream())
-            {
-                await stream.CopyToAsync(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-
-                using (var zipArchive = new ZipArchive(ms, ZipArchiveMode.Read))
-                {
-                    try
-                    {
-                        foreach (var entry in zipArchive.Entries)
-                        {
-                            if (zipArchive.Entries.Count == 1
-                                || (entry.FullName.StartsWith("Data/ONSPD")
-                                    && entry.Name.StartsWith(".csv")))
-                            {
-                                using (var entryStream = entry.Open())
-                                {
-                                    await entryStream.CopyToAsync(outputStream);
-                                    outputStream.Seek(0, SeekOrigin.Begin);
-                                }
-
-                                break;
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        throw;
-                    }
-                }
-            }
-
-            return outputStream;
         }
     }
 }

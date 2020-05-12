@@ -14,7 +14,8 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.PostcodeLookup.Builders
             {
                 WriteZipArchiveEntry(archive,
                     "Data/ONSPD_MAY_2019_UK.csv",
-                    new byte[] { 3, 4 }).GetAwaiter().GetResult();
+                    new byte[] { 1, 2, 3, 4 })
+                    .GetAwaiter().GetResult();
             }
 
             archiveStream.Seek(0, SeekOrigin.Begin);

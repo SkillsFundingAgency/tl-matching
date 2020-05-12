@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -6,6 +6,7 @@ using NSubstitute;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
+using Sfa.Tl.Matching.Functions.UnitTests.PostcodeLookup.Builders;
 using Sfa.Tl.Matching.Models.Dto;
 using Xunit;
 
@@ -18,24 +19,33 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.PostcodeLookup
 
         public When_ImportPostcodeLookup_Function_Blob_Trigger_Fires()
         {
-            var blobStream = Substitute.For<ICloudBlob>();
-            blobStream.OpenReadAsync(null, null, null).Returns(new MemoryStream());
+            using (var archiveStream = new ZipArchiveBuilder().Build())
+            {
+                var blobStream = Substitute.For<ICloudBlob>();
+                blobStream.OpenReadAsync(null, null, null)
+                    .Returns(archiveStream);
 
-            var context = new ExecutionContext();
-            var logger = Substitute.For<ILogger>();
+                blobStream.Metadata.Returns(new Dictionary<string, string>
+                {
+                    {"createdBy", "TestUser"}
+                });
+                
+                var context = new ExecutionContext();
+                var logger = Substitute.For<ILogger>();
 
-            _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
+                _functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            _fileImportService = Substitute.For<IFileImportService<PostcodeLookupStagingFileImportDto>>();
+                _fileImportService = Substitute.For<IFileImportService<PostcodeLookupStagingFileImportDto>>();
 
-            var postcodeLookup = new Functions.PostcodeLookup();
-            postcodeLookup.ImportPostcodeLookupAsync(
-                blobStream,
-                "test",
-                context,
-                logger,
-                _fileImportService,
-                _functionLogRepository).GetAwaiter().GetResult();
+                var postcodeLookup = new Functions.PostcodeLookup();
+                postcodeLookup.ImportPostcodeLookupAsync(
+                    blobStream,
+                    "test",
+                    context,
+                    logger,
+                    _fileImportService,
+                    _functionLogRepository).GetAwaiter().GetResult();
+            }
         }
 
         [Fact]

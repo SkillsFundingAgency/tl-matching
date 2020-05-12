@@ -40,11 +40,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
                     using (var transaction = connection.BeginTransaction())
                     {
-                        var truncateCommand = new SqlCommand($"TRUNCATE TABLE {typeof(T).Name};", connection, transaction)
-                        {
-                            CommandTimeout = DefaultCommandTimeout
-                        };
-
+                        var truncateCommand = new SqlCommand($"TRUNCATE TABLE {typeof(T).Name};", connection, transaction); ;
                         truncateCommand.ExecuteNonQuery();
 
                         using (var bulkCopy = CreateSqlBulkCopy(connection, transaction, dataTable))
@@ -81,7 +77,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             }
         }
 
-        public async Task<int> MergeFromStagingAsync()
+        public async Task<int> MergeFromStagingAsync(bool deleteMissingRows = true)
         {
             int numberOfRecordsAffected;
 
@@ -96,7 +92,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                         var isSuccessful = false;
                         try
                         {
-                            var mergeSql = GetMergeSql();
+                            var mergeSql = GetMergeSql(deleteMissingRows);
 
                             var mergeCommand = new SqlCommand(mergeSql, connection, transaction)
                             {
@@ -134,7 +130,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
             return numberOfRecordsAffected;
         }
 
-        private static string GetMergeSql()
+        private static string GetMergeSql(bool deleteMissingRows)
         {
             var sourceType = typeof(T);
             var source = sourceType.Name;
@@ -153,13 +149,17 @@ namespace Sfa.Tl.Matching.Data.Repositories
             var sourceCompareColumn = sourceType.GetProperties().Where(prop => prop.GetCustomAttribute<MergeKeyAttribute>(false) != null).Select(prop => prop.Name).Single();
             var targetCompareColumn = targetType.GetProperties().Where(prop => prop.GetCustomAttribute<MergeKeyAttribute>(false) != null).Select(prop => prop.Name).Single();
 
-            return $"MERGE INTO {target} AS TARGET " +
-                   $"USING ( SELECT * FROM {source} ) AS SOURCE ON SOURCE.{sourceCompareColumn} = TARGET.{targetCompareColumn} " +
-                   "WHEN MATCHED AND ( TARGET.ChecksumCol <> SOURCE.ChecksumCol ) THEN " +
-                   $"UPDATE SET { fromSourceToTargetMappingForUpdate } " +
-                   "WHEN NOT MATCHED BY TARGET THEN " +
-                   $"INSERT ( {targetColumnList} ) VALUES ( {sourceColumnList} ) " +
-                   "WHEN NOT MATCHED BY SOURCE THEN DELETE;";
+            var sql = $"MERGE INTO {target} AS TARGET " +
+                      $"USING ( SELECT * FROM {source} ) AS SOURCE ON SOURCE.{sourceCompareColumn} = TARGET.{targetCompareColumn} " +
+                      "WHEN MATCHED AND ( TARGET.ChecksumCol <> SOURCE.ChecksumCol ) THEN " +
+                      $"UPDATE SET {fromSourceToTargetMappingForUpdate} " +
+                      "WHEN NOT MATCHED BY TARGET THEN " +
+                      $"INSERT ( {targetColumnList} ) VALUES ( {sourceColumnList} ) ";
+
+            if (deleteMissingRows)
+                sql += "WHEN NOT MATCHED BY SOURCE THEN DELETE;";
+
+            return sql;
         }
 
         private SqlBulkCopy CreateSqlBulkCopy(SqlConnection connection, SqlTransaction transaction, DataTable dataTable)
