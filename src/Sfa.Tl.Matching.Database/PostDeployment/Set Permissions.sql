@@ -10,3 +10,9 @@ GRANT ALTER, INSERT, UPDATE, DELETE ON OBJECT::[dbo].[LearningAimReferenceStagin
 GRANT ALTER, INSERT, UPDATE, DELETE ON OBJECT::[dbo].[LocalEnterprisePartnershipStaging] TO DataImporter;
 GRANT ALTER, INSERT, UPDATE, DELETE ON OBJECT::[dbo].[PostcodeLookupStaging] TO DataImporter;
 GRANT ALTER, INSERT, UPDATE, DELETE ON OBJECT::[dbo].[ProviderReferenceStaging] TO DataImporter;
+
+
+IF EXISTS(SELECT name FROM sys.database_principals WHERE name = 'mtch-rw-svc')
+BEGIN
+	EXEC sp_addrolemember 'DataImporter', 'mtch-rw-svc'
+END
