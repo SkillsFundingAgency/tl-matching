@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -35,10 +37,16 @@ namespace Sfa.Tl.Matching.Functions
 
                 var stopwatch = Stopwatch.StartNew();
 
+                var createdBy = blockBlob.GetCreatedByMetadata();
+                var fileDataStream =
+                    blockBlob.Name.EndsWith(".zip")
+                        ? await ExtractFromZipAsync(stream)
+                        : stream;
+
                 var createdRecords = await fileImportService.BulkImportAsync(new PostcodeLookupStagingFileImportDto
                 {
-                    FileDataStream = stream,
-                    CreatedBy = blockBlob.GetCreatedByMetadata()
+                    FileDataStream = fileDataStream,
+                    CreatedBy = createdBy
                 });
 
                 stopwatch.Stop();
@@ -61,6 +69,46 @@ namespace Sfa.Tl.Matching.Functions
                     RowNumber = -1
                 });
             }
+        }
+
+        private async Task<Stream> ExtractFromZipAsync(Stream stream)
+        {
+            var outputStream = new MemoryStream();
+
+            using (var ms = new MemoryStream())
+            {
+                await stream.CopyToAsync(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+
+                using (var zipArchive = new ZipArchive(ms, ZipArchiveMode.Read))
+                {
+                    try
+                    {
+                        foreach (var entry in zipArchive.Entries)
+                        {
+                            if (zipArchive.Entries.Count == 1
+                                || (entry.FullName.StartsWith("Data/ONSPD")
+                                    && entry.Name.StartsWith(".csv")))
+                            {
+                                using (var entryStream = entry.Open())
+                                {
+                                    await entryStream.CopyToAsync(outputStream);
+                                    outputStream.Seek(0, SeekOrigin.Begin);
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
+                }
+            }
+
+            return outputStream;
         }
     }
 }

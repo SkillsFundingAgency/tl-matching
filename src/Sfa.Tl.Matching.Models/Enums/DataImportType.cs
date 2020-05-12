@@ -16,7 +16,7 @@ namespace Sfa.Tl.Matching.Models.Enums
 
         [Description("Postcodes")]
         [DisplayName("ONS Postcodes")]
-        [FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
+        [FileExtensions(Extensions = FileImportTypeExtensions.Zip)]
         Postcodes
     }
 }
