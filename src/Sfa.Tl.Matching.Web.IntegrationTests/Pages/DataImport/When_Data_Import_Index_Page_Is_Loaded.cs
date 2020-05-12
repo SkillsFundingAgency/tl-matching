@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.DataImport
         }
 
         [Fact]
-        public async Task The_The_Correct_Response_Is_Returned()
+        public async Task Then_The_Correct_Response_Is_Returned()
         {
             // ReSharper disable all PossibleNullReferenceException
 
