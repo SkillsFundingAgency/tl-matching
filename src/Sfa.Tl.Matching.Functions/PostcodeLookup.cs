@@ -41,17 +41,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 using (var ms = new MemoryStream())
                 {
-                    //await stream.CopyToAsync(ms);
-
-                    var buffer = new byte[stream.Length];
-                    int read;
-
-                    while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-                    {
-                        await ms.WriteAsync(buffer, 0, read);
-                    }
-
-                    //ms.Seek(0, SeekOrigin.Begin);
+                    await stream.CopyToAsync(ms);
 
                     using (var zipArchive = new ZipArchive(ms, ZipArchiveMode.Read))
                     {

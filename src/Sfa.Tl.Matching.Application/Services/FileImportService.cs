@@ -23,6 +23,9 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IBulkInsertRepository<TEntity> _repository;
         private readonly IDataProcessor<TEntity> _dataProcessor;
 
+        private const int BatchingThreshold = 200000;
+        private const int BatchSize = 100000;
+
         public FileImportService(ILogger<FileImportService<TImportDto, TDto, TEntity>> logger,
             IMapper mapper,
             IFileReader<TImportDto, TDto> fileReader,
@@ -38,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task<int> BulkImportAsync(TImportDto fileImportDto)
         {
-            _logger.LogInformation($"Processing { typeof(TImportDto).Name }.");
+            _logger.LogInformation($"Processing {typeof(TImportDto).Name}.");
 
             var dataDtos = await _fileReader.ValidateAndParseFileAsync(fileImportDto);
 
@@ -55,11 +58,26 @@ namespace Sfa.Tl.Matching.Application.Services
 
             _dataProcessor.PreProcessingHandler(entities);
 
-            _logger.LogInformation($"Saving { entities.Count } { typeof(TImportDto).Name }.");
+            _logger.LogInformation($"Saving {entities.Count} {typeof(TImportDto).Name}.");
 
-            await _repository.BulkInsertAsync(entities);
+            var numberOfRecordsAffected = 0;
+            if (entities.Count < BatchingThreshold)
+            {
+                await _repository.BulkInsertAsync(entities);
+                numberOfRecordsAffected = await _repository.MergeFromStagingAsync();
+            }
+            else
+            {
+                for (var i = 0; i < entities.Count; i += BatchSize)
+                {
+                    var batch = entities.Skip(i).Take(BatchSize);
 
-            var numberOfRecordsAffected = await _repository.MergeFromStagingAsync();
+                    await _repository.BulkInsertAsync(batch.ToList());
+
+                    var recordsAffected = await _repository.MergeFromStagingAsync(false);
+                    numberOfRecordsAffected += recordsAffected;
+                }
+            }
 
             _dataProcessor.PostProcessingHandler(entities);
 

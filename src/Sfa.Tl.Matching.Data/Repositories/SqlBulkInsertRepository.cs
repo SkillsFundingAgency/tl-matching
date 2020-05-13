@@ -154,10 +154,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                       "WHEN MATCHED AND ( TARGET.ChecksumCol <> SOURCE.ChecksumCol ) THEN " +
                       $"UPDATE SET {fromSourceToTargetMappingForUpdate} " +
                       "WHEN NOT MATCHED BY TARGET THEN " +
-                      $"INSERT ( {targetColumnList} ) VALUES ( {sourceColumnList} ) ";
-
-            if (deleteMissingRows)
-                sql += "WHEN NOT MATCHED BY SOURCE THEN DELETE;";
+                      $"INSERT ( {targetColumnList} ) VALUES ( {sourceColumnList} ) " +
+                      (deleteMissingRows ? "WHEN NOT MATCHED BY SOURCE THEN DELETE" : "") +
+                      ";";
 
             return sql;
         }
