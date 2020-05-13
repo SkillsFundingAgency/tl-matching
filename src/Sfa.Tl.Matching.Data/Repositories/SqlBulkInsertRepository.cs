@@ -40,7 +40,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
 
                     using (var transaction = connection.BeginTransaction())
                     {
-                        var truncateCommand = new SqlCommand($"TRUNCATE TABLE {typeof(T).Name};", connection, transaction); ;
+                        var truncateCommand = new SqlCommand($"TRUNCATE TABLE {typeof(T).Name};", connection, transaction);
                         truncateCommand.ExecuteNonQuery();
 
                         using (var bulkCopy = CreateSqlBulkCopy(connection, transaction, dataTable))
@@ -81,7 +81,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
             int numberOfRecordsAffected;
 
-            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromSeconds(DefaultCommandTimeout), TransactionScopeAsyncFlowOption.Enabled))
             {
                 using (var connection = new SqlConnection(_matchingConfiguration.SqlConnectionString))
                 {
