@@ -21,18 +21,21 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IAsyncNotificationClient _notificationClient;
         private readonly IRepository<EmailTemplate> _emailTemplateRepository;
         private readonly IRepository<EmailHistory> _emailHistoryRepository;
+        private readonly IRepository<FunctionLog> _functionLogRepository;
         private readonly IMapper _mapper;
 
         public EmailService(MatchingConfiguration configuration,
             IAsyncNotificationClient notificationClient,
             IRepository<EmailTemplate> emailTemplateRepository,
             IRepository<EmailHistory> emailHistoryRepository,
+            IRepository<FunctionLog> functionLogRepository,
             IMapper mapper,
             ILogger<EmailService> logger)
         {
             _configuration = configuration;
             _emailTemplateRepository = emailTemplateRepository;
             _emailHistoryRepository = emailHistoryRepository;
+            _functionLogRepository = functionLogRepository;
             _mapper = mapper;
             _notificationClient = notificationClient;
             _logger = logger;
@@ -48,7 +51,15 @@ namespace Sfa.Tl.Matching.Application.Services
             var emailTemplate = await _emailTemplateRepository.GetSingleOrDefaultAsync(t => t.TemplateName == templateName);
             if (emailTemplate == null)
             {
-                _logger.LogWarning($"Email template {templateName} not found. No emails sent.");
+                var message = $"Email template {templateName} not found. No emails sent.";
+                _logger.LogWarning(message);
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = message,
+                    FunctionName = nameof(EmailService),
+                    RowNumber = -1
+                });
+
                 return;
             }
 
@@ -56,7 +67,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await SendEmailAndSaveHistoryAsync(opportunityId, toAddress, emailTemplate, personalisationTokens, createdBy);
         }
-
+        
         public async Task<EmailDeliveryStatusDto> GetEmailBodyFromNotifyClientAsync(Guid notificationId)
         {
             var notification = await _notificationClient.GetNotificationByIdAsync(notificationId.ToString());
@@ -111,7 +122,17 @@ namespace Sfa.Tl.Matching.Application.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error sending email template {emailTemplate.TemplateId} to {recipient}");
+                var message = $"Error sending email template {emailTemplate?.TemplateId} to {recipient}. {ex.Message}";
+                _logger.LogError(ex, message);
+
+                message += $"\r\nInner exception: {ex.InnerException?.Message}\r\n" +
+                           $"Stack trace: {ex.StackTrace}";
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = message,
+                    FunctionName = nameof(EmailService),
+                    RowNumber = -1
+                });
             }
         }
 
