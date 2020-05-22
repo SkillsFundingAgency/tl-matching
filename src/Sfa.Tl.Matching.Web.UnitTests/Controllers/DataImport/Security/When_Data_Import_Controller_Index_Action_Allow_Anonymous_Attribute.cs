@@ -20,11 +20,8 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.DataImport.Security
                 .GetMember(nameof(DataImportController.Index), MemberTypes.Method, flags)
                 .Cast<MethodInfo>().ToList();
 
-            _allowAnonymousAttributeGet = methodInfos[0].GetCustomAttribute(typeof(AllowAnonymousAttribute))
-                as AllowAnonymousAttribute;
-
-            _allowAnonymousAttributePost = methodInfos[1].GetCustomAttribute(typeof(AllowAnonymousAttribute))
-                as AllowAnonymousAttribute;
+            _allowAnonymousAttributeGet = methodInfos[0].GetCustomAttribute<AllowAnonymousAttribute>();
+            _allowAnonymousAttributePost = methodInfos[1].GetCustomAttribute<AllowAnonymousAttribute>();
         }
 
         [Fact]

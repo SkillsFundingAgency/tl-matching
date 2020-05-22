@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sfa.Tl.Matching.Application.Extensions;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Models.ViewModel;
 
@@ -60,19 +61,31 @@ namespace Sfa.Tl.Matching.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles = RolesExtensions.AdminUser)]
         [ActionName("Maintenance")]
         [Route("service-under-maintenance", Name = "GetLatestServiceStatusHistory")]
         public async Task<IActionResult> MaintenanceAsync()
         {
+            if (!HttpContext.User.HasAdminRole())
+            {
+                return RedirectToRoute("FailedLogin");
+            }
+            
             var viewModel = await _serviceStatusHistoryService.GetLatestServiceStatusHistoryAsync();
 
             return View(viewModel);
         }
 
+        [Authorize(Roles = RolesExtensions.AdminUser)]
         [HttpPost]
         [Route("service-under-maintenance", Name = "SaveServiceStatusHistory")]
         public async Task<IActionResult> SaveServiceStatusHistoryAsync(ServiceStatusHistoryViewModel viewModel)
         {
+            if (!HttpContext.User.HasAdminRole())
+            {
+                return RedirectToRoute("FailedLogin");
+            }
+
             await _serviceStatusHistoryService.SaveServiceStatusHistoryAsync(viewModel);
 
             return RedirectToRoute("GetLatestServiceStatusHistory");

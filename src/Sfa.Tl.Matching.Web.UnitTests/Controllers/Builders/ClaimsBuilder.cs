@@ -23,6 +23,13 @@ namespace Sfa.Tl.Matching.Web.UnitTests.Controllers.Builders
             return this;
         }
 
+        internal ClaimsBuilder<T> AddAdminUser()
+        {
+            _claimList.Add(new Claim(ClaimTypes.Role, RolesExtensions.AdminUser));
+
+            return this;
+        }
+
         internal ClaimsBuilder<T> AddStandardUser()
         {
             _claimList.Add(new Claim(ClaimTypes.Role, RolesExtensions.StandardUser));

@@ -18,14 +18,14 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
         {
             var employer = new Domain.Models.Employer
             {
-                AlsoKnownAs = "test",
-                Aupa = "test",
-                CompanyName = "test",
+                AlsoKnownAs = "test aka",
+                Aupa = "test aupa",
+                CompanyName = "test company name",
                 CrmId = Guid.NewGuid(),
                 Email = "test@test.com",
-                Owner = "test",
+                Owner = "test owner",
                 Phone = "01234567890",
-                PrimaryContact = "test",
+                PrimaryContact = "test contact",
                 CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
             };
 

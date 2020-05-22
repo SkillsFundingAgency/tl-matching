@@ -12,10 +12,10 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
     public class When_LearningAimReference_Import_File_Is_Valid_And_Empty_Db_Add : IClassFixture<LearningAimReferenceTestFixture>, IDisposable
     {
         private readonly LearningAimReferenceTestFixture _testFixture;
-        private const string DataFilePath = @"LearningAimReference\LearningAimReference-Empty-Db-Add.csv";
+        private const string DataFilePath = @"LearningAimReference\LearningAimReference_Empty_Db_Add.csv";
         private int _createdRecordCount;
         private readonly string _testExecutionDirectory;
-        private const string Title = "LearningAimReference-Empty-Db-Add";
+        private const string Title = "LearningAimReference_Empty_Db_Add";
 
         public When_LearningAimReference_Import_File_Is_Valid_And_Empty_Db_Add(LearningAimReferenceTestFixture testFixture)
         {

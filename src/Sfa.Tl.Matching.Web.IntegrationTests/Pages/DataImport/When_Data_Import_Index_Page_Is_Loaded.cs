@@ -20,7 +20,7 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.DataImport
         }
 
         [Fact]
-        public async Task The_The_Correct_Response_Is_Returned()
+        public async Task Then_The_Correct_Response_Is_Returned()
         {
             // ReSharper disable all PossibleNullReferenceException
 
@@ -44,9 +44,11 @@ namespace Sfa.Tl.Matching.Web.IntegrationTests.Pages.DataImport
             backLink.PathName.Should().Be("/Start");
             
             var importTypeList = documentHtml.GetElementById("SelectedImportType");
-            importTypeList.Children.Length.Should().Be(1);
-            importTypeList.Text().Should().Be("Learning Aim Reference\n");
-            
+            importTypeList.Children.Length.Should().Be(3);
+            importTypeList.Children[0].Text().Should().Be("Learning Aim Reference");
+            importTypeList.Children[1].Text().Should().Be("Local Enterprise Partnership");
+            importTypeList.Children[2].Text().Should().Be("ONS Postcodes");
+
             var upload = documentHtml.GetElementById("tl-upload") as IHtmlButtonElement;
             upload.TextContent.Trim().Should().Be("Upload");
             upload.Type.Should().Be("submit");

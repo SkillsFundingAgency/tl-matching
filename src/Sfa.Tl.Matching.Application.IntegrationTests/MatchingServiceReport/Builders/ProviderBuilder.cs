@@ -19,15 +19,15 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
         {
             var provider = new Provider
             {
-                DisplayName = "test",
-                Name = "test",
+                DisplayName = "test provider display name",
+                Name = "test provider",
                 OfstedRating = 1,
-                PrimaryContact = "test",
-                PrimaryContactEmail = "test@test.com",
+                PrimaryContact = "test primary contact",
+                PrimaryContactEmail = "testprimary@test.com",
                 PrimaryContactPhone = "01234567890",
-                SecondaryContact = "test",
-                SecondaryContactEmail = "test@test.com",
-                SecondaryContactPhone = "01234567890",
+                SecondaryContact = "test secondary contact",
+                SecondaryContactEmail = "testsecondary@test.com",
+                SecondaryContactPhone = "01234567891",
                 Source = "test",
                 UkPrn = 12345678,
                 IsCdfProvider = true,
@@ -39,11 +39,11 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                     {
                         IsRemoved = true,
                         IsEnabledForReferral = true,
-                        County = "test" + venue,
-                        Name = "test" + venue,
-                        Postcode = "test" + venue,
-                        Source = "test" + venue,
-                        Town = "test" + venue,
+                        County = $"test county{venue}",
+                        Name = $"test name{venue}",
+                        Postcode = $"POST PO{venue}",
+                        Source = $"test{venue}",
+                        Town = $"test town{venue}",
                         CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
                         ProviderQualification = new List<ProviderQualification>
                         {
@@ -55,15 +55,15 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                                 {
                                     CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
                                     LarId = "12345678",
-                                    ShortTitle = "test",
-                                    Title = "test",
+                                    ShortTitle = "test short title",
+                                    Title = "test title",
                                     QualificationRouteMapping = new List<QualificationRouteMapping>
                                     {
                                         new QualificationRouteMapping
                                         {
                                             RouteId = 1,
                                             CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests",
-                                            Source = "test",
+                                            Source = "test"
                                         }
                                     }
                                 }

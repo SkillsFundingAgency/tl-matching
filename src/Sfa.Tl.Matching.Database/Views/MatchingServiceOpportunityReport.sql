@@ -16,6 +16,8 @@
 		pg.NoSuitableStudent, 
 		pg.HadBadExperience, 
 		pg.ProvidersTooFarAway, 
+		lep.[Code] as LepCode,
+		lep.[Name] as LepName,
 		oi.CreatedBy AS Username,
 		oi.CreatedOn,
 		oi.ModifiedOn
@@ -24,6 +26,8 @@
 		INNER JOIN [Route] as rt on rt.Id = oi.RouteId
 		LEFT JOIN Employer as e on  e.CrmId = o.EmployerCrmId
 		LEFT JOIN ProvisionGap as pg on oi.Id = pg.OpportunityItemId
+		LEFT JOIN [PostcodeLookup] as pl on pl.Postcode = oi.Postcode
+		LEFT JOIN [dbo].[LocalEnterprisePartnership] as lep on lep.Code = pl.PrimaryLepCode
 	WHERE 
 		oi.IsSaved = 1
 		AND (oi.IsCompleted = 1 or oi.IsDeleted = 0)

@@ -32,6 +32,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             IAsyncNotificationClient notificationClient,
             ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
             ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<FunctionLog>> functionLogLogger,
             ILogger<EmailService> emailServiceLogger,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -43,10 +44,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         )
         {
             //Arrange
-            var (templateLogger, historyLogger, mapper) = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger);
+            var (templateRepository, emailHistoryRepository, functionLogRepository, mapper)
+                = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger, functionLogLogger);
 
-            var sut = new EmailService(configuration, notificationClient, templateLogger, historyLogger, mapper,
-                emailServiceLogger);
+            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository, 
+                functionLogRepository, mapper, emailServiceLogger);
 
             var tokens = new Dictionary<string, string>
             {
@@ -66,12 +68,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
 
             data.Should().NotBeNull();
-            data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
-            data.Status.Should().BeNullOrEmpty();
-            data.NotificationId.Should().Be(emailNotificationResponse.id);
-            data.CreatedBy.Should().Be("System");
-            data.SentTo.Should().Be("test@test.com");
-
+            data?.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
+            data?.Status.Should().BeNullOrEmpty();
+            data?.NotificationId.Should().Be(emailNotificationResponse.id);
+            data?.CreatedBy.Should().Be("System");
+            data?.SentTo.Should().Be("test@test.com");
         }
 
         [Theory, AutoDomainData]
@@ -81,6 +82,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             IAsyncNotificationClient notificationClient,
             ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
             ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<FunctionLog>> functionLogLogger,
             ILogger<EmailService> emailServiceLogger,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -91,10 +93,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         )
         {
             //Arrange
-            var (templateLogger, historyLogger, mapper) = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger);
+            var (templateRepository, emailHistoryRepository, functionLogRepository, mapper) 
+                = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger, functionLogLogger);
 
-            var sut = new EmailService(configuration, notificationClient, templateLogger, historyLogger, mapper,
-                emailServiceLogger);
+            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository, 
+                functionLogRepository, mapper, emailServiceLogger);
 
             var tokens = new Dictionary<string, string>
             {
@@ -125,6 +128,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             IAsyncNotificationClient notificationClient,
             ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
             ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<FunctionLog>> functionLogLogger,
             ILogger<EmailService> emailServiceLogger,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -135,10 +139,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         )
         {
             //Arrange
-            var (templateLogger, historyLogger, mapper) = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger);
+            var (templatetemplateRepositoryLogger, emailHistoryRepository, functionLogRepository, mapper) 
+                = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger, functionLogLogger);
 
-            var sut = new EmailService(configuration, notificationClient, templateLogger, historyLogger, mapper,
-                emailServiceLogger);
+            var sut = new EmailService(configuration, notificationClient, templatetemplateRepositoryLogger, emailHistoryRepository, 
+                functionLogRepository, mapper, emailServiceLogger);
 
             emailHistory.NotificationId = payLoad.Id;
             await DataBuilder.SetTestData(dbContext, provider, venue, opportunity, backgroundProcessHistory);
@@ -151,10 +156,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == payLoad.Id);
 
             data.Should().NotBeNull();
-            data.Status.Should().Be(payLoad.Status);
-            data.NotificationId.Should().Be(payLoad.Id);
-            data.ModifiedBy.Should().Be("System");
-
+            data?.Status.Should().Be(payLoad.Status);
+            data?.NotificationId.Should().Be(payLoad.Id);
+            data?.ModifiedBy.Should().Be("System");
         }
 
         [Theory]
@@ -169,6 +173,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             IAsyncNotificationClient notificationClient,
             ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
             ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<FunctionLog>> functionLogLogger,
             ILogger<EmailService> emailServiceLogger,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -185,10 +190,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             payLoad.Status = status;
             payLoad.Id = notificationId;
 
-            var (templateLogger, historyLogger, mapper) = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger);
+            var (templateRepository, emailHistoryRepository, functionLogRepository, mapper) 
+                = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger, functionLogLogger);
 
-            var sut = new EmailService(configuration, notificationClient, templateLogger, historyLogger, mapper,
-                emailServiceLogger);
+            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository, 
+                functionLogRepository, mapper, emailServiceLogger);
 
             var tokens = new Dictionary<string, string>
             {
@@ -208,12 +214,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
 
             data.Should().NotBeNull();
-            data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
-            data.NotificationId.Should().Be(emailNotificationResponse.id);
-            data.CreatedBy.Should().Be("System");
-            data.Status.Should().BeNullOrEmpty();
-            data.ModifiedBy.Should().BeNullOrEmpty();
-            data.ModifiedOn.Should().BeNull();
+            data?.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
+            data?.NotificationId.Should().Be(emailNotificationResponse.id);
+            data?.CreatedBy.Should().Be("System");
+            data?.Status.Should().BeNullOrEmpty();
+            data?.ModifiedBy.Should().BeNullOrEmpty();
+            data?.ModifiedOn.Should().BeNull();
 
             //Act - Update Email With Status
             await sut.UpdateEmailStatus(payLoad);
@@ -221,13 +227,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
 
             data.Should().NotBeNull();
-            data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
-            data.Status.Should().NotBeNullOrEmpty();
-            data.Status.Should().Be(payLoad.Status);
-            data.NotificationId.Should().Be(emailNotificationResponse.id);
-            data.CreatedBy.Should().Be("System");
-            data.ModifiedBy.Should().Be("System");
-
+            data?.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
+            data?.Status.Should().NotBeNullOrEmpty();
+            data?.Status.Should().Be(payLoad.Status);
+            data?.NotificationId.Should().Be(emailNotificationResponse.id);
+            data?.CreatedBy.Should().Be("System");
+            data?.ModifiedBy.Should().Be("System");
         }
 
         [Theory]
@@ -242,6 +247,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             IAsyncNotificationClient notificationClient,
             ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
             ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<FunctionLog>> functionLogLogger,
             ILogger<EmailService> emailServiceLogger,
             [Frozen] Domain.Models.Opportunity opportunity,
             [Frozen] Domain.Models.Provider provider,
@@ -258,10 +264,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             payLoad.Status = status;
             payLoad.Id = notificationId;
 
-            var (templateLogger, historyLogger, mapper) = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger);
+            var (templateRepository, emailHistoryRepository, functionLogRepository, mapper) 
+                = SetUp(dbContext, emailTemplateLogger, emailHistoryLogger, functionLogLogger);
 
-            var sut = new EmailService(configuration, notificationClient, templateLogger, historyLogger, mapper,
-                emailServiceLogger);
+            var sut = new EmailService(configuration, notificationClient, templateRepository, emailHistoryRepository, 
+                functionLogRepository, mapper, emailServiceLogger);
 
             var tokens = new Dictionary<string, string>
             {
@@ -281,12 +288,12 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             var data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
 
             data.Should().NotBeNull();
-            data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
-            data.NotificationId.Should().Be(emailNotificationResponse.id);
-            data.CreatedBy.Should().Be("System");
-            data.Status.Should().BeNullOrEmpty();
-            data.ModifiedBy.Should().BeNullOrEmpty();
-            data.ModifiedOn.Should().BeNull();
+            data?.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
+            data?.NotificationId.Should().Be(emailNotificationResponse.id);
+            data?.CreatedBy.Should().Be("System");
+            data?.Status.Should().BeNullOrEmpty();
+            data?.ModifiedBy.Should().BeNullOrEmpty();
+            data?.ModifiedOn.Should().BeNull();
 
             //Act - Update Email With Status
             await sut.UpdateEmailStatus(payLoad);
@@ -294,27 +301,28 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             data = dbContext.EmailHistory.FirstOrDefault(x => x.NotificationId == notificationId);
 
             data.Should().NotBeNull();
-            data.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
-            data.Status.Should().NotBeNullOrEmpty();
-            data.Status.Should().Be(payLoad.Status);
-            data.NotificationId.Should().Be(emailNotificationResponse.id);
-            data.CreatedBy.Should().Be("System");
-            data.ModifiedBy.Should().Be("System");
-
+            data?.EmailTemplateId.Should().Be(emailHistory.EmailTemplateId);
+            data?.Status.Should().NotBeNullOrEmpty();
+            data?.Status.Should().Be(payLoad.Status);
+            data?.NotificationId.Should().Be(emailNotificationResponse.id);
+            data?.CreatedBy.Should().Be("System");
+            data?.ModifiedBy.Should().Be("System");
         }
 
-        private (GenericRepository<EmailTemplate>, GenericRepository<EmailHistory>, Mapper) SetUp(
+        private (GenericRepository<EmailTemplate>, GenericRepository<EmailHistory>, GenericRepository<FunctionLog>, Mapper) SetUp(
             MatchingDbContext dbContext,
             ILogger<GenericRepository<EmailTemplate>> emailTemplateLogger,
-            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger
+            ILogger<GenericRepository<EmailHistory>> emailHistoryLogger,
+            ILogger<GenericRepository<FunctionLog>> functionLogLogger
         )
         {
             var emailTemplateRepository = new GenericRepository<EmailTemplate>(emailTemplateLogger, dbContext);
             var emailHistoryRepository = new GenericRepository<EmailHistory>(emailHistoryLogger, dbContext);
+            var functionLogRepository = new GenericRepository<FunctionLog>(functionLogLogger, dbContext);
             var config = new MapperConfiguration(c => c.AddMaps(typeof(EmailHistoryMapper).Assembly));
             var mapper = new Mapper(config);
 
-            return (emailTemplateRepository, emailHistoryRepository, mapper);
+            return (emailTemplateRepository, emailHistoryRepository, functionLogRepository, mapper);
         }
     }
 }

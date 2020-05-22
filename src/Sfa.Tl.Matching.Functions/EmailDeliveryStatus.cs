@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Functions
             ILogger logger,
             [Inject] MatchingConfiguration matchingConfiguration,
             [Inject] IEmailDeliveryStatusService emailDeliveryStatusService,
-            [Inject] IRepository<FunctionLog> functionlogRepository)
+            [Inject] IRepository<FunctionLog> functionLogRepository)
         {
             try
             {
@@ -58,13 +58,13 @@ namespace Sfa.Tl.Matching.Functions
             {
                 var errormessage = $"Invalid Authorization Token {exception}";
 
-                return await LogError(functionlogRepository, logger, errormessage);
+                return await LogError(functionLogRepository, logger, errormessage);
             }
             catch (Exception e)
             {
                 var errormessage = $"Error updating email status. Internal Error Message {e}";
 
-                return await LogError(functionlogRepository, logger, errormessage);
+                return await LogError(functionLogRepository, logger, errormessage);
             }
         }
 
@@ -76,7 +76,7 @@ namespace Sfa.Tl.Matching.Functions
             ILogger logger,
             [Inject] MatchingConfiguration matchingConfiguration,
             [Inject] IEmailDeliveryStatusService emailDeliveryStatusService,
-            [Inject] IRepository<FunctionLog> functionlogRepository)
+            [Inject] IRepository<FunctionLog> functionLogRepository)
         {
             if (!matchingConfiguration.SendEmailEnabled) return;
 
@@ -93,7 +93,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.CreateAsync(new FunctionLog
+                await functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = context.FunctionName,
@@ -116,11 +116,11 @@ namespace Sfa.Tl.Matching.Functions
             return token == $"Bearer {emailDeliveryStatusToken}";
         }
 
-        private static async Task<BadRequestObjectResult> LogError(IRepository<FunctionLog> functionlogRepository, ILogger logger, string errormessage)
+        private static async Task<BadRequestObjectResult> LogError(IRepository<FunctionLog> functionLogRepository, ILogger logger, string errormessage)
         {
             logger.LogError(errormessage);
 
-            await functionlogRepository.CreateAsync(new FunctionLog
+            await functionLogRepository.CreateAsync(new FunctionLog
             {
                 ErrorMessage = errormessage,
                 FunctionName = nameof(EmailDeliveryStatus),
@@ -129,6 +129,5 @@ namespace Sfa.Tl.Matching.Functions
 
             return new BadRequestObjectResult(errormessage);
         }
-
     }
 }

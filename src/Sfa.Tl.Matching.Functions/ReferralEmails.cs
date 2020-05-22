@@ -19,7 +19,7 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IReferralEmailService referralEmailService,
-            [Inject] IRepository<FunctionLog> functionlogRepository)
+            [Inject] IRepository<FunctionLog> functionLogRepository)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -37,7 +37,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.CreateAsync(new FunctionLog
+                await functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = context.FunctionName,
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Functions
             ExecutionContext context,
             ILogger logger,
             [Inject] IReferralEmailService referralEmailService,
-            [Inject] IRepository<FunctionLog> functionlogRepository)
+            [Inject] IRepository<FunctionLog> functionLogRepository)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -75,7 +75,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.CreateAsync(new FunctionLog
+                await functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = context.FunctionName,

@@ -22,15 +22,33 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task UploadAsync(DataUploadDto dto)
         {
-            var blobContainer = await GetContainerAsync(dto.ImportType.ToString().ToLowerInvariant());
-
-            var blockBlob = blobContainer.GetBlockBlobReference(dto.FileName);
-            blockBlob.AddCreatedByMetadata(dto.UserName);
-            blockBlob.Properties.ContentType = dto.ContentType;
+            var blockBlob = await GetBlockBlobReference(
+                dto.ImportType.ToString().ToLowerInvariant(),
+                dto.FileName, dto.ContentType, dto.UserName);
 
             await blockBlob.UploadFromByteArrayAsync(dto.Data, 0, dto.Data.Length);
 
-            _logger.LogInformation($"successfuly uploaded {dto.FileName} to {dto.ImportType} folder");
+            _logger.LogInformation($"Successfuly uploaded {dto.FileName} to {dto.ImportType} folder");
+        }
+
+        public async Task UploadFromStreamAsync(DataStreamUploadDto dto)
+        {
+            var blockBlob = await GetBlockBlobReference(dto.ContainerName, dto.FileName, dto.ContentType, dto.UserName);
+
+            await blockBlob.UploadFromStreamAsync(dto.DataStream);
+
+            _logger.LogInformation($"Successfuly uploaded {dto.FileName} to {dto.ContainerName} folder");
+        }
+
+        private async Task<CloudBlockBlob> GetBlockBlobReference(string containerName, string fileName,
+            string contentType, string createdByUserName)
+        {
+            var blobContainer = await GetContainerAsync(containerName);
+
+            var blockBlob = blobContainer.GetBlockBlobReference(fileName);
+            blockBlob.AddCreatedByMetadata(createdByUserName);
+            blockBlob.Properties.ContentType = contentType;
+            return blockBlob;
         }
 
         private async Task<CloudBlobContainer> GetContainerAsync(string containerName)

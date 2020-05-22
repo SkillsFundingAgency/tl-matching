@@ -68,7 +68,11 @@ namespace Sfa.Tl.Matching.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.Configure<FormOptions>(options => { options.ValueCountLimit = 15360; });
+            services.Configure<FormOptions>(options =>
+            {
+                options.ValueCountLimit = 15360;
+                options.MultipartBodyLengthLimit = int.MaxValue;
+            });
 
             services.AddAntiforgery(options =>
             {
