@@ -28,16 +28,6 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
                         CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests"
                     }));
 
-            //for (var i = 0; i < postcodeCount; i++)
-            //{
-            //    postcodes.Add(new Domain.Models.PostcodeLookup
-            //    {
-            //        Postcode = $"POST PO{i}",
-            //        LepCode = "LEP000001",
-            //        CreatedBy = "Sfa.Tl.Matching.Application.IntegrationTests"
-            //    });
-            //}
-
             _context.AddRange(postcodes);
             _context.SaveChanges();
 
