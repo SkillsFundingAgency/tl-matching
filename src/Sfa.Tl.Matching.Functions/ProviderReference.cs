@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Functions
             ILogger logger,
             [Inject] IReferenceDataService referenceDataService,
             [Inject] IDateTimeProvider dateTimeProvider,
-            [Inject] IRepository<FunctionLog> functionlogRepository)
+            [Inject] IRepository<FunctionLog> functionLogRepository)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.CreateAsync(new FunctionLog
+                await functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = nameof(ProviderReference),

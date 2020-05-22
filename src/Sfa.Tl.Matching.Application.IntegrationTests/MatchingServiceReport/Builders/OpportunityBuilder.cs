@@ -40,9 +40,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
         {
             return new OpportunityItem
             {
-                Town = "test",
-                JobRole = "test",
-                Postcode = "test",
+                Town = "test town",
+                JobRole = "test job role",
+                Postcode = "POST PO1",
 
                 Placements = 1,
                 PlacementsKnown = true,
@@ -68,9 +68,9 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.MatchingServiceReport.Bui
         {
             return new OpportunityItem
             {
-                Town = "test",
-                JobRole = "test",
-                Postcode = "test",
+                Town = "test town",
+                JobRole = "test job role",
+                Postcode = "POST PO1",
 
                 Placements = 1,
                 PlacementsKnown = true,

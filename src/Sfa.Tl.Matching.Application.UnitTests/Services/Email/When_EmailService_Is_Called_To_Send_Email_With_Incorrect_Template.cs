@@ -38,8 +38,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             _emailTemplateRepository
                 .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>())
                 .ReturnsNull();
+            
+            var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, emailHistoryRepository, mapper, _logger);
+            var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, emailHistoryRepository, functionLogRepository, mapper, _logger);
             const string toAddress = "test@test.com";
             var tokens = new Dictionary<string, string>
             {

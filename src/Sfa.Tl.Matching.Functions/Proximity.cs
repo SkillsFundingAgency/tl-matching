@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Functions
             ILogger logger,
             [Inject] IGoogleMapApiClient googleMapApiClient,
             [Inject] IRepository<ProviderVenue> providerVenueRepository,
-            [Inject] IRepository<FunctionLog> functionlogRepository
+            [Inject] IRepository<FunctionLog> functionLogRepository
         )
         {
             try
@@ -63,7 +63,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.CreateAsync(new FunctionLog
+                await functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = nameof(BackFillProviderPostTownAsync),
@@ -82,7 +82,7 @@ namespace Sfa.Tl.Matching.Functions
             [Inject] ILocationApiClient locationApiClient,
             [Inject] IGoogleMapApiClient googleMapApiClient,
             [Inject] IRepository<OpportunityItem> opportunityItemRepository,
-            [Inject] IRepository<FunctionLog> functionlogRepository
+            [Inject] IRepository<FunctionLog> functionLogRepository
         )
         {
             try
@@ -103,7 +103,7 @@ namespace Sfa.Tl.Matching.Functions
 
                         logger.LogError(errormessage);
 
-                        await functionlogRepository.CreateAsync(new FunctionLog
+                        await functionLogRepository.CreateAsync(new FunctionLog
                         {
                             ErrorMessage = errormessage,
                             FunctionName = nameof(BackFillEmployerPostTownAsync),
@@ -133,7 +133,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.CreateAsync(new FunctionLog
+                await functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = nameof(BackFillEmployerPostTownAsync),
@@ -151,7 +151,7 @@ namespace Sfa.Tl.Matching.Functions
             ILogger logger,
             [Inject] ILocationApiClient locationApiClient,
             [Inject] IRepository<ProviderVenue> providerVenueRepository,
-            [Inject] IRepository<FunctionLog> functionlogRepository
+            [Inject] IRepository<FunctionLog> functionLogRepository
         )
         {
             try
@@ -187,7 +187,7 @@ namespace Sfa.Tl.Matching.Functions
 
                         logger.LogError(errormessage);
 
-                        await functionlogRepository.CreateAsync(new FunctionLog
+                        await functionLogRepository.CreateAsync(new FunctionLog
                         {
                             ErrorMessage = errormessage,
                             FunctionName = nameof(BackFillProximityDataAsync),
@@ -209,7 +209,7 @@ namespace Sfa.Tl.Matching.Functions
 
                 logger.LogError(errormessage);
 
-                await functionlogRepository.CreateAsync(new FunctionLog
+                await functionLogRepository.CreateAsync(new FunctionLog
                 {
                     ErrorMessage = errormessage,
                     FunctionName = nameof(BackFillProximityDataAsync),

@@ -17,6 +17,8 @@ namespace Sfa.Tl.Matching.Domain.Models
         public int? Placements { get; set; }
         public string JobRole { get; set; }
         public string RouteName { get; set; }
+        public string LepCode { get; set; }
+        public string LepName { get; set; }
         public bool? NoSuitableStudent { get; set; }
         public bool? HadBadExperience { get; set; }
         public bool? ProvidersTooFarAway { get; set; }

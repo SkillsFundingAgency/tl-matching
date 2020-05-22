@@ -99,7 +99,6 @@
     <Build Include="Tables\OpportunityItem.sql" />
     <Build Include="Tables\Opportunity.sql" />
     <None Include="PostDeployment\Remove Obsolete Tables.sql" />
-    <Build Include="Tables\OLDOpportunity.sql" />
     <Build Include="Tables\BankHoliday.sql" />
     <Build Include="Tables\ServiceStatusHistory.sql" />
     <Build Include="Tables\UserCache.sql" />
@@ -113,6 +112,12 @@
     <Build Include="Indexes\IX_Employer_CrmId.sql" />
     <Build Include="Indexes\IX_ProviderQualification_QualificationId.sql" />
     <Build Include="Views\OpportunityBasketItem.sql" />
+    <Build Include="Tables\LocalEnterprisePartnership.sql" />
+    <Build Include="Tables\PostcodeLookup.sql" />
+    <Build Include="Tables\LocalEnterprisePartnershipStaging.sql" />
+    <Build Include="Tables\PostcodeLookupStaging.sql" />
+    <Build Include="Indexes\IX_LocalEnterprisePartnership_Code.sql" />
+    <None Include="PostDeployment\Set Permissions.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

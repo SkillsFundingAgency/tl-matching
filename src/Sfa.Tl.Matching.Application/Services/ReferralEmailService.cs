@@ -21,7 +21,7 @@ namespace Sfa.Tl.Matching.Application.Services
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<OpportunityItem> _opportunityItemRepository;
-        private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
+        private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository; private readonly IRepository<FunctionLog> _functionLogRepository;
 
         public ReferralEmailService(
                     IMapper mapper,
@@ -29,7 +29,8 @@ namespace Sfa.Tl.Matching.Application.Services
                     IEmailService emailService,
                     IOpportunityRepository opportunityRepository,
                     IRepository<OpportunityItem> opportunityItemRepository,
-                    IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository)
+                    IRepository<BackgroundProcessHistory> backgroundProcessHistoryRepository,
+                    IRepository<FunctionLog> functionLogRepository)
         {
             _mapper = mapper;
             _dateTimeProvider = dateTimeProvider;
@@ -37,6 +38,7 @@ namespace Sfa.Tl.Matching.Application.Services
             _opportunityRepository = opportunityRepository;
             _opportunityItemRepository = opportunityItemRepository;
             _backgroundProcessHistoryRepository = backgroundProcessHistoryRepository;
+            _functionLogRepository = functionLogRepository;
         }
 
         public async Task SendEmployerReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
@@ -45,7 +47,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             try
             {
-                var employerReferral = await _opportunityRepository.GetEmployerReferralsAsync(opportunityId, itemIds); 
+                var employerReferral = await _opportunityRepository.GetEmployerReferralsAsync(opportunityId, itemIds);
                 var sb = new StringBuilder();
 
                 if (employerReferral == null) return;
@@ -100,7 +102,16 @@ namespace Sfa.Tl.Matching.Application.Services
 
         public async Task SendProviderReferralEmailAsync(int opportunityId, IEnumerable<int> itemIds, int backgroundProcessHistoryId, string username)
         {
-            if (await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId) == null) return;
+            if (await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId) == null)
+            {
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = $"Background Prociessing History not found for id {backgroundProcessHistoryId}",
+                    FunctionName = nameof(ReferralEmailService),
+                    RowNumber = -1
+                });
+                return;
+            }
 
             var referrals = await _opportunityRepository.GetProviderOpportunitiesAsync(opportunityId, itemIds);
 
@@ -147,7 +158,16 @@ namespace Sfa.Tl.Matching.Application.Services
             catch (Exception ex)
             {
                 var errorMessage = $"Error sending provider referral emails. {ex.Message} " +
-                                   $"Opportunity id {opportunityId}";
+                                   $"Opportunity id {opportunityId}" +
+                                   $"\r\nInner exception: {ex.InnerException?.Message}\r\n" +
+                                   $"Stack trace: {ex.StackTrace}";
+
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = errorMessage,
+                    FunctionName = nameof(ReferralEmailService),
+                    RowNumber = -1
+                });
 
                 await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, referrals.Count, BackgroundProcessHistoryStatus.Error, username, errorMessage);
             }
@@ -247,9 +267,9 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task UpdateBackgroundProcessHistoryAsync(
             int backgroundProcessHistoryId,
-            int providerCount, 
+            int providerCount,
             BackgroundProcessHistoryStatus historyStatus,
-            string userName, 
+            string userName,
             string errorMessage = null)
         {
             var backgroundProcessHistory = await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId);

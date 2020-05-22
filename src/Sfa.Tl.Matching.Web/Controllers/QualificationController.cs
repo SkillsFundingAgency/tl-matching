@@ -96,7 +96,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
                 ModelState.AddModelError("SearchTerms", "You must enter 2 or more letters for your search");
 
             if (!ModelState.IsValid)
-                return View("SearchQualifications",viewModel);
+                return View("SearchQualifications", viewModel);
 
             var searchResult = await _qualificationService.SearchQualificationAsync(viewModel.SearchTerms);
 
@@ -209,7 +209,7 @@ namespace Sfa.Tl.Matching.Web.Controllers
 
             return routes;
         }
-        
+
         private async Task PopulateRoutesForQualificationSearchItem(QualificationSearchViewModel searchResult)
         {
             var routes = await _routePathService.GetRouteSummaryAsync();
@@ -217,16 +217,13 @@ namespace Sfa.Tl.Matching.Web.Controllers
             foreach (var searchResultItem in searchResult.Results)
             {
                 searchResultItem.Routes = routes.Select(route =>
-                {
-                    return new RouteSummaryViewModel
+                    new RouteSummaryViewModel
                     {
                         Id = route.Id,
                         IsSelected = searchResultItem.RouteIds.Contains(route.Id),
                         Name = route.Name,
                         Summary = route.Summary
-                    };
-
-                }).ToList();
+                    }).ToList();
             }
         }
 

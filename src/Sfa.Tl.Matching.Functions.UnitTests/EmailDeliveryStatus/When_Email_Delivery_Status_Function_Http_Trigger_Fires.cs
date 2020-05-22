@@ -32,7 +32,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             EmailDeliveryStatusPayLoad payLoad,
             ExecutionContext context,
             IMessageQueueService messageQueueService,
-            IRepository<FunctionLog> functionlogRepository,
+            IRepository<FunctionLog> functionLogRepository,
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
             ILogger<EmailDeliveryStatusService> logger
@@ -54,18 +54,17 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             var functions = new Functions.EmailDeliveryStatus();
             var result = await functions.EmailDeliveryStatusHandlerAsync(httpRequest, context, logger,
                 matchingConfiguration,
-                notificationService, functionlogRepository) as OkObjectResult;
+                notificationService, functionLogRepository) as OkObjectResult;
 
             //Assert
             httpRequest.Headers.TryGetValue("Authorization", out var token);
 
             token.Should().Equal($"Bearer {matchingConfiguration.EmailDeliveryStatusToken}");
             result.Should().NotBeNull();
-            result.StatusCode.Should().Be(200);
-            result.Value.Should().Be("1 records updated.");
+            result?.StatusCode.Should().Be(200);
+            result?.Value.Should().Be("1 records updated.");
 
             await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
-
         }
 
         [Theory, AutoDomainData]
@@ -77,7 +76,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             IMessageQueueService messageQueueService,
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
-            IRepository<FunctionLog> functionlogRepository,
+            IRepository<FunctionLog> functionLogRepository,
             ILogger<EmailDeliveryStatusService> logger
         )
         {
@@ -98,12 +97,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             var functions = new Functions.EmailDeliveryStatus();
             var result = await functions.EmailDeliveryStatusHandlerAsync(
                 HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
-                notificationService, functionlogRepository) as OkObjectResult;
+                notificationService, functionLogRepository) as OkObjectResult;
 
             //Arrange
             result.Should().NotBeNull();
-            result.StatusCode.Should().Be(200);
-            result.Value.Should().Be("-1 records updated.");
+            result?.StatusCode.Should().Be(200);
+            result?.Value.Should().Be("-1 records updated.");
 
             await emailHistoryRepository.DidNotReceive().UpdateWithSpecifiedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
                 Arg.Any<Expression<Func<EmailHistory, object>>[]>());
@@ -121,7 +120,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             IMessageQueueService messageQueueService,
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
-            IRepository<FunctionLog> functionlogRepository,
+            IRepository<FunctionLog> functionLogRepository,
             ILogger<EmailDeliveryStatusService> logger
         )
         {
@@ -143,12 +142,12 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             var functions = new Functions.EmailDeliveryStatus();
             var result = await functions.EmailDeliveryStatusHandlerAsync(
                 HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
-                notificationService, functionlogRepository) as BadRequestObjectResult;
+                notificationService, functionLogRepository) as BadRequestObjectResult;
 
             //Assert
             result.Should().NotBeNull();
-            result.StatusCode.Should().Be(400);
-            result.Should().BeOfType<BadRequestObjectResult>();
+            result?.StatusCode.Should().Be(400);
+            result?.Should().BeOfType<BadRequestObjectResult>();
 
             await emailHistoryRepository.DidNotReceive().UpdateWithSpecifiedColumnsOnlyAsync(Arg.Any<EmailHistory>(),
                 Arg.Any<Expression<Func<EmailHistory, object>>[]>());
@@ -159,7 +158,6 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
                 Arg.Any<Expression<Func<EmailHistory, object>>[]>());
 
             await messageQueueService.DidNotReceive().PushEmailDeliveryStatusMessageAsync(Arg.Any<SendEmailDeliveryStatus>());
-
         }
 
         [Theory]
@@ -177,7 +175,7 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             IMessageQueueService messageQueueService,
             IEmailService emailService,
             IOpportunityRepository opportunityRepository,
-            IRepository<FunctionLog> functionlogRepository,
+            IRepository<FunctionLog> functionLogRepository,
             ILogger<EmailDeliveryStatusService> logger
         )
         {
@@ -199,15 +197,14 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             var functions = new Functions.EmailDeliveryStatus();
             var result = await functions.EmailDeliveryStatusHandlerAsync(
                 HttpRequestSetup(query, serializedPayLoad), context, logger, matchingConfiguration,
-                notificationService, functionlogRepository) as OkObjectResult;
+                notificationService, functionLogRepository) as OkObjectResult;
 
             //Assert
             result.Should().NotBeNull();
-            result.StatusCode.Should().Be(200);
-            result.Value.Should().Be("1 records updated.");
+            result?.StatusCode.Should().Be(200);
+            result?.Value.Should().Be("1 records updated.");
 
             await messageQueueService.Received(1).PushEmailDeliveryStatusMessageAsync(Arg.Is<SendEmailDeliveryStatus>(email => email.NotificationId == payLoad.Id));
-
         }
 
         private static HttpRequest HttpRequestSetup(Dictionary<string, StringValues> query, string body)
@@ -230,7 +227,6 @@ namespace Sfa.Tl.Matching.Functions.UnitTests.EmailDeliveryStatus
             reqMock.Body.Returns(stream);
 
             return reqMock;
-
         }
     }
 }

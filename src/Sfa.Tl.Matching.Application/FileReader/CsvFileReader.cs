@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using CsvHelper;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
@@ -43,23 +44,26 @@ namespace Sfa.Tl.Matching.Application.FileReader
                 .Select(prop => new { ColumnInfo = prop, Index = prop.GetCustomAttribute<ColumnAttribute>(false).Order })
                 .ToList();
 
-            using (var reader = new StreamReader(fileImportDto.FileDataStream))
+            using (var streamReader = new StreamReader(fileImportDto.FileDataStream))
+            using (var reader = new CsvReader(streamReader))//, CultureInfo.CurrentCulture))
             {
+                //Manually skip header rows 
+                reader.Configuration.HasHeaderRecord = false;
                 if (fileImportDto.NumberOfHeaderRows.HasValue)
                 {
                     for (var i = 0; i < fileImportDto.NumberOfHeaderRows; i++)
                     {
-                        await reader.ReadLineAsync();
+                        await reader.ReadAsync();
                     }
                 }
 
                 var validationErrors = new List<FunctionLog>();
                 var startIndex = fileImportDto.NumberOfHeaderRows ?? 0;
 
-                while (!reader.EndOfStream)
+                while (await reader.ReadAsync())
                 {
-                    var row = await reader.ReadLineAsync();
-                    var columnValues = row.Remove(0, 1).Remove(row.Length - 2).Split("\",\"");
+                    var columnValues = reader.Context.Record;
+
                     ValidationResult validationResult;
 
                     foreach (var column in columnInfos)
@@ -79,7 +83,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                     }
                     catch (Exception exception)
                     {
-                        validationResult = new ValidationResult { Errors = { new ValidationFailure(nameof(TDto), exception.ToString()) } };
+                        validationResult = new ValidationResult { Errors = { new ValidationFailure(typeof(TDto).Name, exception.ToString()) } };
                     }
 
                     if (!validationResult.IsValid)

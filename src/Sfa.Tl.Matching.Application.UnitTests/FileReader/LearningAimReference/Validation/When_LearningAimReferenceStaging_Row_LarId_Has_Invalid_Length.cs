@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.FileReader.LearningAimReference.Validation
 {
-    public class When_LearningAimReferenceStaging_Row_LaarId_Has_Invalid_Length : IClassFixture<LearningAimReferenceStagingFileImportFixture>
+    public class When_LearningAimReferenceStaging_Row_LarId_Has_Invalid_Length : IClassFixture<LearningAimReferenceStagingFileImportFixture>
     {
         private readonly LearningAimReferenceStagingFileImportFixture _fixture;
 
-        public When_LearningAimReferenceStaging_Row_LaarId_Has_Invalid_Length(LearningAimReferenceStagingFileImportFixture fixture)
+        public When_LearningAimReferenceStaging_Row_LarId_Has_Invalid_Length(LearningAimReferenceStagingFileImportFixture fixture)
         {
             _fixture = fixture;
         }

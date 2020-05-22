@@ -6,7 +6,17 @@ namespace Sfa.Tl.Matching.Models.Enums
 {
     public enum DataImportType
     {
-        [Description("Learning Aim Reference"), FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
-        LearningAimReference
+        [Description("Learning Aim Reference")]
+        [FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
+        LearningAimReference,
+
+        [Description("Local Enterprise Partnership")]
+        [FileExtensions(Extensions = FileImportTypeExtensions.Csv)]
+        LocalEnterprisePartnership,
+
+        [Description("Postcodes")]
+        [DisplayName("ONS Postcodes")]
+        [FileExtensions(Extensions = FileImportTypeExtensions.Zip)]
+        Postcodes
     }
 }

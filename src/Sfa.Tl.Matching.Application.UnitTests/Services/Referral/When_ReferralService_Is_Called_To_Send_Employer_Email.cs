@@ -44,13 +44,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     .AddSecondaryContact()
                     .Build());
 
+            var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
+
             var itemIds = new List<int>
             {
                 1
             };
 
             var referralEmailService = new ReferralEmailService(mapper, datetimeProvider, _emailService,
-                _opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo);
+                _opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo, functionLogRepository);
 
             referralEmailService.SendEmployerReferralEmailAsync(1, itemIds, 1, "system").GetAwaiter().GetResult();
         }

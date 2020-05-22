@@ -125,13 +125,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                 Status = BackgroundProcessHistoryStatus.Pending.ToString()
             });
 
+            var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
+
             var itemIds = new List<int>
             {
                 1
             };
 
             var referralService = new ReferralEmailService(mapper, dateTimeProvider, emailService,
-                opportunityRepo, _opportunityItemRepository, backgroundProcessHistoryRepo);
+                opportunityRepo, _opportunityItemRepository, backgroundProcessHistoryRepo, functionLogRepository);
 
             referralService.SendProviderReferralEmailAsync(1, itemIds, 1, httpcontextAccesor.HttpContext.User.GetUserName()).GetAwaiter().GetResult();
         }

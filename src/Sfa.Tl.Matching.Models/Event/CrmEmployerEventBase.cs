@@ -34,6 +34,7 @@ namespace Sfa.Tl.Matching.Models.Event
         public string Alias { get; set; }
 
         [JsonProperty("sfa_aupa")]
+        // ReSharper disable once InconsistentNaming
         public SfaAupa sfa_aupa { get; set; }
 
         [JsonProperty("sfa_ceasedtrading")]
