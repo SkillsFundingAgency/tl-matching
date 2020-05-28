@@ -106,7 +106,7 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = $"Background Prociessing History not found for id {backgroundProcessHistoryId}",
+                    ErrorMessage = $"Background Processing History not found for id {backgroundProcessHistoryId}",
                     FunctionName = nameof(ReferralEmailService),
                     RowNumber = -1
                 });
