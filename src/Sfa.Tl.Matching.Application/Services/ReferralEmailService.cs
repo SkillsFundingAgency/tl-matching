@@ -140,12 +140,12 @@ namespace Sfa.Tl.Matching.Application.Services
                     };
 
                     const EmailTemplateName template = EmailTemplateName.ProviderReferralV5;
-                    await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy);
+                    await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy, referral.OpportunityItemId);
 
                     if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
                     {
                         tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmailAsync(template, opportunityId, referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
+                        await SendEmailAsync(template, opportunityId, referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy, referral.OpportunityItemId);
                     }
 
                     await CompleteSelectedReferralsAsync(opportunityId, referral.OpportunityItemId, username);
@@ -204,6 +204,13 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task CompleteSelectedReferralsAsync(int opportunityId, int itemId, string username)
         {
+            await _functionLogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"Completing selected referrals for opportunity {opportunityId}, item {itemId}",
+                FunctionName = nameof(ReferralEmailService),
+                RowNumber = 1
+            });
+
             var selectedOpportunityItemIds = _opportunityItemRepository
                 .GetManyAsync(oi => oi.Opportunity.Id == opportunityId
                                     && oi.Id == itemId
@@ -211,14 +218,34 @@ namespace Sfa.Tl.Matching.Application.Services
                                     && oi.IsSelectedForReferral
                                     && !oi.IsCompleted).Select(oi => oi.Id).ToList();
 
+            await _functionLogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"selectedOpportunityItemIds.Count={selectedOpportunityItemIds.Count}",
+                FunctionName = nameof(ReferralEmailService),
+                RowNumber = 2
+            });
+
             if (selectedOpportunityItemIds.Count > 0)
             {
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = $"Setting to complete - selectedOpportunityItemIds {string.Join(",", selectedOpportunityItemIds)}",
+                    FunctionName = nameof(ReferralEmailService),
+                    RowNumber = 3
+                });
                 await SetOpportunityItemsAsCompletedAsync(selectedOpportunityItemIds, username);
             }
         }
 
         private async Task CompleteRemainingItemsAsync(int opportunityId, string username)
         {
+            await _functionLogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"Completing remaining items for opportunity {opportunityId}",
+                FunctionName = nameof(ReferralEmailService),
+                RowNumber = 4
+            });
+
             var remainingOpportunities = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
                                                                                   && oi.IsSaved
                                                                                   && !oi.IsSelectedForReferral
@@ -228,12 +255,27 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var provisionItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
 
+            await _functionLogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"provisionItems.Count={provisionItems.Count}, referralItems.Count={referralItems.Count}",
+                FunctionName = nameof(ReferralEmailService),
+                RowNumber = 5
+            });
+
             if (provisionItems.Count > 0 && referralItems.Count == 0)
             {
                 var provisionIds = provisionItems.Select(oi => oi.Id).ToList();
 
                 if (provisionIds.Count > 0)
+                {
+                    await _functionLogRepository.CreateAsync(new FunctionLog
+                    {
+                        ErrorMessage = $"Setting to complete - provisionIds {string.Join(",", provisionIds)}",
+                        FunctionName = nameof(ReferralEmailService),
+                        RowNumber = 6
+                    });
                     await SetOpportunityItemsAsCompletedAsync(provisionIds, username);
+                }
             }
         }
 
@@ -260,8 +302,14 @@ namespace Sfa.Tl.Matching.Application.Services
                 : "at least 1";
         }
 
-        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, string toAddress, IDictionary<string, string> tokens, string createdBy)
+        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, string toAddress, IDictionary<string, string> tokens, string createdBy, int opportunityItemId = 0)
         {
+            await _functionLogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"SendEmailAsync - opportunityId={opportunityId}, template={template}, toAddress={toAddress}, tokens={tokens?.Count}",
+                FunctionName = nameof(ReferralEmailService),
+                RowNumber = opportunityItemId
+            });
             await _emailService.SendEmailAsync(opportunityId, template.ToString(), toAddress, tokens, createdBy);
         }
 
