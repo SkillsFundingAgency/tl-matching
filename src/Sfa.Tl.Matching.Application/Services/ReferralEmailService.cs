@@ -322,11 +322,25 @@ namespace Sfa.Tl.Matching.Application.Services
         {
             var backgroundProcessHistory = await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId);
 
+            await _functionLogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"UpdateBackgroundProcessHistoryAsync - backgroundProcessHistoryId={backgroundProcessHistoryId}, found=={backgroundProcessHistory != null}",
+                FunctionName = nameof(ReferralEmailService),
+                RowNumber = -1 * backgroundProcessHistoryId
+            });
+
             backgroundProcessHistory.RecordCount = providerCount;
             backgroundProcessHistory.Status = historyStatus.ToString();
             backgroundProcessHistory.StatusMessage = errorMessage;
             backgroundProcessHistory.ModifiedBy = userName;
             backgroundProcessHistory.ModifiedOn = _dateTimeProvider.UtcNow();
+
+            await _functionLogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"UpdateBackgroundProcessHistoryAsync - updating backgroundProcessHistoryId={backgroundProcessHistoryId} to {backgroundProcessHistory.Status}",
+                FunctionName = nameof(ReferralEmailService),
+                RowNumber = -1 * backgroundProcessHistoryId
+            });
 
             await _backgroundProcessHistoryRepository.UpdateWithSpecifiedColumnsOnlyAsync(backgroundProcessHistory,
                 history => history.RecordCount,
@@ -334,6 +348,14 @@ namespace Sfa.Tl.Matching.Application.Services
                 history => history.StatusMessage,
                 history => history.ModifiedBy,
                 history => history.ModifiedOn);
+
+            await _functionLogRepository.CreateAsync(new FunctionLog
+            {
+                ErrorMessage = $"UpdateBackgroundProcessHistoryAsync - updated backgroundProcessHistoryId={backgroundProcessHistoryId} to {backgroundProcessHistory.Status}",
+                FunctionName = nameof(ReferralEmailService),
+                RowNumber = -1 * backgroundProcessHistoryId
+            });
+
         }
 
         private async Task<BackgroundProcessHistory> GetBackgroundProcessHistoryDataAsync(int backgroundProcessHistoryId)
