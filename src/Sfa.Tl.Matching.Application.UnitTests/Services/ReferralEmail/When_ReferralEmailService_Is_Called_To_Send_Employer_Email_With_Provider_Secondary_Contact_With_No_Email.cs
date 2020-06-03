@@ -11,23 +11,22 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 {
-    public class When_ReferralService_Is_Called_To_Send_Employer_Email
+    public class When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_Provider_Secondary_Contact_With_No_Email
     {
         private readonly IEmailService _emailService;
-        private readonly IOpportunityRepository _opportunityRepository;
 
-        public When_ReferralService_Is_Called_To_Send_Employer_Email()
+        public When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_Provider_Secondary_Contact_With_No_Email()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
             var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
-            
+
             var mapper = Substitute.For<IMapper>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
             _emailService = Substitute.For<IEmailService>();
-            _opportunityRepository = Substitute.For<IOpportunityRepository>();
+            var opportunityRepository = Substitute.For<IOpportunityRepository>();
             
             backgroundProcessHistoryRepo.GetSingleOrDefaultAsync(
                 Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
@@ -37,11 +36,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                     Status = BackgroundProcessHistoryStatus.Pending.ToString()
                 });
 
-            _opportunityRepository
+            opportunityRepository
                 .GetEmployerReferralsAsync(
                     Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new ValidEmployerReferralDtoBuilder()
-                    .AddSecondaryContact()
+                    .AddSecondaryContact(includeEmail: false)
                     .Build());
 
             var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
@@ -52,50 +51,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
             };
 
             var referralEmailService = new ReferralEmailService(mapper, datetimeProvider, _emailService,
-                _opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo, functionLogRepository);
+                opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo, functionLogRepository);
 
             referralEmailService.SendEmployerReferralEmailAsync(1, itemIds, 1, "system").GetAwaiter().GetResult();
-        }
-
-        [Fact]
-        public void Then_OpportunityRepository_GetEmployerReferrals_Is_Called_Exactly_Once()
-        {
-            _opportunityRepository
-                .Received(1)
-                .GetEmployerReferralsAsync(
-                    Arg.Any<int>(), Arg.Any<IEnumerable<int>>());
-        }
-
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_Exactly_Once_With_Expected_Parameters()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
-                        templateName => templateName == "EmployerReferralV5"),
-                    Arg.Is<string>(
-                        toAddress => toAddress == "employer.contact@employer.co.uk"),
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Any<string>());
-        }
-        
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Expected_Tokens()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_contact_name")
-                                  && tokens["employer_contact_name"] == "Employer Contact"
-                                  && tokens.ContainsKey("employer_business_name")
-                                  && tokens["employer_business_name"] == "Employer"
-                                  && tokens.ContainsKey("employer_contact_number")
-                                  && tokens["employer_contact_number"] == "020 123 4567"
-                                  && tokens.ContainsKey("employer_contact_email")
-                                  && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"), 
-                    Arg.Any<string>());
         }
         
         [Fact]
@@ -106,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  + "* Students wanted: 2\r\n"
                                                  + "* First provider selected: Venue Name part of Display Name (ProviderPostcode)\r\n"
                                                  + "Primary contact: Primary Contact (Telephone: 020 123 3210; Email: primary.contact@provider.ac.uk)\r\n"
-                                                 + "Secondary contact: Secondary Contact (Telephone: 021 456 0987; Email: secondary.contact@provider.ac.uk)\r\n"
+                                                 + "Secondary contact: Secondary Contact (Telephone: 021 456 0987)\r\n"
                                                  + "\r\n";
 
             _emailService

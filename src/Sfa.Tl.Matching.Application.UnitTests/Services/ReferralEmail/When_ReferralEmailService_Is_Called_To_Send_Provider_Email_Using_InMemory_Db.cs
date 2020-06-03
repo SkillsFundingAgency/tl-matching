@@ -17,7 +17,7 @@ using Sfa.Tl.Matching.Models.Enums;
 using Sfa.Tl.Matching.Tests.Common.AutoDomain;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 {
     public class When_ReferralEmailService_Is_Called_To_Send_Provider_Email_Using_InMemory_Db
     {

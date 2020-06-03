@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 
             var opportunity = new ValidOpportunityBuilder()
                 .AddEmployer()
-                .AddReferrals(true)
+                .AddReferrals() //Not completed
                 .Build();
             
             var opportunityItem = opportunity.OpportunityItem.First();
@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _opportunityItemId = opportunity.OpportunityItem.First().Id;
             
             var repository = new OpportunityRepository(logger, dbContext);
-            _result = repository.GetProviderOpportunitiesAsync(
+            _result = repository.GetIncompleteProviderOpportunitiesAsync(
                     1, 
                     new List<int> { _opportunityItemId })
                 .GetAwaiter().GetResult();

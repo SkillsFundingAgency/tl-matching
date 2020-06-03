@@ -11,13 +11,13 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 {
-    public class When_ReferralService_Is_Called_To_Send_Employer_Email_With_No_Provider_Secondary_Contact
+    public class When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_No_Provider_Secondary_Contact
     {
         private readonly IEmailService _emailService;
 
-        public When_ReferralService_Is_Called_To_Send_Employer_Email_With_No_Provider_Secondary_Contact()
+        public When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_No_Provider_Secondary_Contact()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
             var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();

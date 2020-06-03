@@ -12,16 +12,16 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 {
-    public class When_ReferralService_Is_Called_To_Send_Provider_Email
+    public class When_ReferralEmailService_Is_Called_To_Send_Provider_Email
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
 
         private readonly IDictionary<string, string> _contactNames = new Dictionary<string, string>();
 
-        public When_ReferralService_Is_Called_To_Send_Provider_Email()
+        public When_ReferralEmailService_Is_Called_To_Send_Provider_Email()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
             var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
@@ -57,7 +57,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 });
 
             _opportunityRepository
-                .GetProviderOpportunitiesAsync(
+                .GetIncompleteProviderOpportunitiesAsync(
                     Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new ValidOpportunityReferralDtoListBuilder().Build());
 
@@ -75,11 +75,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         }
 
         [Fact]
-        public void Then_OpportunityRepository_GetProviderOpportunities_Is_Called_Exactly_Once()
+        public void Then_OpportunityRepository_GetIncompleteProviderOpportunities_Is_Called_Exactly_Once()
         {
             _opportunityRepository
                 .Received(1)
-                .GetProviderOpportunitiesAsync(Arg.Any<int>(), Arg.Any<IEnumerable<int>>());
+                .GetIncompleteProviderOpportunitiesAsync(Arg.Any<int>(), Arg.Any<IEnumerable<int>>());
         }
 
         [Fact]

@@ -113,7 +113,7 @@ namespace Sfa.Tl.Matching.Application.Services
                 return;
             }
 
-            var referrals = await _opportunityRepository.GetProviderOpportunitiesAsync(opportunityId, itemIds);
+            var referrals = await _opportunityRepository.GetIncompleteProviderOpportunitiesAsync(opportunityId, itemIds);
 
             try
             {

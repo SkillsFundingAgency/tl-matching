@@ -11,16 +11,17 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 {
-    public class When_ReferralService_Is_Called_To_Send_Employer_Email_With_Provider_Secondary_Contact_With_No_Phone
+    public class When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_Provider_Secondary_Contact_With_No_Phone_And_No_Email
     {
         private readonly IEmailService _emailService;
 
-        public When_ReferralService_Is_Called_To_Send_Employer_Email_With_Provider_Secondary_Contact_With_No_Phone()
+        public When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_Provider_Secondary_Contact_With_No_Phone_And_No_Email()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
             var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
+            
             var mapper = Substitute.For<IMapper>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
@@ -39,7 +40,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                 .GetEmployerReferralsAsync(
                     Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new ValidEmployerReferralDtoBuilder()
-                    .AddSecondaryContact(includePhone: false)
+                    .AddSecondaryContact(false, false)
                     .Build());
 
             var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
@@ -63,7 +64,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
                                                  + "* Students wanted: 2\r\n"
                                                  + "* First provider selected: Venue Name part of Display Name (ProviderPostcode)\r\n"
                                                  + "Primary contact: Primary Contact (Telephone: 020 123 3210; Email: primary.contact@provider.ac.uk)\r\n"
-                                                 + "Secondary contact: Secondary Contact (Email: secondary.contact@provider.ac.uk)\r\n"
+                                                 + "Secondary contact: Secondary Contact\r\n"
                                                  + "\r\n";
 
             _emailService
