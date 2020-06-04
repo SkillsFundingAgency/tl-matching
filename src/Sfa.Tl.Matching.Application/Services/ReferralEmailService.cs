@@ -252,29 +252,28 @@ namespace Sfa.Tl.Matching.Application.Services
                                                                                   && !oi.IsCompleted);
 
             var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString()).ToList();
-
-            var provisionItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
+            var provisionGapItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
 
             await _functionLogRepository.CreateAsync(new FunctionLog
             {
-                ErrorMessage = $"provisionItems.Count={provisionItems.Count}, referralItems.Count={referralItems.Count}",
+                ErrorMessage = $"provisionGapItems.Count={provisionGapItems.Count}, referralItems.Count={referralItems.Count}",
                 FunctionName = nameof(ReferralEmailService),
                 RowNumber = 5
             });
 
-            if (provisionItems.Count > 0 && referralItems.Count == 0)
+            if (provisionGapItems.Count > 0 && referralItems.Count == 0)
             {
-                var provisionIds = provisionItems.Select(oi => oi.Id).ToList();
+                var provisionGapIds = provisionGapItems.Select(oi => oi.Id).ToList();
 
-                if (provisionIds.Count > 0)
+                if (provisionGapIds.Count > 0)
                 {
                     await _functionLogRepository.CreateAsync(new FunctionLog
                     {
-                        ErrorMessage = $"Setting to complete - provisionIds {string.Join(",", provisionIds)}",
+                        ErrorMessage = $"Setting to complete - provisionIds {string.Join(",", provisionGapIds)}",
                         FunctionName = nameof(ReferralEmailService),
                         RowNumber = 6
                     });
-                    await SetOpportunityItemsAsCompletedAsync(provisionIds, username);
+                    await SetOpportunityItemsAsCompletedAsync(provisionGapIds, username);
                 }
             }
         }
