@@ -11,11 +11,11 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 {
-    public class When_OpportunityRepository_GetProviderOpportunities_Is_Called_With_Completed_Opportunity
+    public class When_OpportunityRepository_GetIncompleteProviderOpportunities_Is_Called_With_Completed_Opportunity
     {
         private readonly IList<OpportunityReferralDto> _result;
 
-        public When_OpportunityRepository_GetProviderOpportunities_Is_Called_With_Completed_Opportunity()
+        public When_OpportunityRepository_GetIncompleteProviderOpportunities_Is_Called_With_Completed_Opportunity()
         {
             var logger = Substitute.For<ILogger<OpportunityRepository>>();
 
