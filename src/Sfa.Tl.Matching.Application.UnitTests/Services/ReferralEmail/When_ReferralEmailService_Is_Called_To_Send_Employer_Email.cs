@@ -71,12 +71,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
-                        templateName => templateName == "EmployerReferralV5"),
-                    Arg.Is<string>(
-                        toAddress => toAddress == "employer.contact@employer.co.uk"),
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Any<string>());
+                .SendEmailAsync(Arg.Is<string>(templateName => templateName == "EmployerReferralV5"), 
+                    Arg.Is<string>(toAddress => toAddress == "employer.contact@employer.co.uk"),
+                    Arg.Any<int?>(), Arg.Any<int?>(), 
+                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
         
         [Fact]
@@ -84,18 +82,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<int?>(), Arg.Any<int?>(), 
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_contact_name")
-                                  && tokens["employer_contact_name"] == "Employer Contact"
-                                  && tokens.ContainsKey("employer_business_name")
-                                  && tokens["employer_business_name"] == "Employer"
-                                  && tokens.ContainsKey("employer_contact_number")
-                                  && tokens["employer_contact_number"] == "020 123 4567"
-                                  && tokens.ContainsKey("employer_contact_email")
-                                  && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"), 
-                    Arg.Any<string>());
+                    tokens => tokens.ContainsKey("employer_contact_name")
+                              && tokens["employer_contact_name"] == "Employer Contact"
+                              && tokens.ContainsKey("employer_business_name")
+                              && tokens["employer_business_name"] == "Employer"
+                              && tokens.ContainsKey("employer_contact_number")
+                              && tokens["employer_contact_number"] == "020 123 4567"
+                              && tokens.ContainsKey("employer_contact_email")
+                              && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"), Arg.Any<string>());
         }
         
         [Fact]
@@ -111,11 +108,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<int?>(), Arg.Any<int?>(), 
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("placements_list")
-                                  && tokens["placements_list"] == expectedPlacementsList), Arg.Any<string>());
+                    tokens => tokens.ContainsKey("placements_list")
+                              && tokens["placements_list"] == expectedPlacementsList), Arg.Any<string>());
         }
     }
 }

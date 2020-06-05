@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,40 +116,79 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var referrals = await _opportunityRepository.GetIncompleteProviderOpportunitiesAsync(opportunityId, itemIds);
 
+            //Group by opportunity item, then loop over that with referrals onside
+
             try
             {
-                foreach (var referral in referrals)
+                var opportunityItemGroups = (
+                    from p in referrals
+                    orderby p.OpportunityItemId
+                    group p by p.OpportunityItemId into g
+                    select new
+                    {
+                        OpportunityItemId = g.Key,
+                        Referrals = g.Select(c => c).ToList()
+                    }
+                ).ToList();
+
+                Debug.WriteLine("============");
+                foreach (var opportunityItem in opportunityItemGroups)
                 {
-                    var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
-
-                    var tokens = new Dictionary<string, string>
+                    Debug.WriteLine($"Opportunity item {opportunityItem.OpportunityItemId}  has {opportunityItem.Referrals.Count} referrals");
+                    Debug.WriteLine($"{opportunityItem.OpportunityItemId}");
+                    foreach (var referral in opportunityItem.Referrals)
                     {
-                        { "contact_name", referral.ProviderPrimaryContact },
-                        { "provider_name", referral.ProviderDisplayName },
-                        { "route", referral.RouteName.ToLowerInvariant() },
-                        { "venue_text", referral.VenueText },
-                        { "search_radius", referral.DistanceFromEmployer },
-                        { "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
-                            ? $"* looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
-                            : $"* looking for this job role: {referral.JobRole}" },
-                        { "employer_business_name", referral.CompanyName.ToTitleCase() },
-                        { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
-                        { "employer_contact_number", referral.EmployerContactPhone },
-                        { "employer_contact_email", referral.EmployerContactEmail },
-                        { "employer_town_postcode", $"{referral.Town} {referral.Postcode }" },
-                        { "number_of_placements", placements }
-                    };
+                        Debug.WriteLine($"    {referral.ReferralId}");
+                    }
+                }
+                Debug.WriteLine("============");
+                var loopCounter = 0;
 
-                    const EmailTemplateName template = EmailTemplateName.ProviderReferralV5;
-                    await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy, referral.OpportunityItemId);
+                foreach (var opportunityItem in opportunityItemGroups)
+                {
+                    loopCounter++;
+                    Debug.WriteLine($"Opportunity item {opportunityItem.OpportunityItemId}  has {opportunityItem.Referrals.Count} referrals");
 
-                    if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
+                    foreach (var referral in opportunityItem.Referrals)
                     {
-                        tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmailAsync(template, opportunityId, referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy, referral.OpportunityItemId);
+                        Debug.WriteLine($"Loop {loopCounter} of {referrals.Count}");
+
+                        var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
+
+                        var tokens = new Dictionary<string, string>
+                        {
+                            {"contact_name", referral.ProviderPrimaryContact},
+                            {"provider_name", referral.ProviderDisplayName},
+                            {"route", referral.RouteName.ToLowerInvariant()},
+                            {"venue_text", referral.VenueText},
+                            {"search_radius", referral.DistanceFromEmployer},
+                            {
+                                "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
+                                    ? $"* looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
+                                    : $"* looking for this job role: {referral.JobRole}"
+                            },
+                            {"employer_business_name", referral.CompanyName.ToTitleCase()},
+                            {"employer_contact_name", referral.EmployerContact.ToTitleCase()},
+                            {"employer_contact_number", referral.EmployerContactPhone},
+                            {"employer_contact_email", referral.EmployerContactEmail},
+                            {"employer_town_postcode", $"{referral.Town} {referral.Postcode}"},
+                            {"number_of_placements", placements}
+                        };
+
+                        const EmailTemplateName template = EmailTemplateName.ProviderReferralV5;
+                        await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens,
+                            referral.CreatedBy, referral.OpportunityItemId);
+
+                        if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) &&
+                            !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
+                        {
+                            tokens["contact_name"] = referral.ProviderSecondaryContact;
+                            await SendEmailAsync(template, opportunityId, referral.ProviderSecondaryContactEmail, tokens,
+                                referral.CreatedBy, referral.OpportunityItemId);
+                        }
                     }
 
-                    await CompleteSelectedReferralsAsync(opportunityId, referral.OpportunityItemId, username);
+                    await CompleteSelectedReferralsAsync(opportunityId, opportunityItem.OpportunityItemId, username);
                 }
 
                 await CompleteRemainingItemsAsync(opportunityId, username);
@@ -301,15 +341,16 @@ namespace Sfa.Tl.Matching.Application.Services
                 : "at least 1";
         }
 
-        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, string toAddress, IDictionary<string, string> tokens, string createdBy, int opportunityItemId = 0)
+        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, string toAddress, IDictionary<string, string> tokens, string createdBy, int? opportunityItemId = null)
         {
             await _functionLogRepository.CreateAsync(new FunctionLog
             {
                 ErrorMessage = $"SendEmailAsync - opportunityId={opportunityId}, template={template}, toAddress={toAddress}, tokens={tokens?.Count}",
                 FunctionName = nameof(ReferralEmailService),
-                RowNumber = opportunityItemId
+                RowNumber = opportunityItemId ?? 0
             });
-            await _emailService.SendEmailAsync(opportunityId, template.ToString(), toAddress, tokens, createdBy);
+
+            await _emailService.SendEmailAsync(template.ToString(), toAddress, opportunityId, opportunityItemId, tokens, createdBy);
         }
 
         private async Task UpdateBackgroundProcessHistoryAsync(
@@ -323,7 +364,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
             await _functionLogRepository.CreateAsync(new FunctionLog
             {
-                ErrorMessage = $"UpdateBackgroundProcessHistoryAsync - backgroundProcessHistoryId={backgroundProcessHistoryId}, found=={backgroundProcessHistory != null}",
+                ErrorMessage = $"UpdateBackgroundProcessHistoryAsync - backgroundProcessHistoryId={backgroundProcessHistoryId}, found=={backgroundProcessHistory != null} type {backgroundProcessHistory?.ProcessType} to status {historyStatus}",
                 FunctionName = nameof(ReferralEmailService),
                 RowNumber = -1 * backgroundProcessHistoryId
             });

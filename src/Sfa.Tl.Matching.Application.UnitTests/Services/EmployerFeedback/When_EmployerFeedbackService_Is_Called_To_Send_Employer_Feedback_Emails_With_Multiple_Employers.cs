@@ -110,11 +110,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(null,
-                    Arg.Is<string>(templateName => templateName == EmailTemplateName.EmployerFeedbackV2.ToString()),
+                .SendEmailAsync(Arg.Is<string>(templateName => templateName == EmailTemplateName.EmployerFeedbackV2.ToString()),
                     Arg.Is<string>(toAddress => toAddress == "employer.contact@employer.co.uk"),
+                    null, null,
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokensForEmail1)),
+                    tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokensForEmail1)),
                     Arg.Is<string>(createdBy => createdBy == "TestUser"));
 
             const string expectedOpportunityListForEmail2 = "* 3 x Another Job Role at Another Town CV1 4WT on 01 December 2019";
@@ -129,11 +129,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(null,
-                    Arg.Is<string>(templateName => templateName == EmailTemplateName.EmployerFeedbackV2.ToString()),
+                .SendEmailAsync(Arg.Is<string>(templateName => templateName == EmailTemplateName.EmployerFeedbackV2.ToString()),
                     Arg.Is<string>(toAddress => toAddress == "another.employer.contact@employer.co.uk"),
-                    Arg.Is<IDictionary<string, string>>(
-                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokensForEmail2)),
+                    null, null,
+                    Arg.Is<IDictionary<string, string>>(tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokensForEmail2)),
                     Arg.Is<string>(createdBy => createdBy == "TestUser"));
         }
 

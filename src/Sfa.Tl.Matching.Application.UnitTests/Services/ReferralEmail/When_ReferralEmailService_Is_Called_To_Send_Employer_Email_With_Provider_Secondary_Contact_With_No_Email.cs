@@ -69,11 +69,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<int?>(), Arg.Any<int?>(), 
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("placements_list")
-                                  && tokens["placements_list"] == expectedPlacementsList), Arg.Any<string>());
+                    tokens => tokens.ContainsKey("placements_list")
+                              && tokens["placements_list"] == expectedPlacementsList), Arg.Any<string>());
         }
     }
 }

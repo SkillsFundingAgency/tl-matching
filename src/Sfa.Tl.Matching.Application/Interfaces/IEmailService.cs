@@ -8,7 +8,8 @@ namespace Sfa.Tl.Matching.Application.Interfaces
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(int? opportunityId, string templateName, string toAddress,
+        Task SendEmailAsync(string templateName, string toAddress,
+            int? opportunityId, int? opportunityItemId,
             IDictionary<string, string> personalisationTokens, string createdBy);
         Task<EmailDeliveryStatusDto> GetEmailBodyFromNotifyClientAsync(Guid notificationId);
         Task<EmailHistoryDto> GetEmailHistoryAsync(Guid notificationId);

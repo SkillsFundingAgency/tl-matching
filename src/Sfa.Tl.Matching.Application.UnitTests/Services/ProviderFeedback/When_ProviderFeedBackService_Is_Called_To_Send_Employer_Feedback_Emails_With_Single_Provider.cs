@@ -38,14 +38,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             _emailService = Substitute.For<IEmailService>();
 
             _emailService
-                .When(x => x.SendEmailAsync(Arg.Any<int?>(),
+                .When(x => x.SendEmailAsync(Arg.Any<string>(),
                     Arg.Any<string>(),
-                    Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Any<string>()))
+                    Arg.Any<int?>(),
+                    Arg.Any<int?>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>()))
                 .Do(x =>
                 {
-                    var address = x.ArgAt<string>(2);
+                    var address = x.ArgAt<string>(1);
                     var tokens = x.Arg<Dictionary<string, string>>();
                     if (tokens.TryGetValue("other_email_details", out var contact))
                     {
@@ -107,12 +106,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         {
             _emailService
                 .Received(2)
-                .SendEmailAsync(Arg.Any<int?>(),
-                    Arg.Is<string>(
-                    templateName => templateName == "ProviderFeedbackV2"),
+                .SendEmailAsync(Arg.Is<string>(
+                        templateName => templateName == "ProviderFeedbackV2"),
                     Arg.Any<string>(),
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Is<string>(createdBy => createdBy == "TestUser"));
+                    Arg.Any<int?>(),
+                    Arg.Any<int?>(), Arg.Any<IDictionary<string, string>>(), Arg.Is<string>(createdBy => createdBy == "TestUser"));
         }
         
         [Fact]

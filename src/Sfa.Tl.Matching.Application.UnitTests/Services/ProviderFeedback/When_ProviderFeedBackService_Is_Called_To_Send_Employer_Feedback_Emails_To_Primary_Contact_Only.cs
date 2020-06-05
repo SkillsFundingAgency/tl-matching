@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
                 .Returns(new DateTime(2019, 12, 13));
 
             _emailService = Substitute.For<IEmailService>();
-            
+
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
 
             _opportunityRepository
@@ -105,11 +105,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(null,
-                    Arg.Is<string>(templateName => templateName == EmailTemplateName.ProviderFeedbackV2.ToString()),
+                .SendEmailAsync(Arg.Is<string>(templateName => templateName == EmailTemplateName.ProviderFeedbackV2.ToString()),
                     Arg.Is<string>(toAddress => toAddress == "primary.contact@provider.co.uk"),
+                    null, null,
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokens)),
+                    tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokens)),
                     Arg.Is<string>(createdBy => createdBy == "TestUser"));
         }
 

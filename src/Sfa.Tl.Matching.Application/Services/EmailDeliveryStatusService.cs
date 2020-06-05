@@ -102,8 +102,8 @@ namespace Sfa.Tl.Matching.Application.Services
                 { "email_body", emailBodyDto.Body }
             };
 
-            await _emailService.SendEmailAsync(emailHistoryDto.OpportunityId, EmailTemplateName.EmailDeliveryStatus.ToString(),
-                _configuration.MatchingServiceSupportEmailAddress, tokens, "System");
+            await _emailService.SendEmailAsync(EmailTemplateName.EmailDeliveryStatus.ToString(),
+                _configuration.MatchingServiceSupportEmailAddress, emailHistoryDto.OpportunityId, emailHistoryDto.OpportunityItemId, tokens, "System");
         }
 
         private async Task<string> GetEmailBody(EmailTemplateName emailTemplateName, EmailHistoryDto emailHistoryDto)
