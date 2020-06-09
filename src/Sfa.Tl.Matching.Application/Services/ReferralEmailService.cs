@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -107,7 +106,7 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = $"Background Processing History not found for id {backgroundProcessHistoryId}",
+                    ErrorMessage = $"Background Processing History not found or not pending for id {backgroundProcessHistoryId}",
                     FunctionName = nameof(ReferralEmailService),
                     RowNumber = -1
                 });
@@ -116,10 +115,20 @@ namespace Sfa.Tl.Matching.Application.Services
 
             var referrals = await _opportunityRepository.GetIncompleteProviderOpportunitiesAsync(opportunityId, itemIds);
 
-            //Group by opportunity item, then loop over that with referrals onside
+            if (referrals == null || referrals.Count == 0)
+            {
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    // ReSharper disable once PossibleMultipleEnumeration
+                    ErrorMessage = $"No provider referrals found for opportunity id {opportunityId} with {itemIds?.Count()} items",
+                    FunctionName = nameof(ReferralEmailService),
+                    RowNumber = -1
+                });
+            }
 
             try
             {
+                //Group by opportunity item, then loop over that with referrals onside
                 var opportunityItemGroups = (
                     from p in referrals
                     orderby p.OpportunityItemId
@@ -131,28 +140,10 @@ namespace Sfa.Tl.Matching.Application.Services
                     }
                 ).ToList();
 
-                Debug.WriteLine("============");
                 foreach (var opportunityItem in opportunityItemGroups)
                 {
-                    Debug.WriteLine($"Opportunity item {opportunityItem.OpportunityItemId}  has {opportunityItem.Referrals.Count} referrals");
-                    Debug.WriteLine($"{opportunityItem.OpportunityItemId}");
                     foreach (var referral in opportunityItem.Referrals)
                     {
-                        Debug.WriteLine($"    {referral.ReferralId}");
-                    }
-                }
-                Debug.WriteLine("============");
-                var loopCounter = 0;
-
-                foreach (var opportunityItem in opportunityItemGroups)
-                {
-                    loopCounter++;
-                    Debug.WriteLine($"Opportunity item {opportunityItem.OpportunityItemId}  has {opportunityItem.Referrals.Count} referrals");
-
-                    foreach (var referral in opportunityItem.Referrals)
-                    {
-                        Debug.WriteLine($"Loop {loopCounter} of {referrals.Count}");
-
                         var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
 
                         var tokens = new Dictionary<string, string>
@@ -193,7 +184,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                 await CompleteRemainingItemsAsync(opportunityId, username);
 
-                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, referrals.Count, BackgroundProcessHistoryStatus.Complete, username);
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, referrals?.Count ?? 0, BackgroundProcessHistoryStatus.Complete, username);
             }
             catch (Exception ex)
             {
@@ -244,13 +235,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task CompleteSelectedReferralsAsync(int opportunityId, int itemId, string username)
         {
-            await _functionLogRepository.CreateAsync(new FunctionLog
-            {
-                ErrorMessage = $"Completing selected referrals for opportunity {opportunityId}, item {itemId}",
-                FunctionName = nameof(ReferralEmailService),
-                RowNumber = 1
-            });
-
             var selectedOpportunityItemIds = _opportunityItemRepository
                 .GetManyAsync(oi => oi.Opportunity.Id == opportunityId
                                     && oi.Id == itemId
@@ -258,34 +242,14 @@ namespace Sfa.Tl.Matching.Application.Services
                                     && oi.IsSelectedForReferral
                                     && !oi.IsCompleted).Select(oi => oi.Id).ToList();
 
-            await _functionLogRepository.CreateAsync(new FunctionLog
-            {
-                ErrorMessage = $"selectedOpportunityItemIds.Count={selectedOpportunityItemIds.Count}",
-                FunctionName = nameof(ReferralEmailService),
-                RowNumber = 2
-            });
-
             if (selectedOpportunityItemIds.Count > 0)
             {
-                await _functionLogRepository.CreateAsync(new FunctionLog
-                {
-                    ErrorMessage = $"Setting to complete - selectedOpportunityItemIds {string.Join(",", selectedOpportunityItemIds)}",
-                    FunctionName = nameof(ReferralEmailService),
-                    RowNumber = 3
-                });
                 await SetOpportunityItemsAsCompletedAsync(selectedOpportunityItemIds, username);
             }
         }
 
         private async Task CompleteRemainingItemsAsync(int opportunityId, string username)
         {
-            await _functionLogRepository.CreateAsync(new FunctionLog
-            {
-                ErrorMessage = $"Completing remaining items for opportunity {opportunityId}",
-                FunctionName = nameof(ReferralEmailService),
-                RowNumber = 4
-            });
-
             var remainingOpportunities = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
                                                                                   && oi.IsSaved
                                                                                   && !oi.IsSelectedForReferral
@@ -294,25 +258,12 @@ namespace Sfa.Tl.Matching.Application.Services
             var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString()).ToList();
             var provisionGapItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
 
-            await _functionLogRepository.CreateAsync(new FunctionLog
-            {
-                ErrorMessage = $"provisionGapItems.Count={provisionGapItems.Count}, referralItems.Count={referralItems.Count}",
-                FunctionName = nameof(ReferralEmailService),
-                RowNumber = 5
-            });
-
             if (provisionGapItems.Count > 0 && referralItems.Count == 0)
             {
                 var provisionGapIds = provisionGapItems.Select(oi => oi.Id).ToList();
 
                 if (provisionGapIds.Count > 0)
                 {
-                    await _functionLogRepository.CreateAsync(new FunctionLog
-                    {
-                        ErrorMessage = $"Setting to complete - provisionIds {string.Join(",", provisionGapIds)}",
-                        FunctionName = nameof(ReferralEmailService),
-                        RowNumber = 6
-                    });
                     await SetOpportunityItemsAsCompletedAsync(provisionGapIds, username);
                 }
             }
@@ -343,13 +294,6 @@ namespace Sfa.Tl.Matching.Application.Services
 
         private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, string toAddress, IDictionary<string, string> tokens, string createdBy, int? opportunityItemId = null)
         {
-            await _functionLogRepository.CreateAsync(new FunctionLog
-            {
-                ErrorMessage = $"SendEmailAsync - opportunityId={opportunityId}, template={template}, toAddress={toAddress}, tokens={tokens?.Count}",
-                FunctionName = nameof(ReferralEmailService),
-                RowNumber = opportunityItemId ?? 0
-            });
-
             await _emailService.SendEmailAsync(template.ToString(), toAddress, opportunityId, opportunityItemId, tokens, createdBy);
         }
 
@@ -360,14 +304,18 @@ namespace Sfa.Tl.Matching.Application.Services
             string userName,
             string errorMessage = null)
         {
-            var backgroundProcessHistory = await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId);
-
-            await _functionLogRepository.CreateAsync(new FunctionLog
+            var backgroundProcessHistory = await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId, false);
+            if (backgroundProcessHistory == null)
             {
-                ErrorMessage = $"UpdateBackgroundProcessHistoryAsync - backgroundProcessHistoryId={backgroundProcessHistoryId}, found=={backgroundProcessHistory != null} type {backgroundProcessHistory?.ProcessType} to status {historyStatus}",
-                FunctionName = nameof(ReferralEmailService),
-                RowNumber = -1 * backgroundProcessHistoryId
-            });
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = $"UpdateBackgroundProcessHistoryAsync::Background Processing History not found for id {backgroundProcessHistoryId}",
+                    FunctionName = nameof(ReferralEmailService),
+                    RowNumber = -1
+                });
+
+                throw new InvalidOperationException($"Cannot update non-existent background processing history for id={backgroundProcessHistoryId}");
+            }
 
             backgroundProcessHistory.RecordCount = providerCount;
             backgroundProcessHistory.Status = historyStatus.ToString();
@@ -375,34 +323,20 @@ namespace Sfa.Tl.Matching.Application.Services
             backgroundProcessHistory.ModifiedBy = userName;
             backgroundProcessHistory.ModifiedOn = _dateTimeProvider.UtcNow();
 
-            await _functionLogRepository.CreateAsync(new FunctionLog
-            {
-                ErrorMessage = $"UpdateBackgroundProcessHistoryAsync - updating backgroundProcessHistoryId={backgroundProcessHistoryId} to {backgroundProcessHistory.Status}",
-                FunctionName = nameof(ReferralEmailService),
-                RowNumber = -1 * backgroundProcessHistoryId
-            });
-
             await _backgroundProcessHistoryRepository.UpdateWithSpecifiedColumnsOnlyAsync(backgroundProcessHistory,
                 history => history.RecordCount,
                 history => history.Status,
                 history => history.StatusMessage,
                 history => history.ModifiedBy,
                 history => history.ModifiedOn);
-
-            await _functionLogRepository.CreateAsync(new FunctionLog
-            {
-                ErrorMessage = $"UpdateBackgroundProcessHistoryAsync - updated backgroundProcessHistoryId={backgroundProcessHistoryId} to {backgroundProcessHistory.Status}",
-                FunctionName = nameof(ReferralEmailService),
-                RowNumber = -1 * backgroundProcessHistoryId
-            });
-
         }
 
-        private async Task<BackgroundProcessHistory> GetBackgroundProcessHistoryDataAsync(int backgroundProcessHistoryId)
+        private async Task<BackgroundProcessHistory> GetBackgroundProcessHistoryDataAsync(int backgroundProcessHistoryId, bool getPendingOnly = true)
         {
             var backgroundProcessHistory = await _backgroundProcessHistoryRepository.GetSingleOrDefaultAsync(p => p.Id == backgroundProcessHistoryId);
 
-            if (backgroundProcessHistory == null || backgroundProcessHistory.Status != BackgroundProcessHistoryStatus.Pending.ToString())
+            if (backgroundProcessHistory == null
+                || (getPendingOnly && backgroundProcessHistory.Status != BackgroundProcessHistoryStatus.Pending.ToString()))
             {
                 return null;
             }
