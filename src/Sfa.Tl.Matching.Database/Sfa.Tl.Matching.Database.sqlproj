@@ -70,6 +70,7 @@
     <None Include="Sfa.Tl.Matching.Database.Local.publish.xml" />
     <None Include="PostDeployment\Seed UserProfile.sql" />
     <None Include="Indexes\IX_OpportunityBaskekItem.sql" />
+    <None Include="PostDeployment\Remove Obsolete Email History Columns.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
@@ -118,6 +119,9 @@
     <Build Include="Tables\PostcodeLookupStaging.sql" />
     <Build Include="Indexes\IX_LocalEnterprisePartnership_Code.sql" />
     <None Include="PostDeployment\Set Permissions.sql" />
+    <Build Include="Indexes\IX_Referral_OpportunityItemId.sql" />
+    <Build Include="Indexes\IX_OpportunityItem_OpportunityId_IsSaved_IsSelectedForReferral_IsDeleted.sql" />
+    <Build Include="Indexes\IX_OpportunityItem_OpportunityId_IsSaved_IsCompleted_IsDeleted.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostDeployment\PostDeploy.sql" />

@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 { "contactname",  "name" }
             };
 
-            emailService.SendEmailAsync(2, "Test Template", toAddress, tokens, createdBy).GetAwaiter().GetResult();
+            emailService.SendEmailAsync("Test Template", toAddress, 2, 100, tokens, createdBy).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -63,6 +63,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
                 .Received(1)
                 .CreateAsync(Arg.Is<EmailHistory>(email =>
                     email.OpportunityId == 2 &&
+                    email.OpportunityItemId == 100 &&
                     email.EmailTemplateId == 1 &&
                     email.SentTo == "test@test.com" &&
                     email.CreatedBy == "CreatedBy"));

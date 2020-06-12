@@ -60,7 +60,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 
             const string templateName = "TestTemplate";
 
-            emailService.SendEmailAsync(null, templateName, _toAddress, tokens, "System").GetAwaiter().GetResult();
+            emailService.SendEmailAsync(templateName, _toAddress, null, null, tokens, "System").GetAwaiter().GetResult();
         }
 
         [Fact]

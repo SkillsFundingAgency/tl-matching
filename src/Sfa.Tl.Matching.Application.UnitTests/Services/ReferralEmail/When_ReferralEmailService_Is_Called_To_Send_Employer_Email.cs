@@ -11,14 +11,14 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 {
-    public class When_ReferralService_Is_Called_To_Send_Employer_Email
+    public class When_ReferralEmailService_Is_Called_To_Send_Employer_Email
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
 
-        public When_ReferralService_Is_Called_To_Send_Employer_Email()
+        public When_ReferralEmailService_Is_Called_To_Send_Employer_Email()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
             var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
@@ -71,12 +71,10 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
-                        templateName => templateName == "EmployerReferralV5"),
-                    Arg.Is<string>(
-                        toAddress => toAddress == "employer.contact@employer.co.uk"),
-                    Arg.Any<IDictionary<string, string>>(),
-                    Arg.Any<string>());
+                .SendEmailAsync(Arg.Is<string>(templateName => templateName == "EmployerReferralV5"), 
+                    Arg.Is<string>(toAddress => toAddress == "employer.contact@employer.co.uk"),
+                    Arg.Any<int?>(), Arg.Any<int?>(), 
+                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
         
         [Fact]
@@ -84,18 +82,17 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<int?>(), Arg.Any<int?>(), 
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("employer_contact_name")
-                                  && tokens["employer_contact_name"] == "Employer Contact"
-                                  && tokens.ContainsKey("employer_business_name")
-                                  && tokens["employer_business_name"] == "Employer"
-                                  && tokens.ContainsKey("employer_contact_number")
-                                  && tokens["employer_contact_number"] == "020 123 4567"
-                                  && tokens.ContainsKey("employer_contact_email")
-                                  && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"), 
-                    Arg.Any<string>());
+                    tokens => tokens.ContainsKey("employer_contact_name")
+                              && tokens["employer_contact_name"] == "Employer Contact"
+                              && tokens.ContainsKey("employer_business_name")
+                              && tokens["employer_business_name"] == "Employer"
+                              && tokens.ContainsKey("employer_contact_number")
+                              && tokens["employer_contact_number"] == "020 123 4567"
+                              && tokens.ContainsKey("employer_contact_email")
+                              && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"), Arg.Any<string>());
         }
         
         [Fact]
@@ -111,11 +108,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<int?>(), Arg.Any<int?>(), 
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("placements_list")
-                                  && tokens["placements_list"] == expectedPlacementsList), Arg.Any<string>());
+                    tokens => tokens.ContainsKey("placements_list")
+                              && tokens["placements_list"] == expectedPlacementsList), Arg.Any<string>());
         }
     }
 }

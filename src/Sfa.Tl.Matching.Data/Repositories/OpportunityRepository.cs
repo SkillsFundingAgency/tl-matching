@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
         }
 
-        public async Task<IList<OpportunityReferralDto>> GetProviderOpportunitiesAsync(int opportunityId, IEnumerable<int> itemIds)
+        public async Task<IList<OpportunityReferralDto>> GetIncompleteProviderOpportunitiesAsync(int opportunityId, IEnumerable<int> itemIds)
         {
             var data = await (from op in _dbContext.Opportunity
                               join oi in _dbContext.OpportunityItem on op.Id equals oi.OpportunityId
@@ -32,6 +32,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                     && itemIds.Contains(oi.Id)
                                     && oi.IsSelectedForReferral
                                     && oi.IsSaved
+                                    && !oi.IsCompleted
                                     && p.IsCdfProvider
                                     && p.IsEnabledForReferral
                                     && pv.IsEnabledForReferral

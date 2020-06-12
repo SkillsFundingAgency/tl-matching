@@ -11,3 +11,4 @@ DECLARE @TicketNo VARCHAR(32)
 :r ".\Seed Email Templates.sql"
 :r ".\Remove Obsolete Tables.sql"
 :r ".\Seed UserProfile.sql"
+:r ".\Remove Obsolete Email History Columns.sql"
