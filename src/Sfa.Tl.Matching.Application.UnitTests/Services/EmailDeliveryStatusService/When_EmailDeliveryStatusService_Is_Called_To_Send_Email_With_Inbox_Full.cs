@@ -18,6 +18,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly Guid _notificationId = new Guid("a8de2d8c-23ae-4c2f-980a-0a8a3231938f");
         private const int OpportunityId = 1;
+        private const int OpportunityItemId = 2;
         private const string SupportEmailAddress = "support@service.com";
 
         public When_EmailDeliveryStatusService_Is_Called_To_Send_Email_With_Inbox_Full()
@@ -43,6 +44,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 {
                     NotificationId = _notificationId,
                     OpportunityId = OpportunityId,
+                    OpportunityItemId = OpportunityItemId,
                     SentTo = "sent-to@email.com",
                     Status = "unknown-failure",
                     EmailTemplateId = 7,
@@ -86,17 +88,14 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         [Fact]
         public void Then_EmailService_SendEmailAsync_Is_Called_Exactly_Once()
         {
-            _emailService.Received(1).SendEmailAsync(OpportunityId,
-                EmailTemplateName.EmailDeliveryStatus.ToString(),
-                SupportEmailAddress,
+            _emailService.Received(1).SendEmailAsync(EmailTemplateName.EmailDeliveryStatus.ToString(), SupportEmailAddress, OpportunityId, OpportunityItemId, 
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("summary") && tokens["summary"] == "We cannot determine whether or not the following email was sent."
-                    && tokens.ContainsKey("email_type") && tokens["email_type"] == "provider referral"
-                    && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
-                    && tokens.ContainsKey("reason") && tokens["reason"] == "Inbox not accepting messages right now"
-                    && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
-                    && tokens.ContainsKey("email_body") && tokens["email_body"] == "Body")
-                , Arg.Any<string>());
+                                                  && tokens.ContainsKey("email_type") && tokens["email_type"] == "provider referral"
+                                                  && tokens.ContainsKey("body") && tokens["body"] == "Provider name: Provider Venue Name\r\nProvider primary contact: primary-contact@email.com\r\nProvider secondary contact: secondary-contact@email.com\r\n"
+                                                  && tokens.ContainsKey("reason") && tokens["reason"] == "Inbox not accepting messages right now"
+                                                  && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
+                                                  && tokens.ContainsKey("email_body") && tokens["email_body"] == "Body"), Arg.Any<string>());
         }
     }
 }

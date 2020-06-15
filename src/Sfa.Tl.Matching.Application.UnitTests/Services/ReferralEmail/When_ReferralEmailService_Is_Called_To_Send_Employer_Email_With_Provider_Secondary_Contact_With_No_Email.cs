@@ -11,13 +11,13 @@ using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Enums;
 using Xunit;
 
-namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
+namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 {
-    public class When_ReferralService_Is_Called_To_Send_Employer_Email_With_Provider_Secondary_Contact_With_No_Email
+    public class When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_Provider_Secondary_Contact_With_No_Email
     {
         private readonly IEmailService _emailService;
 
-        public When_ReferralService_Is_Called_To_Send_Employer_Email_With_Provider_Secondary_Contact_With_No_Email()
+        public When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_Provider_Secondary_Contact_With_No_Email()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
             var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
@@ -69,11 +69,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Referral
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<int?>(), Arg.Any<int?>(), 
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => tokens.ContainsKey("placements_list")
-                                  && tokens["placements_list"] == expectedPlacementsList), Arg.Any<string>());
+                    tokens => tokens.ContainsKey("placements_list")
+                              && tokens["placements_list"] == expectedPlacementsList), Arg.Any<string>());
         }
     }
 }

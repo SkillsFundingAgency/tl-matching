@@ -12,14 +12,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 {
-    public class When_OpportunityRepository_GetProviderOpportunities_Is_Called
+    public class When_OpportunityRepository_GetIncompleteProviderOpportunities_Is_Called
     {
         private readonly int _opportunityId;
         private readonly int _referralId;
         private readonly int _opportunityItemId;
         private readonly IList<OpportunityReferralDto> _result;
 
-        public When_OpportunityRepository_GetProviderOpportunities_Is_Called()
+        public When_OpportunityRepository_GetIncompleteProviderOpportunities_Is_Called()
         {
             var logger = Substitute.For<ILogger<OpportunityRepository>>();
 
@@ -27,7 +27,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 
             var opportunity = new ValidOpportunityBuilder()
                 .AddEmployer()
-                .AddReferrals(true)
+                .AddReferrals() //Not completed
                 .Build();
             
             var opportunityItem = opportunity.OpportunityItem.First();
@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
             _opportunityItemId = opportunity.OpportunityItem.First().Id;
             
             var repository = new OpportunityRepository(logger, dbContext);
-            _result = repository.GetProviderOpportunitiesAsync(
+            _result = repository.GetIncompleteProviderOpportunitiesAsync(
                     1, 
                     new List<int> { _opportunityItemId })
                 .GetAwaiter().GetResult();

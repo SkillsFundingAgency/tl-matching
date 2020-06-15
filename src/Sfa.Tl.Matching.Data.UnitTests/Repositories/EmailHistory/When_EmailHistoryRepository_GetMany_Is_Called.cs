@@ -40,8 +40,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory
             _result.First().OpportunityId.Should().Be(1);
             _result.First().EmailTemplateId.Should().Be(2);
             _result.First().SentTo.Should().BeEquivalentTo("recipient@test.com");
-            _result.First().CopiedTo.Should().BeEquivalentTo("copy@test.com");
-            _result.First().BlindCopiedTo.Should().BeEquivalentTo("blindcopy@test.com");
             _result.First().CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
             _result.First().CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);
             _result.First().ModifiedBy.Should().BeEquivalentTo(EntityCreationConstants.ModifiedByUser);

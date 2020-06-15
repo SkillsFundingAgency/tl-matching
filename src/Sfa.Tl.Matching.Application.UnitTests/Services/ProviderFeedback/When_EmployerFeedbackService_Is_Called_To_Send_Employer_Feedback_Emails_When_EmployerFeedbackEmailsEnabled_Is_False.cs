@@ -28,11 +28,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
 
             _emailService = Substitute.For<IEmailService>();
 
-            _bankHolidayRepository = Substitute.For< IRepository<BankHoliday>>();
+            _bankHolidayRepository = Substitute.For<IRepository<BankHoliday>>();
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
             _opportunityRepository.GetReferralsForProviderFeedbackAsync(Arg.Any<DateTime>())
                 .Returns(new ValidProviderFeedbackDtoListBuilder().Build());
-            
+
             testFixture.Configuration.ProviderFeedbackEmailsEnabled = false;
 
             var providerFeedbackService = new ProviderFeedbackService(
@@ -85,11 +85,8 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
         {
             _emailService
                  .DidNotReceive()
-                 .SendEmailAsync(Arg.Any<int>(), 
-                     Arg.Any<string>(),
-                     Arg.Any<string>(),
-                     Arg.Any<IDictionary<string, string>>(),
-                     Arg.Any<string>());
+                 .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int>(), Arg.Any<int>(),
+                     Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Fact]

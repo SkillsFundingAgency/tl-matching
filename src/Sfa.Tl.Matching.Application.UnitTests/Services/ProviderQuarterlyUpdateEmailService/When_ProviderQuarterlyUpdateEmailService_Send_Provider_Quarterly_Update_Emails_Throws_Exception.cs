@@ -28,7 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         public When_ProviderQuarterlyUpdateEmailService_Send_Provider_Quarterly_Update_Emails_Throws_Exception(ProviderQuarterlyUpdateEmailFixture testFixture)
         {
             _emailService = Substitute.For<IEmailService>();
-            
+
             var messageQueueService = Substitute.For<IMessageQueueService>();
             _logger = Substitute.For<ILogger<Application.Services.ProviderQuarterlyUpdateEmailService>>();
 
@@ -41,7 +41,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
             _backgroundProcessHistoryRepository
                 .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>())
                 .Returns(new BackgroundProcessHistoryBuilder().Build());
-            
+
             _receivedProviderQuarterlyUpdateEmailRequestHistories = new List<BackgroundProcessHistory>();
             _backgroundProcessHistoryRepository
                 .UpdateAsync(Arg.Do<BackgroundProcessHistory>
@@ -58,11 +58,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 )));
 
             _emailService
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>())
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>())
                 .Throws(new Exception());
 
             var providerQuarterlyUpdateEmailService = new Application.Services.ProviderQuarterlyUpdateEmailService(
-                _logger, 
+                _logger,
                     _emailService,
                     _providerRepository, _backgroundProcessHistoryRepository,
                     messageQueueService, testFixture.DateTimeProvider);
@@ -87,7 +87,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                 .Received(1)
                 .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>());
         }
-        
+
         [Fact]
         public void Then_BackgroundProcessHistoryRepository_Update_Is_Called_Exactly_Twice()
         {
@@ -108,7 +108,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
                          && p.ModifiedBy == "TestUser"
                 ));
         }
-        
+
         [Fact]
         public void Then_BackgroundProcessHistoryRepository_Update_Sets_Expected_Values_In_First_Call()
         {
@@ -119,7 +119,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
             history.RecordCount.Should().Be(1);
             history.ModifiedBy.Should().Be("TestUser");
         }
-        
+
         [Fact]
         public void Then_BackgroundProcessHistoryRepository_Update_Sets_Expected_Values_In_Second_Call()
         {
@@ -136,7 +136,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<int?>(), Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
         }
 
         [Fact]

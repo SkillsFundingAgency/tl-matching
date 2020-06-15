@@ -42,6 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
                 {
                     NotificationId = _notificationId,
                     OpportunityId = null,
+                    OpportunityItemId = null,
                     SentTo = "sent-to@email.com",
                     Status = "permanent-failure",
                     EmailTemplateId = 11,
@@ -87,16 +88,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmailDeliveryStatusServ
         [Fact]
         public void Then_EmailService_SendEmailAsync_Is_Called_Exactly_Once()
         {
-            _emailService.Received(1).SendEmailAsync(null,
-                EmailTemplateName.EmailDeliveryStatus.ToString(),
-                SupportEmailAddress,
+            _emailService.Received(1).SendEmailAsync(EmailTemplateName.EmailDeliveryStatus.ToString(), SupportEmailAddress, null, null,
                 Arg.Is<IDictionary<string, string>>(tokens =>
                     tokens.ContainsKey("summary") && tokens["summary"] == "There was an error sending an email from the industry placement matching service."
-                    && tokens.ContainsKey("email_type") && tokens["email_type"] == "employer aupa blank"
-                    && tokens.ContainsKey("reason") && tokens["reason"] == "Email address does not exist"
-                    && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
-                    && tokens.ContainsKey("email_body") && tokens["email_body"] == "Body")
-                , Arg.Any<string>());
+                                                  && tokens.ContainsKey("email_type") && tokens["email_type"] == "employer aupa blank"
+                                                  && tokens.ContainsKey("reason") && tokens["reason"] == "Email address does not exist"
+                                                  && tokens.ContainsKey("sender_username") && tokens["sender_username"] == "CreatedBy"
+                                                  && tokens.ContainsKey("email_body") && tokens["email_body"] == "Body"), Arg.Any<string>());
         }
     }
 }

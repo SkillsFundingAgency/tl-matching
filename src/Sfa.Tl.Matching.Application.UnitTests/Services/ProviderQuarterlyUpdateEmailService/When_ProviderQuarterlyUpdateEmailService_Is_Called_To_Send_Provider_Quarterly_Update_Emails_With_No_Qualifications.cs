@@ -28,9 +28,9 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
             _testFixture = testFixture;
 
             _emailService = Substitute.For<IEmailService>();
-            
+
             var messageQueueService = Substitute.For<IMessageQueueService>();
-           
+
             _providerRepository = Substitute.For<IProviderRepository>();
             _providerRepository
                 .GetProvidersWithFundingAsync()
@@ -128,12 +128,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
         {
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Is<string>(
-                        templateName => templateName == "ProviderQuarterlyUpdate"),
+                .SendEmailAsync(Arg.Is<string>(templateName => templateName == "ProviderQuarterlyUpdate"),
                     Arg.Is<string>(toAddress => toAddress == "primary.contact@provider.co.uk"),
-                    Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
+                    Arg.Any<int?>(), Arg.Any<int?>(),
+                    Arg.Any<IDictionary<string, string>>(),
+                    Arg.Any<string>());
         }
-        
+
         [Fact]
         public void Then_EmailService_SendEmail_Is_Called_With_Expected_Tokens()
         {
@@ -160,10 +161,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQuarterlyUpdate
 
             _emailService
                 .Received(1)
-                .SendEmailAsync(Arg.Any<int?>(), Arg.Any<string>(),
-                    Arg.Any<string>(),
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
+                    Arg.Any<int?>(), Arg.Any<int?>(),
                     Arg.Is<IDictionary<string, string>>(
-                        tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)), Arg.Any<string>());
+                    tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedResults)),
+                    Arg.Any<string>());
         }
 
         [Fact]

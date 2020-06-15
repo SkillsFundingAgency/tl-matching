@@ -27,8 +27,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory
                 var repository = new GenericRepository<Domain.Models.EmailHistory>(logger, dbContext);
 
                 entity.SentTo = "updated.recipient@test.com";
-                entity.CopiedTo = "updated.copy@test.com";
-                entity.BlindCopiedTo = "updated.blindcopy@test.com";
 
                 entity.ModifiedOn = new DateTime(2019, 11, 01, 12, 30, 00);
                 entity.ModifiedBy = "UpdateTestUser";
@@ -47,8 +45,6 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.EmailHistory
             _result.OpportunityId.Should().Be(1);
             _result.EmailTemplateId.Should().Be(2);
             _result.SentTo.Should().BeEquivalentTo("updated.recipient@test.com");
-            _result.CopiedTo.Should().BeEquivalentTo("updated.copy@test.com");
-            _result.BlindCopiedTo.Should().BeEquivalentTo("updated.blindcopy@test.com");
 
             _result.CreatedBy.Should().BeEquivalentTo(EntityCreationConstants.CreatedByUser);
             _result.CreatedOn.Should().Be(EntityCreationConstants.CreatedOn);

@@ -106,54 +106,85 @@ namespace Sfa.Tl.Matching.Application.Services
             {
                 await _functionLogRepository.CreateAsync(new FunctionLog
                 {
-                    ErrorMessage = $"Background Prociessing History not found for id {backgroundProcessHistoryId}",
+                    ErrorMessage = $"Background Processing History not found or not pending for id {backgroundProcessHistoryId}",
                     FunctionName = nameof(ReferralEmailService),
                     RowNumber = -1
                 });
                 return;
             }
 
-            var referrals = await _opportunityRepository.GetProviderOpportunitiesAsync(opportunityId, itemIds);
+            var referrals = await _opportunityRepository.GetIncompleteProviderOpportunitiesAsync(opportunityId, itemIds);
+
+            if (referrals == null || referrals.Count == 0)
+            {
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    // ReSharper disable once PossibleMultipleEnumeration
+                    ErrorMessage = $"No provider referrals found for opportunity id {opportunityId} with {itemIds?.Count()} items",
+                    FunctionName = nameof(ReferralEmailService),
+                    RowNumber = -1
+                });
+            }
 
             try
             {
-                foreach (var referral in referrals)
+                //Group by opportunity item, then loop over that with referrals onside
+                var opportunityItemGroups = (
+                    from p in referrals
+                    orderby p.OpportunityItemId
+                    group p by p.OpportunityItemId into g
+                    select new
+                    {
+                        OpportunityItemId = g.Key,
+                        Referrals = g.Select(c => c).ToList()
+                    }
+                ).ToList();
+
+                foreach (var opportunityItem in opportunityItemGroups)
                 {
-                    var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
-
-                    var tokens = new Dictionary<string, string>
+                    foreach (var referral in opportunityItem.Referrals)
                     {
-                        { "contact_name", referral.ProviderPrimaryContact },
-                        { "provider_name", referral.ProviderDisplayName },
-                        { "route", referral.RouteName.ToLowerInvariant() },
-                        { "venue_text", referral.VenueText },
-                        { "search_radius", referral.DistanceFromEmployer },
-                        { "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
-                            ? $"* looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
-                            : $"* looking for this job role: {referral.JobRole}" },
-                        { "employer_business_name", referral.CompanyName.ToTitleCase() },
-                        { "employer_contact_name", referral.EmployerContact.ToTitleCase() },
-                        { "employer_contact_number", referral.EmployerContactPhone },
-                        { "employer_contact_email", referral.EmployerContactEmail },
-                        { "employer_town_postcode", $"{referral.Town} {referral.Postcode }" },
-                        { "number_of_placements", placements }
-                    };
+                        var placements = GetNumberOfPlacements(referral.PlacementsKnown, referral.Placements);
 
-                    const EmailTemplateName template = EmailTemplateName.ProviderReferralV5;
-                    await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens, referral.CreatedBy);
+                        var tokens = new Dictionary<string, string>
+                        {
+                            {"contact_name", referral.ProviderPrimaryContact},
+                            {"provider_name", referral.ProviderDisplayName},
+                            {"route", referral.RouteName.ToLowerInvariant()},
+                            {"venue_text", referral.VenueText},
+                            {"search_radius", referral.DistanceFromEmployer},
+                            {
+                                "job_role_list", string.IsNullOrEmpty(referral.JobRole) || referral.JobRole == "None given"
+                                    ? $"* looking for students in courses related to {referral.RouteName.ToLowerInvariant()}"
+                                    : $"* looking for this job role: {referral.JobRole}"
+                            },
+                            {"employer_business_name", referral.CompanyName.ToTitleCase()},
+                            {"employer_contact_name", referral.EmployerContact.ToTitleCase()},
+                            {"employer_contact_number", referral.EmployerContactPhone},
+                            {"employer_contact_email", referral.EmployerContactEmail},
+                            {"employer_town_postcode", $"{referral.Town} {referral.Postcode}"},
+                            {"number_of_placements", placements}
+                        };
 
-                    if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) && !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
-                    {
-                        tokens["contact_name"] = referral.ProviderSecondaryContact;
-                        await SendEmailAsync(template, opportunityId, referral.ProviderSecondaryContactEmail, tokens, referral.CreatedBy);
+                        const EmailTemplateName template = EmailTemplateName.ProviderReferralV5;
+                        await SendEmailAsync(template, opportunityId, referral.ProviderPrimaryContactEmail, tokens,
+                            referral.CreatedBy, referral.OpportunityItemId);
+
+                        if (!string.IsNullOrWhiteSpace(referral.ProviderSecondaryContactEmail) &&
+                            !string.IsNullOrWhiteSpace(referral.ProviderSecondaryContact))
+                        {
+                            tokens["contact_name"] = referral.ProviderSecondaryContact;
+                            await SendEmailAsync(template, opportunityId, referral.ProviderSecondaryContactEmail, tokens,
+                                referral.CreatedBy, referral.OpportunityItemId);
+                        }
                     }
 
-                    await CompleteSelectedReferralsAsync(opportunityId, referral.OpportunityItemId, username);
+                    await CompleteSelectedReferralsAsync(opportunityId, opportunityItem.OpportunityItemId, username);
                 }
 
                 await CompleteRemainingItemsAsync(opportunityId, username);
 
-                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, referrals.Count, BackgroundProcessHistoryStatus.Complete, username);
+                await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, referrals?.Count ?? 0, BackgroundProcessHistoryStatus.Complete, username);
             }
             catch (Exception ex)
             {
@@ -225,15 +256,16 @@ namespace Sfa.Tl.Matching.Application.Services
                                                                                   && !oi.IsCompleted);
 
             var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString()).ToList();
+            var provisionGapItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
 
-            var provisionItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
-
-            if (provisionItems.Count > 0 && referralItems.Count == 0)
+            if (provisionGapItems.Count > 0 && referralItems.Count == 0)
             {
-                var provisionIds = provisionItems.Select(oi => oi.Id).ToList();
+                var provisionGapIds = provisionGapItems.Select(oi => oi.Id).ToList();
 
-                if (provisionIds.Count > 0)
-                    await SetOpportunityItemsAsCompletedAsync(provisionIds, username);
+                if (provisionGapIds.Count > 0)
+                {
+                    await SetOpportunityItemsAsCompletedAsync(provisionGapIds, username);
+                }
             }
         }
 
@@ -260,9 +292,9 @@ namespace Sfa.Tl.Matching.Application.Services
                 : "at least 1";
         }
 
-        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, string toAddress, IDictionary<string, string> tokens, string createdBy)
+        private async Task SendEmailAsync(EmailTemplateName template, int? opportunityId, string toAddress, IDictionary<string, string> tokens, string createdBy, int? opportunityItemId = null)
         {
-            await _emailService.SendEmailAsync(opportunityId, template.ToString(), toAddress, tokens, createdBy);
+            await _emailService.SendEmailAsync(template.ToString(), toAddress, opportunityId, opportunityItemId, tokens, createdBy);
         }
 
         private async Task UpdateBackgroundProcessHistoryAsync(
@@ -272,7 +304,18 @@ namespace Sfa.Tl.Matching.Application.Services
             string userName,
             string errorMessage = null)
         {
-            var backgroundProcessHistory = await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId);
+            var backgroundProcessHistory = await GetBackgroundProcessHistoryDataAsync(backgroundProcessHistoryId, false);
+            if (backgroundProcessHistory == null)
+            {
+                await _functionLogRepository.CreateAsync(new FunctionLog
+                {
+                    ErrorMessage = $"UpdateBackgroundProcessHistoryAsync::Background Processing History not found for id {backgroundProcessHistoryId}",
+                    FunctionName = nameof(ReferralEmailService),
+                    RowNumber = -1
+                });
+
+                throw new InvalidOperationException($"Cannot update non-existent background processing history for id={backgroundProcessHistoryId}");
+            }
 
             backgroundProcessHistory.RecordCount = providerCount;
             backgroundProcessHistory.Status = historyStatus.ToString();
@@ -288,11 +331,12 @@ namespace Sfa.Tl.Matching.Application.Services
                 history => history.ModifiedOn);
         }
 
-        private async Task<BackgroundProcessHistory> GetBackgroundProcessHistoryDataAsync(int backgroundProcessHistoryId)
+        private async Task<BackgroundProcessHistory> GetBackgroundProcessHistoryDataAsync(int backgroundProcessHistoryId, bool getPendingOnly = true)
         {
             var backgroundProcessHistory = await _backgroundProcessHistoryRepository.GetSingleOrDefaultAsync(p => p.Id == backgroundProcessHistoryId);
 
-            if (backgroundProcessHistory == null || backgroundProcessHistory.Status != BackgroundProcessHistoryStatus.Pending.ToString())
+            if (backgroundProcessHistory == null
+                || (getPendingOnly && backgroundProcessHistory.Status != BackgroundProcessHistoryStatus.Pending.ToString()))
             {
                 return null;
             }

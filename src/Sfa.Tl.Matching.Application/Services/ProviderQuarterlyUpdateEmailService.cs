@@ -123,7 +123,7 @@ namespace Sfa.Tl.Matching.Application.Services
 
                     tokens.Add("secondary_contact_details", secondaryDetailsBuilder.ToString());
 
-                    await SendEmailAsync(EmailTemplateName.ProviderQuarterlyUpdate, null, toAddress, tokens, userName);
+                    await SendEmailAsync(EmailTemplateName.ProviderQuarterlyUpdate, null, null, toAddress, tokens, userName);
 
                     numberOfProviderEmailsSent++;
                 }
@@ -153,13 +153,12 @@ namespace Sfa.Tl.Matching.Application.Services
         private async Task SendEmailAsync(
             EmailTemplateName template, 
             int? opportunityId,
+            int? opportunityItemId,
             string toAddress,
             IDictionary<string, string> tokens, 
             string createdBy)
         {
-            await _emailService.SendEmailAsync(opportunityId, template.ToString(),
-                    toAddress,
-                    tokens, createdBy);
+            await _emailService.SendEmailAsync(template.ToString(), toAddress, opportunityId, opportunityItemId, tokens, createdBy);
         }
 
         private async Task UpdateBackgroundProcessHistoryAsync(
