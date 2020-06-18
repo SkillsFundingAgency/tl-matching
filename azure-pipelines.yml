@@ -1,7 +1,12 @@
 trigger:
-- master
-- feature/*
-- bugs/*
+  branches:
+    include:
+    - master
+    - feature/*
+    - bugs/*    
+    exclude:
+    - feature/NewBuild
+    - "*"
 
 variables:
   buildConfiguration: 'release'
