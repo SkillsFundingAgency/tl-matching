@@ -112,7 +112,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .Received(1)
                 .SendEmailAsync(Arg.Is<string>(templateName => templateName == EmailTemplateName.EmployerFeedbackV2.ToString()),
                     Arg.Is<string>(toAddress => toAddress == "employer.contact@employer.co.uk"),
-                    null, null,
+                    Arg.Is<int>(oId => oId == 2), null,
                     Arg.Is<IDictionary<string, string>>(
                     tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokensForEmail1)),
                     Arg.Is<string>(createdBy => createdBy == "TestUser"));
@@ -131,7 +131,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback
                 .Received(1)
                 .SendEmailAsync(Arg.Is<string>(templateName => templateName == EmailTemplateName.EmployerFeedbackV2.ToString()),
                     Arg.Is<string>(toAddress => toAddress == "another.employer.contact@employer.co.uk"),
-                    null, null,
+                    Arg.Is<int>(oId => oId == 2), null,
                     Arg.Is<IDictionary<string, string>>(tokens => _testFixture.DoTokensContainExpectedValues(tokens, expectedTokensForEmail2)),
                     Arg.Is<string>(createdBy => createdBy == "TestUser"));
         }

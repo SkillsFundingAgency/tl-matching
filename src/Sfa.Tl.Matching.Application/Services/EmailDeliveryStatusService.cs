@@ -172,7 +172,13 @@ namespace Sfa.Tl.Matching.Application.Services
             if (!string.IsNullOrEmpty(dto.SecondaryContactEmail))
                 body.AppendLine($"Provider secondary contact: {dto.SecondaryContactEmail}");
             if (!string.IsNullOrEmpty(dto.EmployerEmail))
+            {
+                if(!string.IsNullOrEmpty(dto.EmployerCompanyName))
+                    body.AppendLine($"Employer name: {dto.EmployerCompanyName}");
                 body.AppendLine($"Employer contact: {dto.EmployerEmail}");
+                if (!string.IsNullOrEmpty(dto.UserName))
+                    body.AppendLine($"Employer name: {dto.UserName}");
+            }
 
             return body.ToString();
         }

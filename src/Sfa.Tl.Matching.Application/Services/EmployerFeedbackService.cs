@@ -52,14 +52,19 @@ namespace Sfa.Tl.Matching.Application.Services
                 var previousMonth = previousMonthDate.ToString("MMMM");
                 
                 var referrals = await _opportunityRepository.GetReferralsForEmployerFeedbackAsync(previousMonthDate);
-                var referralsGroupedByEmployer = referrals.GroupBy(r => r.EmployerCrmId)
-                    .ToDictionary(r => r.Key, r => r.OrderByDescending(e => e.ModifiedOn).ToList());
+                var referralsGroupedByEmployer = referrals
+                    .GroupBy(r => r.EmployerCrmId)
+                    .ToDictionary(r => r.Key, 
+                        r => r.OrderByDescending(e => e.ModifiedOn)
+                            .ToList());
                 
                 foreach (var (_, value) in referralsGroupedByEmployer)
                 {
                     var tokens = CreateTokens(value, previousMonth);
 
-                    await _emailService.SendEmailAsync(EmailTemplateName.EmployerFeedbackV2.ToString(), value.First().EmployerContactEmail, null, null, tokens, userName);
+                    var opportunityId = value.First().OpportunityId;
+                    
+                    await _emailService.SendEmailAsync(EmailTemplateName.EmployerFeedbackV2.ToString(), value.First().EmployerContactEmail, opportunityId, null, tokens, userName);
                 }
 
                 return referralsGroupedByEmployer.Count;

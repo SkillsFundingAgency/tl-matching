@@ -6,6 +6,7 @@ namespace Sfa.Tl.Matching.Models.Dto
     {
         public string PrimaryContactEmail { get; set; }
         public string SecondaryContactEmail { get; set; }
+        public string EmployerCompanyName { get; set; }
         public string EmployerEmail { get; set; }
         public string ProviderVenueName { get; set; }
         public string ProviderVenuePostcode { get; set; }
@@ -13,5 +14,6 @@ namespace Sfa.Tl.Matching.Models.Dto
         public string ProviderName =>
             ProviderDisplayExtensions.GetProviderEmailDisplayText(ProviderVenueName, ProviderVenuePostcode,
                 ProviderDisplayName);
+        public string UserName { get; set; }
     }
 }

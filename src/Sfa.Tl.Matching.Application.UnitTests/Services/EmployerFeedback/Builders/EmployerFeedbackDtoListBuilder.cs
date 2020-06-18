@@ -14,6 +14,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
             {
                 new EmployerFeedbackDto
                 {
+                    OpportunityId = 1,
                     OpportunityItemId = 1,
                     EmployerContact = "Employer Contact",
                     EmployerContactEmail = "employer.contact@employer.co.uk",
@@ -27,6 +28,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
                 },
                 new EmployerFeedbackDto
                 {
+                    OpportunityId = 1,
                     OpportunityItemId = 2,
                     EmployerContact = "Old Employer Contact",
                     EmployerContactEmail = "old.employer.contact@employer.co.uk",
@@ -41,6 +43,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
                 },
                 new EmployerFeedbackDto
                 {
+                    OpportunityId = 1,
                     OpportunityItemId = 3,
                     EmployerContact = "Old Employer Contact",
                     EmployerContactEmail = "old.employer.contact@employer.co.uk",
@@ -55,6 +58,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
                 },
                 new EmployerFeedbackDto
                 {
+                    OpportunityId = 1,
                     OpportunityItemId = 4,
                     EmployerContact = "Old Employer Contact",
                     EmployerContactEmail = "old.employer.contact@employer.co.uk",
@@ -69,6 +73,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
                 ,
                 new EmployerFeedbackDto
                 {
+                    OpportunityId = 1,
                     OpportunityItemId = 5,
                     EmployerContact = "Old Employer Contact",
                     EmployerContactEmail = "old.employer.contact@employer.co.uk",
@@ -86,6 +91,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.EmployerFeedback.Builde
         {
             _employerFeedbackDtos.Add(new EmployerFeedbackDto
             {
+                OpportunityId = 2,
                 OpportunityItemId = 6,
                 EmployerContact = "Another Employer Contact",
                 EmployerContactEmail = "another.employer.contact@employer.co.uk",

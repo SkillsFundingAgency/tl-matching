@@ -306,7 +306,9 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                    && o.EmployerContactEmail == sentTo
                              select new EmailBodyDto
                              {
+                                 EmployerCompanyName = o.Employer.CompanyName,
                                  EmployerEmail = o.EmployerContactEmail,
+                                 UserName = o.CreatedBy
                              })
                 .FirstOrDefaultAsync();
 
