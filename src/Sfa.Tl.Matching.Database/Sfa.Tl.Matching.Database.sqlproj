@@ -70,7 +70,6 @@
     <None Include="Sfa.Tl.Matching.Database.Local.publish.xml" />
     <None Include="PostDeployment\Seed UserProfile.sql" />
     <None Include="Indexes\IX_OpportunityBaskekItem.sql" />
-    <None Include="PostDeployment\Remove Obsolete Email History Columns.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Employer.sql" />
