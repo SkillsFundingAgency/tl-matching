@@ -5,6 +5,7 @@ BEGIN
 END
 
 --Allow the DataImporter to alter staging tables so they can trancate data
+GRANT ALTER, INSERT, UPDATE, DELETE ON OBJECT::[dbo].[BankHoliday] TO DataImporter;
 GRANT ALTER, INSERT, UPDATE, DELETE ON OBJECT::[dbo].[EmployerStaging] TO DataImporter;
 GRANT ALTER, INSERT, UPDATE, DELETE ON OBJECT::[dbo].[LearningAimReferenceStaging] TO DataImporter;
 GRANT ALTER, INSERT, UPDATE, DELETE ON OBJECT::[dbo].[LocalEnterprisePartnershipStaging] TO DataImporter;
