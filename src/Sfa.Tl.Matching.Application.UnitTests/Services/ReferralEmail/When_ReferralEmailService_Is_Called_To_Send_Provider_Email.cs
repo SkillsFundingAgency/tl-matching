@@ -52,7 +52,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
                 });
 
             _opportunityRepository
-                .GetIncompleteProviderOpportunitiesAsync(
+                .GetProviderReferralsAsync(
                     Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new ValidOpportunityReferralDtoListBuilder().Build());
 
@@ -70,11 +70,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
         }
 
         [Fact]
-        public void Then_OpportunityRepository_GetIncompleteProviderOpportunities_Is_Called_Exactly_Once()
+        public void Then_OpportunityRepository_GGetProviderReferrals_Is_Called_Exactly_Once()
         {
             _opportunityRepository
                 .Received(1)
-                .GetIncompleteProviderOpportunitiesAsync(Arg.Any<int>(), Arg.Any<IEnumerable<int>>());
+                .GetProviderReferralsAsync(Arg.Any<int>(), Arg.Any<IEnumerable<int>>());
         }
 
         [Fact]

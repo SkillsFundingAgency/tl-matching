@@ -95,7 +95,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Opportunity
                     }
                 }.AsQueryable());
 
-            opportunityRepo.GetIncompleteProviderOpportunitiesAsync(Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
+            opportunityRepo.GetProviderReferralsAsync(Arg.Any<int>(), Arg.Any<IEnumerable<int>>())
                 .Returns(new List<OpportunityReferralDto>
                 {
                     new OpportunityReferralDto
