@@ -19,6 +19,7 @@ using Sfa.Tl.Matching.Application.FileReader.Employer;
 using Sfa.Tl.Matching.Application.FileReader.LearningAimReferenceStaging;
 using Sfa.Tl.Matching.Application.FileReader.LocalEnterprisePartnershipStaging;
 using Sfa.Tl.Matching.Application.FileReader.PostcodeLookupStaging;
+using Sfa.Tl.Matching.Application.FileReader.ProviderVenueQualification;
 using Sfa.Tl.Matching.Application.Interfaces;
 using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data;
@@ -78,6 +79,9 @@ namespace Sfa.Tl.Matching.Functions.Extensions
 
             RegisterFileReaders(services);
 
+            services.AddTransient<IProviderVenueQualificationReader, ProviderVenueQualificationReader>();
+            services.AddTransient<IProviderVenueQualificationFileImportService, ProviderVenueQualificationFileImportService>();
+            
             RegisterRepositories(services);
 
             RegisterApplicationServices(services);
