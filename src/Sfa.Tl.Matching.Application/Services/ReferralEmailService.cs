@@ -179,10 +179,10 @@ namespace Sfa.Tl.Matching.Application.Services
                         }
                     }
 
-                    await CompleteSelectedReferralsAsync(opportunityId, opportunityItem.OpportunityItemId, username);
+                    await SetOpportunityItemsAsCompletedAsync(new[] { opportunityItem.OpportunityItemId }, username);
                 }
 
-                await CompleteRemainingItemsAsync(opportunityId, username);
+                await CompleteRemainingProvisionGapsAsync(opportunityId, username);
 
                 await UpdateBackgroundProcessHistoryAsync(backgroundProcessHistoryId, referrals?.Count ?? 0, BackgroundProcessHistoryStatus.Complete, username);
             }
@@ -233,38 +233,21 @@ namespace Sfa.Tl.Matching.Application.Services
             return sb.ToString();
         }
 
-        private async Task CompleteSelectedReferralsAsync(int opportunityId, int itemId, string username)
-        {
-            var selectedOpportunityItemIds = _opportunityItemRepository
-                .GetManyAsync(oi => oi.Opportunity.Id == opportunityId
-                                    && oi.Id == itemId
-                                    && oi.IsSaved
-                                    && oi.IsSelectedForReferral
-                                    && !oi.IsCompleted).Select(oi => oi.Id).ToList();
-
-            if (selectedOpportunityItemIds.Count > 0)
-            {
-                await SetOpportunityItemsAsCompletedAsync(selectedOpportunityItemIds, username);
-            }
-        }
-
-        private async Task CompleteRemainingItemsAsync(int opportunityId, string username)
+        private async Task CompleteRemainingProvisionGapsAsync(int opportunityId, string username)
         {
             var remainingOpportunities = _opportunityItemRepository.GetManyAsync(oi => oi.Opportunity.Id == opportunityId
                                                                                   && oi.IsSaved
-                                                                                  && !oi.IsSelectedForReferral
                                                                                   && !oi.IsCompleted);
 
-            var referralItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.Referral.ToString()).ToList();
-            var provisionGapItems = remainingOpportunities.Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString()).ToList();
-
-            if (provisionGapItems.Count > 0 && referralItems.Count == 0)
+            if (!remainingOpportunities.Any(oi => oi.OpportunityType == OpportunityType.Referral.ToString()))
             {
-                var provisionGapIds = provisionGapItems.Select(oi => oi.Id).ToList();
-
-                if (provisionGapIds.Count > 0)
+                var provisionGapItemIds = remainingOpportunities
+                    .Where(oi => oi.OpportunityType == OpportunityType.ProvisionGap.ToString())
+                    .Select(oi => oi.Id)
+                    .ToList();
+                if (provisionGapItemIds.Count > 0)
                 {
-                    await SetOpportunityItemsAsCompletedAsync(provisionGapIds, username);
+                    await SetOpportunityItemsAsCompletedAsync(provisionGapItemIds, username);
                 }
             }
         }
