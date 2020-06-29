@@ -45,6 +45,9 @@
         "certificateName": {
             "type": "string"
         },
+        "bankHolidayGeneratorTrigger": {
+            "type": "string"
+        },
         "employerFeedbackTrigger": {
             "type": "string"
         },
@@ -259,6 +262,10 @@
                             {
                                 "name": "ServiceName",
                                 "value": "Sfa.Tl.Matching"
+                            },
+                            {
+                                "name": "BankHolidayGeneratorTrigger",
+                                "value": "[parameters('bankHolidayGeneratorTrigger')]"
                             },
                             {
                                 "name": "EmployerFeedbackTrigger",

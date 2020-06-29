@@ -3,6 +3,7 @@
     "Values": {
         "FUNCTIONS_WORKER_RUNTIME": "dotnet",
         "CronSchedule": "0 */15 * * * *",
+        "BankHolidayGemeratorTrigger": "0 0 9 * * MON-FRI",
         "ProviderReferenceTrigger": "0 0 10 * * *",
         "EmployerFeedbackTrigger": "0 0 9 * * MON-FRI",
         "ProviderFeedbackTrigger": "0 0 9 * * MON-FRI",
