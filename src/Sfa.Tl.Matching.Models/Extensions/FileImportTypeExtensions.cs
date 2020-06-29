@@ -22,7 +22,7 @@ namespace Sfa.Tl.Matching.Models.Extensions
                 return typeof(FileExtensionsAttribute)
                 .GetProperty("Extensions")
                 ?.GetValue(attribute)
-                .ToString();
+                ?.ToString();
 
             return null;
         }
