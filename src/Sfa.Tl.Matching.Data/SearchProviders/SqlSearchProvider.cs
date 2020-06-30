@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GeoAPI.Geometries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Models.Dto;
 using Sfa.Tl.Matching.Models.ViewModel;
@@ -312,7 +312,7 @@ namespace Sfa.Tl.Matching.Data.SearchProviders
             return dto;
         }
 
-        private static IPoint GetSearchStartPoint(string latitude, string longitude)
+        private static Point GetSearchStartPoint(string latitude, string longitude)
         {
             if (string.IsNullOrWhiteSpace(latitude) || string.IsNullOrWhiteSpace(longitude))
                 throw new InvalidOperationException("Latitude and Longitude can not be null or blank");
