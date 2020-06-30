@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Transactions;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Sfa.Tl.Matching.Data.Extensions;
 using Sfa.Tl.Matching.Data.Interfaces;
