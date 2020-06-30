@@ -1,28 +1,32 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Sfa.Tl.Matching.Tests.Common.Extensions
 {
     public class FakeAsyncEnumerator<T> : IAsyncEnumerator<T>
     {
-        private readonly IEnumerator<T> _inner;
+        private readonly IAsyncEnumerator<T> _inner;
 
-        public FakeAsyncEnumerator(IEnumerator<T> inner)
+        public FakeAsyncEnumerator(IAsyncEnumerator<T> inner)
         {
             _inner = inner;
         }
 
         public void Dispose()
         {
-            _inner.Dispose();
+            _inner.DisposeAsync();
         }
 
         public T Current => _inner.Current;
 
-        public Task<bool> MoveNext(CancellationToken cancellationToken)
+        public ValueTask<bool> MoveNextAsync()
         {
-            return Task.FromResult(_inner.MoveNext());
+            return _inner.MoveNextAsync();
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            return _inner.DisposeAsync();
         }
     }
 }

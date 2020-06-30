@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Sfa.Tl.Matching.Tests.Common.Extensions
@@ -41,9 +40,9 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
             return new FakeAsyncEnumerable<TResult>(expression);
         }
 
-        public Task<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken)
+        public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken)
         {
-            return Task.FromResult(Execute<TResult>(expression));
+            return Execute<TResult>(expression);
         }
     }
 }

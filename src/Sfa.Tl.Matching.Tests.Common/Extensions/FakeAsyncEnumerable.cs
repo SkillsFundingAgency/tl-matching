@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sfa.Tl.Matching.Tests.Common.Extensions
 {
@@ -10,11 +12,10 @@ namespace Sfa.Tl.Matching.Tests.Common.Extensions
 
         public FakeAsyncEnumerable(IEnumerable<T> enumerable) : base(enumerable) { }
 
-        public IAsyncEnumerator<T> GetEnumerator()
-        {
-            return new FakeAsyncEnumerator<T>(this.AsEnumerable().GetEnumerator());
-        }
-
         IQueryProvider IQueryable.Provider => new FakeAsyncQueryProvider<T>(this);
+        public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken())
+        {
+            return new FakeAsyncEnumerator<T>(this.AsAsyncEnumerable().GetAsyncEnumerator());
+        }
     }
 }
