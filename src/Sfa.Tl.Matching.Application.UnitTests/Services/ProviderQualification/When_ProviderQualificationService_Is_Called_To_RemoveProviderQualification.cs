@@ -35,7 +35,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderQualification
                     }}.AsQueryable();
 
             // ReSharper disable once SuspiciousTypeConversion.Global
-            ((IAsyncEnumerable<Domain.Models.ProviderQualification>)mockSet).GetEnumerator()
+            ((IAsyncEnumerable<Domain.Models.ProviderQualification>)mockSet).GetAsyncEnumerator()
                 .Returns(new FakeAsyncEnumerator<Domain.Models.ProviderQualification>(providerQualifications.GetEnumerator()));
             ((IQueryable<Domain.Models.ProviderQualification>)mockSet).Provider.Returns(
                 new FakeAsyncQueryProvider<Domain.Models.ProviderQualification>(providerQualifications.Provider));

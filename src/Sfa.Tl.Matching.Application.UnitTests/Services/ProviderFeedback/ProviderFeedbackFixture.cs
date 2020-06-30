@@ -39,7 +39,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ProviderFeedback
             var mockSet = Substitute.For<DbSet<BankHoliday>, IAsyncEnumerable<BankHoliday>, IQueryable<BankHoliday>>();
 
             // ReSharper disable once SuspiciousTypeConversion.Global
-            ((IAsyncEnumerable<BankHoliday>)mockSet).GetEnumerator()
+            ((IAsyncEnumerable<BankHoliday>)mockSet).GetAsyncEnumerator()
                 .Returns(new FakeAsyncEnumerator<BankHoliday>(bankHolidays.GetEnumerator()));
             ((IQueryable<BankHoliday>)mockSet).Provider.Returns(
                 new FakeAsyncQueryProvider<BankHoliday>(bankHolidays.Provider));

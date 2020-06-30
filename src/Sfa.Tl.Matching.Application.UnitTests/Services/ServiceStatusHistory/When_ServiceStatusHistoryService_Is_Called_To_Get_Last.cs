@@ -36,7 +36,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ServiceStatusHistory
             var mockSet = Substitute.For<DbSet<Domain.Models.ServiceStatusHistory>, IAsyncEnumerable<Domain.Models.ServiceStatusHistory>, IQueryable<Domain.Models.ServiceStatusHistory>>();
 
             // ReSharper disable once SuspiciousTypeConversion.Global
-            ((IAsyncEnumerable<Domain.Models.ServiceStatusHistory>)mockSet).GetEnumerator()
+            ((IAsyncEnumerable<Domain.Models.ServiceStatusHistory>)mockSet).GetAsyncEnumerator()
                 .Returns(new FakeAsyncEnumerator<Domain.Models.ServiceStatusHistory>(serviceStatusHistories.GetEnumerator()));
             ((IQueryable<Domain.Models.ServiceStatusHistory>)mockSet).Provider.Returns(
                 new FakeAsyncQueryProvider<Domain.Models.ServiceStatusHistory>(serviceStatusHistories.Provider));
