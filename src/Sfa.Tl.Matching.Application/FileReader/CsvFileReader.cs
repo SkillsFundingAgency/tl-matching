@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -45,7 +46,7 @@ namespace Sfa.Tl.Matching.Application.FileReader
                 .ToList();
 
             using (var streamReader = new StreamReader(fileImportDto.FileDataStream))
-            using (var reader = new CsvReader(streamReader))//, CultureInfo.CurrentCulture))
+            using (var reader = new CsvReader(streamReader, CultureInfo.CurrentCulture))
             {
                 //Manually skip header rows 
                 reader.Configuration.HasHeaderRecord = false;
