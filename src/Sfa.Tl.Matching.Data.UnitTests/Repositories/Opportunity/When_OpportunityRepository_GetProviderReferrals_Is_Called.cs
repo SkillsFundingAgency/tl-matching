@@ -12,14 +12,14 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 {
-    public class When_OpportunityRepository_GetIncompleteProviderOpportunities_Is_Called
+    public class When_OpportunityRepository_GetProviderReferrals_Is_Called
     {
         private readonly int _opportunityId;
         private readonly int _referralId;
         private readonly int _opportunityItemId;
         private readonly IList<OpportunityReferralDto> _result;
 
-        public When_OpportunityRepository_GetIncompleteProviderOpportunities_Is_Called()
+        public When_OpportunityRepository_GetProviderReferrals_Is_Called()
         {
             var logger = Substitute.For<ILogger<OpportunityRepository>>();
 
@@ -27,21 +27,20 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
 
             var opportunity = new ValidOpportunityBuilder()
                 .AddEmployer()
-                .AddReferrals() //Not completed
+                .AddReferrals(isSelectedForReferral: true) //Not completed, is selected
                 .Build();
             
-            var opportunityItem = opportunity.OpportunityItem.First();
-            opportunityItem.IsSelectedForReferral = true;
-
             dbContext.Add(opportunity);
             dbContext.SaveChanges();
+
+            var opportunityItem = opportunity.OpportunityItem.First();
 
             _opportunityId = opportunity.Id;
             _referralId = opportunityItem.Referral.First().Id;
             _opportunityItemId = opportunity.OpportunityItem.First().Id;
             
             var repository = new OpportunityRepository(logger, dbContext);
-            _result = repository.GetIncompleteProviderOpportunitiesAsync(
+            _result = repository.GetProviderReferralsAsync(
                     1, 
                     new List<int> { _opportunityItemId })
                 .GetAwaiter().GetResult();
