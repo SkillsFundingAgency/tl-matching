@@ -27,8 +27,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity
                         .AddProvisionGaps()
                         .Build());
                 dbContext.SaveChanges();
-
-
+                
                 var repository = new OpportunityRepository(logger, dbContext);
                 _result = repository.GetEmployerReferralsAsync(1, new[] { 1 })
                     .GetAwaiter().GetResult();

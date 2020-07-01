@@ -13,13 +13,13 @@ using Xunit;
 
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 {
-    public class When_ReferralEmailService_Is_Called_To_Send_Employer_Email
+    public class When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_No_Opportunity_Item_Ids
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
         private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
-        public When_ReferralEmailService_Is_Called_To_Send_Employer_Email()
+        public When_ReferralEmailService_Is_Called_To_Send_Employer_Email_With_No_Opportunity_Item_Ids()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
             _backgroundProcessHistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
@@ -29,7 +29,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 
             _emailService = Substitute.For<IEmailService>();
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-
+            
             _backgroundProcessHistoryRepository.GetSingleOrDefaultAsync(
                 Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
                 {
@@ -47,10 +47,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
 
             var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
-            var itemIds = new List<int>
-            {
-                1
-            };
+            var itemIds = new List<int>();
 
             var referralEmailService = new ReferralEmailService(mapper, datetimeProvider, _emailService,
                 _opportunityRepository, opportunityItemRepository, _backgroundProcessHistoryRepository, functionLogRepository);
@@ -68,62 +65,22 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
         }
 
         [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_Exactly_Once_With_Expected_Parameters()
+        public void Then_EmailService_SendEmail_Is_Not_Called()
         {
             _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Is<string>(templateName => templateName == "EmployerReferralV5"), 
-                    Arg.Is<string>(toAddress => toAddress == "employer.contact@employer.co.uk"),
+                .DidNotReceive()
+                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
                     Arg.Any<int?>(), Arg.Any<int?>(), 
                     Arg.Any<IDictionary<string, string>>(), Arg.Any<string>());
-        }
-        
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Expected_Tokens()
-        {
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<int?>(), Arg.Any<int?>(), 
-                    Arg.Is<IDictionary<string, string>>(
-                    tokens => tokens.ContainsKey("employer_contact_name")
-                              && tokens["employer_contact_name"] == "Employer Contact"
-                              && tokens.ContainsKey("employer_business_name")
-                              && tokens["employer_business_name"] == "Employer"
-                              && tokens.ContainsKey("employer_contact_number")
-                              && tokens["employer_contact_number"] == "020 123 4567"
-                              && tokens.ContainsKey("employer_contact_email")
-                              && tokens["employer_contact_email"] == "employer.contact@employer.co.uk"), Arg.Any<string>());
-        }
-        
-        [Fact]
-        public void Then_EmailService_SendEmail_Is_Called_With_Placements_List()
-        {
-            const string expectedPlacementsList = "# WorkplaceTown WorkplacePostcode\r\n"
-                                                 + "* Job role: Job Role\r\n"
-                                                 + "* Students wanted: 2\r\n"
-                                                 + "* First provider selected: Venue Name part of Display Name (ProviderPostcode)\r\n"
-                                                 + "Primary contact: Primary Contact (Telephone: 020 123 3210; Email: primary.contact@provider.ac.uk)\r\n"
-                                                 + "Secondary contact: Secondary Contact (Telephone: 021 456 0987; Email: secondary.contact@provider.ac.uk)\r\n"
-                                                 + "\r\n";
-
-            _emailService
-                .Received(1)
-                .SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(),
-                    Arg.Any<int?>(), Arg.Any<int?>(), 
-                    Arg.Is<IDictionary<string, string>>(
-                    tokens => tokens.ContainsKey("placements_list")
-                              && tokens["placements_list"] == expectedPlacementsList), Arg.Any<string>());
         }
 
         [Fact]
         public void Then_BackgroundProcessHistoryRepository_UpdateWithSpecifiedColumnsOnly_Is_Called_Exactly_Once()
         {
-            _backgroundProcessHistoryRepository
+             _backgroundProcessHistoryRepository
                 .Received(1)
                 .UpdateWithSpecifiedColumnsOnlyAsync(Arg.Any<BackgroundProcessHistory>(),
                     Arg.Any<Expression<Func<BackgroundProcessHistory, object>>[]>());
         }
-
     }
 }

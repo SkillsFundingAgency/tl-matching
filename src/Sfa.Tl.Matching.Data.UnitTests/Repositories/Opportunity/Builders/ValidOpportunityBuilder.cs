@@ -38,7 +38,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
             return this;
         }
 
-        public ValidOpportunityBuilder AddReferrals(bool isCompleted = false)
+        public ValidOpportunityBuilder AddReferrals(bool isCompleted = false, bool isSelectedForReferral = false)
         {
             if (_opportunity.OpportunityItem == null)
             {
@@ -58,6 +58,7 @@ namespace Sfa.Tl.Matching.Data.UnitTests.Repositories.Opportunity.Builders
                     Postcode = "CV1 2WT",
                     IsSaved = true,
                     IsCompleted = isCompleted,
+                    IsSelectedForReferral = isSelectedForReferral,
                     CreatedBy = EntityCreationConstants.CreatedByUser,
                     CreatedOn = EntityCreationConstants.CreatedOn,
                     ModifiedBy = EntityCreationConstants.ModifiedByUser,

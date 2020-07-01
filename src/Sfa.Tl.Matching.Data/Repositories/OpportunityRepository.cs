@@ -18,7 +18,7 @@ namespace Sfa.Tl.Matching.Data.Repositories
         {
         }
 
-        public async Task<IList<OpportunityReferralDto>> GetIncompleteProviderOpportunitiesAsync(int opportunityId, IEnumerable<int> itemIds)
+        public async Task<IList<OpportunityReferralDto>> GetProviderReferralsAsync(int opportunityId, IEnumerable<int> itemIds)
         {
             var data = await (from op in _dbContext.Opportunity
                               join oi in _dbContext.OpportunityItem on op.Id equals oi.OpportunityId
@@ -30,7 +30,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                               orderby re.DistanceFromEmployer
                               where op.Id == opportunityId
                                     && itemIds.Contains(oi.Id)
-                                    && oi.IsSelectedForReferral
                                     && oi.IsSaved
                                     && !oi.IsCompleted
                                     && p.IsCdfProvider
@@ -86,7 +85,6 @@ namespace Sfa.Tl.Matching.Data.Repositories
                                       from oi in _dbContext.OpportunityItem
                                       where oi.OpportunityId == opportunityId
                                             && itemIds.Contains(oi.Id)
-                                            && oi.IsSelectedForReferral
                                             && oi.IsSaved
                                       select new WorkplaceDto
                                       {
