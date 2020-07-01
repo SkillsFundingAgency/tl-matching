@@ -18,20 +18,21 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
     {
         private readonly IEmailService _emailService;
         private readonly IOpportunityRepository _opportunityRepository;
+        private readonly IRepository<BackgroundProcessHistory> _backgroundProcessHistoryRepository;
 
         private readonly IDictionary<string, string> _contactNames = new Dictionary<string, string>();
 
         public When_ReferralEmailService_Is_Called_To_Send_Provider_Email()
         {
             var datetimeProvider = Substitute.For<IDateTimeProvider>();
-            var backgroundProcessHistoryRepo = Substitute.For<IRepository<BackgroundProcessHistory>>();
+            _backgroundProcessHistoryRepository = Substitute.For<IRepository<BackgroundProcessHistory>>();
 
             var mapper = Substitute.For<IMapper>();
             var opportunityItemRepository = Substitute.For<IRepository<OpportunityItem>>();
 
             _emailService = Substitute.For<IEmailService>();
             _opportunityRepository = Substitute.For<IOpportunityRepository>();
-            backgroundProcessHistoryRepo.GetSingleOrDefaultAsync(
+            _backgroundProcessHistoryRepository.GetSingleOrDefaultAsync(
                 Arg.Any<Expression<Func<BackgroundProcessHistory, bool>>>()).Returns(new BackgroundProcessHistory
                 {
                     Id = 1,
@@ -64,13 +65,13 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
             };
 
             var referralEmailService = new ReferralEmailService(mapper, datetimeProvider, _emailService,
-                _opportunityRepository, opportunityItemRepository, backgroundProcessHistoryRepo, functionLogRepository);
+                _opportunityRepository, opportunityItemRepository, _backgroundProcessHistoryRepository, functionLogRepository);
 
             referralEmailService.SendProviderReferralEmailAsync(1, itemIds, 1, "system").GetAwaiter().GetResult();
         }
 
         [Fact]
-        public void Then_OpportunityRepository_GGetProviderReferrals_Is_Called_Exactly_Once()
+        public void Then_OpportunityRepository_GetProviderReferrals_Is_Called_Exactly_Once()
         {
             _opportunityRepository
                 .Received(1)
@@ -151,6 +152,15 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.ReferralEmail
                               && tokens["employer_town_postcode"] == "Town AA1 1AA"
                               && tokens.ContainsKey("number_of_placements")
                               && tokens["number_of_placements"] == "at least 1"), Arg.Any<string>());
+        }
+
+        [Fact]
+        public void Then_BackgroundProcessHistoryRepository_UpdateWithSpecifiedColumnsOnly_Is_Called_Exactly_Once()
+        {
+            _backgroundProcessHistoryRepository
+                .Received(1)
+                .UpdateWithSpecifiedColumnsOnlyAsync(Arg.Any<BackgroundProcessHistory>(),
+                    Arg.Any<Expression<Func<BackgroundProcessHistory, object>>[]>());
         }
     }
 }
