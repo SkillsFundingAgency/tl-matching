@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Notify.Interfaces;
 using NSubstitute;
@@ -11,7 +13,9 @@ using Sfa.Tl.Matching.Application.Services;
 using Sfa.Tl.Matching.Data.Interfaces;
 using Sfa.Tl.Matching.Domain.Models;
 using Sfa.Tl.Matching.Models.Configuration;
+using Sfa.Tl.Matching.Tests.Common.Extensions;
 using Xunit;
+
 namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
 {
     public class When_EmailService_Is_Called_To_Send_Email_With_Incorrect_Template
@@ -38,7 +42,7 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
             _emailTemplateRepository
                 .GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>())
                 .ReturnsNull();
-            
+
             var functionLogRepository = Substitute.For<IRepository<FunctionLog>>();
 
             var emailService = new EmailService(configuration, _notificationsApi, _emailTemplateRepository, emailHistoryRepository, functionLogRepository, mapper, _logger);
@@ -58,18 +62,11 @@ namespace Sfa.Tl.Matching.Application.UnitTests.Services.Email
         {
             _emailTemplateRepository.Received(1).GetSingleOrDefaultAsync(Arg.Any<Expression<Func<EmailTemplate, bool>>>());
         }
-        
+
         [Fact]
         public void Then_EmailTemplateRepository_Logger_Is_Called_Exactly_Once_With_Expected_Message()
         {
-            _logger
-                .Received(1)
-                .Log(
-                    LogLevel.Warning,
-                    Arg.Any<EventId>(),
-                    Arg.Is<object>(o => o.ToString().Contains("Email template MissingTestTemplate not found. No emails sent.")),
-                    null,
-                    Arg.Any<Func<object, Exception, string>>());
+            _logger.ShouldHaveExactMessage(LogLevel.Warning, "Email template MissingTestTemplate not found. No emails sent.");
         }
 
         [Fact]

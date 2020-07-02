@@ -2,7 +2,6 @@
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using Sfa.Tl.Matching.Domain.Models;
-using Sfa.Tl.Matching.Tests.Common;
 
 namespace Sfa.Tl.Matching.Application.IntegrationTests.SearchProviders.SqlSearchProvider.Builders
 {
