@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LocalEnterprisePartnershi
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                MatchingDbContext.Database.ExecuteSqlCommand("DELETE FROM LocalEnterprisePartnership");
+                MatchingDbContext.Database.ExecuteSqlRaw("DELETE FROM LocalEnterprisePartnership");
                 MatchingDbContext.SaveChanges();
                 return;
             }

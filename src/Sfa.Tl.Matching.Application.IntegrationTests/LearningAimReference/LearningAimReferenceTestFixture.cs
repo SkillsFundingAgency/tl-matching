@@ -53,7 +53,7 @@ namespace Sfa.Tl.Matching.Application.IntegrationTests.LearningAimReference
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                MatchingDbContext.Database.ExecuteSqlCommand("DELETE FROM LearningAimReference");
+                MatchingDbContext.Database.ExecuteSqlRaw("DELETE FROM LearningAimReference");
                 MatchingDbContext.SaveChanges();
                 return;
             }
