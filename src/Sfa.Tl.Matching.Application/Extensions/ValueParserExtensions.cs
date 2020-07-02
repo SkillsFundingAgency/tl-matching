@@ -82,15 +82,13 @@ namespace Sfa.Tl.Matching.Application.Extensions
 
         public static bool ToBool(this string value)
         {
-            switch (value.ToLower())
+            return value.ToLower() switch
             {
-                case Yes:
-                    return true;
-                case No:
-                    return false;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(value)} cannot be parsed ({nameof(ToBool)})");
-            }
+                Yes => true,
+                No => false,
+                _ => throw new ArgumentOutOfRangeException(nameof(value),
+                    $"{nameof(value)} cannot be parsed ({nameof(ToBool)})")
+            };
         }
 
         public static AupaStatus ToAupaStatus(this int value)
@@ -100,19 +98,14 @@ namespace Sfa.Tl.Matching.Application.Extensions
         }
         public static AupaStatus ToAupaStatus(this SfaAupa value)
         {
-            switch (value.Value)
+            return value.Value switch
             {
-                case 229660000:
-                    return AupaStatus.Aware;
-                case 229660001:
-                    return AupaStatus.Understand;
-                case 229660002:
-                    return AupaStatus.Planning;
-                case 229660003:
-                    return AupaStatus.Active;
-                default:
-                    throw new NotImplementedException();
-            }
+                229660000 => AupaStatus.Aware,
+                229660001 => AupaStatus.Understand,
+                229660002 => AupaStatus.Planning,
+                229660003 => AupaStatus.Active,
+                _ => throw new NotImplementedException()
+            };
         }
 
         public static bool IsDateTime(this string value)

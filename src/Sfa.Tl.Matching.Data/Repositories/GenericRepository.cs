@@ -154,15 +154,12 @@ namespace Sfa.Tl.Matching.Data.Repositories
             {
                 var propList = properties.Select(pro =>
                 {
-                    switch (pro.Body)
+                    return pro.Body switch
                     {
-                        case UnaryExpression expression:
-                            return ((MemberExpression)expression.Operand).Member.Name;
-                        case MemberExpression expression1:
-                            return expression1.Member.Name;
-                        default:
-                            throw new InvalidOperationException("unable to extract PropertyName for Bulk Update");
-                    }
+                        UnaryExpression expression => ((MemberExpression) expression.Operand).Member.Name,
+                        MemberExpression expression1 => expression1.Member.Name,
+                        _ => throw new InvalidOperationException("unable to extract PropertyName for Bulk Update")
+                    };
                 }).ToList();
 
                 await using var transaction = await _dbContext.Database.BeginTransactionAsync();
